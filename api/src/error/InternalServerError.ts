@@ -7,7 +7,7 @@ export class InternalServerErrorError extends HttpError {
   /**
    * Creates a new instance of `InternalServerErrorError`.
    */
-  public constructor() {
-    super(500, "Internal Server Error");
+  public constructor(message?: string) {
+    super(500, "Internal Server Error", message);
   }
 }

@@ -1,17 +1,61 @@
 /**
+ * Interface that holds all available routes as keys alongside with it's request
+ * and response message types as values.
+ */
+interface Routes {
+  "/auth/login": Types<AuthLoginBody, AuthData>;
+}
+
+/**
+ * Route types. `TBody` corresponds to the type of request message body, `TData`
+ * to type of field `data` in response message body.
+ */
+interface Types<TBody, TData> {
+  /**
+   * Type of object that is within request message body.
+   */
+  body: TBody;
+
+  /**
+   * Type of field `data` of the object within response message body.
+   */
+  data: TData;
+}
+
+/**
+ * Route type.
+ */
+export type Route = keyof Routes;
+
+/**
+ * State types.
+ */
+export type State<TRoute extends Route> = Routes[TRoute];
+
+/**
+ * Body type of the route `TRoute`.
+ */
+export type Body<TRoute extends Route> = State<TRoute>["body"];
+
+/**
+ * Data type of the route `TRoute`.
+ */
+export type Data<TRoute extends Route> = State<TRoute>["data"];
+
+/**
  * Type of an object within response message body.
  */
-export type IResponse<T> = DataResponse<T> | ErrorResponse;
+export type Response<TData> = DataResponse<TData> | ErrorResponse;
 
 /**
  * Type of an object within response message body if request was handled
  * successfully.
  */
-export interface DataResponse<T> {
+export interface DataResponse<TData> {
   /**
    * Responded data.
    */
-  data: T;
+  data: TData;
 }
 
 /**
@@ -83,4 +127,29 @@ export interface ErrorLocation {
    * there isn't a specific field that is related to the error.
    */
   field?: string;
+}
+
+/**
+ * Login request message body type.
+ */
+export interface AuthLoginBody {
+  /**
+   * Account email.
+   */
+  email: string;
+
+  /**
+   * Account password.
+   */
+  password: string;
+}
+
+/**
+ * Login response message data type.
+ */
+export interface AuthData {
+  /**
+   * Generated JWT token.
+   */
+  token: string;
 }

@@ -1,4 +1,4 @@
-import { IDetail, IErrorResponse } from "../types";
+import { ErrorDetail, ErrorResponse } from "../types";
 
 /**
  * A HTTP error.
@@ -22,7 +22,7 @@ export abstract class HttpError {
   /**
    * Error details detailing where and why the error occurred.
    */
-  public details?: IDetail[];
+  public details?: ErrorDetail[];
 
   /**
    * Creates a new instance of `HttpError`.
@@ -36,7 +36,7 @@ export abstract class HttpError {
     code: number,
     reason: string,
     message?: string,
-    ...details: IDetail[]
+    ...details: ErrorDetail[]
   ) {
     this.code = code;
     this.reason = reason;
@@ -47,7 +47,7 @@ export abstract class HttpError {
   /**
    * Converts this error into a response object.
    */
-  public toResponse(): IErrorResponse {
+  public toResponse(): ErrorResponse {
     return {
       error: {
         code: this.code,

@@ -1,33 +1,33 @@
 /**
  * Type of an object within response message body.
  */
-export type IResponse = IDataResponse | IErrorResponse;
+export type IResponse<T> = DataResponse<T> | ErrorResponse;
 
 /**
  * Type of an object within response message body if request was handled
  * successfully.
  */
-export interface IDataResponse {
+export interface DataResponse<T> {
   /**
    * Responded data.
    */
-  data: any;
+  data: T;
 }
 
 /**
  * Type of an object within response message body if an error occurred.
  */
-export interface IErrorResponse {
+export interface ErrorResponse {
   /**
    * Occurred error description.
    */
-  error: IError;
+  error: Error;
 }
 
 /**
  * Type that describes occurred error.
  */
-export interface IError {
+export interface Error {
   /**
    * HTTP status code.
    */
@@ -46,17 +46,17 @@ export interface IError {
   /**
    * Error details detailing where and why the error occurred.
    */
-  details?: IDetail[];
+  details?: ErrorDetail[];
 }
 
 /**
  * Type that describes one of the locations and the reasons of the occurred error.
  */
-export interface IDetail {
+export interface ErrorDetail {
   /**
    * Location of the error;
    */
-  location: ILocation;
+  location: ErrorLocation;
 
   /**
    * Reason phrase of the the occurred error.
@@ -72,7 +72,7 @@ export interface IDetail {
 /**
  * Type that describes the location of the occurred error.
  */
-export interface ILocation {
+export interface ErrorLocation {
   /**
    * HTTP request message part that is related to the occurred error.
    */

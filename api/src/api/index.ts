@@ -4,10 +4,16 @@ import * as bodyParser from "koa-bodyparser";
 
 import { auth } from "./auth";
 
+import { bodyParserOnError } from "./utility/errors";
+
+const BODY_PARSER_OPTIONS: bodyParser.Options = {
+  enableTypes: ["json"],
+  onerror: bodyParserOnError
+};
+
 /**
  * Application that handles all requests to the API.
  */
 export const api = new Koa();
 
-api.use(bodyParser());
-api.use(auth.routes());
+api.use(bodyParser(BODY_PARSER_OPTIONS)).use(auth.routes());

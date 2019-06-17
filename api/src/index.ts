@@ -24,7 +24,7 @@ async function main() {
     .use(mount("/api", api))
     .use(mount(serve))
     .use(absence())
-    .listen(process.env.PORT);
+    .listen(process.env.PORT!);
 }
 
 main();

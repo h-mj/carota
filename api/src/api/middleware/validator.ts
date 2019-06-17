@@ -1,7 +1,7 @@
 import { Middleware } from "koa";
 import { Body, Route, State } from "../../types";
 import * as Joi from "@hapi/joi";
-import { badRequestErrorFrom } from "../utility/errors";
+import { createValidationError } from "../utility/errors";
 
 /**
  * Schema for body of route `TRoute`.
@@ -41,7 +41,7 @@ export const validator = <TRoute extends Route>(
   );
 
   if (error !== null) {
-    throw badRequestErrorFrom(error);
+    throw createValidationError(error);
   }
 
   context.state.body = value;

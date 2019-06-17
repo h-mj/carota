@@ -4,6 +4,7 @@
  */
 interface Routes {
   "/auth/login": Types<AuthLoginBody, AuthData>;
+  "/auth/register": Types<AuthRegisterBody, AuthData>;
 }
 
 /**
@@ -120,7 +121,7 @@ export interface ErrorLocation {
   /**
    * HTTP request message part that is related to the occurred error.
    */
-  part: "request-line" | "headers" | "body";
+  part: ErrorLocationPart;
 
   /**
    * Header or object field that is related to the occurred error. `undefined` if
@@ -128,6 +129,32 @@ export interface ErrorLocation {
    */
   field?: string;
 }
+
+/**
+ * Part of the request message where the error occurred.
+ */
+export type ErrorLocationPart = "request-line" | "headers" | "body";
+
+/**
+ * Type that is used to create enum like objects with given constants
+ * `TConstants`.
+ */
+export type Enum<TConstants extends string> = { readonly [C in TConstants]: C };
+
+/**
+ * Language type.
+ */
+export type Language = "English" | "Estonian" | "Russian";
+
+/**
+ * All account type options.
+ */
+export type AccountType = "Default" | "Adviser";
+
+/**
+ * All account rights options.
+ */
+export type AccountRights = "Default" | "All";
 
 /**
  * Login request message body type.
@@ -142,6 +169,36 @@ export interface AuthLoginBody {
    * Account password.
    */
   password: string;
+}
+
+/**
+ * Register request message body type.
+ */
+export interface AuthRegisterBody {
+  /**
+   * Personal name.
+   */
+  name: string;
+
+  /**
+   * Account language.
+   */
+  language: Language;
+
+  /**
+   * Account email.
+   */
+  email: string;
+
+  /**
+   * Account password.
+   */
+  password: string;
+
+  /**
+   * Invitation ID.
+   */
+  invitationId: string;
 }
 
 /**

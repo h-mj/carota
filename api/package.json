@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon -x node -r ts-node/register -r dotenv/config src/index.ts"
+    "start": "nodemon -x node -r ts-node/register -r dotenv/config src/index.ts",
+    "typeorm": "node -r ts-node/register ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
     "@hapi/joi": "^15.0.3",

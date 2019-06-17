@@ -1,3 +1,6 @@
+import { createConnection } from "typeorm";
+import "reflect-metadata";
+
 import * as Koa from "koa";
 
 import * as compress from "koa-compress";
@@ -10,12 +13,18 @@ import * as mount from "koa-mount";
 import { api } from "./api";
 import { serve } from "./serve";
 
-new Koa()
-  .use(compress())
-  .use(helmet())
-  .use(logger())
-  .use(responder())
-  .use(mount("/api", api))
-  .use(mount(serve))
-  .use(absence())
-  .listen(process.env.PORT);
+async function main() {
+  await createConnection();
+
+  new Koa()
+    .use(compress())
+    .use(helmet())
+    .use(logger())
+    .use(responder())
+    .use(mount("/api", api))
+    .use(mount(serve))
+    .use(absence())
+    .listen(process.env.PORT);
+}
+
+main();

@@ -1,0 +1,93 @@
+import * as React from "react";
+import styled, { css } from "styled-components";
+import { UNIT_HEIGHT } from "../styling/sizes";
+import {
+  DEFAULT_BORDER,
+  DEFAULT_LABEL,
+  ACTIVE,
+  ERROR
+} from "../styling/colors";
+import { TRANSITION } from "../styling/animations";
+
+/**
+ * Button component properties.
+ */
+interface Props {
+  hasError?: boolean;
+}
+
+/**
+ * Button component.
+ */
+export const Button: React.FunctionComponent<Props> = ({
+  children,
+  hasError
+}) => (
+  <Container>
+    <ButtonElement hasError={hasError}>{children}</ButtonElement>
+  </Container>
+);
+
+/**
+ * Container component that contains all other components.
+ */
+export const Container = styled.div`
+  position: relative;
+  width: 100%;
+  height: ${UNIT_HEIGHT}rem;
+`;
+
+/**
+ * Button color styling when property `hasError` is not `true`.
+ */
+const defaultStyle = css`
+  box-shadow: 0 0 0 1px ${DEFAULT_BORDER}, inset 0 0 0 1px ${DEFAULT_BORDER};
+  color: ${DEFAULT_LABEL};
+
+  &:active {
+    box-shadow: 0 0 0 1px ${ACTIVE}, inset 0 0 0 1px ${ACTIVE};
+    color: ${ACTIVE};
+  }
+`;
+
+/**
+ * Button color styling when property `hasError` is true.
+ */
+const errorStyle = css`
+  &,
+  &:active {
+    box-shadow: 0 0 0 1px ${ERROR}, inset 0 0 0 1px ${ERROR};
+    color: ${ERROR};
+  }
+`;
+
+/**
+ * The actual button element.
+ */
+const ButtonElement = styled.button<Props>`
+  /* Reset */
+  border: none;
+  outline: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+
+  position: absolute;
+  top: 0.5rem;
+
+  width: 100%;
+  height: ${UNIT_HEIGHT - 1}rem;
+
+  border-radius: 0.25rem;
+
+  cursor: pointer;
+
+  ${TRANSITION}
+
+  ${props => (props.hasError ? errorStyle : defaultStyle)};
+`;

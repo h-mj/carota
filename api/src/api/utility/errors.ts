@@ -5,7 +5,7 @@ import {
   ErrorDetail,
   ErrorReason,
   ErrorContext,
-  ContextElement
+  ErrorContextElement
 } from "../../types";
 import { InternalServerErrorError } from "../../error/InternalServerError";
 
@@ -27,8 +27,7 @@ export const bodyParserOnError = () => {
 };
 
 /**
- * Maps Joi error types to reasons. Most of the time type and reason have
- * opposite meanings.
+ * Maps Joi error types to error reasons.
  */
 const TYPE_TO_REASON: { [type: string]: ErrorReason } = {
   "any.allowOnly": "invalid",
@@ -41,40 +40,49 @@ const TYPE_TO_REASON: { [type: string]: ErrorReason } = {
 };
 
 /**
- * Enumerates for each error type which fields will appear under which name in
- * error context. `undefined` if context must not be included.
+ * Defines for each error type which fields will appear in error context under
+ * which name and defines optional `stringify` and `transform` functions.
+ * `undefined` if context must not be included.
  */
 const TYPE_TO_CONTEXT_TEMPLATE: {
-  [type: string]: { [field: string]: Transform };
+  [type: string]: { [field: string]: Transformation };
 } = {
   "any.allowOnly": { valids: { name: "options" } },
   "string.min": { limit: { name: "length" } }
 };
 
 /**
- * Type that contains a new name and transformation function for specific field.
+ * Type that contains a new name and optional stringify and transformation
+ * functions for a specific field in Joi detail context.
+ */
+interface Transformation {
+  name: string;
+  stringify?: Stringify;
+  transform?: Transform;
+}
+
+/**
+ * Function type that transforms a `ContextElement` object into a string.
+ */
+interface Stringify {
+  (entity: ErrorContextElement): string;
+}
+
+/**
+ * Transformation function type that transforms an unknown object into a
+ * `ContextElement`.
  */
 interface Transform {
-  name: string;
-  stringify?: Transformation<ContextElement, string>;
-  transform?: Transformation<unknown, ContextElement>;
+  (entity: unknown): ErrorContextElement;
 }
 
 /**
- * Transformation function type that transforms object of type `V` to type `R`.
- */
-interface Transformation<V, R> {
-  (entity: V): R;
-}
-
-/**
- * Default `stringify` function used if no `stringify` function is provided.
+ * Default `stringify` function that is used if no `stringify` function is
+ * provided.
  *
  * @param entity Entity that is being transformed.
  */
-const DEFAULT_STRINGIFY: Transformation<ContextElement, string> = (
-  entity: ContextElement
-) => {
+const DEFAULT_STRINGIFY: Stringify = (entity: ErrorContextElement) => {
   if (Array.isArray(entity)) {
     return `[${entity.map(DEFAULT_STRINGIFY).join(", ")}]`;
   }
@@ -83,13 +91,12 @@ const DEFAULT_STRINGIFY: Transformation<ContextElement, string> = (
 };
 
 /**
- * Default transformation function used if no transform function is provided.
+ * Default transformation function that is used if no transform function is
+ * provided.
  *
  * @param entity Entity that is being transformed.
  */
-const DEFAULT_TRANSFORM: Transformation<unknown, ContextElement> = (
-  entity: unknown
-) => {
+const DEFAULT_TRANSFORM: Transform = (entity: unknown) => {
   if (Array.isArray(entity)) {
     return entity;
   }
@@ -103,8 +110,8 @@ const DEFAULT_TRANSFORM: Transformation<unknown, ContextElement> = (
 
 /**
  * Maps Joi error types to message templates. `{field}` will be replaced by
- * corresponding field and other variables (in the form of `{VARIABLE}`) must
- * appear in this type's context template as renamed field.
+ * corresponding field name and other variables (in the form of `{VARIABLE}`)
+ * must appear in this type's context template as `name` field.
  */
 const TYPE_TO_MESSAGE: { [type: string]: string } = {
   "any.allowOnly": 'Field "{field}" must be one of {options}.',
@@ -170,7 +177,10 @@ export const createValidationError = (error: ValidationError) => {
     });
   }
 
-  return new BadRequestError("", ...details);
+  return new BadRequestError(
+    "One or more fields failed validation.",
+    ...details
+  );
 };
 
 /**

@@ -158,13 +158,13 @@ export type ErrorReason =
  * provided in some field.
  */
 export interface ErrorContext {
-  [key: string]: ContextElement;
+  [key: string]: ErrorContextElement;
 }
 
 /**
  * Type of context field value.
  */
-export type ContextElement = string | number | string[];
+export type ErrorContextElement = string | number | string[];
 
 /**
  * Type that is used to create enum like objects with given constants

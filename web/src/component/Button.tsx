@@ -12,14 +12,14 @@ import { TRANSITION } from "../styling/animations";
 /**
  * Button component properties.
  */
-interface Props {
+interface ButtonProps {
   hasError?: boolean;
 }
 
 /**
  * Button component.
  */
-export const Button: React.FunctionComponent<Props> = ({
+export const Button: React.FunctionComponent<ButtonProps> = ({
   children,
   hasError
 }) => (
@@ -31,7 +31,7 @@ export const Button: React.FunctionComponent<Props> = ({
 /**
  * Container component that contains all other components.
  */
-export const Container = styled.div`
+const Container = styled.div`
   position: relative;
   width: 100%;
   height: ${UNIT_HEIGHT}rem;
@@ -64,7 +64,7 @@ const errorStyle = css`
 /**
  * The actual button element.
  */
-const ButtonElement = styled.button<Props>`
+const ButtonElement = styled.button<ButtonProps>`
   /* Reset */
   border: none;
   outline: none;

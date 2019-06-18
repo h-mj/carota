@@ -1,3 +1,4 @@
+import { observer } from "mobx-react";
 import * as React from "react";
 import styled, { css } from "styled-components";
 import {
@@ -13,19 +14,32 @@ import { TRANSITION } from "../styling/animations";
 /**
  * Input value change callback function type.
  */
-export interface ChangeHandler {
-  (name: string, value: string): void;
+export interface InputChangeHandler<TName extends InputName> {
+  (name: TName, value: string): void;
 }
 
 /**
- * Input type type.
+ * Union of all supported input names.
  */
-export type Type = "text" | "email" | "password" | "number";
+export type InputName = "email" | "password";
+
+/**
+ * Union of all supported input types.
+ */
+export type InputType = "text" | "email" | "password" | "number";
+
+/**
+ * Mapping between input name and its type.
+ */
+const NAME_TO_TYPE: { [N in InputName]: InputType } = {
+  email: "email",
+  password: "password"
+};
 
 /**
  * Input component properties.
  */
-interface Props {
+interface InputProps<TName extends InputName> {
   /**
    * Error message which will be shown under the input field.
    *
@@ -37,22 +51,17 @@ interface Props {
   /**
    * Name of this input. Used as one of the callback function arguments.
    */
-  name: string;
+  name: TName;
 
   /**
    * Change callback function.
    */
-  onChange?: ChangeHandler;
+  onChange?: InputChangeHandler<TName>;
 
   /**
    * Placeholder/label text.
    */
   placeholder?: string;
-
-  /**
-   * Input type.
-   */
-  type: Type;
 
   /**
    * The value within the input.
@@ -63,7 +72,10 @@ interface Props {
 /**
  * Input component that allows user to enter single line of text.
  */
-export class Input extends React.Component<Props> {
+@observer
+export class Input<TName extends InputName> extends React.Component<
+  InputProps<TName>
+> {
   /**
    * Cache of previous property `error` value so that error text does not
    * disappear abruptly when error is gone.
@@ -71,7 +83,7 @@ export class Input extends React.Component<Props> {
   private error?: string;
 
   public render() {
-    const { error, name, placeholder, type, value } = this.props;
+    const { error, name, placeholder, value } = this.props;
 
     if (error !== undefined) {
       this.error = error;
@@ -83,7 +95,7 @@ export class Input extends React.Component<Props> {
           hasError={error !== undefined}
           name={name}
           onChange={this.handleChange}
-          type={type}
+          type={NAME_TO_TYPE[name]}
           value={value}
         />
 
@@ -103,14 +115,14 @@ export class Input extends React.Component<Props> {
       return;
     }
 
-    this.props.onChange(event.target.name, event.target.value);
+    this.props.onChange(this.props.name, event.target.value);
   };
 }
 
 /**
  * Container component that contains all other components.
  */
-export const Container = styled.div`
+const Container = styled.div`
   position: relative;
   width: 100%;
   height: ${UNIT_HEIGHT}rem;

@@ -2,6 +2,7 @@ import * as React from "react";
 import { render } from "react-dom";
 import { createGlobalStyle } from "styled-components";
 import { BACKGROUND, FOREGROUND } from "./styling/colors";
+import { SignIn } from "./scene/SignIn";
 
 /**
  * Global style that contains styling defined in global stylesheet.
@@ -28,7 +29,7 @@ const GlobalStyle = createGlobalStyle`
  */
 class Application extends React.Component {
   public render() {
-    return "Hello there";
+    return <SignIn />;
   }
 }
 

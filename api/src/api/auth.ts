@@ -46,7 +46,7 @@ export const auth = new Router();
  * Login request body schema.
  */
 const loginSchema: Schema<"/auth/login"> = {
-  email: is.string().email(),
+  email: is.string(),
   password: is.string()
 };
 

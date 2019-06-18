@@ -1,12 +1,16 @@
 import {
   BaseEntity,
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn
 } from "typeorm";
 
-import { Enum, Language, AccountType, AccountRights } from "../types";
+import { AccountRights, AccountType, Enum, Language } from "../types";
+
+import { Person } from "./Person";
 
 export const LanguageEnum: Enum<Language> = {
   English: "English",
@@ -40,6 +44,10 @@ export class Account extends BaseEntity {
 
   @Column()
   public hash!: string;
+
+  @OneToOne(() => Person)
+  @JoinColumn()
+  public person?: Person;
 
   @ManyToOne(() => Account)
   public adviser?: Account;

@@ -228,6 +228,11 @@ export interface AuthRegisterBody {
 }
 
 /**
+ * Sex type.
+ */
+export type Sex = "Female" | "Male";
+
+/**
  * Login response message data type.
  */
 export interface AuthData {

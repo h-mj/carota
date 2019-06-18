@@ -1,13 +1,13 @@
 import {
   BaseEntity,
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn
 } from "typeorm";
 
-import { AccountType, AccountRights } from "../types";
-import { AccountTypeEnum, Account, AccountRightsEnum } from "./Account";
+import { AccountRights, AccountType } from "../types";
+import { Account, AccountRightsEnum, AccountTypeEnum } from "./Account";
 
 @Entity()
 export class Invitation extends BaseEntity {

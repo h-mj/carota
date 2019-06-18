@@ -1,7 +1,6 @@
 import * as Router from "koa-router";
 import { hash, compare } from "bcryptjs";
-import { sign } from "jsonwebtoken";
-import { define } from "./utility/routes";
+import { defineNoAuth } from "./utility/routes";
 import { Schema, is } from "./middleware/validator";
 import { LanguageEnum, Account } from "../entity/Account";
 import { Invitation } from "../entity/Invitation";
@@ -10,37 +9,12 @@ import {
   createIdNotFoundError
 } from "./utility/errors";
 import { callCatch } from "./utility/queries";
-
-/**
- * Type of payload in JWT.
- */
-interface Payload {
-  id: string;
-}
-
-/**
- * Creates a payload from a given account.
- *
- * @param account Account from which payload is created.
- */
-const createPayload = (account: Account): Payload => {
-  return { id: account.id };
-};
-
-/**
- * Signs a payload generated based on a given account using `SECRET` environment
- * variable.
- *
- * @param account Account from which payload is created.
- */
-const signToken = (account: Account) => {
-  return sign(createPayload(account), process.env.SECRET!);
-};
+import { signToken } from "./middleware/authenticator";
 
 /**
  * Router, which handles all routes related to authentication.
  */
-export const auth = new Router();
+export const authRouter = new Router();
 
 /**
  * Login request body schema.
@@ -50,7 +24,7 @@ const loginSchema: Schema<"/auth/login"> = {
   password: is.string()
 };
 
-define(auth, "/auth/login", loginSchema, async context => {
+defineNoAuth(authRouter, "/auth/login", loginSchema, async context => {
   const { email, password } = context.state.body;
 
   const account = await Account.findOne({ email });
@@ -73,7 +47,7 @@ const registerSchema: Schema<"/auth/register"> = {
   invitationId: is.string().guid()
 };
 
-define(auth, "/auth/register", registerSchema, async context => {
+defineNoAuth(authRouter, "/auth/register", registerSchema, async context => {
   const { name, language, email, password, invitationId } = context.state.body;
 
   const invitation = await Invitation.findOne({ id: invitationId });

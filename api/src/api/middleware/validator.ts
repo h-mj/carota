@@ -1,5 +1,5 @@
 import { Middleware } from "koa";
-import { Body, Route, State } from "../../types";
+import { Body, Data, Route } from "../../types";
 import * as Joi from "@hapi/joi";
 import { createValidationError } from "../utility/errors";
 
@@ -25,6 +25,21 @@ const VALIDATION_OPTIONS: Joi.ValidationOptions = {
 };
 
 /**
+ * `TRoute` route middleware state type after validation.
+ */
+export interface ValidationState<TRoute extends Route> {
+  /**
+   * Body type of this route.
+   */
+  body: Body<TRoute>;
+
+  /**
+   * Data type of this route.
+   */
+  data: Data<TRoute>;
+}
+
+/**
  * Returns a middleware that validates `context.request.body` using given
  * `schema`. Throws an error if any errors occurred or assigns validation result
  * to `context.state.body`.
@@ -33,7 +48,7 @@ const VALIDATION_OPTIONS: Joi.ValidationOptions = {
  */
 export const validator = <TRoute extends Route>(
   schema: Schema<TRoute>
-): Middleware<State<TRoute>> => async (context, next) => {
+): Middleware<ValidationState<TRoute>> => async (context, next) => {
   const { error, value } = Joi.validate<Body<TRoute>>(
     context.request.body,
     schema,

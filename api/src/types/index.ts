@@ -29,19 +29,14 @@ interface Types<TBody, TData> {
 export type Route = keyof Routes;
 
 /**
- * State types.
- */
-export type State<TRoute extends Route> = Routes[TRoute];
-
-/**
  * Body type of the route `TRoute`.
  */
-export type Body<TRoute extends Route> = State<TRoute>["body"];
+export type Body<TRoute extends Route> = Routes[TRoute]["body"];
 
 /**
  * Data type of the route `TRoute`.
  */
-export type Data<TRoute extends Route> = State<TRoute>["data"];
+export type Data<TRoute extends Route> = Routes[TRoute]["data"];
 
 /**
  * Type of an object within response message body.

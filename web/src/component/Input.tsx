@@ -8,7 +8,7 @@ import {
   ACTIVE,
   BACKGROUND
 } from "../styling/colors";
-import { UNIT_HEIGHT } from "../styling/sizes";
+import { UNIT_HEIGHT, BORDER_RADIUS } from "../styling/sizes";
 import { TRANSITION } from "../styling/animations";
 
 /**
@@ -143,7 +143,7 @@ const Border = styled.div`
   height: ${UNIT_HEIGHT - 1}rem;
 
   box-shadow: 0 0 0 1px, inset 0 0 0 1px;
-  border-radius: 0.25rem;
+  border-radius: ${BORDER_RADIUS}rem;
   box-sizing: border-box;
 
   pointer-events: none;

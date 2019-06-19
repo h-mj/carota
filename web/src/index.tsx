@@ -1,8 +1,10 @@
+import { inject, Provider } from "mobx-react";
 import * as React from "react";
 import { render } from "react-dom";
 import { createGlobalStyle } from "styled-components";
+import { SCENES } from "./scene";
+import { InjectedProps, STORES } from "./store";
 import { BACKGROUND, FOREGROUND } from "./styling/colors";
-import { SignIn } from "./scene/SignIn";
 
 /**
  * Global style that contains styling defined in global stylesheet.
@@ -27,16 +29,21 @@ const GlobalStyle = createGlobalStyle`
 /**
  * The root component.
  */
-class Application extends React.Component {
+@inject("scenes")
+class Application extends React.Component<InjectedProps> {
   public render() {
-    return <SignIn />;
+    const Main = SCENES[this.props.scenes!.main];
+
+    return <Main />;
   }
 }
 
 render(
   <>
     <GlobalStyle />
-    <Application />
+    <Provider {...STORES}>
+      <Application />
+    </Provider>
   </>,
   document.getElementById("root")
 );

@@ -8,6 +8,7 @@ import {
   FormValues,
   FormSubmitHandler
 } from "../component/Form";
+import styled from "styled-components";
 
 /**
  * Union of all forum input names this scene uses.
@@ -27,13 +28,15 @@ export class SignIn extends React.Component {
 
   public render() {
     return (
-      <Form
-        errors={this.errors}
-        names={["email", "password"]}
-        onChange={this.onChange}
-        onSubmit={this.onSubmit}
-        values={this.values}
-      />
+      <Container>
+        <Form
+          errors={this.errors}
+          names={["email", "password"]}
+          onChange={this.onChange}
+          onSubmit={this.onSubmit}
+          values={this.values}
+        />
+      </Container>
     );
   }
 
@@ -46,3 +49,11 @@ export class SignIn extends React.Component {
     console.log(this.values.email + ": " + this.values.password);
   };
 }
+
+const Container = styled.div`
+  width: 100%;
+  max-width: 32rem;
+  padding: 2rem;
+  box-sizing: border-box;
+  margin: 0 auto;
+`;

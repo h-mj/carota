@@ -13,6 +13,12 @@ interface Scenes {
 export type Scene = keyof Scenes;
 
 /**
+ * Scenes that use form component and should have appropriate translations.
+ */
+
+export type FormScene = "signIn";
+
+/**
  * Object where scene names are mapped to its class. This object is used to
  * render a scene using only its name and change drawn scene by only changing
  * the name of the current scene.

@@ -1,7 +1,9 @@
-import { observer } from "mobx-react";
+import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Button } from "./Button";
 import { Input, InputChangeHandler, InputName } from "./Input";
+import { FormScene } from "../scene";
+import { InjectedProps } from "../store";
 
 /**
  * Form input errors type that maps input name to its error message. `undefined`
@@ -46,6 +48,11 @@ interface FormProps<TName extends InputName> {
   onSubmit?: FormSubmitHandler;
 
   /**
+   * Scene name which uses this component.
+   */
+  scene: FormScene;
+
+  /**
    * Mapping between input name and its value.
    */
   values: FormValues<TName>;
@@ -54,12 +61,13 @@ interface FormProps<TName extends InputName> {
 /**
  * Form component that is a collection of inputs specified by an array of names.
  */
+@inject("translations")
 @observer
 export class Form<TName extends InputName> extends React.Component<
-  FormProps<TName>
+  FormProps<TName> & InjectedProps
 > {
   public render() {
-    const { errors, names, onChange, values } = this.props;
+    const { errors, names, onChange, scene, translations, values } = this.props;
 
     return (
       <form noValidate={true} onSubmit={this.handleSubmit}>
@@ -73,7 +81,7 @@ export class Form<TName extends InputName> extends React.Component<
           />
         ))}
 
-        <Button />
+        <Button>{translations!.translation.forms[scene].submit}</Button>
       </form>
     );
   }

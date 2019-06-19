@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled, { css } from "styled-components";
 import {
@@ -10,6 +10,7 @@ import {
 } from "../styling/colors";
 import { UNIT_HEIGHT, BORDER_RADIUS } from "../styling/sizes";
 import { TRANSITION } from "../styling/animations";
+import { InjectedProps } from "../store";
 
 /**
  * Input value change callback function type.
@@ -59,11 +60,6 @@ interface InputProps<TName extends InputName> {
   onChange?: InputChangeHandler<TName>;
 
   /**
-   * Placeholder/label text.
-   */
-  placeholder?: string;
-
-  /**
    * The value within the input.
    */
   value: string;
@@ -72,9 +68,10 @@ interface InputProps<TName extends InputName> {
 /**
  * Input component that allows user to enter single line of text.
  */
+@inject("translations")
 @observer
 export class Input<TName extends InputName> extends React.Component<
-  InputProps<TName>
+  InputProps<TName> & InjectedProps
 > {
   /**
    * Cache of previous property `error` value so that error text does not
@@ -83,7 +80,7 @@ export class Input<TName extends InputName> extends React.Component<
   private error?: string;
 
   public render() {
-    const { error, name, placeholder, value } = this.props;
+    const { error, name, translations, value } = this.props;
 
     if (error !== undefined) {
       this.error = error;
@@ -100,7 +97,11 @@ export class Input<TName extends InputName> extends React.Component<
         />
 
         <Border />
-        {placeholder !== undefined && <Placeholder>{placeholder}</Placeholder>}
+
+        <Placeholder>
+          {translations!.translation.inputs[name].placeholder}
+        </Placeholder>
+
         <Error>{this.error}</Error>
       </Container>
     );

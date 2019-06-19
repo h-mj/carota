@@ -34,6 +34,7 @@ export class SignIn extends React.Component {
           names={["email", "password"]}
           onChange={this.onChange}
           onSubmit={this.onSubmit}
+          scene="signIn"
           values={this.values}
         />
       </Container>

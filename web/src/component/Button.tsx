@@ -78,10 +78,10 @@ const ButtonElement = styled.button<ButtonProps>`
   letter-spacing: inherit;
 
   position: absolute;
-  top: 0.5rem;
+  top: ${UNIT / 8}rem;
 
   width: 100%;
-  height: ${UNIT - 1}rem;
+  height: ${(3 * UNIT) / 4}rem;
 
   border-radius: ${BORDER_RADIUS}rem;
 

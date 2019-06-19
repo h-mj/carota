@@ -148,10 +148,10 @@ const Container = styled.div`
  */
 const Border = styled.div`
   position: absolute;
-  top: 0.5rem;
+  top: ${UNIT / 8}rem;
 
   width: 100%;
-  height: ${UNIT - 1}rem;
+  height: ${(3 * UNIT) / 4}rem;
 
   box-shadow: 0 0 0 1px, inset 0 0 0 1px;
   border-radius: ${BORDER_RADIUS}rem;
@@ -169,9 +169,9 @@ const Border = styled.div`
 const Placeholder = styled.div`
   position: absolute;
   left: 0.75rem;
-  top: 0.5rem;
+  top: ${UNIT / 8}rem;
 
-  height: ${UNIT - 1}rem;
+  height: ${(3 * UNIT) / 4}rem;
 
   padding: 0 0.25rem;
   box-sizing: border-box;
@@ -195,7 +195,7 @@ const Error = styled.div`
   display: flex;
   align-items: center;
 
-  height: 1rem;
+  height: ${UNIT / 4}rem;
 
   padding: 0 0.25rem;
   box-sizing: border-box;
@@ -265,10 +265,10 @@ const InputElement = styled.input<InputElementProps>`
   letter-spacing: inherit;
 
   position: absolute;
-  top: 0.5rem;
+  top: ${UNIT / 8}rem;
 
   width: 100%;
-  height: ${UNIT - 1}rem;
+  height: ${(3 * UNIT) / 4}rem;
 
   padding: 0 1rem;
   box-sizing: border-box;
@@ -280,7 +280,7 @@ const InputElement = styled.input<InputElementProps>`
   /* Fix for Firefox's invalid number inputs having empty value */
   &[type="number"]:invalid + * + ${Placeholder} {
     top: 0;
-    height: 1rem;
+    height: ${UNIT / 4}rem;
 
     background-color: ${BACKGROUND};
     font-size: 0.75rem;

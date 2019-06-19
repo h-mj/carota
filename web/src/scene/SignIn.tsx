@@ -72,7 +72,7 @@ export class SignIn extends React.Component<InjectedProps> {
 const Container = styled.div`
   width: 100%;
   max-width: ${7 * UNIT}rem;
-  padding: 0 ${UNIT / 2}rem;
+  padding: ${UNIT / 2}rem;
   box-sizing: border-box;
   margin: 0 auto;
 `;

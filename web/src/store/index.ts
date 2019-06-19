@@ -1,10 +1,12 @@
-import { TranslationsStore } from "./TranslationsStore";
-import { ScenesStore } from "./ScenesStore";
+import { translations, TranslationsStore } from "./TranslationsStore";
+import { scenes, ScenesStore } from "./ScenesStore";
+import { auth, AuthStore } from "./AuthStore";
 
 /**
  * Mapping between store name and its class type.
  */
 export interface Stores {
+  auth: AuthStore;
   scenes: ScenesStore;
   translations: TranslationsStore;
 }
@@ -14,8 +16,9 @@ export interface Stores {
  * `Provider` component in `index.tsx`.
  */
 export const STORES: Stores = {
-  scenes: new ScenesStore(),
-  translations: new TranslationsStore()
+  auth,
+  scenes,
+  translations
 };
 
 /**

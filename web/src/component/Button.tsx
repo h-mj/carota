@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled, { css } from "styled-components";
-import { UNIT_HEIGHT, BORDER_RADIUS } from "../styling/sizes";
+import { UNIT, BORDER_RADIUS } from "../styling/sizes";
 import {
   DEFAULT_BORDER,
   DEFAULT_LABEL,
@@ -34,7 +34,7 @@ export const Button: React.FunctionComponent<ButtonProps> = ({
 const Container = styled.div`
   position: relative;
   width: 100%;
-  height: ${UNIT_HEIGHT}rem;
+  height: ${UNIT}rem;
 `;
 
 /**
@@ -81,7 +81,7 @@ const ButtonElement = styled.button<ButtonProps>`
   top: 0.5rem;
 
   width: 100%;
-  height: ${UNIT_HEIGHT - 1}rem;
+  height: ${UNIT - 1}rem;
 
   border-radius: ${BORDER_RADIUS}rem;
 

@@ -1,15 +1,21 @@
+import { ErrorReason } from "api";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Button } from "./Button";
 import { Input, InputChangeHandler, InputName } from "./Input";
 import { FormScene } from "../scene";
 import { InjectedProps } from "../store";
+import { anyErrors } from "../utility/forms";
+import styled from "styled-components";
+import { UNIT } from "../styling/sizes";
 
 /**
  * Form input errors type that maps input name to its error message. `undefined`
  * if there's are no errors.
  */
-export type FormErrors<TName extends InputName> = { [P in TName]?: string };
+export type FormErrorReasons<TName extends InputName> = {
+  [P in TName]?: ErrorReason
+};
 
 /**
  * Form input values type that maps input name to its value.
@@ -28,11 +34,6 @@ export interface FormSubmitHandler {
  */
 interface FormProps<TName extends InputName> {
   /**
-   * Mapping between input name and its error message.
-   */
-  errors: FormErrors<TName>;
-
-  /**
    * List of all field names in order.
    */
   names: TName[];
@@ -46,6 +47,11 @@ interface FormProps<TName extends InputName> {
    * Submit callback function.
    */
   onSubmit?: FormSubmitHandler;
+
+  /**
+   * Mapping between input name and its error reason.
+   */
+  reasons: FormErrorReasons<TName>;
 
   /**
    * Scene name which uses this component.
@@ -67,21 +73,33 @@ export class Form<TName extends InputName> extends React.Component<
   FormProps<TName> & InjectedProps
 > {
   public render() {
-    const { errors, names, onChange, scene, translations, values } = this.props;
+    const {
+      names,
+      onChange,
+      reasons,
+      scene,
+      translations,
+      values
+    } = this.props;
+
+    const { submit, title } = translations!.translation.forms[scene];
 
     return (
       <form noValidate={true} onSubmit={this.handleSubmit}>
-        {names.map(name => (
+        {title !== undefined && <Title>{title}</Title>}
+
+        {names.map((name, index) => (
           <Input
+            autoFocus={index === 0}
             key={name}
-            error={errors[name]}
             name={name}
             onChange={onChange}
+            reason={reasons[name]}
             value={values[name]}
           />
         ))}
 
-        <Button>{translations!.translation.forms[scene].submit}</Button>
+        <Button hasError={anyErrors(reasons)}>{submit}</Button>
       </form>
     );
   }
@@ -100,3 +118,16 @@ export class Form<TName extends InputName> extends React.Component<
     this.props.onSubmit();
   };
 }
+
+/**
+ * Title message on top of the form.
+ */
+const Title = styled.div`
+  height: ${1.5 * UNIT}rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 1.5rem;
+`;

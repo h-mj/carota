@@ -1,2 +1,2 @@
-export const UNIT_HEIGHT = 4.5;
-export const BORDER_RADIUS = 0.25;
+export const UNIT = 4.5;
+export const BORDER_RADIUS = 0.125;

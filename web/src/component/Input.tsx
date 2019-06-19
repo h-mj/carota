@@ -1,3 +1,4 @@
+import { ErrorReason } from "api";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled, { css } from "styled-components";
@@ -8,7 +9,7 @@ import {
   ACTIVE,
   BACKGROUND
 } from "../styling/colors";
-import { UNIT_HEIGHT, BORDER_RADIUS } from "../styling/sizes";
+import { UNIT, BORDER_RADIUS } from "../styling/sizes";
 import { TRANSITION } from "../styling/animations";
 import { InjectedProps } from "../store";
 
@@ -42,12 +43,9 @@ const NAME_TO_TYPE: { [N in InputName]: InputType } = {
  */
 interface InputProps<TName extends InputName> {
   /**
-   * Error message which will be shown under the input field.
-   *
-   * If message is not `undefined`, some of the input components will also be
-   * colored red.
+   * Boolean whether or not this input should be in the focus automatically.
    */
-  error?: string;
+  autoFocus?: boolean;
 
   /**
    * Name of this input. Used as one of the callback function arguments.
@@ -58,6 +56,14 @@ interface InputProps<TName extends InputName> {
    * Change callback function.
    */
   onChange?: InputChangeHandler<TName>;
+
+  /**
+   * Error reason, which is used to display translated error message.
+   *
+   * If reason is not `undefined`, some of the input components will also be
+   * colored red.
+   */
+  reason?: ErrorReason;
 
   /**
    * The value within the input.
@@ -74,22 +80,28 @@ export class Input<TName extends InputName> extends React.Component<
   InputProps<TName> & InjectedProps
 > {
   /**
-   * Cache of previous property `error` value so that error text does not
+   * Cache of previous property `reason` value so that error text does not
    * disappear abruptly when error is gone.
    */
-  private error?: string;
+  private reason?: ErrorReason;
 
   public render() {
-    const { error, name, translations, value } = this.props;
+    const { autoFocus, name, reason, translations, value } = this.props;
 
-    if (error !== undefined) {
-      this.error = error;
+    if (reason !== undefined) {
+      this.reason = reason;
     }
+
+    const { placeholder, reasons } = translations!.translation.inputs[name];
+
+    const message =
+      this.reason === undefined ? undefined : reasons[this.reason];
 
     return (
       <Container>
         <InputElement
-          hasError={error !== undefined}
+          autoFocus={autoFocus}
+          hasError={reason !== undefined}
           name={name}
           onChange={this.handleChange}
           type={NAME_TO_TYPE[name]}
@@ -98,11 +110,9 @@ export class Input<TName extends InputName> extends React.Component<
 
         <Border />
 
-        <Placeholder>
-          {translations!.translation.inputs[name].placeholder}
-        </Placeholder>
+        <Placeholder>{placeholder}</Placeholder>
 
-        <Error>{this.error}</Error>
+        {message !== undefined && <Error>{message}</Error>}
       </Container>
     );
   }
@@ -126,7 +136,7 @@ export class Input<TName extends InputName> extends React.Component<
 const Container = styled.div`
   position: relative;
   width: 100%;
-  height: ${UNIT_HEIGHT}rem;
+  height: ${UNIT}rem;
 `;
 
 /**
@@ -141,7 +151,7 @@ const Border = styled.div`
   top: 0.5rem;
 
   width: 100%;
-  height: ${UNIT_HEIGHT - 1}rem;
+  height: ${UNIT - 1}rem;
 
   box-shadow: 0 0 0 1px, inset 0 0 0 1px;
   border-radius: ${BORDER_RADIUS}rem;
@@ -161,7 +171,7 @@ const Placeholder = styled.div`
   left: 0.75rem;
   top: 0.5rem;
 
-  height: ${UNIT_HEIGHT - 1}rem;
+  height: ${UNIT - 1}rem;
 
   padding: 0 0.25rem;
   box-sizing: border-box;
@@ -258,7 +268,7 @@ const InputElement = styled.input<InputElementProps>`
   top: 0.5rem;
 
   width: 100%;
-  height: ${UNIT_HEIGHT - 1}rem;
+  height: ${UNIT - 1}rem;
 
   padding: 0 1rem;
   box-sizing: border-box;

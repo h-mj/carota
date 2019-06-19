@@ -39,19 +39,21 @@ export type Body<TRoute extends Route> = Routes[TRoute]["body"];
 export type Data<TRoute extends Route> = Routes[TRoute]["data"];
 
 /**
- * Type of an object within response message body.
+ * Type of an object within response message body on route `TRoute`.
  */
-export type Response<TData> = DataResponse<TData> | ErrorResponse;
+export type Response<TRoute extends Route> =
+  | DataResponse<TRoute>
+  | ErrorResponse;
 
 /**
  * Type of an object within response message body if request was handled
  * successfully.
  */
-export interface DataResponse<TData> {
+export interface DataResponse<TRoute extends Route> {
   /**
    * Responded data.
    */
-  data: TData;
+  data: Data<TRoute>;
 }
 
 /**

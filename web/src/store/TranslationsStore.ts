@@ -34,6 +34,7 @@ export class TranslationsStore {
 }
 
 /**
- * The only `TranslationsStore` class instance.
+ * The only `TranslationsStore` class instance and which is provided to all
+ * components.
  */
 export const translations = new TranslationsStore();

@@ -6,9 +6,9 @@ import { translations, TranslationsStore } from "./TranslationsStore";
  * Mapping between store name and its class type.
  */
 export interface Stores {
-  auth: AuthStore;
-  scenes: ScenesStore;
-  translations: TranslationsStore;
+  readonly auth: AuthStore;
+  readonly scenes: ScenesStore;
+  readonly translations: TranslationsStore;
 }
 
 /**

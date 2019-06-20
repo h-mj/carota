@@ -6,7 +6,10 @@ import { authRouter } from "./auth";
 
 import { bodyParserOnError } from "./utility/errors";
 
-const BODY_PARSER_OPTIONS: bodyParser.Options = {
+/**
+ * `bodyParser` middleware options.
+ */
+const BODY_PARSER_OPTIONS: Readonly<bodyParser.Options> = {
   enableTypes: ["json"],
   onerror: bodyParserOnError
 };

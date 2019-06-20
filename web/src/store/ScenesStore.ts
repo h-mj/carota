@@ -2,9 +2,9 @@ import { autorun, computed, observable } from "mobx";
 import { Parameters, ROUTES, SceneNames, Stage } from "../scene";
 
 /**
- * Returns a scene name and it's parameters object based on given url.
+ * Returns a scene name and it's parameters object based on given URL.
  *
- * @param url Current url.
+ * @param url URL string.
  */
 const getStage = (url: string): Stage<SceneNames> => {
   forRoute: for (const route of Object.keys(ROUTES)) {
@@ -30,8 +30,6 @@ const getStage = (url: string): Stage<SceneNames> => {
       }
     }
 
-    console.log(parameters);
-
     return {
       sceneName: ROUTES[route as keyof typeof ROUTES],
       parameters: parameters
@@ -42,15 +40,12 @@ const getStage = (url: string): Stage<SceneNames> => {
 };
 
 /**
- * Returns a URL of a stage.
+ * Returns an URL from a given stage.
  */
-const getUrl = ({
-  sceneName: scene,
-  parameters
-}: Stage<SceneNames>): string => {
+const getUrl = ({ sceneName, parameters }: Stage<SceneNames>): string => {
   forRoute: for (const route of Object.keys(ROUTES)) {
     // If route's scene is not stage's scene, skip.
-    if (ROUTES[route as keyof typeof ROUTES] !== scene) {
+    if (ROUTES[route as keyof typeof ROUTES] !== sceneName) {
       continue;
     }
 
@@ -59,7 +54,7 @@ const getUrl = ({
     if (parameters !== undefined) {
       // Replace all parameters with their values in parameters.
       for (const parameter of Object.keys(parameters)) {
-        // If there's no such parameter, it's wrong route.
+        // If there's no such parameter, it's a wrong route.
         if (!url.includes(`{${parameter}}`)) {
           continue forRoute;
         }
@@ -68,7 +63,7 @@ const getUrl = ({
       }
     }
 
-    // If there are still parameters present in url, it's wrong route.
+    // If there are still parameters present in url, it's also a wrong route.
     if (url.match(/{.*}/) !== null) {
       continue;
     }
@@ -82,18 +77,20 @@ const getUrl = ({
 /**
  * Store that stores and updates all stages.
  *
- * It is also responsible for selecting correct scene name based on current URL
- * and updating current URL if scene name is changed.
+ * It is also responsible for retrieving correct scene name and parameters based
+ * on current URL and updating current URL if scene name or parameters were
+ * changed.
  */
 export class ScenesStore {
   /**
-   * Current main scene.
+   * Current main stage.
    */
   @observable private mainStage: Stage<SceneNames>;
 
   /**
-   * Creates a new instance of `ScenesStore` and adds listeners stage change and
-   * history state pop events which update url and stage correspondingly.
+   * Creates a new instance of `ScenesStore` and adds listeners for main stage
+   * change and history state pop events which update url and main stage
+   * correspondingly.
    */
   public constructor() {
     this.mainStage = getStage(window.location.pathname);
@@ -126,7 +123,7 @@ export class ScenesStore {
   }
 
   /**
-   * Sets main stage's scene and parameters.
+   * Sets main stage's scene name and parameters.
    *
    * @param sceneName
    * @param parameters
@@ -140,6 +137,7 @@ export class ScenesStore {
 }
 
 /**
- * The only `ScenesStore` class instance.
+ * The only `ScenesStore` class instance and which is provided to all
+ * components.
  */
 export const scenes = new ScenesStore();

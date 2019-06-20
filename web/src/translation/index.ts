@@ -1,26 +1,28 @@
 import { InputNames } from "../component/Input";
 import { ErrorReasons } from "api";
-import { FormSceneNames } from "../component/Form";
+import { FormTypes } from "../component/Form";
 
 /**
- * Translation type that includes all other translations.
+ * Translation type that contains all other translations.
  */
 export interface Translation {
   /**
    * Input component translations.
    */
-  inputs: InputTranslations;
+  readonly inputs: InputTranslations;
 
   /**
    * Form component translations.
    */
-  forms: FormTranslations;
+  readonly forms: FormTranslations;
 }
 
 /**
  * Type that maps input name to its translation.
  */
-type InputTranslations = { [InputName in InputNames]: InputTranslation };
+type InputTranslations = {
+  readonly [InputName in InputNames]: InputTranslation
+};
 
 /**
  * Translations of an input component.
@@ -29,23 +31,25 @@ interface InputTranslation {
   /**
    * Input placeholder text.
    */
-  placeholder: string;
+  readonly placeholder: string;
 
   /**
    * Error reason translations.
    */
-  reasons: InputErrorReasonTranslations;
+  readonly reasons: InputErrorReasonTranslations;
 }
 
 /**
  * Error reason translation texts.
  */
-type InputErrorReasonTranslations = { [ErrorReason in ErrorReasons]?: string };
+type InputErrorReasonTranslations = {
+  readonly [ErrorReason in ErrorReasons]?: string
+};
 
 /**
  * Type that maps form scene name to its translation.
  */
-type FormTranslations = { [FormSceneName in FormSceneNames]: FormTranslation };
+type FormTranslations = { readonly [FormType in FormTypes]: FormTranslation };
 
 /**
  * Translations of a form component.
@@ -54,10 +58,10 @@ interface FormTranslation {
   /**
    * Form submit button text.
    */
-  submit: string;
+  readonly submit: string;
 
   /**
    * Form title text that will be shown before input fields.
    */
-  title?: string;
+  readonly title?: string;
 }

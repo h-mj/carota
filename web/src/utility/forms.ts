@@ -3,27 +3,30 @@ import { InputNames } from "../component/Input";
 import { FormErrorReasons, FormValues } from "../component/Form";
 
 /**
- * Checks whether or not `field` is a form input name.
+ * Checks whether or not `inputName` is a form input name using `formValues`
+ * object, which should contain `inputName` as it's key.
  *
- * @param field
- * @param object
+ * @param inputName Field name.
+ * @param formValues Form values which are used to check whether or not
+ * `inputName` is a form field.
  */
 export const isFormInputName = <TInputNames extends InputNames>(
-  field: string,
-  object: FormValues<TInputNames>
-): field is TInputNames => {
-  return field in object;
+  inputName: string,
+  formValues: FormValues<TInputNames>
+): inputName is TInputNames => {
+  return inputName in formValues;
 };
 
 /**
  * Creates a new `FormErrorReasons<TInputNames>` object from given API `Error`
  * object detailing for each erroneous field its error reason.
  *
- * Form `values` object is used to check whether or not erroneous field is form
- * field or not.
+ * Form `values` object is used to check whether or not erroneous input field is
+ * form input field or not.
  *
  * @param error API Error object.
- * @param values Form values used to check whether or not field is a form field.
+ * @param values Form values which are used to check whether or not field is a
+ * form field.
  */
 export const createFormErrorsReasons = <TInputNames extends InputNames>(
   error: Error,
@@ -49,9 +52,9 @@ export const createFormErrorsReasons = <TInputNames extends InputNames>(
 };
 
 /**
- * Returns whether or not there are any erroneous fields.
+ * Returns whether or not there are any erroneous input fields.
  *
- * @param reasons Error reasons of each field.
+ * @param reasons Error reasons object.
  */
 export const anyErrors = <TInputNames extends InputNames>(
   reasons: FormErrorReasons<TInputNames>

@@ -1,5 +1,11 @@
 import { createUniqueConstraintError } from "./errors";
 
+/**
+ * Wrapper function for database calls that catches database specific errors and
+ * throws `HttpError` type errors instead.
+ *
+ * @throws `BadRequestError` if unique constraint error was caught.
+ */
 export const callCatch = async <T>(fn: () => Promise<T>): Promise<T> => {
   try {
     return await fn();

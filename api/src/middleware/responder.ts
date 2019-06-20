@@ -22,7 +22,7 @@ export const responder = (): Middleware => async (context, next) => {
       httpError = error;
     } else {
       console.error(error);
-      httpError = new InternalServerErrorError("Unknown error occurred");
+      httpError = new InternalServerErrorError("Unknown error occurred.");
     }
 
     context.status = httpError.code;

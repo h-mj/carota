@@ -15,8 +15,9 @@ export class AuthStore {
   /**
    * Creates a new instance of `AuthStore`.
    *
-   * Assigns token inside `localStorage` to field `token` and every time field
-   * `token` changes `localStorage` is updated.
+   * Assigns token inside `localStorage` to field `token` and creates an
+   * `autorun` that updates token value inside `localStorage` any time field
+   * `token` changes.
    */
   public constructor() {
     this.token = localStorage.getItem("token") || undefined;
@@ -31,7 +32,7 @@ export class AuthStore {
   }
 
   /**
-   * Returns `Authorization` header field value or undefined, if user is not
+   * Returns `Authorization` header field value or `undefined`, if user is not
    * authenticated.
    */
   @computed
@@ -54,7 +55,7 @@ export class AuthStore {
   /**
    * Makes a `POST` request with given `body` to API signing in route and on
    * success assigns returned token to field `token` and returns `undefined` or
-   * returns `api.Error` type object.
+   * returns an `Error` object.
    */
   @action
   public async login(body: Body<"/auth/login">) {
@@ -72,7 +73,7 @@ export class AuthStore {
   /**
    * Makes a `POST` request with given `body` to API registration route and on
    * success assigns returned token to field `token` and returns `undefined` or
-   * returns `api.Error` type object.
+   * returns an `Error` object.
    */
   @action
   public async register(body: Body<"/auth/register">) {
@@ -97,6 +98,6 @@ export class AuthStore {
 }
 
 /**
- * The only `AuthStore` class instance.
+ * The only `AuthStore` class instance and which is provided to all components
  */
 export const auth = new AuthStore();

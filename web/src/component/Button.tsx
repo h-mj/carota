@@ -29,7 +29,7 @@ export const Button: React.FunctionComponent<ButtonProps> = ({
 );
 
 /**
- * Container component that contains all other components.
+ * Container component that contains the button component.
  */
 const Container = styled.div`
   position: relative;
@@ -51,7 +51,7 @@ const defaultStyle = css`
 `;
 
 /**
- * Button color styling when property `hasError` is true.
+ * Button color styling when property `hasError` is `true`.
  */
 const errorStyle = css`
   &,

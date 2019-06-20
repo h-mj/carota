@@ -21,14 +21,14 @@ export interface InputChangeHandler<TName extends InputNames> {
 }
 
 /**
- * Union of all supported input names.
+ * Union of input names.
  */
 export type InputNames = "email" | "password";
 
 /**
- * Union of all supported input types.
+ * Union of input types.
  */
-export type InputTypes = "text" | "email" | "password" | "number";
+type InputTypes = "text" | "email" | "password" | "number";
 
 /**
  * Mapping between input name and its type.
@@ -60,8 +60,7 @@ interface InputProps<TInputName extends InputNames> {
   /**
    * Error reason, which is used to display translated error message.
    *
-   * If reason is not `undefined`, some of the input components will also be
-   * colored red.
+   * If reason is defined, some of the input sub-components will be colored red.
    */
   reason?: ErrorReasons;
 
@@ -85,6 +84,9 @@ export class Input<TInputName extends InputNames> extends React.Component<
    */
   private reason?: ErrorReasons;
 
+  /**
+   * Renders this component.
+   */
   public render() {
     const { autoFocus, name, reason, translations, value } = this.props;
 
@@ -131,7 +133,7 @@ export class Input<TInputName extends InputNames> extends React.Component<
 }
 
 /**
- * Container component that contains all other components.
+ * Container component that contains all input sub-components.
  */
 const Container = styled.div`
   position: relative;
@@ -211,8 +213,7 @@ const Error = styled.div`
 `;
 
 /**
- * Color styling of input and its sub-components when property `error` is not
- * `undefined`.
+ * Color styling of input and its sub-components when there are no errors.
  */
 const defaultColors = css`
   & + ${Border} {
@@ -229,8 +230,7 @@ const defaultColors = css`
 `;
 
 /**
- * Color styling of input and its sub-components when property `error` is
- * `undefined`.
+ * Color styling of input and its sub-components when error reason is defined.
  */
 const errorColors = css`
   & + ${Border}, & + * + ${Placeholder} {

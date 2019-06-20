@@ -5,14 +5,18 @@ import { Account } from "../../entity/Account";
 import { BadRequestError } from "../../error/BadRequestError";
 
 /**
- * Type of payload in JWT.
+ * Type of payload within JWT.
  */
 export interface Payload {
+  /**
+   * Account id, which is used to retrieve corresponding account on
+   * authentication.
+   */
   id: string;
 }
 
 /**
- * Creates a payload from a given account.
+ * Creates a payload object that will be signed from a given account.
  *
  * @param account Account from which payload is created.
  */
@@ -21,7 +25,7 @@ const createPayload = (account: Account): Payload => {
 };
 
 /**
- * Signs a payload generated based on a given account using `SECRET` environment
+ * Signs a payload created based on a given account using `SECRET` environment
  * variable.
  *
  * @param account Account from which payload is created.
@@ -31,7 +35,7 @@ export const signToken = (account: Account) => {
 };
 
 /**
- * Middleware state type after both authentication.
+ * Middleware state type after authentication middleware has been run.
  */
 export interface AuthenticationState {
   /**
@@ -45,8 +49,10 @@ export interface AuthenticationState {
  * `Authorization` header and retrieving and assigning corresponding account to
  * `context.state.account`.
  *
- * If no header is provided, header value is invalid or token inside the header
- * is invalid, `BadRequestError` is thrown.
+ * @throws `BadRequestError` if `Authorization` header value structure is
+ * invalid.
+ * @throws `ForbiddenError` if header is not provided, token is incorrect or
+ * associated account does not exist.
  */
 export const authenticator = (): Middleware<AuthenticationState> => async (
   context,
@@ -95,12 +101,12 @@ export const authenticator = (): Middleware<AuthenticationState> => async (
 
   if (account === undefined) {
     throw new ForbiddenError(
-      'Token provided in header field "Authorization" is valid, but account does not exist.',
+      'Token provided in header field "Authorization" is valid, but associated account does not exist.',
       {
         location: { part: "headers", field: "Authorization" },
         reason: "incorrect",
         message:
-          'Token provided in header field "Authorization" is valid, but account does not exist.'
+          'Token provided in header field "Authorization" is valid, but associated account does not exist.'
       }
     );
   }

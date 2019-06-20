@@ -1,21 +1,22 @@
 import { ErrorReasons } from "api";
 import { inject, observer } from "mobx-react";
+import styled from "styled-components";
 import * as React from "react";
 import { Button } from "./Button";
 import { Input, InputChangeHandler, InputNames } from "./Input";
 import { InjectedProps } from "../store";
-import { anyErrors } from "../utility/forms";
-import styled from "styled-components";
 import { UNIT } from "../styling/sizes";
+import { anyErrors } from "../utility/forms";
 
 /**
- * Scenes that use form component and should have appropriate translations.
+ * Union of all form types which is used to retrieve appropriate translations
+ * for title and submit button texts.
  */
-export type FormSceneNames = "signIn";
+export type FormTypes = "signIn";
 
 /**
- * Form input errors type that maps input name to its error message. `undefined`
- * if there's are no errors.
+ * Form input errors type that maps input name to its error reason. `undefined`
+ * if input doesn't have any errors.
  */
 export type FormErrorReasons<TInputNames extends InputNames> = {
   [InputName in TInputNames]?: ErrorReasons
@@ -40,12 +41,12 @@ export interface FormSubmitHandler {
  */
 interface FormProps<TInputNames extends InputNames> {
   /**
-   * List of all field names in order.
+   * List of all field names in order from top to bottom.
    */
   names: TInputNames[];
 
   /**
-   * Change callback function.
+   * Input change callback function.
    */
   onChange?: InputChangeHandler<TInputNames>;
 
@@ -60,9 +61,10 @@ interface FormProps<TInputNames extends InputNames> {
   reasons: FormErrorReasons<TInputNames>;
 
   /**
-   * Scene name which uses this component.
+   * Form type that is used to retrieve appropriate translations for title and
+   * submit button texts.
    */
-  scene: FormSceneNames;
+  type: FormTypes;
 
   /**
    * Mapping between input name and its value.
@@ -79,16 +81,8 @@ export class Form<TInputNames extends InputNames> extends React.Component<
   FormProps<TInputNames> & InjectedProps
 > {
   public render() {
-    const {
-      names,
-      onChange,
-      reasons,
-      scene,
-      translations,
-      values
-    } = this.props;
-
-    const { submit, title } = translations!.translation.forms[scene];
+    const { names, onChange, reasons, translations, type, values } = this.props;
+    const { submit, title } = translations!.translation.forms[type];
 
     return (
       <form noValidate={true} onSubmit={this.handleSubmit}>
@@ -111,7 +105,7 @@ export class Form<TInputNames extends InputNames> extends React.Component<
   }
 
   /**
-   * Prevents forms default submit event and calls `onSubmit` property if
+   * Prevents default submit event and calls `onSubmit` property if it is
    * defined.
    */
   private handleSubmit: React.FormEventHandler<HTMLFormElement> = event => {
@@ -126,7 +120,7 @@ export class Form<TInputNames extends InputNames> extends React.Component<
 }
 
 /**
- * Title message on top of the form.
+ * Title message component on top of the form.
  */
 const Title = styled.div`
   height: ${1.5 * UNIT}rem;

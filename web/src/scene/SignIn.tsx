@@ -14,7 +14,7 @@ import { UNIT } from "../styling/sizes";
 import { createFormErrorsReasons } from "../utility/forms";
 
 /**
- * Union of all forum input names this scene uses.
+ * Union of all form input names this scene uses.
  */
 type InputNames = "email" | "password";
 
@@ -37,6 +37,9 @@ export class SignIn extends Scene<"signIn"> {
    */
   @observable private reasons: FormErrorReasons<InputNames> = {};
 
+  /**
+   * Renders a sign in form.
+   */
   public render() {
     return (
       <Container>
@@ -45,7 +48,7 @@ export class SignIn extends Scene<"signIn"> {
           onChange={this.onChange}
           onSubmit={this.onSubmit}
           reasons={this.reasons}
-          scene="signIn"
+          type="signIn"
           values={this.values}
         />
       </Container>

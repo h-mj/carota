@@ -2,16 +2,16 @@
  * Interface that holds all available routes as keys alongside with it's request
  * and response message types as values.
  */
-interface Routes {
-  "/auth/login": Types<AuthLoginBody, AuthData>;
-  "/auth/register": Types<AuthRegisterBody, AuthData>;
+interface RouteTypes {
+  "/auth/login": RouteType<AuthLoginBody, AuthData>;
+  "/auth/register": RouteType<AuthRegisterBody, AuthData>;
 }
 
 /**
  * Route types. `TBody` corresponds to the type of request message body, `TData`
  * to type of field `data` in response message body.
  */
-interface Types<TBody, TData> {
+interface RouteType<TBody, TData> {
   /**
    * Type of object that is within request message body.
    */
@@ -26,17 +26,17 @@ interface Types<TBody, TData> {
 /**
  * Route type.
  */
-export type Route = keyof Routes;
+export type Route = keyof RouteTypes;
 
 /**
  * Body type of the route `TRoute`.
  */
-export type Body<TRoute extends Route> = Routes[TRoute]["body"];
+export type Body<TRoute extends Route> = RouteTypes[TRoute]["body"];
 
 /**
  * Data type of the route `TRoute`.
  */
-export type Data<TRoute extends Route> = Routes[TRoute]["data"];
+export type Data<TRoute extends Route> = RouteTypes[TRoute]["data"];
 
 /**
  * Type of an object within response message body on route `TRoute`.
@@ -167,7 +167,9 @@ export type ErrorContextElement = string | number | string[];
  * Type that is used to create enum like objects with given constants
  * `TConstants`.
  */
-export type Enum<TConstants extends string> = { readonly [C in TConstants]: C };
+export type Enum<TConstants extends string> = {
+  readonly [Constant in TConstants]: Constant;
+};
 
 /**
  * Union of all languages.

@@ -12,19 +12,19 @@ type SceneTypes =
   | SceneType<Unknown, typeof Unknown>;
 
 /**
- * Interface that defines scene component class and type.
+ * Interface that defines for each scene its component class and type of that class.
  */
 interface SceneType<
   TClass extends Scene<SceneNames>,
   TTypeof extends typeof Scene
 > {
   /**
-   * Scene class type.
+   * Scene component class type.
    */
   class: TClass;
 
   /**
-   * Scene typeof type.
+   * Scene component class type type.
    */
   typeof: TTypeof;
 }
@@ -39,23 +39,18 @@ export type SceneNames = SceneTypes["class"] extends Scene<
   : never;
 
 /**
- * Type which maps scene name to its class type.
- */
-type SceneClasses = { [SceneName in SceneNames]: typeof Scene };
-
-/**
- * Object where scene names are mapped to its class. This object is used to
+ * Object where scene names are mapped to its class type. This object is used to
  * render a scene using only its name and change drawn scene by only changing
- * the name of the current scene.
+ * the name of the current scene in store `ScenesStore`.
  */
-export const SCENES: SceneClasses = {
+export const SCENES: { readonly [SceneName in SceneNames]: typeof Scene } = {
   home: Home,
   signIn: SignIn,
   unknown: Unknown
 };
 
 /**
- * Stage type that defines it's scene and context.
+ * Stage type that defines a scene name and its parameters.
  */
 export interface Stage<TSceneName extends SceneNames> {
   /**
@@ -70,19 +65,21 @@ export interface Stage<TSceneName extends SceneNames> {
 }
 
 /**
- * Maps routes to corresponding scene and route parameters.
+ * Defines routes and its corresponding scene name and route parameter names. If
+ * route parameter names type is `never`, then there are no parameters within
+ * the path.
  */
 interface RouteTypes {
-  "/": RouteType<"home">;
-  "/login": RouteType<"signIn">;
+  "/": RouteType<"home", never>;
+  "/login": RouteType<"signIn", never>;
 }
 
 /**
- * Type that defines route scene name and route parameters.
+ * Type that defines some route's scene name and route parameter names.
  */
 interface RouteType<
   TSceneName extends SceneNames,
-  TParameterNames extends string = never
+  TParameterNames extends string
 > {
   /**
    * Route parameter names type.
@@ -96,9 +93,8 @@ interface RouteType<
 }
 
 /**
- * Parameters object type of scene named `TSceneName`, which maps scene's route
- * parameters `ParameterNames<TSceneName>` to `string`, if it is required in
- * each parameter list, or `string | undefined`.
+ * Type that is a union of all possible parameter names to `string` mappings of
+ * all routes, which scene name is one of the `TSceneNames` names.
  */
 export type Parameters<TSceneNames extends string> = {
   [SceneName in TSceneNames]: {
@@ -109,16 +105,12 @@ export type Parameters<TSceneNames extends string> = {
 }[TSceneNames];
 
 /**
- * Type that maps route to its scene name.
+ * Object that maps all routes to their corresponding scene name. Used to
+ * retrieve scene name based on current browser pathname.
  */
-type RouteSceneNames = {
-  [Route in keyof RouteTypes]: RouteTypes[Route]["sceneName"]
-};
-
-/**
- * The object that stores the mapping between routes and scenes.
- */
-export const ROUTES: RouteSceneNames = {
+export const ROUTES: {
+  readonly [Route in keyof RouteTypes]: RouteTypes[Route]["sceneName"]
+} = {
   "/": "home",
   "/login": "signIn"
 };

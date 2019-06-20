@@ -10,9 +10,9 @@ import { UnauthorizedError } from "../../error/UnauthorizedError";
 import { InternalServerErrorError } from "../../error/InternalServerError";
 
 /**
- * Function that is used as `onerror` function in `koa-bodyparser`.
+ * Function that is used as `onerror` function in `bodyParser` options.
  *
- * Throws a `BadRequestError` when `koa-bodyparser` fails to parse the body.
+ * @throws `BadRequestError` if `bodyParser` fails to parse the body.
  */
 export const bodyParserOnError = () => {
   const message = "Invalid JSON object in the request body message.";
@@ -29,7 +29,7 @@ export const bodyParserOnError = () => {
 /**
  * Maps Joi error types to error reasons.
  */
-const TYPE_TO_REASON: { [type: string]: ErrorReasons } = {
+const TYPE_TO_REASON: { readonly [type: string]: ErrorReasons } = {
   "any.allowOnly": "invalid",
   "any.empty": "empty",
   "any.required": "missing",
@@ -45,7 +45,7 @@ const TYPE_TO_REASON: { [type: string]: ErrorReasons } = {
  * `undefined` if context must not be included.
  */
 const TYPE_TO_CONTEXT_TEMPLATE: {
-  [type: string]: { [field: string]: Transformation };
+  readonly [type: string]: { [field: string]: Transformation };
 } = {
   "any.allowOnly": { valids: { name: "options" } },
   "string.min": { limit: { name: "length" } }
@@ -56,8 +56,19 @@ const TYPE_TO_CONTEXT_TEMPLATE: {
  * functions for a specific field in Joi detail context.
  */
 interface Transformation {
+  /**
+   * New name of the field.
+   */
   name: string;
+
+  /**
+   * Function that converts field value into a string for error messages.
+   */
   stringify?: Stringify;
+
+  /**
+   * Function that converts field value into another value of some kind.
+   */
   transform?: Transform;
 }
 
@@ -109,11 +120,15 @@ const DEFAULT_TRANSFORM: Transform = (entity: unknown) => {
 };
 
 /**
- * Maps Joi error types to message templates. `{field}` will be replaced by
- * corresponding field name and other variables (in the form of `{VARIABLE}`)
- * must appear in this type's context template as `name` field.
+ * Maps Joi error types to message templates.
+ *
+ * Substring `{field}` will be replaced by corresponding field name and other
+ * variables (in the form of `{VARIABLE}`) will be replaced by stringified
+ * versions of the values using defined `stringify` function provided by
+ * `Transformation` object, or `DEFAULT_STRINGIFY` function. Other variable
+ * names must appear in this type's `Transformation` object as `name` field.
  */
-const TYPE_TO_MESSAGE: { [type: string]: string } = {
+const TYPE_TO_MESSAGE: { readonly [type: string]: string } = {
   "any.allowOnly": 'Field "{field}" must be one of {options}.',
   "any.empty": 'Field "{field}" must not be empty.',
   "any.required": 'Field "{field}" is required.',
@@ -227,7 +242,7 @@ export const createIdNotFoundError = (
 /**
  * Creates a new `BadRequestError` stating that given field is not unique.
  *
- * @param field Field, whose value must be unique.
+ * @param field Field, which value must be unique.
  */
 export const createUniqueConstraintError = (field: string) => {
   const message = `Field "${field}" must be unique.`;

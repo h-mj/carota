@@ -2,7 +2,7 @@ import * as Router from "koa-router";
 import { hash, compare } from "bcryptjs";
 import { defineNoAuth } from "./utility/routes";
 import { Schema, is } from "./middleware/validator";
-import { LanguageEnum, Account } from "../entity/Account";
+import { LanguagesEnum, Account } from "../entity/Account";
 import { Invitation } from "../entity/Invitation";
 import {
   createInvalidCredentialsError,
@@ -41,7 +41,7 @@ defineNoAuth(authRouter, "/auth/login", loginSchema, async context => {
  */
 const registerSchema: Schema<"/auth/register"> = {
   name: is.string(),
-  language: is.string().valid(Object.keys(LanguageEnum)),
+  language: is.string().valid(Object.keys(LanguagesEnum)),
   email: is.string().email(),
   password: is.string().min(8),
   invitationId: is.string().guid()

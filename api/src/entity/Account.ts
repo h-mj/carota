@@ -8,17 +8,17 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 
-import { AccountRights, AccountType, Enum, Language } from "../types";
+import { AccountRights, AccountTypes, Enum, Languages } from "../types";
 
 import { Person } from "./Person";
 
-export const LanguageEnum: Enum<Language> = {
+export const LanguagesEnum: Enum<Languages> = {
   English: "English",
   Estonian: "Estonian",
   Russian: "Russian"
 };
 
-export const AccountTypeEnum: Enum<AccountType> = {
+export const AccountTypesEnum: Enum<AccountTypes> = {
   Adviser: "Adviser",
   Default: "Default"
 };
@@ -36,8 +36,8 @@ export class Account extends BaseEntity {
   @Column()
   public name!: string;
 
-  @Column("enum", { enum: LanguageEnum })
-  public language!: Language;
+  @Column("enum", { enum: LanguagesEnum })
+  public language!: Languages;
 
   @Column({ unique: true })
   public email!: string;
@@ -55,8 +55,8 @@ export class Account extends BaseEntity {
   @ManyToOne(() => Account)
   public inviter?: Account;
 
-  @Column("enum", { enum: AccountTypeEnum })
-  public type!: AccountType;
+  @Column("enum", { enum: AccountTypesEnum })
+  public type!: AccountTypes;
 
   @Column("enum", { enum: AccountRightsEnum })
   public rights!: AccountRights;

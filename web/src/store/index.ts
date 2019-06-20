@@ -1,6 +1,6 @@
-import { translations, TranslationsStore } from "./TranslationsStore";
-import { scenes, ScenesStore } from "./ScenesStore";
 import { auth, AuthStore } from "./AuthStore";
+import { scenes, ScenesStore } from "./ScenesStore";
+import { translations, TranslationsStore } from "./TranslationsStore";
 
 /**
  * Mapping between store name and its class type.

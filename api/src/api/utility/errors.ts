@@ -1,6 +1,6 @@
 import {
   ErrorDetail,
-  ErrorReason,
+  ErrorReasons,
   ErrorContext,
   ErrorContextElement
 } from "../../types";
@@ -29,7 +29,7 @@ export const bodyParserOnError = () => {
 /**
  * Maps Joi error types to error reasons.
  */
-const TYPE_TO_REASON: { [type: string]: ErrorReason } = {
+const TYPE_TO_REASON: { [type: string]: ErrorReasons } = {
   "any.allowOnly": "invalid",
   "any.empty": "empty",
   "any.required": "missing",

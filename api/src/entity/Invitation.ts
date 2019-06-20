@@ -6,8 +6,8 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 
-import { AccountRights, AccountType } from "../types";
-import { Account, AccountRightsEnum, AccountTypeEnum } from "./Account";
+import { AccountRights, AccountTypes } from "../types";
+import { Account, AccountRightsEnum, AccountTypesEnum } from "./Account";
 
 @Entity()
 export class Invitation extends BaseEntity {
@@ -20,8 +20,8 @@ export class Invitation extends BaseEntity {
   @ManyToOne(() => Account)
   public inviter?: Account;
 
-  @Column("enum", { enum: AccountTypeEnum })
-  public type!: AccountType;
+  @Column("enum", { enum: AccountTypesEnum })
+  public type!: AccountTypes;
 
   @Column("enum", { enum: AccountRightsEnum })
   public rights!: AccountRights;

@@ -1,14 +1,14 @@
-import { Language } from "api";
+import { Languages } from "api";
+import { computed, observable } from "mobx";
 import { Translation } from "../translation";
 import { english } from "../translation/english";
 import { estonian } from "../translation/estonian";
 import { russian } from "../translation/russian";
-import { observable, computed } from "mobx";
 
 /**
  * Object that stores each language's translation object.
  */
-const TRANSLATIONS: { [L in Language]: Translation } = {
+const TRANSLATIONS: { [Language in Languages]: Translation } = {
   English: english,
   Estonian: estonian,
   Russian: russian
@@ -22,7 +22,7 @@ export class TranslationsStore {
   /**
    * Current interface language.
    */
-  @observable private language: Language = "English";
+  @observable private language: Languages = "English";
 
   /**
    * Returns translation object based on current interface language.

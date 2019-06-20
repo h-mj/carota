@@ -1,4 +1,4 @@
-import { ErrorReason } from "api";
+import { ErrorReasons } from "api";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled, { css } from "styled-components";
@@ -16,24 +16,24 @@ import { InjectedProps } from "../store";
 /**
  * Input value change callback function type.
  */
-export interface InputChangeHandler<TName extends InputName> {
+export interface InputChangeHandler<TName extends InputNames> {
   (name: TName, value: string): void;
 }
 
 /**
  * Union of all supported input names.
  */
-export type InputName = "email" | "password";
+export type InputNames = "email" | "password";
 
 /**
  * Union of all supported input types.
  */
-export type InputType = "text" | "email" | "password" | "number";
+export type InputTypes = "text" | "email" | "password" | "number";
 
 /**
  * Mapping between input name and its type.
  */
-const NAME_TO_TYPE: { [N in InputName]: InputType } = {
+const NAME_TO_TYPE: { [InputName in InputNames]: InputTypes } = {
   email: "email",
   password: "password"
 };
@@ -41,7 +41,7 @@ const NAME_TO_TYPE: { [N in InputName]: InputType } = {
 /**
  * Input component properties.
  */
-interface InputProps<TName extends InputName> {
+interface InputProps<TInputName extends InputNames> {
   /**
    * Boolean whether or not this input should be in the focus automatically.
    */
@@ -50,12 +50,12 @@ interface InputProps<TName extends InputName> {
   /**
    * Name of this input. Used as one of the callback function arguments.
    */
-  name: TName;
+  name: TInputName;
 
   /**
    * Change callback function.
    */
-  onChange?: InputChangeHandler<TName>;
+  onChange?: InputChangeHandler<TInputName>;
 
   /**
    * Error reason, which is used to display translated error message.
@@ -63,7 +63,7 @@ interface InputProps<TName extends InputName> {
    * If reason is not `undefined`, some of the input components will also be
    * colored red.
    */
-  reason?: ErrorReason;
+  reason?: ErrorReasons;
 
   /**
    * The value within the input.
@@ -76,14 +76,14 @@ interface InputProps<TName extends InputName> {
  */
 @inject("translations")
 @observer
-export class Input<TName extends InputName> extends React.Component<
-  InputProps<TName> & InjectedProps
+export class Input<TInputName extends InputNames> extends React.Component<
+  InputProps<TInputName> & InjectedProps
 > {
   /**
    * Cache of previous property `reason` value so that error text does not
    * disappear abruptly when error is gone.
    */
-  private reason?: ErrorReason;
+  private reason?: ErrorReasons;
 
   public render() {
     const { autoFocus, name, reason, translations, value } = this.props;

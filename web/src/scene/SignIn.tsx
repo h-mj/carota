@@ -1,33 +1,33 @@
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
+import styled from "styled-components";
+import { Scene } from "./Scene";
 import { InputChangeHandler } from "../component/Input";
 import {
   Form,
   FormErrorReasons,
-  FormValues,
-  FormSubmitHandler
+  FormSubmitHandler,
+  FormValues
 } from "../component/Form";
-import styled from "styled-components";
-import { InjectedProps } from "../store";
-import { createFormErrorsReasons } from "../utility/forms";
 import { UNIT } from "../styling/sizes";
+import { createFormErrorsReasons } from "../utility/forms";
 
 /**
  * Union of all forum input names this scene uses.
  */
-type Name = "email" | "password";
+type InputNames = "email" | "password";
 
 /**
  * Scene that renders a form used for signing in.
  */
-@inject("auth")
+@inject("auth", "scenes")
 @observer
-export class SignIn extends React.Component<InjectedProps> {
+export class SignIn extends Scene<"signIn"> {
   /**
    * Form input field values.
    */
-  @observable private values: FormValues<Name> = {
+  @observable private values: FormValues<InputNames> = {
     email: "",
     password: ""
   };
@@ -35,7 +35,7 @@ export class SignIn extends React.Component<InjectedProps> {
   /**
    * Form input field error reasons.
    */
-  @observable private reasons: FormErrorReasons<Name> = {};
+  @observable private reasons: FormErrorReasons<InputNames> = {};
 
   public render() {
     return (
@@ -53,7 +53,10 @@ export class SignIn extends React.Component<InjectedProps> {
   }
 
   @action
-  private onChange: InputChangeHandler<Name> = (name: Name, value: string) => {
+  private onChange: InputChangeHandler<InputNames> = (
+    name: InputNames,
+    value: string
+  ) => {
     this.values[name] = value;
   };
 
@@ -62,7 +65,7 @@ export class SignIn extends React.Component<InjectedProps> {
     const error = await this.props.auth!.login(this.values);
 
     if (error === undefined) {
-      return;
+      return this.props.scenes!.redirect("signIn", {});
     }
 
     this.reasons = createFormErrorsReasons(error, this.values);

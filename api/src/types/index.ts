@@ -103,7 +103,7 @@ export interface ErrorDetail {
   /**
    * Reason phrase of the the occurred error.
    */
-  reason: ErrorReason;
+  reason: ErrorReasons;
 
   /**
    * Extra information about the occurred error.
@@ -123,7 +123,7 @@ export interface ErrorLocation {
   /**
    * HTTP request message part that is related to the occurred error.
    */
-  part: ErrorLocationPart;
+  part: ErrorLocationParts;
 
   /**
    * Header or object field that is related to the occurred error. `undefined` if
@@ -135,12 +135,12 @@ export interface ErrorLocation {
 /**
  * Part of the request message where the error occurred.
  */
-export type ErrorLocationPart = "request-line" | "headers" | "body";
+export type ErrorLocationParts = "request-line" | "headers" | "body";
 
 /**
  * Error reason type containing all possible reasons.
  */
-export type ErrorReason =
+export type ErrorReasons =
   | "empty"
   | "missing"
   | "invalid"
@@ -170,17 +170,17 @@ export type ErrorContextElement = string | number | string[];
 export type Enum<TConstants extends string> = { readonly [C in TConstants]: C };
 
 /**
- * Language type.
+ * Union of all languages.
  */
-export type Language = "English" | "Estonian" | "Russian";
+export type Languages = "English" | "Estonian" | "Russian";
 
 /**
- * All account type options.
+ * Union of all account types.
  */
-export type AccountType = "Default" | "Adviser";
+export type AccountTypes = "Default" | "Adviser";
 
 /**
- * All account rights options.
+ * Union of all account rights.
  */
 export type AccountRights = "Default" | "All";
 
@@ -211,7 +211,7 @@ export interface AuthRegisterBody {
   /**
    * Account language.
    */
-  language: Language;
+  language: Languages;
 
   /**
    * Account email.
@@ -230,9 +230,9 @@ export interface AuthRegisterBody {
 }
 
 /**
- * Sex type.
+ * Union of all sexes.
  */
-export type Sex = "Female" | "Male";
+export type Sexes = "Female" | "Male";
 
 /**
  * Login response message data type.

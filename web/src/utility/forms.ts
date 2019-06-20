@@ -1,6 +1,6 @@
 import { Error } from "api";
+import { InputNames } from "../component/Input";
 import { FormErrorReasons, FormValues } from "../component/Form";
-import { InputName } from "../component/Input";
 
 /**
  * Checks whether or not `field` is a form input name.
@@ -8,16 +8,16 @@ import { InputName } from "../component/Input";
  * @param field
  * @param object
  */
-export const isFormInputName = <TNames extends InputName>(
+export const isFormInputName = <TInputNames extends InputNames>(
   field: string,
-  object: FormValues<TNames>
-): field is TNames => {
+  object: FormValues<TInputNames>
+): field is TInputNames => {
   return field in object;
 };
 
 /**
- * Creates a new `FormErrorReasons<TName>` object from given API `Error` object
- * detailing for each erroneous field its error reason.
+ * Creates a new `FormErrorReasons<TInputNames>` object from given API `Error`
+ * object detailing for each erroneous field its error reason.
  *
  * Form `values` object is used to check whether or not erroneous field is form
  * field or not.
@@ -25,11 +25,11 @@ export const isFormInputName = <TNames extends InputName>(
  * @param error API Error object.
  * @param values Form values used to check whether or not field is a form field.
  */
-export const createFormErrorsReasons = <TNames extends InputName>(
+export const createFormErrorsReasons = <TInputNames extends InputNames>(
   error: Error,
-  values: FormValues<TNames>
-): FormErrorReasons<TNames> => {
-  const errors: FormErrorReasons<TNames> = {};
+  values: FormValues<TInputNames>
+): FormErrorReasons<TInputNames> => {
+  const errors: FormErrorReasons<TInputNames> = {};
 
   if (error.details === undefined) {
     return errors;
@@ -53,8 +53,8 @@ export const createFormErrorsReasons = <TNames extends InputName>(
  *
  * @param reasons Error reasons of each field.
  */
-export const anyErrors = <TNames extends InputName>(
-  reasons: FormErrorReasons<TNames>
+export const anyErrors = <TInputNames extends InputNames>(
+  reasons: FormErrorReasons<TInputNames>
 ) => {
   return Object.keys(reasons).length !== 0;
 };

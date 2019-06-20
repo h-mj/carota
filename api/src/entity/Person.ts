@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { Enum, Sex } from "../types";
+import { Enum, Sexes } from "../types";
 
-export const SexEnum: Enum<Sex> = {
+export const SexesEnum: Enum<Sexes> = {
   Female: "Female",
   Male: "Male"
 };
@@ -11,8 +11,8 @@ export class Person extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   public id!: string;
 
-  @Column("enum", { enum: SexEnum })
-  public sex!: Sex;
+  @Column("enum", { enum: SexesEnum })
+  public sex!: Sexes;
 
   @Column("date")
   public dateOfBirth!: string;

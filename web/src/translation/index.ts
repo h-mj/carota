@@ -1,6 +1,6 @@
-import { InputName } from "../component/Input";
-import { FormScene } from "../scene";
-import { ErrorReason } from "api";
+import { InputNames } from "../component/Input";
+import { ErrorReasons } from "api";
+import { FormSceneNames } from "../component/Form";
 
 /**
  * Translation type that includes all other translations.
@@ -20,7 +20,7 @@ export interface Translation {
 /**
  * Type that maps input name to its translation.
  */
-type InputTranslations = { [I in InputName]: InputTranslation };
+type InputTranslations = { [InputName in InputNames]: InputTranslation };
 
 /**
  * Translations of an input component.
@@ -40,12 +40,12 @@ interface InputTranslation {
 /**
  * Error reason translation texts.
  */
-type InputErrorReasonTranslations = { [R in ErrorReason]?: string };
+type InputErrorReasonTranslations = { [ErrorReason in ErrorReasons]?: string };
 
 /**
  * Type that maps form scene name to its translation.
  */
-type FormTranslations = { [S in FormScene]: FormTranslation };
+type FormTranslations = { [FormSceneName in FormSceneNames]: FormTranslation };
 
 /**
  * Translations of a form component.

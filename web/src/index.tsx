@@ -1,8 +1,8 @@
-import { inject, Provider } from "mobx-react";
+import { inject, observer, Provider } from "mobx-react";
 import * as React from "react";
 import { render } from "react-dom";
 import { createGlobalStyle } from "styled-components";
-import { SCENES } from "./scene";
+import { SceneNames, SCENES, Stage } from "./scene";
 import { InjectedProps, STORES } from "./store";
 import { BACKGROUND, FOREGROUND } from "./styling/colors";
 
@@ -30,11 +30,21 @@ const GlobalStyle = createGlobalStyle`
  * The root component.
  */
 @inject("scenes")
+@observer
 class Application extends React.Component<InjectedProps> {
   public render() {
-    const Main = SCENES[this.props.scenes!.main];
+    return this.getSceneComponent(this.props.scenes!.main);
+  }
 
-    return <Main />;
+  /**
+   * Returns scene component that matches given stage.
+   *
+   * @param stage Given stage.
+   */
+  private getSceneComponent(stage: Stage<SceneNames>) {
+    const Scene = SCENES[stage.sceneName];
+
+    return <Scene parameters={stage.parameters} />;
   }
 }
 

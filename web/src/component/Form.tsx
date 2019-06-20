@@ -1,26 +1,32 @@
-import { ErrorReason } from "api";
+import { ErrorReasons } from "api";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Button } from "./Button";
-import { Input, InputChangeHandler, InputName } from "./Input";
-import { FormScene } from "../scene";
+import { Input, InputChangeHandler, InputNames } from "./Input";
 import { InjectedProps } from "../store";
 import { anyErrors } from "../utility/forms";
 import styled from "styled-components";
 import { UNIT } from "../styling/sizes";
 
 /**
+ * Scenes that use form component and should have appropriate translations.
+ */
+export type FormSceneNames = "signIn";
+
+/**
  * Form input errors type that maps input name to its error message. `undefined`
  * if there's are no errors.
  */
-export type FormErrorReasons<TName extends InputName> = {
-  [P in TName]?: ErrorReason
+export type FormErrorReasons<TInputNames extends InputNames> = {
+  [InputName in TInputNames]?: ErrorReasons
 };
 
 /**
  * Form input values type that maps input name to its value.
  */
-export type FormValues<TName extends InputName> = { [P in TName]: string };
+export type FormValues<TInputNames extends InputNames> = {
+  [InputName in TInputNames]: string
+};
 
 /**
  * Form submit callback function type.
@@ -32,16 +38,16 @@ export interface FormSubmitHandler {
 /**
  * From component properties.
  */
-interface FormProps<TName extends InputName> {
+interface FormProps<TInputNames extends InputNames> {
   /**
    * List of all field names in order.
    */
-  names: TName[];
+  names: TInputNames[];
 
   /**
    * Change callback function.
    */
-  onChange?: InputChangeHandler<TName>;
+  onChange?: InputChangeHandler<TInputNames>;
 
   /**
    * Submit callback function.
@@ -51,17 +57,17 @@ interface FormProps<TName extends InputName> {
   /**
    * Mapping between input name and its error reason.
    */
-  reasons: FormErrorReasons<TName>;
+  reasons: FormErrorReasons<TInputNames>;
 
   /**
    * Scene name which uses this component.
    */
-  scene: FormScene;
+  scene: FormSceneNames;
 
   /**
    * Mapping between input name and its value.
    */
-  values: FormValues<TName>;
+  values: FormValues<TInputNames>;
 }
 
 /**
@@ -69,8 +75,8 @@ interface FormProps<TName extends InputName> {
  */
 @inject("translations")
 @observer
-export class Form<TName extends InputName> extends React.Component<
-  FormProps<TName> & InjectedProps
+export class Form<TInputNames extends InputNames> extends React.Component<
+  FormProps<TInputNames> & InjectedProps
 > {
   public render() {
     const {

@@ -1,6 +1,11 @@
 import { Translation } from ".";
 
 export const estonian: Translation = {
+  alerts: {
+    signInInvalidCredentials: {
+      message: "Vale e-posti aadress või parool."
+    }
+  },
   inputs: {
     email: {
       placeholder: "Sisestage e-posti aadress",

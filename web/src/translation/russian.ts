@@ -1,6 +1,11 @@
 import { Translation } from ".";
 
 export const russian: Translation = {
+  alerts: {
+    signInInvalidCredentials: {
+      message: "Неверный адрес электронной почты или пароль."
+    }
+  },
   inputs: {
     email: {
       placeholder: "Введите адрес электронной почты",

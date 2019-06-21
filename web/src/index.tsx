@@ -4,6 +4,7 @@ import { render } from "react-dom";
 import { createGlobalStyle } from "styled-components";
 import { SceneNames, SCENES, Stage } from "./scene";
 import { Scene } from "./scene/Scene";
+import { Alerts } from "./component/Alerts";
 import { InjectedProps, STORES } from "./store";
 import { BACKGROUND, FOREGROUND } from "./styling/colors";
 
@@ -34,7 +35,14 @@ const GlobalStyle = createGlobalStyle`
 @observer
 class Application extends React.Component<InjectedProps> {
   public render() {
-    return this.getSceneComponent(this.props.scenes!.main);
+    const { alerts, main } = this.props.scenes!;
+
+    return (
+      <>
+        {this.renderSceneComponent(main)}
+        <Alerts alerts={alerts} />
+      </>
+    );
   }
 
   /**
@@ -42,7 +50,7 @@ class Application extends React.Component<InjectedProps> {
    *
    * @param stage Given stage.
    */
-  private getSceneComponent(stage: Stage<SceneNames>) {
+  private renderSceneComponent(stage: Stage<SceneNames>) {
     const SceneComponent: typeof Scene = SCENES[stage.sceneName];
 
     return <SceneComponent parameters={stage.parameters} />;

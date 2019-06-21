@@ -170,7 +170,7 @@ const Border = styled.div`
  */
 const Placeholder = styled.div`
   position: absolute;
-  left: 0.75rem;
+  left: ${UNIT / 4 - 0.25}rem;
   top: ${UNIT / 8}rem;
 
   height: ${(3 * UNIT) / 4}rem;
@@ -191,7 +191,7 @@ const Placeholder = styled.div`
  */
 const Error = styled.div`
   position: absolute;
-  left: 0.75rem;
+  left: ${UNIT / 4 - 0.25}rem;
   bottom: 0;
 
   display: flex;
@@ -270,7 +270,7 @@ const InputElement = styled.input<InputElementProps>`
   width: 100%;
   height: ${(3 * UNIT) / 4}rem;
 
-  padding: 0 1rem;
+  padding: 0 ${UNIT / 4}rem;
   box-sizing: border-box;
 
   ${TRANSITION};

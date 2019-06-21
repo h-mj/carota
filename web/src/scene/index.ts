@@ -7,16 +7,16 @@ import { Unknown } from "./Unknown";
 /**
  * Union of all scene types.
  */
-type SceneTypes =
-  | SceneType<Home, typeof Home>
-  | SceneType<Register, typeof Register>
-  | SceneType<SignIn, typeof SignIn>
-  | SceneType<Unknown, typeof Unknown>;
+type ScenesProperties =
+  | SceneProperties<Home, typeof Home>
+  | SceneProperties<Register, typeof Register>
+  | SceneProperties<SignIn, typeof SignIn>
+  | SceneProperties<Unknown, typeof Unknown>;
 
 /**
  * Interface that defines for each scene its component class and type of that class.
  */
-interface SceneType<
+interface SceneProperties<
   TClass extends Scene<SceneNames>,
   TTypeof extends typeof Scene
 > {
@@ -34,7 +34,7 @@ interface SceneType<
 /**
  * Union of all scene names.
  */
-export type SceneNames = SceneTypes["class"] extends Scene<
+export type SceneNames = ScenesProperties["class"] extends Scene<
   infer InferredSceneName
 >
   ? InferredSceneName
@@ -44,8 +44,8 @@ export type SceneNames = SceneTypes["class"] extends Scene<
  * Type that maps scene name to its class type.
  */
 type SceneClassTypes = {
-  [SceneName in SceneNames]: SceneTypes extends infer InferredSceneType
-    ? InferredSceneType extends SceneType<
+  [SceneName in SceneNames]: ScenesProperties extends infer InferredSceneType
+    ? InferredSceneType extends SceneProperties<
         infer InferredSceneClass,
         infer InferredSceneType
       >
@@ -77,26 +77,26 @@ export const SCENES: Readonly<SceneClassTypes> = {
  * If route parameter names type is `never`, then there are no parameters within
  * the path.
  */
-interface RoutableTypes {
-  "/": StageType<"home", never>;
-  "/login": StageType<"signIn", never>;
-  "/register/{invitationId}": StageType<"register", "invitationId">;
+interface RoutableStageProperties {
+  "/": StageProperties<"home", never>;
+  "/login": StageProperties<"signIn", never>;
+  "/register/{invitationId}": StageProperties<"register", "invitationId">;
 }
 
 /**
  * Union of all stage definitions that cannot be accessed by navigating to a
  * specific URL.
  */
-type DeepTypes = StageType<"unknown", never>;
+type DeepStageProperties = StageProperties<"unknown", never>;
 
 /**
  * Type that is a union of all possible parameter names to `string` mappings of
  * all routes, which scene name is one of the `TSceneNames` names.
  */
 export type Parameters<TSceneNames extends string> =
-  | RoutableTypes[keyof RoutableTypes]
-  | DeepTypes extends infer InferredTypes
-  ? InferredTypes extends StageType<
+  | RoutableStageProperties[keyof RoutableStageProperties]
+  | DeepStageProperties extends infer InferredTypes
+  ? InferredTypes extends StageProperties<
       infer InferredSceneName,
       infer InferredParameterNames
     >
@@ -109,7 +109,10 @@ export type Parameters<TSceneNames extends string> =
 /**
  * Type that defines some route's scene name and route parameter names.
  */
-interface StageType<TSceneName extends string, TParameterNames extends string> {
+interface StageProperties<
+  TSceneName extends string,
+  TParameterNames extends string
+> {
   /**
    * Route parameter names type.
    */
@@ -126,7 +129,9 @@ interface StageType<TSceneName extends string, TParameterNames extends string> {
  * retrieve scene name based on current browser pathname.
  */
 export const ROUTES: Readonly<
-  { [Route in keyof RoutableTypes]: RoutableTypes[Route]["sceneName"] }
+  {
+    [Route in keyof RoutableStageProperties]: RoutableStageProperties[Route]["sceneName"]
+  }
 > = {
   "/": "home",
   "/login": "signIn",

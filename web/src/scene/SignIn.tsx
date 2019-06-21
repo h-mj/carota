@@ -44,11 +44,11 @@ export class SignIn extends Scene<"signIn"> {
     return (
       <Container>
         <Form
-          names={["email", "password"]}
+          inputNames={["email", "password"]}
+          name="signIn"
           onChange={this.onChange}
           onSubmit={this.onSubmit}
           reasons={this.reasons}
-          type="signIn"
           values={this.values}
         />
       </Container>
@@ -72,6 +72,10 @@ export class SignIn extends Scene<"signIn"> {
         sceneName: "signIn",
         parameters: {}
       });
+    }
+
+    if (error.code === 401) {
+      this.props.scenes!.pushAlert("signInInvalidCredentials", {});
     }
 
     this.reasons = createFormErrorsReasons(error, this.values);

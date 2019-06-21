@@ -1,12 +1,18 @@
 import { ErrorReasons } from "api";
 import { InputNames } from "../component/Input";
-import { FormTypes } from "../component/Form";
+import { FormNames } from "../component/Form";
 import { SceneNames } from "../scene";
+import { AlertNames } from "../component/Alerts";
 
 /**
  * Translation type that contains all other translations.
  */
 export interface Translation {
+  /**
+   * Alert component translations.
+   */
+  alerts: AlertsTranslation;
+
   /**
    * Input component translations.
    */
@@ -29,7 +35,19 @@ export interface Translation {
 }
 
 /**
- * Type that maps input name to its translation.
+ * Type that maps alert names to their translations.
+ */
+type AlertsTranslation = { [AlertName in AlertNames]: AlertTranslation };
+
+/**
+ * Translations of an alert component.
+ */
+interface AlertTranslation {
+  message: string;
+}
+
+/**
+ * Type that maps input names to their translations.
  */
 type InputsTranslation = { [InputName in InputNames]: InputTranslation };
 
@@ -49,14 +67,14 @@ interface InputTranslation {
 }
 
 /**
- * Error reason translation texts.
+ * Type that maps error reasons to their translations.
  */
 type InputErrorReasonTranslations = { [ErrorReason in ErrorReasons]?: string };
 
 /**
- * Type that maps form scene name to its translation.
+ * Type that maps form names to their translations.
  */
-type FormsTranslation = { [FormType in FormTypes]: FormTranslation };
+type FormsTranslation = { [FormType in FormNames]: FormTranslation };
 
 /**
  * Translations of a form component.
@@ -74,7 +92,7 @@ interface FormTranslation {
 }
 
 /**
- * Type that maps scene name to its translation.
+ * Type that maps scene names to their translations.
  */
 type ScenesTranslation = { [SceneName in SceneNames]: SceneTranslation };
 

@@ -10,6 +10,7 @@ import {
 } from "../scene";
 import { auth } from "./AuthStore";
 import { translations } from "./TranslationsStore";
+import { Alert, AlertNames, AlertParameters } from "../component/Alerts";
 
 /**
  * Returns a scene name and it's parameters object based on given URL.
@@ -98,7 +99,12 @@ export class ScenesStore {
   /**
    * Current main stage.
    */
-  @observable private mainStage!: Readonly<Stage<SceneNames>>;
+  @observable private _main!: Readonly<Stage<SceneNames>>;
+
+  /**
+   * List of alerts.
+   */
+  @observable private _alerts: Array<Alert<AlertNames>> = [];
 
   /**
    * Creates a new instance of `ScenesStore` and adds listeners for main stage
@@ -111,11 +117,19 @@ export class ScenesStore {
   }
 
   /**
-   * Returns main stage object.
+   * Returns a main stage object.
    */
   @computed
   public get main() {
-    return this.mainStage;
+    return this._main;
+  }
+
+  /**
+   * Returns a list of alerts.
+   */
+  @computed
+  public get alerts() {
+    return this._alerts;
   }
 
   /**
@@ -126,7 +140,7 @@ export class ScenesStore {
    */
   @action
   public redirect<TSceneName extends SceneNames>(stage: Stage<TSceneName>) {
-    this.mainStage =
+    this._main =
       auth.authenticated !==
       NO_AUTHENTICATION_SCENE_NAMES.includes(stage.sceneName)
         ? stage
@@ -136,7 +150,7 @@ export class ScenesStore {
 
     const url = getUrl(stage) || window.location.pathname;
     const title = `${
-      translations.translation.scenes[this.mainStage.sceneName].title
+      translations.translation.scenes[this._main.sceneName].title
     } - ${translations.translation.title}`;
 
     if (url !== window.location.pathname) {
@@ -153,6 +167,48 @@ export class ScenesStore {
   public update() {
     this.redirect(getStage(window.location.pathname) || UNKNOWN_STAGE);
   }
+
+  /**
+   * Pushes an alert with name `name` and parameters `parameters` that will be
+   * shown in `Alerts` component for `timeout` seconds.
+   *
+   * @param name Name of the alert.
+   * @param parameters Alert's parameters.
+   * @param timeout Time in seconds during which alert will be shown.
+   */
+  public pushAlert<TAlertName extends AlertNames>(
+    name: TAlertName,
+    parameters: AlertParameters<TAlertName>,
+    timeout = 5
+  ) {
+    const alert = {
+      id:
+        Math.random()
+          .toString(36)
+          .substring(2) + Date.now().toString(36),
+      name,
+      parameters
+    };
+
+    this._alerts.push(alert);
+
+    if (timeout !== 0) {
+      setTimeout(this.popAlert, 1000 * timeout, alert);
+    }
+  }
+
+  /**
+   * Removes an alert with id `id` from alert list.
+   */
+  public popAlert = (alert: Alert<AlertNames>) => {
+    const index = this._alerts.findIndex(other => other.id === alert.id);
+
+    if (index === -1) {
+      return;
+    }
+
+    this._alerts.splice(index, 1);
+  };
 }
 
 /**

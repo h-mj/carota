@@ -9,10 +9,10 @@ import { UNIT } from "../styling/sizes";
 import { anyErrors } from "../utility/forms";
 
 /**
- * Union of all form types which is used to retrieve appropriate translations
+ * Union of all form names which is used to retrieve appropriate translations
  * for title and submit button texts.
  */
-export type FormTypes = "signIn";
+export type FormNames = "signIn";
 
 /**
  * Form input errors type that maps input name to its error reason. `undefined`
@@ -43,7 +43,13 @@ interface FormProps<TInputNames extends InputNames> {
   /**
    * List of all field names in order from top to bottom.
    */
-  names: TInputNames[];
+  inputNames: TInputNames[];
+
+  /**
+   * Form name that is used to retrieve appropriate translations for title and
+   * submit button texts.
+   */
+  name: FormNames;
 
   /**
    * Input change callback function.
@@ -61,12 +67,6 @@ interface FormProps<TInputNames extends InputNames> {
   reasons: FormErrorReasons<TInputNames>;
 
   /**
-   * Form type that is used to retrieve appropriate translations for title and
-   * submit button texts.
-   */
-  type: FormTypes;
-
-  /**
    * Mapping between input name and its value.
    */
   values: FormValues<TInputNames>;
@@ -81,21 +81,29 @@ export class Form<TInputNames extends InputNames> extends React.Component<
   FormProps<TInputNames> & InjectedProps
 > {
   public render() {
-    const { names, onChange, reasons, translations, type, values } = this.props;
-    const { submit, title } = translations!.translation.forms[type];
+    const {
+      inputNames,
+      name,
+      onChange,
+      reasons,
+      translations,
+      values
+    } = this.props;
+
+    const { submit, title } = translations!.translation.forms[name];
 
     return (
       <form noValidate={true} onSubmit={this.handleSubmit}>
         {title !== undefined && <Title>{title}</Title>}
 
-        {names.map((name, index) => (
+        {inputNames.map((inputName, index) => (
           <Input
             autoFocus={index === 0}
-            key={name}
-            name={name}
+            key={inputName}
+            name={inputName}
             onChange={onChange}
-            reason={reasons[name]}
-            value={values[name]}
+            reason={reasons[inputName]}
+            value={values[inputName]}
           />
         ))}
 

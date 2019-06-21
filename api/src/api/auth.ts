@@ -71,5 +71,7 @@ defineNoAuth(authRouter, "/auth/register", REGISTER_SCHEMA, async context => {
 
   const account = await callCatch(() => template.save());
 
+  await invitation.remove();
+
   context.state.data = { token: signToken(account) };
 });

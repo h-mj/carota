@@ -141,11 +141,11 @@ export type ErrorLocationParts = "request-line" | "headers" | "body";
  * Error reason type containing all possible reasons.
  */
 export type ErrorReasons =
-  | "empty"
-  | "missing"
-  | "invalid"
-  | "incorrect"
   | "conflict"
+  | "empty"
+  | "incorrect"
+  | "invalid"
+  | "missing"
   | "unexpected";
 
 /**

@@ -69,7 +69,7 @@ export class SignIn extends Scene<"signIn"> {
 
     if (error === undefined) {
       return this.props.scenes!.redirect({
-        sceneName: "signIn",
+        sceneName: "home",
         parameters: {}
       });
     }

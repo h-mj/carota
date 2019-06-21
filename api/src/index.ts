@@ -1,6 +1,8 @@
 import { createConnection } from "typeorm";
 import "reflect-metadata";
 
+import { Invitation } from "./entity/Invitation";
+
 import * as Koa from "koa";
 
 import * as compress from "koa-compress";
@@ -15,6 +17,13 @@ import { serve } from "./serve";
 
 async function main() {
   await createConnection();
+
+  const invitation = await Invitation.create({
+    rights: "All",
+    type: "Default"
+  }).save();
+
+  console.log(`http://localhost:3000/register/${invitation.id}`);
 
   new Koa()
     .use(compress())

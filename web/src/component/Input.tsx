@@ -1,4 +1,4 @@
-import { ErrorReasons } from "api";
+import { ErrorReasons, Languages } from "api";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled, { css } from "styled-components";
@@ -21,22 +21,60 @@ export interface InputChangeHandler<TName extends InputNames> {
 }
 
 /**
- * Union of input names.
+ * Union of all input names.
  */
-export type InputNames = "email" | "password";
+export type InputNames = TextInputNames | SwitchInputNames;
 
 /**
- * Union of input types.
+ * Union of text input names.
  */
-type InputTypes = "text" | "email" | "password" | "number";
+export type TextInputNames = "email" | "name" | "password";
+
+/**
+ * Union of text input types.
+ */
+type TextInputTypes = "text" | "email" | "password" | "number";
+
+/**
+ * Object that maps switch input names to their options types.
+ */
+export interface SwitchInputOptions {
+  language: Languages;
+}
+
+/**
+ * Object that maps switch input name to array of its all options.
+ */
+const SWITCH_INPUT_OPTIONS: Readonly<
+  { [InputName in SwitchInputNames]: Array<SwitchInputOptions[InputName]> }
+> = {
+  language: ["Estonian", "English", "Russian"]
+};
+
+/**
+ * Union of switch input names.
+ */
+export type SwitchInputNames = keyof SwitchInputOptions;
 
 /**
  * Mapping between input name and its type.
  */
-const NAME_TO_TYPE: { [InputName in InputNames]: InputTypes } = {
+const TEXT_INPUT_NAME_TO_TYPE: Readonly<
+  { [InputName in TextInputNames]: TextInputTypes }
+> = {
   email: "email",
+  name: "text",
   password: "password"
 };
+
+/**
+ * Type of the value input named `TInputName` contains.
+ */
+export type InputValueType<
+  TInputName extends InputNames
+> = TInputName extends SwitchInputNames
+  ? SwitchInputOptions[TInputName] | ""
+  : string;
 
 /**
  * Input component properties.
@@ -88,7 +126,7 @@ export class Input<TInputName extends InputNames> extends React.Component<
    * Renders this component.
    */
   public render() {
-    const { autoFocus, name, reason, translations, value } = this.props;
+    const { name, reason, translations } = this.props;
 
     if (reason !== undefined) {
       this.reason = reason;
@@ -101,21 +139,60 @@ export class Input<TInputName extends InputNames> extends React.Component<
 
     return (
       <Container>
-        <InputElement
-          autoFocus={autoFocus}
-          hasError={reason !== undefined}
-          name={name}
-          onChange={this.handleChange}
-          type={NAME_TO_TYPE[name]}
-          value={value}
-        />
+        {name in SWITCH_INPUT_OPTIONS
+          ? this.renderSwitchInput(name as SwitchInputNames)
+          : this.renderTextInput(name as TextInputNames)}
 
         <Border />
-
         <Placeholder>{placeholder}</Placeholder>
-
         {message !== undefined && <Error>{message}</Error>}
       </Container>
+    );
+  }
+
+  /**
+   * Renders a text input named `name`.
+   *
+   * @param name Name of the text input.
+   */
+  private renderTextInput(name: TextInputNames) {
+    const { autoFocus, reason, value } = this.props;
+
+    return (
+      <TextInputElement
+        autoFocus={autoFocus}
+        hasError={reason !== undefined}
+        name={name}
+        onChange={this.handleChange}
+        type={TEXT_INPUT_NAME_TO_TYPE[name]}
+        value={value}
+      />
+    );
+  }
+
+  /**
+   * Renders a switch input named `name` with its options.
+   *
+   * @param name Name of the switch input.
+   */
+  private renderSwitchInput(name: SwitchInputNames) {
+    const { reason, value, translations } = this.props;
+
+    return (
+      <SwitchInputElement hasError={reason !== undefined}>
+        {SWITCH_INPUT_OPTIONS[name].map(option => (
+          <Option
+            hasError={reason !== undefined}
+            key={option}
+            onClick={this.handleChange}
+            selected={option === value}
+            type="button"
+            value={option}
+          >
+            {translations!.translation.inputs[name].options[option]}
+          </Option>
+        ))}
+      </SwitchInputElement>
     );
   }
 
@@ -123,7 +200,7 @@ export class Input<TInputName extends InputNames> extends React.Component<
    * Relays actual input event handler callback value to our own change callback
    * function.
    */
-  private handleChange: React.ChangeEventHandler<HTMLInputElement> = event => {
+  private handleChange: React.EventHandler<any> = event => {
     if (this.props.onChange === undefined) {
       return;
     }
@@ -161,7 +238,7 @@ const Border = styled.div`
 
   pointer-events: none;
 
-  ${TRANSITION}
+  ${TRANSITION};
 `;
 
 /**
@@ -170,8 +247,11 @@ const Border = styled.div`
  */
 const Placeholder = styled.div`
   position: absolute;
-  left: ${UNIT / 4 - 0.25}rem;
   top: ${UNIT / 8}rem;
+  left: 50%;
+
+  transform: translateX(-50%);
+  white-space: nowrap;
 
   height: ${(3 * UNIT) / 4}rem;
 
@@ -183,7 +263,19 @@ const Placeholder = styled.div`
 
   pointer-events: none;
 
-  ${TRANSITION}
+  ${TRANSITION};
+`;
+
+/**
+ * Extra placeholder style if it is in label state.
+ */
+const labelStyle = css`
+  top: 0;
+  height: ${UNIT / 4}rem;
+
+  background-color: ${BACKGROUND};
+  font-size: 0.75rem;
+  letter-spacing: 0;
 `;
 
 /**
@@ -191,8 +283,11 @@ const Placeholder = styled.div`
  */
 const Error = styled.div`
   position: absolute;
-  left: ${UNIT / 4 - 0.25}rem;
   bottom: 0;
+  left: 50%;
+
+  transform: translateX(-50%);
+  white-space: nowrap;
 
   display: flex;
   align-items: center;
@@ -209,7 +304,7 @@ const Error = styled.div`
 
   pointer-events: none;
 
-  ${TRANSITION}
+  ${TRANSITION};
 `;
 
 /**
@@ -224,7 +319,11 @@ const defaultColors = css`
     color: ${DEFAULT_LABEL};
   }
 
-  &:focus + ${Border}, &:focus + * + ${Placeholder} {
+  &:focus + ${Border},
+  &:focus + * + ${Placeholder},
+  /* Also make colors active if one of the options is focused */
+  &:focus-within + ${Border},
+  &:focus-within + * + ${Placeholder} {
     color: ${ACTIVE};
   }
 `;
@@ -249,9 +348,28 @@ interface InputElementProps {
 }
 
 /**
- * The actual input element into which text is inputted.
+ * Style that is shared between all types of inputs.
  */
-const InputElement = styled.input<InputElementProps>`
+const inputElementStyle = css<InputElementProps>`
+  position: absolute;
+  top: ${UNIT / 8}rem;
+
+  width: 100%;
+  height: ${(3 * UNIT) / 4}rem;
+
+  ${TRANSITION};
+
+  & + * + ${Error}, & + * + * + ${Error} {
+    opacity: ${props => (props.hasError ? 1 : 0)};
+  }
+
+  ${props => (props.hasError ? errorColors : defaultColors)};
+`;
+
+/**
+ * The actual text input element into which text is inputted.
+ */
+const TextInputElement = styled.input<InputElementProps>`
   /* Reset */
   border: none;
   outline: none;
@@ -264,31 +382,16 @@ const InputElement = styled.input<InputElementProps>`
   font-size: inherit;
   letter-spacing: inherit;
 
-  position: absolute;
-  top: ${UNIT / 8}rem;
-
-  width: 100%;
-  height: ${(3 * UNIT) / 4}rem;
+  ${inputElementStyle};
 
   padding: 0 ${UNIT / 4}rem;
   box-sizing: border-box;
-
-  ${TRANSITION};
 
   &:focus + * + ${Placeholder},
   &:not([value=""]) + * + ${Placeholder},
   /* Fix for Firefox's invalid number inputs having empty value */
   &[type="number"]:invalid + * + ${Placeholder} {
-    top: 0;
-    height: ${UNIT / 4}rem;
-
-    background-color: ${BACKGROUND};
-    font-size: 0.75rem;
-    letter-spacing: 0;
-  }
-
-  & + * + ${Error}, & + * + * + ${Error} {
-    opacity: ${props => (props.hasError ? 1 : 0)};
+    ${labelStyle};
   }
 
   &::-webkit-outer-spin-button,
@@ -299,6 +402,64 @@ const InputElement = styled.input<InputElementProps>`
   &[type="number"] {
     -moz-appearance: textfield;
   }
+`;
 
-  ${props => (props.hasError ? errorColors : defaultColors)};
+/**
+ * Option component properties.
+ */
+interface OptionProps {
+  /**
+   * Boolean value that shows whether or not there is an error.
+   */
+  hasError: boolean;
+
+  /**
+   * Boolean whether or not this option is selected.
+   */
+  selected: boolean;
+}
+
+/**
+ * Option component that is within `SwitchInputElement` component.
+ */
+const Option = styled.button<OptionProps>`
+  /* Reset */
+  border: none;
+  outline: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: ${props =>
+    props.selected ? ACTIVE : props.hasError ? ERROR : DEFAULT_LABEL};
+
+  cursor: pointer;
+
+  ${TRANSITION};
+`;
+
+/**
+ * Switch input element that lets user to choose between one of the options
+ * within this component.
+ */
+const SwitchInputElement = styled.div<InputElementProps>`
+  ${inputElementStyle}
+
+  display: flex;
+
+  & + * + ${Placeholder} {
+    ${labelStyle};
+  }
 `;

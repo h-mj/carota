@@ -9,14 +9,35 @@ export const english: Translation = {
   inputs: {
     email: {
       placeholder: "Enter an email address",
-      reasons: { empty: "Please enter an email address" }
+      reasons: {
+        conflict: "Entered email address is already used by another account",
+        empty: "Please enter an email address",
+        invalid: "Please enter a valid email address"
+      }
+    },
+    language: {
+      options: {
+        English: "English",
+        Estonian: "eesti",
+        Russian: "русский"
+      },
+      placeholder: "Select a language",
+      reasons: { empty: "Please select a language" }
+    },
+    name: {
+      placeholder: "Enter your name",
+      reasons: { empty: "Please enter your name" }
     },
     password: {
       placeholder: "Enter a password",
-      reasons: { empty: "Please enter a password" }
+      reasons: {
+        empty: "Please enter a password",
+        invalid: "Password must be at least 8 characters long"
+      }
     }
   },
   forms: {
+    register: { submit: "Sign up", title: "Sign up" },
     signIn: { submit: "Sign in", title: "Sign in" }
   },
   scenes: {

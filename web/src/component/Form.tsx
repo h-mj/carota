@@ -3,7 +3,7 @@ import { inject, observer } from "mobx-react";
 import styled from "styled-components";
 import * as React from "react";
 import { Button } from "./Button";
-import { Input, InputChangeHandler, InputNames } from "./Input";
+import { Input, InputChangeHandler, InputNames, InputValueType } from "./Input";
 import { InjectedProps } from "../store";
 import { UNIT } from "../styling/sizes";
 import { anyErrors } from "../utility/forms";
@@ -12,7 +12,7 @@ import { anyErrors } from "../utility/forms";
  * Union of all form names which is used to retrieve appropriate translations
  * for title and submit button texts.
  */
-export type FormNames = "signIn";
+export type FormNames = "register" | "signIn";
 
 /**
  * Form input errors type that maps input name to its error reason. `undefined`
@@ -26,7 +26,7 @@ export type FormErrorReasons<TInputNames extends InputNames> = {
  * Form input values type that maps input name to its value.
  */
 export type FormValues<TInputNames extends InputNames> = {
-  [InputName in TInputNames]: string
+  [InputName in TInputNames]: InputValueType<InputName>
 };
 
 /**

@@ -44,7 +44,8 @@ const defaultStyle = css`
   box-shadow: 0 0 0 1px ${DEFAULT_BORDER}, inset 0 0 0 1px ${DEFAULT_BORDER};
   color: ${DEFAULT_LABEL};
 
-  &:active {
+  &:active,
+  &:focus {
     box-shadow: 0 0 0 1px ${ACTIVE}, inset 0 0 0 1px ${ACTIVE};
     color: ${ACTIVE};
   }
@@ -54,11 +55,8 @@ const defaultStyle = css`
  * Button color styling when property `hasError` is `true`.
  */
 const errorStyle = css`
-  &,
-  &:active {
-    box-shadow: 0 0 0 1px ${ERROR}, inset 0 0 0 1px ${ERROR};
-    color: ${ERROR};
-  }
+  box-shadow: 0 0 0 1px ${ERROR}, inset 0 0 0 1px ${ERROR};
+  color: ${ERROR};
 `;
 
 /**

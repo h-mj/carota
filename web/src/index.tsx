@@ -3,6 +3,7 @@ import * as React from "react";
 import { render } from "react-dom";
 import { createGlobalStyle } from "styled-components";
 import { SceneNames, SCENES, Stage } from "./scene";
+import { Scene } from "./scene/Scene";
 import { InjectedProps, STORES } from "./store";
 import { BACKGROUND, FOREGROUND } from "./styling/colors";
 
@@ -42,9 +43,9 @@ class Application extends React.Component<InjectedProps> {
    * @param stage Given stage.
    */
   private getSceneComponent(stage: Stage<SceneNames>) {
-    const Scene = SCENES[stage.sceneName];
+    const SceneComponent: typeof Scene = SCENES[stage.sceneName];
 
-    return <Scene parameters={stage.parameters} />;
+    return <SceneComponent parameters={stage.parameters} />;
   }
 }
 

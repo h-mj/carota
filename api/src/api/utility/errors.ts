@@ -29,7 +29,7 @@ export const bodyParserOnError = () => {
 /**
  * Maps Joi error types to error reasons.
  */
-const TYPE_TO_REASON: { readonly [type: string]: ErrorReasons } = {
+const TYPE_TO_REASON: Readonly<{ [type: string]: ErrorReasons }> = {
   "any.allowOnly": "invalid",
   "any.empty": "empty",
   "any.required": "missing",
@@ -44,9 +44,9 @@ const TYPE_TO_REASON: { readonly [type: string]: ErrorReasons } = {
  * which name and defines optional `stringify` and `transform` functions.
  * `undefined` if context must not be included.
  */
-const TYPE_TO_CONTEXT_TEMPLATE: {
-  readonly [type: string]: { [field: string]: Transformation };
-} = {
+const TYPE_TO_CONTEXT_TEMPLATE: Readonly<{
+  [type: string]: { [field: string]: Transformation };
+}> = {
   "any.allowOnly": { valids: { name: "options" } },
   "string.min": { limit: { name: "length" } }
 };
@@ -128,7 +128,7 @@ const DEFAULT_TRANSFORM: Transform = (entity: unknown) => {
  * `Transformation` object, or `DEFAULT_STRINGIFY` function. Other variable
  * names must appear in this type's `Transformation` object as `name` field.
  */
-const TYPE_TO_MESSAGE: { readonly [type: string]: string } = {
+const TYPE_TO_MESSAGE: Readonly<{ [type: string]: string }> = {
   "any.allowOnly": 'Field "{field}" must be one of {options}.',
   "any.empty": 'Field "{field}" must not be empty.',
   "any.required": 'Field "{field}" is required.',

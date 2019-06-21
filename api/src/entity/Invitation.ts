@@ -7,7 +7,7 @@ import {
 } from "typeorm";
 
 import { AccountRights, AccountTypes } from "../types";
-import { Account, AccountRightsEnum, AccountTypesEnum } from "./Account";
+import { Account, ACCOUNT_RIGHTS_ENUM, ACCOUNT_TYPES_ENUM } from "./Account";
 
 /**
  * Model that is used to register new accounts and assign advisers, inviters,
@@ -38,12 +38,12 @@ export class Invitation extends BaseEntity {
   /**
    * Account type of future account.
    */
-  @Column("enum", { enum: AccountTypesEnum })
+  @Column("enum", { enum: ACCOUNT_TYPES_ENUM })
   public type!: AccountTypes;
 
   /**
    * Account rights of future account.
    */
-  @Column("enum", { enum: AccountRightsEnum })
+  @Column("enum", { enum: ACCOUNT_RIGHTS_ENUM })
   public rights!: AccountRights;
 }

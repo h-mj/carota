@@ -1,13 +1,23 @@
-import { autorun, computed, observable } from "mobx";
-import { Parameters, ROUTES, SceneNames, Stage } from "../scene";
+import { computed, observable, action } from "mobx";
+import {
+  Parameters,
+  ROUTES,
+  SceneNames,
+  Stage,
+  NO_AUTHENTICATION_SCENE_NAMES,
+  GATEWAY_STAGE,
+  UNKNOWN_STAGE
+} from "../scene";
+import { auth } from "./AuthStore";
+import { translations } from "./TranslationsStore";
 
 /**
  * Returns a scene name and it's parameters object based on given URL.
  *
  * @param url URL string.
  */
-const getStage = (url: string): Stage<SceneNames> => {
-  forRoute: for (const route of Object.keys(ROUTES)) {
+const getStage = (url: string): Stage<SceneNames> | undefined => {
+  forRoute: for (const route in ROUTES) {
     const urlParts = url.split("/");
     const routeParts = route.split("/");
 
@@ -36,14 +46,17 @@ const getStage = (url: string): Stage<SceneNames> => {
     };
   }
 
-  return { sceneName: "unknown", parameters: {} };
+  return undefined;
 };
 
 /**
  * Returns an URL from a given stage.
  */
-const getUrl = ({ sceneName, parameters }: Stage<SceneNames>): string => {
-  forRoute: for (const route of Object.keys(ROUTES)) {
+const getUrl = <TSceneName extends SceneNames>({
+  sceneName,
+  parameters
+}: Stage<TSceneName>): string | undefined => {
+  forRoute: for (const route in ROUTES) {
     // If route's scene is not stage's scene, skip.
     if (ROUTES[route as keyof typeof ROUTES] !== sceneName) {
       continue;
@@ -53,7 +66,7 @@ const getUrl = ({ sceneName, parameters }: Stage<SceneNames>): string => {
 
     if (parameters !== undefined) {
       // Replace all parameters with their values in parameters.
-      for (const parameter of Object.keys(parameters)) {
+      for (const parameter in parameters) {
         // If there's no such parameter, it's a wrong route.
         if (!url.includes(`{${parameter}}`)) {
           continue forRoute;
@@ -71,7 +84,7 @@ const getUrl = ({ sceneName, parameters }: Stage<SceneNames>): string => {
     return url;
   }
 
-  return window.location.pathname;
+  return;
 };
 
 /**
@@ -85,7 +98,7 @@ export class ScenesStore {
   /**
    * Current main stage.
    */
-  @observable private mainStage: Stage<SceneNames>;
+  @observable private mainStage!: Readonly<Stage<SceneNames>>;
 
   /**
    * Creates a new instance of `ScenesStore` and adds listeners for main stage
@@ -93,25 +106,8 @@ export class ScenesStore {
    * correspondingly.
    */
   public constructor() {
-    this.mainStage = getStage(window.location.pathname);
-
-    autorun(() => {
-      const url = getUrl(this.mainStage);
-
-      if (url === window.location.pathname) {
-        return;
-      }
-
-      window.history.pushState(null, "", url);
-    });
-
-    window.addEventListener(
-      "popstate",
-      () => {
-        this.mainStage = getStage(window.location.pathname);
-      },
-      false
-    );
+    this.update();
+    window.addEventListener("popstate", () => this.update(), false);
   }
 
   /**
@@ -128,11 +124,34 @@ export class ScenesStore {
    * @param sceneName
    * @param parameters
    */
-  public redirect<TSceneName extends SceneNames>(
-    sceneName: TSceneName,
-    parameters: Parameters<TSceneName>
-  ) {
-    this.mainStage = { sceneName, parameters };
+  @action
+  public redirect<TSceneName extends SceneNames>(stage: Stage<TSceneName>) {
+    this.mainStage =
+      auth.authenticated !==
+      NO_AUTHENTICATION_SCENE_NAMES.includes(stage.sceneName)
+        ? stage
+        : auth.authenticated
+        ? UNKNOWN_STAGE
+        : GATEWAY_STAGE;
+
+    const url = getUrl(stage) || window.location.pathname;
+    const title = `${
+      translations.translation.scenes[this.mainStage.sceneName].title
+    } - ${translations.translation.title}`;
+
+    if (url !== window.location.pathname) {
+      window.history.pushState(null, title, url);
+    }
+
+    document.title = title;
+  }
+
+  /**
+   * Redirects user to correct stage based on current pathname.
+   */
+  @action
+  public update() {
+    this.redirect(getStage(window.location.pathname) || UNKNOWN_STAGE);
   }
 }
 

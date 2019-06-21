@@ -13,5 +13,12 @@ export const russian: Translation = {
   },
   forms: {
     signIn: { submit: "Вход", title: "Вход" }
-  }
+  },
+  scenes: {
+    home: { title: "Главная страница" },
+    register: { title: "Завести аккаунт" },
+    signIn: { title: "Вход" },
+    unknown: { title: "Запрошенная страница не найдена" }
+  },
+  title: "Морковка"
 };

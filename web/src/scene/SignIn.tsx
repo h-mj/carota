@@ -68,7 +68,10 @@ export class SignIn extends Scene<"signIn"> {
     const error = await this.props.auth!.login(this.values);
 
     if (error === undefined) {
-      return this.props.scenes!.redirect("signIn", {});
+      return this.props.scenes!.redirect({
+        sceneName: "signIn",
+        parameters: {}
+      });
     }
 
     this.reasons = createFormErrorsReasons(error, this.values);

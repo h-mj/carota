@@ -168,7 +168,7 @@ export type ErrorContextElement = string | number | string[];
  * `TConstants`.
  */
 export type Enum<TConstants extends string> = {
-  readonly [Constant in TConstants]: Constant;
+  [Constant in TConstants]: Constant;
 };
 
 /**

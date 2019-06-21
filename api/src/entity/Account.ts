@@ -15,7 +15,7 @@ import { Person } from "./Person";
 /**
  * Object that is used as language enumeration.
  */
-export const LanguagesEnum: Enum<Languages> = {
+export const LANGUAGES_ENUM: Readonly<Enum<Languages>> = {
   English: "English",
   Estonian: "Estonian",
   Russian: "Russian"
@@ -24,7 +24,7 @@ export const LanguagesEnum: Enum<Languages> = {
 /**
  * Object that is used as account type enumeration.
  */
-export const AccountTypesEnum: Enum<AccountTypes> = {
+export const ACCOUNT_TYPES_ENUM: Readonly<Enum<AccountTypes>> = {
   Adviser: "Adviser",
   Default: "Default"
 };
@@ -32,7 +32,7 @@ export const AccountTypesEnum: Enum<AccountTypes> = {
 /**
  * Object that is used as account rights enumeration.
  */
-export const AccountRightsEnum: Enum<AccountRights> = {
+export const ACCOUNT_RIGHTS_ENUM: Readonly<Enum<AccountRights>> = {
   All: "All",
   Default: "Default"
 };
@@ -57,7 +57,7 @@ export class Account extends BaseEntity {
   /**
    * User interface language.
    */
-  @Column("enum", { enum: LanguagesEnum })
+  @Column("enum", { enum: LANGUAGES_ENUM })
   public language!: Languages;
 
   /**
@@ -97,12 +97,12 @@ export class Account extends BaseEntity {
    * - `Adviser` type accounts can invite advisees and advise them.
    * - `Default` type accounts cannot invite other users nor advise other users.
    */
-  @Column("enum", { enum: AccountTypesEnum })
+  @Column("enum", { enum: ACCOUNT_TYPES_ENUM })
   public type!: AccountTypes;
 
   /**
    * Account rights.
    */
-  @Column("enum", { enum: AccountRightsEnum })
+  @Column("enum", { enum: ACCOUNT_RIGHTS_ENUM })
   public rights!: AccountRights;
 }

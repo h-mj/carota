@@ -13,5 +13,12 @@ export const estonian: Translation = {
   },
   forms: {
     signIn: { submit: "Logige sisse", title: "Logige sisse" }
-  }
+  },
+  scenes: {
+    home: { title: "Avaleht" },
+    register: { title: "Looge konto" },
+    signIn: { title: "Logige sisse" },
+    unknown: { title: "Soovitud lehekülge ei leitud" }
+  },
+  title: "Morkovka"
 };

@@ -13,5 +13,12 @@ export const english: Translation = {
   },
   forms: {
     signIn: { submit: "Sign in", title: "Sign in" }
-  }
+  },
+  scenes: {
+    home: { title: "Home" },
+    register: { title: "Sign up" },
+    signIn: { title: "Sign in" },
+    unknown: { title: "The page you requested cannot be found" }
+  },
+  title: "Morkovka"
 };

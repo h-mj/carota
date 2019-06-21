@@ -8,7 +8,7 @@ import { russian } from "../translation/russian";
 /**
  * Object that stores each language's translation object.
  */
-const TRANSLATIONS: { [Language in Languages]: Translation } = {
+const TRANSLATIONS: Readonly<{ [Language in Languages]: Translation }> = {
   English: english,
   Estonian: estonian,
   Russian: russian

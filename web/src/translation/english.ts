@@ -6,6 +6,18 @@ export const english: Translation = {
       message: "Incorrect email address or password."
     }
   },
+  errors: {
+    invalidInvitation: {
+      title: "We are sorry, this sign up address is invalid.",
+      message:
+        "An account has already been created using this sign up address or the address is invalid. If you haven't already created an account using this web address, please contact the person who invited you."
+    },
+    unknown: {
+      title: "We are sorry, the page you requested has not been found.",
+      message:
+        "The web address may be misspelled or the page you're looking for is no longer available."
+    }
+  },
   inputs: {
     email: {
       placeholder: "Enter an email address",
@@ -44,7 +56,9 @@ export const english: Translation = {
     home: { title: "Home" },
     register: { title: "Sign up" },
     signIn: { title: "Sign in" },
-    unknown: { title: "The page you requested cannot be found" }
+    unknown: {
+      title: "We are sorry, the page you requested has not been found"
+    }
   },
   title: "Morkovka"
 };

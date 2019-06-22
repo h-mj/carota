@@ -5,6 +5,7 @@
 interface RouteTypes {
   "/auth/login": RouteType<AuthLoginBody, AuthData>;
   "/auth/register": RouteType<AuthRegisterBody, AuthData>;
+  "/auth/check": RouteType<AuthInvitationCheckBody, AuthInvitationCheckData>;
 }
 
 /**
@@ -232,6 +233,16 @@ export interface AuthRegisterBody {
 }
 
 /**
+ * Invitation check message body type.
+ */
+export interface AuthInvitationCheckBody {
+  /**
+   * Invitation ID, which validity is being checked.
+   */
+  invitationId: string;
+}
+
+/**
  * Union of all sexes.
  */
 export type Sexes = "Female" | "Male";
@@ -244,4 +255,14 @@ export interface AuthData {
    * Generated JWT token.
    */
   token: string;
+}
+
+/**
+ * Invitation check response message data type.
+ */
+export interface AuthInvitationCheckData {
+  /**
+   * Whether or not given invitation ID is valid.
+   */
+  valid: boolean;
 }

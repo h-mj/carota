@@ -1,5 +1,5 @@
 import { Body } from "api";
-import { autorun, computed, observable, action } from "mobx";
+import { action, autorun, computed, observable } from "mobx";
 import { post } from "../utility/client";
 
 /**
@@ -56,6 +56,8 @@ export class AuthStore {
    * Makes a `POST` request with given `body` to API signing in route and on
    * success assigns returned token to field `token` and returns `undefined` or
    * returns an `Error` object.
+   *
+   * @param body Login request message body.
    */
   @action
   public async login(body: Body<"/auth/login">) {
@@ -74,6 +76,8 @@ export class AuthStore {
    * Makes a `POST` request with given `body` to API registration route and on
    * success assigns returned token to field `token` and returns `undefined` or
    * returns an `Error` object.
+   *
+   * @param body Registration request message body.
    */
   @action
   public async register(body: Body<"/auth/register">) {
@@ -94,6 +98,17 @@ export class AuthStore {
   @action
   public logout() {
     this.token = undefined;
+  }
+
+  /**
+   * Returns whether or not given invitation ID in `body` object is valid.
+   *
+   * @param body Invitation check request message body.
+   */
+  public async check(body: Body<"/auth/check">) {
+    const response = await post("/auth/check", body);
+
+    return "data" in response && response.data.valid;
   }
 }
 

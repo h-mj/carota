@@ -131,11 +131,13 @@ export class Form<TInputNames extends InputNames> extends React.Component<
  * Title message component on top of the form.
  */
 const Title = styled.div`
-  height: ${1.5 * UNIT}rem;
+  height: ${2 * UNIT}rem;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  font-size: 1.5rem;
+  font-size: 2rem;
+  letter-spacing: -0.019rem;
+  text-align: center;
 `;

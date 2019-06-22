@@ -3,13 +3,13 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
 import { Scene } from "./Scene";
-import { InputChangeHandler } from "../component/Input";
 import {
   Form,
   FormErrorReasons,
   FormSubmitHandler,
   FormValues
 } from "../component/Form";
+import { InputChangeHandler } from "../component/Input";
 import { UNIT } from "../styling/sizes";
 import { createFormErrorsReasons } from "../utility/forms";
 

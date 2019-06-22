@@ -18,10 +18,14 @@ import { serve } from "./serve";
 async function main() {
   await createConnection();
 
-  const invitation = await Invitation.create({
-    rights: "All",
-    type: "Default"
-  }).save();
+  let invitation = await Invitation.findOne();
+
+  if (invitation === undefined) {
+    invitation = await Invitation.create({
+      rights: "All",
+      type: "Default"
+    }).save();
+  }
 
   console.log(`http://localhost:3000/register/${invitation.id}`);
 

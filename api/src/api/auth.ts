@@ -75,3 +75,23 @@ defineNoAuth(authRouter, "/auth/register", REGISTER_SCHEMA, async context => {
 
   context.state.data = { token: signToken(account) };
 });
+
+/**
+ * Invitation check request body schema.
+ */
+const INVITATION_CHECK_SCHEMA: Readonly<Schema<"/auth/check">> = {
+  invitationId: is.string().guid()
+};
+
+defineNoAuth(
+  authRouter,
+  "/auth/check",
+  INVITATION_CHECK_SCHEMA,
+  async context => {
+    const invitation = await Invitation.findOne({
+      id: context.state.body.invitationId
+    });
+
+    context.state.data = { valid: invitation !== undefined };
+  }
+);

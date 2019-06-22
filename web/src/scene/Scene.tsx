@@ -5,7 +5,7 @@ import { InjectedProps } from "../store";
 /**
  * Scene component properties.
  */
-interface SceneProps<TSceneName extends string> extends InjectedProps {
+export interface SceneProps<TSceneName extends string> extends InjectedProps {
   /**
    * Parameters of this scene.
    */

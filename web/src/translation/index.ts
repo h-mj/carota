@@ -7,6 +7,7 @@ import {
 import { FormNames } from "../component/Form";
 import { SceneNames } from "../scene";
 import { AlertNames } from "../component/Alerts";
+import { ErrorNames } from "../component/Error";
 
 /**
  * Translation type that contains all other translations.
@@ -16,6 +17,11 @@ export interface Translation {
    * Alert component translations.
    */
   alerts: AlertsTranslation;
+
+  /**
+   * Error component translations.
+   */
+  errors: ErrorsTranslation;
 
   /**
    * Input component translations.
@@ -47,6 +53,19 @@ type AlertsTranslation = { [AlertName in AlertNames]: AlertTranslation };
  * Translations of an alert component.
  */
 interface AlertTranslation {
+  message: string;
+}
+
+/**
+ * Type that maps error names to their translations.
+ */
+type ErrorsTranslation = { [ErrorName in ErrorNames]: ErrorTranslation };
+
+/**
+ * Translations of an error component.
+ */
+interface ErrorTranslation {
+  title: string;
   message: string;
 }
 

@@ -1,18 +1,20 @@
+import { Languages } from "api";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
-import { Scene } from "./Scene";
-import { InputChangeHandler, InputValueType } from "../component/Input";
+import { Scene, SceneProps } from "./Scene";
+import { Error } from "../component/Error";
 import {
   Form,
   FormErrorReasons,
   FormSubmitHandler,
   FormValues
 } from "../component/Form";
+import { InputChangeHandler, InputValueType } from "../component/Input";
 import { UNIT } from "../styling/sizes";
 import { createFormErrorsReasons } from "../utility/forms";
-import { Languages } from "api";
+import { Loader } from "../component/Loader";
 
 /**
  * Union of all form input names this scene uses.
@@ -41,9 +43,34 @@ export class Register extends Scene<"register"> {
   @observable private reasons: FormErrorReasons<InputNames> = {};
 
   /**
+   * Whether or not `invitationId` in `parameters` props is valid. `undefined`
+   * if the value has not been retrieved yet.
+   */
+  @observable private valid?: boolean;
+
+  /**
+   * Creates a new instance of `Register` scene.
+   *
+   * Calls an async function that checks whether
+   */
+  public constructor(props: SceneProps<"register">) {
+    super(props);
+
+    this.checkInvitationIdValidity();
+  }
+
+  /**
    * Renders a registration form.
    */
   public render() {
+    if (this.valid === undefined) {
+      return <Loader />;
+    }
+
+    if (!this.valid) {
+      return <Error name="invalidInvitation" parameters={{}} />;
+    }
+
     return (
       <Container>
         <Form
@@ -73,7 +100,7 @@ export class Register extends Scene<"register"> {
 
     const error = await this.props.auth!.register({
       email,
-      language: language as Languages,
+      language: language as Languages, // Ignore that language could be `""` if nothing is selected.
       name,
       password,
       invitationId
@@ -88,6 +115,14 @@ export class Register extends Scene<"register"> {
 
     this.reasons = createFormErrorsReasons(error, this.values);
   };
+
+  /**
+   * Checks whether ot not `invitationId` in `parameters` props is valid and
+   * assigns boolean value to `valid` field.
+   */
+  private async checkInvitationIdValidity() {
+    this.valid = await this.props.auth!.check(this.props.parameters);
+  }
 }
 
 const Container = styled.div`

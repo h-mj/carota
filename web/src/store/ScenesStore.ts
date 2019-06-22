@@ -8,9 +8,9 @@ import {
   GATEWAY_STAGE,
   UNKNOWN_STAGE
 } from "../scene";
+import { Alert, AlertNames, AlertParameters } from "../component/Alerts";
 import { auth } from "./AuthStore";
 import { translations } from "./TranslationsStore";
-import { Alert, AlertNames, AlertParameters } from "../component/Alerts";
 
 /**
  * Returns a scene name and it's parameters object based on given URL.

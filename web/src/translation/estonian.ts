@@ -6,6 +6,18 @@ export const estonian: Translation = {
       message: "Vale e-posti aadress või parool."
     }
   },
+  errors: {
+    invalidInvitation: {
+      title:
+        "Vabandame, selle konto loomise lehekülje internetiaadress on kehtetu.",
+      message:
+        "Selle internetiaadressi abil on konto juba loodud või on tegemist vale aadressiga. Kui te pole kontot selle aadressiga loonud, palun võtke ühendust teid kutsunud isikuga."
+    },
+    unknown: {
+      title: "Vabandame, soovitud lehekülge ei leitud.",
+      message: "404"
+    }
+  },
   inputs: {
     email: {
       placeholder: "Sisestage e-posti aadress",
@@ -45,7 +57,7 @@ export const estonian: Translation = {
     home: { title: "Avaleht" },
     register: { title: "Looge konto" },
     signIn: { title: "Logige sisse" },
-    unknown: { title: "Soovitud lehekülge ei leitud" }
+    unknown: { title: "Vabandame, soovitud lehekülge ei leitud" }
   },
   title: "Morkovka"
 };

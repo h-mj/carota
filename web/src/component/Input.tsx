@@ -81,7 +81,7 @@ export type InputValueType<
  */
 interface InputProps<TInputName extends InputNames> {
   /**
-   * Boolean whether or not this input should be in the focus automatically.
+   * Whether or not this input should be in the focus automatically.
    */
   autoFocus?: boolean;
 
@@ -414,7 +414,7 @@ interface OptionProps {
   hasError: boolean;
 
   /**
-   * Boolean whether or not this option is selected.
+   * Whether or not this option is selected.
    */
   selected: boolean;
 }

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Parameters } from ".";
+import { SceneParameters } from ".";
 import { InjectedProps } from "../store";
 
 /**
@@ -9,7 +9,7 @@ export interface SceneProps<TSceneName extends string> extends InjectedProps {
   /**
    * Parameters of this scene.
    */
-  parameters: Parameters<TSceneName>;
+  parameters: SceneParameters<TSceneName>;
 }
 
 /**

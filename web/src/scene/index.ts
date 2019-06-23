@@ -93,7 +93,7 @@ type DeepStageProperties = StageProperties<"unknown", never>;
  * Type that is a union of all possible parameter names to `string` mappings of
  * all routes, which scene name is one of the `TSceneNames` names.
  */
-export type Parameters<TSceneNames extends string> =
+export type SceneParameters<TSceneNames extends string> =
   | RoutableStageProperties[keyof RoutableStageProperties]
   | DeepStageProperties extends infer InferredTypes
   ? InferredTypes extends StageProperties<
@@ -139,6 +139,82 @@ export const ROUTES: Readonly<
 };
 
 /**
+ * Returns a scene name and it's parameters object based on given URL.
+ *
+ * @param url URL string.
+ */
+export const getStageFromUrl = (url: string): Stage<SceneNames> | undefined => {
+  forRoute: for (const route in ROUTES) {
+    const urlParts = url.split("/");
+    const routeParts = route.split("/");
+
+    if (urlParts.length !== routeParts.length) {
+      continue;
+    }
+
+    const parameters: SceneParameters<SceneNames> = {};
+
+    for (let i = 0; i < urlParts.length; ++i) {
+      const urlPart = urlParts[i];
+      const routePart = routeParts[i];
+
+      if (routePart.startsWith("{") && routePart.endsWith("}")) {
+        (parameters as any)[
+          routePart.substring(1, routePart.length - 1)
+        ] = urlPart;
+      } else if (urlPart !== routePart) {
+        continue forRoute;
+      }
+    }
+
+    return {
+      sceneName: ROUTES[route as keyof typeof ROUTES],
+      parameters: parameters
+    };
+  }
+
+  return undefined;
+};
+
+/**
+ * Returns an URL from a given stage.
+ */
+export const getSceneUrl = <TSceneName extends SceneNames>({
+  sceneName,
+  parameters
+}: Stage<TSceneName>): string | undefined => {
+  forRoute: for (const route in ROUTES) {
+    // If route's scene is not stage's scene, skip.
+    if (ROUTES[route as keyof typeof ROUTES] !== sceneName) {
+      continue;
+    }
+
+    let url = route;
+
+    if (parameters !== undefined) {
+      // Replace all parameters with their values in parameters.
+      for (const parameter in parameters) {
+        // If there's no such parameter, it's a wrong route.
+        if (!url.includes(`{${parameter}}`)) {
+          continue forRoute;
+        }
+
+        url = url.replace(`{${parameter}}`, (parameters as any)[parameter]);
+      }
+    }
+
+    // If there are still parameters present in url, it's also a wrong route.
+    if (url.match(/{.*}/) !== null) {
+      continue;
+    }
+
+    return url;
+  }
+
+  return;
+};
+
+/**
  * Stage type that defines a scene name and its parameters.
  */
 export interface Stage<TSceneName extends SceneNames> {
@@ -150,7 +226,7 @@ export interface Stage<TSceneName extends SceneNames> {
   /**
    * Stage's context.
    */
-  parameters: Parameters<TSceneName>;
+  parameters: SceneParameters<TSceneName>;
 }
 
 /**

@@ -47,6 +47,9 @@ interface ErrorProps<TErrorName extends ErrorNames> {
 export class Error<TErrorName extends ErrorNames> extends React.Component<
   ErrorProps<TErrorName> & InjectedProps
 > {
+  /**
+   * Renders an error component.
+   */
   public render() {
     const { name, parameters, translations } = this.props;
 
@@ -94,7 +97,7 @@ const Title = styled.div`
   margin-bottom: ${UNIT / 2}rem;
   line-height: ${UNIT / 2}rem;
   font-size: 2rem;
-  letter-spacing: -.022em;
+  letter-spacing: -0.022em;
 `;
 
 /**

@@ -11,10 +11,10 @@ import {
   FormSubmitHandler,
   FormValues
 } from "../component/Form";
+import { Loader } from "../component/Loader";
 import { InputChangeHandler, InputValueType } from "../component/Input";
 import { UNIT } from "../styling/sizes";
-import { createFormErrorsReasons } from "../utility/forms";
-import { Loader } from "../component/Loader";
+import { createFormErrorsReasons, setTimeout } from "../utility/forms";
 
 /**
  * Union of all form input names this scene uses.
@@ -43,6 +43,11 @@ export class Register extends Scene<"register"> {
   @observable private reasons: FormErrorReasons<InputNames> = {};
 
   /**
+   * Whether or not form is waiting for server response.
+   */
+  @observable private loading: boolean = false;
+
+  /**
    * Whether or not `invitationId` in `parameters` props is valid. `undefined`
    * if the value has not been retrieved yet.
    */
@@ -65,9 +70,7 @@ export class Register extends Scene<"register"> {
   public render() {
     if (this.valid === undefined) {
       return <Loader />;
-    }
-
-    if (!this.valid) {
+    } else if (!this.valid) {
       return <Error name="invalidInvitation" parameters={{}} />;
     }
 
@@ -81,6 +84,8 @@ export class Register extends Scene<"register"> {
           reasons={this.reasons}
           values={this.values}
         />
+
+        {this.loading && <Loader translucent={true} />}
       </Container>
     );
   }
@@ -95,16 +100,21 @@ export class Register extends Scene<"register"> {
 
   @action
   private onSubmit: FormSubmitHandler = async () => {
+    this.loading = true;
+
     const { email, language, name, password } = this.values;
     const { invitationId } = this.props.parameters;
 
-    const error = await this.props.auth!.register({
-      email,
-      language: language as Languages, // Ignore that language could be `""` if nothing is selected.
-      name,
-      password,
-      invitationId
-    });
+    const [error] = await Promise.all([
+      this.props.auth!.register({
+        email,
+        language: language as Languages, // Ignore that language could be `""` if nothing is selected.
+        name,
+        password,
+        invitationId
+      }),
+      setTimeout(1)
+    ]);
 
     if (error === undefined) {
       return this.props.scenes!.redirect({
@@ -114,6 +124,8 @@ export class Register extends Scene<"register"> {
     }
 
     this.reasons = createFormErrorsReasons(error, this.values);
+
+    this.loading = false;
   };
 
   /**

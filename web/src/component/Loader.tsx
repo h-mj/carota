@@ -1,13 +1,27 @@
 import * as React from "react";
 import styled, { keyframes } from "styled-components";
-import { ACTIVE } from "../styling/colors";
+import { scaleIn, scaleOut } from "../styling/animations";
+import { ACTIVE, BACKGROUND_TRANSLUCENT } from "../styling/colors";
 import { UNIT } from "../styling/sizes";
+
+/**
+ * Loader component props.
+ */
+interface LoaderProps {
+  /**
+   * Whether or not it should be translucent so underlying components are
+   * visible.
+   */
+  translucent?: boolean;
+}
 
 /**
  * Component that is shown when some part of the application is being loaded.
  */
-export const Loader: React.FunctionComponent = () => (
-  <Overlay>
+export const Loader: React.FunctionComponent<LoaderProps> = ({
+  translucent
+}) => (
+  <Overlay translucent={translucent}>
     <DiskContainer>
       <Disk />
       <Disk />
@@ -21,13 +35,22 @@ export const Loader: React.FunctionComponent = () => (
  * Component that fills entire container and displays its children in the middle
  * of the component.
  */
-const Overlay = styled.div`
+const Overlay = styled.div<LoaderProps>`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
   display: flex;
   justify-content: center;
   align-items: center;
 
-  width: 100%;
-  height: 100%;
+  /* Don't let users select components below the overlay */
+  user-select: none;
+
+  ${props =>
+    props.translucent && `background-color: ${BACKGROUND_TRANSLUCENT}`};
 `;
 
 /**
@@ -50,19 +73,6 @@ const DiskContainer = styled.div`
 `;
 
 /**
- * Animation that fades a disk in.
- */
-const fadeIn = keyframes`
-  0% {
-    transform: scale(0);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-`;
-
-/**
  * Animation that moves a disk to the right by `DISK_OFFSET`.
  */
 const move = keyframes`
@@ -72,19 +82,6 @@ const move = keyframes`
 
   100% {
     transform: translateX(${DISK_OFFSET}rem);
-  }
-`;
-
-/**
- * Animation that fades a disk out.
- */
-const fadeOut = keyframes`
-  0% {
-    transform: scale(1);
-  }
-
-  100% {
-    transform: scale(0);
   }
 `;
 
@@ -103,7 +100,7 @@ const Disk = styled.div`
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 
   &:nth-child(1) {
-    animation: ${fadeIn} 0.5s infinite;
+    animation: ${scaleIn} 0.5s infinite;
   }
 
   &:nth-child(2) {
@@ -117,6 +114,6 @@ const Disk = styled.div`
 
   &:nth-child(4) {
     left: ${2 * DISK_OFFSET}rem;
-    animation: ${fadeOut} 0.5s infinite;
+    animation: ${scaleOut} 0.5s infinite;
   }
 `;

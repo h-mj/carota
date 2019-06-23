@@ -1,11 +1,11 @@
+import { action, observable } from "mobx";
+import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled, { keyframes } from "styled-components";
+import { InjectedProps } from "../store";
+import { fadeIn, TRANSITION, TRANSITION_DURATION } from "../styling/animations";
 import { BACKGROUND, DEFAULT_BORDER, ERROR } from "../styling/colors";
 import { BORDER_RADIUS, UNIT } from "../styling/sizes";
-import { TRANSITION, TRANSITION_DURATION } from "../styling/animations";
-import { InjectedProps } from "../store";
-import { inject, observer } from "mobx-react";
-import { observable, action } from "mobx";
 
 /**
  * Union of all alert types.
@@ -198,16 +198,14 @@ const AlertContainer = styled.div`
 `;
 
 /**
- * Alert fade in animation.
+ * Alert component move in animation.
  */
-const alertFadeIn = keyframes`
+const moveIn = keyframes`
   0% {
-    opacity: 0;
     transform: translateX(-100%);
   }
 
   100% {
-    opacity: 1;
     transform: translateX(0);
   }
 `;
@@ -255,7 +253,8 @@ const AlertElement = styled.div<AlertElementProps>`
   opacity: ${props => (props.fading ? 0 : 1)};
   transform: translateX(${props => (props.fading ? -100 : 0)}%);
 
-  animation: ${alertFadeIn} ${TRANSITION_DURATION}s;
+  animation: ${moveIn} ${TRANSITION_DURATION}s,
+    ${fadeIn} ${TRANSITION_DURATION}s;
 
   ${TRANSITION}
 

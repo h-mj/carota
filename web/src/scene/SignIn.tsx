@@ -10,8 +10,9 @@ import {
   FormValues
 } from "../component/Form";
 import { InputChangeHandler } from "../component/Input";
+import { Loader } from "../component/Loader";
 import { UNIT } from "../styling/sizes";
-import { createFormErrorsReasons } from "../utility/forms";
+import { createFormErrorsReasons, setTimeout } from "../utility/forms";
 
 /**
  * Union of all form input names this scene uses.
@@ -38,6 +39,11 @@ export class SignIn extends Scene<"signIn"> {
   @observable private reasons: FormErrorReasons<InputNames> = {};
 
   /**
+   * Whether or not form is waiting for server response.
+   */
+  @observable private loading: boolean = false;
+
+  /**
    * Renders a sign in form.
    */
   public render() {
@@ -51,6 +57,8 @@ export class SignIn extends Scene<"signIn"> {
           reasons={this.reasons}
           values={this.values}
         />
+
+        {this.loading && <Loader translucent={true} />}
       </Container>
     );
   }
@@ -65,7 +73,12 @@ export class SignIn extends Scene<"signIn"> {
 
   @action
   private onSubmit: FormSubmitHandler = async () => {
-    const error = await this.props.auth!.login(this.values);
+    this.loading = true;
+
+    const [error] = await Promise.all([
+      this.props.auth!.login(this.values),
+      setTimeout(1)
+    ]);
 
     if (error === undefined) {
       return this.props.scenes!.redirect({
@@ -79,6 +92,8 @@ export class SignIn extends Scene<"signIn"> {
     }
 
     this.reasons = createFormErrorsReasons(error, this.values);
+
+    this.loading = false;
   };
 }
 

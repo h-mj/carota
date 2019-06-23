@@ -108,7 +108,7 @@ const Title = styled.div`
   margin-bottom: ${UNIT / 2}rem;
   line-height: ${UNIT / 2}rem;
   font-size: 2rem;
-  letter-spacing: -0.019em;
+  letter-spacing: -0.022em;
 `;
 
 /**

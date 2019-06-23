@@ -23,7 +23,7 @@ type InputNames = "email" | "password";
  */
 @inject("auth", "scenes")
 @observer
-export class SignIn extends Scene<"signIn"> {
+export class Login extends Scene<"login"> {
   /**
    * Form input field values.
    */
@@ -41,7 +41,7 @@ export class SignIn extends Scene<"signIn"> {
    * Waiting reason that is used to show loader component when waiting for
    * server response.
    */
-  private static WAIT_REASON = "signIn";
+  private static WAIT_REASON = "login";
 
   /**
    * Renders a sign in form.
@@ -51,7 +51,7 @@ export class SignIn extends Scene<"signIn"> {
       <Container>
         <Form
           inputNames={["email", "password"]}
-          name="signIn"
+          name="login"
           onChange={this.onChange}
           onSubmit={this.onSubmit}
           reasons={this.reasons}
@@ -71,14 +71,14 @@ export class SignIn extends Scene<"signIn"> {
 
   @action
   private onSubmit: FormSubmitHandler = async () => {
-    this.props.scenes!.wait(SignIn.WAIT_REASON);
+    this.props.scenes!.wait(Login.WAIT_REASON);
 
     const [error] = await Promise.all([
       this.props.auth!.login(this.values),
       setTimeout(1)
     ]);
 
-    this.props.scenes!.done(SignIn.WAIT_REASON);
+    this.props.scenes!.done(Login.WAIT_REASON);
 
     if (error === undefined) {
       return this.props.scenes!.redirect({
@@ -88,7 +88,7 @@ export class SignIn extends Scene<"signIn"> {
     }
 
     if (error.code === 401) {
-      this.props.scenes!.pushAlert("signInInvalidCredentials", {});
+      this.props.scenes!.pushAlert("loginInvalidCredentials", {});
     }
 
     this.reasons = createFormErrorsReasons(error, this.values);

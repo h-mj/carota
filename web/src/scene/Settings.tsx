@@ -1,6 +1,6 @@
 import { Scene } from "./Scene";
 
-export class Home extends Scene<"home"> {
+export class Settings extends Scene<"settings"> {
   public render() {
     return null;
   }

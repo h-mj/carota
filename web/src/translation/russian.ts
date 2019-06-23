@@ -2,7 +2,7 @@ import { Translation } from ".";
 
 export const russian: Translation = {
   alerts: {
-    signInInvalidCredentials: {
+    loginInvalidCredentials: {
       message: "Неверный адрес электронной почты или пароль."
     }
   },
@@ -50,13 +50,19 @@ export const russian: Translation = {
     }
   },
   forms: {
-    register: { submit: "Завести аккаунт", title: "Завести аккаунт" },
-    signIn: { submit: "Вход", title: "Вход" }
+    login: { submit: "Вход", title: "Вход" },
+    register: { submit: "Завести аккаунт", title: "Завести аккаунт" }
   },
   scenes: {
+    administration: { title: "Администрация" },
+    diet: { title: "Диета" },
+    history: { title: "История" },
     home: { title: "Главная страница" },
+    login: { title: "Вход" },
+    logout: { title: "Выход" },
+    measurements: { title: "Замеры" },
     register: { title: "Завести аккаунт" },
-    signIn: { title: "Вход" },
+    settings: { title: "Настройки" },
     unknown: { title: "К сожалению, запрошенная страница не была найдена" }
   },
   title: "Морковка"

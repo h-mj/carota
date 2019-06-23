@@ -1,16 +1,28 @@
 import { Scene } from "./Scene";
+import { Administration } from "./Administration";
+import { Diet } from "./Diet";
+import { History } from "./History";
 import { Home } from "./Home";
+import { Login } from "./Login";
+import { Logout } from "./Logout";
+import { Measurements } from "./Measurements";
 import { Register } from "./Register";
-import { SignIn } from "./SignIn";
+import { Settings } from "./Settings";
 import { Unknown } from "./Unknown";
 
 /**
- * Union of all scene types.
+ * Union of all scene properties.
  */
 type ScenesProperties =
+  | SceneProperties<Administration, typeof Administration>
+  | SceneProperties<Diet, typeof Diet>
+  | SceneProperties<History, typeof History>
   | SceneProperties<Home, typeof Home>
+  | SceneProperties<Login, typeof Login>
+  | SceneProperties<Logout, typeof Logout>
+  | SceneProperties<Measurements, typeof Measurements>
   | SceneProperties<Register, typeof Register>
-  | SceneProperties<SignIn, typeof SignIn>
+  | SceneProperties<Settings, typeof Settings>
   | SceneProperties<Unknown, typeof Unknown>;
 
 /**
@@ -64,9 +76,15 @@ type SceneClassTypes = {
  * the name of the current scene in store `ScenesStore`.
  */
 export const SCENES: Readonly<SceneClassTypes> = {
+  administration: Administration,
+  diet: Diet,
+  history: History,
   home: Home,
+  login: Login,
+  logout: Logout,
+  measurements: Measurements,
   register: Register,
-  signIn: SignIn,
+  settings: Settings,
   unknown: Unknown
 };
 
@@ -78,10 +96,21 @@ export const SCENES: Readonly<SceneClassTypes> = {
  * the path.
  */
 interface RoutableStageProperties {
+  "/administration": StageProperties<"administration", never>;
+  "/diet": StageProperties<"diet", never>;
+  "/history": StageProperties<"history", never>;
   "/": StageProperties<"home", never>;
-  "/login": StageProperties<"signIn", never>;
+  "/login": StageProperties<"login", never>;
+  "/logout": StageProperties<"logout", never>;
+  "/measurements": StageProperties<"measurements", never>;
   "/register/{invitationId}": StageProperties<"register", "invitationId">;
+  "/settings": StageProperties<"settings", never>;
 }
+
+/**
+ * Union of all routes.
+ */
+type Routes = keyof RoutableStageProperties;
 
 /**
  * Union of all stage definitions that cannot be accessed by navigating to a
@@ -94,7 +123,7 @@ type DeepStageProperties = StageProperties<"unknown", never>;
  * all routes, which scene name is one of the `TSceneNames` names.
  */
 export type SceneParameters<TSceneNames extends string> =
-  | RoutableStageProperties[keyof RoutableStageProperties]
+  | RoutableStageProperties[Routes]
   | DeepStageProperties extends infer InferredTypes
   ? InferredTypes extends StageProperties<
       infer InferredSceneName,
@@ -129,13 +158,17 @@ interface StageProperties<
  * retrieve scene name based on current browser pathname.
  */
 export const ROUTES: Readonly<
-  {
-    [Route in keyof RoutableStageProperties]: RoutableStageProperties[Route]["sceneName"]
-  }
+  { [Route in Routes]: RoutableStageProperties[Route]["sceneName"] }
 > = {
+  "/administration": "administration",
+  "/diet": "diet",
+  "/login": "login",
+  "/logout": "logout",
+  "/history": "history",
   "/": "home",
-  "/login": "signIn",
-  "/register/{invitationId}": "register"
+  "/measurements": "measurements",
+  "/register/{invitationId}": "register",
+  "/settings": "settings"
 };
 
 /**
@@ -143,7 +176,7 @@ export const ROUTES: Readonly<
  *
  * @param url URL string.
  */
-export const getStageFromUrl = (url: string): Stage<SceneNames> | undefined => {
+export const getStageFromUrl = (url: string): Stage | undefined => {
   forRoute: for (const route in ROUTES) {
     const urlParts = url.split("/");
     const routeParts = route.split("/");
@@ -152,25 +185,23 @@ export const getStageFromUrl = (url: string): Stage<SceneNames> | undefined => {
       continue;
     }
 
-    const parameters: SceneParameters<SceneNames> = {};
+    const parameters: { [key: string]: string } = {};
 
     for (let i = 0; i < urlParts.length; ++i) {
       const urlPart = urlParts[i];
       const routePart = routeParts[i];
 
       if (routePart.startsWith("{") && routePart.endsWith("}")) {
-        (parameters as any)[
-          routePart.substring(1, routePart.length - 1)
-        ] = urlPart;
+        parameters[routePart.substring(1, routePart.length - 1)] = urlPart;
       } else if (urlPart !== routePart) {
         continue forRoute;
       }
     }
 
     return {
-      sceneName: ROUTES[route as keyof typeof ROUTES],
-      parameters: parameters
-    };
+      sceneName: ROUTES[route as Routes],
+      parameters
+    } as Stage;
   }
 
   return undefined;
@@ -179,13 +210,13 @@ export const getStageFromUrl = (url: string): Stage<SceneNames> | undefined => {
 /**
  * Returns an URL from a given stage.
  */
-export const getSceneUrl = <TSceneName extends SceneNames>({
+export const getSceneUrl = ({
   sceneName,
   parameters
-}: Stage<TSceneName>): string | undefined => {
+}: Stage): string | undefined => {
   forRoute: for (const route in ROUTES) {
     // If route's scene is not stage's scene, skip.
-    if (ROUTES[route as keyof typeof ROUTES] !== sceneName) {
+    if (ROUTES[route as Routes] !== sceneName) {
       continue;
     }
 
@@ -215,41 +246,44 @@ export const getSceneUrl = <TSceneName extends SceneNames>({
 };
 
 /**
- * Stage type that defines a scene name and its parameters.
+ * Union of all stages with scene name as `TSceneNames`, and parameters as
+ * `SceneParameters` type of each scene name.
  */
-export interface Stage<TSceneName extends SceneNames> {
-  /**
-   * Stage's scene name.
-   */
-  sceneName: TSceneName;
+export type Stage<TSceneNames extends SceneNames = SceneNames> = {
+  [SceneName in TSceneNames]: {
+    /**
+     * Stage scene name.
+     */
+    sceneName: SceneName;
 
-  /**
-   * Stage's context.
-   */
-  parameters: SceneParameters<TSceneName>;
-}
+    /**
+     * Scene parameters.
+     */
+    parameters: SceneParameters<SceneName>;
+  }
+}[TSceneNames];
 
 /**
  * Scene names that do not require authentication.
  */
 export const NO_AUTHENTICATION_SCENE_NAMES: Readonly<SceneNames[]> = [
-  "register",
-  "signIn"
+  "login",
+  "register"
 ];
 
 /**
  * Stage that is shown if user is not authenticated but tries to access a stage
  * that requires authentication.
  */
-export const GATEWAY_STAGE: Readonly<Stage<"signIn">> = {
-  sceneName: "signIn",
+export const GATEWAY_STAGE: Readonly<Stage> = {
+  sceneName: "login",
   parameters: {}
 };
 
 /**
  * Stage that is shown if no other stages match current URL.
  */
-export const UNKNOWN_STAGE: Readonly<Stage<"unknown">> = {
+export const UNKNOWN_STAGE: Readonly<Stage> = {
   sceneName: "unknown",
   parameters: {}
 };

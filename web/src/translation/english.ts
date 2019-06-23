@@ -2,7 +2,7 @@ import { Translation } from ".";
 
 export const english: Translation = {
   alerts: {
-    signInInvalidCredentials: {
+    loginInvalidCredentials: {
       message: "Incorrect email address or password."
     }
   },
@@ -49,13 +49,19 @@ export const english: Translation = {
     }
   },
   forms: {
-    register: { submit: "Sign up", title: "Sign up" },
-    signIn: { submit: "Sign in", title: "Sign in" }
+    login: { submit: "Sign in", title: "Sign in" },
+    register: { submit: "Sign up", title: "Sign up" }
   },
   scenes: {
+    administration: { title: "Administration" },
+    diet: { title: "Diet" },
+    history: { title: "History" },
     home: { title: "Home" },
+    login: { title: "Sign in" },
+    logout: { title: "Sign out" },
+    measurements: { title: "Measurements" },
     register: { title: "Sign up" },
-    signIn: { title: "Sign in" },
+    settings: { title: "Settings" },
     unknown: {
       title: "We are sorry, the page you requested has not been found"
     }

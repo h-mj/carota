@@ -4,7 +4,6 @@ import {
   getSceneUrl,
   getStageFromUrl,
   NO_AUTHENTICATION_SCENE_NAMES,
-  SceneNames,
   Stage,
   UNKNOWN_STAGE
 } from "../scene";
@@ -23,7 +22,7 @@ export class ScenesStore {
   /**
    * Current main stage.
    */
-  @observable private _main!: Readonly<Stage<SceneNames>>;
+  @observable private _main!: Readonly<Stage>;
 
   /**
    * List of alerts.
@@ -76,7 +75,7 @@ export class ScenesStore {
    * @param parameters
    */
   @action
-  public redirect<TSceneName extends SceneNames>(stage: Stage<TSceneName>) {
+  public redirect(stage: Stage) {
     this._main =
       auth.authenticated !==
       NO_AUTHENTICATION_SCENE_NAMES.includes(stage.sceneName)
@@ -167,6 +166,14 @@ export class ScenesStore {
   @action
   public done(reason: string) {
     this._waits.delete(reason);
+  }
+
+  /**
+   * Whether or not navigation component should be visible.
+   */
+  @computed
+  public get showNavigation() {
+    return !NO_AUTHENTICATION_SCENE_NAMES.includes(this._main.sceneName);
   }
 }
 

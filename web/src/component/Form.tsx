@@ -12,7 +12,7 @@ import { anyErrors } from "../utility/forms";
  * Union of all form names which is used to retrieve appropriate translations
  * for title and submit button texts.
  */
-export type FormNames = "register" | "signIn";
+export type FormNames = "login" | "register";
 
 /**
  * Form input errors type that maps input name to its error reason. `undefined`

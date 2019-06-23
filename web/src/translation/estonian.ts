@@ -2,7 +2,7 @@ import { Translation } from ".";
 
 export const estonian: Translation = {
   alerts: {
-    signInInvalidCredentials: {
+    loginInvalidCredentials: {
       message: "Vale e-posti aadress või parool."
     }
   },
@@ -50,13 +50,19 @@ export const estonian: Translation = {
     }
   },
   forms: {
-    register: { submit: "Looge konto", title: "Looge konto" },
-    signIn: { submit: "Logige sisse", title: "Logige sisse" }
+    login: { submit: "Logige sisse", title: "Logige sisse" },
+    register: { submit: "Looge konto", title: "Looge konto" }
   },
   scenes: {
+    administration: { title: "Administratsioon" },
+    diet: { title: "Dieet" },
+    history: { title: "Ajalugu" },
     home: { title: "Avaleht" },
+    login: { title: "Logige sisse" },
+    logout: { title: "Logige välja" },
+    measurements: { title: "Mõõdud" },
     register: { title: "Looge konto" },
-    signIn: { title: "Logige sisse" },
+    settings: { title: "Seaded" },
     unknown: { title: "Vabandame, soovitud lehekülge ei leitud" }
   },
   title: "Morkovka"

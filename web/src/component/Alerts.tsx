@@ -17,7 +17,7 @@ type AlertTypes = "default" | "error";
  * Maps alert name to alert type and alert message parameter names.
  */
 interface AlertsProperties {
-  signInInvalidCredentials: AlertProperties<"error", never>;
+  loginInvalidCredentials: AlertProperties<"error", never>;
 }
 
 /**
@@ -59,7 +59,7 @@ export type AlertParameters<TAlertName extends AlertNames> = {
 const NAME_TO_TYPE: Readonly<
   { [AlertName in AlertNames]: AlertsProperties[AlertName]["type"] }
 > = {
-  signInInvalidCredentials: "error"
+  loginInvalidCredentials: "error"
 };
 
 /**

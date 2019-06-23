@@ -1,36 +1,38 @@
 import { inject } from "mobx-react";
 import * as React from "react";
-import { getSceneUrl, SceneNames, SceneParameters } from "../scene";
+import { getSceneUrl, Stage } from "../scene";
 import { InjectedProps } from "../store";
 
 /**
  * Anchor component props.
  */
-interface AnchorProps<TSceneName extends SceneNames> {
+interface AnchorProps {
+  /**
+   * Used by styled-components to restyle this component.
+   */
+  className?: string;
+
   /**
    * Name of the scene to which this anchor will redirect to.
    */
-  sceneName: TSceneName;
-
-  /**
-   * Redirected scene parameters.
-   */
-  parameters: SceneParameters<TSceneName>;
+  stage: Stage;
 }
 
 /**
  * Component that on click redirects user to given scene with some parameters.
  */
 @inject("scenes")
-export class Anchor<TSceneName extends SceneNames> extends React.Component<
-  AnchorProps<TSceneName> & InjectedProps
-> {
+export class Anchor extends React.Component<AnchorProps & InjectedProps> {
   /**
    * Renders an anchor component.
    */
   public render() {
     return (
-      <a href={getSceneUrl(this.props)} onClick={this.handleClick}>
+      <a
+        className={this.props.className}
+        href={getSceneUrl(this.props.stage)}
+        onClick={this.handleClick}
+      >
         {this.props.children}
       </a>
     );
@@ -41,6 +43,6 @@ export class Anchor<TSceneName extends SceneNames> extends React.Component<
    */
   private handleClick: React.MouseEventHandler<HTMLAnchorElement> = event => {
     event.preventDefault();
-    this.props.scenes!.redirect(this.props);
+    this.props.scenes!.redirect(this.props.stage);
   };
 }

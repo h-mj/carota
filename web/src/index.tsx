@@ -5,13 +5,24 @@ import { createGlobalStyle } from "styled-components";
 import { SceneNames, SCENES, Stage } from "./scene";
 import { Scene } from "./scene/Scene";
 import { Alerts } from "./component/Alerts";
+import { Loader } from "./component/Loader";
 import { InjectedProps, STORES } from "./store";
 import { BACKGROUND, FOREGROUND } from "./styling/colors";
 
 /**
+ * Global style properties.
+ */
+interface GlobalStyleProps {
+  /**
+   * Whether or not body overflow must be hidden.
+   */
+  hideOverflow: boolean;
+}
+
+/**
  * Global style that contains styling defined in global stylesheet.
  */
-const GlobalStyle = createGlobalStyle`
+const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
   @import url("https://rsms.me/inter/inter.css");
 
   html {
@@ -25,10 +36,15 @@ const GlobalStyle = createGlobalStyle`
 
   body {
     margin: 0;
+    overflow: ${props => (props.hideOverflow ? "hidden" : "auto")};
   }
 
   html, body, #root {
     height: 100%;
+  }
+
+  #root {
+    position: relative;
   }
 `;
 
@@ -39,11 +55,13 @@ const GlobalStyle = createGlobalStyle`
 @observer
 class Application extends React.Component<InjectedProps> {
   public render() {
-    const { alerts, main } = this.props.scenes!;
+    const { alerts, waiting, main } = this.props.scenes!;
 
     return (
       <>
+        <GlobalStyle hideOverflow={waiting} />
         {this.renderSceneComponent(main)}
+        <Loader loading={waiting} />
         <Alerts alerts={alerts} />
       </>
     );
@@ -62,11 +80,8 @@ class Application extends React.Component<InjectedProps> {
 }
 
 render(
-  <>
-    <GlobalStyle />
-    <Provider {...STORES}>
-      <Application />
-    </Provider>
-  </>,
+  <Provider {...STORES}>
+    <Application />
+  </Provider>,
   document.getElementById("root")
 );

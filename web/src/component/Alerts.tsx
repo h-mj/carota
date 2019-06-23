@@ -3,7 +3,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled, { keyframes } from "styled-components";
 import { InjectedProps } from "../store";
-import { fadeIn, TRANSITION, TRANSITION_DURATION } from "../styling/animations";
+import { fadeIn, TRANSITION_DURATION } from "../styling/animations";
 import { BACKGROUND, DEFAULT_BORDER, ERROR } from "../styling/colors";
 import { BORDER_RADIUS, UNIT } from "../styling/sizes";
 
@@ -181,7 +181,7 @@ export class Alerts extends React.Component<AlertsProps & InjectedProps> {
  * Container that contains all alert components.
  */
 const AlertsContainer = styled.div`
-  position: absolute;
+  position: fixed;
   bottom: ${UNIT / 2}rem;
   left: ${UNIT / 2}rem;
 `;
@@ -256,7 +256,7 @@ const AlertElement = styled.div<AlertElementProps>`
   animation: ${moveIn} ${TRANSITION_DURATION}s,
     ${fadeIn} ${TRANSITION_DURATION}s;
 
-  ${TRANSITION}
+  transition: ${TRANSITION_DURATION}s;
 
   cursor: pointer;
 `;

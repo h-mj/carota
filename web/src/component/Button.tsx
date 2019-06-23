@@ -7,7 +7,7 @@ import {
   ACTIVE,
   ERROR
 } from "../styling/colors";
-import { TRANSITION } from "../styling/animations";
+import { TRANSITION_DURATION } from "../styling/animations";
 
 /**
  * Button component properties.
@@ -85,7 +85,7 @@ const ButtonElement = styled.button<ButtonProps>`
 
   cursor: pointer;
 
-  ${TRANSITION}
+  transition: ${TRANSITION_DURATION}s;
 
   ${props => (props.hasError ? errorStyle : defaultStyle)};
 `;

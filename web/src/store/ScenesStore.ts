@@ -107,6 +107,11 @@ export class ScenesStore {
   @observable private _alerts: Array<Alert<AlertNames>> = [];
 
   /**
+   * Set of reasons why waiting is needed.
+   */
+  @observable private _waits: Set<string> = new Set();
+
+  /**
    * Creates a new instance of `ScenesStore` and adds listeners for main stage
    * change and history state pop events which update url and main stage
    * correspondingly.
@@ -130,6 +135,14 @@ export class ScenesStore {
   @computed
   public get alerts() {
     return this._alerts;
+  }
+
+  /**
+   * Returns whether or not application is waiting for something.
+   */
+  @computed
+  public get waiting() {
+    return this._waits.size !== 0;
   }
 
   /**
@@ -176,6 +189,7 @@ export class ScenesStore {
    * @param parameters Alert's parameters.
    * @param timeout Time in seconds during which alert will be shown.
    */
+  @action
   public pushAlert<TAlertName extends AlertNames>(
     name: TAlertName,
     parameters: AlertParameters<TAlertName>,
@@ -200,6 +214,7 @@ export class ScenesStore {
   /**
    * Removes an alert with id `id` from alert list.
    */
+  @action
   public popAlert = (alert: Alert<AlertNames>) => {
     const index = this._alerts.findIndex(other => other.id === alert.id);
 
@@ -209,6 +224,26 @@ export class ScenesStore {
 
     this._alerts.splice(index, 1);
   };
+
+  /**
+   * Adds a waiting reason to the set.
+   *
+   * @param reason Loading procedure name.
+   */
+  @action
+  public wait(reason: string) {
+    this._waits.add(reason);
+  }
+
+  /**
+   * Removes a waiting reason from the the set
+   *
+   * @param name Loading procedure name.
+   */
+  @action
+  public done(reason: string) {
+    this._waits.delete(reason);
+  }
 }
 
 /**

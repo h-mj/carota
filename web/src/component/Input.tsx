@@ -10,7 +10,7 @@ import {
   BACKGROUND
 } from "../styling/colors";
 import { UNIT, BORDER_RADIUS } from "../styling/sizes";
-import { TRANSITION } from "../styling/animations";
+import { TRANSITION_DURATION } from "../styling/animations";
 import { InjectedProps } from "../store";
 
 /**
@@ -238,7 +238,7 @@ const Border = styled.div`
 
   pointer-events: none;
 
-  ${TRANSITION};
+  transition: ${TRANSITION_DURATION}s;
 `;
 
 /**
@@ -263,7 +263,7 @@ const Placeholder = styled.div`
 
   pointer-events: none;
 
-  ${TRANSITION};
+  transition: ${TRANSITION_DURATION}s;
 `;
 
 /**
@@ -304,7 +304,7 @@ const Error = styled.div`
 
   pointer-events: none;
 
-  ${TRANSITION};
+  transition: ${TRANSITION_DURATION}s;
 `;
 
 /**
@@ -357,7 +357,7 @@ const inputElementStyle = css<InputElementProps>`
   width: 100%;
   height: ${(3 * UNIT) / 4}rem;
 
-  ${TRANSITION};
+  transition: ${TRANSITION_DURATION}s;
 
   & + * + ${Error}, & + * + * + ${Error} {
     opacity: ${props => (props.hasError ? 1 : 0)};
@@ -447,7 +447,7 @@ const Option = styled.button<OptionProps>`
 
   cursor: pointer;
 
-  ${TRANSITION};
+  transition: ${TRANSITION_DURATION}s;
 `;
 
 /**

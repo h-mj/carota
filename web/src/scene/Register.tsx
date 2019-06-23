@@ -11,7 +11,6 @@ import {
   FormSubmitHandler,
   FormValues
 } from "../component/Form";
-import { Loader } from "../component/Loader";
 import { InputChangeHandler, InputValueType } from "../component/Input";
 import { UNIT } from "../styling/sizes";
 import { createFormErrorsReasons, setTimeout } from "../utility/forms";
@@ -43,15 +42,16 @@ export class Register extends Scene<"register"> {
   @observable private reasons: FormErrorReasons<InputNames> = {};
 
   /**
-   * Whether or not form is waiting for server response.
-   */
-  @observable private loading: boolean = false;
-
-  /**
    * Whether or not `invitationId` in `parameters` props is valid. `undefined`
    * if the value has not been retrieved yet.
    */
   @observable private valid?: boolean;
+
+  /**
+   * Waiting reason that is used to show loader component when waiting for
+   * server response.
+   */
+  private static WAIT_REASON = "register";
 
   /**
    * Creates a new instance of `Register` scene.
@@ -69,8 +69,10 @@ export class Register extends Scene<"register"> {
    */
   public render() {
     if (this.valid === undefined) {
-      return <Loader />;
-    } else if (!this.valid) {
+      return null;
+    }
+
+    if (!this.valid) {
       return <Error name="invalidInvitation" parameters={{}} />;
     }
 
@@ -84,8 +86,6 @@ export class Register extends Scene<"register"> {
           reasons={this.reasons}
           values={this.values}
         />
-
-        {this.loading && <Loader translucent={true} />}
       </Container>
     );
   }
@@ -100,10 +100,10 @@ export class Register extends Scene<"register"> {
 
   @action
   private onSubmit: FormSubmitHandler = async () => {
-    this.loading = true;
-
     const { email, language, name, password } = this.values;
     const { invitationId } = this.props.parameters;
+
+    this.props.scenes!.wait(Register.WAIT_REASON);
 
     const [error] = await Promise.all([
       this.props.auth!.register({
@@ -116,6 +116,8 @@ export class Register extends Scene<"register"> {
       setTimeout(1)
     ]);
 
+    this.props.scenes!.done(Register.WAIT_REASON);
+
     if (error === undefined) {
       return this.props.scenes!.redirect({
         sceneName: "home",
@@ -124,8 +126,6 @@ export class Register extends Scene<"register"> {
     }
 
     this.reasons = createFormErrorsReasons(error, this.values);
-
-    this.loading = false;
   };
 
   /**
@@ -133,7 +133,9 @@ export class Register extends Scene<"register"> {
    * assigns boolean value to `valid` field.
    */
   private async checkInvitationIdValidity() {
+    this.props.scenes!.wait(Register.WAIT_REASON);
     this.valid = await this.props.auth!.check(this.props.parameters);
+    this.props.scenes!.done(Register.WAIT_REASON);
   }
 }
 

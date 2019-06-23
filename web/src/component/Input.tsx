@@ -185,7 +185,7 @@ export class Input<TInputName extends InputNames> extends React.Component<
             hasError={reason !== undefined}
             key={option}
             onClick={this.handleChange}
-            selected={option === value}
+            isSelected={option === value}
             type="button"
             value={option}
           >
@@ -255,7 +255,7 @@ const Placeholder = styled.div`
 
   height: ${(3 * UNIT) / 4}rem;
 
-  padding: 0 0.25rem;
+  padding: 0 .25rem;
   box-sizing: border-box;
 
   display: flex;
@@ -274,7 +274,7 @@ const labelStyle = css`
   height: ${UNIT / 4}rem;
 
   background-color: ${BACKGROUND};
-  font-size: 0.75rem;
+  font-size: .75rem;
   letter-spacing: 0;
 `;
 
@@ -294,12 +294,12 @@ const Error = styled.div`
 
   height: ${UNIT / 4}rem;
 
-  padding: 0 0.25rem;
+  padding: 0 .25rem;
   box-sizing: border-box;
 
   background-color: ${BACKGROUND};
   color: ${ERROR};
-  font-size: 0.75rem;
+  font-size: .75rem;
   letter-spacing: 0;
 
   pointer-events: none;
@@ -342,7 +342,7 @@ const errorColors = css`
  */
 interface InputElementProps {
   /**
-   * Boolean value that shows whether or not there is an error.
+   * Whether or not there is an error.
    */
   hasError: boolean;
 }
@@ -409,14 +409,14 @@ const TextInputElement = styled.input<InputElementProps>`
  */
 interface OptionProps {
   /**
-   * Boolean value that shows whether or not there is an error.
+   * Whether or not there is an error.
    */
   hasError: boolean;
 
   /**
    * Whether or not this option is selected.
    */
-  selected: boolean;
+  isSelected: boolean;
 }
 
 /**
@@ -443,7 +443,7 @@ const Option = styled.button<OptionProps>`
   justify-content: center;
 
   color: ${props =>
-    props.selected ? ACTIVE : props.hasError ? ERROR : DEFAULT_LABEL};
+    props.isSelected ? ACTIVE : props.hasError ? ERROR : DEFAULT_LABEL};
 
   cursor: pointer;
 

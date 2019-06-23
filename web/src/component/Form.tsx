@@ -138,6 +138,6 @@ const Title = styled.div`
   align-items: center;
 
   font-size: 2rem;
-  letter-spacing: -0.022em;
+  letter-spacing: -.022em;
   text-align: center;
 `;

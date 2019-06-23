@@ -4,6 +4,7 @@ import * as React from "react";
 import styled, { keyframes } from "styled-components";
 import {
   fadeIn,
+  fadeOut,
   scaleIn,
   scaleOut,
   TRANSITION_DURATION
@@ -18,7 +19,7 @@ interface LoaderProps {
   /**
    * Whether or not something is loading.
    */
-  loading: boolean;
+  isLoading: boolean;
 }
 
 /**
@@ -29,10 +30,10 @@ export class Loader extends React.Component<LoaderProps> {
   /**
    * Whether or not loader should be visible.
    */
-  @observable private visible: boolean = false;
+  @observable private isVisible: boolean = false;
 
   /**
-   * Timeout ID that sets visibility to false after some time.
+   * Timeout ID that sets visibility to false after some timeout.
    */
   private timeoutId: number = 0;
 
@@ -40,21 +41,23 @@ export class Loader extends React.Component<LoaderProps> {
    * Renders loader component.
    */
   public render() {
-    const { loading } = this.props;
+    const { isLoading: loading } = this.props;
 
     if (loading) {
-      this.visible = true;
-    } else if (this.visible) {
+      this.isVisible = true;
+      window.clearTimeout(this.timeoutId);
+      this.timeoutId = 0;
+    } else if (this.isVisible) {
       window.clearTimeout(this.timeoutId);
       this.timeoutId = window.setTimeout(this.hide, 1000 * TRANSITION_DURATION);
     }
 
-    if (!this.visible) {
+    if (!this.isVisible) {
       return null;
     }
 
     return (
-      <Overlay fadingOut={this.timeoutId !== 0}>
+      <Overlay isActive={loading}>
         <DiskContainer>
           <Disk />
           <Disk />
@@ -70,7 +73,7 @@ export class Loader extends React.Component<LoaderProps> {
    */
   @action
   private hide = () => {
-    this.visible = false;
+    this.isVisible = false;
     this.timeoutId = 0;
   };
 }
@@ -80,9 +83,9 @@ export class Loader extends React.Component<LoaderProps> {
  */
 interface OverlayProps {
   /**
-   * Whether or not overlay is fading out.
+   * Whether or not loading is active.
    */
-  fadingOut: boolean;
+  isActive: boolean;
 }
 
 /**
@@ -100,15 +103,14 @@ const Overlay = styled.div<OverlayProps>`
   justify-content: center;
   align-items: center;
 
-  /* Don't let users select components below the overlay */
-  user-select: ${props => (props.fadingOut ? "auto" : "none")};
-
   background-color: ${BACKGROUND_TRANSLUCENT};
 
-  transition: ${TRANSITION_DURATION}s;
-  animation: ${fadeIn} ${TRANSITION_DURATION}s;
+  animation: ${props => (props.isActive ? fadeIn : fadeOut)}
+    ${TRANSITION_DURATION}s forwards;
 
-  opacity: ${props => (props.fadingOut ? 0 : 1)};
+  /* Don't let users select components below the overlay */
+  user-select: ${props => (props.isActive ? "auto" : "none")};
+  pointer-events: ${props => (props.isActive ? "initial" : "none")};
 `;
 
 /**
@@ -134,13 +136,8 @@ const DiskContainer = styled.div`
  * Animation that moves a disk to the right by `DISK_OFFSET`.
  */
 const move = keyframes`
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(${DISK_OFFSET}rem);
-  }
+  from { transform: translateX(0); }
+  to { transform: translateX(${DISK_OFFSET}rem); }
 `;
 
 /**

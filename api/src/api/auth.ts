@@ -92,6 +92,6 @@ defineNoAuth(
       id: context.state.body.invitationId
     });
 
-    context.state.data = { valid: invitation !== undefined };
+    context.state.data = { isValid: invitation !== undefined };
   }
 );

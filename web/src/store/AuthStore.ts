@@ -108,7 +108,7 @@ export class AuthStore {
   public async check(body: Body<"/auth/check">) {
     const response = await post("/auth/check", body);
 
-    return "data" in response && response.data.valid;
+    return "data" in response && response.data.isValid;
   }
 }
 

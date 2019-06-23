@@ -3,31 +3,30 @@ import { keyframes } from "styled-components";
 /**
  * Default transition duration in seconds.
  */
-export const TRANSITION_DURATION = 0.125;
+export const TRANSITION_DURATION = .125;
 
 /**
  * Animation that fades a component in.
  */
 export const fadeIn = keyframes`
-  0% {
-    opacity: 0;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
 
-  100% {
-    opacity: 1;
-  }
+/**
+ * Animation that fades a component out.
+ */
+export const fadeOut = keyframes`
+  from { opacity: 1; }
+  to { opacity: 0; }
 `;
 
 /**
  * Animation that scales a component in.
  */
 export const scaleIn = keyframes`
-  0% {
-    transform: scale(0);
-  }
-
-  100% {
-    transform: scale(1);
+  from { transform: scale(0); }
+  to { transform: scale(1); }
   }
 `;
 
@@ -35,11 +34,7 @@ export const scaleIn = keyframes`
  * Animation that scales a component out.
  */
 export const scaleOut = keyframes`
-  0% {
-    transform: scale(1);
-  }
-
-  100% {
-    transform: scale(0);
+  from { transform: scale(1); }
+  to { transform: scale(0); }
   }
 `;

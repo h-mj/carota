@@ -31,7 +31,7 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
 
     font-family: "Inter", sans-serif;
     font-size: 16px;
-    letter-spacing: -0.011rem;
+    letter-spacing: -.011rem;
   }
 
   body {
@@ -61,7 +61,7 @@ class Application extends React.Component<InjectedProps> {
       <>
         <GlobalStyle hideOverflow={waiting} />
         {this.renderSceneComponent(main)}
-        <Loader loading={waiting} />
+        <Loader isLoading={waiting} />
         <Alerts alerts={alerts} />
       </>
     );

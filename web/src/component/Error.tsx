@@ -66,35 +66,21 @@ export class Error<TErrorName extends ErrorNames> extends React.Component<
     }
 
     return (
-      <Overlay>
-        <Container>
-          <Title>{title}</Title>
-          <Message>{message}</Message>
-        </Container>
-      </Overlay>
+      <Container>
+        <Title>{title}</Title>
+        <Message>{message}</Message>
+      </Container>
     );
   }
 }
-
-/**
- * Component that fills entire container and displays its children in the middle
- * of the component.
- */
-const Overlay = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 100%;
-  height: 100%;
-`;
 
 /**
  * Component that contains error title and message text components.
  */
 const Container = styled.div`
   max-width: ${11 * UNIT}rem;
-  padding: ${UNIT / 2}rem;
+  margin: auto;
+  padding: ${2 * UNIT}rem ${UNIT / 2}rem;
   box-sizing: border-box;
 
   display: flex;
@@ -108,7 +94,7 @@ const Title = styled.div`
   margin-bottom: ${UNIT / 2}rem;
   line-height: ${UNIT / 2}rem;
   font-size: 2rem;
-  letter-spacing: -0.022em;
+  letter-spacing: -.022em;
 `;
 
 /**

@@ -264,5 +264,5 @@ export interface AuthInvitationCheckData {
   /**
    * Whether or not given invitation ID is valid.
    */
-  valid: boolean;
+  isValid: boolean;
 }

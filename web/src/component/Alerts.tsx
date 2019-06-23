@@ -3,9 +3,10 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled, { keyframes } from "styled-components";
 import { InjectedProps } from "../store";
-import { fadeIn, TRANSITION_DURATION } from "../styling/animations";
+import { fadeIn, fadeOut, TRANSITION_DURATION } from "../styling/animations";
 import { BACKGROUND, DEFAULT_BORDER, ERROR } from "../styling/colors";
 import { BORDER_RADIUS, UNIT } from "../styling/sizes";
+import { setTimeout } from "../utility/forms";
 
 /**
  * Union of all alert types.
@@ -102,10 +103,9 @@ export class Alerts extends React.Component<AlertsProps & InjectedProps> {
   @observable private renderedAlerts: Array<Alert<AlertNames>> = [];
 
   /**
-   * Maps fading alert id to its timeout, which after a period of time removes
-   * the alert from `renderedAlerts` array.
+   * Set containing alerts that are no longer active and are fading away.
    */
-  @observable private fadeTimeouts: Map<string, number> = new Map();
+  @observable private fadingAlertIds: Set<string> = new Set();
 
   /**
    * Adds new alerts to `renderedAlerts` array, maps removed alerts ids to their
@@ -123,11 +123,8 @@ export class Alerts extends React.Component<AlertsProps & InjectedProps> {
 
     // Make removed alerts fade away.
     for (const alert of this.renderedAlerts) {
-      if (!alerts.includes(alert) && !this.fadeTimeouts.has(alert.id)) {
-        this.fadeTimeouts.set(
-          alert.id,
-          setTimeout(this.popAlert, TRANSITION_DURATION * 1000, alert)
-        );
+      if (!alerts.includes(alert) && !this.fadingAlertIds.has(alert.id)) {
+        this.fadeAlert(alert);
       }
     }
 
@@ -157,7 +154,7 @@ export class Alerts extends React.Component<AlertsProps & InjectedProps> {
     return (
       <AlertContainer key={id}>
         <AlertElement
-          fading={this.fadeTimeouts.has(id)}
+          isActive={!this.fadingAlertIds.has(id)}
           onClick={() => this.props.scenes!.popAlert(alert)}
           type={NAME_TO_TYPE[name]}
         >
@@ -171,10 +168,12 @@ export class Alerts extends React.Component<AlertsProps & InjectedProps> {
    * Removes an alert from both `renderedAlerts` array and `fadeTimeouts` map.
    */
   @action
-  private popAlert = (alert: Alert<AlertNames>) => {
+  private async fadeAlert(alert: Alert<AlertNames>) {
+    this.fadingAlertIds.add(alert.id);
+    await setTimeout(TRANSITION_DURATION);
+    this.fadingAlertIds.delete(alert.id);
     this.renderedAlerts.splice(this.renderedAlerts.indexOf(alert), 1);
-    this.fadeTimeouts.delete(alert.id);
-  };
+  }
 }
 
 /**
@@ -201,13 +200,16 @@ const AlertContainer = styled.div`
  * Alert component move in animation.
  */
 const moveIn = keyframes`
-  0% {
-    transform: translateX(-100%);
-  }
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+`;
 
-  100% {
-    transform: translateX(0);
-  }
+/**
+ * Alert component move out animation.
+ */
+const moveOut = keyframes`
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
 `;
 
 /**
@@ -223,9 +225,9 @@ const TYPE_TO_BORDER_COLOR: Readonly<{ [AlertType in AlertTypes]: string }> = {
  */
 interface AlertElementProps {
   /**
-   * Boolean showing whether or not this alert is fading away.
+   * Whether or not this alert is active.
    */
-  fading: boolean;
+  isActive: boolean;
 
   /**
    * Alert type.
@@ -250,13 +252,9 @@ const AlertElement = styled.div<AlertElementProps>`
   box-shadow: 0 0 0 1px ${props => TYPE_TO_BORDER_COLOR[props.type]},
     inset 0 0 0 1px ${props => TYPE_TO_BORDER_COLOR[props.type]};
 
-  opacity: ${props => (props.fading ? 0 : 1)};
-  transform: translateX(${props => (props.fading ? -100 : 0)}%);
-
-  animation: ${moveIn} ${TRANSITION_DURATION}s,
-    ${fadeIn} ${TRANSITION_DURATION}s;
-
-  transition: ${TRANSITION_DURATION}s;
+  animation: ${props => (props.isActive ? fadeIn : fadeOut)}
+      ${TRANSITION_DURATION}s,
+    ${props => (props.isActive ? moveIn : moveOut)} ${TRANSITION_DURATION}s;
 
   cursor: pointer;
 `;

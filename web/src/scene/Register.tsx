@@ -45,7 +45,7 @@ export class Register extends Scene<"register"> {
    * Whether or not `invitationId` in `parameters` props is valid. `undefined`
    * if the value has not been retrieved yet.
    */
-  @observable private valid?: boolean;
+  @observable private isValid?: boolean;
 
   /**
    * Waiting reason that is used to show loader component when waiting for
@@ -68,11 +68,11 @@ export class Register extends Scene<"register"> {
    * Renders a registration form.
    */
   public render() {
-    if (this.valid === undefined) {
+    if (this.isValid === undefined) {
       return null;
     }
 
-    if (!this.valid) {
+    if (!this.isValid) {
       return <Error name="invalidInvitation" parameters={{}} />;
     }
 
@@ -134,7 +134,7 @@ export class Register extends Scene<"register"> {
    */
   private async checkInvitationIdValidity() {
     this.props.scenes!.wait(Register.WAIT_REASON);
-    this.valid = await this.props.auth!.check(this.props.parameters);
+    this.isValid = await this.props.auth!.check(this.props.parameters);
     this.props.scenes!.done(Register.WAIT_REASON);
   }
 }

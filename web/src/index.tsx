@@ -73,10 +73,10 @@ class Application extends React.Component<InjectedProps> {
    *
    * @param stage Given stage.
    */
-  private renderSceneComponent(stage: Stage) {
-    const SceneComponent = SCENES[stage.sceneName];
+  private renderSceneComponent({ parameters, props, sceneName }: Stage) {
+    const SceneComponent = SCENES[sceneName];
 
-    return <SceneComponent parameters={stage.parameters} />;
+    return <SceneComponent parameters={parameters} {...props} />;
   }
 }
 

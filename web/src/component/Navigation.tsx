@@ -12,13 +12,13 @@ import { InjectedProps } from "../store";
  * Stage list where it is possible to navigate to using navigation component.
  */
 const NAVIGABLE_STAGES: Readonly<Array<Stage>> = [
-  { sceneName: "home", parameters: {} },
-  { sceneName: "diet", parameters: {} },
-  { sceneName: "measurements", parameters: {} },
-  { sceneName: "history", parameters: {} },
-  { sceneName: "administration", parameters: {} },
-  { sceneName: "settings", parameters: {} },
-  { sceneName: "logout", parameters: {} }
+  { sceneName: "home", parameters: {}, props: {} },
+  { sceneName: "diet", parameters: {}, props: {} },
+  { sceneName: "measurements", parameters: {}, props: {} },
+  { sceneName: "history", parameters: {}, props: {} },
+  { sceneName: "administration", parameters: {}, props: {} },
+  { sceneName: "settings", parameters: {}, props: {} },
+  { sceneName: "logout", parameters: {}, props: {} }
 ];
 
 /**

@@ -3,7 +3,7 @@ import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
-import { Scene, SceneProps } from "./Scene";
+import { Scene, ScenePropsWith } from "./Scene";
 import { Error } from "../component/Error";
 import {
   Form,
@@ -14,6 +14,7 @@ import {
 import { InputChangeHandler, InputValueType } from "../component/Input";
 import { UNIT } from "../styling/sizes";
 import { createFormErrorsReasons, setTimeout } from "../utility/forms";
+import { InjectedProps } from "../store";
 
 /**
  * Union of all form input names this scene uses.
@@ -25,7 +26,7 @@ type InputNames = "email" | "language" | "name" | "password";
  */
 @inject("auth", "scenes")
 @observer
-export class Register extends Scene<"register"> {
+export class Register extends Scene<"register", InjectedProps> {
   /**
    * Form input field values.
    */
@@ -58,7 +59,7 @@ export class Register extends Scene<"register"> {
    *
    * Calls an async function that checks whether
    */
-  public constructor(props: SceneProps<"register">) {
+  public constructor(props: ScenePropsWith<"register", InjectedProps>) {
     super(props);
 
     this.checkInvitationIdValidity();
@@ -100,6 +101,11 @@ export class Register extends Scene<"register"> {
 
   @action
   private onSubmit: FormSubmitHandler = async () => {
+    if (!("invitationId" in this.props.parameters)) {
+      this.isValid = false;
+      return;
+    }
+
     const { email, language, name, password } = this.values;
     const { invitationId } = this.props.parameters;
 
@@ -121,7 +127,8 @@ export class Register extends Scene<"register"> {
     if (error === undefined) {
       return this.props.scenes!.redirect({
         sceneName: "home",
-        parameters: {}
+        parameters: {},
+        props: {}
       });
     }
 
@@ -133,9 +140,13 @@ export class Register extends Scene<"register"> {
    * assigns boolean value to `valid` field.
    */
   private async checkInvitationIdValidity() {
-    this.props.scenes!.wait(Register.WAIT_REASON);
-    this.isValid = await this.props.auth!.check(this.props.parameters);
-    this.props.scenes!.done(Register.WAIT_REASON);
+    if (!("invitationId" in this.props.parameters)) {
+      this.isValid = false;
+    } else {
+      this.props.scenes!.wait(Register.WAIT_REASON);
+      this.isValid = await this.props.auth!.check(this.props.parameters);
+      this.props.scenes!.done(Register.WAIT_REASON);
+    }
   }
 }
 

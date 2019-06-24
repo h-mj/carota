@@ -101,7 +101,11 @@ export class ScenesStore {
    */
   @action
   public update() {
-    this.redirect(getStageFromUrl(window.location.pathname) || UNKNOWN_STAGE);
+    const result = getStageFromUrl(window.location.pathname);
+
+    this.redirect(
+      result !== undefined ? { ...result, props: {} } : UNKNOWN_STAGE
+    );
   }
 
   /**

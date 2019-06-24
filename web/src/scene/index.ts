@@ -28,7 +28,7 @@ type Scenes =
 /**
  * Union of all scene names.
  */
-export type SceneNames = Scenes extends Scene<infer ISceneName>
+export type SceneNames = Scenes extends Scene<infer ISceneName, infer _>
   ? ISceneName
   : never;
 
@@ -88,21 +88,23 @@ interface To<
 }
 
 /**
- * Union of all stage definitions that cannot be accessed by navigating to a
- * specific URL.
- */
-type DeepStageProperties = To<"unknown", never>;
-
-/**
  * Type that is a union of all possible parameter names to `string` mappings of
  * all routes, which scene name is one of the `TSceneNames` names.
  */
 export type SceneParameters<TSceneNames extends string> =
-  | Routes[keyof Routes]
-  | DeepStageProperties extends infer ITypes
-  ? ITypes extends To<infer ISceneName, infer IParameterNames>
+  | {}
+  | (Routes[keyof Routes] extends infer ITypes
+      ? ITypes extends To<infer ISceneName, infer IParameterNames>
+        ? ISceneName extends TSceneNames
+          ? { [ParameterName in IParameterNames]: string }
+          : never
+        : never
+      : never);
+
+export type SceneProps<TSceneNames extends string> = Scenes extends infer IClass
+  ? IClass extends Scene<infer ISceneName, infer IProps>
     ? ISceneName extends TSceneNames
-      ? { [ParameterName in IParameterNames]: string }
+      ? IProps
       : never
     : never
   : never;
@@ -126,11 +128,26 @@ export const ROUTES: Readonly<
 };
 
 /**
+ * Object that holds the information retrieved from the URL.
+ */
+interface RouteInformation {
+  /**
+   * Scene name.
+   */
+  sceneName: SceneNames;
+
+  /**
+   * Scene route parameters.
+   */
+  parameters: SceneParameters<SceneNames>;
+}
+
+/**
  * Returns a scene name and it's parameters object based on given URL.
  *
  * @param url URL string.
  */
-export const getStageFromUrl = (url: string): Stage | undefined => {
+export const getStageFromUrl = (url: string): RouteInformation | undefined => {
   forRoute: for (const route in ROUTES) {
     const urlParts = url.split("/");
     const routeParts = route.split("/");
@@ -155,7 +172,7 @@ export const getStageFromUrl = (url: string): Stage | undefined => {
     return {
       sceneName: ROUTES[route as keyof Routes],
       parameters
-    } as Stage;
+    } as RouteInformation;
   }
 
   return undefined;
@@ -167,7 +184,7 @@ export const getStageFromUrl = (url: string): Stage | undefined => {
 export const getSceneUrl = ({
   sceneName,
   parameters
-}: Stage): string | undefined => {
+}: RouteInformation): string | undefined => {
   forRoute: for (const route in ROUTES) {
     // If route's scene is not stage's scene, skip.
     if (ROUTES[route as keyof Routes] !== sceneName) {
@@ -200,20 +217,24 @@ export const getSceneUrl = ({
 };
 
 /**
- * Union of all stages with scene name as `TSceneNames`, and parameters as
- * `SceneParameters` type of each scene name.
+ * Collection of scene name, route parameters and scene component props.
  */
 export type Stage<TSceneNames extends SceneNames = SceneNames> = {
   [SceneName in TSceneNames]: {
     /**
-     * Stage scene name.
+     * Scene name.
      */
     sceneName: SceneName;
 
     /**
-     * Scene parameters.
+     * Scene route parameters.
      */
     parameters: SceneParameters<SceneName>;
+
+    /**
+     * Scene component props.
+     */
+    props: SceneProps<SceneName>;
   }
 }[TSceneNames];
 
@@ -230,14 +251,16 @@ export const NO_AUTHENTICATION_SCENE_NAMES: Readonly<SceneNames[]> = [
  * that requires authentication.
  */
 export const GATEWAY_STAGE: Readonly<Stage> = {
-  sceneName: "login",
-  parameters: {}
+  parameters: {},
+  props: {},
+  sceneName: "login"
 };
 
 /**
  * Stage that is shown if no other stages match current URL.
  */
 export const UNKNOWN_STAGE: Readonly<Stage> = {
-  sceneName: "unknown",
-  parameters: {}
+  parameters: {},
+  props: {},
+  sceneName: "unknown"
 };

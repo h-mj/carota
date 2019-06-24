@@ -82,8 +82,9 @@ export class Login extends Scene<"login"> {
 
     if (error === undefined) {
       return this.props.scenes!.redirect({
-        sceneName: "home",
-        parameters: {}
+        parameters: {},
+        props: {},
+        sceneName: "home"
       });
     }
 

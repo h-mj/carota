@@ -3,7 +3,6 @@ import * as React from "react";
 import { render } from "react-dom";
 import { createGlobalStyle } from "styled-components";
 import { SCENES, Stage } from "./scene";
-import { Scene } from "./scene/Scene";
 import { Alerts } from "./component/Alerts";
 import { Loader } from "./component/Loader";
 import { Navigation } from "./component/Navigation";
@@ -75,7 +74,7 @@ class Application extends React.Component<InjectedProps> {
    * @param stage Given stage.
    */
   private renderSceneComponent(stage: Stage) {
-    const SceneComponent: typeof Scene = SCENES[stage.sceneName];
+    const SceneComponent = SCENES[stage.sceneName];
 
     return <SceneComponent parameters={stage.parameters} />;
   }

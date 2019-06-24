@@ -1,4 +1,3 @@
-import { Scene } from "./Scene";
 import { Administration } from "./Administration";
 import { Diet } from "./Diet";
 import { History } from "./History";
@@ -7,75 +6,38 @@ import { Login } from "./Login";
 import { Logout } from "./Logout";
 import { Measurements } from "./Measurements";
 import { Register } from "./Register";
+import { Scene } from "./Scene";
 import { Settings } from "./Settings";
 import { Unknown } from "./Unknown";
 
 /**
- * Union of all scene properties.
+ * Union of all scene classes.
  */
-type ScenesProperties =
-  | SceneProperties<Administration, typeof Administration>
-  | SceneProperties<Diet, typeof Diet>
-  | SceneProperties<History, typeof History>
-  | SceneProperties<Home, typeof Home>
-  | SceneProperties<Login, typeof Login>
-  | SceneProperties<Logout, typeof Logout>
-  | SceneProperties<Measurements, typeof Measurements>
-  | SceneProperties<Register, typeof Register>
-  | SceneProperties<Settings, typeof Settings>
-  | SceneProperties<Unknown, typeof Unknown>;
-
-/**
- * Interface that defines for each scene its component class and type of that class.
- */
-interface SceneProperties<
-  TClass extends Scene<SceneNames>,
-  TTypeof extends typeof Scene
-> {
-  /**
-   * Scene component class type.
-   */
-  class: TClass;
-
-  /**
-   * Scene component class type type.
-   */
-  typeof: TTypeof;
-}
+type Scenes =
+  | Administration
+  | Diet
+  | History
+  | Home
+  | Login
+  | Logout
+  | Measurements
+  | Register
+  | Settings
+  | Unknown;
 
 /**
  * Union of all scene names.
  */
-export type SceneNames = ScenesProperties["class"] extends Scene<
-  infer InferredSceneName
->
-  ? InferredSceneName
+export type SceneNames = Scenes extends Scene<infer ISceneName>
+  ? ISceneName
   : never;
 
 /**
- * Type that maps scene name to its class type.
+ * Object where scene names are mapped to its class. This object is used to
+ * render a scene component using its name and change drawn scene by changing
+ * the name of the current scene in `ScenesStore` store.
  */
-type SceneClassTypes = {
-  [SceneName in SceneNames]: ScenesProperties extends infer InferredSceneType
-    ? InferredSceneType extends SceneProperties<
-        infer InferredSceneClass,
-        infer InferredSceneType
-      >
-      ? InferredSceneClass extends Scene<infer InferredSceneName>
-        ? SceneName extends InferredSceneName
-          ? InferredSceneType
-          : never
-        : never
-      : never
-    : never
-};
-
-/**
- * Object where scene names are mapped to its class type. This object is used to
- * render a scene using only its name and change drawn scene by only changing
- * the name of the current scene in store `ScenesStore`.
- */
-export const SCENES: Readonly<SceneClassTypes> = {
+export const SCENES: Readonly<{ [SceneName in SceneNames]: typeof Scene }> = {
   administration: Administration,
   diet: Diet,
   history: History,
@@ -95,52 +57,24 @@ export const SCENES: Readonly<SceneClassTypes> = {
  * If route parameter names type is `never`, then there are no parameters within
  * the path.
  */
-interface RoutableStageProperties {
-  "/administration": StageProperties<"administration", never>;
-  "/diet": StageProperties<"diet", never>;
-  "/history": StageProperties<"history", never>;
-  "/": StageProperties<"home", never>;
-  "/login": StageProperties<"login", never>;
-  "/logout": StageProperties<"logout", never>;
-  "/measurements": StageProperties<"measurements", never>;
-  "/register/{invitationId}": StageProperties<"register", "invitationId">;
-  "/settings": StageProperties<"settings", never>;
+interface Routes {
+  "/administration": To<"administration">;
+  "/diet": To<"diet">;
+  "/history": To<"history">;
+  "/": To<"home">;
+  "/login": To<"login">;
+  "/logout": To<"logout">;
+  "/measurements": To<"measurements">;
+  "/register/{invitationId}": To<"register", "invitationId">;
+  "/settings": To<"settings">;
 }
-
-/**
- * Union of all routes.
- */
-type Routes = keyof RoutableStageProperties;
-
-/**
- * Union of all stage definitions that cannot be accessed by navigating to a
- * specific URL.
- */
-type DeepStageProperties = StageProperties<"unknown", never>;
-
-/**
- * Type that is a union of all possible parameter names to `string` mappings of
- * all routes, which scene name is one of the `TSceneNames` names.
- */
-export type SceneParameters<TSceneNames extends string> =
-  | RoutableStageProperties[Routes]
-  | DeepStageProperties extends infer InferredTypes
-  ? InferredTypes extends StageProperties<
-      infer InferredSceneName,
-      infer InferredParameterNames
-    >
-    ? InferredSceneName extends TSceneNames
-      ? { [ParameterName in InferredParameterNames]: string }
-      : never
-    : never
-  : never;
 
 /**
  * Type that defines some route's scene name and route parameter names.
  */
-interface StageProperties<
+interface To<
   TSceneName extends string,
-  TParameterNames extends string
+  TParameterNames extends string = never
 > {
   /**
    * Route parameter names type.
@@ -154,11 +88,31 @@ interface StageProperties<
 }
 
 /**
+ * Union of all stage definitions that cannot be accessed by navigating to a
+ * specific URL.
+ */
+type DeepStageProperties = To<"unknown", never>;
+
+/**
+ * Type that is a union of all possible parameter names to `string` mappings of
+ * all routes, which scene name is one of the `TSceneNames` names.
+ */
+export type SceneParameters<TSceneNames extends string> =
+  | Routes[keyof Routes]
+  | DeepStageProperties extends infer ITypes
+  ? ITypes extends To<infer ISceneName, infer IParameterNames>
+    ? ISceneName extends TSceneNames
+      ? { [ParameterName in IParameterNames]: string }
+      : never
+    : never
+  : never;
+
+/**
  * Object that maps all routes to their corresponding scene name. Used to
  * retrieve scene name based on current browser pathname.
  */
 export const ROUTES: Readonly<
-  { [Route in Routes]: RoutableStageProperties[Route]["sceneName"] }
+  { [Route in keyof Routes]: Routes[Route]["sceneName"] }
 > = {
   "/administration": "administration",
   "/diet": "diet",
@@ -199,7 +153,7 @@ export const getStageFromUrl = (url: string): Stage | undefined => {
     }
 
     return {
-      sceneName: ROUTES[route as Routes],
+      sceneName: ROUTES[route as keyof Routes],
       parameters
     } as Stage;
   }
@@ -216,7 +170,7 @@ export const getSceneUrl = ({
 }: Stage): string | undefined => {
   forRoute: for (const route in ROUTES) {
     // If route's scene is not stage's scene, skip.
-    if (ROUTES[route as Routes] !== sceneName) {
+    if (ROUTES[route as keyof Routes] !== sceneName) {
       continue;
     }
 

@@ -57,7 +57,7 @@ export const russian: Translation = {
     administration: { title: "Администрация" },
     diet: { title: "Диета" },
     history: { title: "История" },
-    home: { title: "Главная страница" },
+    home: { title: "Главная" },
     login: { title: "Вход" },
     logout: { title: "Выход" },
     measurements: { title: "Замеры" },

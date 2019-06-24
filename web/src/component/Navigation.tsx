@@ -36,33 +36,37 @@ export class Navigation extends React.Component<InjectedProps> {
     const sceneTranslation = this.props.translations!.translation.scenes;
 
     return (
-      <Bar>
-        {NAVIGABLE_STAGES.map((stage, index) => (
-          <Item
-            key={index}
-            stage={stage}
-            isActive={currentSceneName === stage.sceneName}
-          >
-            {sceneTranslation[stage.sceneName].title}
-          </Item>
-        ))}
-      </Bar>
+      <Container>
+        <Bar>
+          {NAVIGABLE_STAGES.map((stage, index) => (
+            <Item
+              key={index}
+              stage={stage}
+              isActive={currentSceneName === stage.sceneName}
+            >
+              {sceneTranslation[stage.sceneName].title}
+            </Item>
+          ))}
+        </Bar>
+      </Container>
     );
   }
 }
 
 /**
+ * Navigation component container.
+ */
+const Container = styled.div`
+  overflow-x: auto;
+`;
+
+/**
  * Bar that contains navigation anchor components.
  */
 const Bar = styled.nav`
-  height: ${UNIT}rem;
-  display: grid;
-  align-items: center;
-  grid-gap: ${UNIT / 2}rem;
-  padding: 0 ${UNIT / 2}rem;
-  grid-template-columns: min-content;
-  grid-auto-flow: column;
-  grid-auto-columns: min-content;
+  display: inline-flex;
+  padding: 0 ${UNIT / 4}rem;
+  box-sizing: border-box;
 `;
 
 /**
@@ -79,6 +83,13 @@ interface ItemProps {
  * One of the navigation bar items.
  */
 const Item = styled(Anchor)<ItemProps>`
+  height: ${UNIT}rem;
+  padding: 0 ${UNIT / 4}rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   color: ${props => (props.isActive ? ACTIVE : DEFAULT_LABEL)};
   text-decoration: none;
   white-space: nowrap;

@@ -8,9 +8,9 @@ import {
   FormSubmitHandler,
   FormValues
 } from "../component/Form";
-import { FormContainer } from "../component/FormContainer";
 import { InputChangeHandler } from "../component/Input";
 import { Notification } from "../component/NotificationContainer";
+import { Thin } from "../component/Thin";
 import { createFormErrorsReasons, setTimeout } from "../utility/forms";
 
 /**
@@ -48,7 +48,7 @@ export class Login extends Scene<"login"> {
    */
   public render() {
     return (
-      <FormContainer>
+      <Thin>
         <Form
           inputNames={["email", "password"]}
           name="login"
@@ -57,7 +57,7 @@ export class Login extends Scene<"login"> {
           reasons={this.reasons}
           values={this.values}
         />
-      </FormContainer>
+      </Thin>
     );
   }
 

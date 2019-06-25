@@ -34,7 +34,7 @@ export const Button: React.FunctionComponent<ButtonProps> = ({
 const Container = styled.div`
   position: relative;
   width: 100%;
-  height: ${UNIT}rem;
+  height: ${(5 * UNIT) / 4}rem;
 `;
 
 /**
@@ -79,7 +79,7 @@ const ButtonElement = styled.button<ButtonProps>`
   top: ${UNIT / 8}rem;
 
   width: 100%;
-  height: ${(3 * UNIT) / 4}rem;
+  height: ${UNIT}rem;
 
   border-radius: ${BORDER_RADIUS}rem;
 

@@ -11,8 +11,8 @@ import {
   FormSubmitHandler,
   FormValues
 } from "../component/Form";
-import { FormContainer } from "../component/FormContainer";
 import { InputChangeHandler, InputValueType } from "../component/Input";
+import { Thin } from "../component/Thin";
 import { createFormErrorsReasons, setTimeout } from "../utility/forms";
 
 /**
@@ -77,7 +77,7 @@ export class Register extends Scene<"register"> {
     }
 
     return (
-      <FormContainer>
+      <Thin>
         <Form
           inputNames={["language", "name", "email", "password"]}
           name="register"
@@ -86,7 +86,7 @@ export class Register extends Scene<"register"> {
           reasons={this.reasons}
           values={this.values}
         />
-      </FormContainer>
+      </Thin>
     );
   }
 

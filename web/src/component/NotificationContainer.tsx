@@ -232,8 +232,8 @@ export class NotificationContainer extends React.Component<
  */
 const NotificationBox = styled.div`
   position: fixed;
-  bottom: ${UNIT / 2}rem;
-  left: ${UNIT / 2}rem;
+  bottom: ${UNIT / 4}rem;
+  left: ${UNIT / 4}rem;
 `;
 
 /**
@@ -284,7 +284,7 @@ const NotificationElement = styled.div<NotificationElementProps>`
   display: flex;
   align-items: center;
 
-  height: ${(3 * UNIT) / 4}rem;
+  height: ${UNIT}rem;
   margin-top: ${UNIT / 4}rem;
   padding: 0 ${UNIT / 4}rem;
   box-sizing: border-box;

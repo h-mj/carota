@@ -87,7 +87,7 @@ const Container = styled.div`
   height: 100%;
 
   margin: auto;
-  padding: ${2 * UNIT}rem ${UNIT / 2}rem;
+  padding: ${2 * UNIT}rem ${UNIT / 4}rem;
   box-sizing: border-box;
 
   display: flex;
@@ -112,6 +112,6 @@ const Title = styled.div`
  */
 const Message = styled.div`
   color: ${DEFAULT_LABEL};
-  line-height: ${UNIT / 3};
+  line-height: ${UNIT / 4};
   text-align: center;
 `;

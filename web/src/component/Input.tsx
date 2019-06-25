@@ -215,7 +215,7 @@ export class Input<TInputName extends InputNames> extends React.Component<
 const Container = styled.div`
   position: relative;
   width: 100%;
-  height: ${UNIT}rem;
+  height: ${(5 * UNIT) / 4}rem;
 `;
 
 /**
@@ -230,7 +230,7 @@ const Border = styled.div`
   top: ${UNIT / 8}rem;
 
   width: 100%;
-  height: ${(3 * UNIT) / 4}rem;
+  height: ${UNIT}rem;
 
   box-shadow: 0 0 0 1px, inset 0 0 0 1px;
   border-radius: ${BORDER_RADIUS}rem;
@@ -253,9 +253,9 @@ const Placeholder = styled.div`
   transform: translateX(-50%);
   white-space: nowrap;
 
-  height: ${(3 * UNIT) / 4}rem;
+  height: ${UNIT}rem;
 
-  padding: 0 .25rem;
+  padding: 0 0.25rem;
   box-sizing: border-box;
 
   display: flex;
@@ -274,7 +274,7 @@ const labelStyle = css`
   height: ${UNIT / 4}rem;
 
   background-color: ${BACKGROUND};
-  font-size: .75rem;
+  font-size: 0.75rem;
   letter-spacing: 0;
 `;
 
@@ -294,12 +294,12 @@ const Error = styled.div`
 
   height: ${UNIT / 4}rem;
 
-  padding: 0 .25rem;
+  padding: 0 0.25rem;
   box-sizing: border-box;
 
   background-color: ${BACKGROUND};
   color: ${ERROR};
-  font-size: .75rem;
+  font-size: 0.75rem;
   letter-spacing: 0;
 
   pointer-events: none;
@@ -355,7 +355,7 @@ const inputElementStyle = css<InputElementProps>`
   top: ${UNIT / 8}rem;
 
   width: 100%;
-  height: ${(3 * UNIT) / 4}rem;
+  height: ${UNIT}rem;
 
   transition: ${TRANSITION_DURATION}s;
 

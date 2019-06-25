@@ -1,7 +1,7 @@
 /**
  * Default height unit size in `rem`.
  */
-export const UNIT = 4.5;
+export const UNIT = 3.5;
 
 /**
  * Border radius size in `rem`.

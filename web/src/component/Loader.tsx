@@ -116,12 +116,12 @@ const Overlay = styled.div<OverlayProps>`
 /**
  * Diameter of disk in `rem`s.
  */
-const DISK_SIZE = UNIT / 12;
+const DISK_SIZE = UNIT / 8;
 
 /**
  * Offset between the start position of one disk and next one.
  */
-const DISK_OFFSET = UNIT / 5;
+const DISK_OFFSET = UNIT / 4;
 
 /**
  * Component that contains moving disks.

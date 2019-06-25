@@ -3,7 +3,7 @@ import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
-import { Scene, ScenePropsWith } from "./Scene";
+import { Scene } from "./Scene";
 import { Stage } from "./Stage";
 import { Error } from "../component/Error";
 import {
@@ -15,7 +15,6 @@ import {
 import { InputChangeHandler, InputValueType } from "../component/Input";
 import { UNIT } from "../styling/sizes";
 import { createFormErrorsReasons, setTimeout } from "../utility/forms";
-import { InjectedProps } from "../store";
 
 /**
  * Union of all form input names this scene uses.
@@ -27,7 +26,7 @@ type InputNames = "email" | "language" | "name" | "password";
  */
 @inject("auth", "view")
 @observer
-export class Register extends Scene<"register", InjectedProps> {
+export class Register extends Scene<"register"> {
   /**
    * Form input field values.
    */
@@ -60,7 +59,7 @@ export class Register extends Scene<"register", InjectedProps> {
    *
    * Calls an async function that checks whether
    */
-  public constructor(props: ScenePropsWith<"register", InjectedProps>) {
+  public constructor(props: any) {
     super(props);
 
     this.checkInvitationIdValidity();

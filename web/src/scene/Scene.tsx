@@ -13,39 +13,33 @@ import { Unknown } from "./Unknown";
 import { Parameters } from "./Stage";
 
 /**
- * Union of scene names, used to reference a specific scene using its name.
+ * Type that maps scene names to their component classes.
  */
-export type SceneNames =
-  | "administration"
-  | "diet"
-  | "history"
-  | "home"
-  | "login"
-  | "logout"
-  | "measurements"
-  | "register"
-  | "settings"
-  | "unknown";
+interface Scenes {
+  administration: Administration;
+  diet: Diet;
+  history: History;
+  home: Home;
+  login: Login;
+  logout: Logout;
+  measurements: Measurements;
+  register: Register;
+  settings: Settings;
+  unknown: Unknown;
+}
 
 /**
- * Union of all scene classes.
+ * Union of scene names, used to reference a specific scene using its name.
  */
-export type Scenes =
-  | Administration
-  | Diet
-  | History
-  | Home
-  | Login
-  | Logout
-  | Measurements
-  | Register
-  | Settings
-  | Unknown;
+export type SceneNames = keyof Scenes;
 
 /**
  * Scene component props type.
  */
-export type ScenePropsWith<TSceneName extends SceneNames, TProps> = TProps &
+export type ScenePropsWith<
+  TSceneName extends SceneNames,
+  TProps = {}
+> = TProps &
   InjectedProps & {
     /**
      * Parameters of this scene.
@@ -58,11 +52,9 @@ export type ScenePropsWith<TSceneName extends SceneNames, TProps> = TProps &
  */
 export type SceneProps<
   TSceneNames extends SceneNames
-> = Scenes extends infer IClass
-  ? IClass extends Scene<infer ISceneName, infer IProps>
-    ? ISceneName extends TSceneNames
-      ? IProps
-      : never
+> = Scenes[TSceneNames] extends infer IClass
+  ? IClass extends Scene<infer _, infer IProps>
+    ? IProps
     : never
   : never;
 

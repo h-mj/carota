@@ -38,7 +38,8 @@ export const ACCOUNT_RIGHTS_ENUM: Readonly<Enum<AccountRights>> = {
 };
 
 /**
- * Account database table.
+ * Application account which is used to save registered users and verify them on
+ * login.
  */
 @Entity()
 export class Account extends BaseEntity {

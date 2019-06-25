@@ -4,6 +4,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
 import { Scene, ScenePropsWith } from "./Scene";
+import { Stage } from "./Stage";
 import { Error } from "../component/Error";
 import {
   Form,
@@ -24,7 +25,7 @@ type InputNames = "email" | "language" | "name" | "password";
 /**
  * Scene that renders a form used for registration.
  */
-@inject("auth", "scenes")
+@inject("auth", "view")
 @observer
 export class Register extends Scene<"register", InjectedProps> {
   /**
@@ -101,15 +102,10 @@ export class Register extends Scene<"register", InjectedProps> {
 
   @action
   private onSubmit: FormSubmitHandler = async () => {
-    if (!("invitationId" in this.props.parameters)) {
-      this.isValid = false;
-      return;
-    }
-
     const { email, language, name, password } = this.values;
-    const { invitationId } = this.props.parameters;
+    const { invitationId } = this.props.parameters!;
 
-    this.props.scenes!.wait(Register.WAIT_REASON);
+    this.props.view!.wait(Register.WAIT_REASON);
 
     const [error] = await Promise.all([
       this.props.auth!.register({
@@ -122,14 +118,10 @@ export class Register extends Scene<"register", InjectedProps> {
       setTimeout(1)
     ]);
 
-    this.props.scenes!.done(Register.WAIT_REASON);
+    this.props.view!.done(Register.WAIT_REASON);
 
     if (error === undefined) {
-      return this.props.scenes!.redirect({
-        sceneName: "home",
-        parameters: {},
-        props: {}
-      });
+      return this.props.view!.redirect(Stage.HOME);
     }
 
     this.reasons = createFormErrorsReasons(error, this.values);
@@ -140,12 +132,12 @@ export class Register extends Scene<"register", InjectedProps> {
    * assigns boolean value to `valid` field.
    */
   private async checkInvitationIdValidity() {
-    if (!("invitationId" in this.props.parameters)) {
+    if (this.props.parameters === undefined) {
       this.isValid = false;
     } else {
-      this.props.scenes!.wait(Register.WAIT_REASON);
+      this.props.view!.wait(Register.WAIT_REASON);
       this.isValid = await this.props.auth!.check(this.props.parameters);
-      this.props.scenes!.done(Register.WAIT_REASON);
+      this.props.view!.done(Register.WAIT_REASON);
     }
   }
 }

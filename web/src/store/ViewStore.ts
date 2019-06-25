@@ -1,12 +1,6 @@
 import { computed, observable, action } from "mobx";
-import {
-  GATEWAY_STAGE,
-  getSceneUrl,
-  getStageFromUrl,
-  NO_AUTHENTICATION_SCENE_NAMES,
-  Stage,
-  UNKNOWN_STAGE
-} from "../scene";
+import { NO_AUTHENTICATION_SCENE_NAMES } from "../scene/Scene";
+import { Stage, Stages } from "../scene/Stage";
 import { Alert, AlertNames, AlertParameters } from "../component/Alerts";
 import { auth } from "./AuthStore";
 import { translations } from "./TranslationsStore";
@@ -15,14 +9,13 @@ import { translations } from "./TranslationsStore";
  * Store that stores and updates all stages.
  *
  * It is also responsible for retrieving correct scene name and parameters based
- * on current URL and updating current URL if scene name or parameters were
- * changed.
+ * on current URL and updating current URL if main stage was changed.
  */
-export class ScenesStore {
+export class ViewStore {
   /**
    * Current main stage.
    */
-  @observable private _main!: Readonly<Stage>;
+  @observable private _main!: Readonly<Stages>;
 
   /**
    * List of alerts.
@@ -75,16 +68,16 @@ export class ScenesStore {
    * @param parameters
    */
   @action
-  public redirect(stage: Stage) {
+  public redirect(stage: Stages) {
     this._main =
       auth.authenticated !==
       NO_AUTHENTICATION_SCENE_NAMES.includes(stage.sceneName)
         ? stage
         : auth.authenticated
-        ? UNKNOWN_STAGE
-        : GATEWAY_STAGE;
+        ? Stage.UNKNOWN
+        : Stage.GATEWAY;
 
-    const url = getSceneUrl(stage) || window.location.pathname;
+    const url = Stage.getUrl(stage) || window.location.pathname;
     const title = `${
       translations.translation.scenes[this._main.sceneName].title
     } - ${translations.translation.title}`;
@@ -101,11 +94,15 @@ export class ScenesStore {
    */
   @action
   public update() {
-    const result = getStageFromUrl(window.location.pathname);
+    let stage: Stages = Stage.UNKNOWN;
 
-    this.redirect(
-      result !== undefined ? { ...result, props: {} } : UNKNOWN_STAGE
-    );
+    const result = Stage.getRoutingInformation(window.location.pathname);
+
+    if (result !== undefined) {
+      stage = new Stage(result.sceneName, result.parameters, {}) as Stages;
+    }
+
+    this.redirect(stage);
   }
 
   /**
@@ -185,4 +182,4 @@ export class ScenesStore {
  * The only `ScenesStore` class instance and which is provided to all
  * components.
  */
-export const scenes = new ScenesStore();
+export const view = new ViewStore();

@@ -93,7 +93,7 @@ interface AlertsProps {
   alerts: Array<Alert<AlertNames>>;
 }
 
-@inject("scenes", "translations")
+@inject("translations", "view")
 @observer
 export class Alerts extends React.Component<AlertsProps & InjectedProps> {
   /**
@@ -155,7 +155,7 @@ export class Alerts extends React.Component<AlertsProps & InjectedProps> {
       <AlertContainer key={id}>
         <AlertElement
           isActive={!this.fadingAlertIds.has(id)}
-          onClick={() => this.props.scenes!.popAlert(alert)}
+          onClick={() => this.props.view!.popAlert(alert)}
           type={NAME_TO_TYPE[name]}
         >
           {message}

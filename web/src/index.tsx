@@ -2,7 +2,6 @@ import { inject, observer, Provider } from "mobx-react";
 import * as React from "react";
 import { render } from "react-dom";
 import { createGlobalStyle } from "styled-components";
-import { SCENES, Stage } from "./scene";
 import { Alerts } from "./component/Alerts";
 import { Loader } from "./component/Loader";
 import { Navigation } from "./component/Navigation";
@@ -51,32 +50,21 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
 /**
  * The root component.
  */
-@inject("scenes")
+@inject("view")
 @observer
 class Application extends React.Component<InjectedProps> {
   public render() {
-    const { alerts, main, showNavigation, waiting } = this.props.scenes!;
+    const { alerts, main, showNavigation, waiting } = this.props.view!;
 
     return (
       <>
         <GlobalStyle hideOverflow={waiting} />
         {showNavigation && <Navigation />}
-        {this.renderSceneComponent(main)}
+        {main.render()}
         <Loader isLoading={waiting} />
         <Alerts alerts={alerts} />
       </>
     );
-  }
-
-  /**
-   * Returns scene component that matches given stage.
-   *
-   * @param stage Given stage.
-   */
-  private renderSceneComponent({ parameters, props, sceneName }: Stage) {
-    const SceneComponent = SCENES[sceneName];
-
-    return <SceneComponent parameters={parameters} {...props} />;
   }
 }
 

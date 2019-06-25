@@ -21,7 +21,7 @@ type InputNames = "email" | "password";
 /**
  * Scene that renders a form used for signing in.
  */
-@inject("auth", "scenes")
+@inject("auth", "view")
 @observer
 export class Login extends Scene<"login"> {
   /**
@@ -71,25 +71,21 @@ export class Login extends Scene<"login"> {
 
   @action
   private onSubmit: FormSubmitHandler = async () => {
-    this.props.scenes!.wait(Login.WAIT_REASON);
+    this.props.view!.wait(Login.WAIT_REASON);
 
     const [error] = await Promise.all([
       this.props.auth!.login(this.values),
       setTimeout(1)
     ]);
 
-    this.props.scenes!.done(Login.WAIT_REASON);
+    this.props.view!.done(Login.WAIT_REASON);
 
     if (error === undefined) {
-      return this.props.scenes!.redirect({
-        parameters: {},
-        props: {},
-        sceneName: "home"
-      });
+      return this.props.view!.update(); // Update stage to match current URL.
     }
 
     if (error.code === 401) {
-      this.props.scenes!.pushAlert("loginInvalidCredentials", {});
+      this.props.view!.pushAlert("loginInvalidCredentials", {});
     }
 
     this.reasons = createFormErrorsReasons(error, this.values);

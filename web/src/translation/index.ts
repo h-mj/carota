@@ -5,7 +5,7 @@ import {
   SwitchInputOptions
 } from "../component/Input";
 import { FormNames } from "../component/Form";
-import { SceneNames } from "../scene";
+import { SceneNames } from "../scene/Scene";
 import { AlertNames } from "../component/Alerts";
 import { ErrorNames } from "../component/Error";
 

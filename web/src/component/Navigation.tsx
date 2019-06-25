@@ -1,38 +1,38 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
+import { Stage, Stages } from "../scene/Stage";
 import { Anchor } from "./Anchor";
 import { TRANSITION_DURATION } from "../styling/animations";
 import { ACTIVE, DEFAULT_LABEL } from "../styling/colors";
 import { UNIT } from "../styling/sizes";
-import { Stage } from "../scene";
 import { InjectedProps } from "../store";
 
 /**
  * Stage list where it is possible to navigate to using navigation component.
  */
-const NAVIGABLE_STAGES: Readonly<Array<Stage>> = [
-  { sceneName: "home", parameters: {}, props: {} },
-  { sceneName: "diet", parameters: {}, props: {} },
-  { sceneName: "measurements", parameters: {}, props: {} },
-  { sceneName: "history", parameters: {}, props: {} },
-  { sceneName: "administration", parameters: {}, props: {} },
-  { sceneName: "settings", parameters: {}, props: {} },
-  { sceneName: "logout", parameters: {}, props: {} }
+const NAVIGABLE_STAGES: Readonly<Array<Stages>> = [
+  new Stage("home", {}, {}),
+  new Stage("diet", {}, {}),
+  new Stage("measurements", {}, {}),
+  new Stage("history", {}, {}),
+  new Stage("administration", {}, {}),
+  new Stage("settings", {}, {}),
+  new Stage("logout", {}, {})
 ];
 
 /**
  * Navigation bar component that is used to navigate to different parts of the
  * application.
  */
-@inject("scenes", "translations")
+@inject("translations", "view")
 @observer
 export class Navigation extends React.Component<InjectedProps> {
   /**
    * Renders a navigation bar with anchors to stages defined in `NAVIGABLE_STAGES`.
    */
   public render() {
-    const currentSceneName = this.props.scenes!.main.sceneName;
+    const currentSceneName = this.props.view!.main.sceneName;
     const sceneTranslation = this.props.translations!.translation.scenes;
 
     return (

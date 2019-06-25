@@ -1,23 +1,18 @@
 import { ErrorReasons } from "api";
+import { SceneNames } from "../scene/Scene";
+import { ErrorNames } from "../component/Error";
+import { FormNames } from "../component/Form";
 import {
   InputNames,
   SwitchInputNames,
   SwitchInputOptions
 } from "../component/Input";
-import { FormNames } from "../component/Form";
-import { SceneNames } from "../scene/Scene";
-import { AlertNames } from "../component/Alerts";
-import { ErrorNames } from "../component/Error";
+import { NotificationNames } from "../component/NotificationContainer";
 
 /**
  * Translation type that contains all other translations.
  */
 export interface Translation {
-  /**
-   * Alert component translations.
-   */
-  alerts: AlertsTranslation;
-
   /**
    * Error component translations.
    */
@@ -34,6 +29,11 @@ export interface Translation {
   forms: FormsTranslation;
 
   /**
+   * Notification component translations.
+   */
+  notifications: NotificationsTranslation;
+
+  /**
    * Scene component translations.
    */
   scenes: ScenesTranslation;
@@ -45,14 +45,16 @@ export interface Translation {
 }
 
 /**
- * Type that maps alert names to their translations.
+ * Type that maps notification names to their translations.
  */
-type AlertsTranslation = { [AlertName in AlertNames]: AlertTranslation };
+type NotificationsTranslation = {
+  [NotificationName in NotificationNames]: NotificationTranslation
+};
 
 /**
- * Translations of an alert component.
+ * Translations of an notification component.
  */
-interface AlertTranslation {
+interface NotificationTranslation {
   message: string;
 }
 

@@ -41,7 +41,7 @@ export interface FormSubmitHandler {
  */
 interface FormProps<TInputNames extends InputNames> {
   /**
-   * List of all field names in order from top to bottom.
+   * Array of all field names in order from top to bottom.
    */
   inputNames: TInputNames[];
 
@@ -138,6 +138,6 @@ const Title = styled.div`
   align-items: center;
 
   font-size: 2rem;
-  letter-spacing: -.022em;
+  letter-spacing: -0.022em;
   text-align: center;
 `;

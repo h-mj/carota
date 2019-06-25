@@ -2,7 +2,7 @@ import { inject, observer, Provider } from "mobx-react";
 import * as React from "react";
 import { render } from "react-dom";
 import { createGlobalStyle } from "styled-components";
-import { Alerts } from "./component/Alerts";
+import { NotificationContainer } from "./component/NotificationContainer";
 import { Loader } from "./component/Loader";
 import { Navigation } from "./component/Navigation";
 import { InjectedProps, STORES } from "./store";
@@ -54,7 +54,7 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
 @observer
 class Application extends React.Component<InjectedProps> {
   public render() {
-    const { alerts, main, showNavigation, waiting } = this.props.view!;
+    const { main, notifications, showNavigation, waiting } = this.props.view!;
 
     return (
       <>
@@ -62,7 +62,7 @@ class Application extends React.Component<InjectedProps> {
         {showNavigation && <Navigation />}
         {main.render()}
         <Loader isLoading={waiting} />
-        <Alerts alerts={alerts} />
+        <NotificationContainer notifications={notifications} />
       </>
     );
   }

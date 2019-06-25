@@ -1,11 +1,6 @@
 import { Translation } from ".";
 
 export const russian: Translation = {
-  alerts: {
-    loginInvalidCredentials: {
-      message: "Неверный адрес электронной почты или пароль."
-    }
-  },
   errors: {
     invalidInvitation: {
       title: "К сожалению, этот адрес для регистрации недействителен.",
@@ -52,6 +47,11 @@ export const russian: Translation = {
   forms: {
     login: { submit: "Вход", title: "Вход" },
     register: { submit: "Завести аккаунт", title: "Завести аккаунт" }
+  },
+  notifications: {
+    loginInvalidCredentials: {
+      message: "Неверный адрес электронной почты или пароль."
+    }
   },
   scenes: {
     administration: { title: "Администрация" },

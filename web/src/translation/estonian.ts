@@ -1,11 +1,6 @@
 import { Translation } from ".";
 
 export const estonian: Translation = {
-  alerts: {
-    loginInvalidCredentials: {
-      message: "Vale e-posti aadress või parool."
-    }
-  },
   errors: {
     invalidInvitation: {
       title:
@@ -52,6 +47,11 @@ export const estonian: Translation = {
   forms: {
     login: { submit: "Logige sisse", title: "Logige sisse" },
     register: { submit: "Looge konto", title: "Looge konto" }
+  },
+  notifications: {
+    loginInvalidCredentials: {
+      message: "Vale e-posti aadress või parool."
+    }
   },
   scenes: {
     administration: { title: "Administratsioon" },

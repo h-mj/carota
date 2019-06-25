@@ -9,7 +9,7 @@ import { UNIT } from "../styling/sizes";
 import { InjectedProps } from "../store";
 
 /**
- * Stage list where it is possible to navigate to using navigation component.
+ * Array of navigable stages using the navigation bar.
  */
 const NAVIGABLE_STAGES: Readonly<Array<Stages>> = [
   new Stage("home", {}, {}),

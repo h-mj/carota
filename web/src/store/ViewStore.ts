@@ -4,7 +4,7 @@ import {
   NO_NAVIGATION_SCENE_NAMES
 } from "../scene/Scene";
 import { Stage, Stages } from "../scene/Stage";
-import { Alert, AlertNames, AlertParameters } from "../component/Alerts";
+import { Notifications } from "../component/NotificationContainer";
 import { auth } from "./AuthStore";
 import { translations } from "./TranslationsStore";
 
@@ -21,9 +21,9 @@ export class ViewStore {
   @observable private _main!: Readonly<Stages>;
 
   /**
-   * List of alerts.
+   * Array of notifications.
    */
-  @observable private _alerts: Array<Alert<AlertNames>> = [];
+  @observable private _notifications: Array<Notifications> = [];
 
   /**
    * Set of reasons why waiting is needed.
@@ -31,9 +31,9 @@ export class ViewStore {
   @observable private _waits: Set<string> = new Set();
 
   /**
-   * Creates a new instance of `ScenesStore` and adds listeners for main stage
-   * change and history state pop events which update url and main stage
-   * correspondingly.
+   * Creates a new instance of `ScenesStore`, updates main scene based on
+   * current URL and adds a history stage pop listener that also updates main
+   * stage based on changed pathname.
    */
   public constructor() {
     this.update();
@@ -49,11 +49,11 @@ export class ViewStore {
   }
 
   /**
-   * Returns a list of alerts.
+   * Returns an array of notifications.
    */
   @computed
-  public get alerts() {
-    return this._alerts;
+  public get notifications() {
+    return this._notifications;
   }
 
   /**
@@ -112,47 +112,35 @@ export class ViewStore {
   }
 
   /**
-   * Pushes an alert with name `name` and parameters `parameters` that will be
-   * shown in `Alerts` component for `timeout` seconds.
+   * Adds `notification` to notifications array and adds an `timeout` second
+   * timeout after which the notification is removed from the array.
    *
-   * @param name Name of the alert.
-   * @param parameters Alert's parameters.
-   * @param timeout Time in seconds during which alert will be shown.
+   * @param notification New notification.
+   * @param timeout Timeout in seconds after which notification is removed.
    */
   @action
-  public pushAlert<TAlertName extends AlertNames>(
-    name: TAlertName,
-    parameters: AlertParameters<TAlertName>,
-    timeout = 5
-  ) {
-    const alert = {
-      id:
-        Math.random()
-          .toString(36)
-          .substring(2) + Date.now().toString(36),
-      name,
-      parameters
-    };
+  public notify(notification: Notifications, timeout: number) {
+    this._notifications.push(notification);
 
-    this._alerts.push(alert);
-
-    if (timeout !== 0) {
-      setTimeout(this.popAlert, 1000 * timeout, alert);
+    if (timeout > 0) {
+      setTimeout(this.conceal, timeout * 1000, notification);
     }
   }
 
   /**
-   * Removes an alert with id `id` from alert list.
+   * Removes a notification from notifications array.
    */
   @action
-  public popAlert = (alert: Alert<AlertNames>) => {
-    const index = this._alerts.findIndex(other => other.id === alert.id);
+  public conceal = (notification: Notifications) => {
+    const index = this._notifications.findIndex(
+      other => other.id === notification.id
+    );
 
     if (index === -1) {
       return;
     }
 
-    this._alerts.splice(index, 1);
+    this._notifications.splice(index, 1);
   };
 
   /**

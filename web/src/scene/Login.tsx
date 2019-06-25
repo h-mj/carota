@@ -10,6 +10,7 @@ import {
   FormValues
 } from "../component/Form";
 import { InputChangeHandler } from "../component/Input";
+import { Notification } from "../component/NotificationContainer";
 import { UNIT } from "../styling/sizes";
 import { createFormErrorsReasons, setTimeout } from "../utility/forms";
 
@@ -85,7 +86,10 @@ export class Login extends Scene<"login"> {
     }
 
     if (error.code === 401) {
-      this.props.view!.pushAlert("loginInvalidCredentials", {});
+      this.props.view!.notify(
+        new Notification("loginInvalidCredentials", {}),
+        5
+      );
     }
 
     this.reasons = createFormErrorsReasons(error, this.values);

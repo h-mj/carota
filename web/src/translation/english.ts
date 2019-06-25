@@ -1,11 +1,6 @@
 import { Translation } from ".";
 
 export const english: Translation = {
-  alerts: {
-    loginInvalidCredentials: {
-      message: "Incorrect email address or password."
-    }
-  },
   errors: {
     invalidInvitation: {
       title: "We are sorry, this sign up address is invalid.",
@@ -51,6 +46,11 @@ export const english: Translation = {
   forms: {
     login: { submit: "Sign in", title: "Sign in" },
     register: { submit: "Sign up", title: "Sign up" }
+  },
+  notifications: {
+    loginInvalidCredentials: {
+      message: "Incorrect email address or password."
+    }
   },
   scenes: {
     administration: { title: "Administration" },

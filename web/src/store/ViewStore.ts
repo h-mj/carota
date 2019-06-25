@@ -119,7 +119,7 @@ export class ViewStore {
    * @param timeout Timeout in seconds after which notification is removed.
    */
   @action
-  public notify(notification: Notifications, timeout: number) {
+  public notify(notification: Notifications, timeout = 5) {
     this._notifications.push(notification);
 
     if (timeout > 0) {
@@ -132,9 +132,7 @@ export class ViewStore {
    */
   @action
   public conceal = (notification: Notifications) => {
-    const index = this._notifications.findIndex(
-      other => other.id === notification.id
-    );
+    const index = this._notifications.indexOf(notification);
 
     if (index === -1) {
       return;

@@ -1,7 +1,6 @@
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import styled from "styled-components";
 import { Scene } from "./Scene";
 import {
   Form,
@@ -9,9 +8,9 @@ import {
   FormSubmitHandler,
   FormValues
 } from "../component/Form";
+import { FormContainer } from "../component/FormContainer";
 import { InputChangeHandler } from "../component/Input";
 import { Notification } from "../component/NotificationContainer";
-import { UNIT } from "../styling/sizes";
 import { createFormErrorsReasons, setTimeout } from "../utility/forms";
 
 /**
@@ -49,7 +48,7 @@ export class Login extends Scene<"login"> {
    */
   public render() {
     return (
-      <Container>
+      <FormContainer>
         <Form
           inputNames={["email", "password"]}
           name="login"
@@ -58,10 +57,13 @@ export class Login extends Scene<"login"> {
           reasons={this.reasons}
           values={this.values}
         />
-      </Container>
+      </FormContainer>
     );
   }
 
+  /**
+   * Updates changed field value.
+   */
   @action
   private onChange: InputChangeHandler<InputNames> = (
     name: InputNames,
@@ -70,6 +72,10 @@ export class Login extends Scene<"login"> {
     this.values[name] = value;
   };
 
+  /**
+   * Sends login credentials to server and either redirects user to correct
+   * stage or displays occurred errors.
+   */
   @action
   private onSubmit: FormSubmitHandler = async () => {
     this.props.view!.wait(Login.WAIT_REASON);
@@ -86,20 +92,9 @@ export class Login extends Scene<"login"> {
     }
 
     if (error.code === 401) {
-      this.props.view!.notify(
-        new Notification("loginInvalidCredentials", {}),
-        5
-      );
+      this.props.view!.notify(new Notification("loginInvalidCredentials", {}));
     }
 
     this.reasons = createFormErrorsReasons(error, this.values);
   };
 }
-
-const Container = styled.div`
-  width: 100%;
-  max-width: ${7 * UNIT}rem;
-  padding: ${UNIT / 2}rem;
-  box-sizing: border-box;
-  margin: 0 auto;
-`;

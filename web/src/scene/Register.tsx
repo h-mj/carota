@@ -2,7 +2,6 @@ import { Languages } from "api";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import styled from "styled-components";
 import { Scene } from "./Scene";
 import { Stage } from "./Stage";
 import { Error } from "../component/Error";
@@ -12,8 +11,8 @@ import {
   FormSubmitHandler,
   FormValues
 } from "../component/Form";
+import { FormContainer } from "../component/FormContainer";
 import { InputChangeHandler, InputValueType } from "../component/Input";
-import { UNIT } from "../styling/sizes";
 import { createFormErrorsReasons, setTimeout } from "../utility/forms";
 
 /**
@@ -78,7 +77,7 @@ export class Register extends Scene<"register"> {
     }
 
     return (
-      <Container>
+      <FormContainer>
         <Form
           inputNames={["language", "name", "email", "password"]}
           name="register"
@@ -87,10 +86,13 @@ export class Register extends Scene<"register"> {
           reasons={this.reasons}
           values={this.values}
         />
-      </Container>
+      </FormContainer>
     );
   }
 
+  /**
+   * Updates changed field value.
+   */
   @action
   private onChange: InputChangeHandler<InputNames> = (
     name: InputNames,
@@ -99,6 +101,10 @@ export class Register extends Scene<"register"> {
     (this.values[name] as string) = value;
   };
 
+  /**
+   * Sends registration form data to server and either redirects user to home
+   * stage or displays occurred errors.
+   */
   @action
   private onSubmit: FormSubmitHandler = async () => {
     const { email, language, name, password } = this.values;
@@ -128,7 +134,7 @@ export class Register extends Scene<"register"> {
 
   /**
    * Checks whether ot not `invitationId` in `parameters` props is valid and
-   * assigns boolean value to `valid` field.
+   * assigns corresponding boolean value to `valid` field.
    */
   private async checkInvitationIdValidity() {
     if (this.props.parameters === undefined) {
@@ -140,11 +146,3 @@ export class Register extends Scene<"register"> {
     }
   }
 }
-
-const Container = styled.div`
-  width: 100%;
-  max-width: ${7 * UNIT}rem;
-  padding: ${UNIT / 2}rem;
-  box-sizing: border-box;
-  margin: 0 auto;
-`;

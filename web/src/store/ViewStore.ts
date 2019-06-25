@@ -1,5 +1,8 @@
 import { computed, observable, action } from "mobx";
-import { NO_AUTHENTICATION_SCENE_NAMES } from "../scene/Scene";
+import {
+  NO_AUTHENTICATION_SCENE_NAMES,
+  NO_NAVIGATION_SCENE_NAMES
+} from "../scene/Scene";
 import { Stage, Stages } from "../scene/Stage";
 import { Alert, AlertNames, AlertParameters } from "../component/Alerts";
 import { auth } from "./AuthStore";
@@ -77,7 +80,7 @@ export class ViewStore {
         ? Stage.UNKNOWN
         : Stage.GATEWAY;
 
-    const url = Stage.getUrl(stage) || window.location.pathname;
+    const url = stage.getUrl() || window.location.pathname;
     const title = `${
       translations.translation.scenes[this._main.sceneName].title
     } - ${translations.translation.title}`;
@@ -94,15 +97,18 @@ export class ViewStore {
    */
   @action
   public update() {
-    let stage: Stages = Stage.UNKNOWN;
+    const stage = Stage.from(window.location.pathname);
 
-    const result = Stage.getRoutingInformation(window.location.pathname);
-
-    if (result !== undefined) {
-      stage = new Stage(result.sceneName, result.parameters, {}) as Stages;
+    // If user is unauthenticated and tries to access the logout scene, redirect to home.
+    if (
+      !auth.authenticated &&
+      stage !== undefined &&
+      stage.sceneName === "logout"
+    ) {
+      this.redirect(Stage.HOME);
     }
 
-    this.redirect(stage);
+    this.redirect(Stage.from(window.location.pathname) || Stage.UNKNOWN);
   }
 
   /**
@@ -174,7 +180,7 @@ export class ViewStore {
    */
   @computed
   public get showNavigation() {
-    return !NO_AUTHENTICATION_SCENE_NAMES.includes(this._main.sceneName);
+    return !NO_NAVIGATION_SCENE_NAMES.includes(this._main.sceneName);
   }
 }
 

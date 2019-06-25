@@ -76,3 +76,12 @@ export const NO_AUTHENTICATION_SCENE_NAMES: Readonly<SceneNames[]> = [
   "login",
   "register"
 ];
+
+/**
+ * Scene names that do not require navigation bar.
+ */
+export const NO_NAVIGATION_SCENE_NAMES: Readonly<SceneNames[]> = [
+  "login",
+  "logout",
+  "register"
+];

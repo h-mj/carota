@@ -66,21 +66,6 @@ export type Parameters<TSceneNames extends SceneNames> =
       : never);
 
 /**
- * Object type that holds the information retrieved from the URL.
- */
-interface RoutingInformation {
-  /**
-   * Scene name.
-   */
-  sceneName: SceneNames;
-
-  /**
-   * Scene route parameters.
-   */
-  parameters: Parameters<SceneNames>;
-}
-
-/**
  * Object where scene names are mapped to its class. This object is used to
  * retrieve scene component by its name.
  */
@@ -160,6 +145,44 @@ export class Stage<TSceneName extends SceneNames> {
   }
 
   /**
+   * Returns an URL of this stage, or `undefined`, if this stage doesn't have a matching route.
+   */
+  public getUrl(): string | undefined {
+    forRoute: for (const route in ROUTES) {
+      // If route's scene is not stage's scene, skip.
+      if (ROUTES[route as keyof Routes] !== this.sceneName) {
+        continue;
+      }
+
+      let url = route;
+
+      if (this.parameters !== undefined) {
+        // Replace all parameters with their values in parameters.
+        for (const parameter in this.parameters) {
+          // If there's no such parameter, it's a wrong route.
+          if (!url.includes(`{${parameter}}`)) {
+            continue forRoute;
+          }
+
+          url = url.replace(
+            `{${parameter}}`,
+            (this.parameters as any)[parameter]
+          );
+        }
+      }
+
+      // If there are still parameters present in url, it's also a wrong route.
+      if (url.match(/{.*}/) !== null) {
+        continue;
+      }
+
+      return url;
+    }
+
+    return;
+  }
+
+  /**
    * Stage that is shown on index path and to which is redirected to after
    * registration.
    */
@@ -177,13 +200,16 @@ export class Stage<TSceneName extends SceneNames> {
   public static UNKNOWN: Readonly<Stages> = new Stage("unknown", undefined, {});
 
   /**
-   * Returns a scene name and it's parameters object based on given URL.
+   * Scene which is used to exit the application.
+   */
+  public static EXIT: Readonly<Stages> = new Stage("logout", {}, {});
+
+  /**
+   * Returns a stage from given URL. `undefined` if no stages match the URL.
    *
    * @param url URL string.
    */
-  public static getRoutingInformation(
-    url: string
-  ): RoutingInformation | undefined {
+  public static from(url: string): Stages | undefined {
     forRoute: for (const route in ROUTES) {
       const urlParts = url.split("/");
       const routeParts = route.split("/");
@@ -205,50 +231,9 @@ export class Stage<TSceneName extends SceneNames> {
         }
       }
 
-      return {
-        sceneName: ROUTES[route as keyof Routes],
-        parameters
-      } as RoutingInformation;
+      return new Stage(ROUTES[route as keyof Routes], parameters, {}) as Stages;
     }
 
     return undefined;
-  }
-
-  /**
-   * Returns an URL from a given stage.
-   */
-  public static getUrl({
-    sceneName,
-    parameters
-  }: RoutingInformation): string | undefined {
-    forRoute: for (const route in ROUTES) {
-      // If route's scene is not stage's scene, skip.
-      if (ROUTES[route as keyof Routes] !== sceneName) {
-        continue;
-      }
-
-      let url = route;
-
-      if (parameters !== undefined) {
-        // Replace all parameters with their values in parameters.
-        for (const parameter in parameters) {
-          // If there's no such parameter, it's a wrong route.
-          if (!url.includes(`{${parameter}}`)) {
-            continue forRoute;
-          }
-
-          url = url.replace(`{${parameter}}`, (parameters as any)[parameter]);
-        }
-      }
-
-      // If there are still parameters present in url, it's also a wrong route.
-      if (url.match(/{.*}/) !== null) {
-        continue;
-      }
-
-      return url;
-    }
-
-    return;
   }
 }

@@ -1,6 +1,6 @@
 import { inject } from "mobx-react";
 import * as React from "react";
-import { Stage, Stages } from "../scene/Stage";
+import { Stages } from "../scene/Stage";
 import { InjectedProps } from "../store";
 
 /**
@@ -30,7 +30,7 @@ export class Anchor extends React.Component<AnchorProps & InjectedProps> {
     return (
       <a
         className={this.props.className}
-        href={Stage.getUrl(this.props.stage)}
+        href={this.props.stage.getUrl()}
         onClick={this.handleClick}
       >
         {this.props.children}

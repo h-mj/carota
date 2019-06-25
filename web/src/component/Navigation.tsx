@@ -1,7 +1,7 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
-import { Stage, Stages } from "../scene/Stage";
+import { Stages } from "../scene/Stage";
 import { Anchor } from "./Anchor";
 import { TRANSITION_DURATION } from "../styling/animations";
 import { ACTIVE, DEFAULT_LABEL } from "../styling/colors";
@@ -9,17 +9,15 @@ import { UNIT } from "../styling/sizes";
 import { InjectedProps } from "../store";
 
 /**
- * Array of navigable stages using the navigation bar.
+ * Navigation component props.
  */
-const NAVIGABLE_STAGES: Readonly<Array<Stages>> = [
-  new Stage("home", {}, {}),
-  new Stage("diet", {}, {}),
-  new Stage("measurements", {}, {}),
-  new Stage("history", {}, {}),
-  new Stage("administration", {}, {}),
-  new Stage("settings", {}, {}),
-  new Stage("logout", {}, {})
-];
+interface NavigationProps {
+  /**
+   * List of stages where it is possible to navigate to using navigation
+   * component.
+   */
+  stages: Stages[];
+}
 
 /**
  * Navigation bar component that is used to navigate to different parts of the
@@ -27,7 +25,9 @@ const NAVIGABLE_STAGES: Readonly<Array<Stages>> = [
  */
 @inject("translations", "view")
 @observer
-export class Navigation extends React.Component<InjectedProps> {
+export class Navigation extends React.Component<
+  NavigationProps & InjectedProps
+> {
   /**
    * Renders a navigation bar with anchors to stages defined in `NAVIGABLE_STAGES`.
    */
@@ -38,7 +38,7 @@ export class Navigation extends React.Component<InjectedProps> {
     return (
       <Container>
         <Bar>
-          {NAVIGABLE_STAGES.map((stage, index) => (
+          {this.props.stages.map((stage, index) => (
             <Item
               key={index}
               stage={stage}

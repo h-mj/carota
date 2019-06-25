@@ -30,7 +30,7 @@ export class Anchor extends React.Component<AnchorProps & InjectedProps> {
     return (
       <a
         className={this.props.className}
-        href={this.props.stage.getUrl()}
+        href={this.props.stage.getUrl() || window.location.pathname}
         onClick={this.handleClick}
       >
         {this.props.children}

@@ -20,7 +20,10 @@ export const authRouter = new Router();
  * Login request body schema.
  */
 const LOGIN_SCHEMA: Readonly<Schema<"/auth/login">> = {
-  email: is.string(),
+  email: is
+    .string()
+    .trim()
+    .lowercase(),
   password: is.string()
 };
 
@@ -42,7 +45,11 @@ defineNoAuth(authRouter, "/auth/login", LOGIN_SCHEMA, async context => {
 const REGISTER_SCHEMA: Readonly<Schema<"/auth/register">> = {
   name: is.string(),
   language: is.string().valid(Object.keys(LANGUAGES_ENUM)),
-  email: is.string().email(),
+  email: is
+    .string()
+    .trim()
+    .lowercase()
+    .email(),
   password: is.string().min(8),
   invitationId: is.string().guid()
 };

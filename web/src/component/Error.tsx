@@ -2,6 +2,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
 import { InjectedProps } from "../store";
+import { DEFAULT_LABEL } from "../styling/colors";
 import { UNIT } from "../styling/sizes";
 
 /**
@@ -81,12 +82,16 @@ export class Error<TErrorName extends ErrorNames> extends React.Component<
  * Component that contains error title and message text components.
  */
 const Container = styled.div`
-  max-width: ${11 * UNIT}rem;
+  width: 100%;
+  max-width: ${10 * UNIT}rem;
+  height: 100%;
+
   margin: auto;
   padding: ${2 * UNIT}rem ${UNIT / 2}rem;
   box-sizing: border-box;
 
   display: flex;
+  justify-content: center;
   flex-direction: column;
 `;
 
@@ -95,15 +100,18 @@ const Container = styled.div`
  */
 const Title = styled.div`
   margin-bottom: ${UNIT / 2}rem;
-  line-height: ${UNIT / 2}rem;
+
   font-size: 2rem;
   letter-spacing: -0.022em;
+  line-height: ${UNIT / 2}rem;
+  text-align: center;
 `;
 
 /**
  * Error message text component.
  */
 const Message = styled.div`
+  color: ${DEFAULT_LABEL};
   line-height: ${UNIT / 3};
-  text-align: justify;
+  text-align: center;
 `;

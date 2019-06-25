@@ -44,6 +44,8 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
 
   #root {
     position: relative;
+    display: flex;
+    flex-direction: column;
   }
 `;
 

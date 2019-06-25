@@ -58,6 +58,7 @@ export class Navigation extends React.Component<InjectedProps> {
  */
 const Container = styled.div`
   overflow-x: auto;
+  flex-shrink: 0;
 `;
 
 /**

@@ -123,7 +123,6 @@ export const english: Translation = {
   },
   forms: {
     login: { submit: "Sign in", title: "Sign in" },
-    nutritionInformation: { submit: "Save", title: "Nutrition information" },
     register: { submit: "Sign up", title: "Sign up" }
   },
   notifications: {

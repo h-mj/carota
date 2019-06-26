@@ -127,10 +127,6 @@ export const russian: Translation = {
   },
   forms: {
     login: { submit: "Вход", title: "Вход" },
-    nutritionInformation: {
-      submit: "Сохранить",
-      title: "Информация о питании"
-    },
     register: { submit: "Завести аккаунт", title: "Завести аккаунт" }
   },
   notifications: {

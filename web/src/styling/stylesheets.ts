@@ -4,6 +4,7 @@ import { css } from "styled-components";
  * CSS rules that reset common preset rules.
  */
 export const RESET = css`
+  max-width: 0;
   border: none;
   outline: none;
   box-shadow: none;

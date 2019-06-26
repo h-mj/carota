@@ -127,7 +127,6 @@ export const estonian: Translation = {
   },
   forms: {
     login: { submit: "Logige sisse", title: "Logige sisse" },
-    nutritionInformation: { submit: "Salvesta", title: "Toitumisalane teave" },
     register: { submit: "Looge konto", title: "Looge konto" }
   },
   notifications: {

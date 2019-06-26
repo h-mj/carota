@@ -18,19 +18,6 @@ import { action, observable } from "mobx";
  */
 export interface FormInputNames {
   login: "email" | "password";
-  nutritionInformation:
-    | "energy"
-    | "fat"
-    | "saturates"
-    | "monoUnsaturates"
-    | "polyunsaturates"
-    | "carbohydrate"
-    | "sugars"
-    | "polyols"
-    | "starch"
-    | "fibre"
-    | "protein"
-    | "salt";
   register: "email" | "language" | "name" | "password";
 }
 
@@ -47,20 +34,6 @@ const FORM_INPUTS: Readonly<
   { [FormName in FormNames]: FormInputNames[FormName][] }
 > = {
   login: ["email", "password"],
-  nutritionInformation: [
-    "energy",
-    "fat",
-    "saturates",
-    "monoUnsaturates",
-    "polyunsaturates",
-    "carbohydrate",
-    "sugars",
-    "polyols",
-    "starch",
-    "fibre",
-    "protein",
-    "salt"
-  ],
   register: ["language", "name", "email", "password"]
 };
 
@@ -112,11 +85,6 @@ interface FormProps<TFormName extends FormNames> {
    * Form submit callback function.
    */
   onSubmit?: FormSubmitHandler<TFormName>;
-
-  /**
-   * Whether or not all inputs should be tabular.
-   */
-  tabular?: boolean;
 }
 
 /**
@@ -141,7 +109,7 @@ export class Form<TFormName extends FormNames> extends React.Component<
    * Renders a form component.
    */
   public render() {
-    const { name, tabular, translations } = this.props;
+    const { name, translations } = this.props;
     const { submit, title } = translations!.translation.forms[name];
 
     return (
@@ -156,7 +124,6 @@ export class Form<TFormName extends FormNames> extends React.Component<
               name={inputName}
               onChange={this.handleChange}
               reason={this.reasons[inputName]}
-              tabular={tabular}
               value={this.values[inputName]}
             />
           )

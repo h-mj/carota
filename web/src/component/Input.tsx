@@ -135,11 +135,6 @@ interface InputProps<TInputName extends InputNames> {
   reason?: ErrorReasons;
 
   /**
-   * Wether or not input should be tabular.
-   */
-  tabular?: boolean;
-
-  /**
    * The value within the input.
    */
   value: string;

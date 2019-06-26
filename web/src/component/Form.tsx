@@ -16,7 +16,7 @@ import { action, observable } from "mobx";
 /**
  * Type that maps form name to union of names of its inputs.
  */
-interface FormInputNames {
+export interface FormInputNames {
   login: "email" | "password";
   nutritionInformation:
     | "energy"

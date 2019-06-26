@@ -28,8 +28,7 @@ export const estonian: Translation = {
       name: "E-posti aadress",
       placeholder: "Sisestage e-posti aadress",
       reasons: {
-        conflict:
-          "Sisestatud e-posti aadress on juba kasutuses teise konto poolt",
+        conflict: "Sisestatud e-posti aadress on juba kasutuses",
         empty: "Palun sisestage e-posti aadress",
         invalid: "Palun sisestage kehtiv e-posti aadress"
       }

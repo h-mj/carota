@@ -24,7 +24,7 @@ export const english: Translation = {
       name: "Email address",
       placeholder: "Enter an email address",
       reasons: {
-        conflict: "Entered email address is already used by another account",
+        conflict: "Entered email address is already in use",
         empty: "Please enter an email address",
         invalid: "Please enter a valid email address"
       }

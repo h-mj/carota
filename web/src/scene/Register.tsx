@@ -5,14 +5,18 @@ import * as React from "react";
 import { Scene } from "./Scene";
 import { Stage } from "./Stage";
 import { Error } from "../component/Error";
-import { Form, FormSubmitHandler } from "../component/Form";
+import {
+  Form,
+  FormInputChangeHandler,
+  FormSubmitHandler
+} from "../component/Form";
 import { Thin } from "../component/container/Thin";
 import { setTimeout } from "../utility/forms";
 
 /**
  * Scene that renders a form used for registration.
  */
-@inject("auth", "view")
+@inject("auth", "translations", "view")
 @observer
 export class Register extends Scene<"register"> {
   /**
@@ -44,25 +48,37 @@ export class Register extends Scene<"register"> {
   public render() {
     if (this.isValid === undefined) {
       return null;
-    }
-
-    if (!this.isValid) {
+    } else if (!this.isValid) {
       return <Error name="invalidInvitation" parameters={{}} />;
     }
 
     return (
       <Thin>
-        <Form name="register" onSubmit={this.onSubmit} />
+        <Form
+          name="register"
+          onChange={this.handleChange}
+          onSubmit={this.handleSubmit}
+        />
       </Thin>
     );
   }
+
+  /**
+   * Updates interface language when language input changes.
+   */
+  @action
+  private handleChange: FormInputChangeHandler<"register"> = (name, value) => {
+    if (name === "language") {
+      this.props.translations!.language = value as Languages;
+    }
+  };
 
   /**
    * Sends registration form data to server and either redirects user to home
    * stage or displays occurred errors.
    */
   @action
-  private onSubmit: FormSubmitHandler<"register"> = async values => {
+  private handleSubmit: FormSubmitHandler<"register"> = async values => {
     const { email, language, name, password } = values;
     const { invitationId } = this.props.parameters!;
 

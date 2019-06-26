@@ -25,7 +25,7 @@ export class Login extends Scene<"login"> {
   public render() {
     return (
       <Thin>
-        <Form name="login" onSubmit={this.onSubmit} />
+        <Form name="login" onSubmit={this.handleSubmit} />
       </Thin>
     );
   }
@@ -35,7 +35,7 @@ export class Login extends Scene<"login"> {
    * stage or displays occurred errors.
    */
   @action
-  private onSubmit: FormSubmitHandler<"login"> = async values => {
+  private handleSubmit: FormSubmitHandler<"login"> = async values => {
     this.props.view!.wait(Login.WAIT_REASON);
 
     const [error] = await Promise.all([

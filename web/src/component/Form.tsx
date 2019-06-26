@@ -16,7 +16,7 @@ import { action, observable } from "mobx";
 /**
  * Type that maps form name to union of names of its inputs.
  */
-export interface FormInputNames {
+interface FormInputNames {
   login: "email" | "password";
   nutritionInformation:
     | "energy"
@@ -80,6 +80,13 @@ export type FormValues<TFormName extends FormNames> = {
 };
 
 /**
+ * InputChangeHandler type based on form name.
+ */
+export type FormInputChangeHandler<
+  TFormName extends FormNames
+> = InputChangeHandler<FormInputNames[TFormName]>;
+
+/**
  * Form submit callback function type.
  */
 export interface FormSubmitHandler<TFormName extends FormNames> {
@@ -97,7 +104,12 @@ interface FormProps<TFormName extends FormNames> {
   name: FormNames;
 
   /**
-   * Submit callback function.
+   * Input change callback function.
+   */
+  onChange?: FormInputChangeHandler<TFormName>;
+
+  /**
+   * Form submit callback function.
    */
   onSubmit?: FormSubmitHandler<TFormName>;
 
@@ -159,11 +171,9 @@ export class Form<TFormName extends FormNames> extends React.Component<
    * Updates changed field value.
    */
   @action
-  private handleChange: InputChangeHandler<FormInputNames[TFormName]> = (
-    name,
-    value
-  ) => {
+  private handleChange: FormInputChangeHandler<TFormName> = (name, value) => {
     (this.values[name] as string) = value;
+    this.props.onChange !== undefined && this.props.onChange(name, value);
   };
 
   /**

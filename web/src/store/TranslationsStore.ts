@@ -22,14 +22,21 @@ export class TranslationsStore {
   /**
    * Current interface language.
    */
-  @observable private language: Languages = "English";
+  @observable private _language: Languages = "English";
+
+  /**
+   * Sets interface language.
+   */
+  public set language(language: Languages) {
+    this._language = language;
+  }
 
   /**
    * Returns translation object based on current interface language.
    */
   @computed
   public get translation() {
-    return TRANSLATIONS[this.language];
+    return TRANSLATIONS[this._language];
   }
 }
 

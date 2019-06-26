@@ -1,0 +1,17 @@
+import { css } from "styled-components";
+
+/**
+ * CSS rules that reset common preset rules.
+ */
+export const RESET = css`
+  border: none;
+  outline: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+`;

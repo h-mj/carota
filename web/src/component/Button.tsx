@@ -8,6 +8,7 @@ import {
   ERROR
 } from "../styling/colors";
 import { TRANSITION_DURATION } from "../styling/animations";
+import { RESET } from "../styling/stylesheets";
 
 /**
  * Button component properties.
@@ -22,20 +23,7 @@ interface ButtonProps {
 export const Button: React.FunctionComponent<ButtonProps> = ({
   children,
   hasError
-}) => (
-  <Container>
-    <ButtonElement hasError={hasError}>{children}</ButtonElement>
-  </Container>
-);
-
-/**
- * Container component that contains the button component.
- */
-const Container = styled.div`
-  position: relative;
-  width: 100%;
-  height: ${(5 * UNIT) / 4}rem;
-`;
+}) => <ButtonElement hasError={hasError}>{children}</ButtonElement>;
 
 /**
  * Button color styling when property `hasError` is not `true`.
@@ -63,20 +51,7 @@ const errorStyle = css`
  * The actual button element.
  */
 const ButtonElement = styled.button<ButtonProps>`
-  /* Reset */
-  border: none;
-  outline: none;
-  box-shadow: none;
-  margin: 0;
-  padding: 0;
-  background: none;
-  color: inherit;
-  font-family: inherit;
-  font-size: inherit;
-  letter-spacing: inherit;
-
-  position: absolute;
-  top: ${UNIT / 8}rem;
+  ${RESET};
 
   width: 100%;
   height: ${UNIT}rem;

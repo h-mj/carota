@@ -3,10 +3,10 @@ import * as React from "react";
 import styled from "styled-components";
 import { Stages } from "../scene/Stage";
 import { Anchor } from "./Anchor";
+import { InjectedProps } from "../store";
 import { TRANSITION_DURATION } from "../styling/animations";
 import { ACTIVE, DEFAULT_LABEL } from "../styling/colors";
 import { UNIT } from "../styling/sizes";
-import { InjectedProps } from "../store";
 
 /**
  * Navigation component props.
@@ -16,7 +16,7 @@ interface NavigationProps {
    * List of stages where it is possible to navigate to using navigation
    * component.
    */
-  stages: Stages[];
+  stages: Readonly<Array<Stages>>;
 }
 
 /**

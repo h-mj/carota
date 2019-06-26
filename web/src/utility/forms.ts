@@ -1,6 +1,10 @@
 import { Error } from "api";
-import { InputNames } from "../component/Input";
-import { FormErrorReasons, FormValues } from "../component/Form";
+import {
+  FormErrorReasons,
+  FormInputNames,
+  FormNames,
+  FormValues
+} from "../component/Form";
 
 /**
  * Checks whether or not `inputName` is a form input name using `formValues`
@@ -10,11 +14,28 @@ import { FormErrorReasons, FormValues } from "../component/Form";
  * @param formValues Form values which are used to check whether or not
  * `inputName` is a form field.
  */
-export const isFormInputName = <TInputNames extends InputNames>(
+export const isFormInputName = <TFormName extends FormNames>(
   inputName: string,
-  formValues: FormValues<TInputNames>
-): inputName is TInputNames => {
+  formValues: FormValues<TFormName>
+): inputName is FormInputNames[TFormName] => {
   return inputName in formValues;
+};
+
+/**
+ * Creates `FormValues<TFormName>` object with all empty values from a given array of input names.
+ *
+ * @param inputName Array of all form input names.
+ */
+export const createFormValues = <TFormName extends FormNames>(
+  inputNames: Array<FormInputNames[TFormName]>
+): FormValues<TFormName> => {
+  const values: { [name: string]: string } = {};
+
+  for (const inputName of inputNames) {
+    values[inputName] = "";
+  }
+
+  return values as FormValues<TFormName>;
 };
 
 /**
@@ -28,13 +49,13 @@ export const isFormInputName = <TInputNames extends InputNames>(
  * @param values Form values which are used to check whether or not field is a
  * form field.
  */
-export const createFormErrorsReasons = <TInputNames extends InputNames>(
-  error: Error,
-  values: FormValues<TInputNames>
-): FormErrorReasons<TInputNames> => {
-  const errors: FormErrorReasons<TInputNames> = {};
+export const createFormErrorsReasons = <TFormName extends FormNames>(
+  error: Error | undefined,
+  values: FormValues<TFormName>
+): FormErrorReasons<TFormName> => {
+  const errors: FormErrorReasons<TFormName> = {};
 
-  if (error.details === undefined) {
+  if (error === undefined || error.details === undefined) {
     return errors;
   }
 
@@ -56,8 +77,8 @@ export const createFormErrorsReasons = <TInputNames extends InputNames>(
  *
  * @param reasons Error reasons object.
  */
-export const anyErrors = <TInputNames extends InputNames>(
-  reasons: FormErrorReasons<TInputNames>
+export const anyErrors = <TFormName extends FormNames>(
+  reasons: FormErrorReasons<TFormName>
 ) => {
   return Object.keys(reasons).length !== 0;
 };

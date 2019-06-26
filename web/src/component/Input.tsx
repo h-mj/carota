@@ -1,4 +1,4 @@
-import { ErrorReasons, Languages } from "api";
+import { ErrorReasons, Languages, Units } from "api";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled, { css } from "styled-components";
@@ -12,6 +12,7 @@ import {
 import { UNIT, BORDER_RADIUS } from "../styling/sizes";
 import { TRANSITION_DURATION } from "../styling/animations";
 import { InjectedProps } from "../store";
+import { RESET } from "../styling/stylesheets";
 
 /**
  * Input value change callback function type.
@@ -28,7 +29,23 @@ export type InputNames = TextInputNames | SwitchInputNames;
 /**
  * Union of text input names.
  */
-export type TextInputNames = "email" | "name" | "password";
+export type TextInputNames =
+  | "barcode"
+  | "carbohydrate"
+  | "email"
+  | "energy"
+  | "fat"
+  | "fibre"
+  | "monoUnsaturates"
+  | "name"
+  | "password"
+  | "polyols"
+  | "polyunsaturates"
+  | "protein"
+  | "salt"
+  | "saturates"
+  | "starch"
+  | "sugars";
 
 /**
  * Union of text input types.
@@ -40,6 +57,7 @@ type TextInputTypes = "text" | "email" | "password" | "number";
  */
 export interface SwitchInputOptions {
   language: Languages;
+  unit: Units;
 }
 
 /**
@@ -48,7 +66,8 @@ export interface SwitchInputOptions {
 const SWITCH_INPUT_OPTIONS: Readonly<
   { [InputName in SwitchInputNames]: Array<SwitchInputOptions[InputName]> }
 > = {
-  language: ["Estonian", "English", "Russian"]
+  language: ["Estonian", "English", "Russian"],
+  unit: ["g", "ml"]
 };
 
 /**
@@ -62,9 +81,22 @@ export type SwitchInputNames = keyof SwitchInputOptions;
 const TEXT_INPUT_NAME_TO_TYPE: Readonly<
   { [InputName in TextInputNames]: TextInputTypes }
 > = {
+  barcode: "number",
+  carbohydrate: "number",
   email: "email",
+  energy: "number",
+  fat: "number",
+  fibre: "number",
+  monoUnsaturates: "number",
   name: "text",
-  password: "password"
+  password: "password",
+  polyols: "number",
+  polyunsaturates: "number",
+  protein: "number",
+  salt: "number",
+  saturates: "number",
+  starch: "number",
+  sugars: "number"
 };
 
 /**
@@ -101,6 +133,11 @@ interface InputProps<TInputName extends InputNames> {
    * If reason is defined, some of the input sub-components will be colored red.
    */
   reason?: ErrorReasons;
+
+  /**
+   * Wether or not input should be tabular.
+   */
+  tabular?: boolean;
 
   /**
    * The value within the input.
@@ -180,7 +217,7 @@ export class Input<TInputName extends InputNames> extends React.Component<
 
     return (
       <SwitchInputElement hasError={reason !== undefined}>
-        {SWITCH_INPUT_OPTIONS[name].map(option => (
+        {(SWITCH_INPUT_OPTIONS[name] as any).map((option: any) => (
           <Option
             hasError={reason !== undefined}
             key={option}
@@ -189,7 +226,7 @@ export class Input<TInputName extends InputNames> extends React.Component<
             type="button"
             value={option}
           >
-            {translations!.translation.inputs[name].options[option]}
+            {(translations!.translation.inputs[name].options as any)[option]}
           </Option>
         ))}
       </SwitchInputElement>
@@ -215,7 +252,7 @@ export class Input<TInputName extends InputNames> extends React.Component<
 const Container = styled.div`
   position: relative;
   width: 100%;
-  height: ${(5 * UNIT) / 4}rem;
+  height: ${UNIT}rem;
 `;
 
 /**
@@ -227,10 +264,9 @@ const Container = styled.div`
  */
 const Border = styled.div`
   position: absolute;
-  top: ${UNIT / 8}rem;
 
   width: 100%;
-  height: ${UNIT}rem;
+  height: 100%;
 
   box-shadow: 0 0 0 1px, inset 0 0 0 1px;
   border-radius: ${BORDER_RADIUS}rem;
@@ -247,11 +283,8 @@ const Border = styled.div`
  */
 const Placeholder = styled.div`
   position: absolute;
-  top: ${UNIT / 8}rem;
   left: 50%;
-
   transform: translateX(-50%);
-  white-space: nowrap;
 
   height: ${UNIT}rem;
 
@@ -260,6 +293,8 @@ const Placeholder = styled.div`
 
   display: flex;
   align-items: center;
+
+  white-space: nowrap;
 
   pointer-events: none;
 
@@ -270,10 +305,11 @@ const Placeholder = styled.div`
  * Extra placeholder style if it is in label state.
  */
 const labelStyle = css`
-  top: 0;
+  top: -${UNIT / 8}rem;
   height: ${UNIT / 4}rem;
 
   background-color: ${BACKGROUND};
+
   font-size: 0.75rem;
   letter-spacing: 0;
 `;
@@ -283,11 +319,9 @@ const labelStyle = css`
  */
 const Error = styled.div`
   position: absolute;
-  bottom: 0;
+  bottom: -${UNIT / 8}rem;
   left: 50%;
-
   transform: translateX(-50%);
-  white-space: nowrap;
 
   display: flex;
   align-items: center;
@@ -298,9 +332,11 @@ const Error = styled.div`
   box-sizing: border-box;
 
   background-color: ${BACKGROUND};
+
   color: ${ERROR};
   font-size: 0.75rem;
   letter-spacing: 0;
+  white-space: nowrap;
 
   pointer-events: none;
 
@@ -352,10 +388,9 @@ interface InputElementProps {
  */
 const inputElementStyle = css<InputElementProps>`
   position: absolute;
-  top: ${UNIT / 8}rem;
 
   width: 100%;
-  height: ${UNIT}rem;
+  height: 100%;
 
   transition: ${TRANSITION_DURATION}s;
 
@@ -370,18 +405,7 @@ const inputElementStyle = css<InputElementProps>`
  * The actual text input element into which text is inputted.
  */
 const TextInputElement = styled.input<InputElementProps>`
-  /* Reset */
-  border: none;
-  outline: none;
-  box-shadow: none;
-  margin: 0;
-  padding: 0;
-  background: none;
-  color: inherit;
-  font-family: inherit;
-  font-size: inherit;
-  letter-spacing: inherit;
-
+  ${RESET};
   ${inputElementStyle};
 
   padding: 0 ${UNIT / 4}rem;
@@ -423,17 +447,7 @@ interface OptionProps {
  * Option component that is within `SwitchInputElement` component.
  */
 const Option = styled.button<OptionProps>`
-  /* Reset */
-  border: none;
-  outline: none;
-  box-shadow: none;
-  margin: 0;
-  padding: 0;
-  background: none;
-  color: inherit;
-  font-family: inherit;
-  font-size: inherit;
-  letter-spacing: inherit;
+  ${RESET};
 
   width: 100%;
   height: 100%;

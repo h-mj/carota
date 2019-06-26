@@ -121,7 +121,7 @@ interface NotificationContainerProps {
   /**
    * Array of active notifications.
    */
-  notifications: Array<Notification<NotificationNames>>;
+  notifications: Readonly<Array<Notification<NotificationNames>>>;
 }
 
 @inject("translations", "view")

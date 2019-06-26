@@ -2,6 +2,7 @@ import * as React from "react";
 import { InjectedProps } from "../store";
 import { Administration } from "./Administration";
 import { Diet } from "./Diet";
+import { FoodEditor } from "./FoodEditor";
 import { History } from "./History";
 import { Home } from "./Home";
 import { Login } from "./Login";
@@ -18,6 +19,7 @@ import { Parameters } from "./Stage";
 interface Scenes {
   administration: Administration;
   diet: Diet;
+  foodEditor: FoodEditor;
   history: History;
   home: Home;
   login: Login;
@@ -72,7 +74,7 @@ export abstract class Scene<
 /**
  * Scene names that do not require authentication.
  */
-export const NO_AUTHENTICATION_SCENE_NAMES: Readonly<SceneNames[]> = [
+export const NO_AUTHENTICATION_SCENE_NAMES: Readonly<Array<SceneNames>> = [
   "login",
   "register"
 ];
@@ -80,7 +82,7 @@ export const NO_AUTHENTICATION_SCENE_NAMES: Readonly<SceneNames[]> = [
 /**
  * Scene names that do not require navigation bar.
  */
-export const NO_NAVIGATION_SCENE_NAMES: Readonly<SceneNames[]> = [
+export const NO_NAVIGATION_SCENE_NAMES: Readonly<Array<SceneNames>> = [
   "login",
   "logout",
   "register"

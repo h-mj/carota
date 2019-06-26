@@ -5,20 +5,9 @@ import * as React from "react";
 import { Scene } from "./Scene";
 import { Stage } from "./Stage";
 import { Error } from "../component/Error";
-import {
-  Form,
-  FormErrorReasons,
-  FormSubmitHandler,
-  FormValues
-} from "../component/Form";
-import { InputChangeHandler, InputValueType } from "../component/Input";
-import { Thin } from "../component/Thin";
-import { createFormErrorsReasons, setTimeout } from "../utility/forms";
-
-/**
- * Union of all form input names this scene uses.
- */
-type InputNames = "email" | "language" | "name" | "password";
+import { Form, FormSubmitHandler } from "../component/Form";
+import { Thin } from "../component/container/Thin";
+import { setTimeout } from "../utility/forms";
 
 /**
  * Scene that renders a form used for registration.
@@ -26,21 +15,6 @@ type InputNames = "email" | "language" | "name" | "password";
 @inject("auth", "view")
 @observer
 export class Register extends Scene<"register"> {
-  /**
-   * Form input field values.
-   */
-  @observable private values: FormValues<InputNames> = {
-    email: "",
-    language: "",
-    name: "",
-    password: ""
-  };
-
-  /**
-   * Form input field error reasons.
-   */
-  @observable private reasons: FormErrorReasons<InputNames> = {};
-
   /**
    * Whether or not `invitationId` in `parameters` props is valid. `undefined`
    * if the value has not been retrieved yet.
@@ -78,36 +52,18 @@ export class Register extends Scene<"register"> {
 
     return (
       <Thin>
-        <Form
-          inputNames={["language", "name", "email", "password"]}
-          name="register"
-          onChange={this.onChange}
-          onSubmit={this.onSubmit}
-          reasons={this.reasons}
-          values={this.values}
-        />
+        <Form name="register" onSubmit={this.onSubmit} />
       </Thin>
     );
   }
-
-  /**
-   * Updates changed field value.
-   */
-  @action
-  private onChange: InputChangeHandler<InputNames> = (
-    name: InputNames,
-    value: InputValueType<InputNames>
-  ) => {
-    (this.values[name] as string) = value;
-  };
 
   /**
    * Sends registration form data to server and either redirects user to home
    * stage or displays occurred errors.
    */
   @action
-  private onSubmit: FormSubmitHandler = async () => {
-    const { email, language, name, password } = this.values;
+  private onSubmit: FormSubmitHandler<"register"> = async values => {
+    const { email, language, name, password } = values;
     const { invitationId } = this.props.parameters!;
 
     this.props.view!.wait(Register.WAIT_REASON);
@@ -126,10 +82,10 @@ export class Register extends Scene<"register"> {
     this.props.view!.done(Register.WAIT_REASON);
 
     if (error === undefined) {
-      return this.props.view!.redirect(Stage.HOME);
+      this.props.view!.redirect(Stage.HOME);
     }
 
-    this.reasons = createFormErrorsReasons(error, this.values);
+    return error;
   };
 
   /**

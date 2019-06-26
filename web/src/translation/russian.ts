@@ -14,7 +14,18 @@ export const russian: Translation = {
     }
   },
   inputs: {
+    barcode: {
+      name: "Штрихкод",
+      placeholder: "Введите штрихкод",
+      reasons: {}
+    },
+    carbohydrate: {
+      name: "Углеводы",
+      placeholder: "Введите количество углеводов",
+      reasons: {}
+    },
     email: {
+      name: "Адрес электронной почты",
       placeholder: "Введите адрес электронной почты",
       reasons: {
         conflict:
@@ -23,29 +34,104 @@ export const russian: Translation = {
         invalid: "Пожалуйста, введите действительный адрес электронной почты"
       }
     },
+    energy: {
+      name: "Энергетическая ценность",
+      placeholder: "Введите энергетическая ценность",
+      reasons: {}
+    },
+    fat: {
+      name: "Жиры",
+      placeholder: "Введите количество жиров",
+      reasons: {}
+    },
+    fibre: {
+      name: "Пищевые волокна",
+      placeholder: "Введите количество пищевых волокон",
+      reasons: {}
+    },
     language: {
+      name: "Язык",
       options: {
         English: "English",
         Estonian: "eesti",
         Russian: "русский"
       },
       placeholder: "Выберите язык",
-      reasons: { empty: "Пожалуйста, выберите язык" }
+      reasons: {
+        empty: "Пожалуйста, выберите язык"
+      }
+    },
+    monoUnsaturates: {
+      name: "Мононенасыщенные жирные кислоты",
+      placeholder: "Введите количество мононенасыщенных жирных кислот",
+      reasons: {}
     },
     name: {
-      placeholder: "Введите ваше имя",
-      reasons: { empty: "Пожалуйста, введите ваше имя" }
+      name: "Имя",
+      placeholder: "Введите имя",
+      reasons: {
+        empty: "Пожалуйста, введите имя"
+      }
     },
     password: {
+      name: "Пароль",
       placeholder: "Введите пароль",
       reasons: {
         empty: "Пожалуйста, введите пароль",
         invalid: "Пароль должен содержать не менее 8 символов"
       }
+    },
+    polyols: {
+      name: "Многоатомные спирты",
+      placeholder: "Введите количество многоатомных спиртов",
+      reasons: {}
+    },
+    polyunsaturates: {
+      name: "Полиненасыщенные жирные кислоты",
+      placeholder: "Введите количество полиненасыщенных жирных кислот",
+      reasons: {}
+    },
+    protein: {
+      name: "Белки",
+      placeholder: "Введите количество белка",
+      reasons: {}
+    },
+    salt: {
+      name: "Соль",
+      placeholder: "Введите количество соли",
+      reasons: {}
+    },
+    saturates: {
+      name: "Насыщенные жирные кислоты",
+      placeholder: "Введите количество насыщенных жирных кислот",
+      reasons: {}
+    },
+    starch: {
+      name: "Крахмал",
+      placeholder: "Введите количество крахмала",
+      reasons: {}
+    },
+    sugars: {
+      name: "Сахара",
+      placeholder: "Введите количество сахаров",
+      reasons: {}
+    },
+    unit: {
+      name: "Единица",
+      options: {
+        g: "г",
+        ml: "мл"
+      },
+      placeholder: "Выберите единицу",
+      reasons: {}
     }
   },
   forms: {
     login: { submit: "Вход", title: "Вход" },
+    nutritionInformation: {
+      submit: "Сохранить",
+      title: "Информация о питании"
+    },
     register: { submit: "Завести аккаунт", title: "Завести аккаунт" }
   },
   notifications: {
@@ -56,6 +142,7 @@ export const russian: Translation = {
   scenes: {
     administration: { title: "Администрация" },
     diet: { title: "Диета" },
+    foodEditor: { title: "Изменить продукт" },
     history: { title: "История" },
     home: { title: "Главная" },
     login: { title: "Вход" },

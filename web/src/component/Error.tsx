@@ -1,7 +1,8 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
-import { Thin } from "./Thin";
+import { Center } from "./container/Center";
+import { Medium } from "./container/Medium";
 import { InjectedProps } from "../store";
 import { DEFAULT_LABEL } from "../styling/colors";
 import { UNIT } from "../styling/sizes";
@@ -71,24 +72,15 @@ export class Error<TErrorName extends ErrorNames> extends React.Component<
     }
 
     return (
-      <Container>
-        <Title>{title}</Title>
-        <Message>{message}</Message>
-      </Container>
+      <Center>
+        <Medium>
+          <Title>{title}</Title>
+          <Message>{message}</Message>
+        </Medium>
+      </Center>
     );
   }
 }
-
-/**
- * Component that contains error title and message text components.
- */
-const Container = styled(Thin)`
-  max-width: ${12 * UNIT}rem;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-`;
 
 /**
  * Error title text component.

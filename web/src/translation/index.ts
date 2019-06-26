@@ -85,6 +85,11 @@ type InputsTranslation = {
  */
 interface InputTranslation {
   /**
+   * Input name.
+   */
+  name: string;
+
+  /**
    * Input placeholder text.
    */
   placeholder: string;

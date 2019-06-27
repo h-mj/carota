@@ -141,7 +141,7 @@ interface FormTranslation {
   /**
    * Form title text that will be shown before input fields.
    */
-  title?: string;
+  title: string;
 }
 
 /**

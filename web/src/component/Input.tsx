@@ -10,7 +10,7 @@ import {
   BACKGROUND
 } from "../styling/colors";
 import { UNIT, BORDER_RADIUS } from "../styling/sizes";
-import { TRANSITION_DURATION } from "../styling/animations";
+import { TIMING_FUNCTION, TRANSITION_DURATION } from "../styling/animations";
 import { InjectedProps } from "../store";
 import { RESET } from "../styling/stylesheets";
 
@@ -265,11 +265,10 @@ const Border = styled.div`
 
   box-shadow: 0 0 0 1px, inset 0 0 0 1px;
   border-radius: ${BORDER_RADIUS}rem;
-  box-sizing: border-box;
 
   pointer-events: none;
 
-  transition: ${TRANSITION_DURATION}s;
+  transition: ${TRANSITION_DURATION}s ${TIMING_FUNCTION};
 `;
 
 /**
@@ -281,9 +280,9 @@ const Placeholder = styled.div`
   left: 50%;
   transform: translateX(-50%);
 
-  height: ${UNIT}rem;
+  height: 100%;
 
-  padding: 0 0.25rem;
+  padding: 0 ${UNIT / 12}rem;
   box-sizing: border-box;
 
   display: flex;
@@ -293,7 +292,7 @@ const Placeholder = styled.div`
 
   pointer-events: none;
 
-  transition: ${TRANSITION_DURATION}s;
+  transition: ${TRANSITION_DURATION}s ${TIMING_FUNCTION};
 `;
 
 /**
@@ -323,7 +322,7 @@ const Error = styled.div`
 
   height: ${UNIT / 4}rem;
 
-  padding: 0 0.25rem;
+  padding: 0 ${UNIT / 12}rem;
   box-sizing: border-box;
 
   background-color: ${BACKGROUND};
@@ -335,7 +334,7 @@ const Error = styled.div`
 
   pointer-events: none;
 
-  transition: ${TRANSITION_DURATION}s;
+  transition: ${TRANSITION_DURATION}s ${TIMING_FUNCTION};
 `;
 
 /**
@@ -387,7 +386,7 @@ const inputElementStyle = css<InputElementProps>`
   width: 100%;
   height: 100%;
 
-  transition: ${TRANSITION_DURATION}s;
+  transition: ${TRANSITION_DURATION}s ${TIMING_FUNCTION};
 
   & + * + ${Error}, & + * + * + ${Error} {
     opacity: ${props => (props.hasError ? 1 : 0)};
@@ -444,19 +443,19 @@ interface OptionProps {
 const Option = styled.button<OptionProps>`
   ${RESET};
 
-  width: 100%;
-  height: 100%;
-
   display: flex;
   align-items: center;
   justify-content: center;
+
+  width: 100%;
+  height: 100%;
 
   color: ${props =>
     props.isSelected ? ACTIVE : props.hasError ? ERROR : DEFAULT_LABEL};
 
   cursor: pointer;
 
-  transition: ${TRANSITION_DURATION}s;
+  transition: ${TRANSITION_DURATION}s ${TIMING_FUNCTION};
 `;
 
 /**

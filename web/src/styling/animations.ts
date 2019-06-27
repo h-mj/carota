@@ -3,7 +3,12 @@ import { keyframes } from "styled-components";
 /**
  * Default transition duration in seconds.
  */
-export const TRANSITION_DURATION = .125;
+export const TRANSITION_DURATION = 0.125;
+
+/**
+ * Animation timing function.
+ */
+export const TIMING_FUNCTION = "cubic-bezier(0.5, 0, 0.2, 1)";
 
 /**
  * Animation that fades a component in.

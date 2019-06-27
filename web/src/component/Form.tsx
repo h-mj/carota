@@ -114,7 +114,7 @@ export class Form<TFormName extends FormNames> extends React.Component<
 
     return (
       <FormElement noValidate={true} onSubmit={this.handleSubmit}>
-        {title !== undefined && <Title>{title}</Title>}
+        <Title>{title}</Title>
 
         {(FORM_INPUTS[name] as FormInputNames[TFormName][]).map(
           (inputName, index) => (
@@ -171,6 +171,7 @@ const FormElement = styled.form`
     margin-bottom: ${UNIT / 4}rem;
   }
 
+  & > *:first-child,
   & > *:last-child {
     margin-bottom: 0;
   }
@@ -180,13 +181,14 @@ const FormElement = styled.form`
  * Title message component on top of the form.
  */
 const Title = styled.div`
-  height: ${2 * UNIT}rem;
+  height: ${UNIT}rem;
+  padding-bottom: ${UNIT}rem;
 
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 
-  font-size: 2rem;
-  letter-spacing: -0.022em;
+  font-size: 2.5rem;
+  letter-spacing: -0.022rem;
   text-align: center;
 `;

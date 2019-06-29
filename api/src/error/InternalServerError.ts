@@ -1,5 +1,5 @@
 import { HttpError } from "./HttpError";
-import { ErrorDetail } from "../types";
+import { ErrorDetail } from "../../types";
 
 /**
  * HTTP 500 (Internal Server Error) error.

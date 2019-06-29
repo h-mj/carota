@@ -2,7 +2,7 @@
   "name": "api",
   "version": "0.0.0",
   "private": true,
-  "types": "src/types/index.ts",
+  "types": "types/index.ts",
   "scripts": {
     "start": "nodemon -x node -r ts-node/register -r dotenv/config src/index.ts",
     "typeorm": "node -r ts-node/register ./node_modules/typeorm/cli.js"

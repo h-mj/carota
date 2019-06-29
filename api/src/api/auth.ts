@@ -1,15 +1,15 @@
 import * as Router from "koa-router";
-import { hash, compare } from "bcryptjs";
-import { defineNoAuth } from "./utility/routes";
-import { Schema, is } from "./middleware/validator";
-import { LANGUAGES_ENUM, Account } from "../entity/Account";
+import { compare, hash } from "bcryptjs";
+import { signToken } from "./middleware/authenticator";
+import { is, Schema } from "./middleware/validator";
+import { Account, LANGUAGES_ENUM } from "../entity/Account";
 import { Invitation } from "../entity/Invitation";
 import {
-  createInvalidCredentialsError,
-  createIdNotFoundError
+  createIdNotFoundError,
+  createInvalidCredentialsError
 } from "./utility/errors";
 import { callCatch } from "./utility/queries";
-import { signToken } from "./middleware/authenticator";
+import { defineNoAuth } from "./utility/routes";
 
 /**
  * Router, which handles all routes related to authentication.

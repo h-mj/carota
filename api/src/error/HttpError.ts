@@ -1,4 +1,4 @@
-import { ErrorDetail, ErrorResponse } from "../types";
+import { ErrorDetail, ErrorResponse } from "../../types";
 
 /**
  * A HTTP error.

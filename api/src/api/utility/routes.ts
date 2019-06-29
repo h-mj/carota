@@ -1,6 +1,6 @@
 import { Middleware } from "koa";
 import * as Router from "koa-router";
-import { Route } from "../../types";
+import { Route } from "../../../types";
 import { Schema, validator, ValidationState } from "../middleware/validator";
 import {
   authenticator,

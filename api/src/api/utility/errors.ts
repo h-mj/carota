@@ -1,13 +1,13 @@
 import {
-  ErrorDetail,
-  ErrorReasons,
   ErrorContext,
-  ErrorContextElement
-} from "../../types";
+  ErrorContextElement,
+  ErrorDetail,
+  ErrorReasons
+} from "../../../types";
 import { ValidationError } from "@hapi/joi";
 import { BadRequestError } from "../../error/BadRequestError";
-import { UnauthorizedError } from "../../error/UnauthorizedError";
 import { InternalServerErrorError } from "../../error/InternalServerError";
+import { UnauthorizedError } from "../../error/UnauthorizedError";
 
 /**
  * Function that is used as `onerror` function in `bodyParser` options.
@@ -174,7 +174,7 @@ export const createValidationError = (error: ValidationError) => {
       template !== undefined &&
       context !== undefined
     ) {
-      for (const key of Object.keys(template)) {
+      for (const key in template) {
         const { name, stringify, transform } = template[key];
         const value = (transform || DEFAULT_TRANSFORM)(detail.context[key]);
 

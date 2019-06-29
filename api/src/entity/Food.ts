@@ -1,11 +1,11 @@
 import {
   BaseEntity,
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { Enum, Units, FoodSaveData } from "../types";
+import { Enum, FoodSaveData, Units } from "../../types";
 import { Account } from "./Account";
 
 /**

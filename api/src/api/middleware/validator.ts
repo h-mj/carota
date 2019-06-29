@@ -1,5 +1,5 @@
+import { Body, Data, Route } from "../../../types";
 import { Middleware } from "koa";
-import { Body, Data, Route } from "../../types";
 import * as Joi from "@hapi/joi";
 import { createValidationError } from "../utility/errors";
 

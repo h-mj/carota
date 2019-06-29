@@ -5,8 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn
 } from "typeorm";
-
-import { AccountRights, AccountTypes } from "../types";
+import { AccountRights, AccountTypes } from "../../types";
 import { Account, ACCOUNT_RIGHTS_ENUM, ACCOUNT_TYPES_ENUM } from "./Account";
 
 /**

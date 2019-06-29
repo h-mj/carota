@@ -1,5 +1,5 @@
 import { HttpError } from "./HttpError";
-import { ErrorDetail } from "../types";
+import { ErrorDetail } from "../../types";
 
 /**
  * HTTP 403 (Forbidden) error.

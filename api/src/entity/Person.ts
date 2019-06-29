@@ -1,5 +1,5 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { Enum, Sexes } from "../types";
+import { Enum, Sexes } from "../../types";
 
 /**
  * Object that is used as sex enumeration.

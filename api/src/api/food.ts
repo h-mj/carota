@@ -1,8 +1,8 @@
 import * as Router from "koa-router";
 import { Schema, is } from "./middleware/validator";
 import { UNITS_ENUM, Food } from "../entity/Food";
-import { define } from "./utility/routes";
 import { createIdNotFoundError } from "./utility/errors";
+import { define } from "./utility/routes";
 
 /**
  * Router, which handles all routes related to food.

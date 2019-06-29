@@ -1,10 +1,7 @@
 import * as Koa from "koa";
-
 import * as bodyParser from "koa-bodyparser";
-
 import { authRouter } from "./auth";
 import { foodRouter } from "./food";
-
 import { bodyParserOnError } from "./utility/errors";
 
 /**
@@ -18,9 +15,7 @@ const BODY_PARSER_OPTIONS: Readonly<bodyParser.Options> = {
 /**
  * Application that handles all requests to the API.
  */
-export const api = new Koa();
-
-api
+export const api = new Koa()
   .use(bodyParser(BODY_PARSER_OPTIONS))
   .use(authRouter.routes())
   .use(foodRouter.routes());

@@ -7,9 +7,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn
 } from "typeorm";
-
-import { AccountRights, AccountTypes, Enum, Languages } from "../types";
-
+import { AccountRights, AccountTypes, Enum, Languages } from "../../types";
 import { Person } from "./Person";
 
 /**

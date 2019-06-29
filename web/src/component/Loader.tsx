@@ -1,4 +1,4 @@
-import { observable, action } from "mobx";
+import { action, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
@@ -22,47 +22,50 @@ interface LoaderProps {
 @observer
 export class Loader extends React.Component<LoaderProps> {
   /**
-   * Whether or not loader should be visible.
+   * Timeout ID that sets `timeoutId` back to `0`.
    */
-  @observable private isVisible: boolean = false;
+  @observable private timeoutId = 0;
 
   /**
-   * Timeout ID that sets visibility to false after some timeout.
+   * Previous value of `isLoading` prop.
    */
-  private timeoutId: number = 0;
+  private previousIsLoading = false;
+
+  /**
+   * Sets fade out timeout if needed and updates `previousIsLoading` value.
+   */
+  public componentWillUpdate(props: LoaderProps) {
+    const { isLoading } = props;
+
+    // If we were loading but not anymore, fade out.
+    if (this.previousIsLoading && !isLoading) {
+      window.clearTimeout(this.timeoutId);
+      this.timeoutId = window.setTimeout(this.hide, 1000 * TRANSITION_DURATION);
+    }
+
+    this.previousIsLoading = isLoading;
+  }
 
   /**
    * Renders loader component.
    */
   public render() {
-    const { isLoading: loading } = this.props;
-
-    if (loading) {
-      this.isVisible = true;
-      window.clearTimeout(this.timeoutId);
-      this.timeoutId = 0;
-    } else if (this.isVisible) {
-      window.clearTimeout(this.timeoutId);
-      this.timeoutId = window.setTimeout(this.hide, 1000 * TRANSITION_DURATION);
+    if (this.props.isLoading || this.timeoutId !== 0) {
+      return (
+        <Overlay isActive={this.props.isLoading}>
+          <Loading />
+        </Overlay>
+      );
     }
 
-    if (!this.isVisible) {
-      return null;
-    }
-
-    return (
-      <Overlay isActive={loading}>
-        <Loading />
-      </Overlay>
-    );
+    return null;
   }
 
   /**
-   * Sets visibility to false and resets timeout ID.
+   * Resets `timeoutId` back to `0`.
    */
   @action
   private hide = () => {
-    this.isVisible = false;
     this.timeoutId = 0;
   };
 }

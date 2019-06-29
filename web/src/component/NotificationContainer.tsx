@@ -108,7 +108,7 @@ export class Notification<TNotificationName extends NotificationNames> {
 }
 
 /**
- * Union of all notifications.
+ * Union of all possible notification classes.
  */
 export type Notifications = {
   [NotificationName in NotificationNames]: Notification<NotificationName>
@@ -121,7 +121,7 @@ interface NotificationContainerProps {
   /**
    * Array of active notifications.
    */
-  notifications: Readonly<Array<Notification<NotificationNames>>>;
+  notifications: Readonly<Array<Notifications>>;
 }
 
 @inject("translations", "view")
@@ -133,41 +133,42 @@ export class NotificationContainer extends React.Component<
    * Stores all notifications that should be visible. Also includes "fading" notifications
    * that are no longer included in `notifications` prop.
    */
-  @observable private visibleNotifications: Array<
-    Notification<NotificationNames>
-  > = [];
+  @observable private visibleNotifications: Array<Notifications> = [];
 
   /**
-   * Set containing notifications that are no longer active and are fading away.
+   * Adds new notifications to `visibleNotifications` array, and fades inactive notifications out.
    */
-  @observable private fadingNotificationIds: Set<string> = new Set();
+  public componentWillUpdate(props: NotificationContainerProps) {
+    const { notifications } = props;
 
-  /**
-   * Adds new notifications to `visibleNotifications` array, adds visible but no
-   * longer active notification IDs to `fadingNotificationIds` and renders all
-   * visible notifications.
-   */
-  public render() {
-    const { notifications } = this.props;
-
-    // Add new notifications to `visibleNotifications`.
+    // Add new notifications to `visibleNotifications`,
     for (const notification of notifications) {
       if (!this.visibleNotifications.includes(notification)) {
         this.visibleNotifications.push(notification);
       }
     }
 
-    // Make inactive notifications fade away.
+    // and make inactive notifications fade out.
     for (const notification of this.visibleNotifications) {
-      if (
-        !notifications.includes(notification) &&
-        !this.fadingNotificationIds.has(notification.id)
-      ) {
+      if (!notifications.includes(notification)) {
         this.fadeNotification(notification);
       }
     }
+  }
 
-    if (this.visibleNotifications.length === 0) {
+  /**
+   * Renders all visible notifications.
+   */
+  public render() {
+    // `this.visibleNotifications.length` is always greater or equal to
+    // `this.props.notifications.length`, so the first part of and statement is
+    // useless. The reason why it is included is that otherwise this component
+    // won't be rerendered, because the reference to array doesn't change and
+    // MobX thinks nothing will be changed as a result of rendering
+    if (
+      this.props.notifications.length === 0 &&
+      this.visibleNotifications.length === 0
+    ) {
       return null;
     }
 
@@ -181,9 +182,8 @@ export class NotificationContainer extends React.Component<
   /**
    * Renders one of the notifications.
    */
-  private renderNotification = (
-    notification: Notification<NotificationNames>
-  ) => {
+  private renderNotification = (notification: Notifications) => {
+    const { notifications } = this.props;
     const { id, name, parameters } = notification;
 
     let message = this.props.translations!.translation.notifications[name]
@@ -200,7 +200,7 @@ export class NotificationContainer extends React.Component<
     return (
       <NotificationElement
         key={id}
-        isActive={!this.fadingNotificationIds.has(id)}
+        isActive={notifications.includes(notification)}
         onClick={() => this.props.view!.conceal(notification)}
         type={NAME_TO_TYPE[name]}
       >
@@ -210,20 +210,15 @@ export class NotificationContainer extends React.Component<
   };
 
   /**
-   * Removes an notification from both `visibleNotifications` array and
-   * `fadingNotificationIds` set.
+   * Removes an notification from `visibleNotifications` array after a timeout.
    */
   @action
-  private async fadeNotification(
-    notification: Notification<NotificationNames>
-  ) {
-    this.fadingNotificationIds.add(notification.id);
+  private async fadeNotification(notification: Notifications) {
     await setTimeout(TRANSITION_DURATION);
     this.visibleNotifications.splice(
       this.visibleNotifications.indexOf(notification),
       1
     );
-    this.fadingNotificationIds.delete(notification.id);
   }
 }
 

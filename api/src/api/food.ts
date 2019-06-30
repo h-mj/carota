@@ -23,13 +23,28 @@ const SAVE_SCHEMA: Schema<"/food/save"> = {
   energy: is.number().precision(2),
   fat: is.number().precision(2),
   saturates: is.number().precision(2),
-  monoUnsaturates: is.number().precision(2),
-  polyunsaturates: is.number().precision(2),
+  monoUnsaturates: is
+    .number()
+    .precision(2)
+    .optional(),
+  polyunsaturates: is
+    .number()
+    .precision(2)
+    .optional(),
   carbohydrate: is.number().precision(2),
   sugars: is.number().precision(2),
-  polyols: is.number().precision(2),
-  starch: is.number().precision(2),
-  fibre: is.number().precision(2),
+  polyols: is
+    .number()
+    .precision(2)
+    .optional(),
+  starch: is
+    .number()
+    .precision(2)
+    .optional(),
+  fibre: is
+    .number()
+    .precision(2)
+    .optional(),
   protein: is.number().precision(2),
   salt: is.number().precision(2)
 };

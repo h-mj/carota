@@ -3,13 +3,13 @@ import { inject, observer } from "mobx-react";
 import styled from "styled-components";
 import * as React from "react";
 import { Button } from "./Button";
-import { Input, InputChangeHandler, InputValueType } from "./Input";
+import { Input, InputChangeHandler, InputNames, InputValueType } from "./Input";
 import { InjectedProps } from "../store";
 import { UNIT } from "../styling/sizes";
 import {
   anyErrors,
   createFormErrorsReasons,
-  createFormValues
+  createInputValues
 } from "../utility/forms";
 import { action, observable } from "mobx";
 
@@ -38,19 +38,33 @@ const FORM_INPUTS: Readonly<
 };
 
 /**
- * Form input errors type that maps input name to its error reason. `undefined`
+ * Input errors type that maps input name to its error reason. `undefined`
  * if input doesn't have any errors.
  */
-export type FormErrorReasons<TFormName extends FormNames> = {
-  [InputName in FormInputNames[TFormName]]?: ErrorReasons
+export type InputErrorReasons<TInputNames extends InputNames> = {
+  [InputName in TInputNames]?: ErrorReasons
 };
 
 /**
- * Form input values type that maps input name to its value.
+ * Input errors type of given form.
  */
-export type FormValues<TFormName extends FormNames> = {
-  [InputName in FormInputNames[TFormName]]: InputValueType<InputName>
+export type FormErrorReasons<TFormName extends FormNames> = InputErrorReasons<
+  FormInputNames[TFormName]
+>;
+
+/**
+ * Input values type where input name is mapped to its value.
+ */
+export type InputValues<TInputNames extends InputNames> = {
+  [InputName in TInputNames]: InputValueType<InputName>
 };
+
+/**
+ * Input values type of given form.
+ */
+export type FormValues<TFormName extends FormNames> = InputValues<
+  FormInputNames[TFormName]
+>;
 
 /**
  * InputChangeHandler type based on form name.
@@ -98,7 +112,7 @@ export class Form<TFormName extends FormNames> extends React.Component<
   /**
    * Form input field values.
    */
-  @observable private values = createFormValues(FORM_INPUTS[this.props.name]);
+  @observable private values = createInputValues(FORM_INPUTS[this.props.name]);
 
   /**
    * Form input field error reasons.
@@ -135,7 +149,7 @@ export class Form<TFormName extends FormNames> extends React.Component<
   }
 
   /**
-   * Updates changed field value.
+   * Updates changed input value.
    */
   @action
   private handleChange: FormInputChangeHandler<TFormName> = (name, value) => {

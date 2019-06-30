@@ -26,6 +26,8 @@ export type Stages = {
 interface Routes {
   "/administration": To<"administration">;
   "/diet": To<"diet">;
+  "/food/create": To<"foodEditor">;
+  "/food/{id}/edit": To<"foodEditor">;
   "/history": To<"history">;
   "/": To<"home">;
   "/logout": To<"logout">;
@@ -93,6 +95,8 @@ export const ROUTES: Readonly<
 > = {
   "/administration": "administration",
   "/diet": "diet",
+  "/food/create": "foodEditor",
+  "/food/{id}/edit": "foodEditor",
   "/logout": "logout",
   "/history": "history",
   "/": "home",

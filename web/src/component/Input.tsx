@@ -118,6 +118,11 @@ interface InputProps<TInputName extends InputNames> {
   autoFocus?: boolean;
 
   /**
+   * Whether or not only the input component itself should be rendered.
+   */
+  basic?: boolean;
+
+  /**
    * Name of this input. Used as one of the callback function arguments.
    */
   name: TInputName;
@@ -158,10 +163,14 @@ export class Input<TInputName extends InputNames> extends React.Component<
    * Renders this component.
    */
   public render() {
-    const { name, reason, translations } = this.props;
+    const { basic, name, reason, translations } = this.props;
 
     if (reason !== undefined) {
       this.reason = reason;
+    }
+
+    if (basic === true) {
+      return this.renderInput();
     }
 
     const { placeholder, reasons } = translations!.translation.inputs[name];
@@ -171,10 +180,7 @@ export class Input<TInputName extends InputNames> extends React.Component<
 
     return (
       <Container>
-        {name in SWITCH_INPUT_OPTIONS
-          ? this.renderSwitchInput(name as SwitchInputNames)
-          : this.renderTextInput(name as TextInputNames)}
-
+        {this.renderInput()}
         <Border />
         <Placeholder>{placeholder}</Placeholder>
         {message !== undefined && <Error>{message}</Error>}
@@ -183,16 +189,25 @@ export class Input<TInputName extends InputNames> extends React.Component<
   }
 
   /**
+   * Renders the actual input component.
+   */
+  private renderInput = () =>
+    this.props.name in SWITCH_INPUT_OPTIONS
+      ? this.renderSwitchInput(this.props.name as SwitchInputNames)
+      : this.renderTextInput(this.props.name as TextInputNames);
+
+  /**
    * Renders a text input named `name`.
    *
    * @param name Name of the text input.
    */
   private renderTextInput(name: TextInputNames) {
-    const { autoFocus, reason, value } = this.props;
+    const { autoFocus, basic, reason, value } = this.props;
 
     return (
       <TextInputElement
         autoFocus={autoFocus}
+        basic={basic === true}
         hasError={reason !== undefined}
         name={name}
         onChange={this.handleChange}
@@ -208,10 +223,13 @@ export class Input<TInputName extends InputNames> extends React.Component<
    * @param name Name of the switch input.
    */
   private renderSwitchInput(name: SwitchInputNames) {
-    const { reason, value, translations } = this.props;
+    const { basic, reason, value, translations } = this.props;
 
     return (
-      <SwitchInputElement hasError={reason !== undefined}>
+      <SwitchInputElement
+        basic={basic === true}
+        hasError={reason !== undefined}
+      >
         {(SWITCH_INPUT_OPTIONS[name] as any).map((option: any) => (
           <Option
             hasError={reason !== undefined}
@@ -372,6 +390,11 @@ const errorColors = css`
  */
 interface InputElementProps {
   /**
+   * Whether or not only input component is rendered.
+   */
+  basic: boolean;
+
+  /**
    * Whether or not there is an error.
    */
   hasError: boolean;
@@ -381,7 +404,7 @@ interface InputElementProps {
  * Style that is shared between all types of inputs.
  */
 const inputElementStyle = css<InputElementProps>`
-  position: absolute;
+  position: ${props => (props.basic ? "initial" : "absolute")};
 
   width: 100%;
   height: 100%;
@@ -402,8 +425,12 @@ const TextInputElement = styled.input<InputElementProps>`
   ${RESET};
   ${inputElementStyle};
 
+  flex: 1;
+
   padding: 0 ${UNIT / 4}rem;
   box-sizing: border-box;
+
+  text-align: ${props => (props.basic ? "right" : "left")};
 
   &:focus + * + ${Placeholder},
   &:not([value=""]) + * + ${Placeholder},

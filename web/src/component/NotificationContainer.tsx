@@ -2,7 +2,7 @@ import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled, { keyframes } from "styled-components";
-import { InjectedProps } from "../store";
+import { Component } from "./Component";
 import { fadeIn, fadeOut, TRANSITION_DURATION } from "../styling/animations";
 import { BACKGROUND, DEFAULT_BORDER, ERROR } from "../styling/colors";
 import { BORDER_RADIUS, UNIT } from "../styling/sizes";
@@ -124,10 +124,28 @@ interface NotificationContainerProps {
   notifications: Readonly<Array<Notifications>>;
 }
 
+/**
+ * Type that maps notification names to their translations.
+ */
+type NotificationContainerTranslation = {
+  [NotificationName in NotificationNames]: NotificationTranslation
+};
+
+/**
+ * Translations of an notification component.
+ */
+interface NotificationTranslation {
+  message: string;
+}
+
+/**
+ * Component that displays all notifications in the bottom left corner.
+ */
 @inject("translations", "view")
 @observer
-export class NotificationContainer extends React.Component<
-  NotificationContainerProps & InjectedProps
+export class NotificationContainer extends Component<
+  NotificationContainerProps,
+  NotificationContainerTranslation
 > {
   /**
    * Stores all notifications that should be visible. Also includes "fading" notifications
@@ -186,8 +204,7 @@ export class NotificationContainer extends React.Component<
     const { notifications } = this.props;
     const { id, name, parameters } = notification;
 
-    let message = this.props.translations!.translation.notifications[name]
-      .message;
+    let message = this.translation[name].message;
 
     // Replace message parameters with their values.
     for (const parameter in parameters) {

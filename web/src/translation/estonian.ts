@@ -1,16 +1,23 @@
 import { Translation } from ".";
 
 export const estonian: Translation = {
-  errors: {
-    invalidInvitation: {
-      title:
-        "Vabandame, selle konto loomise lehekülje internetiaadress on kehtetu.",
-      message:
-        "Selle internetiaadressi abil on konto juba loodud või on tegemist vale aadressiga. Kui te pole kontot selle aadressiga loonud, palun võtke ühendust teid kutsunud isikuga."
+  components: {
+    Error: {
+      invalidInvitation: {
+        title:
+          "Vabandame, selle konto loomise lehekülje internetiaadress on kehtetu.",
+        message:
+          "Selle internetiaadressi abil on konto juba loodud või on tegemist vale aadressiga. Kui te pole kontot selle aadressiga loonud, palun võtke ühendust teid kutsunud isikuga."
+      },
+      unknown: {
+        title: "Vabandame, soovitud lehekülge ei leitud.",
+        message: "404"
+      }
     },
-    unknown: {
-      title: "Vabandame, soovitud lehekülge ei leitud.",
-      message: "404"
+    NotificationContainer: {
+      loginInvalidCredentials: {
+        message: "Vale e-posti aadress või parool."
+      }
     }
   },
   inputs: {
@@ -128,11 +135,6 @@ export const estonian: Translation = {
   forms: {
     login: { submit: "Logige sisse", title: "Logige sisse" },
     register: { submit: "Looge konto", title: "Looge konto" }
-  },
-  notifications: {
-    loginInvalidCredentials: {
-      message: "Vale e-posti aadress või parool."
-    }
   },
   scenes: {
     administration: { title: "Administratsioon" },

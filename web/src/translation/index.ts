@@ -1,22 +1,21 @@
 import { ErrorReasons } from "api";
 import { SceneNames } from "../scene/Scene";
-import { ErrorNames } from "../component/Error";
 import { FormNames } from "../component/Form";
 import {
   InputNames,
   SwitchInputNames,
   SwitchInputOptions
 } from "../component/Input";
-import { NotificationNames } from "../component/NotificationContainer";
+import { ComponentsTranslation } from "../component/Component";
 
 /**
  * Translation type that contains all other translations.
  */
 export interface Translation {
   /**
-   * Error component translations.
+   * Translation of components.
    */
-  errors: ErrorsTranslation;
+  components: ComponentsTranslation;
 
   /**
    * Input component translations.
@@ -29,11 +28,6 @@ export interface Translation {
   forms: FormsTranslation;
 
   /**
-   * Notification component translations.
-   */
-  notifications: NotificationsTranslation;
-
-  /**
    * Scene component translations.
    */
   scenes: ScenesTranslation;
@@ -42,33 +36,6 @@ export interface Translation {
    * Application name.
    */
   title: string;
-}
-
-/**
- * Type that maps notification names to their translations.
- */
-type NotificationsTranslation = {
-  [NotificationName in NotificationNames]: NotificationTranslation
-};
-
-/**
- * Translations of an notification component.
- */
-interface NotificationTranslation {
-  message: string;
-}
-
-/**
- * Type that maps error names to their translations.
- */
-type ErrorsTranslation = { [ErrorName in ErrorNames]: ErrorTranslation };
-
-/**
- * Translations of an error component.
- */
-interface ErrorTranslation {
-  title: string;
-  message: string;
 }
 
 /**

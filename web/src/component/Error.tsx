@@ -1,16 +1,16 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
+import { Component } from "./Component";
 import { Center } from "./container/Center";
 import { Medium } from "./container/Medium";
-import { InjectedProps } from "../store";
 import { DEFAULT_LABEL } from "../styling/colors";
 import { UNIT } from "../styling/sizes";
 
 /**
  * Maps error names to it's translated text message parameters.
  */
-interface ErrorProperties {
+interface ErrorPropertyTypes {
   invalidInvitation: never;
   unknown: never;
 }
@@ -18,13 +18,13 @@ interface ErrorProperties {
 /**
  * Union of all error names.
  */
-export type ErrorNames = keyof ErrorProperties;
+export type ErrorNames = keyof ErrorPropertyTypes;
 
 /**
  * Error parameters object type of error named `TErrorName`.
  */
 type ErrorParameters<TErrorName extends ErrorNames> = {
-  [Parameter in ErrorProperties[TErrorName]]: string
+  [Parameter in ErrorPropertyTypes[TErrorName]]: string
 };
 
 /**
@@ -43,20 +43,34 @@ interface ErrorProps<TErrorName extends ErrorNames> {
 }
 
 /**
+ * Type that maps error names to their translations.
+ */
+type ErrorsTranslation = { [ErrorName in ErrorNames]: ErrorTranslation };
+
+/**
+ * Translations of an error component.
+ */
+interface ErrorTranslation {
+  title: string;
+  message: string;
+}
+
+/**
  * Error component that displays a title and message of occurred error.
  */
 @inject("translations")
 @observer
-export class Error<TErrorName extends ErrorNames> extends React.Component<
-  ErrorProps<TErrorName> & InjectedProps
+export class Error<TErrorName extends ErrorNames> extends Component<
+  ErrorProps<TErrorName>,
+  ErrorsTranslation
 > {
   /**
    * Renders an error component.
    */
   public render() {
-    const { name, parameters, translations } = this.props;
+    const { name, parameters } = this.props;
 
-    let { title, message } = translations!.translation.errors[name];
+    let { title, message } = this.translation[name];
 
     // Replace parameters in both title and message texts
     for (const parameter in parameters) {

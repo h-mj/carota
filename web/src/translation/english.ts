@@ -1,16 +1,23 @@
 import { Translation } from ".";
 
 export const english: Translation = {
-  errors: {
-    invalidInvitation: {
-      title: "We are sorry, this sign up address is invalid.",
-      message:
-        "An account has already been created using this sign up address or the address is invalid. If you haven't already created an account using this web address, please contact the person who invited you."
+  components: {
+    Error: {
+      invalidInvitation: {
+        title: "We are sorry, this sign up address is invalid.",
+        message:
+          "An account has already been created using this sign up address or the address is invalid. If you haven't already created an account using this web address, please contact the person who invited you."
+      },
+      unknown: {
+        title: "We are sorry, the page you requested has not been found.",
+        message:
+          "The web address may be misspelled or the page you're looking for is no longer available."
+      }
     },
-    unknown: {
-      title: "We are sorry, the page you requested has not been found.",
-      message:
-        "The web address may be misspelled or the page you're looking for is no longer available."
+    NotificationContainer: {
+      loginInvalidCredentials: {
+        message: "Incorrect email address or password."
+      }
     }
   },
   inputs: {
@@ -124,11 +131,6 @@ export const english: Translation = {
   forms: {
     login: { submit: "Sign in", title: "Sign in" },
     register: { submit: "Sign up", title: "Sign up" }
-  },
-  notifications: {
-    loginInvalidCredentials: {
-      message: "Incorrect email address or password."
-    }
   },
   scenes: {
     administration: { title: "Administration" },

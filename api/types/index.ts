@@ -274,29 +274,9 @@ export interface AuthInvitationCheckData {
 }
 
 /**
- * Save food request message body type.
+ * Declares nutritional values of a product.
  */
-export interface FoodSaveBody {
-  /**
-   * Food ID, if updating.
-   */
-  id?: string;
-
-  /**
-   * The name of the food.
-   */
-  name: string;
-
-  /**
-   * Barcode of the food, if exists.
-   */
-  barcode?: string;
-
-  /**
-   * Serving unit.
-   */
-  unit: Units;
-
+export interface NutritionDeclaration {
   /**
    * Amount of energy in kilocalories.
    */
@@ -359,9 +339,34 @@ export interface FoodSaveBody {
 }
 
 /**
+ * Save food request message body type.
+ */
+export interface FoodSaveBody extends NutritionDeclaration {
+  /**
+   * Food ID, if updating.
+   */
+  id?: string;
+
+  /**
+   * The name of the food.
+   */
+  name: string;
+
+  /**
+   * Barcode of the food, if exists.
+   */
+  barcode?: string;
+
+  /**
+   * Serving unit.
+   */
+  unit: Units;
+}
+
+/**
  * Save food response message data type.
  */
-export interface FoodSaveData {
+export interface FoodSaveData extends NutritionDeclaration {
   /**
    * Food ID.
    */
@@ -381,64 +386,4 @@ export interface FoodSaveData {
    * Serving unit.
    */
   unit: Units;
-
-  /**
-   * Amount of energy in kilocalories.
-   */
-  energy: number;
-
-  /**
-   * Amount of fat in grams.
-   */
-  fat: number;
-
-  /**
-   * Amount of saturates in grams.
-   */
-  saturates: number;
-
-  /**
-   * Amount of mono-unsaturates in grams.
-   */
-  monoUnsaturates: number;
-
-  /**
-   * Amount of polyunsaturates in grams.
-   */
-  polyunsaturates: number;
-
-  /**
-   * Amount of carbohydrate in grams.
-   */
-  carbohydrate: number;
-
-  /**
-   * Amount of sugars in grams.
-   */
-  sugars: number;
-
-  /**
-   * Amount of polyols in grams.
-   */
-  polyols: number;
-
-  /**
-   * Amount of starch in grams.
-   */
-  starch: number;
-
-  /**
-   * Amount of fibre in grams.
-   */
-  fibre: number;
-
-  /**
-   * Amount of protein in grams.
-   */
-  protein: number;
-
-  /**
-   * Amount of salt in grams.
-   */
-  salt: number;
 }

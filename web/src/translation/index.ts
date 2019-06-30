@@ -1,11 +1,5 @@
-import { ErrorReasons } from "api";
 import { SceneNames } from "../scene/Scene";
 import { FormNames } from "../component/Form";
-import {
-  InputNames,
-  SwitchInputNames,
-  SwitchInputOptions
-} from "../component/Input";
 import { ComponentsTranslation } from "../component/Component";
 
 /**
@@ -16,11 +10,6 @@ export interface Translation {
    * Translation of components.
    */
   components: ComponentsTranslation;
-
-  /**
-   * Input component translations.
-   */
-  inputs: InputsTranslation;
 
   /**
    * Form component translations.
@@ -37,59 +26,6 @@ export interface Translation {
    */
   title: string;
 }
-
-/**
- * Type that maps input names to their translations.
- */
-type InputsTranslation = {
-  [InputName in InputNames]: InputName extends SwitchInputNames
-    ? SwitchInputTranslation<SwitchInputOptions[InputName]>
-    : InputTranslation
-};
-
-/**
- * Translations of an input component.
- */
-interface InputTranslation {
-  /**
-   * Input name.
-   */
-  name: string;
-
-  /**
-   * Input placeholder text.
-   */
-  placeholder: string;
-
-  /**
-   * Error reason translations.
-   */
-  reasons: InputErrorReasonTranslations;
-}
-
-/**
- * Translations of an switch input that includes translations of all its
- * options.
- */
-interface SwitchInputTranslation<TOptions extends string>
-  extends InputTranslation {
-  /**
-   * Switch option translations.
-   */
-  options: SwitchInputOptionsTranslations<TOptions>;
-}
-
-/**
- * Type that maps options to their translations.
- */
-type SwitchInputOptionsTranslations<TOptions extends string> = {
-  [Option in TOptions]: string
-};
-
-/**
- * Type that maps error reasons to their translations.
- */
-type InputErrorReasonTranslations = { [ErrorReason in ErrorReasons]?: string };
 
 /**
  * Type that maps form names to their translations.

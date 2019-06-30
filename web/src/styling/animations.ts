@@ -3,7 +3,7 @@ import { keyframes } from "styled-components";
 /**
  * Default transition duration in seconds.
  */
-export const TRANSITION_DURATION = 0.125;
+export const DURATION = 0.125;
 
 /**
  * Animation timing function.

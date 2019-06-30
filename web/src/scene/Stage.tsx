@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Administration } from "./Administration";
 import { Diet } from "./Diet";
-import { FoodEditor } from "./FoodEditor";
 import { History } from "./History";
 import { Home } from "./Home";
 import { Login } from "./Login";
@@ -26,8 +25,6 @@ export type Stages = {
 interface Routes {
   "/administration": To<"administration">;
   "/diet": To<"diet">;
-  "/food/create": To<"foodEditor">;
-  "/food/{id}/edit": To<"foodEditor">;
   "/history": To<"history">;
   "/": To<"home">;
   "/logout": To<"logout">;
@@ -75,7 +72,6 @@ export type Parameters<TSceneNames extends SceneNames> =
 const SCENES: Readonly<{ [SceneName in SceneNames]: typeof Scene }> = {
   administration: Administration,
   diet: Diet,
-  foodEditor: FoodEditor,
   history: History,
   home: Home,
   login: Login,
@@ -95,8 +91,6 @@ export const ROUTES: Readonly<
 > = {
   "/administration": "administration",
   "/diet": "diet",
-  "/food/create": "foodEditor",
-  "/food/{id}/edit": "foodEditor",
   "/logout": "logout",
   "/history": "history",
   "/": "home",

@@ -5,11 +5,7 @@ import * as React from "react";
 import { Scene } from "./Scene";
 import { Stage } from "./Stage";
 import { Error } from "../component/Error";
-import {
-  Form,
-  FormInputChangeHandler,
-  FormSubmitHandler
-} from "../component/Form";
+import { Form, FormSubmitHandler } from "../component/Form";
 import { Thin } from "../component/container/Thin";
 import { setTimeout } from "../utility/forms";
 
@@ -67,7 +63,7 @@ export class Register extends Scene<"register"> {
    * Updates interface language when language input changes.
    */
   @action
-  private handleChange: FormInputChangeHandler<"register"> = (name, value) => {
+  private handleChange = (name: string, value: string) => {
     if (name === "language") {
       this.props.translations!.language = value as Languages;
     }

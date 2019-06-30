@@ -3,7 +3,7 @@ import { inject, observer } from "mobx-react";
 import styled from "styled-components";
 import * as React from "react";
 import { Button } from "./Button";
-import { Input, InputChangeHandler, InputNames, InputValueType } from "./Input";
+import { Input, InputNames } from "./Input";
 import { InjectedProps } from "../store";
 import { UNIT } from "../styling/sizes";
 import {
@@ -56,7 +56,7 @@ export type FormErrorReasons<TFormName extends FormNames> = InputErrorReasons<
  * Input values type where input name is mapped to its value.
  */
 export type InputValues<TInputNames extends InputNames> = {
-  [InputName in TInputNames]: InputValueType<InputName>
+  [InputName in TInputNames]: string
 };
 
 /**
@@ -65,13 +65,6 @@ export type InputValues<TInputNames extends InputNames> = {
 export type FormValues<TFormName extends FormNames> = InputValues<
   FormInputNames[TFormName]
 >;
-
-/**
- * InputChangeHandler type based on form name.
- */
-export type FormInputChangeHandler<
-  TFormName extends FormNames
-> = InputChangeHandler<FormInputNames[TFormName]>;
 
 /**
  * Form submit callback function type.
@@ -93,7 +86,7 @@ interface FormProps<TFormName extends FormNames> {
   /**
    * Input change callback function.
    */
-  onChange?: FormInputChangeHandler<TFormName>;
+  onChange?: (name: string, value: string) => void;
 
   /**
    * Form submit callback function.
@@ -152,8 +145,8 @@ export class Form<TFormName extends FormNames> extends React.Component<
    * Updates changed input value.
    */
   @action
-  private handleChange: FormInputChangeHandler<TFormName> = (name, value) => {
-    (this.values[name] as string) = value;
+  private handleChange = (name: string, value: string) => {
+    (this.values[name as FormInputNames[TFormName]] as string) = value;
     this.props.onChange !== undefined && this.props.onChange(name, value);
   };
 

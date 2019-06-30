@@ -2,7 +2,6 @@ import * as React from "react";
 import { InjectedProps } from "../store";
 import { Administration } from "./Administration";
 import { Diet } from "./Diet";
-import { FoodEditor } from "./FoodEditor";
 import { History } from "./History";
 import { Home } from "./Home";
 import { Login } from "./Login";
@@ -19,7 +18,6 @@ import { Parameters } from "./Stage";
 interface Scenes {
   administration: Administration;
   diet: Diet;
-  foodEditor: FoodEditor;
   history: History;
   home: Home;
   login: Login;

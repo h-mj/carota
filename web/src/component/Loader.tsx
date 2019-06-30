@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
 import { Loading } from "./icon/Loading";
-import { fadeIn, fadeOut, TRANSITION_DURATION } from "../styling/animations";
+import { DURATION, fadeIn, fadeOut } from "../styling/animations";
 import { BACKGROUND_TRANSLUCENT } from "../styling/colors";
 
 /**
@@ -40,7 +40,7 @@ export class Loader extends React.Component<LoaderProps> {
     // If we were loading but not anymore, fade out.
     if (this.previousIsLoading && !isLoading) {
       window.clearTimeout(this.timeoutId);
-      this.timeoutId = window.setTimeout(this.hide, 1000 * TRANSITION_DURATION);
+      this.timeoutId = window.setTimeout(this.hide, 1000 * DURATION);
     }
 
     this.previousIsLoading = isLoading;
@@ -97,8 +97,8 @@ const Overlay = styled.div<OverlayProps>`
 
   background-color: ${BACKGROUND_TRANSLUCENT};
 
-  animation: ${props => (props.isActive ? fadeIn : fadeOut)}
-    ${TRANSITION_DURATION}s forwards;
+  animation: ${props => (props.isActive ? fadeIn : fadeOut)} ${DURATION}s
+    forwards;
 
   /* Don't let users select components below the overlay */
   user-select: ${props => (props.isActive ? "auto" : "none")};

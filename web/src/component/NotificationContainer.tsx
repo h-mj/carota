@@ -3,7 +3,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled, { keyframes } from "styled-components";
 import { Component } from "./Component";
-import { fadeIn, fadeOut, TRANSITION_DURATION } from "../styling/animations";
+import { DURATION, fadeIn, fadeOut } from "../styling/animations";
 import { BACKGROUND, DEFAULT_BORDER, ERROR } from "../styling/colors";
 import { BORDER_RADIUS, UNIT } from "../styling/sizes";
 import { setTimeout } from "../utility/forms";
@@ -231,7 +231,7 @@ export class NotificationContainer extends Component<
    */
   @action
   private async fadeNotification(notification: Notifications) {
-    await setTimeout(TRANSITION_DURATION);
+    await setTimeout(DURATION);
     this.visibleNotifications.splice(
       this.visibleNotifications.indexOf(notification),
       1
@@ -307,9 +307,8 @@ const NotificationElement = styled.div<NotificationElementProps>`
   box-shadow: 0 0 0 1px ${props => TYPE_TO_BORDER_COLOR[props.type]},
     inset 0 0 0 1px ${props => TYPE_TO_BORDER_COLOR[props.type]};
 
-  animation: ${props => (props.isActive ? fadeIn : fadeOut)}
-      ${TRANSITION_DURATION}s,
-    ${props => (props.isActive ? moveIn : moveOut)} ${TRANSITION_DURATION}s;
+  animation: ${props => (props.isActive ? fadeIn : fadeOut)} ${DURATION}s,
+    ${props => (props.isActive ? moveIn : moveOut)} ${DURATION}s;
 
   cursor: pointer;
 `;

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Stages } from "../scene/Stage";
 import { Anchor } from "./Anchor";
 import { InjectedProps } from "../store";
-import { TRANSITION_DURATION } from "../styling/animations";
+import { DURATION } from "../styling/animations";
 import { ACTIVE, DEFAULT_LABEL } from "../styling/colors";
 import { UNIT } from "../styling/sizes";
 
@@ -95,7 +95,7 @@ const Item = styled(Anchor)<ItemProps>`
   text-decoration: none;
   white-space: nowrap;
 
-  transition: ${TRANSITION_DURATION}s;
+  transition: ${DURATION}s;
 
   &:hover {
     color: ${ACTIVE};

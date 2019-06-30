@@ -1,14 +1,16 @@
-import * as React from "react";
-import { InjectedProps } from "../store";
 import { computed } from "mobx";
+import * as React from "react";
 import { Error } from "./Error";
+import { Input } from "./Input";
 import { NotificationContainer } from "./NotificationContainer";
+import { InjectedProps } from "../store";
 
 /**
  * Maps component class name to the class.
  */
 interface ComponentMap {
   Error: Error<any>;
+  Input: Input;
   NotificationContainer: NotificationContainer;
 }
 

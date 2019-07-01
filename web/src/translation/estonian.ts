@@ -35,6 +35,10 @@ export const estonian: Translation = {
         message: "404"
       }
     },
+    Form: {
+      login: { submit: "Logige sisse", title: "Logige sisse" },
+      register: { submit: "Looge konto", title: "Looge konto" }
+    },
     Input: {
       barcode: {
         placeholder: "Sisestage triipkood",
@@ -90,10 +94,6 @@ export const estonian: Translation = {
         message: "Vale e-posti aadress või parool."
       }
     }
-  },
-  forms: {
-    login: { submit: "Logige sisse", title: "Logige sisse" },
-    register: { submit: "Looge konto", title: "Looge konto" }
   },
   scenes: {
     administration: { title: "Administratsioon" },

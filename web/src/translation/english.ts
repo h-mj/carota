@@ -35,6 +35,10 @@ export const english: Translation = {
           "The web address may be misspelled or the page you're looking for is no longer available."
       }
     },
+    Form: {
+      login: { submit: "Sign in", title: "Sign in" },
+      register: { submit: "Sign up", title: "Sign up" }
+    },
     Input: {
       barcode: {
         placeholder: "Enter a barcode",
@@ -90,10 +94,6 @@ export const english: Translation = {
         message: "Incorrect email address or password."
       }
     }
-  },
-  forms: {
-    login: { submit: "Sign in", title: "Sign in" },
-    register: { submit: "Sign up", title: "Sign up" }
   },
   scenes: {
     administration: { title: "Administration" },

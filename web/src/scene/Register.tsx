@@ -5,10 +5,9 @@ import * as React from "react";
 import { Scene } from "./Scene";
 import { Stage } from "./Stage";
 import { Error } from "../component/Error";
-import { Form, FormSubmitHandler, FormInputNames } from "../component/Form";
+import { Form, FormChangeHandler, FormSubmitHandler } from "../component/Form";
 import { Thin } from "../component/container/Thin";
-import { setTimeout } from "../utility/forms";
-import { InputChangeHandler, InputValues } from "../component/Input";
+import { setTimeout } from "../utility/primises";
 
 /**
  * Scene that renders a form used for registration.
@@ -64,9 +63,7 @@ export class Register extends Scene<"register"> {
    * Updates interface language when language input changes.
    */
   @action
-  private handleChange: InputChangeHandler<
-    InputValues<FormInputNames["register"]>
-  > = (name, value) => {
+  private handleChange: FormChangeHandler<"register"> = (name, value) => {
     if (name === "language") {
       this.props.translations!.language = value as Languages;
     }
@@ -85,10 +82,10 @@ export class Register extends Scene<"register"> {
 
     const [error] = await Promise.all([
       this.props.auth!.register({
-        email: email!,
+        email: email || "",
         language: language as Languages, // Ignore that language could be `""` if nothing is selected.
-        name: name!,
-        password: password!,
+        name: name || "",
+        password: password || "",
         invitationId
       }),
       setTimeout(1)

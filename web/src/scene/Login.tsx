@@ -5,7 +5,7 @@ import { Scene } from "./Scene";
 import { Form, FormSubmitHandler } from "../component/Form";
 import { Notification } from "../component/NotificationContainer";
 import { Thin } from "../component/container/Thin";
-import { setTimeout } from "../utility/forms";
+import { setTimeout } from "../utility/primises";
 
 /**
  * Scene that renders a form used for signing in.
@@ -38,8 +38,13 @@ export class Login extends Scene<"login"> {
   private handleSubmit: FormSubmitHandler<"login"> = async values => {
     this.props.view!.wait(Login.WAIT_REASON);
 
+    const { email, password } = values;
+
     const [error] = await Promise.all([
-      this.props.auth!.login(values as any),
+      this.props.auth!.login({
+        email: email || "",
+        password: password || ""
+      }),
       setTimeout(1)
     ]);
 

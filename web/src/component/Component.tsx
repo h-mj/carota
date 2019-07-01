@@ -2,6 +2,7 @@ import { computed } from "mobx";
 import * as React from "react";
 import { DeclareNutrition } from "./DeclareNutrition";
 import { Error } from "./Error";
+import { Form } from "./Form";
 import { Input } from "./Input";
 import { NotificationContainer } from "./NotificationContainer";
 import { InjectedProps } from "../store";
@@ -12,6 +13,7 @@ import { InjectedProps } from "../store";
 interface ComponentMap {
   DeclareNutrition: DeclareNutrition;
   Error: Error<any>;
+  Form: Form;
   Input: Input;
   NotificationContainer: NotificationContainer;
 }

@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled, { css } from "styled-components";
+import { InputChangeHandler } from "./Input";
 import {
   DURATION,
   fadeIn,
@@ -44,7 +45,7 @@ export interface TextFieldProps {
   /**
    * Function that will be called when text field value changes.
    */
-  onChange?: (name: string, value: string) => void;
+  onChange?: InputChangeHandler<string>;
 
   /**
    * Placeholder text that will be shown inside text field if text field is
@@ -113,7 +114,7 @@ export class TextField extends React.Component<TextFieldProps> {
    */
   private handleChange: React.ChangeEventHandler<HTMLInputElement> = event => {
     if (this.props.onChange !== undefined) {
-      this.props.onChange(event.target.name, event.target.value);
+      this.props.onChange(this.props.name, event.target.value);
     }
   };
 }

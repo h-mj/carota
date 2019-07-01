@@ -35,6 +35,10 @@ export const russian: Translation = {
           "Веб-адрес может быть неверный или страница, которую вы ищете, больше не доступна."
       }
     },
+    Form: {
+      login: { submit: "Вход", title: "Вход" },
+      register: { submit: "Завести аккаунт", title: "Завести аккаунт" }
+    },
     Input: {
       barcode: {
         placeholder: "Введите штрихкод",
@@ -90,10 +94,6 @@ export const russian: Translation = {
         message: "Неверный адрес электронной почты или пароль."
       }
     }
-  },
-  forms: {
-    login: { submit: "Вход", title: "Вход" },
-    register: { submit: "Завести аккаунт", title: "Завести аккаунт" }
   },
   scenes: {
     administration: { title: "Администрация" },

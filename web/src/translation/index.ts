@@ -1,5 +1,4 @@
 import { SceneNames } from "../scene/Scene";
-import { FormNames } from "../component/Form";
 import { ComponentsTranslation } from "../component/Component";
 
 /**
@@ -12,37 +11,12 @@ export interface Translation {
   components: ComponentsTranslation;
 
   /**
-   * Form component translations.
-   */
-  forms: FormsTranslation;
-
-  /**
    * Scene component translations.
    */
   scenes: ScenesTranslation;
 
   /**
    * Application name.
-   */
-  title: string;
-}
-
-/**
- * Type that maps form names to their translations.
- */
-type FormsTranslation = { [FormType in FormNames]: FormTranslation };
-
-/**
- * Translations of a form component.
- */
-interface FormTranslation {
-  /**
-   * Form submit button text.
-   */
-  submit: string;
-
-  /**
-   * Form title text that will be shown before input fields.
    */
   title: string;
 }

@@ -6,7 +6,7 @@ import { Component } from "./Component";
 import { DURATION, fadeIn, fadeOut } from "../styling/animations";
 import { BACKGROUND, DEFAULT_BORDER, ERROR } from "../styling/colors";
 import { BORDER_RADIUS, UNIT } from "../styling/sizes";
-import { setTimeout } from "../utility/forms";
+import { setTimeout } from "../utility/primises";
 
 /**
  * Union of all notification types.

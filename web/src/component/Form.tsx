@@ -19,6 +19,7 @@ const withInputs = <TInputNames extends InputNames>(...names: TInputNames[]) =>
  */
 const FORM_INPUT_NAMES = {
   login: withInputs("email", "password"),
+  foodInformation: withInputs("name", "barcode", "unit", "declareNutrition"),
   register: withInputs("language", "name", "email", "password")
 };
 

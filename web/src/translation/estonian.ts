@@ -37,6 +37,7 @@ export const estonian: Translation = {
     },
     Form: {
       login: { submit: "Logige sisse", title: "Logige sisse" },
+      foodInformation: { submit: "Salvesta", title: "Toidualane teave" },
       register: { submit: "Looge konto", title: "Looge konto" }
     },
     Input: {
@@ -96,16 +97,17 @@ export const estonian: Translation = {
     }
   },
   scenes: {
-    administration: { title: "Administratsioon" },
-    diet: { title: "Dieet" },
-    history: { title: "Ajalugu" },
-    home: { title: "Avaleht" },
-    login: { title: "Logige sisse" },
-    logout: { title: "Logige välja" },
-    measurements: { title: "Mõõdud" },
-    register: { title: "Looge konto" },
-    settings: { title: "Seaded" },
-    unknown: { title: "Vabandame, soovitud lehekülge ei leitud" }
+    Administration: { title: "Administratsioon" },
+    Diet: { title: "Dieet" },
+    FoodInformation: { title: "Toidualane teave" },
+    History: { title: "Ajalugu" },
+    Home: { title: "Avaleht" },
+    Login: { title: "Logige sisse" },
+    Logout: { title: "Logige välja" },
+    Measurements: { title: "Mõõdud" },
+    Register: { title: "Looge konto" },
+    Settings: { title: "Seaded" },
+    Unknown: { title: "Vabandame, soovitud lehekülge ei leitud" }
   },
   title: "Morkovka"
 };

@@ -37,6 +37,7 @@ export const english: Translation = {
     },
     Form: {
       login: { submit: "Sign in", title: "Sign in" },
+      foodInformation: { submit: "Save", title: "Food information" },
       register: { submit: "Sign up", title: "Sign up" }
     },
     Input: {
@@ -96,16 +97,17 @@ export const english: Translation = {
     }
   },
   scenes: {
-    administration: { title: "Administration" },
-    diet: { title: "Diet" },
-    history: { title: "History" },
-    home: { title: "Home" },
-    login: { title: "Sign in" },
-    logout: { title: "Sign out" },
-    measurements: { title: "Measurements" },
-    register: { title: "Sign up" },
-    settings: { title: "Settings" },
-    unknown: {
+    Administration: { title: "Administration" },
+    Diet: { title: "Diet" },
+    FoodInformation: { title: "Food information" },
+    History: { title: "History" },
+    Home: { title: "Home" },
+    Login: { title: "Sign in" },
+    Logout: { title: "Sign out" },
+    Measurements: { title: "Measurements" },
+    Register: { title: "Sign up" },
+    Settings: { title: "Settings" },
+    Unknown: {
       title: "We are sorry, the page you requested has not been found"
     }
   },

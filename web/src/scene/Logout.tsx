@@ -7,7 +7,7 @@ import { setTimeout } from "../utility/primises";
  * Scene that, when constructed, logs user out after some timeout.
  */
 @inject("auth", "view")
-export class Logout extends Scene<"logout"> {
+export class Logout extends Scene<"Logout"> {
   /**
    * Waiting reason that is used to show loader component when waiting for timeout.
    */

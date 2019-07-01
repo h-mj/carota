@@ -14,7 +14,7 @@ import { setTimeout } from "../utility/primises";
  */
 @inject("auth", "translations", "view")
 @observer
-export class Register extends Scene<"register"> {
+export class Register extends Scene<"Register"> {
   /**
    * Whether or not `invitationId` in `parameters` props is valid. `undefined`
    * if the value has not been retrieved yet.

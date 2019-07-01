@@ -12,7 +12,7 @@ import { setTimeout } from "../utility/primises";
  */
 @inject("auth", "view")
 @observer
-export class Login extends Scene<"login"> {
+export class Login extends Scene<"Login"> {
   /**
    * Waiting reason that is used to show loader component when waiting for
    * server response.

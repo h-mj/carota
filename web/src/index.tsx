@@ -54,13 +54,13 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
  * Array of navigable stages using the navigation bar.
  */
 export const NAVIGATION_STAGES: Readonly<Array<Stages>> = [
-  new Stage("home", {}, {}),
-  new Stage("diet", {}, {}),
-  new Stage("measurements", {}, {}),
-  new Stage("history", {}, {}),
-  new Stage("administration", {}, {}),
-  new Stage("settings", {}, {}),
-  new Stage("logout", {}, {})
+  new Stage("Home", {}, {}),
+  new Stage("Diet", {}, {}),
+  new Stage("Measurements", {}, {}),
+  new Stage("History", {}, {}),
+  new Stage("Administration", {}, {}),
+  new Stage("Settings", {}, {}),
+  new Stage("Logout", {}, {})
 ];
 
 /**

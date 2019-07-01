@@ -1,7 +1,9 @@
 import * as React from "react";
+import { Parameters } from "./Stage";
 import { InjectedProps } from "../store";
 import { Administration } from "./Administration";
 import { Diet } from "./Diet";
+import { FoodInformation } from "./FoodInformation";
 import { History } from "./History";
 import { Home } from "./Home";
 import { Login } from "./Login";
@@ -10,28 +12,28 @@ import { Measurements } from "./Measurements";
 import { Register } from "./Register";
 import { Settings } from "./Settings";
 import { Unknown } from "./Unknown";
-import { Parameters } from "./Stage";
 
 /**
  * Type that maps scene names to their component classes.
  */
-interface Scenes {
-  administration: Administration;
-  diet: Diet;
-  history: History;
-  home: Home;
-  login: Login;
-  logout: Logout;
-  measurements: Measurements;
-  register: Register;
-  settings: Settings;
-  unknown: Unknown;
+interface SceneMap {
+  Administration: Administration;
+  Diet: Diet;
+  FoodInformation: FoodInformation;
+  History: History;
+  Home: Home;
+  Login: Login;
+  Logout: Logout;
+  Measurements: Measurements;
+  Register: Register;
+  Settings: Settings;
+  Unknown: Unknown;
 }
 
 /**
  * Union of scene names, used to reference a specific scene using its name.
  */
-export type SceneNames = keyof Scenes;
+export type SceneNames = keyof SceneMap;
 
 /**
  * Scene component props type.
@@ -52,7 +54,7 @@ export type ScenePropsWith<
  */
 export type SceneProps<
   TSceneNames extends SceneNames
-> = Scenes[TSceneNames] extends infer IClass
+> = SceneMap[TSceneNames] extends infer IClass
   ? IClass extends Scene<infer _, infer IProps>
     ? IProps
     : never
@@ -73,15 +75,15 @@ export abstract class Scene<
  * Scene names that do not require authentication.
  */
 export const NO_AUTHENTICATION_SCENE_NAMES: Readonly<Array<SceneNames>> = [
-  "login",
-  "register"
+  "Login",
+  "Register"
 ];
 
 /**
  * Scene names that do not require navigation bar.
  */
 export const NO_NAVIGATION_SCENE_NAMES: Readonly<Array<SceneNames>> = [
-  "login",
-  "logout",
-  "register"
+  "Login",
+  "Logout",
+  "Register"
 ];

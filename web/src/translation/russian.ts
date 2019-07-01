@@ -17,7 +17,7 @@ export const russian: Translation = {
         starch: "Крахмал",
         sugars: "Сахара"
       },
-      title: "TODO",
+      title: "Пищевая ценность",
       units: {
         g: "г",
         kcal: "ккал"
@@ -37,6 +37,7 @@ export const russian: Translation = {
     },
     Form: {
       login: { submit: "Вход", title: "Вход" },
+      foodInformation: { submit: "Сохранить", title: "Информация о еде" },
       register: { submit: "Завести аккаунт", title: "Завести аккаунт" }
     },
     Input: {
@@ -96,16 +97,17 @@ export const russian: Translation = {
     }
   },
   scenes: {
-    administration: { title: "Администрация" },
-    diet: { title: "Диета" },
-    history: { title: "История" },
-    home: { title: "Главная" },
-    login: { title: "Вход" },
-    logout: { title: "Выход" },
-    measurements: { title: "Замеры" },
-    register: { title: "Завести аккаунт" },
-    settings: { title: "Настройки" },
-    unknown: { title: "К сожалению, запрошенная страница не была найдена" }
+    Administration: { title: "Администрация" },
+    Diet: { title: "Диета" },
+    FoodInformation: { title: "Информация о еде" },
+    History: { title: "История" },
+    Home: { title: "Главная" },
+    Login: { title: "Вход" },
+    Logout: { title: "Выход" },
+    Measurements: { title: "Замеры" },
+    Register: { title: "Завести аккаунт" },
+    Settings: { title: "Настройки" },
+    Unknown: { title: "К сожалению, запрошенная страница не была найдена" }
   },
   title: "Морковка"
 };

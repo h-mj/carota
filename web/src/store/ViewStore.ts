@@ -103,9 +103,9 @@ export class ViewStore {
     if (
       !auth.authenticated &&
       stage !== undefined &&
-      stage.sceneName === "logout"
+      stage.sceneName === "Logout"
     ) {
-      this.redirect(Stage.HOME);
+      return this.redirect(Stage.HOME);
     }
 
     this.redirect(Stage.from(window.location.pathname) || Stage.UNKNOWN);

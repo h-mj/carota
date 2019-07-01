@@ -1,4 +1,4 @@
-import { NutritionDeclaration } from "api";
+import { ErrorReasons, NutritionDeclaration } from "api";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
@@ -54,6 +54,11 @@ export interface DeclareNutritionProps {
    * Function that will be called when text field value changes.
    */
   onChange?: InputChangeHandler<Partial<NutritionDeclaration>>;
+
+  /**
+   * Occurred error reasons related to interal input components.
+   */
+  reason?: { [NutrientName in NutrientNames]?: ErrorReasons };
 
   /**
    * Text field value.

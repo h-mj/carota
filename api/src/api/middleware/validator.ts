@@ -4,11 +4,18 @@ import * as Joi from "@hapi/joi";
 import { createValidationError } from "../utility/errors";
 
 /**
+ * Scema object type of given object `TObject`.
+ */
+type SchemaType<TObject extends object> = {
+  [Property in keyof TObject]: TObject[Property] extends object
+    ? SchemaType<TObject[Property]>
+    : Joi.SchemaLike;
+};
+
+/**
  * Schema for body of route `TRoute`.
  */
-export type Schema<TRoute extends Route> = {
-  [P in keyof Body<TRoute>]: Joi.SchemaLike;
-};
+export type Schema<TRoute extends Route> = SchemaType<Body<TRoute>>;
 
 /**
  * Export `Joi` as `is` for shorter schema definitions.

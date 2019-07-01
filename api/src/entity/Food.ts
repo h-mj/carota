@@ -128,21 +128,23 @@ export class Food extends BaseEntity {
    * Creates `FoodSaveData` type object from this instance.
    */
   public toData = (): FoodSaveData => ({
-    barcode: this.barcode,
-    carbohydrate: this.carbohydrate,
-    energy: this.energy,
-    fat: this.fat,
-    fibre: this.fibre,
     id: this.id,
-    monoUnsaturates: this.monoUnsaturates,
     name: this.name,
-    polyols: this.polyols,
-    polyunsaturates: this.polyunsaturates,
-    protein: this.protein,
-    salt: this.salt,
-    saturates: this.saturates,
-    starch: this.starch,
-    sugars: this.sugars,
-    unit: this.unit
+    barcode: this.barcode,
+    unit: this.unit,
+    nutritionDeclaration: {
+      energy: this.energy,
+      fat: this.fat,
+      saturates: this.saturates,
+      monoUnsaturates: this.monoUnsaturates,
+      polyunsaturates: this.polyunsaturates,
+      carbohydrate: this.carbohydrate,
+      sugars: this.sugars,
+      polyols: this.polyols,
+      starch: this.starch,
+      fibre: this.fibre,
+      protein: this.protein,
+      salt: this.salt
+    }
   });
 }

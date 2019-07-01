@@ -72,8 +72,8 @@ export abstract class HttpError {
       for (const detail of this.details) {
         string += `\n- "${detail.reason}" in ${detail.location.part}`;
 
-        if (detail.location.field) {
-          string += ` (field "${detail.location.field}")`;
+        if (detail.location.path) {
+          string += ` (path "${detail.location.path.join(" > ")}")`;
         }
 
         if (detail.message) {

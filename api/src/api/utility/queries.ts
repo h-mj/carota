@@ -20,7 +20,7 @@ export const callCatch = async <T>(fn: () => Promise<T>): Promise<T> => {
         detail.indexOf(")")
       );
 
-      throw createUniqueConstraintError(field);
+      throw createUniqueConstraintError([field]);
     }
 
     throw error;

@@ -128,10 +128,10 @@ export interface ErrorLocation {
   part: ErrorLocationParts;
 
   /**
-   * Header or object field that is related to the occurred error. `undefined` if
-   * there isn't a specific field that is related to the error.
+   * Path to specific field that is related to the occurred error. `undefined`
+   * if there isn't a specific field that is related to the error.
    */
-  field?: string;
+  path?: string[];
 }
 
 /**
@@ -341,7 +341,7 @@ export interface NutritionDeclaration {
 /**
  * Save food request message body type.
  */
-export interface FoodSaveBody extends NutritionDeclaration {
+export interface FoodSaveBody {
   /**
    * Food ID, if updating.
    */
@@ -361,12 +361,17 @@ export interface FoodSaveBody extends NutritionDeclaration {
    * Serving unit.
    */
   unit: Units;
+
+  /**
+   * Food nutrition declaration.
+   */
+  nutritionDeclaration: NutritionDeclaration;
 }
 
 /**
  * Save food response message data type.
  */
-export interface FoodSaveData extends NutritionDeclaration {
+export interface FoodSaveData {
   /**
    * Food ID.
    */
@@ -386,4 +391,9 @@ export interface FoodSaveData extends NutritionDeclaration {
    * Serving unit.
    */
   unit: Units;
+
+  /**
+   * Food nutrition declaration.
+   */
+  nutritionDeclaration: NutritionDeclaration;
 }

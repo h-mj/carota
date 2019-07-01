@@ -33,7 +33,7 @@ defineNoAuth(authRouter, "/auth/login", LOGIN_SCHEMA, async context => {
   const account = await Account.findOne({ email });
 
   if (account === undefined || !(await compare(password, account.hash))) {
-    throw createInvalidCredentialsError("email", "password");
+    throw createInvalidCredentialsError(["email"], ["password"]);
   }
 
   context.state.data = { token: signToken(account) };
@@ -60,7 +60,9 @@ defineNoAuth(authRouter, "/auth/register", REGISTER_SCHEMA, async context => {
   const invitation = await Invitation.findOne({ id: invitationId });
 
   if (invitation === undefined) {
-    throw createIdNotFoundError(invitationId, Invitation.name, "invitationId");
+    throw createIdNotFoundError(invitationId, Invitation.name, [
+      "invitationId"
+    ]);
   }
 
   const { adviser, inviter, type, rights } = invitation;

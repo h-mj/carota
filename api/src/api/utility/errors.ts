@@ -35,6 +35,7 @@ const TYPE_TO_REASON: Readonly<{ [type: string]: ErrorReasons }> = {
   "any.required": "missing",
   "number.base": "invalid",
   "object.allowUnknown": "unexpected",
+  "object.base": "invalid",
   "string.email": "invalid",
   "string.guid": "invalid",
   "string.min": "invalid"
@@ -135,6 +136,7 @@ const TYPE_TO_MESSAGE: Readonly<{ [type: string]: string }> = {
   "any.required": 'Field "{field}" is required.',
   "number.base": 'Field "{field} must be a valid number.',
   "object.allowUnknown": 'Field "{field}" was not expected.',
+  "object.base": 'Field "{field}" must be a valid object.',
   "string.email": 'Field "{field}" must be a valid email.',
   "string.guid": 'Field "{field}" must be a valid GUID.',
   "string.min": 'Field "{field}" must be at least {length} characters long.'
@@ -157,7 +159,8 @@ export const createValidationError = (error: ValidationError) => {
       );
     }
 
-    const field = detail.path.pop();
+    const path = detail.path;
+    const field = path[path.length - 1];
 
     if (field === undefined) {
       continue;
@@ -187,7 +190,7 @@ export const createValidationError = (error: ValidationError) => {
     }
 
     details.push({
-      location: { part: "body", field },
+      location: { part: "body", path },
       reason: TYPE_TO_REASON[type],
       context,
       message
@@ -205,16 +208,17 @@ export const createValidationError = (error: ValidationError) => {
  *
  * @param fields One or more invalid fields.
  */
-export const createInvalidCredentialsError = (...fields: string[]) => {
-  const message = `Incorrect ${fields
+export const createInvalidCredentialsError = (...paths: string[][]) => {
+  const message = `Incorrect ${paths
+    .map(path => path[path.length - 1])
     .join(", ")
     .replace(/, ([^,]*)$/, " or $1")}.`;
 
   return new UnauthorizedError(
     message,
-    ...fields.map(
-      (field): ErrorDetail => ({
-        location: { part: "body", field },
+    ...paths.map(
+      (path): ErrorDetail => ({
+        location: { part: "body", path },
         reason: "incorrect",
         message
       })
@@ -230,12 +234,12 @@ export const createInvalidCredentialsError = (...fields: string[]) => {
 export const createIdNotFoundError = (
   id: string,
   entity: string,
-  field: string
+  path: string[]
 ) => {
   const message = `${entity} with ID "${id}" does not exist.`;
 
   return new BadRequestError(message, {
-    location: { part: "body", field },
+    location: { part: "body", path },
     reason: "incorrect",
     message
   });
@@ -246,11 +250,11 @@ export const createIdNotFoundError = (
  *
  * @param field Field, which value must be unique.
  */
-export const createUniqueConstraintError = (field: string) => {
-  const message = `Field "${field}" must be unique.`;
+export const createUniqueConstraintError = (path: string[]) => {
+  const message = `Field "${path[path.length - 1]}" must be unique.`;
 
   return new BadRequestError(message, {
-    location: { part: "body", field },
+    location: { part: "body", path },
     reason: "conflict",
     message
   });

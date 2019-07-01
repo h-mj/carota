@@ -62,7 +62,7 @@ export const authenticator = (): Middleware<AuthenticationState> => async (
 
   if (header === "") {
     throw new ForbiddenError('Header field "Authorization" is required.', {
-      location: { part: "headers", field: "Authorization" },
+      location: { part: "headers", path: ["Authorization"] },
       reason: "missing",
       message: 'Header field "Authorization" is required.'
     });
@@ -74,7 +74,7 @@ export const authenticator = (): Middleware<AuthenticationState> => async (
     throw new BadRequestError(
       'Syntax of header field "Authorization" must be "Bearer <credentials>".',
       {
-        location: { part: "headers", field: "Authorization" },
+        location: { part: "headers", path: ["Authorization"] },
         reason: "invalid",
         message:
           'Syntax of header field "Authorization" must be "Bearer <credentials>".'
@@ -90,7 +90,7 @@ export const authenticator = (): Middleware<AuthenticationState> => async (
     throw new ForbiddenError(
       'Token provided in header field "Authorization" is incorrect.',
       {
-        location: { part: "headers", field: "Authorization" },
+        location: { part: "headers", path: ["Authorization"] },
         reason: "incorrect",
         message: 'Token provided in header field "Authorization" is incorrect.'
       }
@@ -103,7 +103,7 @@ export const authenticator = (): Middleware<AuthenticationState> => async (
     throw new ForbiddenError(
       'Token provided in header field "Authorization" is valid, but associated account does not exist.',
       {
-        location: { part: "headers", field: "Authorization" },
+        location: { part: "headers", path: ["Authorization"] },
         reason: "incorrect",
         message:
           'Token provided in header field "Authorization" is valid, but associated account does not exist.'

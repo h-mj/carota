@@ -5,7 +5,13 @@ import * as React from "react";
 import styled from "styled-components";
 import { Component } from "./Component";
 import { Button } from "./Button";
-import { Input, InputChangeHandler, InputNames, InputValues } from "./Input";
+import {
+  Input,
+  InputChangeHandler,
+  InputErrorReasons,
+  InputNames,
+  InputValues
+} from "./Input";
 import { UNIT } from "../styling/sizes";
 
 /**
@@ -61,7 +67,47 @@ type FormValues<TFormName extends FormNames = FormNames> = {
  * type.
  */
 type FormErrorReasons<TFormName extends FormNames = FormNames> = {
-  [InputName in FormInputNames<TFormName>]?: ErrorReasons
+  [InputName in FormInputNames<TFormName>]?: InputErrorReasons<InputName>
+};
+
+/**
+ * Type of an object which keys are of type string and values are either of type
+ * `T`, this type itself or `undefined`.
+ */
+type Tree<T> = {
+  [P: string]: T | Tree<T> | undefined;
+};
+
+/**
+ * Navigates inside `reasons` object using path and assigns `reason` to the
+ * destination field.
+ *
+ * @param reasons An reason object inside which we will navigate.
+ * @param path Path to the erroneus field.
+ * @param reason Field error reason.
+ */
+const putReason = (
+  reasons: Tree<ErrorReasons>,
+  path: string[],
+  reason: ErrorReasons
+) => {
+  let node = reasons;
+
+  const [field, ...steps] = path.slice().reverse();
+
+  for (let step = steps.pop(); step !== undefined; step = steps.pop()) {
+    if (!(step in node)) {
+      node[step] = {};
+    }
+
+    const next = node[step];
+
+    if (typeof next === "object") {
+      node = next;
+    }
+  }
+
+  node[field] = reason;
 };
 
 /**
@@ -85,13 +131,19 @@ const createFormErrorReasons = <TFormName extends FormNames>(
   }
 
   for (const detail of error.details) {
-    const { field } = detail.location;
+    const { path } = detail.location;
 
-    if (field === undefined || !isFormInputName(formName, field)) {
+    if (path === undefined) {
       continue;
     }
 
-    reasons[field] = detail.reason;
+    const field = path[0];
+
+    if (!isFormInputName(formName, field)) {
+      continue;
+    }
+
+    putReason(reasons, path, detail.reason);
   }
 
   return reasons;

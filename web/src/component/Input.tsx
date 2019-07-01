@@ -26,6 +26,15 @@ export type InputValues<TInputNames extends InputNames = InputNames> = {
 }[TInputNames];
 
 /**
+ * Union of error reason types of given input names.
+ */
+export type InputErrorReasons<TInputNames extends InputNames = InputNames> = {
+  [InputName in TInputNames]: InputName extends DeclareNutritionNames
+    ? DeclareNutritionProps["reason"]
+    : ErrorReasons
+}[TInputNames];
+
+/**
  * Declare nutrition component name.
  */
 export type DeclareNutritionNames = "declareNutrition";
@@ -106,7 +115,7 @@ interface InputProps<TInputNames extends InputNames = InputNames> {
   /**
    * Reason why an error related to this input occurred.
    */
-  reason?: ErrorReasons;
+  reason?: InputErrorReasons<TInputNames>;
 }
 
 /**
@@ -228,11 +237,13 @@ export class Input<
    */
   @computed
   private get error() {
-    const { name, reason } = this.props;
+    const { name, reason } = this.props as InputProps<
+      SelectNames | TextFieldNames
+    >;
 
     return reason === undefined
       ? undefined
-      : this.translation[name as SelectNames | TextFieldNames].reasons[reason];
+      : this.translation[name].reasons[reason];
   }
 
   /**

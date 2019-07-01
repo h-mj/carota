@@ -2,6 +2,27 @@ import { Translation } from ".";
 
 export const russian: Translation = {
   components: {
+    DeclareNutrition: {
+      nutrients: {
+        carbohydrate: "Углеводы",
+        energy: "Энергетическая ценность",
+        fat: "Жиры",
+        fibre: "Пищевые волокна",
+        monoUnsaturates: "Мононенасыщенные жирные кислоты",
+        polyols: "Многоатомные спирты",
+        polyunsaturates: "Полиненасыщенные жирные кислоты",
+        protein: "Белки",
+        salt: "Соль",
+        saturates: "Насыщенные жирные кислоты",
+        starch: "Крахмал",
+        sugars: "Сахара"
+      },
+      title: "TODO",
+      units: {
+        g: "г",
+        kcal: "ккал"
+      }
+    },
     Error: {
       invalidInvitation: {
         title: "К сожалению, этот адрес для регистрации недействителен.",

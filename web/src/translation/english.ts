@@ -2,6 +2,27 @@ import { Translation } from ".";
 
 export const english: Translation = {
   components: {
+    DeclareNutrition: {
+      nutrients: {
+        carbohydrate: "Carbohydrate",
+        energy: "Energy",
+        fat: "Fat",
+        fibre: "Fibre",
+        monoUnsaturates: "Mono-unsaturates",
+        polyols: "Polyols",
+        polyunsaturates: "Polyunsaturates",
+        protein: "Protein",
+        salt: "Salt",
+        saturates: "Saturates",
+        starch: "Starch",
+        sugars: "Sugars"
+      },
+      title: "Nutrition information",
+      units: {
+        g: "g",
+        kcal: "kcal"
+      }
+    },
     Error: {
       invalidInvitation: {
         title: "We are sorry, this sign up address is invalid.",

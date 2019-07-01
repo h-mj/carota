@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled, { css } from "styled-components";
+import { InputChangeHandler } from "./Input";
 import { ErrorMessage, Label } from "./TextField";
 import { DURATION, TIMING_FUNCTION } from "../styling/animations";
 import {
@@ -14,7 +15,7 @@ import { RESET } from "../styling/stylesheets";
 /**
  * Select component props.
  */
-interface SelectProps {
+export interface SelectProps<TValues extends string = string> {
   /**
    * Error message which will be shown under the select.
    */
@@ -29,12 +30,12 @@ interface SelectProps {
   /**
    * Function that will be called when selected option changes.
    */
-  onChange?: (name: string, value: string) => void;
+  onChange?: InputChangeHandler<TValues>;
 
   /**
    * Options from which to select.
    */
-  options: Readonly<Array<{ label: string; value: string }>>;
+  options: Readonly<Array<{ label: string; value: TValues }>>;
 
   /**
    * Label text that will be shown above the select component.
@@ -44,13 +45,15 @@ interface SelectProps {
   /**
    * Selected option value.
    */
-  value: string;
+  value?: string;
 }
 
 /**
  * Component that allows user to select between finite array of options.
  */
-export class Select extends React.Component<SelectProps> {
+export class Select<TValues extends string = string> extends React.Component<
+  SelectProps<TValues>
+> {
   /**
    * Last defined `error` prop value that is used as error message if `error`
    * prop is `undefined` but we still want to render `ErrorMessage` component.
@@ -60,7 +63,7 @@ export class Select extends React.Component<SelectProps> {
   /**
    * Updates `previousError` value when receiving potentially new props.
    */
-  public componentWillReceiveProps(props: SelectProps) {
+  public componentWillReceiveProps(props: SelectProps<TValues>) {
     if (props.error !== undefined) {
       this.previousError = props.error;
     }

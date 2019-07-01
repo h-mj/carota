@@ -24,7 +24,7 @@ export type TextFieldType = "email" | "number" | "password" | "tel" | "text";
 /**
  * Text field component props.
  */
-interface TextFieldProps {
+export interface TextFieldProps {
   /**
    * Whether or not this input should be in the focus automatically.
    */
@@ -60,7 +60,7 @@ interface TextFieldProps {
   /**
    * Text field value.
    */
-  value: string;
+  value?: string;
 }
 
 /**
@@ -96,7 +96,7 @@ export class TextField extends React.Component<TextFieldProps> {
           name={name}
           onChange={this.handleChange}
           type={type}
-          value={value}
+          value={value || ""}
         />
         {placeholder !== undefined && <Placeholder>{placeholder}</Placeholder>}
         {this.previousError !== undefined && (
@@ -261,6 +261,7 @@ const Input = styled.input<InputProps>`
     ${labelStyle};
   }
 
+  /* Hide up/down arrows on the right of the input */
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
     display: none;

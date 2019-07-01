@@ -1,5 +1,5 @@
 import { Error } from "api";
-import { InputErrorReasons, InputValues } from "../component/Form";
+import { InputErrorReasons, InputValuesX } from "../component/Form";
 import { InputNames } from "../component/Input";
 
 /**
@@ -12,7 +12,7 @@ import { InputNames } from "../component/Input";
  */
 export const isInputName = <TInputNames extends InputNames>(
   inputName: string,
-  inputValues: Readonly<InputValues<TInputNames>>
+  inputValues: Readonly<InputValuesX<TInputNames>>
 ): inputName is TInputNames => {
   return inputName in inputValues;
 };
@@ -25,14 +25,14 @@ export const isInputName = <TInputNames extends InputNames>(
  */
 export const createInputValues = <TInputNames extends InputNames>(
   inputNames: Readonly<Array<TInputNames>>
-): InputValues<TInputNames> => {
+): InputValuesX<TInputNames> => {
   const values: { [name: string]: string } = {};
 
   for (const inputName of inputNames) {
     values[inputName] = "";
   }
 
-  return values as InputValues<TInputNames>;
+  return values as InputValuesX<TInputNames>;
 };
 
 /**
@@ -48,7 +48,7 @@ export const createInputValues = <TInputNames extends InputNames>(
  */
 export const createFormErrorsReasons = <TInputNames extends InputNames>(
   error: Error | undefined,
-  values: Readonly<InputValues<TInputNames>>
+  values: Readonly<InputValuesX<TInputNames>>
 ): InputErrorReasons<TInputNames> => {
   const errors: InputErrorReasons<TInputNames> = {};
 

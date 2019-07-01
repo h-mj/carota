@@ -39,7 +39,7 @@ export class Login extends Scene<"login"> {
     this.props.view!.wait(Login.WAIT_REASON);
 
     const [error] = await Promise.all([
-      this.props.auth!.login(values),
+      this.props.auth!.login(values as any),
       setTimeout(1)
     ]);
 

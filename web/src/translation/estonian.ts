@@ -2,6 +2,27 @@ import { Translation } from ".";
 
 export const estonian: Translation = {
   components: {
+    DeclareNutrition: {
+      nutrients: {
+        carbohydrate: "Süsivesikud",
+        energy: "Energiasisaldus",
+        fat: "Rasvad",
+        fibre: "Kiudained",
+        monoUnsaturates: "Monoküllastumata rasvhapped",
+        polyols: "Polüoolid",
+        polyunsaturates: "Polüküllastumata rasvhapped",
+        protein: "Valgud",
+        salt: "Sool",
+        saturates: "Küllastunud rasvhapped",
+        starch: "Tärklis",
+        sugars: "Suhkrud"
+      },
+      title: "Toitumisalane teave",
+      units: {
+        g: "g",
+        kcal: "kcal"
+      }
+    },
     Error: {
       invalidInvitation: {
         title:

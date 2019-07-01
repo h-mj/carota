@@ -3,14 +3,10 @@ import { inject, observer } from "mobx-react";
 import styled from "styled-components";
 import * as React from "react";
 import { Button } from "./Button";
-import { Input, InputNames } from "./Input";
+import { Input, InputChangeHandler, InputNames, InputValues } from "./Input";
 import { InjectedProps } from "../store";
 import { UNIT } from "../styling/sizes";
-import {
-  anyErrors,
-  createFormErrorsReasons,
-  createInputValues
-} from "../utility/forms";
+import { anyErrors, createFormErrorsReasons } from "../utility/forms";
 import { action, observable } from "mobx";
 
 /**
@@ -52,17 +48,14 @@ export type FormErrorReasons<TFormName extends FormNames> = InputErrorReasons<
   FormInputNames[TFormName]
 >;
 
-/**
- * Input values type where input name is mapped to its value.
- */
-export type InputValues<TInputNames extends InputNames> = {
-  [InputName in TInputNames]: string
+export type InputValuesX<TInputNames extends InputNames> = {
+  [InputName in TInputNames]?: InputValues<InputName>
 };
 
 /**
  * Input values type of given form.
  */
-export type FormValues<TFormName extends FormNames> = InputValues<
+export type FormValues<TFormName extends FormNames> = InputValuesX<
   FormInputNames[TFormName]
 >;
 
@@ -86,7 +79,7 @@ interface FormProps<TFormName extends FormNames> {
   /**
    * Input change callback function.
    */
-  onChange?: (name: string, value: string) => void;
+  onChange?: InputChangeHandler<InputValues<FormInputNames[TFormName]>>;
 
   /**
    * Form submit callback function.
@@ -105,7 +98,7 @@ export class Form<TFormName extends FormNames> extends React.Component<
   /**
    * Form input field values.
    */
-  @observable private values = createInputValues(FORM_INPUTS[this.props.name]);
+  @observable private values: FormValues<TFormName> = {};
 
   /**
    * Form input field error reasons.
@@ -131,7 +124,7 @@ export class Form<TFormName extends FormNames> extends React.Component<
               name={inputName}
               onChange={this.handleChange}
               reason={this.reasons[inputName]}
-              value={this.values[inputName]}
+              value={this.values[inputName] as any}
             />
           )
         )}
@@ -145,8 +138,13 @@ export class Form<TFormName extends FormNames> extends React.Component<
    * Updates changed input value.
    */
   @action
-  private handleChange = (name: string, value: string) => {
-    (this.values[name as FormInputNames[TFormName]] as string) = value;
+  private handleChange: InputChangeHandler<
+    InputValues<FormInputNames[TFormName]>
+  > = (name, value) => {
+    (this.values[name as FormInputNames[TFormName]] as InputValues<
+      FormInputNames[TFormName]
+    >) = value;
+
     this.props.onChange !== undefined && this.props.onChange(name, value);
   };
 

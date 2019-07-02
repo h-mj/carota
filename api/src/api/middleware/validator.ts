@@ -6,11 +6,9 @@ import { createValidationError } from "../utility/errors";
 /**
  * Scema object type of given object `TObject`.
  */
-type SchemaType<TObject extends object> = {
-  [Property in keyof TObject]: TObject[Property] extends object
-    ? SchemaType<TObject[Property]>
-    : Joi.SchemaLike;
-};
+type SchemaType<TType> = TType extends object
+  ? { [P in keyof TType]: SchemaType<TType[P]> }
+  : Joi.SchemaLike;
 
 /**
  * Schema for body of action `TAction` of controller `TController`.
@@ -18,7 +16,6 @@ type SchemaType<TObject extends object> = {
 export type Schema<
   TController extends Controllers,
   TAction extends Actions<TController>
-  // @ts-ignore
 > = SchemaType<Body<TController, TAction>>;
 
 /**

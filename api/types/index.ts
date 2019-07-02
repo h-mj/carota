@@ -44,8 +44,7 @@ export type Actions<TController extends Controllers> = keyof Api[TController];
 export type Body<
   TController extends Controllers,
   TAction extends Actions<TController>
-  // @ts-ignore
-> = Api[TController][TAction]["body"];
+> = Api[TController][TAction] extends Types<infer IBody, {}> ? IBody : never;
 
 /**
  * Data type of the action `TAction` of controller `TController`.
@@ -53,8 +52,7 @@ export type Body<
 export type Data<
   TController extends Controllers,
   TAction extends Actions<TController>
-  // @ts-ignore
-> = Api[TController][TAction]["data"];
+> = Api[TController][TAction] extends Types<{}, infer IData> ? IData : never;
 
 /**
  * Type of an object within response message body of action `TAction` of

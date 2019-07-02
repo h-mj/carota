@@ -1,4 +1,4 @@
-import { Body, Data, Route } from "../../../types";
+import { Actions, Body, Controllers, Data } from "../../../types";
 import { Middleware } from "koa";
 import * as Joi from "@hapi/joi";
 import { createValidationError } from "../utility/errors";
@@ -13,9 +13,13 @@ type SchemaType<TObject extends object> = {
 };
 
 /**
- * Schema for body of route `TRoute`.
+ * Schema for body of action `TAction` of controller `TController`.
  */
-export type Schema<TRoute extends Route> = SchemaType<Body<TRoute>>;
+export type Schema<
+  TController extends Controllers,
+  TAction extends Actions<TController>
+  // @ts-ignore
+> = SchemaType<Body<TController, TAction>>;
 
 /**
  * Export `Joi` as `is` for shorter schema definitions.
@@ -32,18 +36,22 @@ const VALIDATION_OPTIONS: Readonly<Joi.ValidationOptions> = {
 };
 
 /**
- * `TRoute` route middleware state type after validation has been run.
+ * Middleware state type after validation of `TAction` action of `TController`
+ * controller request body has been run.
  */
-export interface ValidationState<TRoute extends Route> {
+export interface ValidationState<
+  TController extends Controllers,
+  TAction extends Actions<TController>
+> {
   /**
    * Body type of this route.
    */
-  body: Body<TRoute>;
+  body: Body<TController, TAction>;
 
   /**
    * Data type of this route.
    */
-  data: Data<TRoute>;
+  data: Data<TController, TAction>;
 }
 
 /**
@@ -55,10 +63,16 @@ export interface ValidationState<TRoute extends Route> {
  *
  * @throws `BadRequestError` if any validation errors occurred.
  */
-export const validator = <TRoute extends Route>(
-  schema: Schema<TRoute>
-): Middleware<ValidationState<TRoute>> => async (context, next) => {
-  const { error, value } = Joi.validate<Body<TRoute>>(
+export const validator = <
+  TController extends Controllers,
+  TAction extends Actions<TController>
+>(
+  schema: Schema<TController, TAction>
+): Middleware<ValidationState<TController, TAction>> => async (
+  context,
+  next
+) => {
+  const { error, value } = Joi.validate<Body<TController, TAction>>(
     context.request.body,
     schema,
     VALIDATION_OPTIONS

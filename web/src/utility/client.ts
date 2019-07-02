@@ -1,17 +1,23 @@
-import { Body, Response, Route } from "api";
+import { Actions, Body, Controllers, Response } from "api";
 import { auth } from "../store/AuthStore";
 
 /**
- * Makes a `POST` request to route `/api/${route}` with message body as string
- * version of parameter `body` and returns response message body as JSON.
+ * Makes a `POST` request to route `/api/${controller}/${action}` with message
+ * body as string version of parameter `body` and returns response message body
+ * as JSON.
  *
- * @param route Request route.
+ * @param controller Controller name.
+ * @param action Controllers action name.
  * @param body Request body object which will be in request message body.
  */
-export const post = async <TRoute extends Route>(
-  route: TRoute,
-  body: Body<TRoute>
-): Promise<Response<TRoute>> => {
+export const post = async <
+  TController extends Controllers,
+  TAction extends Actions<TController>
+>(
+  controller: TController,
+  action: TAction,
+  body: Body<TController, TAction>
+): Promise<Response<TController, TAction>> => {
   const bodyString = JSON.stringify(body);
   const headers = new Headers();
 
@@ -23,7 +29,7 @@ export const post = async <TRoute extends Route>(
     headers.append("Authorization", authorization);
   }
 
-  const response = await fetch("/api" + route, {
+  const response = await fetch(`/api/${controller}/${action}`, {
     body: bodyString,
     headers,
     method: "POST"

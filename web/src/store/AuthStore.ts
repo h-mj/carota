@@ -60,8 +60,8 @@ export class AuthStore {
    * @param body Login request message body.
    */
   @action
-  public async login(body: Body<"/auth/login">) {
-    const response = await post("/auth/login", body);
+  public async login(body: Body<"auth", "login">) {
+    const response = await post("auth", "login", body);
 
     if ("error" in response) {
       return response.error;
@@ -80,8 +80,8 @@ export class AuthStore {
    * @param body Registration request message body.
    */
   @action
-  public async register(body: Body<"/auth/register">) {
-    const response = await post("/auth/register", body);
+  public async register(body: Body<"auth", "register">) {
+    const response = await post("auth", "register", body);
 
     if ("error" in response) {
       return response.error;
@@ -105,8 +105,8 @@ export class AuthStore {
    *
    * @param body Invitation check request message body.
    */
-  public async check(body: Body<"/auth/check">) {
-    const response = await post("/auth/check", body);
+  public async check(body: Body<"auth", "check">) {
+    const response = await post("auth", "check", body);
 
     return "data" in response && response.data.isValid;
   }

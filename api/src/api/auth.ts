@@ -19,7 +19,7 @@ export const authRouter = new Router();
 /**
  * Login request body schema.
  */
-const LOGIN_SCHEMA: Readonly<Schema<"/auth/login">> = {
+const LOGIN_SCHEMA: Readonly<Schema<"auth", "login">> = {
   email: is
     .string()
     .trim()
@@ -27,7 +27,7 @@ const LOGIN_SCHEMA: Readonly<Schema<"/auth/login">> = {
   password: is.string()
 };
 
-defineNoAuth(authRouter, "/auth/login", LOGIN_SCHEMA, async context => {
+defineNoAuth(authRouter, "auth", "login", LOGIN_SCHEMA, async context => {
   const { email, password } = context.state.body;
 
   const account = await Account.findOne({ email });
@@ -42,7 +42,7 @@ defineNoAuth(authRouter, "/auth/login", LOGIN_SCHEMA, async context => {
 /**
  * Register request body schema.
  */
-const REGISTER_SCHEMA: Readonly<Schema<"/auth/register">> = {
+const REGISTER_SCHEMA: Readonly<Schema<"auth", "register">> = {
   name: is.string(),
   language: is.string().valid(Object.keys(LANGUAGES_ENUM)),
   email: is
@@ -54,7 +54,7 @@ const REGISTER_SCHEMA: Readonly<Schema<"/auth/register">> = {
   invitationId: is.string().guid()
 };
 
-defineNoAuth(authRouter, "/auth/register", REGISTER_SCHEMA, async context => {
+defineNoAuth(authRouter, "auth", "register", REGISTER_SCHEMA, async context => {
   const { name, language, email, password, invitationId } = context.state.body;
 
   const invitation = await Invitation.findOne({ id: invitationId });
@@ -88,13 +88,14 @@ defineNoAuth(authRouter, "/auth/register", REGISTER_SCHEMA, async context => {
 /**
  * Invitation check request body schema.
  */
-const INVITATION_CHECK_SCHEMA: Readonly<Schema<"/auth/check">> = {
+const INVITATION_CHECK_SCHEMA: Readonly<Schema<"auth", "check">> = {
   invitationId: is.string().guid()
 };
 
 defineNoAuth(
   authRouter,
-  "/auth/check",
+  "auth",
+  "check",
   INVITATION_CHECK_SCHEMA,
   async context => {
     const invitation = await Invitation.findOne({

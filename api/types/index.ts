@@ -1,19 +1,22 @@
 /**
- * Interface that holds all available routes as keys alongside with it's request
- * and response message types as values.
+ * Type that describes all available controllers, actions of each controller and
+ * request body message and response data types of each action.
  */
-interface RouteTypes {
-  "/auth/login": RouteType<AuthLoginBody, AuthData>;
-  "/auth/register": RouteType<AuthRegisterBody, AuthData>;
-  "/auth/check": RouteType<AuthInvitationCheckBody, AuthInvitationCheckData>;
-  "/food/save": RouteType<FoodSaveBody, FoodSaveData>;
+interface Api {
+  auth: {
+    check: Types<AuthCheckBody, AuthCheckData>;
+    login: Types<AuthLoginBody, AuthData>;
+    register: Types<AuthRegisterBody, AuthData>;
+  };
+  food: {
+    save: Types<FoodSaveBody, FoodSaveData>;
+  };
 }
 
 /**
- * Route types. `TBody` corresponds to the type of request message body, `TData`
- * to type of field `data` in response message body.
+ * Desctibes the request body type and response data type of some action.
  */
-interface RouteType<TBody, TData> {
+interface Types<TBody, TData> {
   /**
    * Type of object that is within request message body.
    */
@@ -26,36 +29,54 @@ interface RouteType<TBody, TData> {
 }
 
 /**
- * Route type.
+ * Controller type.
  */
-export type Route = keyof RouteTypes;
+export type Controllers = keyof Api;
 
 /**
- * Body type of the route `TRoute`.
+ * Actions type of given controller `TController`.
  */
-export type Body<TRoute extends Route> = RouteTypes[TRoute]["body"];
+export type Actions<TController extends Controllers> = keyof Api[TController];
 
 /**
- * Data type of the route `TRoute`.
+ * Body type of the action `TAction` of controller `TController`.
  */
-export type Data<TRoute extends Route> = RouteTypes[TRoute]["data"];
+export type Body<
+  TController extends Controllers,
+  TAction extends Actions<TController>
+  // @ts-ignore
+> = Api[TController][TAction]["body"];
 
 /**
- * Type of an object within response message body on route `TRoute`.
+ * Data type of the action `TAction` of controller `TController`.
  */
-export type Response<TRoute extends Route> =
-  | DataResponse<TRoute>
-  | ErrorResponse;
+export type Data<
+  TController extends Controllers,
+  TAction extends Actions<TController>
+  // @ts-ignore
+> = Api[TController][TAction]["data"];
+
+/**
+ * Type of an object within response message body of action `TAction` of
+ * controller `TController`.
+ */
+export type Response<
+  TController extends Controllers,
+  TAction extends Actions<TController>
+> = DataResponse<TController, TAction> | ErrorResponse;
 
 /**
  * Type of an object within response message body if request was handled
  * successfully.
  */
-export interface DataResponse<TRoute extends Route> {
+export interface DataResponse<
+  TController extends Controllers,
+  TAction extends Actions<TController>
+> {
   /**
    * Responded data.
    */
-  data: Data<TRoute>;
+  data: Data<TController, TAction>;
 }
 
 /**
@@ -246,7 +267,7 @@ export interface AuthRegisterBody {
 /**
  * Invitation check message body type.
  */
-export interface AuthInvitationCheckBody {
+export interface AuthCheckBody {
   /**
    * Invitation ID, which validity is being checked.
    */
@@ -266,7 +287,7 @@ export interface AuthData {
 /**
  * Invitation check response message data type.
  */
-export interface AuthInvitationCheckData {
+export interface AuthCheckData {
   /**
    * Whether or not given invitation ID is valid.
    */

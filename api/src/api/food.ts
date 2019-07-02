@@ -12,7 +12,7 @@ export const foodRouter = new Router();
 /**
  * Save request body schema.
  */
-const SAVE_SCHEMA: Schema<"/food/save"> = {
+const SAVE_SCHEMA: Schema<"food", "save"> = {
   id: is
     .string()
     .guid()
@@ -51,7 +51,7 @@ const SAVE_SCHEMA: Schema<"/food/save"> = {
   }
 };
 
-define(foodRouter, "/food/save", SAVE_SCHEMA, async context => {
+define(foodRouter, "food", "save", SAVE_SCHEMA, async context => {
   const { id, nutritionDeclaration, ...rest } = context.state.body;
   const food = id === undefined ? new Food() : await Food.findOne({ id });
 

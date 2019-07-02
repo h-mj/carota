@@ -155,7 +155,7 @@ interface TextFieldTranslation extends InputTranslation {
  * translated placeholder and error texts or translated label and error texts
  * alongside predefined and translated options respectively.
  */
-@inject("translations")
+@inject("views")
 @observer
 export class Input<
   TInputNames extends InputNames = InputNames

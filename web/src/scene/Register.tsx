@@ -12,7 +12,7 @@ import { setTimeout } from "../utility/primises";
 /**
  * Scene that renders a form used for registration.
  */
-@inject("auth", "translations", "view")
+@inject("auth", "views")
 @observer
 export class Register extends Scene<"Register"> {
   /**
@@ -65,7 +65,7 @@ export class Register extends Scene<"Register"> {
   @action
   private handleChange: FormChangeHandler<"register"> = (name, value) => {
     if (name === "language") {
-      this.props.translations!.language = value as Languages;
+      this.props.views!.language = value as Languages;
     }
   };
 
@@ -78,7 +78,7 @@ export class Register extends Scene<"Register"> {
     const { email, language, name, password } = values;
     const { invitationId } = this.props.parameters!;
 
-    this.props.view!.wait(Register.WAIT_REASON);
+    this.props.views!.wait(Register.WAIT_REASON);
 
     const [error] = await Promise.all([
       this.props.auth!.register({
@@ -91,10 +91,10 @@ export class Register extends Scene<"Register"> {
       setTimeout(1)
     ]);
 
-    this.props.view!.done(Register.WAIT_REASON);
+    this.props.views!.done(Register.WAIT_REASON);
 
     if (error === undefined) {
-      this.props.view!.redirect(Stage.HOME);
+      this.props.views!.redirect(Stage.HOME);
     }
 
     return error;
@@ -108,9 +108,9 @@ export class Register extends Scene<"Register"> {
     if (this.props.parameters === undefined) {
       this.isValid = false;
     } else {
-      this.props.view!.wait(Register.WAIT_REASON);
+      this.props.views!.wait(Register.WAIT_REASON);
       this.isValid = await this.props.auth!.check(this.props.parameters);
-      this.props.view!.done(Register.WAIT_REASON);
+      this.props.views!.done(Register.WAIT_REASON);
     }
   }
 }

@@ -61,6 +61,22 @@ export type SceneProps<
   : never;
 
 /**
+ * Type that maps scene names to their translations.
+ */
+export type ScenesTranslation = { [SceneName in SceneNames]: SceneTranslation };
+
+/**
+ * Translations of a scene component.
+ */
+interface SceneTranslation {
+  /**
+   * Title of this scene, which will be used as `window.title` when this scene
+   * is shown.
+   */
+  title: string;
+}
+
+/**
  * Scene component base class that is extended by all scene components.
  *
  * Generic parameter `TSceneName` is used to reference a scene by their name in

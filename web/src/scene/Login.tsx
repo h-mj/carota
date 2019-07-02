@@ -10,7 +10,7 @@ import { setTimeout } from "../utility/primises";
 /**
  * Scene that renders a form used for signing in.
  */
-@inject("auth", "view")
+@inject("auth", "views")
 @observer
 export class Login extends Scene<"Login"> {
   /**
@@ -36,7 +36,7 @@ export class Login extends Scene<"Login"> {
    */
   @action
   private handleSubmit: FormSubmitHandler<"login"> = async values => {
-    this.props.view!.wait(Login.WAIT_REASON);
+    this.props.views!.wait(Login.WAIT_REASON);
 
     const { email, password } = values;
 
@@ -48,12 +48,12 @@ export class Login extends Scene<"Login"> {
       setTimeout(1)
     ]);
 
-    this.props.view!.done(Login.WAIT_REASON);
+    this.props.views!.done(Login.WAIT_REASON);
 
     if (error === undefined) {
-      this.props.view!.update(); // Update stage to match current URL.
+      this.props.views!.update(); // Update stage to match current URL.
     } else if (error.code === 401) {
-      this.props.view!.notify(new Notification("loginInvalidCredentials", {}));
+      this.props.views!.notify(new Notification("loginInvalidCredentials", {}));
     }
 
     return error;

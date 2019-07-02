@@ -141,7 +141,7 @@ interface NotificationTranslation {
 /**
  * Component that displays all notifications in the bottom left corner.
  */
-@inject("translations", "view")
+@inject("views")
 @observer
 export class NotificationContainer extends Component<
   NotificationContainerProps,
@@ -218,7 +218,7 @@ export class NotificationContainer extends Component<
       <NotificationElement
         key={id}
         isActive={notifications.includes(notification)}
-        onClick={() => this.props.view!.conceal(notification)}
+        onClick={() => this.props.views!.conceal(notification)}
         type={NAME_TO_TYPE[name]}
       >
         {message}

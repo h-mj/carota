@@ -6,7 +6,7 @@ import { setTimeout } from "../utility/primises";
 /**
  * Scene that, when constructed, logs user out after some timeout.
  */
-@inject("auth", "view")
+@inject("auth", "views")
 export class Logout extends Scene<"Logout"> {
   /**
    * Waiting reason that is used to show loader component when waiting for timeout.
@@ -33,7 +33,7 @@ export class Logout extends Scene<"Logout"> {
    * Function that logs user out and redirects to home page after some timeout.
    */
   private async logout() {
-    const { auth, view } = this.props;
+    const { auth, views: view } = this.props;
 
     view!.wait(Logout.WAIT_REASON);
 

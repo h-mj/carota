@@ -58,7 +58,7 @@ interface ErrorTranslation {
 /**
  * Error component that displays a title and message of occurred error.
  */
-@inject("translations")
+@inject("views")
 @observer
 export class Error<TErrorName extends ErrorNames> extends Component<
   ErrorProps<TErrorName>,

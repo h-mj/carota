@@ -23,7 +23,7 @@ interface NavigationProps {
  * Navigation bar component that is used to navigate to different parts of the
  * application.
  */
-@inject("translations", "view")
+@inject("views")
 @observer
 export class Navigation extends React.Component<
   NavigationProps & InjectedProps
@@ -32,8 +32,8 @@ export class Navigation extends React.Component<
    * Renders a navigation bar with anchors to stages defined in `NAVIGABLE_STAGES`.
    */
   public render() {
-    const currentSceneName = this.props.view!.main.sceneName;
-    const sceneTranslation = this.props.translations!.translation.scenes;
+    const currentSceneName = this.props.views!.main.sceneName;
+    const sceneTranslation = this.props.views!.translation.scenes;
 
     return (
       <Container>

@@ -1,14 +1,12 @@
 import { auth, AuthStore } from "./AuthStore";
-import { translations, TranslationsStore } from "./TranslationsStore";
-import { view, ViewStore } from "./ViewStore";
+import { views, ViewsStore } from "./ViewsStore";
 
 /**
  * Mapping between store names and their class types.
  */
 export interface Stores {
   auth: AuthStore;
-  translations: TranslationsStore;
-  view: ViewStore;
+  views: ViewsStore;
 }
 
 /**
@@ -17,8 +15,7 @@ export interface Stores {
  */
 export const STORES: Readonly<Stores> = {
   auth,
-  translations,
-  view
+  views
 };
 
 /**

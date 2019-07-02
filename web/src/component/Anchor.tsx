@@ -21,7 +21,7 @@ interface AnchorProps {
 /**
  * Component that on click redirects user to given scene with some parameters.
  */
-@inject("view")
+@inject("views")
 export class Anchor extends React.Component<AnchorProps & InjectedProps> {
   /**
    * Renders an anchor component.
@@ -43,6 +43,6 @@ export class Anchor extends React.Component<AnchorProps & InjectedProps> {
    */
   private handleClick: React.MouseEventHandler<HTMLAnchorElement> = event => {
     event.preventDefault();
-    this.props.view!.redirect(this.props.stage);
+    this.props.views!.redirect(this.props.stage);
   };
 }

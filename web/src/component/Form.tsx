@@ -232,7 +232,7 @@ interface FormTranslation {
  * used as initial values. It is impossible to retrieve error reasons object,
  * but values are provided as `onSubmit` callback function parameter.
  */
-@inject("translations")
+@inject("views")
 @observer
 export class Form<TFormName extends FormNames = FormNames> extends Component<
   FormProps<TFormName>,

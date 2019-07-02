@@ -66,11 +66,11 @@ export const NAVIGATION_STAGES: Readonly<Array<Stages>> = [
 /**
  * The root component.
  */
-@inject("view")
+@inject("views")
 @observer
 class Application extends React.Component<InjectedProps> {
   public render() {
-    const { main, notifications, showNavigation, waiting } = this.props.view!;
+    const { main, notifications, showNavigation, waiting } = this.props.views!;
 
     return (
       <>

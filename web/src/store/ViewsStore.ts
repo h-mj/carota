@@ -1,20 +1,27 @@
+import { Languages } from "api";
 import { computed, observable, action } from "mobx";
+import { Stage, Stages } from "../scene/Stage";
 import {
   NO_AUTHENTICATION_SCENE_NAMES,
   NO_NAVIGATION_SCENE_NAMES
 } from "../scene/Scene";
-import { Stage, Stages } from "../scene/Stage";
 import { Notifications } from "../component/NotificationContainer";
 import { auth } from "./AuthStore";
-import { translations } from "./TranslationsStore";
+import { TRANSLATIONS } from "../translation";
 
 /**
- * Store that stores and updates all stages.
+ * Store that stores information about current state of the view, including
+ * language, main stage, active notifications, and waiting reasons.
  *
  * It is also responsible for retrieving correct scene name and parameters based
  * on current URL and updating current URL if main stage was changed.
  */
-export class ViewStore {
+export class ViewsStore {
+  /**
+   * Current interface language.
+   */
+  @observable private _language: Languages = "English";
+
   /**
    * Current main stage.
    */
@@ -38,6 +45,14 @@ export class ViewStore {
   public constructor() {
     this.update();
     window.addEventListener("popstate", () => this.update(), false);
+  }
+
+  /**
+   * Returns translation object based on current interface language.
+   */
+  @computed
+  public get translation() {
+    return TRANSLATIONS[this._language];
   }
 
   /**
@@ -65,6 +80,21 @@ export class ViewStore {
   }
 
   /**
+   * Whether or not navigation component should be visible.
+   */
+  @computed
+  public get showNavigation() {
+    return !NO_NAVIGATION_SCENE_NAMES.includes(this._main.sceneName);
+  }
+
+  /**
+   * Sets interface language.
+   */
+  public set language(language: Languages) {
+    this._language = language;
+  }
+
+  /**
    * Sets main stage's scene name and parameters.
    *
    * @param sceneName
@@ -81,9 +111,9 @@ export class ViewStore {
         : Stage.GATEWAY;
 
     const url = stage.getUrl() || window.location.pathname;
-    const title = `${
-      translations.translation.scenes[this._main.sceneName].title
-    } - ${translations.translation.title}`;
+    const title = `${this.translation.scenes[this._main.sceneName].title} - ${
+      this.translation.title
+    }`;
 
     if (url !== window.location.pathname) {
       window.history.pushState(null, title, url);
@@ -160,18 +190,10 @@ export class ViewStore {
   public done(reason: string) {
     this._waits.delete(reason);
   }
-
-  /**
-   * Whether or not navigation component should be visible.
-   */
-  @computed
-  public get showNavigation() {
-    return !NO_NAVIGATION_SCENE_NAMES.includes(this._main.sceneName);
-  }
 }
 
 /**
  * The only `ScenesStore` class instance and which is provided to all
  * components.
  */
-export const view = new ViewStore();
+export const views = new ViewsStore();

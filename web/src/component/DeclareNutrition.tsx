@@ -78,7 +78,7 @@ interface DeclareNutritionTranslation {
 /**
  * Component that is used to define or edit product nutrient values.
  */
-@inject("translations")
+@inject("views")
 @observer
 export class DeclareNutrition extends Component<
   DeclareNutritionProps,

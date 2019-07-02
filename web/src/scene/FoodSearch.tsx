@@ -6,15 +6,17 @@ import { Medium } from "../component/container/Medium";
 import styled from "styled-components";
 import { TextField } from "../component/TextField";
 import { InputChangeHandler } from "../component/Input";
-import { UNIT } from "../styling/sizes";
+import { UNIT, BORDER_RADIUS } from "../styling/sizes";
 import { DEFAULT_BORDER } from "../styling/colors";
 
 @inject("foods")
 @observer
-export class FoodList extends Scene<"FoodList"> {
+export class FoodSearch extends Scene<"FoodSearch"> {
   @observable query = "";
 
   public render() {
+    const results = this.props.foods!.getAll();
+
     return (
       <Medium>
         <TextField
@@ -25,9 +27,13 @@ export class FoodList extends Scene<"FoodList"> {
           value={this.query}
         />
 
-        {this.props.foods!.getAll().map(food => (
-          <Result>{food.name}</Result>
-        ))}
+        {results.length > 0 && (
+          <Results>
+            {this.props.foods!.getAll().map(food => (
+              <Result key={food.id}>{food.name}</Result>
+            ))}
+          </Results>
+        )}
       </Medium>
     );
   }
@@ -37,12 +43,21 @@ export class FoodList extends Scene<"FoodList"> {
     this.query = value;
 
     if (value) {
-      this.props.foods!.find({ query: this.query });
+      this.props.foods!.search({ query: this.query });
     } else {
       this.props.foods!.clear();
     }
   };
 }
+
+const Results = styled.div`
+  width: 100%;
+
+  margin-top: ${UNIT / 4}rem;
+
+  box-shadow: 0 0 0 1px ${DEFAULT_BORDER}, inset 0 0 0 1px ${DEFAULT_BORDER};
+  border-radius: ${BORDER_RADIUS}rem;
+`;
 
 const Result = styled.div`
   display: flex;
@@ -54,7 +69,8 @@ const Result = styled.div`
   padding: 0 ${UNIT / 4}rem;
   box-sizing: border-box;
 
-  border-bottom: solid 2px ${DEFAULT_BORDER};
+  box-shadow: 0 0 0 1px ${DEFAULT_BORDER}, inset 0 0 0 1px ${DEFAULT_BORDER};
+  border-radius: ${BORDER_RADIUS}rem;
 
   &:last-of-type {
     border-bottom: 0;

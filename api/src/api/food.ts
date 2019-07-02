@@ -10,40 +10,6 @@ import { define } from "./utility/routes";
 export const foodRouter = new Router();
 
 /**
- * Returns a function that checks whether or not given food matches the query
- * string.
- *
- * @param query Search query string.
- */
-const matches = (query: string) => (food: Food) => {
-  const name = food.name.toLowerCase();
-
-  return (
-    query
-      .trim()
-      .toLocaleLowerCase()
-      .split(/\s+/)
-      .find(part => !name.includes(part)) === undefined
-  );
-};
-
-/**
- * Find request body schema.
- */
-const FIND_SCHEMA: Schema<"food", "find"> = {
-  query: is.string()
-};
-
-define(foodRouter, "food", "find", FIND_SCHEMA, async context => {
-  const foods = await Food.find();
-
-  context.state.data = foods
-    .filter(matches(context.state.body.query))
-    .map(food => food.toData())
-    .slice(0, 20);
-});
-
-/**
  * Save request body schema.
  */
 const SAVE_SCHEMA: Schema<"food", "save"> = {
@@ -103,4 +69,38 @@ define(foodRouter, "food", "save", SAVE_SCHEMA, async context => {
   });
 
   context.state.data = (await food.save()).toData();
+});
+
+/**
+ * Returns a function that checks whether or not given food matches the query
+ * string.
+ *
+ * @param query Search query string.
+ */
+const matches = (query: string) => (food: Food) => {
+  const name = food.name.toLowerCase();
+
+  return (
+    query
+      .trim()
+      .toLocaleLowerCase()
+      .split(/\s+/)
+      .find(part => !name.includes(part)) === undefined
+  );
+};
+
+/**
+ * Search request body schema.
+ */
+const SEARCH_SCHEMA: Schema<"food", "search"> = {
+  query: is.string()
+};
+
+define(foodRouter, "food", "search", SEARCH_SCHEMA, async context => {
+  const foods = await Food.find();
+
+  context.state.data = foods
+    .filter(matches(context.state.body.query))
+    .map(food => food.toData())
+    .slice(0, 20);
 });

@@ -9,8 +9,8 @@ interface Api {
     register: Types<AuthRegisterBody, AuthData>;
   };
   food: {
-    find: Types<FoodFindBody, FoodData[]>;
     save: Types<FoodSaveBody, FoodData>;
+    search: Types<FoodSearchBody, FoodData[]>;
   };
 }
 
@@ -393,9 +393,12 @@ export interface FoodSaveBody {
 }
 
 /**
- * Find food request message body type.
+ * Search food request message body type.
  */
-export interface FoodFindBody {
+export interface FoodSearchBody {
+  /**
+   * Search query string.
+   */
   query: string;
 }
 

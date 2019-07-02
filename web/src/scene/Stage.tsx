@@ -3,7 +3,7 @@ import { Scene, SceneNames, SceneProps } from "./Scene";
 import { Administration } from "./Administration";
 import { Diet } from "./Diet";
 import { FoodInformation } from "./FoodInformation";
-import { FoodList } from "./FoodList";
+import { FoodSearch } from "./FoodSearch";
 import { History } from "./History";
 import { Home } from "./Home";
 import { Login } from "./Login";
@@ -50,7 +50,7 @@ const ROUTES = {
   "/diet": to("Diet"),
   "/food/add": to("FoodInformation"),
   "/food/{id}/edit": to("FoodInformation", "id"),
-  "/food/list": to("FoodList"),
+  "/food/search": to("FoodSearch"),
   "/history": to("History"),
   "/": to("Home"),
   "/logout": to("Logout"),
@@ -83,7 +83,7 @@ export const SCENES = {
   Administration: Administration,
   Diet: Diet,
   FoodInformation: FoodInformation,
-  FoodList: FoodList,
+  FoodSearch: FoodSearch,
   History: History,
   Home: Home,
   Login: Login,

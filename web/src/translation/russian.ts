@@ -100,7 +100,7 @@ export const russian: Translation = {
     Administration: { title: "Администрация" },
     Diet: { title: "Диета" },
     FoodInformation: { title: "Информация о продукте" },
-    FoodList: { title: "Список продуктов" },
+    FoodSearch: { title: "Поиск продуктов" },
     History: { title: "История" },
     Home: { title: "Главная" },
     Login: { title: "Вход" },

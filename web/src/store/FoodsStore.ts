@@ -12,8 +12,8 @@ export class FoodsStore extends Store<Food> {
    *
    * @param body Food find request body.
    */
-  public async find(body: Body<"food", "find">) {
-    const response = await post("food", "find", body);
+  public async search(body: Body<"food", "search">) {
+    const response = await post("food", "search", body);
 
     if ("error" in response) {
       return response.error;

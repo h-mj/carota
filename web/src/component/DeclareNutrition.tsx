@@ -7,9 +7,9 @@ import { InputChangeHandler } from "./Input";
 import { Label } from "./TextField";
 import { DURATION, TIMING_FUNCTION } from "../styling/animations";
 import {
+  ACTIVE,
   DEFAULT_BORDER,
   DEFAULT_LABEL,
-  ACTIVE,
   ERROR
 } from "../styling/colors";
 import { BORDER_RADIUS, UNIT } from "../styling/sizes";
@@ -225,7 +225,7 @@ const defaultRowStyle = css`
 
   &:focus-within > ${Header},
   &:focus-within > ${Unit},
-  /* Only the last row (first row visually) will affect Label component */
+  /* Only the first row will affect Label component */
   &:focus-within + ${Label} {
     color: ${ACTIVE};
   }
@@ -242,7 +242,7 @@ const errorRowStyle = css`
 
   &:focus-within > ${Header},
   &:focus-within > ${Unit},
-  /* Only the last row (first row visually) will affect Label component */
+  /* Only the first row will affect Label component */
   &:focus-within + ${Label} {
     color: ${ERROR};
   }

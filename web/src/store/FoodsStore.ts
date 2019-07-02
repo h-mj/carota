@@ -3,6 +3,9 @@ import { Store } from "./Store";
 import { Food } from "../model/Food";
 import { post } from "../utility/client";
 
+/**
+ * Store that stores and manages food models.
+ */
 export class FoodsStore extends Store<Food> {
   /**
    * Replaces current food data with found food data.
@@ -23,4 +26,7 @@ export class FoodsStore extends Store<Food> {
   }
 }
 
+/**
+ * The only `FoodsStore` class instance and which is provided to all components
+ */
 export const foods = new FoodsStore(Food);

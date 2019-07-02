@@ -34,7 +34,12 @@ export interface TextFieldProps {
   /**
    * Error message which will be shown under the text field.
    */
-  error?: string;
+  errorMessage?: string;
+
+  /**
+   * Whether or not there's an error.
+   */
+  hasError?: boolean;
 
   /**
    * Text field name that will be included as one of the `onChange` callback
@@ -78,8 +83,8 @@ export class TextField extends React.Component<TextFieldProps> {
    * Updates `previousError` value when receiving potentially new props.
    */
   public componentWillReceiveProps(props: TextFieldProps) {
-    if (props.error !== undefined) {
-      this.previousError = props.error;
+    if (props.errorMessage !== undefined) {
+      this.previousError = props.errorMessage;
     }
   }
 
@@ -87,13 +92,21 @@ export class TextField extends React.Component<TextFieldProps> {
    * Renders text field component alongside the placeholder and error labels.
    */
   public render() {
-    const { autoFocus, error, name, placeholder, type, value } = this.props;
+    const {
+      autoFocus,
+      errorMessage,
+      hasError,
+      name,
+      placeholder,
+      type,
+      value
+    } = this.props;
 
     return (
       <Container>
         <Input
           autoFocus={autoFocus}
-          hasError={error !== undefined}
+          hasError={hasError === true || errorMessage !== undefined}
           name={name}
           onChange={this.handleChange}
           type={type}
@@ -101,7 +114,7 @@ export class TextField extends React.Component<TextFieldProps> {
         />
         {placeholder !== undefined && <Placeholder>{placeholder}</Placeholder>}
         {this.previousError !== undefined && (
-          <ErrorMessage hasError={error !== undefined}>
+          <ErrorMessage isActive={errorMessage !== undefined}>
             {this.previousError}
           </ErrorMessage>
         )}
@@ -188,9 +201,9 @@ const Placeholder = styled(Label)`
  */
 interface ErrorMessageProps {
   /**
-   * Whether or not there's an error.
+   * Whether or not error message should be active.
    */
-  hasError: boolean;
+  isActive: boolean;
 }
 
 /**
@@ -200,7 +213,7 @@ export const ErrorMessage = styled(Label)<ErrorMessageProps>`
   top: initial;
   bottom: -${UNIT / 8}rem;
   color: ${ERROR};
-  animation: ${props => (props.hasError ? fadeIn : fadeOut)} ${DURATION}s
+  animation: ${props => (props.isActive ? fadeIn : fadeOut)} ${DURATION}s
     forwards;
 `;
 

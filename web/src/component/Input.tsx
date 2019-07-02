@@ -197,11 +197,14 @@ export class Input<
    * Renders a `Select` component.
    */
   private renderSelect() {
-    const { name, onChange, value } = this.props as InputProps<SelectNames>;
+    const { name, onChange, reason, value } = this.props as InputProps<
+      SelectNames
+    >;
 
     return (
       <Select
-        error={this.error}
+        errorMessage={this.errorMessage}
+        hasError={reason !== undefined}
         label={this.translation[name].label}
         name={name}
         onChange={onChange}
@@ -215,14 +218,14 @@ export class Input<
    * Renders a `TextField` component.
    */
   private renderTextField() {
-    const { autoFocus, name, onChange, value } = this.props as InputProps<
-      TextFieldNames
-    >;
+    const { autoFocus, name, onChange, reason, value } = this
+      .props as InputProps<TextFieldNames>;
 
     return (
       <TextField
         autoFocus={autoFocus}
-        error={this.error}
+        errorMessage={this.errorMessage}
+        hasError={reason !== undefined}
         name={name}
         onChange={onChange}
         placeholder={this.translation[name as TextFieldNames].placeholder}
@@ -236,7 +239,7 @@ export class Input<
    * Returns translated error message based on occurred error reason.
    */
   @computed
-  private get error() {
+  private get errorMessage() {
     const { name, reason } = this.props as InputProps<
       SelectNames | TextFieldNames
     >;

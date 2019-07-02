@@ -115,16 +115,6 @@ export type Notifications = {
 }[NotificationNames];
 
 /**
- * NotificationContainer component properties.
- */
-interface NotificationContainerProps {
-  /**
-   * Array of active notifications.
-   */
-  notifications: Readonly<Array<Notifications>>;
-}
-
-/**
  * Translations of an notification component.
  */
 interface NotificationTranslation {
@@ -137,7 +127,7 @@ interface NotificationTranslation {
 @inject("views")
 @observer
 export class NotificationContainer extends Component<
-  NotificationContainerProps,
+  {},
   Record<NotificationNames, NotificationTranslation>
 > {
   /**
@@ -149,8 +139,8 @@ export class NotificationContainer extends Component<
   /**
    * Adds new notifications to `visibleNotifications` array, and fades inactive notifications out.
    */
-  public componentWillUpdate(props: NotificationContainerProps) {
-    const { notifications } = props;
+  public componentWillUpdate() {
+    const { notifications } = this.props.views!;
 
     // Add new notifications to `visibleNotifications`,
     for (const notification of notifications) {
@@ -172,12 +162,13 @@ export class NotificationContainer extends Component<
    */
   public render() {
     // `this.visibleNotifications.length` is always greater or equal to
-    // `this.props.notifications.length`, so the first part of and statement is
-    // useless. The reason why it is included is that otherwise this component
-    // won't be rerendered, because the reference to array doesn't change and
-    // MobX thinks nothing will be changed as a result of rendering
+    // `this.props.views!.notifications.length`, so the first part of and
+    // statement is useless. The reason why it is included is that otherwise
+    // this component won't be rerendered, because the reference to array
+    // doesn't change and MobX thinks nothing will be changed as a result of
+    // rerendering.
     if (
-      this.props.notifications.length === 0 &&
+      this.props.views!.notifications.length === 0 &&
       this.visibleNotifications.length === 0
     ) {
       return null;
@@ -194,7 +185,7 @@ export class NotificationContainer extends Component<
    * Renders one of the notifications.
    */
   private renderNotification = (notification: Notifications) => {
-    const { notifications } = this.props;
+    const { notifications } = this.props.views!;
     const { id, name, parameters } = notification;
 
     let message = this.translation[name].message;

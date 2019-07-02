@@ -1,26 +1,18 @@
 import { action, observable } from "mobx";
-import { observer } from "mobx-react";
+import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
 import { Loading } from "./icon/Loading";
+import { InjectedProps } from "../store/Store";
 import { DURATION, fadeIn, fadeOut } from "../styling/animations";
 import { BACKGROUND_TRANSLUCENT } from "../styling/colors";
 
 /**
- * Loader component props.
- */
-interface LoaderProps {
-  /**
-   * Whether or not something is loading.
-   */
-  isLoading: boolean;
-}
-
-/**
  * Component that is shown when some part of the application is being loaded.
  */
+@inject("views")
 @observer
-export class Loader extends React.Component<LoaderProps> {
+export class Loader extends React.Component<InjectedProps> {
   /**
    * Timeout ID that sets `timeoutId` back to `0`.
    */
@@ -34,25 +26,27 @@ export class Loader extends React.Component<LoaderProps> {
   /**
    * Sets fade out timeout if needed and updates `previousIsLoading` value.
    */
-  public componentWillUpdate(props: LoaderProps) {
-    const { isLoading } = props;
+  public componentWillUpdate() {
+    const { waiting } = this.props.views!;
 
     // If we were loading but not anymore, fade out.
-    if (this.previousIsLoading && !isLoading) {
+    if (this.previousIsLoading && !waiting) {
       window.clearTimeout(this.timeoutId);
       this.timeoutId = window.setTimeout(this.hide, 1000 * DURATION);
     }
 
-    this.previousIsLoading = isLoading;
+    this.previousIsLoading = waiting;
   }
 
   /**
    * Renders loader component.
    */
   public render() {
-    if (this.props.isLoading || this.timeoutId !== 0) {
+    const { waiting } = this.props.views!;
+
+    if (waiting || this.timeoutId !== 0) {
       return (
-        <Overlay isActive={this.props.isLoading}>
+        <Overlay isActive={waiting}>
           <Loading />
         </Overlay>
       );

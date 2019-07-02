@@ -19,7 +19,12 @@ export interface SelectProps<TValues extends string = string> {
   /**
    * Error message which will be shown under the select.
    */
-  error?: string;
+  errorMessage?: string;
+
+  /**
+   * Whether or not there's an error.
+   */
+  hasError?: boolean;
 
   /**
    * Select name that will be included as one of the `onChange` callback
@@ -58,14 +63,14 @@ export class Select<TValues extends string = string> extends React.Component<
    * Last defined `error` prop value that is used as error message if `error`
    * prop is `undefined` but we still want to render `ErrorMessage` component.
    */
-  private previousError?: string;
+  private previousErrorMessage?: string;
 
   /**
    * Updates `previousError` value when receiving potentially new props.
    */
   public componentWillReceiveProps(props: SelectProps<TValues>) {
-    if (props.error !== undefined) {
-      this.previousError = props.error;
+    if (props.errorMessage !== undefined) {
+      this.previousErrorMessage = props.errorMessage;
     }
   }
 
@@ -74,13 +79,13 @@ export class Select<TValues extends string = string> extends React.Component<
    * error labels.
    */
   public render() {
-    const { error, options, label, value } = this.props;
+    const { errorMessage, hasError, options, label, value } = this.props;
 
     return (
-      <Container hasError={error !== undefined}>
+      <Container hasError={hasError === true || errorMessage !== undefined}>
         {options.map(({ label, value: optionValue }) => (
           <Option
-            hasError={error !== undefined}
+            hasError={hasError === true || errorMessage !== undefined}
             key={optionValue}
             isSelected={value === optionValue}
             onClick={this.handleClick}
@@ -91,9 +96,9 @@ export class Select<TValues extends string = string> extends React.Component<
           </Option>
         ))}
         {label !== undefined && <Label>{label}</Label>}
-        {this.previousError !== undefined && (
-          <ErrorMessage hasError={error !== undefined}>
-            {this.previousError}
+        {this.previousErrorMessage !== undefined && (
+          <ErrorMessage isActive={errorMessage !== undefined}>
+            {this.previousErrorMessage}
           </ErrorMessage>
         )}
       </Container>

@@ -106,11 +106,31 @@ export class ViewsStore {
   }
 
   /**
-   * Whether or not navigation component should be visible.
+   * Whether or not body overflow should be hidden so that user can not scroll.
    */
   @computed
-  public get showNavigation() {
-    return !NO_NAVIGATION_SCENE_NAMES.includes(this._main.sceneName);
+  public get hideOverflow() {
+    return this.waiting;
+  }
+
+  /**
+   * Returns navigation item stages.
+   */
+  @computed
+  public get navigation() {
+    if (NO_NAVIGATION_SCENE_NAMES.includes(this.main.sceneName)) {
+      return undefined;
+    }
+
+    return [
+      new Stage("Home", {}, {}),
+      new Stage("Diet", {}, {}),
+      new Stage("Measurements", {}, {}),
+      new Stage("History", {}, {}),
+      new Stage("Administration", {}, {}),
+      new Stage("Settings", {}, {}),
+      new Stage("Logout", {}, {})
+    ];
   }
 
   /**

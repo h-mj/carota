@@ -68,7 +68,9 @@ export type Parameters<TSceneNames extends SceneNames> =
   | (typeof ROUTES[keyof typeof ROUTES] extends infer ITypes
       ? ITypes extends To<infer ISceneName, infer IParameterNames>
         ? ISceneName extends TSceneNames
-          ? Record<IParameterNames, string>
+          ? string extends IParameterNames
+            ? {}
+            : Record<IParameterNames, string>
           : never
         : never
       : never);

@@ -2,10 +2,9 @@ import { inject, observer, Provider } from "mobx-react";
 import * as React from "react";
 import { render } from "react-dom";
 import { createGlobalStyle } from "styled-components";
-import { Stage, Stages } from "./scene/Stage";
+import { Navigation } from "./component/Navigation";
 import { NotificationContainer } from "./component/NotificationContainer";
 import { Loader } from "./component/Loader";
-import { Navigation } from "./component/Navigation";
 import { InjectedProps } from "./store/Store";
 import { auth } from "./store/AuthStore";
 import { foods } from "./store/FoodsStore";
@@ -54,34 +53,21 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
 `;
 
 /**
- * Array of navigable stages using the navigation bar.
- */
-const NAVIGATION_STAGES: Readonly<Array<Stages>> = [
-  new Stage("Home", {}, {}),
-  new Stage("Diet", {}, {}),
-  new Stage("Measurements", {}, {}),
-  new Stage("History", {}, {}),
-  new Stage("Administration", {}, {}),
-  new Stage("Settings", {}, {}),
-  new Stage("Logout", {}, {})
-];
-
-/**
  * The root component.
  */
 @inject("views")
 @observer
 class Application extends React.Component<InjectedProps> {
   public render() {
-    const { main, notifications, showNavigation, waiting } = this.props.views!;
+    const { main, hideOverflow } = this.props.views!;
 
     return (
       <>
-        <GlobalStyle hideOverflow={waiting} />
-        {showNavigation && <Navigation stages={NAVIGATION_STAGES} />}
+        <GlobalStyle hideOverflow={hideOverflow} />
+        <Navigation />
         {main.render()}
-        <Loader isLoading={waiting} />
-        <NotificationContainer notifications={notifications} />
+        <Loader />
+        <NotificationContainer />
       </>
     );
   }

@@ -6,7 +6,9 @@ import { Stage, Stages } from "./scene/Stage";
 import { NotificationContainer } from "./component/NotificationContainer";
 import { Loader } from "./component/Loader";
 import { Navigation } from "./component/Navigation";
-import { InjectedProps, STORES } from "./store";
+import { InjectedProps } from "./store/Store";
+import { auth } from "./store/AuthStore";
+import { views } from "./store/ViewsStore";
 import { BACKGROUND, FOREGROUND } from "./styling/colors";
 
 /**
@@ -53,7 +55,7 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
 /**
  * Array of navigable stages using the navigation bar.
  */
-export const NAVIGATION_STAGES: Readonly<Array<Stages>> = [
+const NAVIGATION_STAGES: Readonly<Array<Stages>> = [
   new Stage("Home", {}, {}),
   new Stage("Diet", {}, {}),
   new Stage("Measurements", {}, {}),
@@ -83,6 +85,15 @@ class Application extends React.Component<InjectedProps> {
     );
   }
 }
+
+/**
+ * Object that contains all stores which are provided to other components by
+ * `Provider` component in `index.tsx`.
+ */
+const STORES: Readonly<Required<InjectedProps>> = {
+  auth,
+  views
+};
 
 render(
   <Provider {...STORES}>

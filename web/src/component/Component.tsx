@@ -5,7 +5,7 @@ import { Error } from "./Error";
 import { Form } from "./Form";
 import { Input } from "./Input";
 import { NotificationContainer } from "./NotificationContainer";
-import { InjectedProps } from "../store";
+import { InjectedProps } from "../store/Store";
 
 /**
  * Maps component class name to the class.

@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Parameters } from "./Stage";
-import { InjectedProps } from "../store";
 import { Administration } from "./Administration";
 import { Diet } from "./Diet";
 import { FoodInformation } from "./FoodInformation";
@@ -12,6 +11,7 @@ import { Measurements } from "./Measurements";
 import { Register } from "./Register";
 import { Settings } from "./Settings";
 import { Unknown } from "./Unknown";
+import { InjectedProps } from "../store/Store";
 
 /**
  * Type that maps scene names to their component classes.
@@ -86,20 +86,3 @@ export abstract class Scene<
   TSceneName extends SceneNames,
   TProps extends {} = {}
 > extends React.Component<ScenePropsWith<TSceneName, TProps>> {}
-
-/**
- * Scene names that do not require authentication.
- */
-export const NO_AUTHENTICATION_SCENE_NAMES: Readonly<Array<SceneNames>> = [
-  "Login",
-  "Register"
-];
-
-/**
- * Scene names that do not require navigation bar.
- */
-export const NO_NAVIGATION_SCENE_NAMES: Readonly<Array<SceneNames>> = [
-  "Login",
-  "Logout",
-  "Register"
-];

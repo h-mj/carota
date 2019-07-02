@@ -90,7 +90,7 @@ const SCENES: Readonly<{ [SceneName in SceneNames]: typeof Scene }> = {
  * Object that maps all routes to their corresponding main scene name. Used to
  * retrieve scene name based on current browser pathname.
  */
-export const ROUTES: Readonly<
+const ROUTES: Readonly<
   { [Route in keyof Routes]: Routes[Route]["sceneNames"] }
 > = {
   "/administration": "Administration",

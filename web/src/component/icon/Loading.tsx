@@ -28,7 +28,7 @@ const SQUARE_OFFSET = UNIT / 4;
 /**
  * Component that contains moving squares.
  */
-export const Squares = styled.div`
+const Squares = styled.div`
   position: relative;
   width: ${2 * SQUARE_OFFSET + SQUARE_SIZE}rem;
   height: ${SQUARE_SIZE}rem;

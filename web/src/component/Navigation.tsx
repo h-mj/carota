@@ -3,7 +3,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { Stages } from "../scene/Stage";
 import { Anchor } from "./Anchor";
-import { InjectedProps } from "../store";
+import { InjectedProps } from "../store/Store";
 import { DURATION } from "../styling/animations";
 import { ACTIVE, DEFAULT_LABEL } from "../styling/colors";
 import { UNIT } from "../styling/sizes";

@@ -1,7 +1,7 @@
 import { inject } from "mobx-react";
 import * as React from "react";
 import { Stages } from "../scene/Stage";
-import { InjectedProps } from "../store";
+import { InjectedProps } from "../store/Store";
 
 /**
  * Anchor component props.

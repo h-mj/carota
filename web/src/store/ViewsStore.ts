@@ -1,13 +1,39 @@
 import { Languages } from "api";
 import { computed, observable, action } from "mobx";
 import { Stage, Stages } from "../scene/Stage";
-import {
-  NO_AUTHENTICATION_SCENE_NAMES,
-  NO_NAVIGATION_SCENE_NAMES
-} from "../scene/Scene";
+import { SceneNames } from "../scene/Scene";
 import { Notifications } from "../component/NotificationContainer";
 import { auth } from "./AuthStore";
-import { TRANSLATIONS } from "../translation";
+import { Translation } from "../translation";
+import { english } from "../translation/english";
+import { estonian } from "../translation/estonian";
+import { russian } from "../translation/russian";
+
+/**
+ * Object that stores each language's translation object.
+ */
+const TRANSLATIONS: Readonly<{ [Language in Languages]: Translation }> = {
+  English: english,
+  Estonian: estonian,
+  Russian: russian
+};
+
+/**
+ * Scene names that do not require authentication.
+ */
+const NO_AUTHENTICATION_SCENE_NAMES: Readonly<Array<SceneNames>> = [
+  "Login",
+  "Register"
+];
+
+/**
+ * Scene names that do not require navigation bar.
+ */
+const NO_NAVIGATION_SCENE_NAMES: Readonly<Array<SceneNames>> = [
+  "Login",
+  "Logout",
+  "Register"
+];
 
 /**
  * Store that stores information about current state of the view, including

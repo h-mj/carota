@@ -100,6 +100,7 @@ export const english: Translation = {
     Administration: { title: "Administration" },
     Diet: { title: "Diet" },
     FoodInformation: { title: "Food information" },
+    FoodList: { title: "Food list" },
     History: { title: "History" },
     Home: { title: "Home" },
     Login: { title: "Sign in" },

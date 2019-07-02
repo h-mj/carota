@@ -1,6 +1,8 @@
 import * as React from "react";
 import { Administration } from "./Administration";
 import { Diet } from "./Diet";
+import { FoodInformation } from "./FoodInformation";
+import { FoodList } from "./FoodList";
 import { History } from "./History";
 import { Home } from "./Home";
 import { Login } from "./Login";
@@ -10,7 +12,6 @@ import { Register } from "./Register";
 import { Scene, SceneNames, SceneProps } from "./Scene";
 import { Settings } from "./Settings";
 import { Unknown } from "./Unknown";
-import { FoodInformation } from "./FoodInformation";
 
 /**
  * Union of all possible stage types.
@@ -28,6 +29,7 @@ interface Routes {
   "/diet": To<"Diet">;
   "/food/add": To<"FoodInformation">;
   "/food/{id}/edit": To<"FoodInformation", "id">;
+  "/food/list": To<"FoodList">;
   "/history": To<"History">;
   "/": To<"Home">;
   "/logout": To<"Logout">;
@@ -76,6 +78,7 @@ const SCENES: Readonly<Record<SceneNames, typeof Scene>> = {
   Administration: Administration,
   Diet: Diet,
   FoodInformation: FoodInformation,
+  FoodList: FoodList,
   History: History,
   Home: Home,
   Login: Login,
@@ -97,6 +100,7 @@ const ROUTES: Readonly<
   "/diet": "Diet",
   "/food/add": "FoodInformation",
   "/food/{id}/edit": "FoodInformation",
+  "/food/list": "FoodList",
   "/logout": "Logout",
   "/history": "History",
   "/": "Home",

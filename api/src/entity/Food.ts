@@ -5,7 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn
 } from "typeorm";
-import { Enum, FoodSaveData, Units } from "../../types";
+import { Enum, FoodData, Units } from "../../types";
 import { Account } from "./Account";
 
 /**
@@ -125,9 +125,9 @@ export class Food extends BaseEntity {
   public editor!: Account;
 
   /**
-   * Creates `FoodSaveData` type object from this instance.
+   * Creates `FoodData` type object from this instance.
    */
-  public toData = (): FoodSaveData => ({
+  public toData = (): FoodData => ({
     id: this.id,
     name: this.name,
     barcode: this.barcode,

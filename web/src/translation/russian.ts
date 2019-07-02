@@ -99,7 +99,8 @@ export const russian: Translation = {
   scenes: {
     Administration: { title: "Администрация" },
     Diet: { title: "Диета" },
-    FoodInformation: { title: "Информация о еде" },
+    FoodInformation: { title: "Информация о продукте" },
+    FoodList: { title: "Список продуктов" },
     History: { title: "История" },
     Home: { title: "Главная" },
     Login: { title: "Вход" },

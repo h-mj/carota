@@ -10,6 +10,40 @@ import { define } from "./utility/routes";
 export const foodRouter = new Router();
 
 /**
+ * Returns a function that checks whether or not given food matches the query
+ * string.
+ *
+ * @param query Search query string.
+ */
+const matches = (query: string) => (food: Food) => {
+  const name = food.name.toLowerCase();
+
+  return (
+    query
+      .trim()
+      .toLocaleLowerCase()
+      .split(/\s+/)
+      .find(part => !name.includes(part)) === undefined
+  );
+};
+
+/**
+ * Find request body schema.
+ */
+const FIND_SCHEMA: Schema<"food", "find"> = {
+  query: is.string()
+};
+
+define(foodRouter, "food", "find", FIND_SCHEMA, async context => {
+  const foods = await Food.find();
+
+  context.state.data = foods
+    .filter(matches(context.state.body.query))
+    .map(food => food.toData())
+    .slice(0, 20);
+});
+
+/**
  * Save request body schema.
  */
 const SAVE_SCHEMA: Schema<"food", "save"> = {
@@ -27,24 +61,29 @@ const SAVE_SCHEMA: Schema<"food", "save"> = {
     monoUnsaturates: is
       .number()
       .precision(2)
+      .default(0)
       .optional(),
     polyunsaturates: is
       .number()
       .precision(2)
+      .default(0)
       .optional(),
     carbohydrate: is.number().precision(2),
     sugars: is.number().precision(2),
     polyols: is
       .number()
       .precision(2)
+      .default(0)
       .optional(),
     starch: is
       .number()
       .precision(2)
+      .default(0)
       .optional(),
     fibre: is
       .number()
       .precision(2)
+      .default(0)
       .optional(),
     protein: is.number().precision(2),
     salt: is.number().precision(2)

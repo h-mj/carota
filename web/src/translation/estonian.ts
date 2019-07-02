@@ -100,6 +100,7 @@ export const estonian: Translation = {
     Administration: { title: "Administratsioon" },
     Diet: { title: "Dieet" },
     FoodInformation: { title: "Toidualane teave" },
+    FoodList: { title: "Toiduainete nimekiri" },
     History: { title: "Ajalugu" },
     Home: { title: "Avaleht" },
     Login: { title: "Logige sisse" },

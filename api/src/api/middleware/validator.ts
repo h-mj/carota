@@ -6,8 +6,10 @@ import { createValidationError } from "../utility/errors";
 /**
  * Scema object type of given object `TObject`.
  */
-type SchemaType<TType> = TType extends object
-  ? { [P in keyof TType]: SchemaType<TType[P]> }
+type SchemaType<T> = T extends object
+  ? { [P in keyof T]: SchemaType<T[P]> }
+  : T extends undefined
+  ? undefined
   : Joi.SchemaLike;
 
 /**
@@ -69,6 +71,10 @@ export const validator = <
   context,
   next
 ) => {
+  if (schema === undefined) {
+    return next();
+  }
+
   const { error, value } = Joi.validate<Body<TController, TAction>>(
     context.request.body,
     schema,

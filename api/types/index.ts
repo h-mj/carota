@@ -9,7 +9,8 @@ interface Api {
     register: Types<AuthRegisterBody, AuthData>;
   };
   food: {
-    save: Types<FoodSaveBody, FoodSaveData>;
+    find: Types<FoodFindBody, FoodData[]>;
+    save: Types<FoodSaveBody, FoodData>;
   };
 }
 
@@ -44,7 +45,9 @@ export type Actions<TController extends Controllers> = keyof Api[TController];
 export type Body<
   TController extends Controllers,
   TAction extends Actions<TController>
-> = Api[TController][TAction] extends Types<infer IBody, {}> ? IBody : never;
+> = Api[TController][TAction] extends Types<infer IBody, infer _>
+  ? IBody
+  : never;
 
 /**
  * Data type of the action `TAction` of controller `TController`.
@@ -52,7 +55,9 @@ export type Body<
 export type Data<
   TController extends Controllers,
   TAction extends Actions<TController>
-> = Api[TController][TAction] extends Types<{}, infer IData> ? IData : never;
+> = Api[TController][TAction] extends Types<infer _, infer IData>
+  ? IData
+  : never;
 
 /**
  * Type of an object within response message body of action `TAction` of
@@ -388,9 +393,16 @@ export interface FoodSaveBody {
 }
 
 /**
+ * Find food request message body type.
+ */
+export interface FoodFindBody {
+  query: string;
+}
+
+/**
  * Save food response message data type.
  */
-export interface FoodSaveData {
+export interface FoodData {
   /**
    * Food ID.
    */

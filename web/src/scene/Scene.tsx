@@ -3,6 +3,7 @@ import { Parameters } from "./Stage";
 import { Administration } from "./Administration";
 import { Diet } from "./Diet";
 import { FoodInformation } from "./FoodInformation";
+import { FoodList } from "./FoodList";
 import { History } from "./History";
 import { Home } from "./Home";
 import { Login } from "./Login";
@@ -20,6 +21,7 @@ interface SceneMap {
   Administration: Administration;
   Diet: Diet;
   FoodInformation: FoodInformation;
+  FoodList: FoodList;
   History: History;
   Home: Home;
   Login: Login;

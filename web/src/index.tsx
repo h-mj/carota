@@ -8,6 +8,7 @@ import { Loader } from "./component/Loader";
 import { Navigation } from "./component/Navigation";
 import { InjectedProps } from "./store/Store";
 import { auth } from "./store/AuthStore";
+import { foods } from "./store/FoodsStore";
 import { views } from "./store/ViewsStore";
 import { BACKGROUND, FOREGROUND } from "./styling/colors";
 
@@ -92,6 +93,7 @@ class Application extends React.Component<InjectedProps> {
  */
 const STORES: Readonly<Required<InjectedProps>> = {
   auth,
+  foods,
   views
 };
 

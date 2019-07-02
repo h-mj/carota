@@ -202,19 +202,14 @@ interface FormProps<TFormName extends FormNames = FormNames> {
    * Object that maps input name to its reason. Used only as initial value for
    * internal `reasons` field.
    */
-  reasons?: FormErrorReasons<TFormName>;
+  reasons?: Readonly<FormErrorReasons<TFormName>>;
 
   /**
    * Object that maps input name to its value. Used only as initial value for
    * internal `values` field.
    */
-  values?: FormValues<TFormName>;
+  values?: Readonly<FormValues<TFormName>>;
 }
-
-/**
- * Translations of different form names.
- */
-type FormsTranslation = { [FormName in FormNames]: FormTranslation };
 
 /**
  * Form translation.
@@ -236,7 +231,7 @@ interface FormTranslation {
 @observer
 export class Form<TFormName extends FormNames = FormNames> extends Component<
   FormProps<TFormName>,
-  FormsTranslation
+  Record<FormNames, FormTranslation>
 > {
   /**
    * Form input values.

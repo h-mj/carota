@@ -125,13 +125,6 @@ interface NotificationContainerProps {
 }
 
 /**
- * Type that maps notification names to their translations.
- */
-type NotificationContainerTranslation = {
-  [NotificationName in NotificationNames]: NotificationTranslation
-};
-
-/**
  * Translations of an notification component.
  */
 interface NotificationTranslation {
@@ -145,7 +138,7 @@ interface NotificationTranslation {
 @observer
 export class NotificationContainer extends Component<
   NotificationContainerProps,
-  NotificationContainerTranslation
+  Record<NotificationNames, NotificationTranslation>
 > {
   /**
    * Stores all notifications that should be visible. Also includes "fading" notifications

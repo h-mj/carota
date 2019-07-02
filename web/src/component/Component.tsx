@@ -1,7 +1,7 @@
 import { computed } from "mobx";
 import * as React from "react";
+import { Alert } from "./Alert";
 import { DeclareNutrition } from "./DeclareNutrition";
-import { Error } from "./Error";
 import { Form } from "./Form";
 import { Input } from "./Input";
 import { NotificationContainer } from "./NotificationContainer";
@@ -11,8 +11,8 @@ import { InjectedProps } from "../store/Store";
  * Maps component class name to the class.
  */
 interface ComponentMap {
+  Alert: Alert;
   DeclareNutrition: DeclareNutrition;
-  Error: Error<any>;
   Form: Form;
   Input: Input;
   NotificationContainer: NotificationContainer;

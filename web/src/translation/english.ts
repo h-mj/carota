@@ -2,6 +2,18 @@ import { Translation } from ".";
 
 export const english: Translation = {
   components: {
+    Alert: {
+      invalidInvitation: {
+        title: "We are sorry, this sign up address is invalid.",
+        message:
+          "An account has already been created using this sign up address or the address is invalid. If you haven't already created an account using this web address, please contact the person who invited you."
+      },
+      unknown: {
+        title: "We are sorry, the page you requested has not been found.",
+        message:
+          "The web address may be misspelled or the page you're looking for is no longer available."
+      }
+    },
     DeclareNutrition: {
       nutrients: {
         carbohydrate: "Carbohydrate",
@@ -21,18 +33,6 @@ export const english: Translation = {
       units: {
         g: "g",
         kcal: "kcal"
-      }
-    },
-    Error: {
-      invalidInvitation: {
-        title: "We are sorry, this sign up address is invalid.",
-        message:
-          "An account has already been created using this sign up address or the address is invalid. If you haven't already created an account using this web address, please contact the person who invited you."
-      },
-      unknown: {
-        title: "We are sorry, the page you requested has not been found.",
-        message:
-          "The web address may be misspelled or the page you're looking for is no longer available."
       }
     },
     Form: {

@@ -4,7 +4,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Scene } from "./Scene";
 import { Stage } from "./Stage";
-import { Error } from "../component/Error";
+import { Alert } from "../component/Alert";
 import { Form, FormChangeHandler, FormSubmitHandler } from "../component/Form";
 import { Thin } from "../component/container/Thin";
 import { setTimeout } from "../utility/primises";
@@ -45,7 +45,7 @@ export class Register extends Scene<"Register"> {
     if (this.isValid === undefined) {
       return null;
     } else if (!this.isValid) {
-      return <Error name="invalidInvitation" parameters={{}} />;
+      return <Alert name="invalidInvitation" parameters={{}} />;
     }
 
     return (

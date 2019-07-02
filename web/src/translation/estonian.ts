@@ -2,6 +2,18 @@ import { Translation } from ".";
 
 export const estonian: Translation = {
   components: {
+    Alert: {
+      invalidInvitation: {
+        title:
+          "Vabandame, selle konto loomise lehekülje internetiaadress on kehtetu.",
+        message:
+          "Selle internetiaadressi abil on konto juba loodud või on tegemist vale aadressiga. Kui te pole kontot selle aadressiga loonud, palun võtke ühendust teid kutsunud isikuga."
+      },
+      unknown: {
+        title: "Vabandame, soovitud lehekülge ei leitud.",
+        message: "404"
+      }
+    },
     DeclareNutrition: {
       nutrients: {
         carbohydrate: "Süsivesikud",
@@ -21,18 +33,6 @@ export const estonian: Translation = {
       units: {
         g: "g",
         kcal: "kcal"
-      }
-    },
-    Error: {
-      invalidInvitation: {
-        title:
-          "Vabandame, selle konto loomise lehekülje internetiaadress on kehtetu.",
-        message:
-          "Selle internetiaadressi abil on konto juba loodud või on tegemist vale aadressiga. Kui te pole kontot selle aadressiga loonud, palun võtke ühendust teid kutsunud isikuga."
-      },
-      unknown: {
-        title: "Vabandame, soovitud lehekülge ei leitud.",
-        message: "404"
       }
     },
     Form: {

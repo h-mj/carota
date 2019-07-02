@@ -58,8 +58,7 @@ export interface DeclareNutritionProps {
   /**
    * Occurred error reasons related to interal input components.
    */
-  reason?: { [NutrientName in NutrientNames]?: ErrorReasons };
-
+  reason?: Readonly<Partial<Record<NutrientNames, ErrorReasons>>>;
   /**
    * Text field value.
    */
@@ -70,7 +69,7 @@ export interface DeclareNutritionProps {
  * Nutrition declaration component translation.
  */
 interface DeclareNutritionTranslation {
-  nutrients: { [NutrientName in NutrientNames]: string };
+  nutrients: Record<NutrientNames, string>;
   title: string;
   units: { g: string; kcal: string };
 }

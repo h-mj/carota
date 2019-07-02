@@ -131,7 +131,7 @@ type InputsTranslation = {
  * General input component translation.
  */
 interface InputTranslation {
-  reasons: { [ErrorReason in ErrorReasons]?: string };
+  reasons: Partial<Record<ErrorReasons, string>>;
 }
 
 /**
@@ -140,7 +140,7 @@ interface InputTranslation {
 interface SelectTranslation<SelectName extends SelectNames>
   extends InputTranslation {
   label: string;
-  options: { [SelectOption in SelectOptions[SelectName]]: string };
+  options: Record<SelectOptions[SelectName], string>;
 }
 
 /**

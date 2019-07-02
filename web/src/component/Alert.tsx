@@ -8,64 +8,54 @@ import { DEFAULT_LABEL } from "../styling/colors";
 import { UNIT } from "../styling/sizes";
 
 /**
- * Maps error names to it's translated text message parameters.
+ * Maps alert names to it's translated text message parameters.
  */
-interface ErrorPropertyTypes {
+interface AlertParameters {
   invalidInvitation: never;
   unknown: never;
 }
 
 /**
- * Union of all error names.
+ * Union of all alert names.
  */
-export type ErrorNames = keyof ErrorPropertyTypes;
+type AlertNames = keyof AlertParameters;
 
 /**
- * Error parameters object type of error named `TErrorName`.
+ * Alert component props.
  */
-type ErrorParameters<TErrorName extends ErrorNames> = {
-  [Parameter in ErrorPropertyTypes[TErrorName]]: string
-};
-
-/**
- * Error component props.
- */
-interface ErrorProps<TErrorName extends ErrorNames> {
+interface AlertProps<TAlertName extends AlertNames> {
   /**
-   * Name of the error.
+   * Name of the alert.
    */
-  name: TErrorName;
+  name: TAlertName;
 
   /**
-   * Error title and message text parameters.
+   * Alert title and message text parameters.
    */
-  parameters: ErrorParameters<TErrorName>;
+  parameters: Record<AlertParameters[TAlertName], string>;
 }
 
 /**
- * Type that maps error names to their translations.
+ * Translation of some alert.
  */
-type ErrorsTranslation = { [ErrorName in ErrorNames]: ErrorTranslation };
-
-/**
- * Translations of an error component.
- */
-interface ErrorTranslation {
+interface AlertTranslation {
   title: string;
   message: string;
 }
 
 /**
- * Error component that displays a title and message of occurred error.
+ * Alert component that displays alert title and translated message.
  */
 @inject("views")
 @observer
-export class Error<TErrorName extends ErrorNames> extends Component<
-  ErrorProps<TErrorName>,
-  ErrorsTranslation
+export class Alert<
+  TAlertName extends AlertNames = AlertNames
+> extends Component<
+  AlertProps<TAlertName>,
+  Record<AlertNames, AlertTranslation>
 > {
   /**
-   * Renders an error component.
+   * Renders an alert component.
    */
   public render() {
     const { name, parameters } = this.props;
@@ -97,7 +87,7 @@ export class Error<TErrorName extends ErrorNames> extends Component<
 }
 
 /**
- * Error title text component.
+ * Alert title text component.
  */
 const Title = styled.div`
   margin-bottom: ${UNIT / 4}rem;
@@ -108,7 +98,7 @@ const Title = styled.div`
 `;
 
 /**
- * Error message text component.
+ * Alert message text component.
  */
 const Message = styled.div`
   color: ${DEFAULT_LABEL};

@@ -63,7 +63,7 @@ export type Parameters<TSceneNames extends SceneNames> =
   | (Routes[keyof Routes] extends infer ITypes
       ? ITypes extends To<infer ISceneName, infer IParameterNames>
         ? ISceneName extends TSceneNames
-          ? { [ParameterName in IParameterNames]: string }
+          ? Record<IParameterNames, string>
           : never
         : never
       : never);
@@ -72,7 +72,7 @@ export type Parameters<TSceneNames extends SceneNames> =
  * Object where scene names are mapped to its class. This object is used to
  * retrieve scene component by its name.
  */
-const SCENES: Readonly<{ [SceneName in SceneNames]: typeof Scene }> = {
+const SCENES: Readonly<Record<SceneNames, typeof Scene>> = {
   Administration: Administration,
   Diet: Diet,
   FoodInformation: FoodInformation,

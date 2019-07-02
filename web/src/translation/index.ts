@@ -1,4 +1,4 @@
-import { ScenesTranslation } from "../scene/Scene";
+import { SceneNames, SceneTranslation } from "../scene/Scene";
 import { ComponentsTranslation } from "../component/Component";
 
 /**
@@ -13,7 +13,7 @@ export interface Translation {
   /**
    * Scene component translations.
    */
-  scenes: ScenesTranslation;
+  scenes: Record<SceneNames, SceneTranslation>;
 
   /**
    * Application name.

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Scene, SceneNames, SceneProps } from "./Scene";
 import { Administration } from "./Administration";
 import { Diet } from "./Diet";
 import { FoodInformation } from "./FoodInformation";
@@ -9,52 +10,54 @@ import { Login } from "./Login";
 import { Logout } from "./Logout";
 import { Measurements } from "./Measurements";
 import { Register } from "./Register";
-import { Scene, SceneNames, SceneProps } from "./Scene";
 import { Settings } from "./Settings";
 import { Unknown } from "./Unknown";
-
-/**
- * Union of all possible stage types.
- */
-export type Stages = {
-  [SceneName in SceneNames]: Stage<SceneName>
-}[SceneNames];
-
-/**
- * Defines a scene name and parameter names for stages that can be
- * accessed by navigating to an URL that matches the key of this interface.
- */
-interface Routes {
-  "/administration": To<"Administration">;
-  "/diet": To<"Diet">;
-  "/food/add": To<"FoodInformation">;
-  "/food/{id}/edit": To<"FoodInformation", "id">;
-  "/food/list": To<"FoodList">;
-  "/history": To<"History">;
-  "/": To<"Home">;
-  "/logout": To<"Logout">;
-  "/measurements": To<"Measurements">;
-  "/register/{invitationId}": To<"Register", "invitationId">;
-  "/settings": To<"Settings">;
-}
 
 /**
  * Type that defines some route's scene name and parameter names.
  */
 interface To<
-  TSceneNames extends SceneNames,
+  TSceneName extends SceneNames,
   TParameterNames extends string = never
 > {
   /**
    * Route parameter names type.
    */
-  parameterNames: TParameterNames;
+  parameterNames: TParameterNames[];
 
   /**
    * Route scene name.
    */
-  sceneNames: TSceneNames;
+  sceneName: TSceneName;
 }
+
+/**
+ * Creates an object that defines some route's scene name and parameter names.
+ */
+const to = <TSceneName extends SceneNames, TParameterNames extends string>(
+  sceneName: TSceneName,
+  ...parameterNames: TParameterNames[]
+): To<TSceneName, TParameterNames> => ({
+  sceneName,
+  parameterNames
+});
+
+/**
+ * Defines routes and corresponding scene and route parameter names.
+ */
+const ROUTES = {
+  "/administration": to("Administration"),
+  "/diet": to("Diet"),
+  "/food/add": to("FoodInformation"),
+  "/food/{id}/edit": to("FoodInformation", "id"),
+  "/food/list": to("FoodList"),
+  "/history": to("History"),
+  "/": to("Home"),
+  "/logout": to("Logout"),
+  "/measurements": to("Measurements"),
+  "/register/{invitationId}": to("Register", "invitationId"),
+  "/settings": to("Settings")
+};
 
 /**
  * Type that is a union of all possible mappings from parameter names to `string` types of
@@ -62,7 +65,7 @@ interface To<
  */
 export type Parameters<TSceneNames extends SceneNames> =
   | undefined
-  | (Routes[keyof Routes] extends infer ITypes
+  | (typeof ROUTES[keyof typeof ROUTES] extends infer ITypes
       ? ITypes extends To<infer ISceneName, infer IParameterNames>
         ? ISceneName extends TSceneNames
           ? Record<IParameterNames, string>
@@ -74,7 +77,7 @@ export type Parameters<TSceneNames extends SceneNames> =
  * Object where scene names are mapped to its class. This object is used to
  * retrieve scene component by its name.
  */
-const SCENES: Readonly<Record<SceneNames, typeof Scene>> = {
+export const SCENES = {
   Administration: Administration,
   Diet: Diet,
   FoodInformation: FoodInformation,
@@ -87,26 +90,6 @@ const SCENES: Readonly<Record<SceneNames, typeof Scene>> = {
   Register: Register,
   Settings: Settings,
   Unknown: Unknown
-};
-
-/**
- * Object that maps all routes to their corresponding main scene name. Used to
- * retrieve scene name based on current browser pathname.
- */
-const ROUTES: Readonly<
-  { [Route in keyof Routes]: Routes[Route]["sceneNames"] }
-> = {
-  "/administration": "Administration",
-  "/diet": "Diet",
-  "/food/add": "FoodInformation",
-  "/food/{id}/edit": "FoodInformation",
-  "/food/list": "FoodList",
-  "/logout": "Logout",
-  "/history": "History",
-  "/": "Home",
-  "/measurements": "Measurements",
-  "/register/{invitationId}": "Register",
-  "/settings": "Settings"
 };
 
 /**
@@ -159,8 +142,8 @@ export class Stage<TSceneName extends SceneNames> {
    */
   public getUrl(): string | undefined {
     forRoute: for (const route in ROUTES) {
-      // If route's scene is not stage's scene, skip.
-      if (ROUTES[route as keyof Routes] !== this.sceneName) {
+      // If route's scene name is not stage's scene name, skip.
+      if (ROUTES[route as keyof typeof ROUTES].sceneName !== this.sceneName) {
         continue;
       }
 
@@ -241,9 +224,20 @@ export class Stage<TSceneName extends SceneNames> {
         }
       }
 
-      return new Stage(ROUTES[route as keyof Routes], parameters, {}) as Stages;
+      return new Stage(
+        ROUTES[route as keyof typeof ROUTES].sceneName,
+        parameters,
+        {}
+      ) as Stages;
     }
 
     return undefined;
   }
 }
+
+/**
+ * Union of all possible stage types.
+ */
+export type Stages = {
+  [SceneName in SceneNames]: Stage<SceneName>
+}[SceneNames];

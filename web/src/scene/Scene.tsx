@@ -1,77 +1,53 @@
-import * as React from "react";
-import { Parameters } from "./Stage";
-import { Administration } from "./Administration";
-import { Diet } from "./Diet";
-import { FoodInformation } from "./FoodInformation";
-import { FoodList } from "./FoodList";
-import { History } from "./History";
-import { Home } from "./Home";
-import { Login } from "./Login";
-import { Logout } from "./Logout";
-import { Measurements } from "./Measurements";
-import { Register } from "./Register";
-import { Settings } from "./Settings";
-import { Unknown } from "./Unknown";
-import { InjectedProps } from "../store/Store";
-
-/**
- * Type that maps scene names to their component classes.
- */
-interface SceneMap {
-  Administration: Administration;
-  Diet: Diet;
-  FoodInformation: FoodInformation;
-  FoodList: FoodList;
-  History: History;
-  Home: Home;
-  Login: Login;
-  Logout: Logout;
-  Measurements: Measurements;
-  Register: Register;
-  Settings: Settings;
-  Unknown: Unknown;
-}
+import { Parameters, SCENES } from "./Stage";
+import { Component } from "../component/Component";
 
 /**
  * Union of scene names, used to reference a specific scene using its name.
  */
-export type SceneNames = keyof SceneMap;
+export type SceneNames = keyof typeof SCENES;
 
 /**
- * Scene component props type.
+ * Default scene component props type.
  */
-export type ScenePropsWith<
-  TSceneName extends SceneNames,
-  TProps = {}
-> = TProps &
-  InjectedProps & {
-    /**
-     * Parameters of this scene.
-     */
-    parameters: Parameters<TSceneName>;
-  };
+export interface DefaultSceneProps<TSceneName extends SceneNames> {
+  /**
+   * Parameters of this scene.
+   */
+  parameters: Parameters<TSceneName>;
+}
 
 /**
  * Union of `TProps` types of scene components with name one of `TSceneNames`.
  */
 export type SceneProps<
   TSceneNames extends SceneNames
-> = SceneMap[TSceneNames] extends infer IClass
+> = typeof SCENES[TSceneNames] extends new (...args: any) => infer IClass
   ? IClass extends Scene<infer _, infer IProps>
     ? IProps
     : never
   : never;
 
 /**
- * Translations of a scene component.
+ * Default scene component translation type.
  */
-export interface SceneTranslation {
+export interface DefaultSceneTranslation {
   /**
    * Title of this scene, which will be used as `window.title` when this scene
    * is shown.
    */
   title: string;
 }
+
+/**
+ * Maps component class name to its translation type.
+ */
+export type ScenesTranslation = {
+  [SceneName in SceneNames]: typeof SCENES[SceneName] extends new (
+    ...args: any
+  ) => Component<infer _, infer ITranslation>
+    ? ITranslation
+    : never
+};
 
 /**
  * Scene component base class that is extended by all scene components.
@@ -81,5 +57,16 @@ export interface SceneTranslation {
  */
 export abstract class Scene<
   TSceneName extends SceneNames,
-  TProps extends {} = {}
-> extends React.Component<ScenePropsWith<TSceneName, TProps>> {}
+  TProps extends {} = {},
+  TTranslation extends {} = {}
+> extends Component<
+  TProps & DefaultSceneProps<TSceneName>,
+  TTranslation & DefaultSceneTranslation
+> {
+  /**
+   * Included so that TypeScript's infer would work, since it uses object
+   * structure to determine types.
+   */
+  // @ts-ignore
+  private propsType?: TProps;
+}

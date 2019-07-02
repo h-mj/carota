@@ -99,8 +99,8 @@ export const estonian: Translation = {
   scenes: {
     Administration: { title: "Administratsioon" },
     Diet: { title: "Dieet" },
-    FoodInformation: { title: "Toidualane teave" },
-    FoodSearch: { title: "Toiduainete otsing" },
+    FoodEdit: { title: "Toiduaine redaktsioon" },
+    FoodSearch: { title: "Toiduaine otsing" },
     History: { title: "Ajalugu" },
     Home: { title: "Avaleht" },
     Login: { title: "Logige sisse" },

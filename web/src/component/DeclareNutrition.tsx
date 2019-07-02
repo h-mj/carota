@@ -1,12 +1,17 @@
 import { ErrorReasons, NutritionDeclaration } from "api";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Component } from "./Component";
 import { InputChangeHandler } from "./Input";
 import { Label } from "./TextField";
 import { DURATION, TIMING_FUNCTION } from "../styling/animations";
-import { DEFAULT_BORDER, DEFAULT_LABEL } from "../styling/colors";
+import {
+  DEFAULT_BORDER,
+  DEFAULT_LABEL,
+  ACTIVE,
+  ERROR
+} from "../styling/colors";
 import { BORDER_RADIUS, UNIT } from "../styling/sizes";
 import { RESET } from "../styling/stylesheets";
 
@@ -91,7 +96,6 @@ export class DeclareNutrition extends Component<
             ? this.renderRow(name[0], index, true)
             : this.renderRow(name, index)
         )}
-        <Label>{this.translation.title}</Label>
       </Table>
     );
   }
@@ -101,23 +105,31 @@ export class DeclareNutrition extends Component<
    * components.
    */
   private renderRow = (name: NutrientNames, index: number, indent = false) => {
-    const { autoFocus, value } = this.props;
+    const { autoFocus, reason, value } = this.props;
 
+    // Label component is rendered after the first row element so that it is
+    // possible to change Label style based on first row state using adjacency
+    // selectors.
     return (
-      <Row key={name}>
-        <Span>
-          {indent && "\u2015 " /* Horizontal bar symbol */}
-          {this.translation.nutrients[name]}
-        </Span>
-        <Amount
-          autoFocus={index === 0 && autoFocus}
-          name={name}
-          onChange={this.handleChange}
-          type="number"
-          value={(value && value[name]) || ""}
-        />
-        <Unit>{this.translation.units[name === "energy" ? "kcal" : "g"]}</Unit>
-      </Row>
+      <React.Fragment key={name}>
+        <Row hasError={reason !== undefined && reason[name] !== undefined}>
+          <Header>
+            {indent && "\u2015 " /* Horizontal bar symbol */}
+            {this.translation.nutrients[name]}
+          </Header>
+          <Amount
+            autoFocus={index === 0 && autoFocus}
+            name={name}
+            onChange={this.handleChange}
+            type="number"
+            value={(value && value[name]) || ""}
+          />
+          <Unit>
+            {this.translation.units[name === "energy" ? "kcal" : "g"]}
+          </Unit>
+        </Row>
+        {index === 0 && <Label>{this.translation.title}</Label>}
+      </React.Fragment>
     );
   };
 
@@ -149,26 +161,9 @@ const Table = styled.div`
 `;
 
 /**
- * Row component that contains nutrient name, amount and unit components.
- */
-const Row = styled.div`
-  display: flex;
-  align-items: center;
-
-  width: 100%;
-  height: ${UNIT}rem;
-
-  border-top: solid 2px ${DEFAULT_BORDER};
-
-  &:first-of-type {
-    border-top: 0;
-  }
-`;
-
-/**
  * Component used for displaying nutrient name.
  */
-const Span = styled.span`
+const Header = styled.span`
   padding: 0 ${UNIT / 4}rem;
   box-sizing: border-box;
 
@@ -178,6 +173,8 @@ const Span = styled.span`
 
   color: ${DEFAULT_LABEL};
   white-space: nowrap;
+
+  transition: ${DURATION}s ${TIMING_FUNCTION};
 `;
 
 /**
@@ -212,4 +209,69 @@ const Unit = styled.span`
 
   color: ${DEFAULT_LABEL};
   text-align: center;
+
+  transition: ${DURATION}s ${TIMING_FUNCTION};
+`;
+
+/**
+ * Components coloring if there is no error.
+ */
+const defaultRowStyle = css`
+  &:focus-within {
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0 0 1px ${ACTIVE}, inset 0 0 0 1px ${ACTIVE};
+  }
+
+  &:focus-within > ${Header},
+  &:focus-within > ${Unit},
+  /* Only the last row (first row visually) will affect Label component */
+  &:focus-within + ${Label} {
+    color: ${ACTIVE};
+  }
+`;
+
+/**
+ * Components coloring if there is an error.
+ */
+const errorRowStyle = css`
+  position: relative;
+  z-index: 1;
+
+  box-shadow: 0 0 0 1px ${ERROR}, inset 0 0 0 1px ${ERROR};
+
+  &:focus-within > ${Header},
+  &:focus-within > ${Unit},
+  /* Only the last row (first row visually) will affect Label component */
+  &:focus-within + ${Label} {
+    color: ${ERROR};
+  }
+`;
+
+/**
+ * Row component props.
+ */
+interface RowProps {
+  /**
+   * Whether or not there's an error.
+   */
+  hasError: boolean;
+}
+
+/**
+ * Row component that contains nutrient name, amount and unit components.
+ */
+const Row = styled.div<RowProps>`
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  height: ${UNIT}rem;
+
+  box-shadow: 0 0 0 1px ${DEFAULT_BORDER}, inset 0 0 0 1px ${DEFAULT_BORDER};
+  border-radius: ${BORDER_RADIUS}rem;
+
+  transition: ${DURATION}s ${TIMING_FUNCTION};
+
+  ${props => (props.hasError ? errorRowStyle : defaultRowStyle)};
 `;

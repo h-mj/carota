@@ -99,8 +99,8 @@ export const english: Translation = {
   scenes: {
     Administration: { title: "Administration" },
     Diet: { title: "Diet" },
-    FoodInformation: { title: "Food information" },
-    FoodSearch: { title: "Food search" },
+    FoodEdit: { title: "Edit food" },
+    FoodSearch: { title: "Search food" },
     History: { title: "History" },
     Home: { title: "Home" },
     Login: { title: "Sign in" },

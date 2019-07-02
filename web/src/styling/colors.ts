@@ -16,12 +16,12 @@ export const FOREGROUND = "rgb(0, 0, 0)";
 /**
  * Border color around components when  component is in default state.
  */
-export const DEFAULT_BORDER = "rgb(180, 180, 180)";
+export const DEFAULT_BORDER = "rgb(195, 195, 195)";
 
 /**
  * Label color of component when component is in default state.
  */
-export const DEFAULT_LABEL = "rgb(150, 150, 150)";
+export const DEFAULT_LABEL = "rgb(165, 165, 165)";
 
 /**
  * Color of borders and labels when component is in active state.

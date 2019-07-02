@@ -3,7 +3,7 @@ import { Scene } from "./Scene";
 import { Form } from "../component/Form";
 import { Thin } from "../component/container/Thin";
 
-export class FoodInformation extends Scene<"FoodInformation"> {
+export class FoodEdit extends Scene<"FoodEdit"> {
   public render() {
     return (
       <Thin>

@@ -2,7 +2,7 @@ import * as React from "react";
 import { Scene, SceneNames, SceneProps } from "./Scene";
 import { Administration } from "./Administration";
 import { Diet } from "./Diet";
-import { FoodInformation } from "./FoodInformation";
+import { FoodEdit } from "./FoodEdit";
 import { FoodSearch } from "./FoodSearch";
 import { History } from "./History";
 import { Home } from "./Home";
@@ -48,8 +48,8 @@ const to = <TSceneName extends SceneNames, TParameterNames extends string>(
 const ROUTES = {
   "/administration": to("Administration"),
   "/diet": to("Diet"),
-  "/food/add": to("FoodInformation"),
-  "/food/{id}/edit": to("FoodInformation", "id"),
+  "/food/new": to("FoodEdit"),
+  "/food/{id}/edit": to("FoodEdit", "id"),
   "/food/search": to("FoodSearch"),
   "/history": to("History"),
   "/": to("Home"),
@@ -82,7 +82,7 @@ export type Parameters<TSceneNames extends SceneNames> =
 export const SCENES = {
   Administration: Administration,
   Diet: Diet,
-  FoodInformation: FoodInformation,
+  FoodEdit: FoodEdit,
   FoodSearch: FoodSearch,
   History: History,
   Home: Home,

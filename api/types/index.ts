@@ -314,17 +314,17 @@ export interface NutritionDeclaration {
   /**
    * Amount of saturates in grams.
    */
-  saturates: number;
+  saturates?: number;
 
   /**
    * Amount of mono-unsaturates in grams.
    */
-  monoUnsaturates: number;
+  monoUnsaturates?: number;
 
   /**
    * Amount of polyunsaturates in grams.
    */
-  polyunsaturates: number;
+  polyunsaturates?: number;
 
   /**
    * Amount of carbohydrate in grams.
@@ -334,22 +334,22 @@ export interface NutritionDeclaration {
   /**
    * Amount of sugars in grams.
    */
-  sugars: number;
+  sugars?: number;
 
   /**
    * Amount of polyols in grams.
    */
-  polyols: number;
+  polyols?: number;
 
   /**
    * Amount of starch in grams.
    */
-  starch: number;
+  starch?: number;
 
   /**
    * Amount of fibre in grams.
    */
-  fibre: number;
+  fibre?: number;
 
   /**
    * Amount of protein in grams.
@@ -359,7 +359,7 @@ export interface NutritionDeclaration {
   /**
    * Amount of salt in grams.
    */
-  salt: number;
+  salt?: number;
 }
 
 /**

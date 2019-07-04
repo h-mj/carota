@@ -61,20 +61,20 @@ export class Food extends BaseEntity {
   /**
    * Amount of saturates in grams.
    */
-  @Column()
-  public saturates!: number;
+  @Column({ nullable: true })
+  public saturates?: number;
 
   /**
    * Amount of mono-unsaturates in grams.
    */
-  @Column()
-  public monoUnsaturates!: number;
+  @Column({ nullable: true })
+  public monoUnsaturates?: number;
 
   /**
    * Amount of polyunsaturates in grams.
    */
-  @Column()
-  public polyunsaturates!: number;
+  @Column({ nullable: true })
+  public polyunsaturates?: number;
 
   /**
    * Amount of carbohydrate in grams.
@@ -85,26 +85,26 @@ export class Food extends BaseEntity {
   /**
    * Amount of sugars in grams.
    */
-  @Column()
-  public sugars!: number;
+  @Column({ nullable: true })
+  public sugars?: number;
 
   /**
    * Amount of polyols in grams.
    */
-  @Column()
-  public polyols!: number;
+  @Column({ nullable: true })
+  public polyols?: number;
 
   /**
    * Amount of starch in grams.
    */
-  @Column()
-  public starch!: number;
+  @Column({ nullable: true })
+  public starch?: number;
 
   /**
    * Amount of fibre in grams.
    */
-  @Column()
-  public fibre!: number;
+  @Column({ nullable: true })
+  public fibre?: number;
 
   /**
    * Amount of protein in grams.
@@ -115,8 +115,8 @@ export class Food extends BaseEntity {
   /**
    * Amount of salt in grams.
    */
-  @Column()
-  public salt!: number;
+  @Column({ nullable: true })
+  public salt?: number;
 
   /**
    * Account of last user who edited this food.

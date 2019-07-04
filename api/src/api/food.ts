@@ -10,6 +10,11 @@ import { define } from "./utility/routes";
 export const foodRouter = new Router();
 
 /**
+ * Nutrient amount schema.
+ */
+const nutrientAmount = is.number().precision(2);
+
+/**
  * Save request body schema.
  */
 const SAVE_SCHEMA: Schema<"food", "save"> = {
@@ -21,38 +26,18 @@ const SAVE_SCHEMA: Schema<"food", "save"> = {
   barcode: is.string().optional(),
   unit: is.string().valid(Object.keys(UNITS_ENUM)),
   nutritionDeclaration: {
-    energy: is.number().precision(2),
-    fat: is.number().precision(2),
-    saturates: is.number().precision(2),
-    monoUnsaturates: is
-      .number()
-      .precision(2)
-      .default(0)
-      .optional(),
-    polyunsaturates: is
-      .number()
-      .precision(2)
-      .default(0)
-      .optional(),
-    carbohydrate: is.number().precision(2),
-    sugars: is.number().precision(2),
-    polyols: is
-      .number()
-      .precision(2)
-      .default(0)
-      .optional(),
-    starch: is
-      .number()
-      .precision(2)
-      .default(0)
-      .optional(),
-    fibre: is
-      .number()
-      .precision(2)
-      .default(0)
-      .optional(),
-    protein: is.number().precision(2),
-    salt: is.number().precision(2)
+    energy: nutrientAmount,
+    fat: nutrientAmount,
+    saturates: nutrientAmount.optional(),
+    monoUnsaturates: nutrientAmount.optional(),
+    polyunsaturates: nutrientAmount.optional(),
+    carbohydrate: nutrientAmount,
+    sugars: nutrientAmount,
+    polyols: nutrientAmount.optional(),
+    starch: nutrientAmount.optional(),
+    fibre: nutrientAmount.optional(),
+    protein: nutrientAmount,
+    salt: nutrientAmount.optional()
   }
 };
 

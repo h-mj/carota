@@ -7,7 +7,7 @@ import { createValidationError } from "../utility/errors";
  * Schema object type of given object `TObject`.
  */
 type SchemaType<T> = T extends object
-  ? { [P in keyof T]: SchemaType<T[P]> }
+  ? { [P in keyof T]-?: SchemaType<T[P]> }
   : T extends undefined
   ? undefined
   : Joi.SchemaLike;

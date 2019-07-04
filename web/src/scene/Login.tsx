@@ -5,7 +5,7 @@ import { Scene } from "./Scene";
 import { Form, FormSubmitHandler } from "../component/Form";
 import { Notification } from "../component/NotificationContainer";
 import { Thin } from "../component/container/Thin";
-import { setTimeout } from "../utility/primises";
+import { setTimeout } from "../utility/promises";
 
 /**
  * Scene that renders a form used for signing in.

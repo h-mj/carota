@@ -83,7 +83,7 @@ type Tree<T> = {
  * destination field.
  *
  * @param reasons An reason object inside which we will navigate.
- * @param path Path to the erroneus field.
+ * @param path Path to the erroneous field.
  * @param reason Field error reason.
  */
 const putReason = (
@@ -220,7 +220,7 @@ interface FormTranslation {
 }
 
 /**
- * Form component used to automatically create forms by specifing form name.
+ * Form component used to automatically create forms by specifying form name.
  *
  * This component manages each inputs value and error reason, meaning it does
  * not require `values` and `reasons` props. These props, if provided, will be
@@ -245,7 +245,7 @@ export class Form<TFormName extends FormNames = FormNames> extends Component<
     this.props.reasons || {};
 
   /**
-   * Renders form component alogside with its inputs.
+   * Renders form component alongside with its inputs.
    */
   public render() {
     const { autoFocus, name } = this.props;

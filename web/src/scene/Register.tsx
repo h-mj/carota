@@ -7,7 +7,7 @@ import { Stage } from "./Stage";
 import { Alert } from "../component/Alert";
 import { Form, FormChangeHandler, FormSubmitHandler } from "../component/Form";
 import { Thin } from "../component/container/Thin";
-import { setTimeout } from "../utility/primises";
+import { setTimeout } from "../utility/promises";
 
 /**
  * Scene that renders a form used for registration.

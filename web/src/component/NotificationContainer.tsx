@@ -6,7 +6,7 @@ import { Component } from "./Component";
 import { DURATION, fadeIn, fadeOut } from "../styling/animations";
 import { BACKGROUND, DEFAULT_BORDER, ERROR } from "../styling/colors";
 import { BORDER_RADIUS, UNIT } from "../styling/sizes";
-import { setTimeout } from "../utility/primises";
+import { setTimeout } from "../utility/promises";
 
 /**
  * Union of all notification types.
@@ -164,9 +164,9 @@ export class NotificationContainer extends Component<
     // `this.visibleNotifications.length` is always greater or equal to
     // `this.props.views!.notifications.length`, so the first part of and
     // statement is useless. The reason why it is included is that otherwise
-    // this component won't be rerendered, because the reference to array
+    // this component won't be re-rendered, because the reference to array
     // doesn't change and MobX thinks nothing will be changed as a result of
-    // rerendering.
+    // re-rendering.
     if (
       this.props.views!.notifications.length === 0 &&
       this.visibleNotifications.length === 0

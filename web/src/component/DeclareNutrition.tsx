@@ -57,7 +57,7 @@ export interface DeclareNutritionProps {
   onChange?: InputChangeHandler<Partial<NutritionDeclaration>>;
 
   /**
-   * Occurred error reasons related to interal input components.
+   * Occurred error reasons related to internal input components.
    */
   reason?: Readonly<Partial<Record<NutrientNames, ErrorReasons>>>;
   /**

@@ -4,7 +4,7 @@ import * as Joi from "@hapi/joi";
 import { createValidationError } from "../utility/errors";
 
 /**
- * Scema object type of given object `TObject`.
+ * Schema object type of given object `TObject`.
  */
 type SchemaType<T> = T extends object
   ? { [P in keyof T]: SchemaType<T[P]> }

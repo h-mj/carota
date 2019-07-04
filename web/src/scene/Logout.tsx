@@ -1,7 +1,7 @@
 import { inject } from "mobx-react";
 import { Scene } from "./Scene";
 import { Stage } from "./Stage";
-import { setTimeout } from "../utility/primises";
+import { setTimeout } from "../utility/promises";
 
 /**
  * Scene that, when constructed, logs user out after some timeout.

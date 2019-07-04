@@ -15,7 +15,7 @@ interface Api {
 }
 
 /**
- * Desctibes the request body type and response data type of some action.
+ * Describes the request body type and response data type of some action.
  */
 interface Types<TBody, TData> {
   /**

@@ -1,17 +1,13 @@
 import { ErrorReasons, NutritionDeclaration } from "api";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { Component } from "./Component";
 import { InputChangeHandler } from "./Input";
+import { InputContainer } from "./Select";
 import { Label } from "./TextField";
 import { DURATION, TIMING_FUNCTION } from "../styling/animations";
-import {
-  ACTIVE,
-  DEFAULT_BORDER,
-  DEFAULT_LABEL,
-  ERROR
-} from "../styling/colors";
+import { DEFAULT_BORDER, DEFAULT_LABEL } from "../styling/colors";
 import { BORDER_RADIUS, UNIT } from "../styling/sizes";
 import { RESET } from "../styling/stylesheets";
 
@@ -111,25 +107,24 @@ export class DeclareNutrition extends Component<
     // possible to change Label style based on first row state using adjacency
     // selectors.
     return (
-      <React.Fragment key={name}>
-        <Row hasError={reason !== undefined && reason[name] !== undefined}>
-          <Header>
-            {indent && "\u2015 " /* Horizontal bar symbol */}
-            {this.translation.nutrients[name]}
-          </Header>
-          <Amount
-            autoFocus={index === 0 && autoFocus}
-            name={name}
-            onChange={this.handleChange}
-            type="number"
-            value={(value && value[name]) || ""}
-          />
-          <Unit>
-            {this.translation.units[name === "energy" ? "kcal" : "g"]}
-          </Unit>
-        </Row>
+      <InputContainer
+        hasError={reason !== undefined && reason[name] !== undefined}
+        key={name}
+      >
+        <Header>
+          {indent && "\u2015 " /* Horizontal bar symbol */}
+          {this.translation.nutrients[name]}
+        </Header>
+        <Amount
+          autoFocus={index === 0 && autoFocus}
+          name={name}
+          onChange={this.handleChange}
+          type="number"
+          value={(value && value[name]) || ""}
+        />
+        <Unit>{this.translation.units[name === "energy" ? "kcal" : "g"]}</Unit>
         {index === 0 && <Label>{this.translation.title}</Label>}
-      </React.Fragment>
+      </InputContainer>
     );
   };
 
@@ -150,8 +145,6 @@ export class DeclareNutrition extends Component<
  * Component that contains row components for each nutrient type.
  */
 const Table = styled.div`
-  position: relative;
-
   width: 100%;
 
   box-shadow: 0 0 0 1px ${DEFAULT_BORDER}, inset 0 0 0 1px ${DEFAULT_BORDER};
@@ -211,67 +204,4 @@ const Unit = styled.span`
   text-align: center;
 
   transition: ${DURATION}s ${TIMING_FUNCTION};
-`;
-
-/**
- * Components coloring if there is no error.
- */
-const defaultRowStyle = css`
-  &:focus-within {
-    position: relative;
-    z-index: 1;
-    box-shadow: 0 0 0 1px ${ACTIVE}, inset 0 0 0 1px ${ACTIVE};
-  }
-
-  &:focus-within > ${Header},
-  &:focus-within > ${Unit},
-  /* Only the first row will affect Label component */
-  &:focus-within + ${Label} {
-    color: ${ACTIVE};
-  }
-`;
-
-/**
- * Components coloring if there is an error.
- */
-const errorRowStyle = css`
-  position: relative;
-  z-index: 1;
-
-  box-shadow: 0 0 0 1px ${ERROR}, inset 0 0 0 1px ${ERROR};
-
-  &:focus-within > ${Header},
-  &:focus-within > ${Unit},
-  /* Only the first row will affect Label component */
-  &:focus-within + ${Label} {
-    color: ${ERROR};
-  }
-`;
-
-/**
- * Row component props.
- */
-interface RowProps {
-  /**
-   * Whether or not there's an error.
-   */
-  hasError: boolean;
-}
-
-/**
- * Row component that contains nutrient name, amount and unit components.
- */
-const Row = styled.div<RowProps>`
-  display: flex;
-  align-items: center;
-
-  width: 100%;
-  height: ${UNIT}rem;
-
-  box-shadow: 0 0 0 1px ${DEFAULT_BORDER}, inset 0 0 0 1px ${DEFAULT_BORDER};
-  border-radius: ${BORDER_RADIUS}rem;
-
-  transition: ${DURATION}s ${TIMING_FUNCTION};
-
-  ${props => (props.hasError ? errorRowStyle : defaultRowStyle)};
 `;

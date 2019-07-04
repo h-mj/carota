@@ -76,7 +76,6 @@ const Label = styled.label`
   display: flex;
   align-items: center;
 
-  width: 100%;
   height: ${UNIT}rem;
 
   cursor: pointer;
@@ -88,7 +87,6 @@ const Label = styled.label`
 const Box = styled.div`
   position: absolute;
   top: ${UNIT / 4}rem;
-  left: ${UNIT / 4}rem;
 
   width: ${UNIT}rem;
   height: ${UNIT / 2}rem;
@@ -127,6 +125,7 @@ const Check = styled.div`
  */
 const Text = styled.div`
   color: ${DEFAULT_LABEL};
+  padding-left: ${UNIT / 4}rem;
 `;
 
 /**
@@ -135,7 +134,7 @@ const Text = styled.div`
 const Input = styled.input`
   ${RESET};
 
-  width: ${1.5 * UNIT}rem;
+  width: ${UNIT}rem;
   height: ${UNIT}rem;
 
   opacity: 0;
@@ -146,7 +145,7 @@ const Input = styled.input`
     left: ${UNIT / 2}rem;
   }
 
-  &:checked ~ * {
+  &:focus ~ * {
     color: ${ACTIVE};
   }
 `;

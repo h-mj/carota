@@ -82,9 +82,7 @@ export class Select<TValues extends string = string> extends React.Component<
     const { errorMessage, hasError, options, label, value } = this.props;
 
     return (
-      <InputContainer
-        hasError={hasError === true || errorMessage !== undefined}
-      >
+      <Container hasError={hasError === true || errorMessage !== undefined}>
         {options.map(({ label, value: optionValue }) => (
           <Option
             hasError={hasError === true || errorMessage !== undefined}
@@ -103,7 +101,7 @@ export class Select<TValues extends string = string> extends React.Component<
             {this.previousErrorMessage}
           </ErrorMessage>
         )}
-      </InputContainer>
+      </Container>
     );
   }
 
@@ -158,11 +156,10 @@ const Option = styled.button<OptionProps>`
  */
 const defaultStyle = css`
   &:focus-within {
-    z-index: 1;
     box-shadow: 0 0 0 1px ${ACTIVE}, inset 0 0 0 1px ${ACTIVE};
   }
 
-  &:focus-within > :not(${Option}):not(input) {
+  &:focus-within > ${Label} {
     color: ${ACTIVE};
   }
 `;
@@ -171,10 +168,9 @@ const defaultStyle = css`
  * Components coloring if there is an error.
  */
 const errorStyle = css`
-  z-index: 1;
   box-shadow: 0 0 0 1px ${ERROR}, inset 0 0 0 1px ${ERROR};
 
-  & > :not(${Option}):not(input) {
+  & > ${Label} {
     color: ${ERROR};
   }
 `;
@@ -192,7 +188,7 @@ interface ContainerProps {
 /**
  * Input container component that contains option components.
  */
-export const InputContainer = styled.div<ContainerProps>`
+const Container = styled.div<ContainerProps>`
   position: relative;
 
   display: flex;

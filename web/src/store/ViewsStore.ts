@@ -49,9 +49,14 @@ export class ViewsStore {
   @observable private _language: Languages = "English";
 
   /**
-   * Current main stage.
+   * Main stage.
    */
-  @observable private _main!: Readonly<Stages>;
+  @observable private _main!: Stages; // Set by calling `update` in constructor.
+
+  /**
+   * Side stage.
+   */
+  @observable private _side?: Stages;
 
   /**
    * Array of notifications.
@@ -82,11 +87,18 @@ export class ViewsStore {
   }
 
   /**
-   * Returns a main stage object.
+   * Returns main stage object.
    */
   @computed
   public get main() {
     return this._main;
+  }
+
+  /**
+   * Returns side stage object.
+   */
+  public get side() {
+    return this._side;
   }
 
   /**
@@ -110,7 +122,7 @@ export class ViewsStore {
    */
   @computed
   public get hideOverflow() {
-    return this.waiting;
+    return this.waiting || this.side !== undefined;
   }
 
   /**
@@ -135,6 +147,8 @@ export class ViewsStore {
 
   /**
    * Sets interface language.
+   *
+   * @param language Language name.
    */
   public set language(language: Languages) {
     this._language = language;
@@ -143,8 +157,9 @@ export class ViewsStore {
   /**
    * Sets main stage's scene name and parameters.
    *
-   * @param sceneName
-   * @param parameters
+   * This function also resets side stage.
+   *
+   * @param stage Stage that will be new main stage.
    */
   @action
   public redirect(stage: Stages) {
@@ -155,6 +170,8 @@ export class ViewsStore {
         : auth.authenticated
         ? Stage.UNKNOWN
         : Stage.GATEWAY;
+
+    this.refocus();
 
     const url = stage.getUrl() || window.location.pathname;
     const title = `${this.translation.scenes[this._main.sceneName].title} - ${
@@ -185,6 +202,22 @@ export class ViewsStore {
     }
 
     this.redirect(Stage.from(window.location.pathname) || Stage.UNKNOWN);
+  }
+
+  /**
+   * Sets a stage that will be rendered on the side.
+   *
+   * @param stage Stage that will be rendered on the side.
+   */
+  public aside(stage: Stages) {
+    this._side = stage;
+  }
+
+  /**
+   * Hides all stages except main stage.
+   */
+  public refocus() {
+    this._side = undefined;
   }
 
   /**
@@ -228,7 +261,7 @@ export class ViewsStore {
   }
 
   /**
-   * Removes a waiting reason from the the set
+   * Removes a waiting reason from the the set.
    *
    * @param name Loading procedure name.
    */

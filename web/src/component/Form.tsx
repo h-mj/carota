@@ -15,7 +15,7 @@ import {
 import { UNIT } from "../styling/sizes";
 
 /**
- * Returns parameters as array of input names.
+ * Returns function input name type parameters as array.
  */
 const withInputs = <TInputNames extends InputNames>(...names: TInputNames[]) =>
   names;
@@ -72,7 +72,7 @@ type FormErrorReasons<TFormName extends FormNames = FormNames> = {
 
 /**
  * Type of an object which keys are of type string and values are either of type
- * `T`, this type itself or `undefined`.
+ * `T`, `Tree<T>` or `undefined`.
  */
 type Tree<T> = {
   [P: string]: T | Tree<T> | undefined;

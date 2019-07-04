@@ -60,6 +60,7 @@ export interface DeclareNutritionProps {
    * Occurred error reasons related to internal input components.
    */
   reason?: Readonly<Partial<Record<NutrientNames, ErrorReasons>>>;
+
   /**
    * Text field value.
    */
@@ -97,15 +98,12 @@ export class DeclareNutrition extends Component<
   }
 
   /**
-   * Renders a row component alongside nutrient name, amount and unit
-   * components.
+   * Renders a row component alongside nutrient name header, amount input and
+   * unit text components.
    */
   private renderRow = (name: NutrientNames, index: number, indent = false) => {
     const { autoFocus, reason, value } = this.props;
 
-    // Label component is rendered after the first row element so that it is
-    // possible to change Label style based on first row state using adjacency
-    // selectors.
     return (
       <InputContainer
         hasError={reason !== undefined && reason[name] !== undefined}

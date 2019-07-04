@@ -162,7 +162,7 @@ const defaultStyle = css`
     box-shadow: 0 0 0 1px ${ACTIVE}, inset 0 0 0 1px ${ACTIVE};
   }
 
-  &:focus-within > :not(input) {
+  &:focus-within > :not(${Option}):not(input) {
     color: ${ACTIVE};
   }
 `;
@@ -174,7 +174,7 @@ const errorStyle = css`
   z-index: 1;
   box-shadow: 0 0 0 1px ${ERROR}, inset 0 0 0 1px ${ERROR};
 
-  & > :not(input) {
+  & > :not(${Option}):not(input) {
     color: ${ERROR};
   }
 `;

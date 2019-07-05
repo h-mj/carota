@@ -148,6 +148,10 @@ const Option = styled.button<OptionProps>`
 
   cursor: pointer;
 
+  &:focus {
+    color: ${ACTIVE};
+  }
+
   transition: ${DURATION}s ${TIMING_FUNCTION};
 `;
 

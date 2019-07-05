@@ -141,11 +141,12 @@ const Input = styled.input`
 
   cursor: inherit;
 
-  &:checked + ${Box} > ${Check} {
-    left: ${UNIT / 2}rem;
+  &:focus + ${Box} {
+    color: ${ACTIVE};
   }
 
-  &:focus ~ * {
+  &:checked + ${Box} > ${Check} {
+    left: ${UNIT / 2}rem;
     color: ${ACTIVE};
   }
 `;

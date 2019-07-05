@@ -10,6 +10,7 @@ import { Label } from "./TextField";
 import { DURATION, TIMING_FUNCTION } from "../styling/animations";
 import {
   ACTIVE,
+  BACKGROUND_DISABLED,
   DEFAULT_BORDER,
   DEFAULT_LABEL,
   ERROR
@@ -27,16 +28,16 @@ type NutrientNames = keyof NutritionDeclaration;
  * is surrounded by array, corresponding row span text will be indented using
  * horizontal line symbol in front.
  */
-const NUTRIENT_NAMES: Readonly<Array<NutrientNames | [NutrientNames]>> = [
+const NUTRIENT_NAMES: Readonly<Array<NutrientNames>> = [
   "energy",
   "fat",
-  ["saturates"],
-  ["monoUnsaturates"],
-  ["polyunsaturates"],
+  "saturates",
+  "monoUnsaturates",
+  "polyunsaturates",
   "carbohydrate",
-  ["sugars"],
-  ["polyols"],
-  ["starch"],
+  "sugars",
+  "polyols",
+  "starch",
   "fibre",
   "protein",
   "salt"
@@ -62,11 +63,9 @@ const areEnabled = (
   const map: Record<string, boolean> = {};
 
   NUTRIENT_NAMES.forEach(name => {
-    const nutrient = Array.isArray(name) ? name[0] : name;
-
-    map[nutrient] =
-      REQUIRED_NUTRIENT_NAMES.has(nutrient) ||
-      (value !== undefined && value[nutrient] !== undefined);
+    map[name] =
+      REQUIRED_NUTRIENT_NAMES.has(name) ||
+      (value !== undefined && value[name] !== undefined);
   });
 
   return map;
@@ -130,13 +129,7 @@ export class DeclareNutrition extends Component<
    * Renders for each input name its row component.
    */
   public render() {
-    return (
-      <Table>
-        {NUTRIENT_NAMES.map((name, index) =>
-          this.renderRow(Array.isArray(name) ? name[0] : name, index)
-        )}
-      </Table>
-    );
+    return <Table>{NUTRIENT_NAMES.map(this.renderRow)}</Table>;
   }
 
   /**
@@ -145,10 +138,11 @@ export class DeclareNutrition extends Component<
    */
   private renderRow = (name: NutrientNames, index: number) => {
     const { autoFocus, reason, value } = this.props;
+    const enabled = this.enabled[name];
 
     return (
       <Container
-        isDisabled={!this.enabled[name]}
+        isDisabled={!enabled}
         hasError={reason !== undefined && reason[name] !== undefined}
         key={name}
       >
@@ -156,7 +150,7 @@ export class DeclareNutrition extends Component<
           <CheckBox
             name={name}
             onChange={this.handleEnableChange}
-            value={this.enabled[name]}
+            value={enabled}
           />
         )}
         <Header>{this.translation.nutrients[name]}</Header>
@@ -166,7 +160,7 @@ export class DeclareNutrition extends Component<
           onChange={this.handleChange}
           type="number"
           value={(value && value[name]) || ""}
-          disabled={!this.enabled[name]}
+          disabled={!enabled}
         />
         <Unit>{this.translation.units[name === "energy" ? "kcal" : "g"]}</Unit>
         {index === 0 && <Label>{this.translation.title}</Label>}
@@ -273,15 +267,14 @@ const Unit = styled.span`
  * Components coloring if there is no error.
  */
 const disabledStyle = css`
-  background-color: whitesmoke;
+  z-index: 1;
+  background-color: ${BACKGROUND_DISABLED};
 `;
 
 /**
  * Components coloring if there is no error.
  */
 const defaultStyle = css`
-  z-index: 1;
-
   &:focus-within,
   &:focus-within > :not(${Amount}) {
     z-index: 2;
@@ -331,10 +324,10 @@ const Container = styled.div<ContainerProps>`
 
   transition: ${DURATION}s ${TIMING_FUNCTION};
 
-  ${props => (props.hasError ? errorStyle : defaultStyle)};
-  ${props => props.isDisabled && disabledStyle};
-
   & > *:first-child {
     margin-left: ${UNIT / 4}rem;
   }
+
+  ${props => (props.isDisabled ? disabledStyle : defaultStyle)};
+  ${props => props.hasError && errorStyle};
 `;

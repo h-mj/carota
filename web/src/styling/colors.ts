@@ -4,6 +4,11 @@
 export const BACKGROUND = "rgb(255, 255, 255)";
 
 /**
+ * Background color.
+ */
+export const BACKGROUND_DISABLED = "rgb(240, 240, 240)";
+
+/**
  * Background color with small transparency.
  */
 export const BACKGROUND_TRANSLUCENT = "rgba(255, 255, 255, 0.9)";

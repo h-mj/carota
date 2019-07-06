@@ -2,7 +2,7 @@ import { ErrorReasons, Languages, Units } from "api";
 import { computed } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Component } from "./Component";
+import { Component } from "../Component";
 import { TextField, TextFieldProps, TextFieldType } from "./TextField";
 import { Select, SelectProps } from "./Select";
 import { DeclareNutrition, DeclareNutritionProps } from "./DeclareNutrition";
@@ -203,9 +203,7 @@ export class Input<
 
     return (
       <Select
-        errorMessage={this.errorMessage}
-        hasError={reason !== undefined}
-        label={this.translation[name].label}
+        invalid={reason !== undefined}
         name={name}
         onChange={onChange}
         options={this.options}
@@ -224,29 +222,13 @@ export class Input<
     return (
       <TextField
         autoFocus={autoFocus}
-        errorMessage={this.errorMessage}
-        hasError={reason !== undefined}
+        invalid={reason !== undefined}
         name={name}
         onChange={onChange}
-        placeholder={this.translation[name as TextFieldNames].placeholder}
         type={TEXT_FIELD_TYPE[name as TextFieldNames]}
-        value={value}
+        value={value || ""}
       />
     );
-  }
-
-  /**
-   * Returns translated error message based on occurred error reason.
-   */
-  @computed
-  private get errorMessage() {
-    const { name, reason } = this.props as InputProps<
-      SelectNames | TextFieldNames
-    >;
-
-    return reason === undefined
-      ? undefined
-      : this.translation[name].reasons[reason];
   }
 
   /**
@@ -258,8 +240,8 @@ export class Input<
     const { name } = this.props as InputProps<SelectNames>;
 
     return (SELECT_OPTION_VALUES[name] as string[]).map(value => ({
-      label: (this.translation[name].options as any)[value],
-      value
+      label: (this.translation[name].options as any)[value] as string,
+      value: value as NonNullable<InputValues<SelectNames>>
     }));
   }
 }

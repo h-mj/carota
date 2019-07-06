@@ -1,66 +1,74 @@
+import { action, observable } from "mobx";
+import { observer } from "mobx-react";
 import * as React from "react";
-import styled, { css } from "styled-components";
-import { UNIT, BORDER_RADIUS } from "../styling/sizes";
-import {
-  DEFAULT_BORDER,
-  DEFAULT_LABEL,
-  ACTIVE,
-  ERROR
-} from "../styling/colors";
-import { DURATION } from "../styling/animations";
+import styled from "styled-components";
+import { getState } from "./Component";
+import { Field } from "./Input/Field";
 import { RESET } from "../styling/stylesheets";
 
 /**
  * Button component properties.
  */
 interface ButtonProps {
-  hasError?: boolean;
+  /**
+   * Whether or not button is disabled.
+   */
+  disabled?: boolean;
+
+  /**
+   * Whether or not button is invalid.
+   */
+  invalid?: boolean;
 }
 
 /**
  * Button component.
  */
-export const Button: React.FunctionComponent<ButtonProps> = ({
-  children,
-  hasError
-}) => <ButtonElement hasError={hasError}>{children}</ButtonElement>;
+@observer
+export class Button extends React.Component<ButtonProps> {
+  /**
+   * Whether or not button is focused.
+   */
+  @observable private focused = false;
 
-/**
- * Button color styling when property `hasError` is not `true`.
- */
-const defaultStyle = css`
-  box-shadow: 0 0 0 1px ${DEFAULT_BORDER}, inset 0 0 0 1px ${DEFAULT_BORDER};
-  color: ${DEFAULT_LABEL};
+  /**
+   * Renders button component inside a field component.
+   */
+  public render() {
+    const { children, disabled, invalid } = this.props;
 
-  &:active,
-  &:focus {
-    box-shadow: 0 0 0 1px ${ACTIVE}, inset 0 0 0 1px ${ACTIVE};
-    color: ${ACTIVE};
+    return (
+      <Field state={getState(disabled, this.focused, invalid)}>
+        <ButtonElement
+          disabled={disabled}
+          onBlur={this.handleFocusChange}
+          onFocus={this.handleFocusChange}
+        >
+          {children}
+        </ButtonElement>
+      </Field>
+    );
   }
-`;
 
-/**
- * Button color styling when property `hasError` is `true`.
- */
-const errorStyle = css`
-  box-shadow: 0 0 0 1px ${ERROR}, inset 0 0 0 1px ${ERROR};
-  color: ${ERROR};
-`;
+  /**
+   * Handles blur and focus events and sets `focused` value based on event type.
+   */
+  @action
+  private handleFocusChange: React.FocusEventHandler<
+    HTMLButtonElement
+  > = event => {
+    this.focused = event.type === "focus";
+  };
+}
 
 /**
  * The actual button element.
  */
-const ButtonElement = styled.button<ButtonProps>`
+const ButtonElement = styled.button`
   ${RESET};
 
   width: 100%;
-  height: ${UNIT}rem;
-
-  border-radius: ${BORDER_RADIUS}rem;
+  height: 100%;
 
   cursor: pointer;
-
-  transition: ${DURATION}s;
-
-  ${props => (props.hasError ? errorStyle : defaultStyle)};
 `;

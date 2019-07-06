@@ -1,8 +1,8 @@
 import * as React from "react";
 import styled, { keyframes } from "styled-components";
-import { BORDER_RADIUS, UNIT } from "../../styling/sizes";
-import { ACTIVE, BACKGROUND } from "../../styling/colors";
 import { scaleIn, scaleOut } from "../../styling/animations";
+import { LIGHT } from "../../styling/light";
+import { BORDER_RADIUS, UNIT_HEIGHT } from "../../styling/sizes";
 
 export const Loading: React.FunctionComponent = () => {
   return (
@@ -18,12 +18,12 @@ export const Loading: React.FunctionComponent = () => {
 /**
  * Diameter of square in `rem`s.
  */
-const SQUARE_SIZE = UNIT / 8;
+const SQUARE_SIZE = UNIT_HEIGHT / 8;
 
 /**
  * Offset between the start position of one square and next one.
  */
-const SQUARE_OFFSET = UNIT / 4;
+const SQUARE_OFFSET = UNIT_HEIGHT / 4;
 
 /**
  * Component that contains moving squares.
@@ -51,10 +51,12 @@ const Square = styled.div`
   width: ${SQUARE_SIZE}rem;
   height: ${SQUARE_SIZE}rem;
 
-  background-color: ${BACKGROUND};
+  background-color: ${LIGHT.backgroundColor};
 
   border-radius: ${BORDER_RADIUS}rem;
-  box-shadow: 0 0 0 1px ${ACTIVE}, inset 0 0 0 1px ${ACTIVE};
+  box-shadow: 0 0 0 1px, inset 0 0 0 1px;
+
+  color: ${LIGHT.colorPrimary};
 
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 

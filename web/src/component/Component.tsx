@@ -1,9 +1,9 @@
 import { computed } from "mobx";
 import * as React from "react";
 import { Alert } from "./Alert";
-import { DeclareNutrition } from "./DeclareNutrition";
+import { DeclareNutrition } from "./Input/DeclareNutrition";
 import { Form } from "./Form";
-import { Input } from "./Input";
+import { Input } from "./Input/Input";
 import { NotificationContainer } from "./NotificationContainer";
 import { InjectedProps } from "../store/Store";
 
@@ -34,6 +34,35 @@ export type ComponentsTranslation = {
     ? ITranslation
     : never
 };
+
+/**
+ * Union of styled component states.
+ */
+export type ComponentState = "disabled" | "default" | "focused" | "invalid";
+
+/**
+ * Returns state type based on component properties.
+ */
+export const getState = (
+  disabled: boolean | undefined,
+  focused: boolean | undefined,
+  invalid: boolean | undefined
+): ComponentState => {
+  if (invalid) return "invalid";
+  if (disabled) return "disabled";
+  if (focused) return "focused";
+  return "default";
+};
+
+/**
+ * Component state prop.
+ */
+export interface StateProps {
+  /**
+   * Component state.
+   */
+  state: ComponentState;
+}
 
 /**
  * Component base class used to easily define and retrieve translations.

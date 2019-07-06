@@ -1,13 +1,13 @@
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Scene } from "./Scene";
-import { Medium } from "../component/container/Medium";
 import styled from "styled-components";
-import { TextField } from "../component/TextField";
-import { InputChangeHandler } from "../component/Input";
-import { UNIT, BORDER_RADIUS } from "../styling/sizes";
-import { DEFAULT_BORDER } from "../styling/colors";
+import { Scene } from "./Scene";
+import { InputChangeHandler } from "../component/Input/Input";
+import { TextField } from "../component/Input/TextField";
+import { Medium } from "../component/container/Medium";
+import { LIGHT } from "../styling/light";
+import { UNIT_HEIGHT, BORDER_RADIUS } from "../styling/sizes";
 
 @inject("foods")
 @observer
@@ -22,7 +22,6 @@ export class FoodSearch extends Scene<"FoodSearch"> {
         <TextField
           name="query"
           onChange={this.handleChange}
-          placeholder="Search"
           type="text"
           value={this.query}
         />
@@ -53,10 +52,11 @@ export class FoodSearch extends Scene<"FoodSearch"> {
 const Results = styled.div`
   width: 100%;
 
-  margin-top: ${UNIT / 4}rem;
+  margin-top: ${UNIT_HEIGHT / 4}rem;
 
-  box-shadow: 0 0 0 1px ${DEFAULT_BORDER}, inset 0 0 0 1px ${DEFAULT_BORDER};
-  border-radius: ${BORDER_RADIUS}rem;
+  color: ${LIGHT.default.borderColor};
+  box-shadow: 0 0 0 1px inset 0 0 0 1px;
+  border-radius: ${BORDER_RADIUS};
 `;
 
 const Result = styled.div`
@@ -64,12 +64,13 @@ const Result = styled.div`
   align-items: center;
 
   width: 100%;
-  height: ${UNIT}rem;
+  height: ${UNIT_HEIGHT}rem;
 
-  padding: 0 ${UNIT / 4}rem;
+  padding: 0 ${UNIT_HEIGHT / 4}rem;
   box-sizing: border-box;
 
-  box-shadow: 0 0 0 1px ${DEFAULT_BORDER}, inset 0 0 0 1px ${DEFAULT_BORDER};
+  color: ${LIGHT.default.borderColor};
+  box-shadow: 0 0 0 1px, inset 0 0 0 1px;
   border-radius: ${BORDER_RADIUS}rem;
 
   &:last-of-type {

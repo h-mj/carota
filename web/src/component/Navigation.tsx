@@ -1,11 +1,12 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
+import { StateProps } from "./Component";
 import { Anchor } from "./Anchor";
 import { InjectedProps } from "../store/Store";
 import { DURATION } from "../styling/animations";
-import { ACTIVE, DEFAULT_LABEL } from "../styling/colors";
-import { UNIT } from "../styling/sizes";
+import { LIGHT } from "../styling/light";
+import { UNIT_HEIGHT } from "../styling/sizes";
 
 /**
  * Navigation bar component that is used to navigate to different parts of the
@@ -35,7 +36,9 @@ export class Navigation extends React.Component<InjectedProps> {
             <Item
               key={index}
               stage={stage}
-              isActive={currentSceneName === stage.sceneName}
+              state={
+                currentSceneName === stage.sceneName ? "focused" : "default"
+              }
             >
               {sceneTranslation[stage.sceneName].title}
             </Item>
@@ -59,38 +62,24 @@ const Container = styled.div`
  */
 const Bar = styled.nav`
   display: inline-flex;
-  padding: 0 ${UNIT / 4}rem;
+  padding: 0 ${UNIT_HEIGHT / 4}rem;
   box-sizing: border-box;
 `;
 
 /**
- * Item component props.
- */
-interface ItemProps {
-  /**
-   * Whether or not this item is active.
-   */
-  isActive: boolean;
-}
-
-/**
  * One of the navigation bar items.
  */
-const Item = styled(Anchor)<ItemProps>`
-  height: ${UNIT}rem;
-  padding: 0 ${UNIT / 4}rem;
+const Item = styled(Anchor)<StateProps>`
+  height: ${UNIT_HEIGHT}rem;
+  padding: 0 ${UNIT_HEIGHT / 4}rem;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  color: ${props => (props.isActive ? ACTIVE : DEFAULT_LABEL)};
+  color: ${props => LIGHT[props.state].color};
   text-decoration: none;
   white-space: nowrap;
 
   transition: ${DURATION}s;
-
-  &:hover {
-    color: ${ACTIVE};
-  }
 `;

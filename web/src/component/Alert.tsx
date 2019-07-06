@@ -4,8 +4,8 @@ import styled from "styled-components";
 import { Component } from "./Component";
 import { Center } from "./container/Center";
 import { Medium } from "./container/Medium";
-import { DEFAULT_LABEL } from "../styling/colors";
-import { UNIT } from "../styling/sizes";
+import { UNIT_HEIGHT } from "../styling/sizes";
+import { LIGHT } from "../styling/light";
 
 /**
  * Maps alert names to it's translated text message parameters.
@@ -90,7 +90,8 @@ export class Alert<
  * Alert title text component.
  */
 const Title = styled.div`
-  margin-bottom: ${UNIT / 4}rem;
+  margin-bottom: ${UNIT_HEIGHT / 4}rem;
+  color: ${LIGHT.colorPrimary};
   font-size: 2rem;
   letter-spacing: -0.022em;
   line-height: 2.5rem;
@@ -101,7 +102,7 @@ const Title = styled.div`
  * Alert message text component.
  */
 const Message = styled.div`
-  color: ${DEFAULT_LABEL};
+  color: ${LIGHT.colorSecondary};
   line-height: 1.5rem;
   text-align: center;
 `;

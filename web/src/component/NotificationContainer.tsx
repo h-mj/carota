@@ -2,71 +2,67 @@ import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled, { keyframes } from "styled-components";
-import { Component } from "./Component";
+import { Component, ComponentState, StateProps } from "./Component";
 import { DURATION, fadeIn, fadeOut } from "../styling/animations";
-import { BACKGROUND, DEFAULT_BORDER, ERROR } from "../styling/colors";
-import { BORDER_RADIUS, UNIT } from "../styling/sizes";
 import { setTimeout } from "../utility/promises";
-
-/**
- * Union of all notification types.
- */
-type NotificationTypes = "default" | "error";
-
-/**
- * Maps notification name to notification type and message parameter names.
- */
-interface NotificationsTypes {
-  loginInvalidCredentials: Types<"error">;
-}
+import { UNIT_HEIGHT, BORDER_RADIUS } from "../styling/sizes";
+import { LIGHT } from "../styling/light";
 
 /**
  * Specifies notification type and its text message parameter names.
  */
-interface Types<
-  TNotificationType extends NotificationTypes,
-  TParameterNames extends string = never
-> {
+interface Types<TState extends ComponentState, TParameterNames extends string> {
   /**
    * Union of all text message parameter names.
    */
-  parameterNames: TParameterNames;
+  parameterNames: TParameterNames[];
 
   /**
    * Notification type.
    */
-  type: TNotificationType;
+  state: TState;
 }
+
+/**
+ * Returns `Types` type object which defines notification component state and
+ * parameters based on notification name.
+ *
+ * @param state Notification component state.
+ * @param parameterNames Notification component message parameter names.
+ */
+const types = <TState extends ComponentState, TParameterNames extends string>(
+  state: TState,
+  ...parameterNames: TParameterNames[]
+): Types<TState, TParameterNames> => ({
+  state,
+  parameterNames
+});
+
+/**
+ * Maps notification name to notification type and message parameter names.
+ */
+const NOTIFICATION_NAME_TYPES = {
+  loginInvalidCredentials: types("invalid")
+};
 
 /**
  * Union of all notification names.
  */
-export type NotificationNames = keyof NotificationsTypes;
+export type NotificationNames = keyof typeof NOTIFICATION_NAME_TYPES;
 
 /**
  * Notification message parameters type that maps parameter names of given notification name to string
  * values.
  */
 export type NotificationMessageParameters<
-  TNotificationName extends NotificationNames
-> = {
-  [NotificationName in NotificationNames]: NotificationName extends TNotificationName
-    ? {
-        [Parameter in NotificationsTypes[NotificationName]["parameterNames"]]: string
-      }
+  TNotificationNames extends NotificationNames
+> = typeof NOTIFICATION_NAME_TYPES[TNotificationNames] extends infer ITypes
+  ? ITypes extends Types<infer _, infer IParameterNames>
+    ? string extends IParameterNames
+      ? {}
+      : Record<IParameterNames, string>
     : never
-}[NotificationNames];
-
-/**
- * Object that maps notification names to their types.
- */
-const NAME_TO_TYPE: Readonly<
-  {
-    [NotificationName in NotificationNames]: NotificationsTypes[NotificationName]["type"]
-  }
-> = {
-  loginInvalidCredentials: "error"
-};
+  : never;
 
 /**
  * Notification object type.
@@ -203,7 +199,7 @@ export class NotificationContainer extends Component<
         key={id}
         isActive={notifications.includes(notification)}
         onClick={() => this.props.views!.conceal(notification)}
-        type={NAME_TO_TYPE[name]}
+        state={NOTIFICATION_NAME_TYPES[name].state}
       >
         {message}
       </NotificationElement>
@@ -228,8 +224,8 @@ export class NotificationContainer extends Component<
  */
 const NotificationBox = styled.div`
   position: fixed;
-  bottom: ${UNIT / 4}rem;
-  left: ${UNIT / 4}rem;
+  bottom: ${UNIT_HEIGHT / 4}rem;
+  left: ${UNIT_HEIGHT / 4}rem;
 `;
 
 /**
@@ -249,28 +245,13 @@ const moveOut = keyframes`
 `;
 
 /**
- * Object that maps notification types to border color.
- */
-const TYPE_TO_BORDER_COLOR: Readonly<
-  { [NotificationType in NotificationTypes]: string }
-> = {
-  default: DEFAULT_BORDER,
-  error: ERROR
-};
-
-/**
  * Actual notification component properties.
  */
-interface NotificationElementProps {
+interface NotificationElementProps extends StateProps {
   /**
    * Whether or not this notification is active.
    */
   isActive: boolean;
-
-  /**
-   * Notification type.
-   */
-  type: NotificationTypes;
 }
 
 /**
@@ -280,16 +261,16 @@ const NotificationElement = styled.div<NotificationElementProps>`
   display: flex;
   align-items: center;
 
-  height: ${UNIT}rem;
-  margin-top: ${UNIT / 4}rem;
-  padding: 0 ${UNIT / 4}rem;
+  height: ${UNIT_HEIGHT}rem;
+  margin-top: ${UNIT_HEIGHT / 4}rem;
+  padding: 0 ${UNIT_HEIGHT / 4}rem;
   box-sizing: border-box;
 
-  background-color: ${BACKGROUND};
+  background-color: ${LIGHT.default.backgroundColor};
 
   border-radius: ${BORDER_RADIUS}rem;
-  box-shadow: 0 0 0 1px ${props => TYPE_TO_BORDER_COLOR[props.type]},
-    inset 0 0 0 1px ${props => TYPE_TO_BORDER_COLOR[props.type]};
+  box-shadow: 0 0 0 1px, inset 0 0 0 1px;
+  color: ${props => LIGHT[props.state].color};
 
   animation: ${props => (props.isActive ? fadeIn : fadeOut)} ${DURATION}s,
     ${props => (props.isActive ? moveIn : moveOut)} ${DURATION}s;

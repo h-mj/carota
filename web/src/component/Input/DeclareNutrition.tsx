@@ -2,21 +2,15 @@ import { ErrorReasons, NutritionDeclaration } from "api";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import styled, { css } from "styled-components";
-import { Component } from "./Component";
+import styled from "styled-components";
+import { Component, getState } from "../Component";
 import { CheckBox } from "./CheckBox";
+import { Field } from "./Field";
 import { InputChangeHandler } from "./Input";
-import { Label } from "./TextField";
-import { DURATION, TIMING_FUNCTION } from "../styling/animations";
-import {
-  ACTIVE,
-  BACKGROUND_DISABLED,
-  DEFAULT_BORDER,
-  DEFAULT_LABEL,
-  ERROR
-} from "../styling/colors";
-import { BORDER_RADIUS, UNIT } from "../styling/sizes";
-import { RESET } from "../styling/stylesheets";
+import { TRANSITION } from "../../styling/animations";
+import { LIGHT } from "../../styling/light";
+import { RESET } from "../../styling/stylesheets";
+import { BORDER_RADIUS, UNIT_HEIGHT } from "../../styling/sizes";
 
 /**
  * Union of all nutrient names.
@@ -54,18 +48,18 @@ const REQUIRED_NUTRIENT_NAMES: Readonly<Set<NutrientNames>> = new Set([
 ]);
 
 /**
- * Returns a map that maps nutrient names to booleans whether or not they are
- * enabled based on initial values.
+ * Returns a map that maps nutrient names to whether or not they are disabled
+ * based on nutrient amount values.
  */
-const areEnabled = (
+const areDisabled = (
   value?: Readonly<Partial<NutritionDeclaration>>
 ): Record<NutrientNames, boolean> => {
   const map: Record<string, boolean> = {};
 
   NUTRIENT_NAMES.forEach(name => {
     map[name] =
-      REQUIRED_NUTRIENT_NAMES.has(name) ||
-      (value !== undefined && value[name] !== undefined);
+      !REQUIRED_NUTRIENT_NAMES.has(name) &&
+      (value === undefined || value[name] === undefined);
   });
 
   return map;
@@ -84,7 +78,7 @@ export interface DeclareNutritionProps {
    * Text field name that will be included as one of the `onChange` callback
    * parameters.
    */
-  name: string;
+  name?: string;
 
   /**
    * Function that will be called when text field value changes.
@@ -121,9 +115,14 @@ export class DeclareNutrition extends Component<
   DeclareNutritionTranslation
 > {
   /**
-   * For each nutrient stores a boolean value whether or not it is enabled.
+   * For each nutrient stores a boolean value whether or not it is disabled.
    */
-  @observable private enabled = areEnabled(this.props.value);
+  @observable private disabled = areDisabled(this.props.value);
+
+  /**
+   * Currently focused nutrient name.
+   */
+  @observable private focusedNutrient?: string;
 
   /**
    * Renders for each input name its row component.
@@ -138,33 +137,40 @@ export class DeclareNutrition extends Component<
    */
   private renderRow = (name: NutrientNames, index: number) => {
     const { autoFocus, reason, value } = this.props;
-    const enabled = this.enabled[name];
+
+    const disabled = this.disabled[name];
+    const state = getState(
+      disabled,
+      this.focusedNutrient === name,
+      reason !== undefined && reason[name] !== undefined
+    );
 
     return (
-      <Container
-        isDisabled={!enabled}
-        hasError={reason !== undefined && reason[name] !== undefined}
-        key={name}
-      >
+      <MarginedField key={name} state={state}>
         {!REQUIRED_NUTRIENT_NAMES.has(name) && (
           <CheckBox
             name={name}
             onChange={this.handleEnableChange}
-            value={enabled}
+            value={!disabled}
           />
         )}
-        <Header>{this.translation.nutrients[name]}</Header>
-        <Amount
-          autoFocus={index === 0 && autoFocus}
-          name={name}
-          onChange={this.handleChange}
-          type="number"
-          value={(value && value[name]) || ""}
-          disabled={!enabled}
-        />
-        <Unit>{this.translation.units[name === "energy" ? "kcal" : "g"]}</Unit>
-        {index === 0 && <Label>{this.translation.title}</Label>}
-      </Container>
+        <Label>
+          <Header>{this.translation.nutrients[name]}</Header>
+          <Input
+            autoFocus={index === 0 && autoFocus}
+            name={name}
+            onBlur={this.handleFocusChange}
+            onChange={this.handleChange}
+            onFocus={this.handleFocusChange}
+            type="number"
+            value={(value && value[name]) || ""}
+            disabled={disabled}
+          />
+          <Unit>
+            {this.translation.units[name === "energy" ? "kcal" : "g"]}
+          </Unit>
+        </Label>
+      </MarginedField>
     );
   };
 
@@ -176,7 +182,7 @@ export class DeclareNutrition extends Component<
       const { name, value } = this.props;
       const { name: inputName, value: inputValue } = event.target;
 
-      this.props.onChange(name, { ...value, [inputName]: inputValue });
+      this.props.onChange(name || "", { ...value, [inputName]: inputValue });
     }
   };
 
@@ -185,15 +191,26 @@ export class DeclareNutrition extends Component<
    */
   @action
   private handleEnableChange: InputChangeHandler<boolean> = (name, value) => {
-    this.enabled[name as NutrientNames] = value;
+    this.disabled[name as NutrientNames] = !value;
 
     // Reset the value of the input.
     if (this.props.onChange) {
-      this.props.onChange(this.props.name, {
+      this.props.onChange(this.props.name || "", {
         ...this.props.value,
         [name]: value ? "" : undefined
       });
     }
+  };
+
+  /**
+   * Handles focus and blur events and sets currently focused nutrient name.
+   */
+  @action
+  private handleFocusChange: React.FocusEventHandler<
+    HTMLInputElement
+  > = event => {
+    this.focusedNutrient =
+      event.type === "focus" ? event.target.name : undefined;
   };
 }
 
@@ -203,40 +220,65 @@ export class DeclareNutrition extends Component<
 const Table = styled.div`
   width: 100%;
 
-  box-shadow: 0 0 0 1px ${DEFAULT_BORDER}, inset 0 0 0 1px ${DEFAULT_BORDER};
+  box-shadow: 0 0 0 1px, inset 0 0 0 1px;
   border-radius: ${BORDER_RADIUS}rem;
 
-  transition: ${DURATION}s ${TIMING_FUNCTION};
+  color: ${LIGHT.default.borderColor};
+
+  transition: ${TRANSITION};
+`;
+
+const MarginedField = styled(Field)`
+  & > * {
+    margin-left: ${UNIT_HEIGHT / 4}rem;
+  }
+`;
+
+/**
+ * Component that contains header, input and unit components.
+ */
+const Label = styled.label`
+  display: flex;
+  align-items: center;
+
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+
+  flex-shrink: 1;
 `;
 
 /**
  * Component used for displaying nutrient name.
  */
 const Header = styled.span`
-  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  margin-left: ${UNIT / 4}rem;
+  min-width: 0;
+  height: 100%;
 
   overflow: hidden;
   text-overflow: ellipsis;
 
-  color: ${DEFAULT_LABEL};
+  color: ${LIGHT.default.color};
   white-space: nowrap;
 
-  transition: ${DURATION}s ${TIMING_FUNCTION};
+  transition: ${TRANSITION};
 `;
 
 /**
  * Component used to display and edit nutrient amount.
  */
-const Amount = styled.input`
+const Input = styled.input`
   ${RESET};
 
   flex: 1;
-  min-width: ${UNIT}rem;
+  min-width: ${UNIT_HEIGHT}rem;
   height: 100%;
 
-  color: ${ACTIVE};
+  color: ${LIGHT.default.color};
   text-align: right;
 
   /* Hide up/down arrows on the right of the input */
@@ -253,81 +295,6 @@ const Amount = styled.input`
 /**
  * Component used to display nutrient amount unit, either `g` or `kcal`.
  */
-const Unit = styled.span`
-  flex-shrink: 0;
-  width: ${UNIT}rem;
-
-  color: ${DEFAULT_LABEL};
-  text-align: center;
-
-  transition: ${DURATION}s ${TIMING_FUNCTION};
-`;
-
-/**
- * Components coloring if there is no error.
- */
-const disabledStyle = css`
-  z-index: 1;
-  background-color: ${BACKGROUND_DISABLED};
-`;
-
-/**
- * Components coloring if there is no error.
- */
-const defaultStyle = css`
-  &:focus-within,
-  &:focus-within > :not(${Amount}) {
-    z-index: 2;
-    color: ${ACTIVE};
-  }
-`;
-
-/**
- * Components coloring if there is an error.
- */
-const errorStyle = css`
-  z-index: 3;
-
-  &,
-  & > :not(${Amount}) {
-    color: ${ERROR};
-  }
-`;
-
-/**
- * Container component props.
- */
-interface ContainerProps {
-  /**
-   * Whether or not there's an error.
-   */
-  hasError: boolean;
-
-  /**
-   * Whether or not associated input is disabled.
-   */
-  isDisabled: boolean;
-}
-
-const Container = styled.div<ContainerProps>`
-  position: relative;
-
-  display: flex;
-  align-items: center;
-
-  width: 100%;
-  height: ${UNIT}rem;
-
-  color: ${DEFAULT_BORDER};
-  box-shadow: 0 0 0 1px, inset 0 0 0 1px;
-  border-radius: ${BORDER_RADIUS}rem;
-
-  transition: ${DURATION}s ${TIMING_FUNCTION};
-
-  & > *:first-child {
-    margin-left: ${UNIT / 4}rem;
-  }
-
-  ${props => (props.isDisabled ? disabledStyle : defaultStyle)};
-  ${props => props.hasError && errorStyle};
+const Unit = styled(Header)`
+  width: ${UNIT_HEIGHT}rem;
 `;

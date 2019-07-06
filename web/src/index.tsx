@@ -9,7 +9,7 @@ import { InjectedProps } from "./store/Store";
 import { auth } from "./store/AuthStore";
 import { foods } from "./store/FoodsStore";
 import { views } from "./store/ViewsStore";
-import { BACKGROUND, FOREGROUND } from "./styling/colors";
+import { LIGHT } from "./styling/light";
 
 /**
  * Global style properties.
@@ -28,8 +28,8 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
   @import url("https://rsms.me/inter/inter.css");
 
   html {
-    background-color: ${BACKGROUND};
-    color: ${FOREGROUND};
+    background-color: ${LIGHT.default.backgroundColor};
+    color: ${LIGHT.default.color};
 
     font-family: "Inter", sans-serif;
     font-size: 16px;

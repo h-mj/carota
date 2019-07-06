@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { Loading } from "./icon/Loading";
 import { InjectedProps } from "../store/Store";
 import { DURATION, fadeIn, fadeOut } from "../styling/animations";
-import { BACKGROUND_TRANSLUCENT } from "../styling/colors";
+import { LIGHT } from "../styling/light";
 
 /**
  * Component that is shown when some part of the application is being loaded.
@@ -89,7 +89,8 @@ const Overlay = styled.div<OverlayProps>`
   justify-content: center;
   align-items: center;
 
-  background-color: ${BACKGROUND_TRANSLUCENT};
+  background-color: ${LIGHT.backgroundColor};
+  opacity: 0.95;
 
   animation: ${props => (props.isActive ? fadeIn : fadeOut)} ${DURATION}s
     forwards;

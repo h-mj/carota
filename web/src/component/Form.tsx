@@ -11,8 +11,9 @@ import {
   InputErrorReasons,
   InputNames,
   InputValues
-} from "./Input";
-import { UNIT } from "../styling/sizes";
+} from "./Input/Input";
+import { UNIT_HEIGHT } from "../styling/sizes";
+import { LIGHT } from "../styling/light";
 
 /**
  * Returns function input name type parameters as array.
@@ -269,7 +270,7 @@ export class Form<TFormName extends FormNames = FormNames> extends Component<
           />
         ))}
 
-        <Button hasError={anyErrors(this.reasons)}>
+        <Button invalid={anyErrors(this.reasons)}>
           {this.translation[name].submit}
         </Button>
       </FormElement>
@@ -308,7 +309,7 @@ export class Form<TFormName extends FormNames = FormNames> extends Component<
  */
 const FormElement = styled.form`
   & > * {
-    margin-bottom: ${UNIT / 4}rem;
+    margin-bottom: ${UNIT_HEIGHT / 4}rem;
   }
 
   & > *:first-child,
@@ -321,13 +322,14 @@ const FormElement = styled.form`
  * Title message component on top of the form.
  */
 const Title = styled.div`
-  height: ${UNIT}rem;
-  padding-bottom: ${UNIT}rem;
+  height: ${UNIT_HEIGHT}rem;
+  padding-bottom: ${UNIT_HEIGHT}rem;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
+  color: ${LIGHT.colorPrimary};
   font-size: 2.5rem;
   letter-spacing: -0.022rem;
   text-align: center;

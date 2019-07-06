@@ -1,14 +1,19 @@
 import { keyframes } from "styled-components";
 
 /**
- * Default transition duration in seconds.
+ * Default animation/transition duration in seconds.
  */
 export const DURATION = 0.125;
 
 /**
- * Animation timing function.
+ * Default animation/duration timing function.
  */
-export const TIMING_FUNCTION = "cubic-bezier(0.5, 0, 0.2, 1)";
+export const TIMING_FUNCTION = "cubic-bezier(0.4, 0.0, 0.2, 1)";
+
+/**
+ * Default transition rule value.
+ */
+export const TRANSITION = `${DURATION}s ${TIMING_FUNCTION}`;
 
 /**
  * Animation that fades a component in.

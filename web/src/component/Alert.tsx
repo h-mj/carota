@@ -6,19 +6,35 @@ import { Center } from "./container/Center";
 import { Medium } from "./container/Medium";
 import { UNIT_HEIGHT } from "../styling/sizes";
 import { LIGHT } from "../styling/light";
+import { withParameters } from "../utility/types";
 
 /**
- * Maps alert names to it's translated text message parameters.
+ * Maps alert names to it's translated text message parameter names.
  */
-interface AlertParameters {
-  invalidInvitation: never;
-  unknown: never;
-}
+const ALERT_TYPES = {
+  invalidInvitation: withParameters(),
+  unknown: withParameters()
+};
 
 /**
  * Union of all alert names.
  */
-type AlertNames = keyof AlertParameters;
+type AlertNames = keyof typeof ALERT_TYPES;
+
+/**
+ * Parameters type of alerts named `TAlertNames`.
+ */
+type AlertParameters<
+  TAlertNames extends AlertNames
+> = typeof ALERT_TYPES[TAlertNames] extends infer IType
+  ? IType extends (infer IParameterNames)[]
+    ? string extends IParameterNames
+      ? {}
+      : IParameterNames extends string
+      ? Record<IParameterNames, string>
+      : never
+    : never
+  : never;
 
 /**
  * Alert component props.
@@ -32,7 +48,7 @@ interface AlertProps<TAlertName extends AlertNames> {
   /**
    * Alert title and message text parameters.
    */
-  parameters: Record<AlertParameters[TAlertName], string>;
+  parameters: AlertParameters<TAlertName>;
 }
 
 /**

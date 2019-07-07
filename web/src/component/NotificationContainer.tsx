@@ -15,7 +15,7 @@ interface Types<TState extends ComponentState, TParameterNames extends string> {
   /**
    * Union of all text message parameter names.
    */
-  parameterNames: TParameterNames[];
+  parameterNames?: TParameterNames[];
 
   /**
    * Notification type.
@@ -30,9 +30,12 @@ interface Types<TState extends ComponentState, TParameterNames extends string> {
  * @param state Notification component state.
  * @param parameterNames Notification component message parameter names.
  */
-const types = <TState extends ComponentState, TParameterNames extends string>(
+const withTypes = <
+  TState extends ComponentState,
+  TParameterNames extends string
+>(
   state: TState,
-  ...parameterNames: TParameterNames[]
+  parameterNames?: TParameterNames[]
 ): Types<TState, TParameterNames> => ({
   state,
   parameterNames
@@ -41,14 +44,14 @@ const types = <TState extends ComponentState, TParameterNames extends string>(
 /**
  * Maps notification name to notification type and message parameter names.
  */
-const NOTIFICATION_NAME_TYPES = {
-  loginInvalidCredentials: types("invalid")
+const NOTIFICATION_TYPES = {
+  loginInvalidCredentials: withTypes("invalid")
 };
 
 /**
  * Union of all notification names.
  */
-export type NotificationNames = keyof typeof NOTIFICATION_NAME_TYPES;
+export type NotificationNames = keyof typeof NOTIFICATION_TYPES;
 
 /**
  * Notification message parameters type that maps parameter names of given notification name to string
@@ -56,7 +59,7 @@ export type NotificationNames = keyof typeof NOTIFICATION_NAME_TYPES;
  */
 export type NotificationMessageParameters<
   TNotificationNames extends NotificationNames
-> = typeof NOTIFICATION_NAME_TYPES[TNotificationNames] extends infer ITypes
+> = typeof NOTIFICATION_TYPES[TNotificationNames] extends infer ITypes
   ? ITypes extends Types<infer _, infer IParameterNames>
     ? string extends IParameterNames
       ? {}
@@ -199,7 +202,7 @@ export class NotificationContainer extends Component<
         key={id}
         isActive={notifications.includes(notification)}
         onClick={() => this.props.views!.conceal(notification)}
-        state={NOTIFICATION_NAME_TYPES[name].state}
+        state={NOTIFICATION_TYPES[name].state}
       >
         {message}
       </NotificationElement>

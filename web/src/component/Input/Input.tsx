@@ -1,26 +1,53 @@
-import { ErrorReasons, Languages, Units } from "api";
+import { ErrorReasons } from "api";
 import { computed } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Component } from "../Component";
-import { TextField, TextFieldProps, TextFieldType } from "./TextField";
-import { Select, SelectProps } from "./Select";
 import { DeclareNutrition, DeclareNutritionProps } from "./DeclareNutrition";
+import { Select, SelectProps } from "./Select";
+import { TextField, TextFieldProps } from "./TextField";
+
+/**
+ * Input definitions object.
+ */
+const INPUTS = {
+  declareNutrition: { component: "DeclareNutrition" },
+  language: {
+    component: "Select",
+    options: ["Estonian", "English", "Russian"]
+  },
+  unit: { component: "Select", options: ["g", "ml"] },
+  barcode: { component: "TextField", type: "tel" },
+  email: { component: "TextField", type: "email" },
+  name: { component: "TextField", type: "text" },
+  password: { component: "TextField", type: "password" }
+} as const;
 
 /**
  * Union of all component names.
  */
-export type InputNames = DeclareNutritionNames | SelectNames | TextFieldNames;
+export type ComponentNames = typeof INPUTS[keyof typeof INPUTS]["component"];
+
+/**
+ * Union of input names that use given component.
+ */
+export type InputNames<
+  TComponentName extends ComponentNames = ComponentNames
+> = {
+  [InputName in keyof typeof INPUTS]: typeof INPUTS[InputName]["component"] extends TComponentName
+    ? InputName
+    : never
+}[keyof typeof INPUTS];
 
 /**
  * Union of input value types of given input names.
  */
 export type InputValues<TInputNames extends InputNames = InputNames> = {
-  [InputName in TInputNames]: InputName extends DeclareNutritionNames
+  [InputName in TInputNames]: InputName extends InputNames<"DeclareNutrition">
     ? DeclareNutritionProps["value"]
-    : InputName extends SelectNames
-    ? SelectProps<SelectOptions[InputName]>["value"]
-    : InputName extends TextFieldNames
+    : InputName extends InputNames<"Select">
+    ? SelectProps<SelectOptionValues<InputName>>["value"]
+    : InputName extends InputNames<"TextField">
     ? TextFieldProps["value"]
     : never
 }[TInputNames];
@@ -29,56 +56,21 @@ export type InputValues<TInputNames extends InputNames = InputNames> = {
  * Union of error reason types of given input names.
  */
 export type InputErrorReasons<TInputNames extends InputNames = InputNames> = {
-  [InputName in TInputNames]: InputName extends DeclareNutritionNames
+  [InputName in TInputNames]: InputName extends InputNames<"DeclareNutrition">
     ? DeclareNutritionProps["reason"]
     : ErrorReasons
 }[TInputNames];
 
 /**
- * Declare nutrition component name.
+ * Union of option values of select inputs named `TSelectNames`.
  */
-export type DeclareNutritionNames = "declareNutrition";
-
-/**
- * Type that maps select component name to type of its options.
- */
-interface SelectOptions {
-  language: Languages;
-  unit: Units;
-}
-
-/**
- * Union of all select component names.
- */
-export type SelectNames = keyof SelectOptions;
-
-/**
- * Object that is used to retrieve an array of option values by select component
- * name.
- */
-const SELECT_OPTION_VALUES: Readonly<
-  { [SelectName in SelectNames]: Array<SelectOptions[SelectName]> }
-> = {
-  language: ["Estonian", "English", "Russian"],
-  unit: ["g", "ml"]
-};
-
-/**
- * Union of all text field component names.
- */
-export type TextFieldNames = "barcode" | "email" | "name" | "password";
-
-/**
- * Object that maps text field name to its type.
- */
-const TEXT_FIELD_TYPE: Readonly<
-  { [TextFieldName in TextFieldNames]: TextFieldType }
-> = {
-  barcode: "tel",
-  email: "email",
-  name: "text",
-  password: "password"
-};
+export type SelectOptionValues<
+  TSelectNames extends InputNames<"Select">
+> = typeof INPUTS[TSelectNames]["options"] extends readonly (infer IOptions)[]
+  ? IOptions extends string
+    ? IOptions
+    : never
+  : never;
 
 /**
  * Change handler function type of given input names.
@@ -122,7 +114,9 @@ interface InputProps<TInputNames extends InputNames = InputNames> {
  * Input component translation.
  */
 type InputsTranslation = {
-  [InputName in SelectNames | TextFieldNames]: InputName extends SelectNames
+  [InputName in InputNames<
+    "Select" | "TextField"
+  >]: InputName extends InputNames<"Select">
     ? SelectTranslation<InputName>
     : TextFieldTranslation
 };
@@ -137,10 +131,10 @@ interface InputTranslation {
 /**
  * Select input translation.
  */
-interface SelectTranslation<SelectName extends SelectNames>
+interface SelectTranslation<SelectName extends InputNames<"Select">>
   extends InputTranslation {
   label: string;
-  options: Record<SelectOptions[SelectName], string>;
+  options: Record<SelectOptionValues<SelectName>, string>;
 }
 
 /**
@@ -166,9 +160,9 @@ export class Input<
   public render() {
     const { name } = this.props;
 
-    if (name === "declareNutrition") {
+    if (INPUTS[name].component === "DeclareNutrition") {
       return this.renderDeclareNutrition();
-    } else if (name in SELECT_OPTION_VALUES) {
+    } else if (INPUTS[name].component === "Select") {
       return this.renderSelect();
     } else {
       return this.renderTextField();
@@ -180,7 +174,7 @@ export class Input<
    */
   private renderDeclareNutrition() {
     const { autoFocus, name, onChange, value } = this.props as InputProps<
-      DeclareNutritionNames
+      InputNames<"DeclareNutrition">
     >;
 
     return (
@@ -198,7 +192,7 @@ export class Input<
    */
   private renderSelect() {
     const { name, onChange, reason, value } = this.props as InputProps<
-      SelectNames
+      InputNames<"Select">
     >;
 
     return (
@@ -217,7 +211,7 @@ export class Input<
    */
   private renderTextField() {
     const { autoFocus, name, onChange, reason, value } = this
-      .props as InputProps<TextFieldNames>;
+      .props as InputProps<InputNames<"TextField">>;
 
     return (
       <TextField
@@ -225,7 +219,7 @@ export class Input<
         invalid={reason !== undefined}
         name={name}
         onChange={onChange}
-        type={TEXT_FIELD_TYPE[name as TextFieldNames]}
+        type={INPUTS[name].type}
         value={value || ""}
       />
     );
@@ -237,11 +231,13 @@ export class Input<
    */
   @computed
   private get options() {
-    const { name } = this.props as InputProps<SelectNames>;
+    const { name } = this.props as InputProps<InputNames<"Select">>;
 
-    return (SELECT_OPTION_VALUES[name] as string[]).map(value => ({
-      label: (this.translation[name].options as any)[value] as string,
-      value: value as NonNullable<InputValues<SelectNames>>
+    return (INPUTS[name].options as readonly SelectOptionValues<
+      InputNames<"Select">
+    >[]).map(value => ({
+      label: (this.translation[name] as any).options[value],
+      value
     }));
   }
 }

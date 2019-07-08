@@ -13,7 +13,6 @@ import {
   InputValues
 } from "./Input/Input";
 import { UNIT_HEIGHT } from "../styling/sizes";
-import { LIGHT } from "../styling/light";
 
 /**
  * Returns function input name type parameters as array.
@@ -216,7 +215,9 @@ interface FormProps<TFormName extends FormNames = FormNames> {
  * Form translation.
  */
 interface FormTranslation {
-  title: string;
+  /**
+   * Submit button text.
+   */
   submit: string;
 }
 
@@ -257,8 +258,6 @@ export class Form<TFormName extends FormNames = FormNames> extends Component<
 
     return (
       <FormElement noValidate={true} onSubmit={this.handleSubmit}>
-        <Title>{this.translation[name].title}</Title>
-
         {inputNames.map((inputName, index) => (
           <Input
             autoFocus={index === 0 && autoFocus}
@@ -312,25 +311,7 @@ const FormElement = styled.form`
     margin-bottom: ${UNIT_HEIGHT / 4}rem;
   }
 
-  & > *:first-child,
   & > *:last-child {
     margin-bottom: 0;
   }
-`;
-
-/**
- * Title message component on top of the form.
- */
-const Title = styled.div`
-  height: ${UNIT_HEIGHT}rem;
-  padding-bottom: ${UNIT_HEIGHT}rem;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: ${LIGHT.colorPrimary};
-  font-size: 2.5rem;
-  letter-spacing: -0.022rem;
-  text-align: center;
 `;

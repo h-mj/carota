@@ -5,8 +5,8 @@ import * as React from "react";
 import { Scene } from "./Scene";
 import { Stage } from "./Stage";
 import { Alert } from "../component/Alert";
+import { Compact } from "../component/container/Compact";
 import { Form, FormChangeHandler, FormSubmitHandler } from "../component/Form";
-import { Thin } from "../component/container/Thin";
 import { setTimeout } from "../utility/promises";
 
 /**
@@ -49,13 +49,13 @@ export class Register extends Scene<"Register"> {
     }
 
     return (
-      <Thin>
+      <Compact>
         <Form
           name="register"
           onChange={this.handleChange}
           onSubmit={this.handleSubmit}
         />
-      </Thin>
+      </Compact>
     );
   }
 

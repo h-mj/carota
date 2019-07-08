@@ -36,9 +36,9 @@ export const english: Translation = {
       }
     },
     Form: {
-      login: { submit: "Sign in", title: "Sign in" },
-      foodInformation: { submit: "Save", title: "Food information" },
-      register: { submit: "Sign up", title: "Sign up" }
+      login: { submit: "Sign in" },
+      foodInformation: { submit: "Save" },
+      register: { submit: "Sign up" }
     },
     Input: {
       barcode: {

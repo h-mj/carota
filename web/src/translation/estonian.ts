@@ -36,9 +36,9 @@ export const estonian: Translation = {
       }
     },
     Form: {
-      login: { submit: "Logige sisse", title: "Logige sisse" },
-      foodInformation: { submit: "Salvesta", title: "Toidualane teave" },
-      register: { submit: "Looge konto", title: "Looge konto" }
+      login: { submit: "Logige sisse" },
+      foodInformation: { submit: "Salvesta" },
+      register: { submit: "Looge konto" }
     },
     Input: {
       barcode: {

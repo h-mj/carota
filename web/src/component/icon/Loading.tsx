@@ -51,8 +51,6 @@ const Square = styled.div`
   width: ${SQUARE_SIZE}rem;
   height: ${SQUARE_SIZE}rem;
 
-  background-color: ${LIGHT.backgroundColor};
-
   border-radius: ${BORDER_RADIUS}rem;
   box-shadow: 0 0 0 1px, inset 0 0 0 1px;
 

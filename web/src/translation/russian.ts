@@ -36,9 +36,9 @@ export const russian: Translation = {
       }
     },
     Form: {
-      login: { submit: "Вход", title: "Вход" },
-      foodInformation: { submit: "Сохранить", title: "Информация о еде" },
-      register: { submit: "Завести аккаунт", title: "Завести аккаунт" }
+      login: { submit: "Вход" },
+      foodInformation: { submit: "Сохранить" },
+      register: { submit: "Завести аккаунт" }
     },
     Input: {
       barcode: {

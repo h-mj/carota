@@ -2,8 +2,6 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
 import { Component } from "./Component";
-import { Center } from "./container/Center";
-import { Medium } from "./container/Medium";
 import { UNIT_HEIGHT } from "../styling/sizes";
 import { LIGHT } from "../styling/light";
 
@@ -88,12 +86,10 @@ export class Alert<
     }
 
     return (
-      <Center>
-        <Medium>
-          <Title>{title}</Title>
-          <Message>{message}</Message>
-        </Medium>
-      </Center>
+      <>
+        <Title>{title}</Title>
+        <Message>{message}</Message>
+      </>
     );
   }
 }

@@ -2,14 +2,15 @@ import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
+import { Stage } from "./Stage";
 import { Scene } from "./Scene";
 import { InputChangeHandler } from "../component/Input/Input";
 import { TextField } from "../component/Input/TextField";
-import { Medium } from "../component/container/Medium";
 import { LIGHT } from "../styling/light";
 import { UNIT_HEIGHT, BORDER_RADIUS } from "../styling/sizes";
+import { RESET } from "../styling/stylesheets";
 
-@inject("foods")
+@inject("foods", "views")
 @observer
 export class FoodSearch extends Scene<"FoodSearch"> {
   @observable query = "";
@@ -18,7 +19,7 @@ export class FoodSearch extends Scene<"FoodSearch"> {
     const results = this.props.foods!.getAll();
 
     return (
-      <Medium>
+      <>
         <TextField
           name="query"
           onChange={this.handleChange}
@@ -29,11 +30,13 @@ export class FoodSearch extends Scene<"FoodSearch"> {
         {results.length > 0 && (
           <Results>
             {this.props.foods!.getAll().map(food => (
-              <Result key={food.id}>{food.name}</Result>
+              <Result key={food.id} onClick={this.handleClick}>
+                {food.name}
+              </Result>
             ))}
           </Results>
         )}
-      </Medium>
+      </>
     );
   }
 
@@ -47,6 +50,11 @@ export class FoodSearch extends Scene<"FoodSearch"> {
       this.props.foods!.clear();
     }
   };
+
+  @action
+  private handleClick: React.MouseEventHandler<HTMLButtonElement> = () => {
+    this.props.views!.aside(new Stage("FoodEdit", undefined, {}));
+  };
 }
 
 const Results = styled.div`
@@ -59,7 +67,9 @@ const Results = styled.div`
   border-radius: ${BORDER_RADIUS};
 `;
 
-const Result = styled.div`
+const Result = styled.button`
+  ${RESET};
+
   display: flex;
   align-items: center;
 

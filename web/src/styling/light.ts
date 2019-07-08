@@ -4,6 +4,7 @@ export const LIGHT: Readonly<Theme> = {
   backgroundColor: "rgb(255, 255, 255)",
   colorPrimary: "rgb(0, 0, 0)",
   colorSecondary: "rgb(166, 166, 166)",
+  overlayBackgroundColor: "rgba(255, 255, 255, 0.95)",
   disabled: {
     backgroundColor: "rgb(245, 245, 245)",
     borderColor: "rgb(188, 188. 188)",

@@ -50,7 +50,6 @@ const ROUTES = {
   "/administration": to("Administration"),
   "/diet": to("Diet"),
   "/food/new": to("FoodEdit"),
-  "/food/{id}/edit": to("FoodEdit", withParameters("id")),
   "/food/search": to("FoodSearch"),
   "/history": to("History"),
   "/": to("Home"),
@@ -58,13 +57,13 @@ const ROUTES = {
   "/measurements": to("Measurements"),
   "/register/{invitationId}": to("Register", withParameters("invitationId")),
   "/settings": to("Settings")
-};
+} as const;
 
 /**
  * Type that is a union of all possible mappings from parameter names to `string` types of
  * all routes, which scene name is one of the `TSceneNames` names.
  */
-export type Parameters<TSceneNames extends SceneNames> =
+export type RouteParameters<TSceneNames extends SceneNames> =
   | undefined
   | (typeof ROUTES[keyof typeof ROUTES] extends infer ITypes
       ? ITypes extends To<infer ISceneName, infer IParameterNames>
@@ -93,7 +92,12 @@ export const SCENES = {
   Register: Register,
   Settings: Settings,
   Unknown: Unknown
-};
+} as const;
+
+/**
+ * Union of stage positions.
+ */
+export type StagePosition = "main" | "side";
 
 /**
  * Object that holds the information needed to render a scene.
@@ -107,7 +111,7 @@ export class Stage<TSceneName extends SceneNames> {
   /**
    * Scene route parameters.
    */
-  public parameters: Parameters<TSceneName>;
+  public parameters: RouteParameters<TSceneName>;
 
   /**
    * Scene component props.
@@ -123,7 +127,7 @@ export class Stage<TSceneName extends SceneNames> {
    */
   public constructor(
     sceneName: TSceneName,
-    parameters: Parameters<TSceneName>,
+    parameters: RouteParameters<TSceneName>,
     props: SceneProps<TSceneName>
   ) {
     this.sceneName = sceneName;
@@ -132,12 +136,18 @@ export class Stage<TSceneName extends SceneNames> {
   }
 
   /**
-   * Renders a scene component.
+   * Renders the stage.
    */
-  public render() {
+  public render(position: StagePosition) {
     const SceneComponent: typeof Scene = SCENES[this.sceneName];
 
-    return <SceneComponent parameters={this.parameters} {...this.props} />;
+    return (
+      <SceneComponent
+        parameters={this.parameters}
+        position={position}
+        {...this.props}
+      />
+    );
   }
 
   /**

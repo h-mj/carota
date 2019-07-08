@@ -3,6 +3,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
 import { Loading } from "./icon/Loading";
+import { Overlay } from "./Overlay";
 import { InjectedProps } from "../store/Store";
 import { DURATION, fadeIn, fadeOut } from "../styling/animations";
 import { LIGHT } from "../styling/light";
@@ -46,9 +47,9 @@ export class Loader extends React.Component<InjectedProps> {
 
     if (waiting || this.timeoutId !== 0) {
       return (
-        <Overlay isActive={waiting}>
+        <LoaderOverlay isActive={waiting}>
           <Loading />
-        </Overlay>
+        </LoaderOverlay>
       );
     }
 
@@ -65,9 +66,9 @@ export class Loader extends React.Component<InjectedProps> {
 }
 
 /**
- * Overlay component props.
+ * Loader overlay component props.
  */
-interface OverlayProps {
+interface LoaderOverlayProps {
   /**
    * Whether or not loading is active.
    */
@@ -75,22 +76,15 @@ interface OverlayProps {
 }
 
 /**
- * Component that fills entire container and displays its children in the middle
- * of the component.
+ * Extended `Overlay` component that fades in and out and allows user to click
+ * though it if fading out.
  */
-const Overlay = styled.div<OverlayProps>`
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
+const LoaderOverlay = styled(Overlay)<LoaderOverlayProps>`
   display: flex;
   justify-content: center;
   align-items: center;
 
-  background-color: ${LIGHT.backgroundColor};
-  opacity: 0.95;
+  background-color: ${LIGHT.overlayBackgroundColor};
 
   animation: ${props => (props.isActive ? fadeIn : fadeOut)} ${DURATION}s
     forwards;

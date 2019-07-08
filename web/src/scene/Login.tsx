@@ -3,8 +3,8 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Scene } from "./Scene";
 import { Form, FormSubmitHandler } from "../component/Form";
+import { Compact } from "../component/container/Compact";
 import { Notification } from "../component/NotificationContainer";
-import { Thin } from "../component/container/Thin";
 import { setTimeout } from "../utility/promises";
 
 /**
@@ -24,9 +24,9 @@ export class Login extends Scene<"Login"> {
    */
   public render() {
     return (
-      <Thin>
+      <Compact>
         <Form name="login" onSubmit={this.handleSubmit} />
-      </Thin>
+      </Compact>
     );
   }
 

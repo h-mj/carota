@@ -1,4 +1,4 @@
-import { Parameters, SCENES } from "./Stage";
+import { RouteParameters, SCENES, StagePosition } from "./Stage";
 import { Component } from "../component/Component";
 
 /**
@@ -13,7 +13,12 @@ export interface DefaultSceneProps<TSceneName extends SceneNames> {
   /**
    * Parameters of this scene.
    */
-  parameters: Parameters<TSceneName>;
+  parameters: RouteParameters<TSceneName>;
+
+  /**
+   * Stage position where the scene will be rendered to.
+   */
+  position: StagePosition;
 }
 
 /**

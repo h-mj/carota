@@ -1,15 +1,18 @@
+import { action } from "mobx";
 import { inject, observer, Provider } from "mobx-react";
 import * as React from "react";
 import { render } from "react-dom";
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
+import { Loader } from "./component/Loader";
 import { Navigation } from "./component/Navigation";
 import { NotificationContainer } from "./component/NotificationContainer";
-import { Loader } from "./component/Loader";
+import { Overlay } from "./component/Overlay";
 import { InjectedProps } from "./store/Store";
 import { auth } from "./store/AuthStore";
 import { foods } from "./store/FoodsStore";
 import { views } from "./store/ViewsStore";
 import { LIGHT } from "./styling/light";
+import { UNIT_HEIGHT } from "./styling/sizes";
 
 /**
  * Global style properties.
@@ -59,19 +62,50 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
 @observer
 class Application extends React.Component<InjectedProps> {
   public render() {
-    const { main, hideOverflow } = this.props.views!;
+    const { hideOverflow, main, side } = this.props.views!;
 
     return (
       <>
         <GlobalStyle hideOverflow={hideOverflow} />
+
         <Navigation />
-        {main.render()}
+        {main.render("main")}
+
+        {side !== undefined && (
+          <Overlay onClick={this.handleOverlayClick}>
+            <Side>{side.render("side")}</Side>
+          </Overlay>
+        )}
+
         <Loader />
         <NotificationContainer />
       </>
     );
   }
+
+  @action
+  private handleOverlayClick: React.MouseEventHandler<
+    HTMLDivElement
+  > = event => {
+    if (event.target === event.currentTarget) {
+      this.props.views!.refocus();
+    }
+  };
 }
+
+/**
+ * Component that contains the side stage.
+ */
+const Side = styled.div`
+  max-width: ${8 * UNIT_HEIGHT}rem;
+  width: 100%;
+  height: 100%;
+
+  overflow: auto;
+
+  background-color: ${LIGHT.backgroundColor};
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.22);
+`;
 
 /**
  * Object that contains all stores which are provided to other components by

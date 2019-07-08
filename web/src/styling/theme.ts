@@ -4,6 +4,7 @@ export interface Theme extends Record<ComponentState, StateTheme> {
   backgroundColor: string;
   colorPrimary: string;
   colorSecondary: string;
+  overlayBackgroundColor: string;
 }
 
 interface StateTheme {

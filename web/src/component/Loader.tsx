@@ -1,12 +1,11 @@
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import styled from "styled-components";
 import { Loading } from "./icon/Loading";
 import { Overlay } from "./Overlay";
 import { InjectedProps } from "../store/Store";
 import { DURATION, fadeIn, fadeOut } from "../styling/animations";
-import { LIGHT } from "../styling/light";
+import { styled } from "../styling/theme";
 
 /**
  * Component that is shown when some part of the application is being loaded.
@@ -84,7 +83,7 @@ const LoaderOverlay = styled(Overlay)<LoaderOverlayProps>`
   justify-content: center;
   align-items: center;
 
-  background-color: ${LIGHT.overlayBackgroundColor};
+  background-color: ${({ theme }) => theme.overlayBackgroundColor};
 
   animation: ${props => (props.isActive ? fadeIn : fadeOut)} ${DURATION}s
     forwards;

@@ -1,9 +1,8 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import styled from "styled-components";
 import { Component } from "./Component";
 import { UNIT_HEIGHT } from "../styling/sizes";
-import { LIGHT } from "../styling/light";
+import { styled } from "../styling/theme";
 
 /**
  * Maps alert names to it's translated text message parameter names.
@@ -99,7 +98,7 @@ export class Alert<
  */
 const Title = styled.div`
   margin-bottom: ${UNIT_HEIGHT / 4}rem;
-  color: ${LIGHT.colorPrimary};
+  color: ${({ theme }) => theme.colorPrimary};
   font-size: 2rem;
   letter-spacing: -0.022em;
   line-height: 2.5rem;
@@ -110,7 +109,7 @@ const Title = styled.div`
  * Alert message text component.
  */
 const Message = styled.div`
-  color: ${LIGHT.colorSecondary};
+  color: ${({ theme }) => theme.colorSecondary};
   line-height: 1.5rem;
   text-align: center;
 `;

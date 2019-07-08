@@ -1,13 +1,11 @@
 import { action, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import styled from "styled-components";
-import { getState, StateProps } from "../Component";
 import { InputChangeHandler } from "./Input";
 import { TRANSITION } from "../../styling/animations";
-import { LIGHT } from "../../styling/light";
 import { UNIT_HEIGHT } from "../../styling/sizes";
 import { RESET } from "../../styling/stylesheets";
+import { getState, styled, StateProps } from "../../styling/theme";
 
 /**
  * Check box component props.
@@ -134,11 +132,11 @@ const Box = styled.div<StateProps>`
   width: ${UNIT_HEIGHT}rem;
   height: ${UNIT_HEIGHT / 2}rem;
 
-  color: ${props => LIGHT[props.state].borderColor};
+  color: ${props => props.theme.states[props.state].borderColor};
   box-shadow: 0 0 0 1px, inset 0 0 0 1px;
   border-radius: ${UNIT_HEIGHT / 4}rem;
 
-  background-color: ${props => LIGHT[props.state].backgroundColor};
+  background-color: ${props => props.theme.states[props.state].backgroundColor};
 
   transition: ${TRANSITION};
 
@@ -178,7 +176,7 @@ const Check = styled.div<CheckProps>`
  * Text component that displays label text after the check box.
  */
 const Text = styled.div<StateProps>`
-  color: ${props => LIGHT[props.state].color};
+  color: ${props => props.theme.states[props.state].color};
   margin-left: ${UNIT_HEIGHT / 4}rem;
 `;
 

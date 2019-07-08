@@ -2,7 +2,6 @@ import { Error, ErrorReasons } from "api";
 import { observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import styled from "styled-components";
 import { Component } from "./Component";
 import { Button } from "./Button";
 import {
@@ -13,6 +12,7 @@ import {
   InputValues
 } from "./Input/Input";
 import { UNIT_HEIGHT } from "../styling/sizes";
+import { styled } from "../styling/theme";
 
 /**
  * Returns function input name type parameters as array.

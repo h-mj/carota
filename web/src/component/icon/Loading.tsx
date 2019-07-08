@@ -1,8 +1,7 @@
 import * as React from "react";
-import styled, { keyframes } from "styled-components";
 import { scaleIn, scaleOut } from "../../styling/animations";
-import { LIGHT } from "../../styling/light";
 import { BORDER_RADIUS, UNIT_HEIGHT } from "../../styling/sizes";
+import { keyframes, styled } from "../../styling/theme";
 
 export const Loading: React.FunctionComponent = () => {
   return (
@@ -54,7 +53,7 @@ const Square = styled.div`
   border-radius: ${BORDER_RADIUS}rem;
   box-shadow: 0 0 0 1px, inset 0 0 0 1px;
 
-  color: ${LIGHT.colorPrimary};
+  color: ${({ theme }) => theme.colorPrimary};
 
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 

@@ -1,8 +1,6 @@
-import styled from "styled-components";
-import { StateProps } from "../Component";
-import { LIGHT } from "../../styling/light";
 import { TRANSITION } from "../../styling/animations";
 import { BORDER_RADIUS, UNIT_HEIGHT } from "../../styling/sizes";
+import { StateProps, styled } from "../../styling/theme";
 
 /**
  * Component that contains any input component.
@@ -18,9 +16,9 @@ export const Field = styled.div<StateProps>`
   border-radius: ${BORDER_RADIUS}rem;
   box-shadow: 0 0 0 1px, inset 0 0 0 1px;
 
-  background-color: ${props => LIGHT[props.state].backgroundColor};
+  background-color: ${props => props.theme.states[props.state].backgroundColor};
 
-  color: ${props => LIGHT[props.state].color};
+  color: ${props => props.theme.states[props.state].color};
   font-size: 1rem;
   letter-spacing: -0.011rem;
 

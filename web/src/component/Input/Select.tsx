@@ -1,13 +1,11 @@
 import { action, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import styled from "styled-components";
-import { getState, StateProps } from "../Component";
 import { Field } from "./Field";
 import { InputChangeHandler } from "./Input";
 import { TRANSITION } from "../../styling/animations";
-import { LIGHT } from "../../styling/light";
 import { RESET } from "../../styling/stylesheets";
+import { getState, StateProps, styled } from "../../styling/theme";
 
 /**
  * Type of an object that contains required information about an option.
@@ -137,7 +135,7 @@ const Option = styled.button<StateProps>`
   width: 100%;
   height: 100%;
 
-  color: ${props => LIGHT[props.state].color};
+  color: ${props => props.theme.states[props.state].color};
 
   cursor: pointer;
 

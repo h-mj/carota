@@ -1,5 +1,5 @@
-import styled from "styled-components";
 import { UNIT_HEIGHT } from "../../styling/sizes";
+import { styled } from "../../styling/theme";
 
 /**
  * Container component used to wrap form components.

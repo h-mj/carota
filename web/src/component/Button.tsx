@@ -1,10 +1,9 @@
 import { action, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import styled from "styled-components";
-import { getState } from "./Component";
 import { Field } from "./Input/Field";
 import { RESET } from "../styling/stylesheets";
+import { getState, styled } from "../styling/theme";
 
 /**
  * Button component properties.

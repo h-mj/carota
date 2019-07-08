@@ -2,15 +2,14 @@ import { ErrorReasons, NutritionDeclaration } from "api";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import styled from "styled-components";
-import { Component, getState } from "../Component";
+import { Component } from "../Component";
 import { CheckBox } from "./CheckBox";
 import { Field } from "./Field";
 import { InputChangeHandler } from "./Input";
 import { TRANSITION } from "../../styling/animations";
-import { LIGHT } from "../../styling/light";
 import { RESET } from "../../styling/stylesheets";
 import { BORDER_RADIUS, UNIT_HEIGHT } from "../../styling/sizes";
+import { getState, State, StateProps, styled } from "../../styling/theme";
 
 /**
  * Union of all nutrient names.
@@ -154,7 +153,7 @@ export class DeclareNutrition extends Component<
             value={!disabled}
           />
         )}
-        <Label>
+        <Label state={state}>
           <Header>{this.translation.nutrients[name]}</Header>
           <Input
             autoFocus={index === 0 && autoFocus}
@@ -223,12 +222,27 @@ const Table = styled.div`
   box-shadow: 0 0 0 1px, inset 0 0 0 1px;
   border-radius: ${BORDER_RADIUS}rem;
 
-  color: ${LIGHT.default.borderColor};
+  color: ${({ theme }) => theme.borderColor};
 
   transition: ${TRANSITION};
 `;
 
+/**
+ * Defined z-index value for each state.
+ */
+const Z_INDICES: Readonly<Record<State, number>> = {
+  disabled: 0,
+  default: 0,
+  active: 2,
+  invalid: 1
+};
+
+/**
+ * `Field` component with extra styling.
+ */
 const MarginedField = styled(Field)`
+  z-index: ${props => Z_INDICES[props.state]};
+
   & > * {
     margin-left: ${UNIT_HEIGHT / 4}rem;
   }
@@ -237,13 +251,15 @@ const MarginedField = styled(Field)`
 /**
  * Component that contains header, input and unit components.
  */
-const Label = styled.label`
+const Label = styled.label<StateProps>`
   display: flex;
   align-items: center;
 
   min-width: 0;
   width: 100%;
   height: 100%;
+
+  color: ${props => props.theme.states[props.state].color};
 
   flex-shrink: 1;
 `;
@@ -262,7 +278,6 @@ const Header = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
 
-  color: ${LIGHT.default.color};
   white-space: nowrap;
 
   transition: ${TRANSITION};
@@ -278,7 +293,7 @@ const Input = styled.input`
   min-width: ${UNIT_HEIGHT}rem;
   height: 100%;
 
-  color: ${LIGHT.default.color};
+  color: ${({ theme }) => theme.colorPrimary};
   text-align: right;
 
   /* Hide up/down arrows on the right of the input */

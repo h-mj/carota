@@ -1,12 +1,10 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import styled from "styled-components";
-import { StateProps } from "./Component";
 import { Anchor } from "./Anchor";
 import { InjectedProps } from "../store/Store";
 import { DURATION } from "../styling/animations";
-import { LIGHT } from "../styling/light";
 import { UNIT_HEIGHT } from "../styling/sizes";
+import { StateProps, styled } from "../styling/theme";
 
 /**
  * Navigation bar component that is used to navigate to different parts of the
@@ -37,7 +35,7 @@ export class Navigation extends React.Component<InjectedProps> {
               key={index}
               stage={stage}
               state={
-                currentSceneName === stage.sceneName ? "focused" : "default"
+                currentSceneName === stage.sceneName ? "active" : "default"
               }
             >
               {sceneTranslation[stage.sceneName].title}
@@ -77,7 +75,7 @@ const Item = styled(Anchor)<StateProps>`
   align-items: center;
   justify-content: center;
 
-  color: ${props => LIGHT[props.state].color};
+  color: ${props => props.theme.states[props.state].color};
   text-decoration: none;
   white-space: nowrap;
 

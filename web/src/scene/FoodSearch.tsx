@@ -1,14 +1,13 @@
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import styled from "styled-components";
 import { Stage } from "./Stage";
 import { Scene } from "./Scene";
 import { InputChangeHandler } from "../component/Input/Input";
 import { TextField } from "../component/Input/TextField";
-import { LIGHT } from "../styling/light";
 import { UNIT_HEIGHT, BORDER_RADIUS } from "../styling/sizes";
 import { RESET } from "../styling/stylesheets";
+import { styled } from "../styling/theme";
 
 @inject("foods", "views")
 @observer
@@ -62,7 +61,7 @@ const Results = styled.div`
 
   margin-top: ${UNIT_HEIGHT / 4}rem;
 
-  color: ${LIGHT.default.borderColor};
+  color: ${({ theme }) => theme.borderColor};
   box-shadow: 0 0 0 1px inset 0 0 0 1px;
   border-radius: ${BORDER_RADIUS};
 `;
@@ -79,7 +78,7 @@ const Result = styled.button`
   padding: 0 ${UNIT_HEIGHT / 4}rem;
   box-sizing: border-box;
 
-  color: ${LIGHT.default.borderColor};
+  color: ${({ theme }) => theme.borderColor};
   box-shadow: 0 0 0 1px, inset 0 0 0 1px;
   border-radius: ${BORDER_RADIUS}rem;
 

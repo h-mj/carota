@@ -1,13 +1,11 @@
 import { action, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import styled from "styled-components";
-import { getState } from "../Component";
 import { Field } from "./Field";
 import { InputChangeHandler } from "./Input";
-import { LIGHT } from "../../styling/light";
 import { UNIT_HEIGHT } from "../../styling/sizes";
 import { RESET } from "../../styling/stylesheets";
+import { getState, styled } from "../../styling/theme";
 
 /**
  * Union of all text field types.
@@ -129,5 +127,5 @@ const Input = styled.input`
   padding: 0 ${UNIT_HEIGHT / 4}rem;
   box-sizing: border-box;
 
-  color: ${LIGHT.colorPrimary};
+  color: ${({ theme }) => theme.colorPrimary};
 `;

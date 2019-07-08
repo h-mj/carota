@@ -36,35 +36,6 @@ export type ComponentsTranslation = {
 };
 
 /**
- * Union of styled component states.
- */
-export type ComponentState = "disabled" | "default" | "focused" | "invalid";
-
-/**
- * Returns state type based on component properties.
- */
-export const getState = (
-  disabled: boolean | undefined,
-  focused: boolean | undefined,
-  invalid: boolean | undefined
-): ComponentState => {
-  if (invalid) return "invalid";
-  if (disabled) return "disabled";
-  if (focused) return "focused";
-  return "default";
-};
-
-/**
- * Component state prop.
- */
-export interface StateProps {
-  /**
-   * Component state.
-   */
-  state: ComponentState;
-}
-
-/**
  * Component base class used to easily define and retrieve translations.
  */
 export abstract class Component<

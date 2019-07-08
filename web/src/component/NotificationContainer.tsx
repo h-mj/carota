@@ -1,17 +1,16 @@
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import styled, { keyframes } from "styled-components";
-import { Component, ComponentState, StateProps } from "./Component";
+import { Component } from "./Component";
 import { DURATION, fadeIn, fadeOut } from "../styling/animations";
 import { setTimeout } from "../utility/promises";
 import { UNIT_HEIGHT, BORDER_RADIUS } from "../styling/sizes";
-import { LIGHT } from "../styling/light";
+import { keyframes, State, StateProps, styled } from "../styling/theme";
 
 /**
  * Specifies notification type and its text message parameter names.
  */
-interface Types<TState extends ComponentState, TParameterNames extends string> {
+interface Types<TState extends State, TParameterNames extends string> {
   /**
    * Union of all text message parameter names.
    */
@@ -30,10 +29,7 @@ interface Types<TState extends ComponentState, TParameterNames extends string> {
  * @param state Notification component state.
  * @param parameterNames Notification component message parameter names.
  */
-const withTypes = <
-  TState extends ComponentState,
-  TParameterNames extends string
->(
+const withTypes = <TState extends State, TParameterNames extends string>(
   state: TState,
   parameterNames?: TParameterNames[]
 ): Types<TState, TParameterNames> => ({
@@ -269,11 +265,11 @@ const NotificationElement = styled.div<NotificationElementProps>`
   padding: 0 ${UNIT_HEIGHT / 4}rem;
   box-sizing: border-box;
 
-  background-color: ${LIGHT.default.backgroundColor};
+  background-color: ${({ theme }) => theme.backgroundColor};
 
   border-radius: ${BORDER_RADIUS}rem;
   box-shadow: 0 0 0 1px, inset 0 0 0 1px;
-  color: ${props => LIGHT[props.state].color};
+  color: ${props => props.theme.states[props.state].color};
 
   animation: ${props => (props.isActive ? fadeIn : fadeOut)} ${DURATION}s,
     ${props => (props.isActive ? moveIn : moveOut)} ${DURATION}s;

@@ -8,6 +8,21 @@ import { post } from "../utility/client";
  */
 export class FoodsStore extends Store<Food> {
   /**
+   * Creates or updates existing food product.
+   */
+  public async save(body: Body<"food", "save">) {
+    const response = await post("food", "save", body);
+
+    if ("error" in response) {
+      return response.error;
+    }
+
+    this.add(response.data);
+
+    return undefined;
+  }
+
+  /**
    * Replaces current food data with found food data.
    *
    * @param body Food find request body.

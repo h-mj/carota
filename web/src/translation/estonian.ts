@@ -71,7 +71,7 @@ export const estonian: Translation = {
           empty: "Palun sisestage nimi"
         }
       },
-      declareNutrition: {
+      nutritionDeclaration: {
         label: "Toitumisalane teave",
         reasons: {}
       },

@@ -13,8 +13,8 @@ export const getState = (
   active: boolean | undefined,
   invalid: boolean | undefined
 ): State => {
-  if (invalid) return "invalid";
   if (disabled) return "disabled";
+  if (invalid) return "invalid";
   if (active) return "active";
   return "default";
 };

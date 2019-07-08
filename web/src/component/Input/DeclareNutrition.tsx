@@ -18,6 +18,18 @@ import { getState, State, StateProps, styled } from "../../styling/theme";
 type NutrientNames = keyof NutritionDeclaration;
 
 /**
+ * Nutrient values type.
+ */
+type NutrientValues = Readonly<Partial<Record<NutrientNames, string>>>;
+
+/**
+ * Nutrient error reasons type.
+ */
+type NutrientErrorReasons = Readonly<
+  Partial<Record<NutrientNames, ErrorReasons>>
+>;
+
+/**
  * Names of nutrients in order that appear in the declaration. If nutrient name
  * is surrounded by array, corresponding row span text will be indented using
  * horizontal line symbol in front.
@@ -52,7 +64,7 @@ const REQUIRED_NUTRIENT_NAMES: Readonly<Set<NutrientNames>> = new Set([
  * based on nutrient amount values.
  */
 const areDisabled = (
-  value?: Readonly<Partial<NutritionDeclaration>>
+  value?: NutrientValues
 ): Record<NutrientNames, boolean> => {
   const map: Record<string, boolean> = {};
 
@@ -88,17 +100,17 @@ export interface DeclareNutritionProps {
   /**
    * Function that will be called when text field value changes.
    */
-  onChange?: InputChangeHandler<Partial<NutritionDeclaration>>;
+  onChange?: InputChangeHandler<NutrientValues>;
 
   /**
    * Occurred error reasons related to internal input components.
    */
-  reason?: Readonly<Partial<Record<NutrientNames, ErrorReasons>>>;
+  reason?: NutrientErrorReasons;
 
   /**
    * Nutrition declaration amount values.
    */
-  value?: Readonly<Partial<NutritionDeclaration>>;
+  value: NutrientValues;
 }
 
 /**
@@ -141,8 +153,8 @@ export class DeclareNutrition extends Component<
    */
   private renderRow = (name: NutrientNames, index: number) => {
     const { autoFocus, label, reason, value } = this.props;
-
     const disabled = this.disabled[name];
+
     const state = getState(
       disabled,
       this.focusedNutrient === name,
@@ -170,7 +182,7 @@ export class DeclareNutrition extends Component<
             onChange={this.handleChange}
             onFocus={this.handleFocusChange}
             type="number"
-            value={(value && value[name]) || ""}
+            value={value[name] || ""}
             disabled={disabled}
           />
           <Unit>
@@ -219,6 +231,11 @@ export class DeclareNutrition extends Component<
     this.focusedNutrient =
       event.type === "focus" ? event.target.name : undefined;
   };
+
+  /**
+   * Returns select default value.
+   */
+  public static getDefaultValue = () => ({});
 }
 
 /**

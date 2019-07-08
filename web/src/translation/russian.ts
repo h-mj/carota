@@ -71,7 +71,7 @@ export const russian: Translation = {
           empty: "Пожалуйста, введите имя"
         }
       },
-      declareNutrition: {
+      nutritionDeclaration: {
         label: "Пищевая ценность",
         reasons: {}
       },

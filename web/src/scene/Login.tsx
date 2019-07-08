@@ -1,3 +1,4 @@
+import { AuthLoginBody } from "api";
 import { action } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -38,13 +39,8 @@ export class Login extends Scene<"Login"> {
   private handleSubmit: FormSubmitHandler<"login"> = async values => {
     this.props.views!.wait(Login.WAIT_REASON);
 
-    const { email, password } = values;
-
     const [error] = await Promise.all([
-      this.props.auth!.login({
-        email: email || "",
-        password: password || ""
-      }),
+      this.props.auth!.login(values as AuthLoginBody), // Let backend handle the validation for now.
       setTimeout(1)
     ]);
 

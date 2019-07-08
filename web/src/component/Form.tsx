@@ -5,6 +5,7 @@ import * as React from "react";
 import { Component } from "./Component";
 import { Button } from "./Button";
 import {
+  getDefaultValue,
   Input,
   InputChangeHandler,
   InputErrorReasons,
@@ -25,7 +26,12 @@ const withInputs = <TInputNames extends InputNames>(...names: TInputNames[]) =>
  */
 const FORM_INPUT_NAMES = {
   login: withInputs("email", "password"),
-  foodInformation: withInputs("name", "barcode", "unit", "declareNutrition"),
+  foodInformation: withInputs(
+    "name",
+    "barcode",
+    "unit",
+    "nutritionDeclaration"
+  ),
   register: withInputs("language", "name", "email", "password")
 };
 
@@ -59,7 +65,22 @@ const isFormInputName = <TFormName extends FormNames>(
  * types.
  */
 type FormValues<TFormName extends FormNames = FormNames> = {
-  [InputName in FormInputNames<TFormName>]?: InputValues<InputName>
+  [InputName in FormInputNames<TFormName>]: InputValues<InputName>
+};
+
+/**
+ * Creates default `FormValues` object of form named `formName`.
+ */
+const createFormDefaultValues = <TFormName extends FormNames>(
+  formName: TFormName
+) => {
+  const values: Record<string, InputValues<InputNames>> = {};
+
+  for (const inputName of FORM_INPUT_NAMES[formName]) {
+    values[inputName] = getDefaultValue(inputName);
+  }
+
+  return values as FormValues<TFormName>;
 };
 
 /**
@@ -238,7 +259,8 @@ export class Form<TFormName extends FormNames = FormNames> extends Component<
   /**
    * Form input values.
    */
-  @observable private values: FormValues<TFormName> = this.props.values || {};
+  @observable private values: FormValues<TFormName> =
+    this.props.values || createFormDefaultValues(this.props.name);
 
   /**
    * Form input error reasons.

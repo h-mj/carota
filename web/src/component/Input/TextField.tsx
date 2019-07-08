@@ -137,6 +137,11 @@ export class TextField extends React.Component<TextFieldProps> {
   > = event => {
     this.focused = event.type === "focus";
   };
+
+  /**
+   * Returns text field default value.
+   */
+  public static getDefaultValue = () => "";
 }
 
 /**

@@ -11,16 +11,16 @@ import { TextField, TextFieldProps } from "./TextField";
  * Input definitions object.
  */
 const INPUTS = {
-  declareNutrition: { component: "DeclareNutrition" },
+  barcode: { component: "TextField", type: "tel" },
+  email: { component: "TextField", type: "email" },
   language: {
     component: "Select",
     options: ["Estonian", "English", "Russian"]
   },
-  unit: { component: "Select", options: ["g", "ml"] },
-  barcode: { component: "TextField", type: "tel" },
-  email: { component: "TextField", type: "email" },
   name: { component: "TextField", type: "text" },
-  password: { component: "TextField", type: "password" }
+  nutritionDeclaration: { component: "DeclareNutrition" },
+  password: { component: "TextField", type: "password" },
+  unit: { component: "Select", options: ["g", "ml"] }
 } as const;
 
 /**
@@ -51,6 +51,23 @@ export type InputValues<TInputNames extends InputNames = InputNames> = {
     ? TextFieldProps["value"]
     : never
 }[TInputNames];
+
+/**
+ * Returns default value of input named `inputName`.
+ */
+export const getDefaultValue = <TInputName extends InputNames>(
+  inputName: TInputName
+) => {
+  const { component } = INPUTS[inputName];
+
+  if (component === "DeclareNutrition") {
+    return DeclareNutrition.getDefaultValue();
+  } else if (component === "Select") {
+    return Select.getDefaultValue();
+  } else {
+    return TextField.getDefaultValue();
+  }
+};
 
 /**
  * Union of error reason types of given input names.
@@ -102,7 +119,7 @@ interface InputProps<TInputNames extends InputNames = InputNames> {
   /**
    * Input value.
    */
-  value?: InputValues<TInputNames>;
+  value: InputValues<TInputNames>;
 
   /**
    * Reason why an error related to this input occurred.
@@ -164,9 +181,8 @@ export class Input<
    * Renders a `DeclareNutrition` component.
    */
   private renderDeclareNutrition() {
-    const { autoFocus, name, onChange, value } = this.props as InputProps<
-      InputNames<"DeclareNutrition">
-    >;
+    const { autoFocus, name, onChange, reason, value } = this
+      .props as InputProps<InputNames<"DeclareNutrition">>;
 
     return (
       <DeclareNutrition
@@ -175,6 +191,7 @@ export class Input<
         name={name}
         onChange={onChange}
         value={value}
+        reason={reason}
       />
     );
   }

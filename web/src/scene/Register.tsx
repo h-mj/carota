@@ -1,4 +1,4 @@
-import { Languages } from "api";
+import { AuthRegisterBody, Languages } from "api";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -76,19 +76,15 @@ export class Register extends Scene<"Register"> {
    */
   @action
   private handleSubmit: FormSubmitHandler<"register"> = async values => {
-    const { email, language, name, password } = values;
     const { invitationId } = this.props.parameters!;
 
     this.props.views!.wait(Register.WAIT_REASON);
 
     const [error] = await Promise.all([
       this.props.auth!.register({
-        email: email || "",
-        language: language as Languages, // Ignore that language could be `""` if nothing is selected.
-        name: name || "",
-        password: password || "",
+        ...values,
         invitationId
-      }),
+      } as AuthRegisterBody), // Let backend handle the validation for now.
       setTimeout(1)
     ]);
 

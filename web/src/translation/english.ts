@@ -54,16 +54,6 @@ export const english: Translation = {
           invalid: "Please enter a valid email address"
         }
       },
-      name: {
-        label: "Enter a name",
-        reasons: {
-          empty: "Please enter a name"
-        }
-      },
-      declareNutrition: {
-        label: "Nutrition information",
-        reasons: {}
-      },
       language: {
         label: "Select a language",
         options: {
@@ -74,6 +64,16 @@ export const english: Translation = {
         reasons: {
           empty: "Please select a language"
         }
+      },
+      name: {
+        label: "Enter a name",
+        reasons: {
+          empty: "Please enter a name"
+        }
+      },
+      nutritionDeclaration: {
+        label: "Nutrition information",
+        reasons: {}
       },
       password: {
         label: "Enter a password",

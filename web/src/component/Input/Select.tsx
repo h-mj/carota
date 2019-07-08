@@ -94,10 +94,12 @@ export class Select<TValues extends string = string> extends React.Component<
         {options !== undefined &&
           options.map(({ label: optionLabel, value: optionValue }) => (
             <Option
+              disabled={disabled}
               key={optionValue}
               onClick={this.handleClick}
               onFocus={this.handleFocusChange}
               onBlur={this.handleFocusChange}
+              selected={value === optionValue}
               state={getState(disabled, value === optionValue, invalid)}
               type="button"
               value={optionValue}
@@ -128,12 +130,27 @@ export class Select<TValues extends string = string> extends React.Component<
   > = event => {
     this.focused = event.type === "focus";
   };
+
+  /**
+   * Returns select default value.
+   */
+  public static getDefaultValue = () => undefined;
+}
+
+/**
+ * Option component props.
+ */
+interface OptionProps extends StateProps {
+  /**
+   * Wether or not this option is selected.
+   */
+  selected: boolean;
 }
 
 /**
  * Component that is one of the options between which selection is made.
  */
-const Option = styled.button<StateProps>`
+const Option = styled.button<OptionProps>`
   ${RESET};
 
   display: flex;
@@ -144,7 +161,7 @@ const Option = styled.button<StateProps>`
   height: 100%;
 
   color: ${props =>
-    props.state === "active"
+    props.selected
       ? props.theme.colorPrimary
       : props.theme.states[props.state].color};
 

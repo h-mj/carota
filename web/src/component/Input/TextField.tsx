@@ -6,7 +6,7 @@ import { InputChangeHandler } from "./Input";
 import { Label } from "./Label";
 import { UNIT_HEIGHT } from "../../styling/sizes";
 import { RESET } from "../../styling/stylesheets";
-import { getState, styled } from "../../styling/theme";
+import { css, getState, styled } from "../../styling/theme";
 
 /**
  * Union of all text field types.
@@ -97,7 +97,14 @@ export class TextField extends React.Component<TextFieldProps> {
 
     return (
       <Field state={state}>
-        {label !== undefined && <Label state={state}>{label}</Label>}
+        {label !== undefined && (
+          <TextFieldLabel
+            placeholderStyle={value === "" && !this.focused}
+            state={state}
+          >
+            {label}
+          </TextFieldLabel>
+        )}
         <Input
           autoFocus={autoFocus}
           disabled={disabled}
@@ -131,6 +138,31 @@ export class TextField extends React.Component<TextFieldProps> {
     this.focused = event.type === "focus";
   };
 }
+
+/**
+ * Text field label component props.
+ */
+interface TextFieldLabel {
+  /**
+   * Whether or not use placeholder style.
+   */
+  placeholderStyle: boolean;
+}
+
+/**
+ * Text field label that acts like a placeholder if input is empty and not focused.
+ */
+const TextFieldLabel = styled(Label)<TextFieldLabel>`
+  ${props =>
+    props.placeholderStyle &&
+    css`
+      top: 0;
+      height: 100%;
+      background-color: transparent;
+      font-size: inherit;
+      letter-spacing: inherit;
+    `}
+`;
 
 /**
  * Input component into which user enters the text.

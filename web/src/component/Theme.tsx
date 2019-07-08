@@ -43,7 +43,7 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
 
     font-family: "Inter", sans-serif;
     font-size: 16px;
-    letter-spacing: -.011rem;
+    letter-spacing: -0.011rem;
   }
 
   body {

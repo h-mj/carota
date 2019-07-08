@@ -14,6 +14,8 @@ export const Label = styled.div<StateProps>`
   display: flex;
   align-items: center;
 
+  height: ${UNIT_HEIGHT / 4}rem;
+
   padding: 0 ${UNIT_HEIGHT / 12}rem;
 
   background-color: ${({ theme }) => theme.backgroundColor};

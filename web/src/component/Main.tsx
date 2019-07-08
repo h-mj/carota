@@ -16,7 +16,7 @@ export class Main extends React.Component<InjectedProps> {
     return (
       <>
         <Navigation />
-        {this.props.views!.main.render("main")};
+        {this.props.views!.main.render("main")}
       </>
     );
   }

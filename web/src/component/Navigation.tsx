@@ -4,7 +4,7 @@ import { Anchor } from "./Anchor";
 import { InjectedProps } from "../store/Store";
 import { DURATION } from "../styling/animations";
 import { UNIT_HEIGHT } from "../styling/sizes";
-import { StateProps, styled } from "../styling/theme";
+import { styled } from "../styling/theme";
 
 /**
  * Navigation bar component that is used to navigate to different parts of the
@@ -34,9 +34,7 @@ export class Navigation extends React.Component<InjectedProps> {
             <Item
               key={index}
               stage={stage}
-              state={
-                currentSceneName === stage.sceneName ? "active" : "default"
-              }
+              selected={currentSceneName === stage.sceneName}
             >
               {sceneTranslation[stage.sceneName].title}
             </Item>
@@ -65,9 +63,19 @@ const Bar = styled.nav`
 `;
 
 /**
+ * Item component props.
+ */
+interface ItemProps {
+  /**
+   * Whether or not this item is selected.
+   */
+  selected: boolean;
+}
+
+/**
  * One of the navigation bar items.
  */
-const Item = styled(Anchor)<StateProps>`
+const Item = styled(Anchor)<ItemProps>`
   height: ${UNIT_HEIGHT}rem;
   padding: 0 ${UNIT_HEIGHT / 4}rem;
 
@@ -75,7 +83,8 @@ const Item = styled(Anchor)<StateProps>`
   align-items: center;
   justify-content: center;
 
-  color: ${props => props.theme.states[props.state].color};
+  color: ${props =>
+    props.theme[props.selected ? "colorPrimary" : "colorSecondary"]};
   text-decoration: none;
   white-space: nowrap;
 

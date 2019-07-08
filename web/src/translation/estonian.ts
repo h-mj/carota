@@ -29,7 +29,6 @@ export const estonian: Translation = {
         starch: "Tärklis",
         sugars: "Suhkrud"
       },
-      title: "Toitumisalane teave",
       units: {
         g: "g",
         kcal: "kcal"
@@ -42,13 +41,13 @@ export const estonian: Translation = {
     },
     Input: {
       barcode: {
-        placeholder: "Sisestage triipkood",
+        label: "Sisestage triipkood",
         reasons: {
           empty: "Palun sisestage triipkood"
         }
       },
       email: {
-        placeholder: "Sisestage e-posti aadress",
+        label: "Sisestage e-posti aadress",
         reasons: {
           conflict: "Sisestatud e-posti aadress on juba kasutuses",
           empty: "Palun sisestage e-posti aadress",
@@ -67,13 +66,17 @@ export const estonian: Translation = {
         }
       },
       name: {
-        placeholder: "Sisestage nimi",
+        label: "Sisestage nimi",
         reasons: {
           empty: "Palun sisestage nimi"
         }
       },
+      declareNutrition: {
+        label: "Toitumisalane teave",
+        reasons: {}
+      },
       password: {
-        placeholder: "Sisestage salasõna",
+        label: "Sisestage salasõna",
         reasons: {
           empty: "Palun sisestage salasõna",
           invalid: "Salasõna peab sisaldama vähemalt 8 tähemärki"

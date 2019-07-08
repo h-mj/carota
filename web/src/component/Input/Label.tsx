@@ -1,0 +1,29 @@
+import { TRANSITION } from "../../styling/animations";
+import { UNIT_HEIGHT } from "../../styling/sizes";
+import { StateProps, styled } from "../../styling/theme";
+
+/**
+ * Input label component.
+ */
+export const Label = styled.div<StateProps>`
+  position: absolute;
+  top: -${UNIT_HEIGHT / 8}rem;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 ${UNIT_HEIGHT / 12}rem;
+
+  background-color: ${({ theme }) => theme.backgroundColor};
+
+  color: ${props => props.theme.states[props.state].color};
+  font-size: 0.75rem;
+  letter-spacing: 0;
+  white-space: nowrap;
+
+  pointer-events: none;
+
+  transition: ${TRANSITION};
+`;

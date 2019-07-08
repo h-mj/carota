@@ -51,6 +51,7 @@ export class Register extends Scene<"Register"> {
     return (
       <Compact>
         <Form
+          autoFocus
           name="register"
           onChange={this.handleChange}
           onSubmit={this.handleSubmit}

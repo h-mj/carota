@@ -68,23 +68,23 @@ export const LIGHT: Readonly<Theme> = {
   backgroundColor: "rgb(255, 255, 255)",
   colorPrimary: "rgb(0, 0, 0)",
   colorSecondary: "rgb(166, 166, 166)",
-  borderColor: "rgb(180, 180, 180)",
+  borderColor: "rgb(210, 210, 210)",
   overlayBackgroundColor: "rgba(255, 255, 255, 0.95)",
   states: {
     disabled: {
-      backgroundColor: "rgb(245, 245, 245)",
-      borderColor: "rgb(180, 180, 180)",
+      backgroundColor: "rgb(250, 250, 250)",
+      borderColor: "rgb(210, 210, 210)",
       color: "rgb(150, 150, 150)"
     },
     default: {
       backgroundColor: "rgb(255, 255, 255)",
-      borderColor: "rgb(180, 180, 180)",
+      borderColor: "rgb(210, 210, 210)",
       color: "rgb(150, 150, 150)"
     },
     active: {
       backgroundColor: "rgb(255, 255, 255)",
-      borderColor: "rgb(0, 0, 0)",
-      color: "rgb(0, 0, 0)"
+      borderColor: "rgb(0, 160, 80)",
+      color: "rgb(0, 160, 80)"
     },
     invalid: {
       backgroundColor: "rgb(255, 255, 255)",

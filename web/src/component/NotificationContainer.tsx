@@ -4,8 +4,9 @@ import * as React from "react";
 import { Component } from "./Component";
 import { DURATION, fadeIn, fadeOut } from "../styling/animations";
 import { setTimeout } from "../utility/promises";
-import { UNIT_HEIGHT, BORDER_RADIUS } from "../styling/sizes";
+import { UNIT_HEIGHT } from "../styling/sizes";
 import { keyframes, State, StateProps, styled } from "../styling/theme";
+import { Field } from "./Input/Field";
 
 /**
  * Specifies notification type and its text message parameter names.
@@ -256,20 +257,10 @@ interface NotificationElementProps extends StateProps {
 /**
  * Notification component that displays the message.
  */
-const NotificationElement = styled.div<NotificationElementProps>`
-  display: flex;
-  align-items: center;
-
-  height: ${UNIT_HEIGHT}rem;
+const NotificationElement = styled(Field)<NotificationElementProps>`
   margin-top: ${UNIT_HEIGHT / 4}rem;
   padding: 0 ${UNIT_HEIGHT / 4}rem;
   box-sizing: border-box;
-
-  background-color: ${({ theme }) => theme.backgroundColor};
-
-  border-radius: ${BORDER_RADIUS}rem;
-  box-shadow: 0 0 0 1px, inset 0 0 0 1px;
-  color: ${props => props.theme.states[props.state].color};
 
   animation: ${props => (props.isActive ? fadeIn : fadeOut)} ${DURATION}s,
     ${props => (props.isActive ? moveIn : moveOut)} ${DURATION}s;

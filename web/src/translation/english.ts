@@ -29,7 +29,6 @@ export const english: Translation = {
         starch: "Starch",
         sugars: "Sugars"
       },
-      title: "Nutrition information",
       units: {
         g: "g",
         kcal: "kcal"
@@ -42,13 +41,13 @@ export const english: Translation = {
     },
     Input: {
       barcode: {
-        placeholder: "Enter a barcode",
+        label: "Enter a barcode",
         reasons: {
           empty: "Please enter a barcode"
         }
       },
       email: {
-        placeholder: "Enter an email address",
+        label: "Enter an email address",
         reasons: {
           conflict: "Entered email address is already in use",
           empty: "Please enter an email address",
@@ -56,10 +55,14 @@ export const english: Translation = {
         }
       },
       name: {
-        placeholder: "Enter a name",
+        label: "Enter a name",
         reasons: {
           empty: "Please enter a name"
         }
+      },
+      declareNutrition: {
+        label: "Nutrition information",
+        reasons: {}
       },
       language: {
         label: "Select a language",
@@ -73,7 +76,7 @@ export const english: Translation = {
         }
       },
       password: {
-        placeholder: "Enter a password",
+        label: "Enter a password",
         reasons: {
           empty: "Please enter a password",
           invalid: "Password must be at least 8 characters long"

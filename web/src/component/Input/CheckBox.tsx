@@ -133,7 +133,12 @@ const Box = styled.div<StateProps>`
   height: ${UNIT_HEIGHT / 2}rem;
 
   color: ${props => props.theme.states[props.state].borderColor};
-  box-shadow: 0 0 0 1px, inset 0 0 0 1px;
+  box-shadow: 0 0 0
+      ${props =>
+        props.state === "disabled" || props.state === "default" ? 0.5 : 1}px,
+    inset 0 0 0
+      ${props =>
+        props.state === "disabled" || props.state === "default" ? 0.5 : 1}px;
   border-radius: ${UNIT_HEIGHT / 4}rem;
 
   background-color: ${props => props.theme.states[props.state].backgroundColor};
@@ -166,8 +171,8 @@ const Check = styled.div<CheckProps>`
   height: ${UNIT_HEIGHT / 2}rem;
 
   color: inherit;
-  box-shadow: 0 0 0 1px, inset 0 0 0 1px;
-  border-radius: ${UNIT_HEIGHT / 4}rem;
+  box-shadow: inherit;
+  border-radius: inherit;
 
   transition: ${TRANSITION};
 `;

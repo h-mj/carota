@@ -6,6 +6,7 @@ import { Component } from "../Component";
 import { CheckBox } from "./CheckBox";
 import { Field } from "./Field";
 import { InputChangeHandler } from "./Input";
+import { Label } from "./Label";
 import { TRANSITION } from "../../styling/animations";
 import { RESET } from "../../styling/stylesheets";
 import { BORDER_RADIUS, UNIT_HEIGHT } from "../../styling/sizes";
@@ -74,6 +75,11 @@ export interface DeclareNutritionProps {
   autoFocus?: boolean;
 
   /**
+   * Label text that will be rendered on top of the input.
+   */
+  label?: string;
+
+  /**
    * Text field name that will be included as one of the `onChange` callback
    * parameters.
    */
@@ -100,7 +106,6 @@ export interface DeclareNutritionProps {
  */
 interface DeclareNutritionTranslation {
   nutrients: Record<NutrientNames, string>;
-  title: string;
   units: { g: string; kcal: string };
 }
 
@@ -135,7 +140,7 @@ export class DeclareNutrition extends Component<
    * header, amount input and unit text components.
    */
   private renderRow = (name: NutrientNames, index: number) => {
-    const { autoFocus, reason, value } = this.props;
+    const { autoFocus, label, reason, value } = this.props;
 
     const disabled = this.disabled[name];
     const state = getState(
@@ -146,6 +151,9 @@ export class DeclareNutrition extends Component<
 
     return (
       <MarginedField key={name} state={state}>
+        {index === 0 && label !== undefined && (
+          <Label state={state}>{label}</Label>
+        )}
         {!REQUIRED_NUTRIENT_NAMES.has(name) && (
           <CheckBox
             name={name}
@@ -153,7 +161,7 @@ export class DeclareNutrition extends Component<
             value={!disabled}
           />
         )}
-        <Label state={state}>
+        <Container state={state}>
           <Header>{this.translation.nutrients[name]}</Header>
           <Input
             autoFocus={index === 0 && autoFocus}
@@ -168,7 +176,7 @@ export class DeclareNutrition extends Component<
           <Unit>
             {this.translation.units[name === "energy" ? "kcal" : "g"]}
           </Unit>
-        </Label>
+        </Container>
       </MarginedField>
     );
   };
@@ -219,11 +227,6 @@ export class DeclareNutrition extends Component<
 const Table = styled.div`
   width: 100%;
 
-  box-shadow: 0 0 0 1px, inset 0 0 0 1px;
-  border-radius: ${BORDER_RADIUS}rem;
-
-  color: ${({ theme }) => theme.borderColor};
-
   transition: ${TRANSITION};
 `;
 
@@ -243,7 +246,17 @@ const Z_INDICES: Readonly<Record<State, number>> = {
 const MarginedField = styled(Field)`
   z-index: ${props => Z_INDICES[props.state]};
 
-  & > * {
+  border-radius: 0;
+
+  &:first-child {
+    border-radius: ${BORDER_RADIUS}rem ${BORDER_RADIUS}rem 0 0;
+  }
+
+  &:last-child {
+    border-radius: 0 0 ${BORDER_RADIUS}rem ${BORDER_RADIUS}rem;
+  }
+
+  & > *:not(${Label}) {
     margin-left: ${UNIT_HEIGHT / 4}rem;
   }
 `;
@@ -251,7 +264,7 @@ const MarginedField = styled(Field)`
 /**
  * Component that contains header, input and unit components.
  */
-const Label = styled.label<StateProps>`
+const Container = styled.label<StateProps>`
   display: flex;
   align-items: center;
 

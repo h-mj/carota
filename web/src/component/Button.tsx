@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { Field } from "./Input/Field";
 import { RESET } from "../styling/stylesheets";
-import { getState, styled } from "../styling/theme";
+import { getState, styled, StateProps } from "../styling/theme";
 
 /**
  * Button component properties.
@@ -35,13 +35,15 @@ export class Button extends React.Component<ButtonProps> {
    */
   public render() {
     const { children, disabled, invalid } = this.props;
+    const state = getState(disabled, this.focused, invalid);
 
     return (
-      <Field state={getState(disabled, this.focused, invalid)}>
+      <Field state={state}>
         <ButtonElement
           disabled={disabled}
           onBlur={this.handleFocusChange}
           onFocus={this.handleFocusChange}
+          state={state}
         >
           {children}
         </ButtonElement>
@@ -63,11 +65,13 @@ export class Button extends React.Component<ButtonProps> {
 /**
  * The actual button element.
  */
-const ButtonElement = styled.button`
+const ButtonElement = styled.button<StateProps>`
   ${RESET};
 
   width: 100%;
   height: 100%;
+
+  color: ${props => props.theme.states[props.state].color};
 
   cursor: pointer;
 `;

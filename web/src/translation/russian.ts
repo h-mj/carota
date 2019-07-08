@@ -29,7 +29,6 @@ export const russian: Translation = {
         starch: "Крахмал",
         sugars: "Сахара"
       },
-      title: "Пищевая ценность",
       units: {
         g: "г",
         kcal: "ккал"
@@ -42,13 +41,13 @@ export const russian: Translation = {
     },
     Input: {
       barcode: {
-        placeholder: "Введите штрихкод",
+        label: "Введите штрихкод",
         reasons: {
           empty: "Пожалуйста, введите штрихкод"
         }
       },
       email: {
-        placeholder: "Введите адрес электронной почты",
+        label: "Введите адрес электронной почты",
         reasons: {
           conflict: "Введенный адрес электронной почты уже используется",
           empty: "Пожалуйста, введите адрес электронной почты",
@@ -67,13 +66,17 @@ export const russian: Translation = {
         }
       },
       name: {
-        placeholder: "Введите имя",
+        label: "Введите имя",
         reasons: {
           empty: "Пожалуйста, введите имя"
         }
       },
+      declareNutrition: {
+        label: "Пищевая ценность",
+        reasons: {}
+      },
       password: {
-        placeholder: "Введите пароль",
+        label: "Введите пароль",
         reasons: {
           empty: "Пожалуйста, введите пароль",
           invalid: "Пароль должен содержать не менее 8 символов"

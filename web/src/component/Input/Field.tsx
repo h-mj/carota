@@ -13,12 +13,17 @@ export const Field = styled.div<StateProps>`
 
   height: ${UNIT_HEIGHT}rem;
 
+  color: ${props => props.theme.states[props.state].borderColor};
   border-radius: ${BORDER_RADIUS}rem;
-  box-shadow: 0 0 0 1px, inset 0 0 0 1px;
+  box-shadow: 0 0 0
+      ${props =>
+        props.state === "disabled" || props.state === "default" ? 0.5 : 1}px,
+    inset 0 0 0
+      ${props =>
+        props.state === "disabled" || props.state === "default" ? 0.5 : 1}px;
 
   background-color: ${props => props.theme.states[props.state].backgroundColor};
 
-  color: ${props => props.theme.states[props.state].color};
   font-size: 1rem;
   letter-spacing: -0.011rem;
 

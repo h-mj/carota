@@ -90,7 +90,7 @@ interface InputProps<TInputNames extends InputNames = InputNames> {
   autoFocus?: boolean;
 
   /**
-   * Name of either `Select` or `TextField` component.
+   * Name of input component.
    */
   name: TInputNames;
 
@@ -114,17 +114,16 @@ interface InputProps<TInputNames extends InputNames = InputNames> {
  * Input component translation.
  */
 type InputsTranslation = {
-  [InputName in InputNames<
-    "Select" | "TextField"
-  >]: InputName extends InputNames<"Select">
+  [InputName in InputNames]: InputName extends InputNames<"Select">
     ? SelectTranslation<InputName>
-    : TextFieldTranslation
+    : InputTranslation
 };
 
 /**
  * General input component translation.
  */
 interface InputTranslation {
+  label: string;
   reasons: Partial<Record<ErrorReasons, string>>;
 }
 
@@ -133,15 +132,7 @@ interface InputTranslation {
  */
 interface SelectTranslation<SelectName extends InputNames<"Select">>
   extends InputTranslation {
-  label: string;
   options: Record<SelectOptionValues<SelectName>, string>;
-}
-
-/**
- * Text field translation.
- */
-interface TextFieldTranslation extends InputTranslation {
-  placeholder: string;
 }
 
 /**
@@ -180,6 +171,7 @@ export class Input<
     return (
       <DeclareNutrition
         autoFocus={autoFocus}
+        label={this.translation[name].label}
         name={name}
         onChange={onChange}
         value={value}
@@ -198,6 +190,7 @@ export class Input<
     return (
       <Select
         invalid={reason !== undefined}
+        label={this.translation[name].label}
         name={name}
         onChange={onChange}
         options={this.options}
@@ -217,6 +210,7 @@ export class Input<
       <TextField
         autoFocus={autoFocus}
         invalid={reason !== undefined}
+        label={this.translation[name].label}
         name={name}
         onChange={onChange}
         type={INPUTS[name].type}

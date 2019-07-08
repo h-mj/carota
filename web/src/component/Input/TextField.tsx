@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { Field } from "./Field";
 import { InputChangeHandler } from "./Input";
+import { Label } from "./Label";
 import { UNIT_HEIGHT } from "../../styling/sizes";
 import { RESET } from "../../styling/stylesheets";
 import { getState, styled } from "../../styling/theme";
@@ -35,6 +36,11 @@ export interface TextFieldProps {
    * Whether or not this field is invalid.
    */
   invalid?: boolean;
+
+  /**
+   * Label text that will be rendered on top of the input.
+   */
+  label?: string;
 
   /**
    * Name of the text field that will be included in parameters of `onChange`
@@ -77,10 +83,21 @@ export class TextField extends React.Component<TextFieldProps> {
    * Renders field component with text input inside it.
    */
   public render() {
-    const { autoFocus, disabled, invalid, name, type, value } = this.props;
+    const {
+      autoFocus,
+      disabled,
+      invalid,
+      label,
+      name,
+      type,
+      value
+    } = this.props;
+
+    const state = getState(disabled, this.focused, invalid);
 
     return (
-      <Field state={getState(disabled, this.focused, invalid)}>
+      <Field state={state}>
+        {label !== undefined && <Label state={state}>{label}</Label>}
         <Input
           autoFocus={autoFocus}
           disabled={disabled}

@@ -25,7 +25,7 @@ export class Login extends Scene<"Login"> {
   public render() {
     return (
       <Compact>
-        <Form name="login" onSubmit={this.handleSubmit} />
+        <Form autoFocus name="login" onSubmit={this.handleSubmit} />
       </Compact>
     );
   }

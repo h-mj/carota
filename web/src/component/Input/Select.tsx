@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { Field } from "./Field";
 import { InputChangeHandler } from "./Input";
+import { Label } from "./Label";
 import { TRANSITION } from "../../styling/animations";
 import { RESET } from "../../styling/stylesheets";
 import { getState, StateProps, styled } from "../../styling/theme";
@@ -35,6 +36,11 @@ export interface SelectProps<TValues extends string = string> {
    * Whether or not this field is invalid.
    */
   invalid?: boolean;
+
+  /**
+   * Label text that will be rendered on top of the input.
+   */
+  label?: string;
 
   /**
    * Name of the select component that will be included in parameters of
@@ -79,10 +85,12 @@ export class Select<TValues extends string = string> extends React.Component<
    * Renders field component with option components inside it.
    */
   public render() {
-    const { disabled, invalid, options, value } = this.props;
+    const { disabled, invalid, label, options, value } = this.props;
+    const state = getState(disabled, this.focused, invalid);
 
     return (
-      <Field state={getState(disabled, this.focused, invalid)}>
+      <Field state={state}>
+        {label !== undefined && <Label state={state}>{label}</Label>}
         {options !== undefined &&
           options.map(({ label: optionLabel, value: optionValue }) => (
             <Option
@@ -135,7 +143,10 @@ const Option = styled.button<StateProps>`
   width: 100%;
   height: 100%;
 
-  color: ${props => props.theme.states[props.state].color};
+  color: ${props =>
+    props.state === "active"
+      ? props.theme.colorPrimary
+      : props.theme.states[props.state].color};
 
   cursor: pointer;
 

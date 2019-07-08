@@ -1,14 +1,10 @@
+import { Fluid } from "./Fluid";
 import { UNIT_HEIGHT } from "../../styling/sizes";
 import { styled } from "../../styling/theme";
 
 /**
  * Container component used to wrap form components.
  */
-export const Compact = styled.div`
+export const Compact = styled(Fluid)`
   max-width: ${8 * UNIT_HEIGHT}rem;
-  width: 100%;
-
-  margin: 0 auto;
-  padding: ${UNIT_HEIGHT / 4}rem;
-  box-sizing: border-box;
 `;

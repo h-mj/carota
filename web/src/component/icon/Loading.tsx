@@ -1,59 +1,58 @@
 import * as React from "react";
 import { scaleIn, scaleOut } from "../../styling/animations";
-import { BORDER_RADIUS, UNIT_HEIGHT } from "../../styling/sizes";
+import { UNIT_HEIGHT } from "../../styling/sizes";
 import { keyframes, styled } from "../../styling/theme";
 
 export const Loading: React.FunctionComponent = () => {
   return (
-    <Squares>
-      <Square />
-      <Square />
-      <Square />
-      <Square />
-    </Squares>
+    <Disks>
+      <Disk />
+      <Disk />
+      <Disk />
+      <Disk />
+    </Disks>
   );
 };
 
 /**
- * Diameter of square in `rem`s.
+ * Diameter of a disk in `rem`s.
  */
-const SQUARE_SIZE = UNIT_HEIGHT / 8;
+const DISK_SIZE = UNIT_HEIGHT / 6;
 
 /**
- * Offset between the start position of one square and next one.
+ * Offset between the start position of one disk and next one.
  */
-const SQUARE_OFFSET = UNIT_HEIGHT / 4;
+const DISK_OFFSET = UNIT_HEIGHT / 3;
 
 /**
- * Component that contains moving squares.
+ * Component that contains moving disks.
  */
-const Squares = styled.div`
+const Disks = styled.div`
   position: relative;
-  width: ${2 * SQUARE_OFFSET + SQUARE_SIZE}rem;
-  height: ${SQUARE_SIZE}rem;
+  width: ${2 * DISK_OFFSET + DISK_SIZE}rem;
+  height: ${DISK_SIZE}rem;
 `;
 
 /**
- * Animation that moves a square to the right by `SQUARE_OFFSET`.
+ * Animation that moves a disk to the right by `DISK_OFFSET`.
  */
 const move = keyframes`
   from { transform: translateX(0); }
-  to { transform: translateX(${SQUARE_OFFSET}rem); }
+  to { transform: translateX(${DISK_OFFSET}rem); }
 `;
 
 /**
- * One of the four animated squares the loading icon contains.
+ * One of the four animated disks the loading icon contains.
  */
-const Square = styled.div`
+const Disk = styled.div`
   position: absolute;
 
-  width: ${SQUARE_SIZE}rem;
-  height: ${SQUARE_SIZE}rem;
+  width: ${DISK_SIZE}rem;
+  height: ${DISK_SIZE}rem;
 
-  border-radius: ${BORDER_RADIUS}rem;
-  box-shadow: 0 0 0 1px, inset 0 0 0 1px;
+  border-radius: ${DISK_SIZE / 2}rem;
 
-  color: ${({ theme }) => theme.colorPrimary};
+  background-color: ${({ theme }) => theme.states.active.borderColor};
 
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 
@@ -62,7 +61,7 @@ const Square = styled.div`
   }
 
   &:nth-child(2) {
-    left: ${2 * SQUARE_OFFSET}rem;
+    left: ${2 * DISK_OFFSET}rem;
     animation: ${scaleOut} 0.5s infinite;
   }
 
@@ -71,7 +70,7 @@ const Square = styled.div`
   }
 
   &:nth-child(4) {
-    left: ${SQUARE_OFFSET}rem;
+    left: ${DISK_OFFSET}rem;
     animation: ${move} 0.5s infinite;
   }
 `;

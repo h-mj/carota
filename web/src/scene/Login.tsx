@@ -5,8 +5,11 @@ import * as React from "react";
 import { Scene } from "./Scene";
 import { Form, FormSubmitHandler } from "../component/Form";
 import { Compact } from "../component/container/Compact";
+import { Logo } from "../component/icon/Logo";
 import { Notification } from "../component/NotificationContainer";
 import { setTimeout } from "../utility/promises";
+import { UNIT_HEIGHT } from "../styling/sizes";
+import { styled } from "../styling/theme";
 
 /**
  * Scene that renders a form used for signing in.
@@ -26,6 +29,9 @@ export class Login extends Scene<"Login"> {
   public render() {
     return (
       <Compact>
+        <LogoContainer>
+          <Logo width={`${UNIT_HEIGHT}rem`} height={`${UNIT_HEIGHT}rem`} />
+        </LogoContainer>
         <Form autoFocus name="login" onSubmit={this.handleSubmit} />
       </Compact>
     );
@@ -55,3 +61,16 @@ export class Login extends Scene<"Login"> {
     return error;
   };
 }
+
+/**
+ * Container that contains a logo.
+ */
+const LogoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: ${2 * UNIT_HEIGHT}rem;
+  height: ${2 * UNIT_HEIGHT}rem;
+  margin: ${UNIT_HEIGHT}rem auto;
+`;

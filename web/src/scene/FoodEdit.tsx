@@ -48,8 +48,6 @@ export class FoodEdit extends Scene<"FoodEdit", FoodEditProps> {
       return;
     }
 
-    console.log(food);
-
     const { name, barcode, unit } = food;
 
     type Nutrient = keyof typeof food.nutritionDeclaration;

@@ -35,7 +35,7 @@ const SAVE_SCHEMA: Schema<"food", "save"> = {
     monoUnsaturates: nutrientAmount.optional(),
     polyunsaturates: nutrientAmount.optional(),
     carbohydrate: nutrientAmount,
-    sugars: nutrientAmount,
+    sugars: nutrientAmount.optional(),
     polyols: nutrientAmount.optional(),
     starch: nutrientAmount.optional(),
     fibre: nutrientAmount.optional(),
@@ -45,20 +45,20 @@ const SAVE_SCHEMA: Schema<"food", "save"> = {
 };
 
 define(foodRouter, "food", "save", SAVE_SCHEMA, async context => {
-  const { id, nutritionDeclaration, ...rest } = context.state.body;
-  const food = id === undefined ? new Food() : await Food.findOne({ id });
+  const { id, name, barcode, unit, nutritionDeclaration } = context.state.body;
 
-  if (food === undefined) {
+  if ((await Food.findOne({ id })) === undefined) {
     throw createIdNotFoundError(id!, Food.name, ["id"]);
   }
 
-  Object.assign(food, rest, nutritionDeclaration, {
-    editor: context.state.account
+  const food = Food.create({
+    id,
+    name,
+    barcode: barcode === "" ? undefined : barcode,
+    unit
   });
 
-  if (food.barcode === "") {
-    food.barcode = null;
-  }
+  Object.assign(food, nutritionDeclaration);
 
   context.state.data = (await food.save()).toData();
 });

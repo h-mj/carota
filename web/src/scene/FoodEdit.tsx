@@ -31,11 +31,6 @@ export class FoodEdit extends Scene<"FoodEdit", FoodEditProps> {
   private values?: FormValues<"foodInformation">;
 
   /**
-   * Waiting reason when submitting data to server.
-   */
-  private static WAIT_REASON = "foodEdit";
-
-  /**
    * Creates a new instance of FoodEdit and creates initial form valuer object
    * based on `food` prop, if provided.
    */
@@ -91,7 +86,7 @@ export class FoodEdit extends Scene<"FoodEdit", FoodEditProps> {
   private handleSubmit: FormSubmitHandler<"foodInformation"> = async values => {
     const { food, foods, position, views } = this.props;
 
-    views!.wait(FoodEdit.WAIT_REASON);
+    const symbol = views!.wait("Food editor save");
 
     const body = {
       id: food !== undefined ? food.id : undefined,
@@ -103,7 +98,7 @@ export class FoodEdit extends Scene<"FoodEdit", FoodEditProps> {
       resolveAfterTimeout(1)
     ]);
 
-    views!.done(FoodEdit.WAIT_REASON);
+    views!.done(symbol);
 
     if (error === undefined) {
       if (position === "main") {

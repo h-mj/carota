@@ -18,12 +18,6 @@ import { styled } from "../styling/theme";
 @observer
 export class Login extends Scene<"Login"> {
   /**
-   * Waiting reason that is used to show loader component when waiting for
-   * server response.
-   */
-  private static WAIT_REASON = "login";
-
-  /**
    * Renders a sign in form.
    */
   public render() {
@@ -43,19 +37,21 @@ export class Login extends Scene<"Login"> {
    */
   @action
   private handleSubmit: FormSubmitHandler<"login"> = async values => {
-    this.props.views!.wait(Login.WAIT_REASON);
+    const { auth, views } = this.props;
+
+    const symbol = views!.wait("Login request");
 
     const [error] = await Promise.all([
-      this.props.auth!.login(values as AuthLoginBody), // Let backend handle the validation for now.
+      auth!.login(values as AuthLoginBody), // Let backend handle the validation for now.
       resolveAfterTimeout(1)
     ]);
 
-    this.props.views!.done(Login.WAIT_REASON);
+    views!.done(symbol);
 
     if (error === undefined) {
-      this.props.views!.update(); // Update stage to match current URL.
+      views!.update(); // Update stage to match current URL.
     } else if (error.code === 401) {
-      this.props.views!.notify(new Notification("loginInvalidCredentials", {}));
+      views!.notify(new Notification("loginInvalidCredentials", {}));
     }
 
     return error;

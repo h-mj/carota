@@ -9,11 +9,6 @@ import { resolveAfterTimeout } from "../utility/promises";
 @inject("auth", "views")
 export class Logout extends Scene<"Logout"> {
   /**
-   * Waiting reason that is used to show loader component when waiting for timeout.
-   */
-  private static WAIT_REASON = "logout";
-
-  /**
    * Executes `logout` function, that logs user out.
    */
   public constructor(props: any) {
@@ -35,13 +30,13 @@ export class Logout extends Scene<"Logout"> {
   private async logout() {
     const { auth, views: view } = this.props;
 
-    view!.wait(Logout.WAIT_REASON);
+    const symbol = view!.wait("Logout timeout");
 
     await resolveAfterTimeout(1);
 
     auth!.logout();
     view!.redirect(Stage.HOME);
 
-    view!.done(Logout.WAIT_REASON);
+    view!.done(symbol);
   }
 }

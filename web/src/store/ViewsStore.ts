@@ -64,9 +64,9 @@ export class ViewsStore {
   @observable private _notifications: Array<Notifications> = [];
 
   /**
-   * Set of reasons why waiting is needed.
+   * Set of active symbols created by `wait` method..
    */
-  @observable private _waits: Set<string> = new Set();
+  @observable private _waits: Set<symbol> = new Set();
 
   /**
    * RootStore instance.
@@ -257,22 +257,26 @@ export class ViewsStore {
   };
 
   /**
-   * Adds a waiting reason to the set.
+   * Creates and returns a unique symbol with given description and adds it to
+   * waiting set. If waiting is done, `done` function should be called with
+   * returned symbol, which removes the symbol from the waiting set.
    *
-   * @param reason Loading procedure name.
+   * @param description Symbol description.
    */
   @action
-  public wait(reason: string) {
-    this._waits.add(reason);
+  public wait(description?: string) {
+    const symbol = Symbol(description);
+    this._waits.add(symbol);
+    return symbol;
   }
 
   /**
-   * Removes a waiting reason from the the set.
+   * Removes a symbol from waiting list.
    *
-   * @param name Loading procedure name.
+   * @param symbol Symbol instance returned by wait.
    */
   @action
-  public done(reason: string) {
-    this._waits.delete(reason);
+  public done(symbol: symbol) {
+    this._waits.delete(symbol);
   }
 }

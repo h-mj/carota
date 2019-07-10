@@ -22,12 +22,6 @@ export class Register extends Scene<"Register"> {
   @observable private isValid?: boolean;
 
   /**
-   * Waiting reason that is used to show loader component when waiting for
-   * server response.
-   */
-  private static WAIT_REASON = "register";
-
-  /**
    * Creates a new instance of `Register` scene.
    *
    * Calls an async function that checks whether
@@ -76,22 +70,22 @@ export class Register extends Scene<"Register"> {
    */
   @action
   private handleSubmit: FormSubmitHandler<"register"> = async values => {
-    const { invitationId } = this.props.parameters!;
+    const { auth, parameters, views } = this.props;
 
-    this.props.views!.wait(Register.WAIT_REASON);
+    const symbol = views!.wait("Register request");
 
     const [error] = await Promise.all([
-      this.props.auth!.register({
+      auth!.register({
         ...values,
-        invitationId
+        invitationId: parameters!.invitationId
       } as AuthRegisterBody), // Let backend handle the validation for now.
       resolveAfterTimeout(1)
     ]);
 
-    this.props.views!.done(Register.WAIT_REASON);
+    views!.done(symbol);
 
     if (error === undefined) {
-      this.props.views!.redirect(Stage.HOME);
+      views!.redirect(Stage.HOME);
     }
 
     return error;
@@ -102,12 +96,14 @@ export class Register extends Scene<"Register"> {
    * assigns corresponding boolean value to `valid` field.
    */
   private async checkInvitationIdValidity() {
-    if (this.props.parameters === undefined) {
+    const { auth, parameters, views } = this.props;
+
+    if (parameters === undefined) {
       this.isValid = false;
     } else {
-      this.props.views!.wait(Register.WAIT_REASON);
-      this.isValid = await this.props.auth!.check(this.props.parameters);
-      this.props.views!.done(Register.WAIT_REASON);
+      const symbol = views!.wait("Invitation check request");
+      this.isValid = await auth!.check(parameters);
+      views!.done(symbol);
     }
   }
 }

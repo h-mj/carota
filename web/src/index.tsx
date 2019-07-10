@@ -6,23 +6,10 @@ import { NotificationContainer } from "./component/NotificationContainer";
 import { Main } from "./component/Main";
 import { Side } from "./component/Side";
 import { Theme } from "./component/Theme";
-import { InjectedProps } from "./store/Store";
-import { auth } from "./store/AuthStore";
-import { foods } from "./store/FoodsStore";
-import { views } from "./store/ViewsStore";
-
-/**
- * Object that contains all stores which are provided to other components by
- * `Provider` component in `index.tsx`.
- */
-const STORES: Readonly<Required<InjectedProps>> = {
-  auth,
-  foods,
-  views
-};
+import { rootStore } from "./store/RootStore";
 
 render(
-  <Provider {...STORES}>
+  <Provider {...rootStore}>
     <Theme>
       <Main />
       <Side />

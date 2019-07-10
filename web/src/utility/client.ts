@@ -1,5 +1,5 @@
 import { Actions, Body, Controllers, Response } from "api";
-import { auth } from "../store/AuthStore";
+import { rootStore } from "../store/RootStore";
 
 /**
  * Makes a `POST` request to route `/api/${controller}/${action}` with message
@@ -23,7 +23,7 @@ export const post = async <
 
   headers.append("Content-Type", "application/json");
 
-  const { authorization } = auth;
+  const { authorization } = rootStore.auth;
 
   if (authorization) {
     headers.append("Authorization", authorization);

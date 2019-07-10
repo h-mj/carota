@@ -111,8 +111,3 @@ export class AuthStore {
     return "data" in response && response.data.isValid;
   }
 }
-
-/**
- * The only `AuthStore` class instance and which is provided to all components
- */
-export const auth = new AuthStore();

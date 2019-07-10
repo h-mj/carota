@@ -3,7 +3,7 @@ import { computed, observable, action } from "mobx";
 import { Stage, Stages } from "../scene/Stage";
 import { SceneNames } from "../scene/Scene";
 import { Notifications } from "../component/NotificationContainer";
-import { auth } from "./AuthStore";
+import { RootStore } from "./RootStore";
 import { Translation } from "../translation";
 import { english } from "../translation/english";
 import { estonian } from "../translation/estonian";
@@ -69,11 +69,17 @@ export class ViewsStore {
   @observable private _waits: Set<string> = new Set();
 
   /**
+   * RootStore instance.
+   */
+  private _rootStore: RootStore;
+
+  /**
    * Creates a new instance of `ScenesStore`, updates main scene based on
    * current URL and adds a history stage pop listener that also updates main
    * stage based on changed pathname.
    */
-  public constructor() {
+  public constructor(rootStore: RootStore) {
+    this._rootStore = rootStore;
     this.update();
     window.addEventListener("popstate", () => this.update(), false);
   }
@@ -163,13 +169,16 @@ export class ViewsStore {
    */
   @action
   public redirect(stage: Stages) {
-    this._main =
-      auth.authenticated !==
-      NO_AUTHENTICATION_SCENE_NAMES.includes(stage.sceneName)
-        ? stage
-        : auth.authenticated
-        ? Stage.UNKNOWN
-        : Stage.GATEWAY;
+    const { authenticated } = this._rootStore.auth;
+
+    // If user authentication status is the same as scene authentication requirement.
+    if (
+      !authenticated === NO_AUTHENTICATION_SCENE_NAMES.includes(stage.sceneName)
+    ) {
+      this._main = stage;
+    } else {
+      this._main = authenticated ? Stage.UNKNOWN : Stage.GATEWAY;
+    }
 
     this.refocus();
 
@@ -190,14 +199,11 @@ export class ViewsStore {
    */
   @action
   public update() {
+    const { authenticated } = this._rootStore.auth;
     const stage = Stage.from(window.location.pathname);
 
     // If user is unauthenticated and tries to access the logout scene, redirect to home.
-    if (
-      !auth.authenticated &&
-      stage !== undefined &&
-      stage.sceneName === "Logout"
-    ) {
+    if (!authenticated && stage !== undefined && stage.sceneName === "Logout") {
       return this.redirect(Stage.HOME);
     }
 
@@ -270,9 +276,3 @@ export class ViewsStore {
     this._waits.delete(reason);
   }
 }
-
-/**
- * The only `ScenesStore` class instance and which is provided to all
- * components.
- */
-export const views = new ViewsStore();

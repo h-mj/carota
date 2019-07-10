@@ -40,8 +40,3 @@ export class FoodsStore extends Store<Food> {
     return undefined;
   }
 }
-
-/**
- * The only `FoodsStore` class instance and which is provided to all components
- */
-export const foods = new FoodsStore(Food);

@@ -23,7 +23,10 @@ const SAVE_SCHEMA: Schema<"food", "save"> = {
     .guid()
     .optional(),
   name: is.string().trim(),
-  barcode: is.string().optional(),
+  barcode: is
+    .string()
+    .allow("")
+    .optional(),
   unit: is.string().valid(Object.keys(UNITS_ENUM)),
   nutritionDeclaration: {
     energy: nutrientAmount,
@@ -52,6 +55,10 @@ define(foodRouter, "food", "save", SAVE_SCHEMA, async context => {
   Object.assign(food, rest, nutritionDeclaration, {
     editor: context.state.account
   });
+
+  if (food.barcode === "") {
+    food.barcode = null;
+  }
 
   context.state.data = (await food.save()).toData();
 });

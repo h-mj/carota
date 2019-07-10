@@ -12,9 +12,17 @@ export class RootStore {
   public views: ViewsStore;
 
   public constructor() {
-    this.auth = new AuthStore();
+    this.auth = new AuthStore(this);
     this.foods = new FoodsStore(Food);
     this.views = new ViewsStore(this);
+  }
+
+  /**
+   * Clears all stores.
+   */
+  public clear() {
+    this.auth.clear();
+    this.foods.clear();
   }
 }
 

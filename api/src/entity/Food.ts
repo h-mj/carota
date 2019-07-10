@@ -37,8 +37,8 @@ export class Food extends BaseEntity {
   /**
    * Barcode of the food, if exists.
    */
-  @Column({ nullable: true })
-  public barcode?: string;
+  @Column("text", { nullable: true })
+  public barcode!: string | null;
 
   /**
    * Serving unit.
@@ -49,74 +49,74 @@ export class Food extends BaseEntity {
   /**
    * Amount of energy in kilocalories.
    */
-  @Column()
+  @Column("float")
   public energy!: number;
 
   /**
    * Amount of fat in grams.
    */
-  @Column()
+  @Column("float")
   public fat!: number;
 
   /**
    * Amount of saturates in grams.
    */
-  @Column({ nullable: true })
-  public saturates?: number;
+  @Column("float", { nullable: true })
+  public saturates!: number | null;
 
   /**
    * Amount of mono-unsaturates in grams.
    */
-  @Column({ nullable: true })
-  public monoUnsaturates?: number;
+  @Column("float", { nullable: true })
+  public monoUnsaturates!: number | null;
 
   /**
    * Amount of polyunsaturates in grams.
    */
-  @Column({ nullable: true })
-  public polyunsaturates?: number;
+  @Column("float", { nullable: true })
+  public polyunsaturates!: number | null;
 
   /**
    * Amount of carbohydrate in grams.
    */
-  @Column()
+  @Column("float")
   public carbohydrate!: number;
 
   /**
    * Amount of sugars in grams.
    */
-  @Column({ nullable: true })
-  public sugars?: number;
+  @Column("float", { nullable: true })
+  public sugars!: number | null;
 
   /**
    * Amount of polyols in grams.
    */
-  @Column({ nullable: true })
-  public polyols?: number;
+  @Column("float", { nullable: true })
+  public polyols!: number | null;
 
   /**
    * Amount of starch in grams.
    */
-  @Column({ nullable: true })
-  public starch?: number;
+  @Column("float", { nullable: true })
+  public starch!: number | null;
 
   /**
    * Amount of fibre in grams.
    */
-  @Column({ nullable: true })
-  public fibre?: number;
+  @Column("float", { nullable: true })
+  public fibre!: number | null;
 
   /**
    * Amount of protein in grams.
    */
-  @Column()
+  @Column("float")
   public protein!: number;
 
   /**
    * Amount of salt in grams.
    */
-  @Column({ nullable: true })
-  public salt?: number;
+  @Column("float", { nullable: true })
+  public salt!: number | null;
 
   /**
    * Account of last user who edited this food.
@@ -130,21 +130,21 @@ export class Food extends BaseEntity {
   public toData = (): FoodData => ({
     id: this.id,
     name: this.name,
-    barcode: this.barcode,
+    barcode: this.barcode || undefined,
     unit: this.unit,
     nutritionDeclaration: {
       energy: this.energy,
       fat: this.fat,
-      saturates: this.saturates,
-      monoUnsaturates: this.monoUnsaturates,
-      polyunsaturates: this.polyunsaturates,
+      saturates: this.saturates || undefined,
+      monoUnsaturates: this.monoUnsaturates || undefined,
+      polyunsaturates: this.polyunsaturates || undefined,
       carbohydrate: this.carbohydrate,
-      sugars: this.sugars,
-      polyols: this.polyols,
-      starch: this.starch,
-      fibre: this.fibre,
+      sugars: this.sugars || undefined,
+      polyols: this.polyols || undefined,
+      starch: this.starch || undefined,
+      fibre: this.fibre || undefined,
       protein: this.protein,
-      salt: this.salt
+      salt: this.salt || undefined
     }
   });
 }

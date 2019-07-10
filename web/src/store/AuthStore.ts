@@ -1,5 +1,6 @@
 import { Body } from "api";
 import { action, autorun, computed, observable } from "mobx";
+import { RootStore } from "./RootStore";
 import { post } from "../utility/client";
 
 /**
@@ -13,14 +14,20 @@ export class AuthStore {
   @observable private token?: string;
 
   /**
+   * RootStore instance.
+   */
+  private rootStore: RootStore;
+
+  /**
    * Creates a new instance of `AuthStore`.
    *
    * Assigns token inside `localStorage` to field `token` and creates an
    * `autorun` that updates token value inside `localStorage` any time field
    * `token` changes.
    */
-  public constructor() {
+  public constructor(rootStore: RootStore) {
     this.token = localStorage.getItem("token") || undefined;
+    this.rootStore = rootStore;
 
     autorun(() => {
       if (this.token === undefined) {
@@ -93,11 +100,11 @@ export class AuthStore {
   }
 
   /**
-   * Assigns `undefined` to field `token` thus signing user out.
+   * Logs the user out by clearing all stores including this one.
    */
   @action
   public logout() {
-    this.token = undefined;
+    this.rootStore.clear();
   }
 
   /**
@@ -109,5 +116,13 @@ export class AuthStore {
     const response = await post("auth", "check", body);
 
     return "data" in response && response.data.isValid;
+  }
+
+  /**
+   * Clears all the data this store holds.
+   */
+  @action
+  public clear() {
+    this.token = undefined;
   }
 }

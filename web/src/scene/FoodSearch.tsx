@@ -29,7 +29,7 @@ export class FoodSearch extends Scene<"FoodSearch"> {
         {results.length > 0 && (
           <Results>
             {this.props.foods!.getAll().map(food => (
-              <Result key={food.id} onClick={this.handleClick}>
+              <Result key={food.id} onClick={this.handleClick} value={food.id}>
                 {food.name}
               </Result>
             ))}
@@ -51,8 +51,12 @@ export class FoodSearch extends Scene<"FoodSearch"> {
   };
 
   @action
-  private handleClick: React.MouseEventHandler<HTMLButtonElement> = () => {
-    this.props.views!.aside(new Stage("FoodEdit", undefined, {}));
+  private handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
+    this.props.views!.aside(
+      new Stage("FoodEdit", undefined, {
+        food: this.props.foods!.get((event.target as any).value)
+      })
+    );
   };
 }
 

@@ -25,14 +25,14 @@ export class Invitation extends BaseEntity {
    * adviser.
    */
   @ManyToOne(() => Account)
-  public adviser?: Account;
+  public adviser!: Account | null;
 
   /**
    * Account which created this invitation. `undefined` if root account is
    * registered.
    */
   @ManyToOne(() => Account)
-  public inviter?: Account;
+  public inviter!: Account | null;
 
   /**
    * Account type of future account.

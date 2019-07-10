@@ -76,20 +76,20 @@ export class Account extends BaseEntity {
    */
   @OneToOne(() => Person)
   @JoinColumn()
-  public person?: Person;
+  public person!: Person | null;
 
   /**
    * Advisers account. `undefined` if account owner doesn't have an adviser.
    */
   @ManyToOne(() => Account)
-  public adviser?: Account;
+  public adviser!: Account | null;
 
   /**
    * Account who created the invitation using which this account was registered.
    * `undefined` if root account.
    */
   @ManyToOne(() => Account)
-  public inviter?: Account;
+  public inviter!: Account | null;
 
   /**
    * Account type, which can be following:

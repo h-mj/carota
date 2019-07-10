@@ -64,7 +64,7 @@ const isFormInputName = <TFormName extends FormNames>(
  * Type that maps all input names of form named `TFormName` to their value
  * types.
  */
-type FormValues<TFormName extends FormNames = FormNames> = {
+export type FormValues<TFormName extends FormNames = FormNames> = {
   [InputName in FormInputNames<TFormName>]: InputValues<InputName>
 };
 

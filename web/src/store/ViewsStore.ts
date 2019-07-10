@@ -27,15 +27,6 @@ const NO_AUTHENTICATION_SCENE_NAMES: Readonly<Array<SceneNames>> = [
 ];
 
 /**
- * Scene names that do not require navigation bar.
- */
-const NO_NAVIGATION_SCENE_NAMES: Readonly<Array<SceneNames>> = [
-  "Login",
-  "Logout",
-  "Register"
-];
-
-/**
  * Store that stores information about current state of the view, including
  * language, main stage, active notifications, and waiting reasons.
  *
@@ -136,7 +127,7 @@ export class ViewsStore {
    */
   @computed
   public get navigation() {
-    if (NO_NAVIGATION_SCENE_NAMES.includes(this.main.sceneName)) {
+    if (!this._rootStore.auth.authenticated) {
       return undefined;
     }
 

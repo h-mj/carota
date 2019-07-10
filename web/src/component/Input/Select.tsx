@@ -1,6 +1,7 @@
 import { action, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
+import { ErrorMessage } from "./ErrorMessage";
 import { Field } from "./Field";
 import { InputChangeHandler } from "./Input";
 import { Label } from "./Label";
@@ -31,6 +32,11 @@ export interface SelectProps<TValues extends string = string> {
    * Whether or not this field is disabled.
    */
   disabled?: boolean;
+
+  /**
+   * Error message text that will appear under the field.
+   */
+  errorMessage?: string;
 
   /**
    * Whether or not this field is invalid.
@@ -85,7 +91,14 @@ export class Select<TValues extends string = string> extends React.Component<
    * Renders field component with option components inside it.
    */
   public render() {
-    const { disabled, invalid, label, options, value } = this.props;
+    const {
+      disabled,
+      errorMessage,
+      invalid,
+      label,
+      options,
+      value
+    } = this.props;
     const state = getState(disabled, this.focused, invalid);
 
     return (
@@ -107,6 +120,7 @@ export class Select<TValues extends string = string> extends React.Component<
               {optionLabel}
             </Option>
           ))}
+        <ErrorMessage message={errorMessage} />
       </Field>
     );
   }

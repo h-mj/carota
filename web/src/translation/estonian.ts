@@ -62,7 +62,7 @@ export const estonian: Translation = {
           Russian: "русский"
         },
         reasons: {
-          empty: "Palun valige keel"
+          missing: "Palun valige keel"
         }
       },
       name: {
@@ -89,7 +89,7 @@ export const estonian: Translation = {
           ml: "ml"
         },
         reasons: {
-          empty: "Palun valige ühik"
+          missing: "Palun valige ühik"
         }
       }
     },

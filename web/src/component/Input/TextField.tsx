@@ -1,6 +1,7 @@
 import { action, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
+import { ErrorMessage } from "./ErrorMessage";
 import { Field } from "./Field";
 import { InputChangeHandler } from "./Input";
 import { Label } from "./Label";
@@ -32,6 +33,11 @@ export interface TextFieldProps {
    * Whether or not this field is disabled.
    */
   disabled?: boolean;
+
+  /**
+   * Error message text that will appear under the field.
+   */
+  errorMessage?: string;
 
   /**
    * Whether or not this field is invalid.
@@ -102,6 +108,7 @@ export class TextField extends React.Component<TextFieldProps> {
     const {
       autoFocus,
       disabled,
+      errorMessage,
       invalid,
       label,
       name,
@@ -133,6 +140,7 @@ export class TextField extends React.Component<TextFieldProps> {
           type={type}
           value={value}
         />
+        <ErrorMessage message={errorMessage} />
       </Field>
     );
   }

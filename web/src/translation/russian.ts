@@ -62,7 +62,7 @@ export const russian: Translation = {
           Russian: "русский"
         },
         reasons: {
-          empty: "Пожалуйста, выберите язык"
+          missing: "Пожалуйста, выберите язык"
         }
       },
       name: {
@@ -89,7 +89,7 @@ export const russian: Translation = {
           ml: "мл"
         },
         reasons: {
-          empty: "Пожалуйста, выберите единицу"
+          missing: "Пожалуйста, выберите единицу"
         }
       }
     },

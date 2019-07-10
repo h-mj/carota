@@ -206,6 +206,7 @@ export class Input<
 
     return (
       <Select
+        errorMessage={this.errorMessage}
         invalid={reason !== undefined}
         label={this.translation[name].label}
         name={name}
@@ -226,6 +227,7 @@ export class Input<
     return (
       <TextField
         autoFocus={autoFocus}
+        errorMessage={this.errorMessage}
         invalid={reason !== undefined}
         label={this.translation[name].label}
         name={name}
@@ -234,6 +236,18 @@ export class Input<
         value={value || ""}
       />
     );
+  }
+
+  private get errorMessage() {
+    const { name, reason } = this.props as InputProps<
+      InputNames<"Select" | "TextField">
+    >;
+
+    if (reason === undefined) {
+      return undefined;
+    }
+
+    return this.translation[name].reasons[reason];
   }
 
   /**

@@ -11,6 +11,7 @@ import { TRANSITION } from "../../styling/animations";
 import { RESET } from "../../styling/stylesheets";
 import { BORDER_RADIUS, UNIT_HEIGHT } from "../../styling/sizes";
 import { getState, State, StateProps, styled } from "../../styling/theme";
+import { resolveAfterTimeout } from "../../utility/promises";
 
 /**
  * Union of all nutrient names.
@@ -18,16 +19,19 @@ import { getState, State, StateProps, styled } from "../../styling/theme";
 type NutrientNames = keyof NutritionDeclaration;
 
 /**
+ * Type that maps nutrient name to type `T`.
+ */
+type NutrientMap<T> = Record<NutrientNames, T>;
+
+/**
  * Nutrient values type.
  */
-type NutrientValues = Readonly<Partial<Record<NutrientNames, string>>>;
+type NutrientValues = Readonly<Partial<NutrientMap<string>>>;
 
 /**
  * Nutrient error reasons type.
  */
-type NutrientErrorReasons = Readonly<
-  Partial<Record<NutrientNames, ErrorReasons>>
->;
+type NutrientErrorReasons = Readonly<Partial<NutrientMap<ErrorReasons>>>;
 
 /**
  * Names of nutrients in order that appear in the declaration. If nutrient name
@@ -141,6 +145,26 @@ export class DeclareNutrition extends Component<
   @observable private focusedNutrient?: string;
 
   /**
+   * Nutrient input references.
+   */
+  private references: NutrientMap<React.RefObject<HTMLInputElement>>;
+
+  /**
+   * Creates a new instance of `DeclareNutrition` and creates reference objects
+   * for each nutrient amount value input.
+   */
+  public constructor(props: DeclareNutritionProps) {
+    super(props);
+
+    this.references = Object.assign(
+      {},
+      ...NUTRIENT_NAMES.map(name => ({
+        [name]: React.createRef<HTMLInputElement>()
+      }))
+    );
+  }
+
+  /**
    * Renders for each input name its row component.
    */
   public render() {
@@ -181,6 +205,8 @@ export class DeclareNutrition extends Component<
             onBlur={this.handleFocusChange}
             onChange={this.handleChange}
             onFocus={this.handleFocusChange}
+            onWheelCapture={this.handleWheelCapture}
+            ref={this.references[name]}
             type="number"
             value={value[name] || ""}
             disabled={disabled}
@@ -230,6 +256,22 @@ export class DeclareNutrition extends Component<
   > = event => {
     this.focusedNutrient =
       event.type === "focus" ? event.target.name : undefined;
+  };
+
+  /**
+   * Prevents wheel scroll altering input value.
+   */
+  private handleWheelCapture: React.WheelEventHandler<
+    HTMLInputElement
+  > = async event => {
+    const reference = this.references[
+      (event.target as any).name as NutrientNames
+    ];
+
+    // Make input readonly for a split second.
+    reference.current!.readOnly = true;
+    await resolveAfterTimeout(0);
+    reference.current!.readOnly = false;
   };
 
   /**

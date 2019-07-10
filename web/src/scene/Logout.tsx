@@ -1,7 +1,7 @@
 import { inject } from "mobx-react";
 import { Scene } from "./Scene";
 import { Stage } from "./Stage";
-import { setTimeout } from "../utility/promises";
+import { resolveAfterTimeout } from "../utility/promises";
 
 /**
  * Scene that, when constructed, logs user out after some timeout.
@@ -37,7 +37,7 @@ export class Logout extends Scene<"Logout"> {
 
     view!.wait(Logout.WAIT_REASON);
 
-    await setTimeout(1);
+    await resolveAfterTimeout(1);
 
     auth!.logout();
     view!.redirect(Stage.HOME);

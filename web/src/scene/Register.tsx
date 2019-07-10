@@ -7,7 +7,7 @@ import { Stage } from "./Stage";
 import { Alert } from "../component/Alert";
 import { Compact } from "../component/container/Compact";
 import { Form, FormChangeHandler, FormSubmitHandler } from "../component/Form";
-import { setTimeout } from "../utility/promises";
+import { resolveAfterTimeout } from "../utility/promises";
 
 /**
  * Scene that renders a form used for registration.
@@ -85,7 +85,7 @@ export class Register extends Scene<"Register"> {
         ...values,
         invitationId
       } as AuthRegisterBody), // Let backend handle the validation for now.
-      setTimeout(1)
+      resolveAfterTimeout(1)
     ]);
 
     this.props.views!.done(Register.WAIT_REASON);

@@ -7,7 +7,7 @@ import { Compact } from "../component/container/Compact";
 import { Fluid } from "../component/container/Fluid";
 import { Form, FormSubmitHandler, FormValues } from "../component/Form";
 import { Food } from "../model/Food";
-import { setTimeout } from "../utility/promises";
+import { resolveAfterTimeout } from "../utility/promises";
 
 /**
  * Food editing scene props.
@@ -102,7 +102,7 @@ export class FoodEdit extends Scene<"FoodEdit", FoodEditProps> {
 
     const [error] = await Promise.all([
       foods!.save((body as unknown) as FoodSaveBody), // Let backend handle the validation for now.
-      setTimeout(1)
+      resolveAfterTimeout(1)
     ]);
 
     views!.done(FoodEdit.WAIT_REASON);

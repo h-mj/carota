@@ -7,7 +7,7 @@ import { Form, FormSubmitHandler } from "../component/Form";
 import { Compact } from "../component/container/Compact";
 import { Logo } from "../component/icon/Logo";
 import { Notification } from "../component/NotificationContainer";
-import { setTimeout } from "../utility/promises";
+import { resolveAfterTimeout } from "../utility/promises";
 import { UNIT_HEIGHT } from "../styling/sizes";
 import { styled } from "../styling/theme";
 
@@ -47,7 +47,7 @@ export class Login extends Scene<"Login"> {
 
     const [error] = await Promise.all([
       this.props.auth!.login(values as AuthLoginBody), // Let backend handle the validation for now.
-      setTimeout(1)
+      resolveAfterTimeout(1)
     ]);
 
     this.props.views!.done(Login.WAIT_REASON);

@@ -7,6 +7,7 @@ import { Label } from "./Label";
 import { UNIT_HEIGHT } from "../../styling/sizes";
 import { RESET } from "../../styling/stylesheets";
 import { css, getState, styled } from "../../styling/theme";
+import { resolveAfterTimeout } from "../../utility/promises";
 
 /**
  * Union of all text field types.
@@ -80,6 +81,21 @@ export class TextField extends React.Component<TextFieldProps> {
   @observable private focused = false;
 
   /**
+   * Input element reference for preventing mouse wheel numeric value increment
+   * and decrementing.
+   */
+  private reference: React.RefObject<HTMLInputElement>;
+
+  /**
+   * Creates actual input element reference.
+   */
+  public constructor(props: TextFieldProps) {
+    super(props);
+
+    this.reference = React.createRef<HTMLInputElement>();
+  }
+
+  /**
    * Renders field component with text input inside it.
    */
   public render() {
@@ -109,9 +125,11 @@ export class TextField extends React.Component<TextFieldProps> {
           autoFocus={autoFocus}
           disabled={disabled}
           name={name}
-          onChange={this.handleChange}
           onBlur={this.handleFocusChange}
+          onChange={this.handleChange}
           onFocus={this.handleFocusChange}
+          onWheelCapture={this.handleWheelCapture}
+          ref={this.reference}
           type={type}
           value={value}
         />
@@ -136,6 +154,18 @@ export class TextField extends React.Component<TextFieldProps> {
     HTMLInputElement
   > = event => {
     this.focused = event.type === "focus";
+  };
+
+  /**
+   * Prevents wheel scroll altering input value.
+   */
+  private handleWheelCapture: React.WheelEventHandler<
+    HTMLInputElement
+  > = async () => {
+    // Make input readonly for a split second.
+    this.reference.current!.readOnly = true;
+    await resolveAfterTimeout(0);
+    this.reference.current!.readOnly = false;
   };
 
   /**

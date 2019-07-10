@@ -83,13 +83,13 @@ export const LIGHT: Readonly<Theme> = {
     },
     active: {
       backgroundColor: "rgb(255, 255, 255)",
-      borderColor: "rgb(0, 180, 90)",
-      color: "rgb(0, 180, 90)"
+      borderColor: "rgb(0, 200, 100)",
+      color: "rgb(0, 200, 100)"
     },
     invalid: {
       backgroundColor: "rgb(255, 255, 255)",
-      borderColor: "rgb(255, 90, 0)",
-      color: "rgb(255, 90, 0)"
+      borderColor: "rgb(255, 150, 0)",
+      color: "rgb(255, 150, 0)"
     }
   }
 };

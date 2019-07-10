@@ -195,6 +195,7 @@ const TextFieldLabel = styled(Label)<TextFieldLabel>`
       height: 100%;
       background-color: transparent;
       font-size: inherit;
+      font-weight: inherit;
       letter-spacing: inherit;
     `}
 `;

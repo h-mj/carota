@@ -21,7 +21,8 @@ export const Label = styled.div<StateProps>`
   background-color: ${({ theme }) => theme.backgroundColor};
 
   color: ${props => props.theme.states[props.state].color};
-  font-size: 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 500;
   letter-spacing: 0;
   white-space: nowrap;
 

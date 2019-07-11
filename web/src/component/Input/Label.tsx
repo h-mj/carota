@@ -8,15 +8,14 @@ import { StateProps, styled } from "../../styling/theme";
 export const Label = styled.div<StateProps>`
   position: absolute;
   top: -${UNIT_HEIGHT / 8}rem;
-  left: 50%;
-  transform: translateX(-50%);
+  left: ${UNIT_HEIGHT / 4 - UNIT_HEIGHT / 16}rem;
 
   display: flex;
   align-items: center;
 
   height: ${UNIT_HEIGHT / 4}rem;
 
-  padding: 0 ${UNIT_HEIGHT / 12}rem;
+  padding: 0 ${UNIT_HEIGHT / 16}rem;
 
   background-color: ${({ theme }) => theme.backgroundColor};
 

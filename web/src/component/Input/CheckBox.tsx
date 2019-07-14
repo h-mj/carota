@@ -1,5 +1,3 @@
-import { action, observable } from "mobx";
-import { observer } from "mobx-react";
 import * as React from "react";
 import { InputChangeHandler } from "./Input";
 import { TRANSITION } from "../../styling/animations";
@@ -51,36 +49,27 @@ interface CheckBoxProps {
 /**
  * Two state selection usually used to define if something is true or false.
  */
-@observer
 export class CheckBox extends React.Component<CheckBoxProps> {
-  /**
-   * Whether or not check box is focused.
-   */
-  @observable private focused = false;
-
   /**
    * Renders real checkbox and fake one on top of it, alongside label text, if
    * defined.
    */
   public render() {
     const { disabled, invalid, label, value } = this.props;
+    const state = getState(disabled, value, invalid);
 
     return (
       <Label>
         <Input
           checked={value}
           disabled={disabled}
-          onBlur={this.handleFocusChange}
           onChange={this.handleChange}
-          onFocus={this.handleFocusChange}
           type="checkbox"
         />
-        <Box state={getState(disabled, this.focused, invalid)}>
+        <Box state={state}>
           <Check selected={value} />
         </Box>
-        {label !== undefined && (
-          <Text state={getState(disabled, this.focused, invalid)}>{label}</Text>
-        )}
+        {label !== undefined && <Text state={state}>{label}</Text>}
       </Label>
     );
   }
@@ -92,16 +81,6 @@ export class CheckBox extends React.Component<CheckBoxProps> {
     if (this.props.onChange !== undefined) {
       this.props.onChange(this.props.name, !this.props.value);
     }
-  };
-
-  /**
-   * Handles blur and focus events and sets `focused` value based on event type.
-   */
-  @action
-  private handleFocusChange: React.FocusEventHandler<
-    HTMLInputElement
-  > = event => {
-    this.focused = event.type === "focus";
   };
 }
 

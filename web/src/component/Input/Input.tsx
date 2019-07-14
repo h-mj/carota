@@ -64,8 +64,10 @@ export const getDefaultValue = <TInputName extends InputNames>(
     return DeclareNutrition.getDefaultValue();
   } else if (component === "Select") {
     return Select.getDefaultValue();
-  } else {
+  } else if (component === "TextField") {
     return TextField.getDefaultValue();
+  } else {
+    throw new Error(`Unknown component ${component}.`);
   }
 };
 
@@ -166,14 +168,16 @@ export class Input<
    * Renders component that corresponds to `name` prop.
    */
   public render() {
-    const { name } = this.props;
+    const { component } = INPUTS[this.props.name];
 
-    if (INPUTS[name].component === "DeclareNutrition") {
+    if (component === "DeclareNutrition") {
       return this.renderDeclareNutrition();
-    } else if (INPUTS[name].component === "Select") {
+    } else if (component === "Select") {
       return this.renderSelect();
-    } else {
+    } else if (component === "TextField") {
       return this.renderTextField();
+    } else {
+      throw new Error(`Unknown component ${component}.`);
     }
   }
 

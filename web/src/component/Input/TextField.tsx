@@ -16,11 +16,6 @@ import { resolveAfterTimeout } from "../../utility/promises";
 export type TextFieldType = "email" | "number" | "password" | "tel" | "text";
 
 /**
- * Union of all message types.
- */
-export type TextFieldMessageType = "default" | "error";
-
-/**
  * Text field component props.
  */
 export interface TextFieldProps {
@@ -53,7 +48,7 @@ export interface TextFieldProps {
    * Name of the text field that will be included in parameters of `onChange`
    * callback function.
    */
-  name?: string;
+  name: string;
 
   /**
    * Function that will be called when text field value changes.
@@ -150,7 +145,7 @@ export class TextField extends React.Component<TextFieldProps> {
    */
   private handleChange: React.ChangeEventHandler<HTMLInputElement> = event => {
     if (this.props.onChange !== undefined) {
-      this.props.onChange(this.props.name || "", event.target.value);
+      this.props.onChange(this.props.name, event.target.value);
     }
   };
 

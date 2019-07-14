@@ -52,7 +52,7 @@ export interface SelectProps<TValues extends string = string> {
    * Name of the select component that will be included in parameters of
    * `onChange` callback function.
    */
-  name?: string;
+  name: string;
 
   /**
    * Function that will be called when selected option changes.
@@ -131,7 +131,7 @@ export class Select<TValues extends string = string> extends React.Component<
    */
   private handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
     if (this.props.onChange !== undefined) {
-      this.props.onChange(this.props.name || "", (event.target as any).value);
+      this.props.onChange(this.props.name, (event.target as any).value);
     }
   };
 

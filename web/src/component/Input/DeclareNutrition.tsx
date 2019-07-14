@@ -67,10 +67,8 @@ const REQUIRED_NUTRIENT_NAMES: Readonly<Set<NutrientNames>> = new Set([
  * Returns a map that maps nutrient names to whether or not they are disabled
  * based on nutrient amount values.
  */
-const areDisabled = (
-  value?: NutrientValues
-): Record<NutrientNames, boolean> => {
-  const map: Record<string, boolean> = {};
+const getDisabled = (value?: NutrientValues): NutrientMap<boolean> => {
+  const map: Partial<NutrientMap<boolean>> = {};
 
   NUTRIENT_NAMES.forEach(name => {
     map[name] =
@@ -78,7 +76,7 @@ const areDisabled = (
       (value === undefined || value[name] === undefined);
   });
 
-  return map;
+  return map as NutrientMap<boolean>;
 };
 
 /**
@@ -99,7 +97,7 @@ export interface DeclareNutritionProps {
    * Text field name that will be included as one of the `onChange` callback
    * parameters.
    */
-  name?: string;
+  name: string;
 
   /**
    * Function that will be called when text field value changes.
@@ -137,12 +135,12 @@ export class DeclareNutrition extends Component<
   /**
    * For each nutrient stores a boolean value whether or not it is disabled.
    */
-  @observable private disabled = areDisabled(this.props.value);
+  @observable private disabled = getDisabled(this.props.value);
 
   /**
    * Currently focused nutrient name.
    */
-  @observable private focusedNutrient?: string;
+  @observable private focusedNutrient?: NutrientNames;
 
   /**
    * Nutrient input references.
@@ -227,7 +225,7 @@ export class DeclareNutrition extends Component<
       const { name, value } = this.props;
       const { name: inputName, value: inputValue } = event.target;
 
-      this.props.onChange(name || "", { ...value, [inputName]: inputValue });
+      this.props.onChange(name, { ...value, [inputName]: inputValue });
     }
   };
 
@@ -240,7 +238,7 @@ export class DeclareNutrition extends Component<
 
     // Reset the value of the input.
     if (this.props.onChange) {
-      this.props.onChange(this.props.name || "", {
+      this.props.onChange(this.props.name, {
         ...this.props.value,
         [name]: value ? "" : undefined
       });
@@ -255,7 +253,7 @@ export class DeclareNutrition extends Component<
     HTMLInputElement
   > = event => {
     this.focusedNutrient =
-      event.type === "focus" ? event.target.name : undefined;
+      event.type === "focus" ? (event.target.name as NutrientNames) : undefined;
   };
 
   /**

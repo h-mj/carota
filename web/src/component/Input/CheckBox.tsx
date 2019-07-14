@@ -30,7 +30,7 @@ interface CheckBoxProps {
    * Name of the check box that will be included in parameters of `onChange`
    * callback function.
    */
-  name?: string;
+  name: string;
 
   /**
    * Function that will be called when check box' state changes.
@@ -90,7 +90,7 @@ export class CheckBox extends React.Component<CheckBoxProps> {
    */
   private handleChange: React.ChangeEventHandler<HTMLInputElement> = () => {
     if (this.props.onChange !== undefined) {
-      this.props.onChange(this.props.name || "", !this.props.value);
+      this.props.onChange(this.props.name, !this.props.value);
     }
   };
 

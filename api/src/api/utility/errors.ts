@@ -169,7 +169,7 @@ export const createValidationError = (error: ValidationError) => {
     const template = TYPE_TO_CONTEXT_TEMPLATE[type];
 
     let message = TYPE_TO_MESSAGE[type].replace("{field}", field);
-    let context: ErrorContext | undefined =
+    const context: ErrorContext | undefined =
       template !== undefined ? {} : undefined;
 
     if (

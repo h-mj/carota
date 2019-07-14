@@ -36,7 +36,8 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
       <Compact>
         <Head title={this.translation.title} />
         <LogoContainer>
-          <Logo width={`${UNIT_HEIGHT}rem`} height={`${UNIT_HEIGHT}rem`} />
+          <Logo />
+          {this.props.views!.translation.components.Head.title}
         </LogoContainer>
         <Form autoFocus name="login" onSubmit={this.handleSubmit} />
       </Compact>
@@ -80,5 +81,12 @@ const LogoContainer = styled.div`
 
   width: ${2 * UNIT_HEIGHT}rem;
   height: ${2 * UNIT_HEIGHT}rem;
-  margin: ${UNIT_HEIGHT}rem auto;
+  margin: ${UNIT_HEIGHT / 2}rem auto;
+
+  & > * {
+    flex-shrink: 0;
+    margin-right: ${UNIT_HEIGHT / 16}rem;
+  }
+
+  color: ${({ theme }) => theme.colorPrimary};
 `;

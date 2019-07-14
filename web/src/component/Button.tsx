@@ -1,8 +1,6 @@
-import { action, observable } from "mobx";
-import { observer } from "mobx-react";
 import * as React from "react";
-import { Field } from "./Input/Field";
 import { RESET } from "../styling/stylesheets";
+import { BORDER_RADIUS, UNIT_HEIGHT } from "../styling/sizes";
 import { getState, styled, StateProps } from "../styling/theme";
 
 /**
@@ -23,43 +21,22 @@ interface ButtonProps {
 /**
  * Button component.
  */
-@observer
 export class Button extends React.Component<ButtonProps> {
-  /**
-   * Whether or not button is focused.
-   */
-  @observable private focused = false;
-
   /**
    * Renders button component inside a field component.
    */
   public render() {
     const { children, disabled, invalid } = this.props;
-    const state = getState(disabled, this.focused, invalid);
 
     return (
-      <Field state={state}>
-        <ButtonElement
-          disabled={disabled}
-          onBlur={this.handleFocusChange}
-          onFocus={this.handleFocusChange}
-          state={state}
-        >
-          {children}
-        </ButtonElement>
-      </Field>
+      <ButtonElement
+        disabled={disabled}
+        state={getState(disabled, true, invalid)}
+      >
+        {children}
+      </ButtonElement>
     );
   }
-
-  /**
-   * Handles blur and focus events and sets `focused` value based on event type.
-   */
-  @action
-  private handleFocusChange: React.FocusEventHandler<
-    HTMLButtonElement
-  > = event => {
-    this.focused = event.type === "focus";
-  };
 }
 
 /**
@@ -69,9 +46,12 @@ const ButtonElement = styled.button<StateProps>`
   ${RESET};
 
   width: 100%;
-  height: 100%;
+  height: ${UNIT_HEIGHT}rem;
 
-  color: ${props => props.theme.states[props.state].color};
+  border-radius: ${BORDER_RADIUS}rem;
+  background-color: ${props => props.theme.states[props.state].borderColor};
+
+  color: ${props => props.theme.states[props.state].backgroundColor};
 
   cursor: pointer;
 `;

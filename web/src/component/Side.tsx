@@ -7,13 +7,13 @@ import { UNIT_HEIGHT } from "../styling/sizes";
 import { styled } from "../styling/theme";
 
 /**
- * Component responsible for rendering side stage.
+ * Component responsible for rendering side scene.
  */
 @inject("views")
 @observer
 export class Side extends React.Component<InjectedProps> {
   /**
-   * Renders a navigation bar and main stage.
+   * Renders side scene container and the scene itself.
    */
   public render() {
     const { side } = this.props.views!;
@@ -30,7 +30,7 @@ export class Side extends React.Component<InjectedProps> {
   }
 
   /**
-   * Hides side stage when user clicks of `Overlay` itself.
+   * Hides side scene when user clicks of `Overlay` itself.
    */
   @action
   private handleOverlayClick: React.MouseEventHandler<
@@ -43,7 +43,7 @@ export class Side extends React.Component<InjectedProps> {
 }
 
 /**
- * Component that contains the side stage.
+ * Component that contains the side scene.
  */
 const Container = styled.div`
   max-width: ${8 * UNIT_HEIGHT}rem;

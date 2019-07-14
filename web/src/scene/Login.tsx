@@ -33,7 +33,7 @@ export class Login extends Scene<"Login"> {
 
   /**
    * Sends login credentials to server and either redirects user to correct
-   * stage or displays occurred errors.
+   * scene or displays occurred errors.
    */
   @action
   private handleSubmit: FormSubmitHandler<"login"> = async values => {
@@ -49,7 +49,7 @@ export class Login extends Scene<"Login"> {
     views!.done(symbol);
 
     if (error === undefined) {
-      views!.update(); // Update stage to match current URL.
+      views!.update(); // Update scene to match current URL.
     } else if (error.code === 401) {
       views!.notify(new Notification("loginInvalidCredentials", {}));
     }

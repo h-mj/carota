@@ -1,6 +1,6 @@
 import { inject } from "mobx-react";
 import * as React from "react";
-import { Stages } from "../scene/Stage";
+import { SceneContexts } from "../scene/SceneContext";
 import { InjectedProps } from "../store/Store";
 
 /**
@@ -13,9 +13,9 @@ interface AnchorProps {
   className?: string;
 
   /**
-   * Name of the scene to which this anchor will redirect to.
+   * Context of a scene to which this anchor will redirect to.
    */
-  stage: Stages;
+  context: SceneContexts;
 }
 
 /**
@@ -30,7 +30,7 @@ export class Anchor extends React.Component<AnchorProps & InjectedProps> {
     return (
       <a
         className={this.props.className}
-        href={this.props.stage.getUrl() || window.location.pathname}
+        href={this.props.context.getUrl() || window.location.pathname}
         onClick={this.handleClick}
       >
         {this.props.children}
@@ -43,6 +43,6 @@ export class Anchor extends React.Component<AnchorProps & InjectedProps> {
    */
   private handleClick: React.MouseEventHandler<HTMLAnchorElement> = event => {
     event.preventDefault();
-    this.props.views!.redirect(this.props.stage);
+    this.props.views!.redirect(this.props.context);
   };
 }

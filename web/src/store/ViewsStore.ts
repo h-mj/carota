@@ -1,6 +1,6 @@
 import { Languages } from "api";
 import { computed, observable, action } from "mobx";
-import { Stage, Stages } from "../scene/Stage";
+import { SceneContext, SceneContexts } from "../scene/SceneContext";
 import { SceneNames } from "../scene/Scene";
 import { Notifications } from "../component/NotificationContainer";
 import { RootStore } from "./RootStore";
@@ -28,10 +28,11 @@ const NO_AUTHENTICATION_SCENE_NAMES: Readonly<Array<SceneNames>> = [
 
 /**
  * Store that stores information about current state of the view, including
- * language, main stage, active notifications, and waiting reasons.
+ * language, main and side scene contexts, active notifications, and waiting
+ * reasons.
  *
  * It is also responsible for retrieving correct scene name and parameters based
- * on current URL and updating current URL if main stage was changed.
+ * on current URL and updating current URL on redirection.
  */
 export class ViewsStore {
   /**
@@ -40,14 +41,14 @@ export class ViewsStore {
   @observable private _language: Languages = "English";
 
   /**
-   * Main stage.
+   * Main scene context.
    */
-  @observable private _main!: Stages; // Set by calling `update` in constructor.
+  @observable private _main!: SceneContexts; // Set by calling `update` in constructor.
 
   /**
-   * Side stage.
+   * Side scene context.
    */
-  @observable private _side?: Stages;
+  @observable private _side?: SceneContexts;
 
   /**
    * Array of notifications.
@@ -66,8 +67,8 @@ export class ViewsStore {
 
   /**
    * Creates a new instance of `ScenesStore`, updates main scene based on
-   * current URL and adds a history stage pop listener that also updates main
-   * stage based on changed pathname.
+   * current URL and adds a history state pop listener that also updates main
+   * scene context based on changed pathname.
    */
   public constructor(rootStore: RootStore) {
     this._rootStore = rootStore;
@@ -84,7 +85,7 @@ export class ViewsStore {
   }
 
   /**
-   * Returns main stage object.
+   * Returns main scene context object.
    */
   @computed
   public get main() {
@@ -92,7 +93,7 @@ export class ViewsStore {
   }
 
   /**
-   * Returns side stage object.
+   * Returns side scene context object.
    */
   public get side() {
     return this._side;
@@ -123,7 +124,8 @@ export class ViewsStore {
   }
 
   /**
-   * Returns navigation item stages.
+   * Returns a list of navigable scene contexts that will be included in
+   * navigation bar.
    */
   @computed
   public get navigation() {
@@ -132,13 +134,13 @@ export class ViewsStore {
     }
 
     return [
-      new Stage("Home", {}, {}),
-      new Stage("Diet", {}, {}),
-      new Stage("Measurements", {}, {}),
-      new Stage("History", {}, {}),
-      new Stage("Administration", {}, {}),
-      new Stage("Settings", {}, {}),
-      new Stage("Logout", {}, {})
+      new SceneContext("Home", {}, {}),
+      new SceneContext("Diet", {}, {}),
+      new SceneContext("Measurements", {}, {}),
+      new SceneContext("History", {}, {}),
+      new SceneContext("Administration", {}, {}),
+      new SceneContext("Settings", {}, {}),
+      new SceneContext("Logout", {}, {})
     ];
   }
 
@@ -152,28 +154,29 @@ export class ViewsStore {
   }
 
   /**
-   * Sets main stage's scene name and parameters.
+   * Sets main scene context.
    *
-   * This function also resets side stage.
+   * This function also resets side scene context.
    *
-   * @param stage Stage that will be new main stage.
+   * @param context Scene context that will be new main scene context.
    */
   @action
-  public redirect(stage: Stages) {
+  public redirect(context: SceneContexts) {
     const { authenticated } = this._rootStore.auth;
 
     // If user authentication status is the same as scene authentication requirement.
     if (
-      !authenticated === NO_AUTHENTICATION_SCENE_NAMES.includes(stage.sceneName)
+      !authenticated ===
+      NO_AUTHENTICATION_SCENE_NAMES.includes(context.sceneName)
     ) {
-      this._main = stage;
+      this._main = context;
     } else {
-      this._main = authenticated ? Stage.UNKNOWN : Stage.GATEWAY;
+      this._main = authenticated ? SceneContext.UNKNOWN : SceneContext.GATEWAY;
     }
 
     this.refocus();
 
-    const url = stage.getUrl() || window.location.pathname;
+    const url = context.getUrl() || window.location.pathname;
     const title = `${this.translation.scenes[this._main.sceneName].title} - ${
       this.translation.title
     }`;
@@ -186,32 +189,38 @@ export class ViewsStore {
   }
 
   /**
-   * Redirects user to correct stage based on current pathname.
+   * Updates main scene context based on current URL and authentication status.
    */
   @action
   public update() {
     const { authenticated } = this._rootStore.auth;
-    const stage = Stage.from(window.location.pathname);
+    const context = SceneContext.from(window.location.pathname);
 
     // If user is unauthenticated and tries to access the logout scene, redirect to home.
-    if (!authenticated && stage !== undefined && stage.sceneName === "Logout") {
-      return this.redirect(Stage.HOME);
+    if (
+      !authenticated &&
+      context !== undefined &&
+      context.sceneName === "Logout"
+    ) {
+      return this.redirect(SceneContext.HOME);
     }
 
-    this.redirect(Stage.from(window.location.pathname) || Stage.UNKNOWN);
+    this.redirect(
+      SceneContext.from(window.location.pathname) || SceneContext.UNKNOWN
+    );
   }
 
   /**
-   * Sets a stage that will be rendered on the side.
+   * Sets a side scene context.
    *
-   * @param stage Stage that will be rendered on the side.
+   * @param context Side scene context.
    */
-  public aside(stage: Stages) {
-    this._side = stage;
+  public aside(context: SceneContexts) {
+    this._side = context;
   }
 
   /**
-   * Hides all stages except main stage.
+   * Hides all scenes except main.
    */
   public refocus() {
     this._side = undefined;

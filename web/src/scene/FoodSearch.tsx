@@ -1,7 +1,7 @@
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Stage } from "./Stage";
+import { SceneContext } from "./SceneContext";
 import { Scene } from "./Scene";
 import { InputChangeHandler } from "../component/Input/Input";
 import { TextField } from "../component/Input/TextField";
@@ -53,7 +53,7 @@ export class FoodSearch extends Scene<"FoodSearch"> {
   @action
   private handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
     this.props.views!.aside(
-      new Stage("FoodEdit", undefined, {
+      new SceneContext("FoodEdit", undefined, {
         food: this.props.foods!.get((event.target as any).value)
       })
     );

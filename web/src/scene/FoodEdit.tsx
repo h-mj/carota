@@ -1,7 +1,7 @@
 import { FoodSaveBody } from "api";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Stage } from "./Stage";
+import { SceneContext } from "./SceneContext";
 import { DefaultSceneProps, Scene } from "./Scene";
 import { Compact } from "../component/container/Compact";
 import { Fluid } from "../component/container/Fluid";
@@ -102,7 +102,7 @@ export class FoodEdit extends Scene<"FoodEdit", FoodEditProps> {
 
     if (error === undefined) {
       if (position === "main") {
-        views!.redirect(new Stage("FoodSearch", {}, {}));
+        views!.redirect(new SceneContext("FoodSearch", {}, {}));
       } else {
         views!.refocus();
       }

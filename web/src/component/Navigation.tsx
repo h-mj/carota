@@ -14,7 +14,7 @@ import { styled } from "../styling/theme";
 @observer
 export class Navigation extends React.Component<InjectedProps> {
   /**
-   * Renders a navigation bar with anchors to stages provided by `ViewsStore`.
+   * Renders a navigation bar with anchors to contexts provided by `ViewsStore`.
    */
   public render() {
     const {
@@ -30,13 +30,13 @@ export class Navigation extends React.Component<InjectedProps> {
     return (
       <Container>
         <Bar>
-          {navigation.map((stage, index) => (
+          {navigation.map((context, index) => (
             <Item
               key={index}
-              stage={stage}
-              selected={currentSceneName === stage.sceneName}
+              context={context}
+              selected={currentSceneName === context.sceneName}
             >
-              {sceneTranslation[stage.sceneName].title}
+              {sceneTranslation[context.sceneName].title}
             </Item>
           ))}
         </Bar>

@@ -95,14 +95,14 @@ export const SCENES = {
 } as const;
 
 /**
- * Union of stage positions.
+ * Union of scene positions.
  */
-export type StagePosition = "main" | "side";
+export type ScenePosition = "main" | "side";
 
 /**
  * Object that holds the information needed to render a scene.
  */
-export class Stage<TSceneName extends SceneNames> {
+export class SceneContext<TSceneName extends SceneNames> {
   /**
    * Scene name.
    */
@@ -119,7 +119,7 @@ export class Stage<TSceneName extends SceneNames> {
   public props: SceneProps<TSceneName>;
 
   /**
-   * Creates a new instance of `Stage`.
+   * Creates a new instance of `SceneContext`.
    *
    * @param sceneName Scene name.
    * @param parameters Scene route parameters.
@@ -136,9 +136,9 @@ export class Stage<TSceneName extends SceneNames> {
   }
 
   /**
-   * Renders the stage.
+   * Renders the scene component.
    */
-  public render(position: StagePosition) {
+  public render(position: ScenePosition) {
     const SceneComponent: typeof Scene = SCENES[this.sceneName];
 
     return (
@@ -151,11 +151,12 @@ export class Stage<TSceneName extends SceneNames> {
   }
 
   /**
-   * Returns an URL of this stage, or `undefined`, if this stage doesn't have a matching route.
+   * Returns an URL corresponding to this scene context, or `undefined`, if this
+   * context doesn't have a matching route.
    */
   public getUrl(): string | undefined {
     forRoute: for (const route in ROUTES) {
-      // If route's scene name is not stage's scene name, skip.
+      // If route's scene name is not context's scene name, skip.
       if (ROUTES[route as keyof typeof ROUTES].sceneName !== this.sceneName) {
         continue;
       }
@@ -189,33 +190,50 @@ export class Stage<TSceneName extends SceneNames> {
   }
 
   /**
-   * Stage that is shown on index path and to which is redirected to after
+   * Context of scene on index path and to which is redirected to after
    * registration.
    */
-  public static HOME: Readonly<Stages> = new Stage("Home", {}, {});
+  public static HOME: Readonly<SceneContexts> = new SceneContext(
+    "Home",
+    {},
+    {}
+  );
 
   /**
-   * Stage that is shown if user is not authenticated but tries to access a stage
-   * that requires authentication.
+   * Context of a scene that is shown if user is not authenticated but tries to
+   * access a scene that requires authentication.
    */
-  public static GATEWAY: Readonly<Stages> = new Stage("Login", undefined, {});
+  public static GATEWAY: Readonly<SceneContexts> = new SceneContext(
+    "Login",
+    undefined,
+    {}
+  );
 
   /**
-   * Stage that is shown if no other stages match current URL.
+   * Context of a scene that is shown if no other scenes match current URL.
    */
-  public static UNKNOWN: Readonly<Stages> = new Stage("Unknown", undefined, {});
+  public static UNKNOWN: Readonly<SceneContexts> = new SceneContext(
+    "Unknown",
+    undefined,
+    {}
+  );
 
   /**
    * Scene which is used to exit the application.
    */
-  public static EXIT: Readonly<Stages> = new Stage("Logout", {}, {});
+  public static EXIT: Readonly<SceneContexts> = new SceneContext(
+    "Logout",
+    {},
+    {}
+  );
 
   /**
-   * Returns a stage from given URL. `undefined` if no stages match the URL.
+   * Returns a scene context from given URL. `undefined` if no scenes match the
+   * URL.
    *
    * @param url URL string.
    */
-  public static from(url: string): Stages | undefined {
+  public static from(url: string): SceneContexts | undefined {
     forRoute: for (const route in ROUTES) {
       const urlParts = url.split("/");
       const routeParts = route.split("/");
@@ -237,11 +255,11 @@ export class Stage<TSceneName extends SceneNames> {
         }
       }
 
-      return new Stage(
+      return new SceneContext(
         ROUTES[route as keyof typeof ROUTES].sceneName,
         parameters,
         {}
-      ) as Stages;
+      ) as SceneContexts;
     }
 
     return undefined;
@@ -249,8 +267,8 @@ export class Stage<TSceneName extends SceneNames> {
 }
 
 /**
- * Union of all possible stage types.
+ * Union of all possible scene context types.
  */
-export type Stages = {
-  [SceneName in SceneNames]: Stage<SceneName>
+export type SceneContexts = {
+  [SceneName in SceneNames]: SceneContext<SceneName>
 }[SceneNames];

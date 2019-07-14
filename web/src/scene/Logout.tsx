@@ -1,6 +1,6 @@
 import { inject } from "mobx-react";
 import { Scene } from "./Scene";
-import { Stage } from "./Stage";
+import { SceneContext } from "./SceneContext";
 import { resolveAfterTimeout } from "../utility/promises";
 
 /**
@@ -35,7 +35,7 @@ export class Logout extends Scene<"Logout"> {
     await resolveAfterTimeout(1);
 
     auth!.logout();
-    view!.redirect(Stage.HOME);
+    view!.redirect(SceneContext.HOME);
 
     view!.done(symbol);
   }

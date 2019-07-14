@@ -2,8 +2,8 @@ import { AuthRegisterBody, Languages } from "api";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
+import { SceneContext } from "./SceneContext";
 import { Scene } from "./Scene";
-import { Stage } from "./Stage";
 import { Alert } from "../component/Alert";
 import { Compact } from "../component/container/Compact";
 import { Form, FormChangeHandler, FormSubmitHandler } from "../component/Form";
@@ -66,7 +66,7 @@ export class Register extends Scene<"Register"> {
 
   /**
    * Sends registration form data to server and either redirects user to home
-   * stage or displays occurred errors.
+   * scene or displays occurred errors.
    */
   @action
   private handleSubmit: FormSubmitHandler<"register"> = async values => {
@@ -85,7 +85,7 @@ export class Register extends Scene<"Register"> {
     views!.done(symbol);
 
     if (error === undefined) {
-      views!.redirect(Stage.HOME);
+      views!.redirect(SceneContext.HOME);
     }
 
     return error;

@@ -177,15 +177,10 @@ export class ViewsStore {
     this.refocus();
 
     const url = context.getUrl() || window.location.pathname;
-    const title = `${this.translation.scenes[this._main.sceneName].title} - ${
-      this.translation.title
-    }`;
 
     if (url !== window.location.pathname) {
-      window.history.pushState(null, title, url);
+      window.history.pushState(null, "", url);
     }
-
-    document.title = title;
   }
 
   /**

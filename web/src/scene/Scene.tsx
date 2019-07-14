@@ -1,5 +1,6 @@
+import { computed } from "mobx";
 import { RouteParameters, SCENES, ScenePosition } from "./SceneContext";
-import { Component } from "../component/Component";
+import { ClassTranslation, Component } from "../component/Component";
 
 /**
  * Union of scene names, used to reference a specific scene using its name.
@@ -44,15 +45,20 @@ export interface DefaultSceneTranslation {
 }
 
 /**
- * Maps component class name to its translation type.
+ * Type that maps scene names to their component class types.
  */
-export type ScenesTranslation = {
+type SceneMap = {
   [SceneName in SceneNames]: typeof SCENES[SceneName] extends new (
     ...args: any
-  ) => Component<infer _, infer ITranslation>
-    ? ITranslation
+  ) => infer IComponent
+    ? IComponent
     : never
 };
+
+/**
+ * Maps component class name to its translation type.
+ */
+export type ScenesTranslation = ClassTranslation<SceneNames, SceneMap>;
 
 /**
  * Scene component base class that is extended by all scene components.
@@ -64,10 +70,17 @@ export abstract class Scene<
   TSceneName extends SceneNames,
   TProps extends {} = {},
   TTranslation extends {} = {}
-> extends Component<
-  TProps & DefaultSceneProps<TSceneName>,
-  TTranslation & DefaultSceneTranslation
-> {
+> extends Component<TProps & DefaultSceneProps<TSceneName>, TTranslation> {
+  /**
+   * Returns translation object of this scene.
+   */
+  @computed
+  public get translation(): TTranslation {
+    return (this.props.views!.translation.scenes[
+      this.constructor.name as SceneNames
+    ] as unknown) as TTranslation;
+  }
+
   /**
    * Included so that TypeScript's infer would work, since it uses object
    * structure to determine types.

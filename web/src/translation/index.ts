@@ -14,9 +14,4 @@ export interface Translation {
    * Scene component translations.
    */
   scenes: ScenesTranslation;
-
-  /**
-   * Application name.
-   */
-  title: string;
 }

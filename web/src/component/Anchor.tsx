@@ -1,7 +1,7 @@
 import { inject } from "mobx-react";
 import * as React from "react";
 import { SceneContexts } from "../scene/SceneContext";
-import { InjectedProps } from "../store/Store";
+import { Component } from "./Component";
 
 /**
  * Anchor component props.
@@ -22,7 +22,7 @@ interface AnchorProps {
  * Component that on click redirects user to given scene with some parameters.
  */
 @inject("views")
-export class Anchor extends React.Component<AnchorProps & InjectedProps> {
+export class Anchor extends Component<AnchorProps> {
   /**
    * Renders an anchor component.
    */

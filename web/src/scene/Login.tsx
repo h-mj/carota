@@ -3,8 +3,9 @@ import { action } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Scene } from "./Scene";
-import { Form, FormSubmitHandler } from "../component/Form";
 import { Compact } from "../component/container/Compact";
+import { Form, FormSubmitHandler } from "../component/Form";
+import { Head } from "../component/Head";
 import { Logo } from "../component/icon/Logo";
 import { Notification } from "../component/NotificationContainer";
 import { resolveAfterTimeout } from "../utility/promises";
@@ -12,17 +13,28 @@ import { UNIT_HEIGHT } from "../styling/sizes";
 import { styled } from "../styling/theme";
 
 /**
+ * Login scene translation.
+ */
+interface LoginTranslation {
+  /**
+   * Page title.
+   */
+  title: string;
+}
+
+/**
  * Scene that renders a form used for signing in.
  */
 @inject("auth", "views")
 @observer
-export class Login extends Scene<"Login"> {
+export class Login extends Scene<"Login", {}, LoginTranslation> {
   /**
    * Renders a sign in form.
    */
   public render() {
     return (
       <Compact>
+        <Head title={this.translation.title} />
         <LogoContainer>
           <Logo width={`${UNIT_HEIGHT}rem`} height={`${UNIT_HEIGHT}rem`} />
         </LogoContainer>

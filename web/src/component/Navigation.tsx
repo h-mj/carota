@@ -1,7 +1,8 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
+import { SceneNames } from "../scene/Scene";
+import { Component } from "./Component";
 import { Anchor } from "./Anchor";
-import { InjectedProps } from "../store/Store";
 import { DURATION } from "../styling/animations";
 import { UNIT_HEIGHT } from "../styling/sizes";
 import { styled } from "../styling/theme";
@@ -12,15 +13,14 @@ import { styled } from "../styling/theme";
  */
 @inject("views")
 @observer
-export class Navigation extends React.Component<InjectedProps> {
+export class Navigation extends Component<{}, Record<SceneNames, string>> {
   /**
    * Renders a navigation bar with anchors to contexts provided by `ViewsStore`.
    */
   public render() {
     const {
       main: { sceneName: currentSceneName },
-      navigation,
-      translation: { scenes: sceneTranslation }
+      navigation
     } = this.props.views!;
 
     if (navigation === undefined) {
@@ -36,7 +36,7 @@ export class Navigation extends React.Component<InjectedProps> {
               context={context}
               selected={currentSceneName === context.sceneName}
             >
-              {sceneTranslation[context.sceneName].title}
+              {this.translation[context.sceneName]}
             </Item>
           ))}
         </Bar>

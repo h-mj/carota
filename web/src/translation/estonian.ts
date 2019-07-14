@@ -14,6 +14,7 @@ export const estonian: Translation = {
         message: "404"
       }
     },
+    Anchor: {},
     DeclareNutrition: {
       nutrients: {
         carbohydrate: "Süsivesikud",
@@ -38,6 +39,9 @@ export const estonian: Translation = {
       login: { submit: "Logige sisse" },
       foodInformation: { submit: "Salvesta" },
       register: { submit: "Looge konto" }
+    },
+    Head: {
+      title: "Morkovka"
     },
     Input: {
       barcode: {
@@ -93,6 +97,21 @@ export const estonian: Translation = {
         }
       }
     },
+    Navigation: {
+      Administration: "Administratsioon",
+      Diet: "Dieet",
+      FoodEdit: "Toiduaine redaktsioon",
+      FoodSearch: "Toiduaine otsing",
+      History: "Ajalugu",
+      Home: "Avaleht",
+      Login: "Logige sisse",
+      Logout: "Logige välja",
+      Measurements: "Mõõdud",
+      Register: "Looge konto",
+      Settings: "Seaded",
+      Unknown: "Vabandame, soovitud lehekülge ei leitud"
+    },
+
     NotificationContainer: {
       loginInvalidCredentials: {
         message: "Vale e-posti aadress või parool."
@@ -100,18 +119,17 @@ export const estonian: Translation = {
     }
   },
   scenes: {
-    Administration: { title: "Administratsioon" },
-    Diet: { title: "Dieet" },
-    FoodEdit: { title: "Toiduaine redaktsioon" },
-    FoodSearch: { title: "Toiduaine otsing" },
-    History: { title: "Ajalugu" },
-    Home: { title: "Avaleht" },
+    Administration: {},
+    Diet: {},
+    FoodEdit: {},
+    FoodSearch: {},
+    History: {},
+    Home: {},
     Login: { title: "Logige sisse" },
-    Logout: { title: "Logige välja" },
-    Measurements: { title: "Mõõdud" },
-    Register: { title: "Looge konto" },
-    Settings: { title: "Seaded" },
-    Unknown: { title: "Vabandame, soovitud lehekülge ei leitud" }
-  },
-  title: "Morkovka"
+    Logout: {},
+    Measurements: {},
+    Register: {},
+    Settings: {},
+    Unknown: {}
+  }
 };

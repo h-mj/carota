@@ -1,20 +1,26 @@
 import { computed } from "mobx";
 import * as React from "react";
 import { Alert } from "./Alert";
+import { Anchor } from "./Anchor";
 import { DeclareNutrition } from "./Input/DeclareNutrition";
 import { Form } from "./Form";
+import { Head } from "./Head";
 import { Input } from "./Input/Input";
+import { Navigation } from "./Navigation";
 import { NotificationContainer } from "./NotificationContainer";
 import { InjectedProps } from "../store/Store";
 
 /**
- * Maps component class name to the class.
+ * Maps component class names to the corresponding class.
  */
 interface ComponentMap {
   Alert: Alert;
+  Anchor: Anchor;
   DeclareNutrition: DeclareNutrition;
   Form: Form;
+  Head: Head;
   Input: Input;
+  Navigation: Navigation;
   NotificationContainer: NotificationContainer;
 }
 
@@ -24,16 +30,25 @@ interface ComponentMap {
 type ComponentNames = keyof ComponentMap;
 
 /**
- * Maps component class name to its translation type.
+ * Maps a component class names `Names` to its translation type using `TMap`,
+ * which maps component names to their component class types.
  */
-export type ComponentsTranslation = {
-  [ComponentName in ComponentNames]: ComponentMap[ComponentName] extends Component<
-    infer _,
-    infer ITranslation
-  >
+export type ClassTranslation<
+  TNames extends string,
+  TMap extends Record<TNames, Component>
+> = {
+  [Name in TNames]: TMap[Name] extends Component<infer _, infer ITranslation>
     ? ITranslation
     : never
 };
+
+/**
+ * Maps a component class name to its translation type.
+ */
+export type ComponentsTranslation = ClassTranslation<
+  ComponentNames,
+  ComponentMap
+>;
 
 /**
  * Component base class used to easily define and retrieve translations.

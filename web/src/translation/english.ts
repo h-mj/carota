@@ -14,6 +14,7 @@ export const english: Translation = {
           "The web address may be misspelled or the page you're looking for is no longer available."
       }
     },
+    Anchor: {},
     DeclareNutrition: {
       nutrients: {
         carbohydrate: "Carbohydrate",
@@ -38,6 +39,9 @@ export const english: Translation = {
       login: { submit: "Sign in" },
       foodInformation: { submit: "Save" },
       register: { submit: "Sign up" }
+    },
+    Head: {
+      title: "Morkovka"
     },
     Input: {
       barcode: {
@@ -93,6 +97,20 @@ export const english: Translation = {
         }
       }
     },
+    Navigation: {
+      Administration: "Administration",
+      Diet: "Diet",
+      FoodEdit: "Edit food",
+      FoodSearch: "Search food",
+      History: "History",
+      Home: "Home",
+      Login: "Sign in",
+      Logout: "Sign out",
+      Measurements: "Measurements",
+      Register: "Sign up",
+      Settings: "Settings",
+      Unknown: "We are sorry, the page you requested has not been found"
+    },
     NotificationContainer: {
       loginInvalidCredentials: {
         message: "Incorrect email address or password."
@@ -100,20 +118,17 @@ export const english: Translation = {
     }
   },
   scenes: {
-    Administration: { title: "Administration" },
-    Diet: { title: "Diet" },
-    FoodEdit: { title: "Edit food" },
-    FoodSearch: { title: "Search food" },
-    History: { title: "History" },
-    Home: { title: "Home" },
+    Administration: {},
+    Diet: {},
+    FoodEdit: {},
+    FoodSearch: {},
+    History: {},
+    Home: {},
     Login: { title: "Sign in" },
-    Logout: { title: "Sign out" },
-    Measurements: { title: "Measurements" },
-    Register: { title: "Sign up" },
-    Settings: { title: "Settings" },
-    Unknown: {
-      title: "We are sorry, the page you requested has not been found"
-    }
-  },
-  title: "Morkovka"
+    Logout: {},
+    Measurements: {},
+    Register: {},
+    Settings: {},
+    Unknown: {}
+  }
 };

@@ -14,6 +14,7 @@ export const russian: Translation = {
           "Веб-адрес может быть неверный или страница, которую вы ищете, больше не доступна."
       }
     },
+    Anchor: {},
     DeclareNutrition: {
       nutrients: {
         carbohydrate: "Углеводы",
@@ -38,6 +39,9 @@ export const russian: Translation = {
       login: { submit: "Вход" },
       foodInformation: { submit: "Сохранить" },
       register: { submit: "Завести аккаунт" }
+    },
+    Head: {
+      title: "Морковка"
     },
     Input: {
       barcode: {
@@ -93,6 +97,20 @@ export const russian: Translation = {
         }
       }
     },
+    Navigation: {
+      Administration: "Администрация",
+      Diet: "Диета",
+      FoodEdit: "Редактировать продукт",
+      FoodSearch: "Поиск продуктов",
+      History: "История",
+      Home: "Главная",
+      Login: "Вход",
+      Logout: "Выход",
+      Measurements: "Замеры",
+      Register: "Завести аккаунт",
+      Settings: "Настройки",
+      Unknown: "К сожалению, запрошенная страница не была найдена"
+    },
     NotificationContainer: {
       loginInvalidCredentials: {
         message: "Неверный адрес электронной почты или пароль."
@@ -100,18 +118,17 @@ export const russian: Translation = {
     }
   },
   scenes: {
-    Administration: { title: "Администрация" },
-    Diet: { title: "Диета" },
-    FoodEdit: { title: "Редактировать продукт" },
-    FoodSearch: { title: "Поиск продуктов" },
-    History: { title: "История" },
-    Home: { title: "Главная" },
+    Administration: {},
+    Diet: {},
+    FoodEdit: {},
+    FoodSearch: {},
+    History: {},
+    Home: {},
     Login: { title: "Вход" },
-    Logout: { title: "Выход" },
-    Measurements: { title: "Замеры" },
-    Register: { title: "Завести аккаунт" },
-    Settings: { title: "Настройки" },
-    Unknown: { title: "К сожалению, запрошенная страница не была найдена" }
-  },
-  title: "Морковка"
+    Logout: {},
+    Measurements: {},
+    Register: {},
+    Settings: {},
+    Unknown: {}
+  }
 };

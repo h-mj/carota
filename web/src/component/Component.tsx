@@ -30,17 +30,32 @@ interface ComponentMap {
 type ComponentNames = keyof ComponentMap;
 
 /**
+ * Keys of object `T` which values are `undefined`.
+ */
+type UndefinedValueKeys<T> = {
+  [K in keyof T]: T[K] extends undefined ? K : never
+}[keyof T];
+
+/**
+ * Type that makes keys which values are `undefined` optional.
+ */
+type MakeUndefinedOptional<T> = Omit<T, UndefinedValueKeys<T>> &
+  { [K in UndefinedValueKeys<T>]?: undefined };
+
+/**
  * Maps a component class names `Names` to its translation type using `TMap`,
  * which maps component names to their component class types.
  */
 export type ClassTranslation<
   TNames extends string,
-  TMap extends Record<TNames, Component>
-> = {
-  [Name in TNames]: TMap[Name] extends Component<infer _, infer ITranslation>
-    ? ITranslation
-    : never
-};
+  TMap extends Record<TNames, Component<{}, {} | undefined>>
+> = MakeUndefinedOptional<
+  {
+    [Name in TNames]: TMap[Name] extends Component<any, infer ITranslation>
+      ? ITranslation
+      : never
+  }
+>;
 
 /**
  * Maps a component class name to its translation type.
@@ -55,7 +70,7 @@ export type ComponentsTranslation = ClassTranslation<
  */
 export abstract class Component<
   TProps extends {} = {},
-  TTranslation extends {} = {}
+  TTranslation extends {} | undefined = undefined
 > extends React.Component<InjectedProps & TProps> {
   /**
    * Returns translation object of this component.

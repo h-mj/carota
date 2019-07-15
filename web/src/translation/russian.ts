@@ -14,7 +14,6 @@ export const russian: Translation = {
           "Веб-адрес может быть неверный или страница, которую вы ищете, больше не доступна."
       }
     },
-    Anchor: {},
     DeclareNutrition: {
       nutrients: {
         carbohydrate: "Углеводы",
@@ -118,17 +117,6 @@ export const russian: Translation = {
     }
   },
   scenes: {
-    Administration: {},
-    Diet: {},
-    FoodEdit: {},
-    FoodSearch: {},
-    History: {},
-    Home: {},
-    Login: { title: "Вход" },
-    Logout: {},
-    Measurements: {},
-    Register: {},
-    Settings: {},
-    Unknown: {}
+    Login: { title: "Вход" }
   }
 };

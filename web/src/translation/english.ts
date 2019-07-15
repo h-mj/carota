@@ -14,7 +14,6 @@ export const english: Translation = {
           "The web address may be misspelled or the page you're looking for is no longer available."
       }
     },
-    Anchor: {},
     DeclareNutrition: {
       nutrients: {
         carbohydrate: "Carbohydrate",
@@ -118,17 +117,6 @@ export const english: Translation = {
     }
   },
   scenes: {
-    Administration: {},
-    Diet: {},
-    FoodEdit: {},
-    FoodSearch: {},
-    History: {},
-    Home: {},
-    Login: { title: "Sign in" },
-    Logout: {},
-    Measurements: {},
-    Register: {},
-    Settings: {},
-    Unknown: {}
+    Login: { title: "Sign in" }
   }
 };

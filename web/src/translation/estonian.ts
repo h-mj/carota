@@ -14,7 +14,6 @@ export const estonian: Translation = {
         message: "404"
       }
     },
-    Anchor: {},
     DeclareNutrition: {
       nutrients: {
         carbohydrate: "Süsivesikud",
@@ -119,17 +118,6 @@ export const estonian: Translation = {
     }
   },
   scenes: {
-    Administration: {},
-    Diet: {},
-    FoodEdit: {},
-    FoodSearch: {},
-    History: {},
-    Home: {},
-    Login: { title: "Logige sisse" },
-    Logout: {},
-    Measurements: {},
-    Register: {},
-    Settings: {},
-    Unknown: {}
+    Login: { title: "Logige sisse" }
   }
 };

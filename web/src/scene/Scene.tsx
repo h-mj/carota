@@ -28,7 +28,7 @@ export interface DefaultSceneProps<TSceneName extends SceneNames> {
 export type SceneProps<
   TSceneNames extends SceneNames
 > = typeof SCENES[TSceneNames] extends new (...args: any) => infer IClass
-  ? IClass extends Scene<infer _, infer IProps>
+  ? IClass extends Scene<any, infer IProps, any>
     ? IProps
     : never
   : never;
@@ -69,7 +69,7 @@ export type ScenesTranslation = ClassTranslation<SceneNames, SceneMap>;
 export abstract class Scene<
   TSceneName extends SceneNames,
   TProps extends {} = {},
-  TTranslation extends {} = {}
+  TTranslation extends {} | undefined = undefined
 > extends Component<TProps & DefaultSceneProps<TSceneName>, TTranslation> {
   /**
    * Returns translation object of this scene.

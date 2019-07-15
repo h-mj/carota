@@ -77,8 +77,8 @@ export abstract class Component<
    */
   @computed
   public get translation(): TTranslation {
-    return (this.props.views!.translation.components[
+    return this.props.views!.translation.components[
       this.constructor.name as ComponentNames
-    ] as unknown) as TTranslation;
+    ] as TTranslation;
   }
 }

@@ -76,9 +76,9 @@ export abstract class Scene<
    */
   @computed
   public get translation(): TTranslation {
-    return (this.props.views!.translation.scenes[
+    return this.props.views!.translation.scenes[
       this.constructor.name as SceneNames
-    ] as unknown) as TTranslation;
+    ] as TTranslation;
   }
 
   /**

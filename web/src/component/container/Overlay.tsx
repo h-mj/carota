@@ -1,4 +1,4 @@
-import { styled } from "../styling/theme";
+import { styled } from "../../styling/theme";
 
 /**
  * Component that fills entire browser viewport.

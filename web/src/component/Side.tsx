@@ -1,7 +1,7 @@
 import { action } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Overlay } from "./Overlay";
+import { Overlay } from "./container/Overlay";
 import { InjectedProps } from "../store/Store";
 import { UNIT_HEIGHT } from "../styling/sizes";
 import { styled } from "../styling/theme";

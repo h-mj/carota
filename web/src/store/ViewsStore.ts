@@ -176,7 +176,7 @@ export class ViewsStore {
 
     this.refocus();
 
-    const url = context.getUrl() || window.location.pathname;
+    const url = context.getUrl();
 
     if (url !== window.location.pathname) {
       window.history.pushState(null, "", url);

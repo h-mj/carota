@@ -30,7 +30,7 @@ export class Anchor extends Component<AnchorProps> {
     return (
       <a
         className={this.props.className}
-        href={this.props.context.getUrl() || window.location.pathname}
+        href={this.props.context.getUrl()}
         onClick={this.handleClick}
       >
         {this.props.children}

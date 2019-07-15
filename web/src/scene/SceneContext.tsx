@@ -151,10 +151,10 @@ export class SceneContext<TSceneName extends SceneNames> {
   }
 
   /**
-   * Returns an URL corresponding to this scene context, or `undefined`, if this
-   * context doesn't have a matching route.
+   * Returns an URL corresponding to this scene context, or
+   * `window.location.pathname`, if this context doesn't have a matching route.
    */
-  public getUrl(): string | undefined {
+  public getUrl(): string {
     forRoute: for (const route in ROUTES) {
       // If route's scene name is not context's scene name, skip.
       if (ROUTES[route as keyof typeof ROUTES].sceneName !== this.sceneName) {
@@ -186,7 +186,7 @@ export class SceneContext<TSceneName extends SceneNames> {
       return url;
     }
 
-    return;
+    return window.location.pathname;
   }
 
   /**

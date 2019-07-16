@@ -8,7 +8,6 @@ import { Form, FormSubmitHandler } from "../component/Form";
 import { Head } from "../component/Head";
 import { Logo } from "../component/icon/Logo";
 import { Notification } from "../component/NotificationContainer";
-import { resolveAfterTimeout } from "../utility/promises";
 import { UNIT_HEIGHT } from "../styling/sizes";
 import { styled } from "../styling/theme";
 
@@ -52,14 +51,7 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
   private handleSubmit: FormSubmitHandler<"login"> = async values => {
     const { auth, views } = this.props;
 
-    const symbol = views!.wait("Login request");
-
-    const [error] = await Promise.all([
-      auth!.login(values as AuthLoginBody), // Let backend handle the validation for now.
-      resolveAfterTimeout(1)
-    ]);
-
-    views!.done(symbol);
+    const error = await views!.load(auth!.login(values as AuthLoginBody)); // Let backend handle the validation for now.
 
     if (error === undefined) {
       views!.update(); // Update scene to match current URL.

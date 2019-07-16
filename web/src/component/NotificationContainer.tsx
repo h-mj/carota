@@ -3,7 +3,6 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Component } from "./Component";
 import { DURATION, fadeIn, fadeOut } from "../styling/animations";
-import { resolveAfterTimeout } from "../utility/promises";
 import { UNIT_HEIGHT } from "../styling/sizes";
 import { keyframes, State, StateProps, styled } from "../styling/theme";
 import { Field } from "./Input/Field";
@@ -211,7 +210,7 @@ export class NotificationContainer extends Component<
    */
   @action
   private async fadeNotification(notification: Notifications) {
-    await resolveAfterTimeout(DURATION);
+    await this.props.views!.wait(DURATION);
     this.visibleNotifications.splice(
       this.visibleNotifications.indexOf(notification),
       1

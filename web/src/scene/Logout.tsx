@@ -1,7 +1,6 @@
 import { inject } from "mobx-react";
 import { Scene } from "./Scene";
 import { SceneContext } from "./SceneContext";
-import { resolveAfterTimeout } from "../utility/promises";
 
 /**
  * Scene that, when constructed, logs user out after some timeout.
@@ -28,15 +27,11 @@ export class Logout extends Scene<"Logout"> {
    * Function that logs user out and redirects to home page after some timeout.
    */
   private async logout() {
-    const { auth, views: view } = this.props;
+    const { auth, views } = this.props;
 
-    const symbol = view!.wait("Logout timeout");
-
-    await resolveAfterTimeout(1);
+    await views!.load(undefined);
 
     auth!.logout();
-    view!.redirect(SceneContext.HOME);
-
-    view!.done(symbol);
+    views!.redirect(SceneContext.HOME);
   }
 }

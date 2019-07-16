@@ -7,7 +7,6 @@ import { Scene } from "./Scene";
 import { Alert } from "../component/Alert";
 import { Compact } from "../component/container/Compact";
 import { Form, FormChangeHandler, FormSubmitHandler } from "../component/Form";
-import { resolveAfterTimeout } from "../utility/promises";
 
 /**
  * Scene that renders a form used for registration.
@@ -72,17 +71,13 @@ export class Register extends Scene<"Register"> {
   private handleSubmit: FormSubmitHandler<"register"> = async values => {
     const { auth, parameters, views } = this.props;
 
-    const symbol = views!.wait("Register request");
-
-    const [error] = await Promise.all([
+    const error = views!.load(
       auth!.register({
         ...values,
         invitationId: parameters!.invitationId
-      } as AuthRegisterBody), // Let backend handle the validation for now.
-      resolveAfterTimeout(1)
-    ]);
-
-    views!.done(symbol);
+      } as AuthRegisterBody), // Let backend handle the validation for now.);
+      1
+    );
 
     if (error === undefined) {
       views!.redirect(SceneContext.HOME);
@@ -98,12 +93,9 @@ export class Register extends Scene<"Register"> {
   private async checkInvitationIdValidity() {
     const { auth, parameters, views } = this.props;
 
-    if (parameters === undefined) {
-      this.isValid = false;
-    } else {
-      const symbol = views!.wait("Invitation check request");
-      this.isValid = await auth!.check(parameters);
-      views!.done(symbol);
-    }
+    this.isValid =
+      parameters === undefined
+        ? false
+        : await views!.load(auth!.check(parameters));
   }
 }

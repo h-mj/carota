@@ -27,26 +27,26 @@ export class Loader extends React.Component<InjectedProps> {
    * Sets fade out timeout if needed and updates `previousIsLoading` value.
    */
   public componentWillUpdate() {
-    const { waiting } = this.props.views!;
+    const { loading } = this.props.views!;
 
     // If we were loading but not anymore, fade out.
-    if (this.previousIsLoading && !waiting) {
+    if (this.previousIsLoading && !loading) {
       window.clearTimeout(this.timeoutId);
       this.timeoutId = window.setTimeout(this.hide, 1000 * DURATION);
     }
 
-    this.previousIsLoading = waiting;
+    this.previousIsLoading = loading;
   }
 
   /**
    * Renders loader component.
    */
   public render() {
-    const { waiting } = this.props.views!;
+    const { loading } = this.props.views!;
 
-    if (waiting || this.timeoutId !== 0) {
+    if (loading || this.timeoutId !== 0) {
       return (
-        <LoaderOverlay isActive={waiting}>
+        <LoaderOverlay isActive={loading}>
           <Loading />
         </LoaderOverlay>
       );

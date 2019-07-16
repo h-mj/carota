@@ -1,6 +1,7 @@
 import { action, observable } from "mobx";
-import { observer } from "mobx-react";
+import { inject, observer } from "mobx-react";
 import * as React from "react";
+import { Component } from "../Component";
 import { ErrorMessage } from "./ErrorMessage";
 import { Field } from "./Field";
 import { InputChangeHandler } from "./Input";
@@ -8,7 +9,6 @@ import { Label } from "./Label";
 import { UNIT_HEIGHT } from "../../styling/sizes";
 import { RESET } from "../../styling/stylesheets";
 import { css, getState, styled } from "../../styling/theme";
-import { resolveAfterTimeout } from "../../utility/promises";
 
 /**
  * Union of all text field types.
@@ -74,8 +74,9 @@ export interface TextFieldProps {
 /**
  * Component that allows user to enter single line of text.
  */
+@inject("views")
 @observer
-export class TextField extends React.Component<TextFieldProps> {
+export class TextField extends Component<TextFieldProps> {
   /**
    * Whether or not input is focused.
    */
@@ -167,7 +168,7 @@ export class TextField extends React.Component<TextFieldProps> {
   > = async () => {
     // Make input readonly for a split second.
     this.reference.current!.readOnly = true;
-    await resolveAfterTimeout(0);
+    await this.props.views!.wait(0);
     this.reference.current!.readOnly = false;
   };
 

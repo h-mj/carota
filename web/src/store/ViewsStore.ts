@@ -56,9 +56,9 @@ export class ViewsStore {
   @observable private _notifications: Array<Notifications> = [];
 
   /**
-   * Set of active symbols created by `wait` method..
+   * Number of active loadings.
    */
-  @observable private _waits: Set<symbol> = new Set();
+  @observable private _loadingCount = 0;
 
   /**
    * RootStore instance.
@@ -108,11 +108,11 @@ export class ViewsStore {
   }
 
   /**
-   * Returns whether or not application is waiting for something.
+   * Returns whether or not application is loading something.
    */
   @computed
-  public get waiting() {
-    return this._waits.size !== 0;
+  public get loading() {
+    return this._loadingCount > 0;
   }
 
   /**
@@ -120,7 +120,7 @@ export class ViewsStore {
    */
   @computed
   public get hideOverflow() {
-    return this.waiting || this.side !== undefined;
+    return this.loading || this.side !== undefined;
   }
 
   /**
@@ -252,26 +252,26 @@ export class ViewsStore {
   };
 
   /**
-   * Creates and returns a unique symbol with given description and adds it to
-   * waiting set. If waiting is done, `done` function should be called with
-   * returned symbol, which removes the symbol from the waiting set.
+   * Awaits a `promise` and returns its result after at least `timeout` seconds.
    *
-   * @param description Symbol description.
+   * @param promise Result promise.
+   * @param timeout Timeout in seconds after at least this duration result will
+   * be returned.
    */
   @action
-  public wait(description?: string) {
-    const symbol = Symbol(description);
-    this._waits.add(symbol);
-    return symbol;
+  public async load<T>(promise: T | Promise<T>, timeout = 1) {
+    ++this._loadingCount;
+    const [result] = await Promise.all([promise, this.wait(timeout)]);
+    --this._loadingCount;
+
+    return result;
   }
 
   /**
-   * Removes a symbol from waiting list.
-   *
-   * @param symbol Symbol instance returned by wait.
+   * Returns a promise that will be resolved after `timeout` seconds.
    */
   @action
-  public done(symbol: symbol) {
-    this._waits.delete(symbol);
+  public async wait(timeout: number) {
+    return new Promise(resolve => setTimeout(resolve, 1000 * timeout));
   }
 }

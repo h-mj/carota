@@ -7,7 +7,6 @@ import { Compact } from "../component/container/Compact";
 import { Fluid } from "../component/container/Fluid";
 import { Form, FormSubmitHandler, FormValues } from "../component/Form";
 import { Food } from "../model/Food";
-import { resolveAfterTimeout } from "../utility/promises";
 
 /**
  * Food editing scene props.
@@ -86,19 +85,14 @@ export class FoodEdit extends Scene<"FoodEdit", FoodEditProps> {
   private handleSubmit: FormSubmitHandler<"foodInformation"> = async values => {
     const { food, foods, position, views } = this.props;
 
-    const symbol = views!.wait("Food editor save");
-
     const body = {
       id: food !== undefined ? food.id : undefined,
       ...values
     };
 
-    const [error] = await Promise.all([
-      foods!.save((body as unknown) as FoodSaveBody), // Let backend handle the validation for now.
-      resolveAfterTimeout(1)
-    ]);
-
-    views!.done(symbol);
+    const error = await views!.load(
+      foods!.save((body as unknown) as FoodSaveBody) // Let backend handle the validation for now
+    );
 
     if (error === undefined) {
       if (position === "main") {

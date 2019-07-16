@@ -11,7 +11,6 @@ import { TRANSITION } from "../../styling/animations";
 import { RESET } from "../../styling/stylesheets";
 import { BORDER_RADIUS, UNIT_HEIGHT } from "../../styling/sizes";
 import { getState, State, StateProps, styled } from "../../styling/theme";
-import { resolveAfterTimeout } from "../../utility/promises";
 
 /**
  * Union of all nutrient names.
@@ -268,7 +267,7 @@ export class DeclareNutrition extends Component<
 
     // Make input readonly for a split second.
     reference.current!.readOnly = true;
-    await resolveAfterTimeout(0);
+    await this.props.views!.wait(0);
     reference.current!.readOnly = false;
   };
 

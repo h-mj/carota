@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Component } from "../component/Component";
 import { RESET } from "../styling/stylesheets";
 import { BORDER_RADIUS, UNIT_HEIGHT } from "../styling/sizes";
 import { getState, styled, StateProps } from "../styling/theme";
@@ -21,7 +22,7 @@ interface ButtonProps {
 /**
  * Button component.
  */
-export class Button extends React.Component<ButtonProps> {
+export class Button extends Component<ButtonProps> {
   /**
    * Renders button component inside a field component.
    */

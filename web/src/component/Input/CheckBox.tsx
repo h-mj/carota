@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Component } from "../Component";
 import { InputChangeHandler } from "./Input";
 import { TRANSITION } from "../../styling/animations";
 import { UNIT_HEIGHT } from "../../styling/sizes";
@@ -49,7 +50,7 @@ interface CheckBoxProps {
 /**
  * Two state selection usually used to define if something is true or false.
  */
-export class CheckBox extends React.Component<CheckBoxProps> {
+export class CheckBox extends Component<CheckBoxProps> {
   /**
    * Renders real checkbox and fake one on top of it, alongside label text, if
    * defined.

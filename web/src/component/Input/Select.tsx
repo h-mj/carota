@@ -1,6 +1,7 @@
 import { action, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
+import { Component } from "../Component";
 import { ErrorMessage } from "./ErrorMessage";
 import { Field } from "./Field";
 import { InputChangeHandler } from "./Input";
@@ -79,7 +80,7 @@ export interface SelectProps<TValues extends string = string> {
  * Component that allows user to select between finite array of options.
  */
 @observer
-export class Select<TValues extends string = string> extends React.Component<
+export class Select<TValues extends string = string> extends Component<
   SelectProps<TValues>
 > {
   /**

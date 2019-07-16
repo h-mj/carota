@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Component } from "../Component";
 import { Label } from "./Label";
 import {
   DURATION,
@@ -22,7 +23,7 @@ interface ErrorMessageProps {
 /**
  * Error message component that displays an error message.
  */
-export class ErrorMessage extends React.Component<ErrorMessageProps> {
+export class ErrorMessage extends Component<ErrorMessageProps> {
   /**
    * Previous error message so that if no error message is provided, this value
    * will be used as error message on fade out.

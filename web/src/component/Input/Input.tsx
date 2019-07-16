@@ -94,8 +94,8 @@ export type SelectOptionValues<
 /**
  * Change handler function type of given input names.
  */
-export type InputChangeHandler<TValues> = (
-  name: string,
+export type InputChangeHandler<TName extends string, TValues> = (
+  name: TName,
   value: TValues
 ) => void;
 
@@ -116,7 +116,7 @@ interface InputProps<TInputNames extends InputNames = InputNames> {
   /**
    * Function that will be called when input value changes.
    */
-  onChange?: InputChangeHandler<InputValues<TInputNames>>;
+  onChange?: InputChangeHandler<TInputNames, InputValues<TInputNames>>;
 
   /**
    * Input value.

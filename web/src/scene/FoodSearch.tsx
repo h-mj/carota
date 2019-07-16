@@ -40,7 +40,7 @@ export class FoodSearch extends Scene<"FoodSearch"> {
   }
 
   @action
-  private handleChange: InputChangeHandler<string> = (_, value) => {
+  private handleChange: InputChangeHandler<any, string> = (_, value) => {
     this.query = value;
 
     if (value) {

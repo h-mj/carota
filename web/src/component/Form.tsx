@@ -186,7 +186,10 @@ const anyErrors = <TFormName extends FormNames>(
  */
 export type FormChangeHandler<
   TFormName extends FormNames = FormNames
-> = InputChangeHandler<InputValues<FormInputNames<TFormName>>>;
+> = InputChangeHandler<
+  FormInputNames<TFormName>,
+  InputValues<FormInputNames<TFormName>>
+>;
 
 /**
  * Form submit handler of form named `TFormName`.

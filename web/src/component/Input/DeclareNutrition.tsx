@@ -81,7 +81,7 @@ const getDisabled = (value?: NutrientValues): NutrientMap<boolean> => {
 /**
  * Nutrition declaration component props.
  */
-export interface DeclareNutritionProps {
+export interface DeclareNutritionProps<TName extends string = string> {
   /**
    * Whether or not first input should be in the focus automatically.
    */
@@ -96,12 +96,12 @@ export interface DeclareNutritionProps {
    * Text field name that will be included as one of the `onChange` callback
    * parameters.
    */
-  name: string;
+  name: TName;
 
   /**
    * Function that will be called when text field value changes.
    */
-  onChange?: InputChangeHandler<NutrientValues>;
+  onChange?: InputChangeHandler<TName, NutrientValues>;
 
   /**
    * Occurred error reasons related to internal input components.
@@ -127,8 +127,8 @@ interface DeclareNutritionTranslation {
  */
 @inject("views")
 @observer
-export class DeclareNutrition extends Component<
-  DeclareNutritionProps,
+export class DeclareNutrition<TName extends string = string> extends Component<
+  DeclareNutritionProps<TName>,
   DeclareNutritionTranslation
 > {
   /**
@@ -150,7 +150,7 @@ export class DeclareNutrition extends Component<
    * Creates a new instance of `DeclareNutrition` and creates reference objects
    * for each nutrient amount value input.
    */
-  public constructor(props: DeclareNutritionProps) {
+  public constructor(props: DeclareNutritionProps<TName>) {
     super(props);
 
     this.references = Object.assign(
@@ -232,8 +232,11 @@ export class DeclareNutrition extends Component<
    * CheckBox change handler that enabled or disables an input.
    */
   @action
-  private handleEnableChange: InputChangeHandler<boolean> = (name, value) => {
-    this.disabled[name as NutrientNames] = !value;
+  private handleEnableChange: InputChangeHandler<NutrientNames, boolean> = (
+    name,
+    value
+  ) => {
+    this.disabled[name] = !value;
 
     // Reset the value of the input.
     if (this.props.onChange) {

@@ -9,7 +9,7 @@ import { getState, styled, StateProps } from "../../styling/theme";
 /**
  * Check box component props.
  */
-interface CheckBoxProps {
+interface CheckBoxProps<TName extends string = string> {
   /**
    * Whether or not this check box is disabled.
    */
@@ -29,12 +29,12 @@ interface CheckBoxProps {
    * Name of the check box that will be included in parameters of `onChange`
    * callback function.
    */
-  name: string;
+  name: TName;
 
   /**
    * Function that will be called when check box' state changes.
    */
-  onChange?: InputChangeHandler<boolean>;
+  onChange?: InputChangeHandler<TName, boolean>;
 
   /**
    * Whether or not check box must be selected.
@@ -50,7 +50,9 @@ interface CheckBoxProps {
 /**
  * Two state selection usually used to define if something is true or false.
  */
-export class CheckBox extends Component<CheckBoxProps> {
+export class CheckBox<TName extends string = string> extends Component<
+  CheckBoxProps<TName>
+> {
   /**
    * Renders real checkbox and fake one on top of it, alongside label text, if
    * defined.

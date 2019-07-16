@@ -18,7 +18,7 @@ export type TextFieldType = "email" | "number" | "password" | "tel" | "text";
 /**
  * Text field component props.
  */
-export interface TextFieldProps {
+export interface TextFieldProps<TName extends string = string> {
   /**
    * Whether or not this field should be in focus automatically.
    */
@@ -48,12 +48,12 @@ export interface TextFieldProps {
    * Name of the text field that will be included in parameters of `onChange`
    * callback function.
    */
-  name: string;
+  name: TName;
 
   /**
    * Function that will be called when text field value changes.
    */
-  onChange?: InputChangeHandler<string>;
+  onChange?: InputChangeHandler<TName, string>;
 
   /**
    * Whether or not this text field must be filled out.
@@ -76,7 +76,9 @@ export interface TextFieldProps {
  */
 @inject("views")
 @observer
-export class TextField extends Component<TextFieldProps> {
+export class TextField<TName extends string = string> extends Component<
+  TextFieldProps<TName>
+> {
   /**
    * Whether or not input is focused.
    */
@@ -91,7 +93,7 @@ export class TextField extends Component<TextFieldProps> {
   /**
    * Creates actual input element reference.
    */
-  public constructor(props: TextFieldProps) {
+  public constructor(props: TextFieldProps<TName>) {
     super(props);
 
     this.reference = React.createRef<HTMLInputElement>();

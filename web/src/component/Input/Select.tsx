@@ -28,7 +28,10 @@ export interface SelectOption<TValues extends string = string> {
 /**
  * Select field component props.
  */
-export interface SelectProps<TValues extends string = string> {
+export interface SelectProps<
+  TName extends string = string,
+  TValues extends string = string
+> {
   /**
    * Whether or not this field is disabled.
    */
@@ -53,12 +56,12 @@ export interface SelectProps<TValues extends string = string> {
    * Name of the select component that will be included in parameters of
    * `onChange` callback function.
    */
-  name: string;
+  name: TName;
 
   /**
    * Function that will be called when selected option changes.
    */
-  onChange?: InputChangeHandler<TValues>;
+  onChange?: InputChangeHandler<TName, TValues>;
 
   /**
    * Array of options between which selection is made.
@@ -80,9 +83,10 @@ export interface SelectProps<TValues extends string = string> {
  * Component that allows user to select between finite array of options.
  */
 @observer
-export class Select<TValues extends string = string> extends Component<
-  SelectProps<TValues>
-> {
+export class Select<
+  TName extends string = string,
+  TValues extends string = string
+> extends Component<SelectProps<TName, TValues>> {
   /**
    * Whether or not input is focused.
    */

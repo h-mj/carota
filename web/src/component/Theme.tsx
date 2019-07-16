@@ -1,6 +1,6 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { InjectedProps } from "../store/Store";
+import { Component } from "./Component";
 import { createGlobalStyle, LIGHT, ThemeProvider } from "../styling/theme";
 
 /**
@@ -8,7 +8,7 @@ import { createGlobalStyle, LIGHT, ThemeProvider } from "../styling/theme";
  */
 @inject("views")
 @observer
-export class Theme extends React.Component<InjectedProps> {
+export class Theme extends Component {
   public render() {
     return (
       <ThemeProvider theme={LIGHT}>

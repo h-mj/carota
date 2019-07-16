@@ -1,8 +1,8 @@
 import { action } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
+import { Component } from "./Component";
 import { Overlay } from "./container/Overlay";
-import { InjectedProps } from "../store/Store";
 import { UNIT_HEIGHT } from "../styling/sizes";
 import { styled } from "../styling/theme";
 
@@ -11,7 +11,7 @@ import { styled } from "../styling/theme";
  */
 @inject("views")
 @observer
-export class Side extends React.Component<InjectedProps> {
+export class Side extends Component {
   /**
    * Renders side scene container and the scene itself.
    */

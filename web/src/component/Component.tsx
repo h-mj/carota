@@ -8,7 +8,7 @@ import { Head } from "./Head";
 import { Input } from "./Input/Input";
 import { Navigation } from "./Navigation";
 import { NotificationContainer } from "./NotificationContainer";
-import { InjectedProps } from "../store/Store";
+import { RootStore } from "../store/RootStore";
 
 /**
  * Maps component class names to the corresponding class.
@@ -71,7 +71,7 @@ export type ComponentsTranslation = ClassTranslation<
 export abstract class Component<
   TProps extends {} = {},
   TTranslation extends {} | undefined = undefined
-> extends React.Component<InjectedProps & TProps> {
+> extends React.Component<Partial<RootStore> & TProps> {
   /**
    * Returns translation object of this component.
    */

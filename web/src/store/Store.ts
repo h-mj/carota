@@ -1,22 +1,5 @@
 import { action, observable } from "mobx";
-import { AuthStore } from "./AuthStore";
-import { FoodsStore } from "./FoodsStore";
-import { ViewsStore } from "./ViewsStore";
-import { Model, ModelData, ModelClass } from "../model/Model";
-
-/**
- * Mapping between store names and their class types.
- */
-interface StoreMap {
-  auth: AuthStore;
-  foods: FoodsStore;
-  views: ViewsStore;
-}
-
-/**
- * Type that is used to add all injectable store types to component properties.
- */
-export type InjectedProps = Partial<StoreMap>;
+import { Model, ModelClass, ModelData } from "../model/Model";
 
 /**
  * Base class for store classes.

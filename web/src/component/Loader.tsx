@@ -1,9 +1,9 @@
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
+import { Component } from "./Component";
 import { Loading } from "./icon/Loading";
 import { Overlay } from "./container/Overlay";
-import { InjectedProps } from "../store/Store";
 import { DURATION, fadeIn, fadeOut } from "../styling/animations";
 import { styled } from "../styling/theme";
 
@@ -12,7 +12,7 @@ import { styled } from "../styling/theme";
  */
 @inject("views")
 @observer
-export class Loader extends React.Component<InjectedProps> {
+export class Loader extends Component {
   /**
    * ID of a timeout that sets `timeoutId` back to `0`.
    */

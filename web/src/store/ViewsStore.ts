@@ -2,7 +2,12 @@ import { Languages } from "api";
 import { computed, observable, action } from "mobx";
 import { SceneContext, SceneContexts } from "../scene/SceneContext";
 import { SceneNames } from "../scene/Scene";
-import { Notifications } from "../component/NotificationContainer";
+import {
+  Notification,
+  NotificationMessageParameters,
+  NotificationNames,
+  Notifications
+} from "../component/NotificationContainer";
 import { RootStore } from "./RootStore";
 import { Translation } from "../translation";
 import { english } from "../translation/english";
@@ -222,14 +227,22 @@ export class ViewsStore {
   }
 
   /**
-   * Adds `notification` to notifications array and adds an `timeout` second
-   * timeout after which the notification is removed from the array.
+   * Creates and adds a notification to notifications array and adds an
+   * `timeout` second timeout after which the notification is removed from the
+   * array.
    *
-   * @param notification New notification.
+   * @param name Notification name.
+   * @param parameters Notification message parameters.
    * @param timeout Timeout in seconds after which notification is removed.
    */
   @action
-  public notify(notification: Notifications, timeout = 5) {
+  public notify<TNotificationName extends NotificationNames>(
+    name: TNotificationName,
+    parameters: NotificationMessageParameters<TNotificationName>,
+    timeout = 5
+  ) {
+    const notification = new Notification(name, parameters);
+
     this._notifications.push(notification);
 
     if (timeout > 0) {

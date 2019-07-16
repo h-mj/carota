@@ -7,7 +7,6 @@ import { Compact } from "../component/container/Compact";
 import { Form, FormSubmitHandler } from "../component/Form";
 import { Head } from "../component/Head";
 import { Logo } from "../component/icon/Logo";
-import { Notification } from "../component/NotificationContainer";
 import { UNIT_HEIGHT } from "../styling/sizes";
 import { styled } from "../styling/theme";
 
@@ -56,7 +55,7 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
     if (error === undefined) {
       views!.update(); // Update scene to match current URL.
     } else if (error.code === 401) {
-      views!.notify(new Notification("loginInvalidCredentials", {}));
+      views!.notify("loginInvalidCredentials", {});
     }
 
     return error;

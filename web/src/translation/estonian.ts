@@ -129,7 +129,7 @@ export const estonian: Translation = {
         }
       },
       title: "Sisenege",
-      submit: "Sisenege"
+      submit: "Sisenege →"
     }
   }
 };

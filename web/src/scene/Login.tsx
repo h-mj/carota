@@ -64,7 +64,7 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
   /**
    * Object that contains values of each input.
    */
-  @observable private values: Record<InputNames, string> = {
+  @observable private values = {
     email: "",
     password: ""
   };

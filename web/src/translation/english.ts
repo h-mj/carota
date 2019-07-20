@@ -128,7 +128,7 @@ export const english: Translation = {
         }
       },
       title: "Sign in",
-      submit: "Sign in"
+      submit: "Sign in →"
     }
   }
 };

@@ -80,7 +80,8 @@ const ButtonElement = styled.button<ButtonElementProps>`
   background-color: ${({ invalid, theme }) =>
     theme[invalid ? "INVALID_COLOR" : "ACTIVE_COLOR"]};
 
-  color: ${({ theme }) => theme.BACKGROUND_COLOR};
+  color: ${({ invalid, theme }) =>
+    theme[invalid ? "BACKGROUND_COLOR" : "PRIMARY_COLOR"]};
 
   cursor: pointer;
 

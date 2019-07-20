@@ -128,7 +128,7 @@ export const russian: Translation = {
         }
       },
       title: "Вход",
-      submit: "Вход"
+      submit: "Вход →"
     }
   }
 };

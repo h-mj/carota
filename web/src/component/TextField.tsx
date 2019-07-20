@@ -223,6 +223,7 @@ const Caption = styled.div<TextFieldStateProps>`
     theme[
       invalid ? "INVALID_COLOR" : focused ? "ACTIVE_COLOR" : "SECONDARY_COLOR"
     ]};
+  white-space: nowrap;
 
   user-select: none;
 
@@ -255,7 +256,8 @@ const Input = styled.input<TextFieldStateProps>`
  * Component that displays the error message under `Label` component.
  */
 const ErrorMessage = styled.div`
-  margin-top: calc(${({ theme }) => theme.PADDING} / 12);
+  margin-top: calc(${({ theme }) => theme.PADDING} / 6);
+
   color: ${({ theme }) => theme.INVALID_COLOR};
   font-size: 0.7rem;
   font-weight: 500;

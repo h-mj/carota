@@ -35,7 +35,6 @@ export const estonian: Translation = {
       }
     },
     Form: {
-      login: { submit: "Logige sisse" },
       foodInformation: { submit: "Salvesta" },
       register: { submit: "Looge konto" }
     },
@@ -118,6 +117,19 @@ export const estonian: Translation = {
     }
   },
   scenes: {
-    Login: { title: "Logige sisse" }
+    Login: {
+      inputs: {
+        email: {
+          label: "E-post",
+          reasons: { empty: "Palun sisestage e-posti aadress" }
+        },
+        password: {
+          label: "Parool",
+          reasons: { empty: "Palun sisestage salasõna" }
+        }
+      },
+      title: "Sisenege",
+      submit: "Sisenege"
+    }
   }
 };

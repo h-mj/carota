@@ -1,83 +1,228 @@
-import { AuthLoginBody } from "api";
-import { action } from "mobx";
+import { ErrorReasons } from "api";
+import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Scene } from "./Scene";
-import { Compact } from "../component/container/Compact";
-import { Form, FormSubmitHandler } from "../component/Form";
+import { Button } from "../component/Button";
 import { Head } from "../component/Head";
-import { Logo } from "../component/icon/Logo";
-import { UNIT_HEIGHT } from "../styling/sizes";
+import { TextField } from "../component/TextField";
 import { styled } from "../styling/theme";
+import { any, insert } from "../utility/form";
 
 /**
- * Login scene translation.
+ * Array of input names within login form.
+ */
+const INPUTS = ["email", "password"] as const;
+
+/**
+ * Input name type that is union of all input names inside `INPUTS` array.
+ */
+type InputNames = typeof INPUTS[number];
+
+/**
+ * Translation of a single input.
+ */
+interface InputTranslation {
+  /**
+   * Text field label text.
+   */
+  label: string;
+
+  /**
+   * Error messages of various error reasons input may have.
+   */
+  reasons: Partial<Record<ErrorReasons, string>>;
+}
+
+/**
+ * Translation of login scene.
  */
 interface LoginTranslation {
+  /**
+   * Input translations.
+   */
+  inputs: Record<InputNames, InputTranslation>;
+
   /**
    * Page title.
    */
   title: string;
+
+  /**
+   * Submit button text.
+   */
+  submit: string;
 }
 
 /**
- * Scene that renders a form used for signing in.
+ * Scene that authenticates user using their email and password and on success
+ * redirects to home page.
  */
 @inject("auth", "views")
 @observer
 export class Login extends Scene<"Login", {}, LoginTranslation> {
   /**
-   * Renders a sign in form.
+   * Object that contains values of each input.
+   */
+  @observable private values: Record<InputNames, string> = {
+    email: "",
+    password: ""
+  };
+
+  /**
+   * Object that contains a reason string of occurred error of each input.
+   *
+   * These reasons are used to retrieve translated error messages of each input
+   * that will be rendered next to the input itself.
+   */
+  @observable private reasons: Partial<Record<InputNames, ErrorReasons>> = {};
+
+  /**
+   * Renders the form and all of its inputs.
    */
   public render() {
     return (
-      <Compact>
+      <Center>
         <Head title={this.translation.title} />
-        <LogoContainer>
-          <Logo />
-          {this.props.views!.translation.components.Head.title}
-        </LogoContainer>
-        <Form autoFocus name="login" onSubmit={this.handleSubmit} />
-      </Compact>
+        <Form noValidate={true} onSubmit={this.handleSubmit}>
+          <Title>{this.translation.title}</Title>
+          <Main>
+            {INPUTS.map((name, index) => (
+              <TextField
+                key={name}
+                autoFocus={index === 0}
+                errorMessage={
+                  this.reasons[name] !== undefined
+                    ? this.translation.inputs[name].reasons[this.reasons[name]!]
+                    : undefined
+                }
+                invalid={this.reasons[name] !== undefined}
+                label={this.translation.inputs[name].label}
+                name={name}
+                onChange={this.handleChange}
+                required={true}
+                type={name}
+                value={this.values[name]}
+              />
+            ))}
+          </Main>
+          <Controls>
+            <Button invalid={any(this.reasons)}>
+              {this.translation.submit}
+            </Button>
+          </Controls>
+        </Form>
+      </Center>
     );
   }
 
   /**
-   * Sends login credentials to server and either redirects user to correct
-   * scene or displays occurred errors.
+   * Updates `values` object when text field value changes.
    */
   @action
-  private handleSubmit: FormSubmitHandler<"login"> = async values => {
-    const { auth, views } = this.props;
+  private handleChange = (name: InputNames, value: string) => {
+    this.values[name] = value;
+  };
 
-    const error = await views!.load(auth!.login(values as AuthLoginBody)); // Let backend handle the validation for now.
+  /**
+   * Prevents default form submit event and executes custom sign in logic
+   * instead.
+   */
+  @action
+  private handleSubmit: React.FormEventHandler<
+    HTMLFormElement
+  > = async event => {
+    event.preventDefault();
 
-    if (error === undefined) {
-      views!.update(); // Update scene to match current URL.
-    } else if (error.code === 401) {
-      views!.notify("loginInvalidCredentials", {});
+    const reasons = {
+      email: this.values.email.trim() === "" ? "empty" : undefined,
+      password: this.values.password === "" ? "empty" : undefined
+    } as const;
+
+    const skip = any(reasons);
+
+    const error = await this.props.views!.load(
+      skip ? undefined : this.props.auth!.login(this.values)
+    );
+
+    if (error === undefined && !skip) {
+      // Update current scene so it matches the URL, since login scene overrides
+      // it.
+      this.props.views!.update();
     }
 
-    return error;
+    if (error !== undefined && error.code === 401 /* Unauthorized */) {
+      this.props.views!.notify("loginInvalidCredentials", {});
+    }
+
+    this.reasons = insert(reasons, error);
   };
 }
 
 /**
- * Container that contains a logo.
+ * Component that takes up whole screen and centers its children.
  */
-const LogoContainer = styled.div`
+const Center = styled.div`
+  width: 100%;
+  min-height: 100%;
+
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
+`;
 
-  width: ${2 * UNIT_HEIGHT}rem;
-  height: ${2 * UNIT_HEIGHT}rem;
-  margin: ${UNIT_HEIGHT / 2}rem auto;
+/**
+ * Form element that contains email and password text fields alongside submit
+ * button.
+ */
+const Form = styled.form`
+  min-height: calc(9 * ${({ theme }) => theme.HEIGHT});
+  max-width: ${({ theme }) => theme.FORM_WIDTH};
+  width: 100%;
+
+  padding: ${({ theme }) => theme.PADDING};
+  box-sizing: border-box;
+
+  transition: ${({ theme }) => theme.TRANSITION};
 
   & > * {
-    flex-shrink: 0;
-    margin-right: ${UNIT_HEIGHT / 16}rem;
+    margin-bottom: ${({ theme }) => theme.PADDING};
   }
 
-  color: ${({ theme }) => theme.colorPrimary};
+  & > *:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+/**
+ * Component that displays title text.
+ */
+const Title = styled.div`
+  color: ${({ theme }) => theme.PRIMARY_COLOR};
+  font-size: 1.5rem;
+  text-align: center;
+`;
+
+/**
+ * Component that contains email and password text fields.
+ */
+const Main = styled.div`
+  width: 100%;
+
+  & > * {
+    margin-bottom: calc(${({ theme }) => theme.PADDING} / 3);
+  }
+
+  & > *:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+/**
+ * Component that contains the submit button.
+ */
+const Controls = styled.div`
+  display: flex;
+  justify-content: right;
 `;

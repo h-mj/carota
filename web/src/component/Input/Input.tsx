@@ -5,7 +5,7 @@ import * as React from "react";
 import { Component } from "../Component";
 import { DeclareNutrition, DeclareNutritionProps } from "./DeclareNutrition";
 import { Select, SelectProps } from "./Select";
-import { TextField, TextFieldProps } from "./TextField";
+import { TextField } from "../TextField";
 
 /**
  * Input definitions object.
@@ -48,7 +48,7 @@ export type InputValues<TInputNames extends InputNames = InputNames> = {
     : InputName extends InputNames<"Select">
     ? SelectProps<SelectOptionValues<InputName>>["value"]
     : InputName extends InputNames<"TextField">
-    ? TextFieldProps["value"]
+    ? string
     : never
 }[TInputNames];
 
@@ -65,7 +65,7 @@ export const getDefaultValue = <TInputName extends InputNames>(
   } else if (component === "Select") {
     return Select.getDefaultValue();
   } else if (component === "TextField") {
-    return TextField.getDefaultValue();
+    return "";
   } else {
     throw new Error(`Unknown component ${component}.`);
   }

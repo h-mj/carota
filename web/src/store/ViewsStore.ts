@@ -134,7 +134,7 @@ export class ViewsStore {
    */
   @computed
   public get navigation() {
-    if (!this._rootStore.auth.authenticated) {
+    if (NO_AUTHENTICATION_SCENE_NAMES.includes(this._main.sceneName)) {
       return undefined;
     }
 
@@ -169,7 +169,8 @@ export class ViewsStore {
   public redirect(context: SceneContexts) {
     const { authenticated } = this._rootStore.auth;
 
-    // If user authentication status is the same as scene authentication requirement.
+    // If user authentication status is the same as scene's authentication
+    // requirement.
     if (
       !authenticated ===
       NO_AUTHENTICATION_SCENE_NAMES.includes(context.sceneName)

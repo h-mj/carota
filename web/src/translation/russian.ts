@@ -35,7 +35,6 @@ export const russian: Translation = {
       }
     },
     Form: {
-      login: { submit: "Вход" },
       foodInformation: { submit: "Сохранить" },
       register: { submit: "Завести аккаунт" }
     },
@@ -117,6 +116,19 @@ export const russian: Translation = {
     }
   },
   scenes: {
-    Login: { title: "Вход" }
+    Login: {
+      inputs: {
+        email: {
+          label: "Эл. почта",
+          reasons: { empty: "Пожалуйста, введите адрес электронной почты" }
+        },
+        password: {
+          label: "Пароль",
+          reasons: { empty: "Пожалуйста, введите пароль" }
+        }
+      },
+      title: "Вход",
+      submit: "Вход"
+    }
   }
 };

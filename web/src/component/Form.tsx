@@ -1,9 +1,9 @@
-import { Error, ErrorReasons } from "api";
+import { Error } from "api";
 import { observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Component } from "./Component";
-import { Button } from "./Button";
+import { Button } from "./Input/Button";
 import {
   getDefaultValue,
   Input,
@@ -14,6 +14,7 @@ import {
 } from "./Input/Input";
 import { UNIT_HEIGHT } from "../styling/sizes";
 import { styled } from "../styling/theme";
+import { any, insert } from "../utility/form";
 
 /**
  * Returns function input name type parameters as array.
@@ -25,7 +26,6 @@ const withInputs = <TInputNames extends InputNames>(...names: TInputNames[]) =>
  * Defines form names and their corresponding input name arrays.
  */
 const FORM_INPUT_NAMES = {
-  login: withInputs("email", "password"),
   foodInformation: withInputs(
     "name",
     "barcode",
@@ -46,19 +46,6 @@ type FormNames = keyof typeof FORM_INPUT_NAMES;
 type FormInputNames<
   TFormName extends FormNames = FormNames
 > = typeof FORM_INPUT_NAMES[TFormName][number];
-
-/**
- * Checks whether or not `inputName` is one of form `formName` inputs.
- *
- * @param inputName
- * @param formName
- */
-const isFormInputName = <TFormName extends FormNames>(
-  formName: TFormName,
-  inputName: string
-): inputName is FormInputNames<TFormName> => {
-  return (FORM_INPUT_NAMES[formName] as string[]).includes(inputName);
-};
 
 /**
  * Type that maps all input names of form named `TFormName` to their value
@@ -89,96 +76,6 @@ const createFormDefaultValues = <TFormName extends FormNames>(
  */
 type FormErrorReasons<TFormName extends FormNames = FormNames> = {
   [InputName in FormInputNames<TFormName>]?: InputErrorReasons<InputName>
-};
-
-/**
- * Type of an object which keys are of type string and values are either of type
- * `T`, `Tree<T>` or `undefined`.
- */
-type Tree<T> = {
-  [P: string]: T | Tree<T> | undefined;
-};
-
-/**
- * Navigates inside `reasons` object using path and assigns `reason` to the
- * destination field.
- *
- * @param reasons An reason object inside which we will navigate.
- * @param path Path to the erroneous field.
- * @param reason Field error reason.
- */
-const putReason = (
-  reasons: Tree<ErrorReasons>,
-  path: string[],
-  reason: ErrorReasons
-) => {
-  let node = reasons;
-
-  const [field, ...steps] = path.slice().reverse();
-
-  for (let step = steps.pop(); step !== undefined; step = steps.pop()) {
-    if (!(step in node)) {
-      node[step] = {};
-    }
-
-    const next = node[step];
-
-    if (typeof next === "object") {
-      node = next;
-    }
-  }
-
-  node[field] = reason;
-};
-
-/**
- * Creates a new `FormErrorReasons<TFormName>` object from given API `Error`
- * object.
- *
- * If occurred error field name is not one of the form input names, it is
- * ignored.
- *
- * @param formName Form name for which error reasons object is created.
- * @param error Occurred API error.
- */
-const createFormErrorReasons = <TFormName extends FormNames>(
-  formName: TFormName,
-  error: Error | undefined
-): FormErrorReasons<TFormName> => {
-  const reasons: FormErrorReasons<TFormName> = {};
-
-  if (error === undefined || error.details === undefined) {
-    return reasons;
-  }
-
-  for (const detail of error.details) {
-    const { path } = detail.location;
-
-    if (path === undefined) {
-      continue;
-    }
-
-    const field = path[0];
-
-    if (!isFormInputName(formName, field)) {
-      continue;
-    }
-
-    putReason(reasons, path, detail.reason);
-  }
-
-  return reasons;
-};
-
-/**
- * Returns whether or not there are any erroneous input fields.
- *
- * @param reasons Error reasons object.
- */
-const anyErrors = <TFormName extends FormNames>(
-  reasons: Readonly<FormErrorReasons<TFormName>>
-) => {
-  return Object.keys(reasons).length !== 0;
 };
 
 /**
@@ -294,7 +191,7 @@ export class Form<TFormName extends FormNames = FormNames> extends Component<
           />
         ))}
 
-        <Button invalid={anyErrors(this.reasons)}>
+        <Button invalid={any(this.reasons)}>
           {this.translation[name].submit}
         </Button>
       </FormElement>
@@ -318,13 +215,13 @@ export class Form<TFormName extends FormNames = FormNames> extends Component<
   > = async event => {
     event.preventDefault();
 
-    const { name, onSubmit } = this.props;
+    const { onSubmit } = this.props;
 
     if (onSubmit === undefined) {
       return;
     }
 
-    this.reasons = createFormErrorReasons(name, await onSubmit(this.values));
+    insert((this.reasons = {}), await onSubmit(this.values));
   };
 }
 

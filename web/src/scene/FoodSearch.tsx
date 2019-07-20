@@ -4,7 +4,7 @@ import * as React from "react";
 import { SceneContext } from "./SceneContext";
 import { Scene } from "./Scene";
 import { InputChangeHandler } from "../component/Input/Input";
-import { TextField } from "../component/Input/TextField";
+import { TextField } from "../component/TextField";
 import { UNIT_HEIGHT, BORDER_RADIUS } from "../styling/sizes";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";

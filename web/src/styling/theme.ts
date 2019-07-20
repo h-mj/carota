@@ -39,6 +39,17 @@ export interface Theme {
   borderColor: string;
   overlayBackgroundColor: string;
   states: Record<State, StateTheme>;
+  BORDER_COLOR: string;
+  HEIGHT: string;
+  PADDING: string;
+  FORM_WIDTH: string;
+  BORDER_RADIUS: string;
+  ACTIVE_COLOR: string;
+  INVALID_COLOR: string;
+  PRIMARY_COLOR: string;
+  SECONDARY_COLOR: string;
+  BACKGROUND_COLOR: string;
+  TRANSITION: string;
 }
 
 /**
@@ -91,5 +102,16 @@ export const LIGHT: Readonly<Theme> = {
       borderColor: "rgb(255, 150, 0)",
       color: "rgb(255, 150, 0)"
     }
-  }
+  },
+  BORDER_COLOR: "rgb(0, 0, 0, 0.15)",
+  HEIGHT: "3.5rem",
+  PADDING: "2.5rem",
+  FORM_WIDTH: "28rem",
+  BORDER_RADIUS: "0.4375rem",
+  ACTIVE_COLOR: "rgb(255, 150, 0)",
+  INVALID_COLOR: "rgb(220, 0, 0)",
+  PRIMARY_COLOR: "rgba(0, 0, 0, 0.88)",
+  SECONDARY_COLOR: "rgba(0, 0, 0, 0.44)",
+  BACKGROUND_COLOR: "rgb(255, 255, 255)",
+  TRANSITION: "0.1s cubic-bezier(0.4, 0.0, 0.2, 1)"
 };

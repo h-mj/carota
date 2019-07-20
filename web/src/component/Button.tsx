@@ -1,13 +1,17 @@
 import * as React from "react";
-import { Component } from "../component/Component";
 import { RESET } from "../styling/stylesheets";
-import { BORDER_RADIUS, UNIT_HEIGHT } from "../styling/sizes";
-import { getState, styled, StateProps } from "../styling/theme";
+import { Component } from "./Component";
+import { styled } from "../styling/theme";
 
 /**
- * Button component properties.
+ * Button component props.
  */
 interface ButtonProps {
+  /**
+   * Whether or not button should be automatically in focus.
+   */
+  autoFocus?: boolean;
+
   /**
    * Whether or not button is disabled.
    */
@@ -17,6 +21,17 @@ interface ButtonProps {
    * Whether or not button is invalid.
    */
   invalid?: boolean;
+
+  /**
+   * Button type, that changes the effect on parent <form> element when button
+   * is clicked.
+   *
+   * Behavior of each type button click inside a <form> element:
+   * - `button` - Doesn't affect the form;
+   * - `reset` - Resets all form fields;
+   * - `submit` - Submits the form data.
+   */
+  type?: "button" | "reset" | "submit";
 }
 
 /**
@@ -24,15 +39,17 @@ interface ButtonProps {
  */
 export class Button extends Component<ButtonProps> {
   /**
-   * Renders button component inside a field component.
+   * Renders the button.
    */
   public render() {
-    const { children, disabled, invalid } = this.props;
+    const { autoFocus, children, disabled, invalid, type } = this.props;
 
     return (
       <ButtonElement
+        autoFocus={autoFocus}
         disabled={disabled}
-        state={getState(disabled, true, invalid)}
+        invalid={invalid}
+        type={type}
       >
         {children}
       </ButtonElement>
@@ -41,18 +58,31 @@ export class Button extends Component<ButtonProps> {
 }
 
 /**
- * The actual button element.
+ * Button props that affect styling.
  */
-const ButtonElement = styled.button<StateProps>`
+interface ButtonElementProps {
+  /**
+   * Whether or not button is invalid.
+   */
+  invalid?: boolean;
+}
+
+/**
+ * Actual button element component.
+ */
+const ButtonElement = styled.button<ButtonElementProps>`
   ${RESET};
 
-  width: 100%;
-  height: ${UNIT_HEIGHT}rem;
+  height: ${({ theme }) => theme.PADDING};
+  padding: 0 ${({ theme }) => theme.PADDING};
 
-  border-radius: ${BORDER_RADIUS}rem;
-  background-color: ${props => props.theme.states[props.state].borderColor};
+  border-radius: ${({ theme }) => theme.BORDER_RADIUS};
+  background-color: ${({ invalid, theme }) =>
+    theme[invalid ? "INVALID_COLOR" : "ACTIVE_COLOR"]};
 
-  color: ${props => props.theme.states[props.state].backgroundColor};
+  color: ${({ theme }) => theme.BACKGROUND_COLOR};
 
   cursor: pointer;
+
+  transition: ${({ theme }) => theme.TRANSITION};
 `;

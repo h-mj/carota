@@ -35,7 +35,6 @@ export const english: Translation = {
       }
     },
     Form: {
-      login: { submit: "Sign in" },
       foodInformation: { submit: "Save" },
       register: { submit: "Sign up" }
     },
@@ -117,6 +116,19 @@ export const english: Translation = {
     }
   },
   scenes: {
-    Login: { title: "Sign in" }
+    Login: {
+      inputs: {
+        email: {
+          label: "Email",
+          reasons: { empty: "Please enter an email address" }
+        },
+        password: {
+          label: "Password",
+          reasons: { empty: "Please enter a password" }
+        }
+      },
+      title: "Sign in",
+      submit: "Sign in"
+    }
   }
 };

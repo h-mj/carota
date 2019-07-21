@@ -6,7 +6,8 @@ import { Scene } from "./Scene";
 import { Button } from "../component/Button";
 import { Head } from "../component/Head";
 import { TextField } from "../component/TextField";
-import { styled } from "../styling/theme";
+import { Center } from "../component/collection/container";
+import { Controls, Form, Main, Title } from "../component/collection/form";
 import { any, insert } from "../utility/form";
 
 /**
@@ -158,71 +159,3 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
     this.reasons = insert(reasons, error);
   };
 }
-
-/**
- * Component that takes up whole screen and centers its children.
- */
-const Center = styled.div`
-  width: 100%;
-  min-height: 100%;
-
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-`;
-
-/**
- * Form element that contains email and password text fields alongside submit
- * button.
- */
-const Form = styled.form`
-  min-height: calc(9 * ${({ theme }) => theme.HEIGHT});
-  max-width: ${({ theme }) => theme.FORM_WIDTH};
-  width: 100%;
-
-  padding: ${({ theme }) => theme.PADDING};
-  box-sizing: border-box;
-
-  transition: ${({ theme }) => theme.TRANSITION};
-
-  & > * {
-    margin-bottom: ${({ theme }) => theme.PADDING};
-  }
-
-  & > *:last-child {
-    margin-bottom: 0;
-  }
-`;
-
-/**
- * Component that displays title text.
- */
-const Title = styled.div`
-  color: ${({ theme }) => theme.PRIMARY_COLOR};
-  font-size: 1.5rem;
-  text-align: center;
-`;
-
-/**
- * Component that contains email and password text fields.
- */
-const Main = styled.div`
-  width: 100%;
-
-  & > * {
-    margin-bottom: calc(${({ theme }) => theme.PADDING} / 3);
-  }
-
-  & > *:last-child {
-    margin-bottom: 0;
-  }
-`;
-
-/**
- * Component that contains the submit button.
- */
-const Controls = styled.div`
-  display: flex;
-  justify-content: right;
-`;

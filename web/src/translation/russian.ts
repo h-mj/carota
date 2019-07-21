@@ -35,8 +35,7 @@ export const russian: Translation = {
       }
     },
     Form: {
-      foodInformation: { submit: "Сохранить" },
-      register: { submit: "Завести аккаунт" }
+      foodInformation: { submit: "Сохранить" }
     },
     Head: {
       title: "Морковка"
@@ -48,25 +47,6 @@ export const russian: Translation = {
           empty: "Пожалуйста, введите штрихкод"
         }
       },
-      email: {
-        label: "Введите адрес электронной почты",
-        reasons: {
-          conflict: "Введенный адрес электронной почты уже используется",
-          empty: "Пожалуйста, введите адрес электронной почты",
-          invalid: "Пожалуйста, введите действительный адрес электронной почты"
-        }
-      },
-      language: {
-        label: "Выберите язык",
-        options: {
-          English: "English",
-          Estonian: "eesti",
-          Russian: "русский"
-        },
-        reasons: {
-          missing: "Пожалуйста, выберите язык"
-        }
-      },
       name: {
         label: "Введите имя",
         reasons: {
@@ -76,13 +56,6 @@ export const russian: Translation = {
       nutritionDeclaration: {
         label: "Пищевая ценность",
         reasons: {}
-      },
-      password: {
-        label: "Введите пароль",
-        reasons: {
-          empty: "Пожалуйста, введите пароль",
-          invalid: "Пароль должен содержать не менее 8 символов"
-        }
       },
       unit: {
         label: "Выберите единицу",
@@ -127,8 +100,47 @@ export const russian: Translation = {
           reasons: { empty: "Пожалуйста, введите пароль" }
         }
       },
-      title: "Вход",
-      submit: "Вход →"
+      submit: "Вход →",
+      title: "Вход"
+    },
+    Register: {
+      inputs: {
+        email: {
+          label: "Эл. почта",
+          reasons: {
+            conflict: "Введенный адрес электронной почты уже используется.",
+            empty: "Пожалуйста, введите адрес электронной почты.",
+            invalid:
+              "Пожалуйста, введите действительный адрес электронной почты."
+          }
+        },
+        language: {
+          label: "Язык",
+          options: {
+            English: "English",
+            Estonian: "eesti",
+            Russian: "русский"
+          },
+          reasons: {
+            missing: "Пожалуйста, выберите язык."
+          }
+        },
+        name: {
+          label: "Имя",
+          reasons: {
+            empty: "Пожалуйста, введите имя."
+          }
+        },
+        password: {
+          label: "Пароль",
+          reasons: {
+            empty: "Пожалуйста, введите пароль.",
+            invalid: "Пароль должен содержать не менее 8 символов."
+          }
+        }
+      },
+      submit: "Завести аккаунт →",
+      title: "Завести аккаунт"
     }
   }
 };

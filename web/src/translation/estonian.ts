@@ -35,8 +35,7 @@ export const estonian: Translation = {
       }
     },
     Form: {
-      foodInformation: { submit: "Salvesta" },
-      register: { submit: "Looge konto" }
+      foodInformation: { submit: "Salvesta" }
     },
     Head: {
       title: "Morkovka"
@@ -48,25 +47,6 @@ export const estonian: Translation = {
           empty: "Palun sisestage triipkood"
         }
       },
-      email: {
-        label: "Sisestage e-posti aadress",
-        reasons: {
-          conflict: "Sisestatud e-posti aadress on juba kasutuses",
-          empty: "Palun sisestage e-posti aadress",
-          invalid: "Palun sisestage kehtiv e-posti aadress"
-        }
-      },
-      language: {
-        label: "Valige keel",
-        options: {
-          English: "English",
-          Estonian: "eesti",
-          Russian: "русский"
-        },
-        reasons: {
-          missing: "Palun valige keel"
-        }
-      },
       name: {
         label: "Sisestage nimi",
         reasons: {
@@ -76,13 +56,6 @@ export const estonian: Translation = {
       nutritionDeclaration: {
         label: "Toitumisalane teave",
         reasons: {}
-      },
-      password: {
-        label: "Sisestage salasõna",
-        reasons: {
-          empty: "Palun sisestage salasõna",
-          invalid: "Salasõna peab sisaldama vähemalt 8 tähemärki"
-        }
       },
       unit: {
         label: "Valige ühik",
@@ -121,15 +94,53 @@ export const estonian: Translation = {
       inputs: {
         email: {
           label: "E-post",
-          reasons: { empty: "Palun sisestage e-posti aadress" }
+          reasons: { empty: "Palun sisestage e-posti aadress." }
         },
         password: {
           label: "Parool",
-          reasons: { empty: "Palun sisestage salasõna" }
+          reasons: { empty: "Palun sisestage salasõna." }
         }
       },
-      title: "Sisenege",
-      submit: "Sisenege →"
+      submit: "Sisenege →",
+      title: "Sisenege"
+    },
+    Register: {
+      inputs: {
+        email: {
+          label: "E-post",
+          reasons: {
+            conflict: "Sisestatud e-posti aadress on juba kasutuses.",
+            empty: "Palun sisestage e-posti aadress.",
+            invalid: "Palun sisestage kehtiv e-posti aadress."
+          }
+        },
+        language: {
+          label: "Keel",
+          options: {
+            English: "English",
+            Estonian: "eesti",
+            Russian: "русский"
+          },
+          reasons: {
+            missing: "Palun valige keel."
+          }
+        },
+        name: {
+          label: "Nimi",
+          reasons: {
+            empty: "Palun sisestage nimi."
+          }
+        },
+        password: {
+          label: "Parool",
+          reasons: {
+            empty: "Palun sisestage salasõna.",
+            invalid: "Salasõna peab sisaldama vähemalt 8 tähemärki."
+          }
+        }
+      },
+      submit: "Looge konto →",
+      title: "Looge konto"
     }
   }
 };

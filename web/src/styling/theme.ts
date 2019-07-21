@@ -30,6 +30,21 @@ export interface StateProps {
 }
 
 /**
+ * Props that affect styling of a components.
+ */
+export interface StyleProps {
+  /**
+   * Whether or not component is active.
+   */
+  active?: boolean;
+
+  /**
+   * Whether or not component is invalid.
+   */
+  invalid?: boolean;
+}
+
+/**
  * Theme definition.
  */
 export interface Theme {
@@ -108,8 +123,8 @@ export const LIGHT: Readonly<Theme> = {
   PADDING: "2.5rem",
   FORM_WIDTH: "28rem",
   BORDER_RADIUS: "0.4375rem",
-  ACTIVE_COLOR: "rgb(255, 150, 0)",
-  INVALID_COLOR: "rgb(220, 0, 0)",
+  ACTIVE_COLOR: "rgb(255, 125, 0)",
+  INVALID_COLOR: "rgb(255, 0, 0)",
   PRIMARY_COLOR: "rgba(0, 0, 0, 0.88)",
   SECONDARY_COLOR: "rgba(0, 0, 0, 0.44)",
   BACKGROUND_COLOR: "rgb(255, 255, 255)",

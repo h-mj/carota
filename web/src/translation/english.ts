@@ -35,8 +35,7 @@ export const english: Translation = {
       }
     },
     Form: {
-      foodInformation: { submit: "Save" },
-      register: { submit: "Sign up" }
+      foodInformation: { submit: "Save" }
     },
     Head: {
       title: "Morkovka"
@@ -48,25 +47,6 @@ export const english: Translation = {
           empty: "Please enter a barcode"
         }
       },
-      email: {
-        label: "Enter an email address",
-        reasons: {
-          conflict: "Entered email address is already in use",
-          empty: "Please enter an email address",
-          invalid: "Please enter a valid email address"
-        }
-      },
-      language: {
-        label: "Select a language",
-        options: {
-          English: "English",
-          Estonian: "eesti",
-          Russian: "русский"
-        },
-        reasons: {
-          missing: "Please select a language"
-        }
-      },
       name: {
         label: "Enter a name",
         reasons: {
@@ -76,13 +56,6 @@ export const english: Translation = {
       nutritionDeclaration: {
         label: "Nutrition information",
         reasons: {}
-      },
-      password: {
-        label: "Enter a password",
-        reasons: {
-          empty: "Please enter a password",
-          invalid: "Password must be at least 8 characters long"
-        }
       },
       unit: {
         label: "Select a unit",
@@ -120,15 +93,53 @@ export const english: Translation = {
       inputs: {
         email: {
           label: "Email",
-          reasons: { empty: "Please enter an email address" }
+          reasons: { empty: "Please enter an email address." }
         },
         password: {
           label: "Password",
-          reasons: { empty: "Please enter a password" }
+          reasons: { empty: "Please enter a password." }
         }
       },
-      title: "Sign in",
-      submit: "Sign in →"
+      submit: "Sign in →",
+      title: "Sign in"
+    },
+    Register: {
+      inputs: {
+        email: {
+          label: "Email",
+          reasons: {
+            conflict: "Entered email address is already in use.",
+            empty: "Please enter an email address.",
+            invalid: "Please enter a valid email address."
+          }
+        },
+        language: {
+          label: "Language",
+          options: {
+            English: "English",
+            Estonian: "eesti",
+            Russian: "русский"
+          },
+          reasons: {
+            missing: "Please select a language."
+          }
+        },
+        name: {
+          label: "Name",
+          reasons: {
+            empty: "Please enter a name."
+          }
+        },
+        password: {
+          label: "Password",
+          reasons: {
+            empty: "Please enter a password.",
+            invalid: "Password must be at least 8 characters long."
+          }
+        }
+      },
+      submit: "Create account →",
+      title: "Create account"
     }
   }
 };

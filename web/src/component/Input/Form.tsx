@@ -2,8 +2,8 @@ import { Error } from "api";
 import { observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Component } from "./Component";
-import { Button } from "./Input/Button";
+import { Component } from "../Component";
+import { Button } from "./Button";
 import {
   getDefaultValue,
   Input,
@@ -11,10 +11,10 @@ import {
   InputErrorReasons,
   InputNames,
   InputValues
-} from "./Input/Input";
-import { UNIT_HEIGHT } from "../styling/sizes";
-import { styled } from "../styling/theme";
-import { any, insert } from "../utility/form";
+} from "./Input";
+import { UNIT_HEIGHT } from "../../styling/sizes";
+import { styled } from "../../styling/theme";
+import { any, insert } from "../../utility/form";
 
 /**
  * Returns function input name type parameters as array.
@@ -26,13 +26,7 @@ const withInputs = <TInputNames extends InputNames>(...names: TInputNames[]) =>
  * Defines form names and their corresponding input name arrays.
  */
 const FORM_INPUT_NAMES = {
-  foodInformation: withInputs(
-    "name",
-    "barcode",
-    "unit",
-    "nutritionDeclaration"
-  ),
-  register: withInputs("language", "name", "email", "password")
+  foodInformation: withInputs("name", "barcode", "unit", "nutritionDeclaration")
 };
 
 /**

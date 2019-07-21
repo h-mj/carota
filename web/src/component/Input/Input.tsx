@@ -4,7 +4,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Component } from "../Component";
 import { DeclareNutrition, DeclareNutritionProps } from "./DeclareNutrition";
-import { Select, SelectProps } from "./Select";
+import { Select } from "../Select";
 import { TextField } from "../TextField";
 
 /**
@@ -12,14 +12,8 @@ import { TextField } from "../TextField";
  */
 const INPUTS = {
   barcode: { component: "TextField", type: "tel" },
-  email: { component: "TextField", type: "email" },
-  language: {
-    component: "Select",
-    options: ["Estonian", "English", "Russian"]
-  },
   name: { component: "TextField", type: "text" },
   nutritionDeclaration: { component: "DeclareNutrition" },
-  password: { component: "TextField", type: "password" },
   unit: { component: "Select", options: ["g", "ml"] }
 } as const;
 
@@ -46,7 +40,7 @@ export type InputValues<TInputNames extends InputNames = InputNames> = {
   [InputName in TInputNames]: InputName extends InputNames<"DeclareNutrition">
     ? DeclareNutritionProps["value"]
     : InputName extends InputNames<"Select">
-    ? SelectProps<SelectOptionValues<InputName>>["value"]
+    ? SelectOptionValues<InputName> | undefined
     : InputName extends InputNames<"TextField">
     ? string
     : never
@@ -63,7 +57,7 @@ export const getDefaultValue = <TInputName extends InputNames>(
   if (component === "DeclareNutrition") {
     return DeclareNutrition.getDefaultValue();
   } else if (component === "Select") {
-    return Select.getDefaultValue();
+    return undefined;
   } else if (component === "TextField") {
     return "";
   } else {

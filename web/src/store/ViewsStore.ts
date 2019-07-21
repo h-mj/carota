@@ -190,6 +190,14 @@ export class ViewsStore {
   }
 
   /**
+   * Redirects user to home scene.
+   */
+  @action
+  public home() {
+    this.redirect(SceneContext.HOME);
+  }
+
+  /**
    * Updates main scene context based on current URL and authentication status.
    */
   @action
@@ -203,7 +211,7 @@ export class ViewsStore {
       context !== undefined &&
       context.sceneName === "Logout"
     ) {
-      return this.redirect(SceneContext.HOME);
+      return this.home();
     }
 
     this.redirect(

@@ -1,101 +1,220 @@
-import { AuthRegisterBody, Languages } from "api";
-import { action, observable } from "mobx";
+import { ErrorReasons, Languages } from "api";
+import { observable, action } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { SceneContext } from "./SceneContext";
 import { Scene } from "./Scene";
-import { Alert } from "../component/Alert";
-import { Compact } from "../component/container/Compact";
-import { Form, FormChangeHandler, FormSubmitHandler } from "../component/Form";
+import { Head } from "../component/Head";
+import { Select } from "../component/Select";
+import { TextField } from "../component/TextField";
+import { Center } from "../component/collection/container";
+import { Controls, Form, Main, Title } from "../component/collection/form";
+import { Button } from "../component/Button";
+import { any, insert } from "../utility/form";
 
 /**
- * Scene that renders a form used for registration.
+ * Array of text field names within registration form.
+ */
+const TEXT_FIELDS = ["name", "email", "password"] as const;
+
+/**
+ * Text field name type that is union of all text field names inside
+ * `TEXT_FIELDS` array.
+ */
+type TextFieldNames = typeof TEXT_FIELDS[number];
+
+/**
+ * Union of all input names.
+ */
+type InputNames = "language" | TextFieldNames;
+
+/**
+ * Text field translation.
+ */
+interface TextFieldTranslation {
+  /**
+   * Text field label text.
+   */
+  label: string;
+
+  /**
+   * Error messages of various error reasons input may have.
+   */
+  reasons: Partial<Record<ErrorReasons, string>>;
+}
+
+/**
+ * Language field translation, that includes language option translations
+ * alongside all `TextFieldTranslation` properties.
+ */
+interface LanguageSelectTranslation extends TextFieldTranslation {
+  /**
+   * Translations of select options.
+   */
+  options: Record<Languages, string>;
+}
+
+/**
+ * Register scene translation.
+ */
+interface RegisterTranslation {
+  /**
+   * Registration form input translations.
+   */
+  inputs: {
+    [InputName in InputNames]: InputName extends TextFieldNames
+      ? TextFieldTranslation
+      : LanguageSelectTranslation
+  };
+
+  /**
+   * Form submit button text.
+   */
+  submit: string;
+
+  /**
+   * Page title.
+   */
+  title: string;
+}
+
+/**
+ * Scene that used to create a new account by filling in registration form.
  */
 @inject("auth", "views")
 @observer
-export class Register extends Scene<"Register"> {
+export class Register extends Scene<"Register", {}, RegisterTranslation> {
   /**
-   * Whether or not `invitationId` in `parameters` props is valid. `undefined`
-   * if the value has not been retrieved yet.
+   * Object that contains values of each input.
    */
-  @observable private isValid?: boolean;
+  @observable private values = {
+    language: undefined as Languages | undefined,
+    name: "",
+    email: "",
+    password: ""
+  };
 
   /**
-   * Creates a new instance of `Register` scene.
-   *
-   * Calls an async function that checks whether
+   * Object that contains error reasons of occurred errors of each input.
    */
-  public constructor(props: any) {
-    super(props);
-
-    this.checkInvitationIdValidity();
-  }
+  @observable private reasons: Partial<Record<InputNames, ErrorReasons>> = {};
 
   /**
-   * Renders a registration form.
+   * Renders registration form.
    */
   public render() {
-    if (this.isValid === undefined) {
-      return null;
-    } else if (!this.isValid) {
-      return <Alert name="invalidInvitation" parameters={{}} />;
-    }
-
     return (
-      <Compact>
-        <Form
-          autoFocus
-          name="register"
-          onChange={this.handleChange}
-          onSubmit={this.handleSubmit}
-        />
-      </Compact>
+      <Center>
+        <Head title={this.translation.title} />
+        <Form noValidate={true} onSubmit={this.handleSubmit}>
+          <Title>{this.translation.title}</Title>
+          <Main>
+            <Select
+              errorMessage={
+                this.reasons.language !== undefined
+                  ? this.translation.inputs.language.reasons[
+                      this.reasons.language!
+                    ]
+                  : undefined
+              }
+              invalid={this.reasons.language !== undefined}
+              label={this.translation.inputs.language.label}
+              name="language"
+              onChange={this.handleLanguageChange}
+              options={(["English", "Estonian", "Russian"] as const).map(
+                language => ({
+                  label: this.translation.inputs.language.options[language],
+                  value: language
+                })
+              )}
+              value={this.values["language"]}
+            />
+
+            {TEXT_FIELDS.map(name => (
+              <TextField
+                key={name}
+                errorMessage={
+                  this.reasons[name] !== undefined
+                    ? this.translation.inputs[name].reasons[this.reasons[name]!]
+                    : undefined
+                }
+                invalid={this.reasons[name] !== undefined}
+                label={this.translation.inputs[name].label}
+                name={name}
+                onChange={this.handleTextFieldChange}
+                required={true}
+                type={name === "name" ? "text" : name}
+                value={this.values[name]}
+              />
+            ))}
+          </Main>
+          <Controls>
+            <Button invalid={any(this.reasons)}>
+              {this.translation.submit}
+            </Button>
+          </Controls>
+        </Form>
+      </Center>
     );
   }
 
   /**
-   * Updates interface language when language input changes.
+   * Updates `values` object on text field value change.
    */
   @action
-  private handleChange: FormChangeHandler<"register"> = (name, value) => {
-    if (name === "language") {
-      this.props.views!.language = value as Languages;
-    }
+  private handleTextFieldChange = (name: TextFieldNames, value: string) => {
+    this.values[name] = value;
   };
 
   /**
-   * Sends registration form data to server and either redirects user to home
-   * scene or displays occurred errors.
+   * Updates `language` field of `values` object on language select option change.
    */
   @action
-  private handleSubmit: FormSubmitHandler<"register"> = async values => {
-    const { auth, parameters, views } = this.props;
+  private handleLanguageChange = (
+    name: "language",
+    value: Languages | undefined
+  ) => {
+    this.values[name] = value;
+    this.props.views!.language = value || "English";
+  };
 
-    const error = views!.load(
-      auth!.register({
-        ...values,
-        invitationId: parameters!.invitationId
-      } as AuthRegisterBody), // Let backend handle the validation for now.);
-      1
+  /**
+   * Prevents default form submit event and executes custom registration logic
+   * instead.
+   */
+  @action
+  private handleSubmit: React.FormEventHandler<
+    HTMLFormElement
+  > = async event => {
+    event.preventDefault();
+
+    const { language, name, email, password } = this.values;
+    const { invitationId } = this.props.parameters!;
+
+    const reasons = {
+      language: language === undefined ? "missing" : undefined,
+      name: name.trim() === "" ? "empty" : undefined,
+      email: email.trim() === "" ? "empty" : undefined,
+      password: password.length < 8 ? "invalid" : undefined
+    } as const;
+
+    const skip = any(reasons);
+
+    const error = await this.props.views!.load(
+      skip
+        ? undefined
+        : this.props.auth!.register({
+            language: language!, // Language cannot be `undefined` since if it was server request would be skipped.
+            name,
+            email,
+            password,
+            invitationId
+          })
     );
 
-    if (error === undefined) {
-      views!.redirect(SceneContext.HOME);
+    if (error === undefined && !skip) {
+      this.props.views!.home();
     }
 
-    return error;
+    this.reasons = insert(reasons, error);
   };
-
-  /**
-   * Checks whether ot not `invitationId` in `parameters` props is valid and
-   * assigns corresponding boolean value to `valid` field.
-   */
-  private async checkInvitationIdValidity() {
-    const { auth, parameters, views } = this.props;
-
-    this.isValid =
-      parameters === undefined
-        ? false
-        : await views!.load(auth!.check(parameters));
-  }
 }

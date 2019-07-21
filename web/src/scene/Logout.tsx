@@ -1,6 +1,5 @@
 import { inject } from "mobx-react";
 import { Scene } from "./Scene";
-import { SceneContext } from "./SceneContext";
 
 /**
  * Scene that, when constructed, logs user out after some timeout.
@@ -32,6 +31,6 @@ export class Logout extends Scene<"Logout"> {
     await views!.load(undefined);
 
     auth!.logout();
-    views!.redirect(SceneContext.HOME);
+    views!.home();
   }
 }

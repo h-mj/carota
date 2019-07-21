@@ -3,7 +3,7 @@ import * as React from "react";
 import { Alert } from "./Alert";
 import { Anchor } from "./Anchor";
 import { DeclareNutrition } from "./Input/DeclareNutrition";
-import { Form } from "./Form";
+import { Form } from "./Input/Form";
 import { Head } from "./Head";
 import { Input } from "./Input/Input";
 import { Navigation } from "./Navigation";

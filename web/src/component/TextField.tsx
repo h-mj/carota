@@ -2,15 +2,9 @@ import { action, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
 import { Component } from "./Component";
+import { ErrorMessage, Field, Label } from "./collection/input";
 import { RESET } from "../styling/stylesheets";
-import { styled } from "../styling/theme";
-
-/**
- * Change callback function type that takes changed input name and new value as parameters.
- */
-interface ChangeHandler<TName extends string, TValues> {
-  (name: TName, value: TValues): void;
-}
+import { styled, StyleProps } from "../styling/theme";
 
 /**
  * Text field component props.
@@ -55,7 +49,7 @@ interface TextFieldProps<TName extends string> {
   /**
    * Function that will be called when text field value changes.
    */
-  onChange?: ChangeHandler<TName, string>;
+  onChange?: (name: TName, value: string) => void;
 
   /**
    * Text that will be shown inside the text field if it's empty.
@@ -96,7 +90,7 @@ export class TextField<TName extends string = string> extends Component<
   @observable private focused = false;
 
   /**
-   * Renders `Label`, `Input` and `ErrorMessage` components.
+   * Renders the text field.
    */
   public render() {
     const {
@@ -116,17 +110,17 @@ export class TextField<TName extends string = string> extends Component<
 
     return (
       <div>
-        <Label focused={this.focused} invalid={invalid}>
+        <Field as="label" active={this.focused} invalid={invalid}>
           {label !== undefined && (
-            <Caption focused={this.focused} invalid={invalid}>
+            <Label active={this.focused} invalid={invalid}>
               {label}
-            </Caption>
+            </Label>
           )}
           <Input
             autoComplete={autoComplete ? "on" : "off"}
             autoFocus={autoFocus}
             disabled={disabled}
-            focused={this.focused}
+            active={this.focused}
             invalid={invalid}
             name={name}
             onBlur={this.handleFocusChange}
@@ -138,7 +132,7 @@ export class TextField<TName extends string = string> extends Component<
             type={type}
             value={value}
           />
-        </Label>
+        </Field>
         {errorMessage !== undefined && (
           <ErrorMessage>{errorMessage}</ErrorMessage>
         )}
@@ -171,69 +165,9 @@ export class TextField<TName extends string = string> extends Component<
 }
 
 /**
- * Props that affect styling of other components.
- */
-interface TextFieldStateProps {
-  /**
-   * Whether or not text field input is in focus.
-   */
-  focused?: boolean;
-
-  /**
-   * Whether or not text field is invalid.
-   */
-  invalid?: boolean;
-}
-
-/**
- * Label component that contains the caption and input element.
- */
-const Label = styled.label<TextFieldStateProps>`
-  display: flex;
-
-  height: ${({ theme }) => theme.HEIGHT};
-
-  border: solid 2px
-    ${({ focused, invalid, theme }) =>
-      theme[
-        invalid ? "INVALID_COLOR" : focused ? "ACTIVE_COLOR" : "BORDER_COLOR"
-      ]};
-  border-radius: ${({ theme }) => theme.BORDER_RADIUS};
-  box-sizing: border-box;
-
-  cursor: text;
-
-  transition: ${({ theme }) => theme.TRANSITION};
-`;
-
-/**
- * Component that displays the label text.
- */
-const Caption = styled.div<TextFieldStateProps>`
-  min-width: 30%;
-  height: 100%;
-
-  display: flex;
-  align-items: center;
-
-  padding: 0 calc(${({ theme }) => theme.PADDING} / 3);
-  box-sizing: border-box;
-
-  color: ${({ focused, invalid, theme }) =>
-    theme[
-      invalid ? "INVALID_COLOR" : focused ? "ACTIVE_COLOR" : "SECONDARY_COLOR"
-    ]};
-  white-space: nowrap;
-
-  user-select: none;
-
-  transition: ${({ theme }) => theme.TRANSITION};
-`;
-
-/**
  * Input element into which user enters the text.
  */
-const Input = styled.input<TextFieldStateProps>`
+const Input = styled.input<StyleProps>`
   ${RESET};
 
   width: 100%;
@@ -250,16 +184,4 @@ const Input = styled.input<TextFieldStateProps>`
     color: ${({ theme }) => theme.SECONDARY_COLOR};
     opacity: initial;
   }
-`;
-
-/**
- * Component that displays the error message under `Label` component.
- */
-const ErrorMessage = styled.div`
-  margin-top: calc(${({ theme }) => theme.PADDING} / 6);
-
-  color: ${({ theme }) => theme.INVALID_COLOR};
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0;
 `;

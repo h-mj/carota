@@ -142,7 +142,7 @@ const Disk = styled.div`
 
   border-radius: ${DISK_SIZE / 2}rem;
 
-  background-color: ${({ theme }) => theme.states.active.borderColor};
+  background-color: ${({ theme }) => theme.ACTIVE_COLOR};
 
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 

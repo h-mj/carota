@@ -5,7 +5,7 @@ import { SceneContext } from "./SceneContext";
 import { DefaultSceneProps, Scene } from "./Scene";
 import { Compact } from "../component/container/Compact";
 import { Fluid } from "../component/container/Fluid";
-import { Form, FormSubmitHandler, FormValues } from "../component/Form";
+import { Form, FormSubmitHandler, FormValues } from "../component/Input/Form";
 import { Food } from "../model/Food";
 
 /**

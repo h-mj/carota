@@ -31,8 +31,7 @@ export abstract class Model<TModel extends Model = any, TData = {}> {
   /**
    * Store that stores and manages this model.
    */
-  // @ts-ignore
-  private store: Store<TModel>;
+  protected store: Store<TModel>;
 
   /**
    * Creates a new instance of some model.

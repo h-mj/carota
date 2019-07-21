@@ -4,13 +4,15 @@
  */
 interface Api {
   auth: {
-    check: Types<AuthCheckBody, AuthCheckData>;
     login: Types<AuthLoginBody, AuthData>;
     register: Types<AuthRegisterBody, AuthData>;
   };
   food: {
     save: Types<FoodSaveBody, FoodData>;
     search: Types<FoodSearchBody, FoodData[]>;
+  };
+  invitation: {
+    get: Types<InvitationGetBody, InvitationData>;
   };
 }
 
@@ -268,13 +270,13 @@ export interface AuthRegisterBody {
 }
 
 /**
- * Invitation check message body type.
+ * Invitation get message body type.
  */
-export interface AuthCheckBody {
+export interface InvitationGetBody {
   /**
    * Invitation ID, which validity is being checked.
    */
-  invitationId: string;
+  id: string;
 }
 
 /**
@@ -290,11 +292,21 @@ export interface AuthData {
 /**
  * Invitation check response message data type.
  */
-export interface AuthCheckData {
+export interface InvitationData {
   /**
-   * Whether or not given invitation ID is valid.
+   * Invitation ID.
    */
-  isValid: boolean;
+  id: string;
+
+  /**
+   * Account type of future account.
+   */
+  type: string;
+
+  /**
+   * Account rights of future account.
+   */
+  rights: string;
 }
 
 /**

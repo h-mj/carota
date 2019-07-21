@@ -38,9 +38,9 @@ export class Store<TModel extends Model> {
   };
 
   /**
-   * Creates a new model instance if model data is provided and adds created
-   * instance to map `data`. If model instance is provided, adds that instance
-   * instead.
+   * Creates a new model instance if model data is provided and adds and returns
+   * created instance to map `data`. If model instance is provided, adds and
+   * returns that instance instead.
    *
    * @param model Model instance or model data.
    */
@@ -50,6 +50,8 @@ export class Store<TModel extends Model> {
       model instanceof Model ? model : new this.modelClass(model, this);
 
     this.data.set(instance.id, instance);
+
+    return instance;
   };
 
   /**

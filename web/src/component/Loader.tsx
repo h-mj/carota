@@ -30,9 +30,26 @@ export class Loader extends Component {
   private previousIsLoading = false;
 
   /**
+   * Creates a new instance of `Loader` and updates loading state.
+   */
+  public constructor(props: any) {
+    super(props);
+    this.update();
+  }
+
+  /**
+   * Updates loading component on component update.
+   */
+  @action
+  public componentWillUpdate() {
+    this.update();
+  }
+
+  /**
    * Sets fade out timeout if needed and updates `previousIsLoading` value.
    */
-  public componentWillUpdate() {
+  @action
+  private update() {
     const { loading } = this.props.views!;
 
     // If we were loading but not anymore, fade out.

@@ -5,7 +5,7 @@ import { styled } from "../../styling/theme";
  */
 export const Controls = styled.div`
   display: flex;
-  justify-content: right;
+  justify-content: flex-end;
 `;
 
 /**

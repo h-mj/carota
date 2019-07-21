@@ -135,15 +135,17 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
   > = async event => {
     event.preventDefault();
 
+    const { email, password } = this.values;
+
     const reasons = {
-      email: this.values.email.trim() === "" ? "empty" : undefined,
-      password: this.values.password === "" ? "empty" : undefined
+      email: email.trim() === "" ? "empty" : undefined,
+      password: password === "" ? "empty" : undefined
     } as const;
 
     const skip = any(reasons);
 
     const error = await this.props.views!.load(
-      skip ? undefined : this.props.auth!.login(this.values)
+      skip ? undefined : this.props.auth!.login(email, password)
     );
 
     if (error === undefined && !skip) {

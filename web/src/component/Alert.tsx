@@ -1,7 +1,7 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Component } from "./Component";
-import { UNIT_HEIGHT } from "../styling/sizes";
+import { Center } from "./collection/container";
 import { styled } from "../styling/theme";
 
 /**
@@ -85,10 +85,10 @@ export class Alert<
     }
 
     return (
-      <>
+      <Center>
         <Title>{title}</Title>
         <Message>{message}</Message>
-      </>
+      </Center>
     );
   }
 }
@@ -97,19 +97,20 @@ export class Alert<
  * Alert title text component.
  */
 const Title = styled.div`
-  margin-bottom: ${UNIT_HEIGHT / 4}rem;
-  color: ${({ theme }) => theme.colorPrimary};
+  max-width: ${({ theme }) => theme.FORM_WIDTH};
+  margin-bottom: calc(${({ theme }) => theme.PADDING} / 3);
+  color: ${({ theme }) => theme.PRIMARY_COLOR};
   font-size: 2rem;
   letter-spacing: -0.022em;
   line-height: 2.5rem;
-  text-align: center;
 `;
 
 /**
  * Alert message text component.
  */
 const Message = styled.div`
-  color: ${({ theme }) => theme.colorSecondary};
+  max-width: ${({ theme }) => theme.FORM_WIDTH};
+  color: ${({ theme }) => theme.SECONDARY_COLOR};
   line-height: 1.5rem;
-  text-align: center;
+  text-align: justify;
 `;

@@ -3,6 +3,7 @@ import { observable, action } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Scene } from "./Scene";
+import { Alert } from "../component/Alert";
 import { Head } from "../component/Head";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
@@ -78,11 +79,21 @@ interface RegisterTranslation {
 }
 
 /**
+ * Regular expression that matches valid GUID v4.
+ */
+const GUID_V4_REGEX = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
+
+/**
  * Scene that used to create a new account by filling in registration form.
  */
-@inject("auth", "views")
+@inject("auth", "invitations", "views")
 @observer
 export class Register extends Scene<"Register", {}, RegisterTranslation> {
+  /**
+   * Whether or not invitation within route parameters is valid.
+   */
+  @observable private valid?: boolean;
+
   /**
    * Object that contains values of each input.
    */
@@ -99,9 +110,25 @@ export class Register extends Scene<"Register", {}, RegisterTranslation> {
   @observable private reasons: Partial<Record<InputNames, ErrorReasons>> = {};
 
   /**
+   * Creates `Register` scene and initiates invitation ID verification.
+   */
+  public constructor(props: any) {
+    super(props);
+    this.verify();
+  }
+
+  /**
    * Renders registration form.
    */
   public render() {
+    if (this.valid === undefined) {
+      return null;
+    }
+
+    if (!this.valid) {
+      return <Alert name="invalidInvitation" parameters={{}} />;
+    }
+
     return (
       <Center>
         <Head title={this.translation.title} />
@@ -202,13 +229,13 @@ export class Register extends Scene<"Register", {}, RegisterTranslation> {
     const error = await this.props.views!.load(
       skip
         ? undefined
-        : this.props.auth!.register({
-            language: language!, // Language cannot be `undefined` since if it was server request would be skipped.
+        : this.props.auth!.register(
+            language!, // Language cannot be `undefined` since if it was server request would be skipped.
             name,
             email,
             password,
             invitationId
-          })
+          )
     );
 
     if (error === undefined && !skip) {
@@ -216,5 +243,27 @@ export class Register extends Scene<"Register", {}, RegisterTranslation> {
     }
 
     this.reasons = insert(reasons, error);
+  };
+
+  /**
+   * Verifies invitation ID inside router parameters.
+   */
+  @action
+  private verify = async () => {
+    const { parameters } = this.props;
+
+    if (
+      parameters === undefined ||
+      parameters.invitationId === undefined ||
+      !GUID_V4_REGEX.test(parameters.invitationId)
+    ) {
+      this.valid = false;
+    } else {
+      const invitation = await this.props.views!.load(
+        this.props.invitations!.fetch(parameters.invitationId)
+      );
+
+      this.valid = invitation !== undefined;
+    }
   };
 }

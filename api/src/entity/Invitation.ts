@@ -5,7 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn
 } from "typeorm";
-import { AccountRights, AccountTypes } from "../../types";
+import { AccountRights, AccountTypes, InvitationData } from "../../types";
 import { Account, ACCOUNT_RIGHTS_ENUM, ACCOUNT_TYPES_ENUM } from "./Account";
 
 /**
@@ -45,4 +45,13 @@ export class Invitation extends BaseEntity {
    */
   @Column("enum", { enum: ACCOUNT_RIGHTS_ENUM })
   public rights!: AccountRights;
+
+  /**
+   * Creates `InvitationData` type object from this instance.
+   */
+  public toData = (): InvitationData => ({
+    id: this.id,
+    type: this.type,
+    rights: this.rights
+  });
 }

@@ -1,4 +1,4 @@
-import { Body } from "api";
+import { Languages } from "api";
 import { action, autorun, computed, observable } from "mobx";
 import { RootStore } from "./RootStore";
 import { post } from "../utility/client";
@@ -67,8 +67,8 @@ export class AuthStore {
    * @param body Login request message body.
    */
   @action
-  public async login(body: Body<"auth", "login">) {
-    const response = await post("auth", "login", body);
+  public async login(email: string, password: string) {
+    const response = await post("auth", "login", { email, password });
 
     if ("error" in response) {
       return response.error;
@@ -87,8 +87,20 @@ export class AuthStore {
    * @param body Registration request message body.
    */
   @action
-  public async register(body: Body<"auth", "register">) {
-    const response = await post("auth", "register", body);
+  public async register(
+    language: Languages,
+    name: string,
+    email: string,
+    password: string,
+    invitationId: string
+  ) {
+    const response = await post("auth", "register", {
+      language,
+      name,
+      email,
+      password,
+      invitationId
+    });
 
     if ("error" in response) {
       return response.error;
@@ -105,17 +117,6 @@ export class AuthStore {
   @action
   public logout() {
     this.rootStore.clear();
-  }
-
-  /**
-   * Returns whether or not given invitation ID in `body` object is valid.
-   *
-   * @param body Invitation check request message body.
-   */
-  public async check(body: Body<"auth", "check">) {
-    const response = await post("auth", "check", body);
-
-    return "data" in response && response.data.isValid;
   }
 
   /**

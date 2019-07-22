@@ -83,8 +83,8 @@ const Item = styled(Anchor)<ItemProps>`
   align-items: center;
   justify-content: center;
 
-  color: ${props =>
-    props.theme[props.selected ? "colorPrimary" : "colorSecondary"]};
+  color: ${({ selected, theme }) =>
+    selected ? theme.PRIMARY_COLOR : theme.SECONDARY_COLOR};
   text-decoration: none;
   white-space: nowrap;
 

@@ -2,7 +2,7 @@ import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Component } from "./Component";
-import { Overlay } from "./container/Overlay";
+import { Overlay } from "./collection/container";
 import {
   DURATION,
   fadeIn,
@@ -111,7 +111,8 @@ const LoaderOverlay = styled(Overlay)<LoaderOverlayProps>`
   justify-content: center;
   align-items: center;
 
-  background-color: ${({ theme }) => theme.overlayBackgroundColor};
+  background-color: ${({ theme }) => theme.BACKGROUND_COLOR};
+  opacity: 0.95;
 
   animation: ${props => (props.isActive ? fadeIn : fadeOut)} ${DURATION}s
     forwards;

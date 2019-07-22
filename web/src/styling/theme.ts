@@ -1,35 +1,6 @@
 import * as styledComponents from "styled-components";
 
 /**
- * Union of component states.
- */
-export type State = "disabled" | "default" | "active" | "invalid";
-
-/**
- * Returns state type based on component properties.
- */
-export const getState = (
-  disabled: boolean | undefined,
-  active: boolean | undefined,
-  invalid: boolean | undefined
-): State => {
-  if (disabled) return "disabled";
-  if (invalid) return "invalid";
-  if (active) return "active";
-  return "default";
-};
-
-/**
- * Component state prop.
- */
-export interface StateProps {
-  /**
-   * Component state.
-   */
-  state: State;
-}
-
-/**
  * Props that affect styling of a components.
  */
 export interface StyleProps {
@@ -37,6 +8,11 @@ export interface StyleProps {
    * Whether or not component is active.
    */
   active?: boolean;
+
+  /**
+   * Whether or not component is disabled.
+   */
+  disabled?: boolean;
 
   /**
    * Whether or not component is invalid.
@@ -48,12 +24,6 @@ export interface StyleProps {
  * Theme definition.
  */
 export interface Theme {
-  backgroundColor: string;
-  colorPrimary: string;
-  colorSecondary: string;
-  borderColor: string;
-  overlayBackgroundColor: string;
-  states: Record<State, StateTheme>;
   BORDER_COLOR: string;
   HEIGHT: string;
   PADDING: string;
@@ -64,16 +34,8 @@ export interface Theme {
   PRIMARY_COLOR: string;
   SECONDARY_COLOR: string;
   BACKGROUND_COLOR: string;
+  DISABLED_BACKGROUND_COLOR: string;
   TRANSITION: string;
-}
-
-/**
- * State theme definition.
- */
-interface StateTheme {
-  backgroundColor: string;
-  borderColor: string;
-  color: string;
 }
 
 /**
@@ -91,42 +53,16 @@ export const {
  * Light theme definition.
  */
 export const LIGHT: Readonly<Theme> = {
-  backgroundColor: "rgb(255, 255, 255)",
-  colorPrimary: "rgb(0, 0, 0)",
-  colorSecondary: "rgb(166, 166, 166)",
-  borderColor: "rgb(210, 210, 210)",
-  overlayBackgroundColor: "rgba(255, 255, 255, 0.95)",
-  states: {
-    disabled: {
-      backgroundColor: "rgb(250, 250, 250)",
-      borderColor: "rgb(210, 210, 210)",
-      color: "rgb(150, 150, 150)"
-    },
-    default: {
-      backgroundColor: "rgb(255, 255, 255)",
-      borderColor: "rgb(210, 210, 210)",
-      color: "rgb(150, 150, 150)"
-    },
-    active: {
-      backgroundColor: "rgb(255, 255, 255)",
-      borderColor: "rgb(0, 200, 100)",
-      color: "rgb(0, 200, 100)"
-    },
-    invalid: {
-      backgroundColor: "rgb(255, 255, 255)",
-      borderColor: "rgb(255, 150, 0)",
-      color: "rgb(255, 150, 0)"
-    }
-  },
-  BORDER_COLOR: "rgb(0, 0, 0, 0.15)",
+  BORDER_COLOR: "rgb(222, 222, 222)",
   HEIGHT: "3.5rem",
   PADDING: "2.5rem",
   FORM_WIDTH: "28rem",
   BORDER_RADIUS: "0.4375rem",
   ACTIVE_COLOR: "rgb(255, 125, 0)",
-  INVALID_COLOR: "rgb(255, 0, 0)",
+  INVALID_COLOR: "rgb(222, 0, 0)",
   PRIMARY_COLOR: "rgba(0, 0, 0, 0.88)",
   SECONDARY_COLOR: "rgba(0, 0, 0, 0.44)",
   BACKGROUND_COLOR: "rgb(255, 255, 255)",
+  DISABLED_BACKGROUND_COLOR: "rgb(245, 245, 245)",
   TRANSITION: "0.1s cubic-bezier(0.4, 0.0, 0.2, 1)"
 };

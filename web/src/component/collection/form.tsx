@@ -29,9 +29,9 @@ export const Form = styled.form`
 `;
 
 /**
- * Component that contains email and password text fields.
+ * Component that groups together multiple fields.
  */
-export const Main = styled.div`
+export const Group = styled.div`
   width: 100%;
 
   & > * {

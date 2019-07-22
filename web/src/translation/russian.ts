@@ -14,59 +14,8 @@ export const russian: Translation = {
           "Веб-адрес может быть неверный или страница, которую вы ищете, больше не доступна."
       }
     },
-    DeclareNutrition: {
-      nutrients: {
-        carbohydrate: "Углеводы",
-        energy: "Энергетическая ценность",
-        fat: "Жиры",
-        fibre: "Пищевые волокна",
-        monoUnsaturates: "Мононенасыщенные жирные кислоты",
-        polyols: "Многоатомные спирты",
-        polyunsaturates: "Полиненасыщенные жирные кислоты",
-        protein: "Белки",
-        salt: "Соль",
-        saturates: "Насыщенные жирные кислоты",
-        starch: "Крахмал",
-        sugars: "Сахара"
-      },
-      units: {
-        g: "г",
-        kcal: "ккал"
-      }
-    },
-    Form: {
-      foodInformation: { submit: "Сохранить" }
-    },
     Head: {
       title: "Морковка"
-    },
-    Input: {
-      barcode: {
-        label: "Введите штрихкод",
-        reasons: {
-          empty: "Пожалуйста, введите штрихкод"
-        }
-      },
-      name: {
-        label: "Введите имя",
-        reasons: {
-          empty: "Пожалуйста, введите имя"
-        }
-      },
-      nutritionDeclaration: {
-        label: "Пищевая ценность",
-        reasons: {}
-      },
-      unit: {
-        label: "Выберите единицу",
-        options: {
-          g: "г",
-          ml: "мл"
-        },
-        reasons: {
-          missing: "Пожалуйста, выберите единицу"
-        }
-      }
     },
     Navigation: {
       Administration: "Администрация",
@@ -86,18 +35,72 @@ export const russian: Translation = {
       loginInvalidCredentials: {
         message: "Неверный адрес электронной почты или пароль."
       }
+    },
+    NutritionDeclaration: {
+      nutrients: {
+        carbohydrate: "Углеводы",
+        energy: "Энергетическая ценность",
+        fat: "Жиры",
+        fibre: "Пищевые волокна",
+        monoUnsaturates: "Мононенасыщенные жирные кислоты",
+        polyols: "Многоатомные спирты",
+        polyunsaturates: "Полиненасыщенные жирные кислоты",
+        protein: "Белки",
+        salt: "Соль",
+        saturates: "Насыщенные жирные кислоты",
+        starch: "Крахмал",
+        sugars: "Сахара"
+      },
+      title: "Пищевая ценность",
+      units: {
+        g: "г",
+        kcal: "ккал"
+      }
     }
   },
   scenes: {
+    FoodEdit: {
+      inputs: {
+        barcode: {
+          label: "Штрих-код",
+          reasons: {
+            empty: "Пожалуйста, введите штрих-код."
+          }
+        },
+        name: {
+          label: "Название",
+          reasons: {
+            empty: "Пожалуйста, введите название продукта."
+          }
+        },
+        unit: {
+          label: "Единица",
+          options: {
+            g: "г",
+            ml: "мл"
+          },
+          reasons: {
+            missing: "Пожалуйста, выберите единицу."
+          }
+        },
+        quantity: {
+          label: "Количество",
+          reasons: {
+            empty: "Пожалуйста, введите количество продукта."
+          }
+        }
+      },
+      submit: "Сохранить"
+    },
     Login: {
       inputs: {
         email: {
           label: "Эл. почта",
-          reasons: { empty: "Пожалуйста, введите адрес электронной почты" }
+          reasons: { empty: "Пожалуйста, введите адрес электронной почты." }
         },
         password: {
           label: "Пароль",
-          reasons: { empty: "Пожалуйста, введите пароль" }
+          reasons: { empty: "Пожалуйста, введите пароль." }
         }
       },
       submit: "Вход →",

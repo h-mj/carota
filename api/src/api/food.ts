@@ -47,7 +47,7 @@ const SAVE_SCHEMA: Schema<"food", "save"> = {
 define(foodRouter, "food", "save", SAVE_SCHEMA, async context => {
   const { id, name, barcode, unit, nutritionDeclaration } = context.state.body;
 
-  if ((await Food.findOne({ id })) === undefined) {
+  if (id !== undefined && (await Food.findOne({ id })) === undefined) {
     throw createIdNotFoundError(id!, Food.name, ["id"]);
   }
 
@@ -55,7 +55,8 @@ define(foodRouter, "food", "save", SAVE_SCHEMA, async context => {
     id,
     name,
     barcode: barcode === "" ? undefined : barcode,
-    unit
+    unit,
+    editor: context.state.account
   });
 
   Object.assign(food, nutritionDeclaration);

@@ -1,13 +1,10 @@
 import { computed } from "mobx";
 import * as React from "react";
 import { Alert } from "./Alert";
-import { Anchor } from "./Anchor";
-import { DeclareNutrition } from "./Input/DeclareNutrition";
-import { Form } from "./Input/Form";
 import { Head } from "./Head";
-import { Input } from "./Input/Input";
 import { Navigation } from "./Navigation";
 import { NotificationContainer } from "./NotificationContainer";
+import { NutritionDeclaration } from "./NutritionDeclaration";
 import { RootStore } from "../store/RootStore";
 
 /**
@@ -15,13 +12,10 @@ import { RootStore } from "../store/RootStore";
  */
 interface ComponentMap {
   Alert: Alert;
-  Anchor: Anchor;
-  DeclareNutrition: DeclareNutrition;
-  Form: Form;
   Head: Head;
-  Input: Input;
   Navigation: Navigation;
   NotificationContainer: NotificationContainer;
+  NutritionDeclaration: NutritionDeclaration;
 }
 
 /**
@@ -77,8 +71,8 @@ export abstract class Component<
    */
   @computed
   public get translation(): TTranslation {
-    return this.props.views!.translation.components[
+    return (this.props.views!.translation.components[
       this.constructor.name as ComponentNames
-    ] as TTranslation;
+    ] as unknown) as TTranslation;
   }
 }

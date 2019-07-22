@@ -8,7 +8,7 @@ import { Head } from "../component/Head";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
 import { Center } from "../component/collection/container";
-import { Controls, Form, Main, Title } from "../component/collection/form";
+import { Controls, Form, Group, Title } from "../component/collection/form";
 import { Button } from "../component/Button";
 import { any, insert } from "../utility/form";
 
@@ -44,12 +44,11 @@ interface TextFieldTranslation {
 }
 
 /**
- * Language field translation, that includes language option translations
- * alongside all `TextFieldTranslation` properties.
+ * Language selection field translation.
  */
 interface LanguageSelectTranslation extends TextFieldTranslation {
   /**
-   * Translations of select options.
+   * Translations of language options.
    */
   options: Record<Languages, string>;
 }
@@ -134,7 +133,7 @@ export class Register extends Scene<"Register", {}, RegisterTranslation> {
         <Head title={this.translation.title} />
         <Form noValidate={true} onSubmit={this.handleSubmit}>
           <Title>{this.translation.title}</Title>
-          <Main>
+          <Group>
             <Select
               errorMessage={
                 this.reasons.language !== undefined
@@ -153,6 +152,7 @@ export class Register extends Scene<"Register", {}, RegisterTranslation> {
                   value: language
                 })
               )}
+              required={true}
               value={this.values["language"]}
             />
 
@@ -173,7 +173,7 @@ export class Register extends Scene<"Register", {}, RegisterTranslation> {
                 value={this.values[name]}
               />
             ))}
-          </Main>
+          </Group>
           <Controls>
             <Button invalid={any(this.reasons)}>
               {this.translation.submit}
@@ -217,6 +217,7 @@ export class Register extends Scene<"Register", {}, RegisterTranslation> {
     const { language, name, email, password } = this.values;
     const { invitationId } = this.props.parameters!;
 
+    // Client side validation error reasons for each input.
     const reasons = {
       language: language === undefined ? "missing" : undefined,
       name: name.trim() === "" ? "empty" : undefined,

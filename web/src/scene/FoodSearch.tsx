@@ -3,7 +3,6 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { SceneContext } from "./SceneContext";
 import { Scene } from "./Scene";
-import { InputChangeHandler } from "../component/Input/Input";
 import { TextField } from "../component/TextField";
 import { UNIT_HEIGHT, BORDER_RADIUS } from "../styling/sizes";
 import { RESET } from "../styling/stylesheets";
@@ -40,7 +39,7 @@ export class FoodSearch extends Scene<"FoodSearch"> {
   }
 
   @action
-  private handleChange: InputChangeHandler<any, string> = (_, value) => {
+  private handleChange = (_: string, value: string) => {
     this.query = value;
 
     if (value) {
@@ -65,7 +64,7 @@ const Results = styled.div`
 
   margin-top: ${UNIT_HEIGHT / 4}rem;
 
-  color: ${({ theme }) => theme.borderColor};
+  color: ${({ theme }) => theme.BORDER_COLOR};
   box-shadow: 0 0 0 1px inset 0 0 0 1px;
   border-radius: ${BORDER_RADIUS};
 `;
@@ -82,7 +81,7 @@ const Result = styled.button`
   padding: 0 ${UNIT_HEIGHT / 4}rem;
   box-sizing: border-box;
 
-  color: ${({ theme }) => theme.borderColor};
+  color: ${({ theme }) => theme.BORDER_COLOR};
   box-shadow: 0 0 0 1px, inset 0 0 0 1px;
   border-radius: ${BORDER_RADIUS}rem;
 

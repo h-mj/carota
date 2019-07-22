@@ -14,59 +14,8 @@ export const english: Translation = {
           "The web address may be misspelled or the page you're looking for is no longer available."
       }
     },
-    DeclareNutrition: {
-      nutrients: {
-        carbohydrate: "Carbohydrate",
-        energy: "Energy",
-        fat: "Fat",
-        fibre: "Fibre",
-        monoUnsaturates: "Mono-unsaturates",
-        polyols: "Polyols",
-        polyunsaturates: "Polyunsaturates",
-        protein: "Protein",
-        salt: "Salt",
-        saturates: "Saturates",
-        starch: "Starch",
-        sugars: "Sugars"
-      },
-      units: {
-        g: "g",
-        kcal: "kcal"
-      }
-    },
-    Form: {
-      foodInformation: { submit: "Save" }
-    },
     Head: {
       title: "Morkovka"
-    },
-    Input: {
-      barcode: {
-        label: "Enter a barcode",
-        reasons: {
-          empty: "Please enter a barcode"
-        }
-      },
-      name: {
-        label: "Enter a name",
-        reasons: {
-          empty: "Please enter a name"
-        }
-      },
-      nutritionDeclaration: {
-        label: "Nutrition information",
-        reasons: {}
-      },
-      unit: {
-        label: "Select a unit",
-        options: {
-          g: "g",
-          ml: "ml"
-        },
-        reasons: {
-          missing: "Please select a unit"
-        }
-      }
     },
     Navigation: {
       Administration: "Administration",
@@ -86,9 +35,63 @@ export const english: Translation = {
       loginInvalidCredentials: {
         message: "Incorrect email address or password."
       }
+    },
+    NutritionDeclaration: {
+      nutrients: {
+        carbohydrate: "Carbohydrate",
+        energy: "Energy",
+        fat: "Fat",
+        fibre: "Fibre",
+        monoUnsaturates: "Mono-unsaturates",
+        polyols: "Polyols",
+        polyunsaturates: "Polyunsaturates",
+        protein: "Protein",
+        salt: "Salt",
+        saturates: "Saturates",
+        starch: "Starch",
+        sugars: "Sugars"
+      },
+      title: "Nutrition information",
+      units: {
+        g: "g",
+        kcal: "kcal"
+      }
     }
   },
   scenes: {
+    FoodEdit: {
+      inputs: {
+        barcode: {
+          label: "Barcode",
+          reasons: {
+            empty: "Please enter product barcode."
+          }
+        },
+        name: {
+          label: "Name",
+          reasons: {
+            empty: "Please enter product name."
+          }
+        },
+        unit: {
+          label: "Unit",
+          options: {
+            g: "g",
+            ml: "ml"
+          },
+          reasons: {
+            missing: "Please select a unit."
+          }
+        },
+        quantity: {
+          label: "Quantity",
+          reasons: {
+            empty: "Please enter product quantity."
+          }
+        }
+      },
+      submit: "Save"
+    },
     Login: {
       inputs: {
         email: {

@@ -2,7 +2,7 @@ import { action } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Component } from "./Component";
-import { Overlay } from "./container/Overlay";
+import { Overlay } from "./collection/container";
 import { UNIT_HEIGHT } from "../styling/sizes";
 import { styled } from "../styling/theme";
 
@@ -52,6 +52,6 @@ const Container = styled.div`
 
   overflow: auto;
 
-  background-color: ${({ theme }) => theme.backgroundColor};
+  background-color: ${({ theme }) => theme.BACKGROUND_COLOR};
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.22);
 `;

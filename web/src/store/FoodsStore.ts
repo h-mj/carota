@@ -1,4 +1,4 @@
-import { Body } from "api";
+import { Body, Units, NutritionDeclaration } from "api";
 import { Store } from "./Store";
 import { Food } from "../model/Food";
 import { post } from "../utility/client";
@@ -10,8 +10,20 @@ export class FoodsStore extends Store<Food> {
   /**
    * Creates or updates existing food product.
    */
-  public async save(body: Body<"food", "save">) {
-    const response = await post("food", "save", body);
+  public async save(
+    id: string | undefined,
+    name: string,
+    barcode: string | undefined,
+    unit: Units,
+    nutritionDeclaration: NutritionDeclaration
+  ) {
+    const response = await post("food", "save", {
+      id,
+      name,
+      barcode,
+      unit,
+      nutritionDeclaration
+    });
 
     if ("error" in response) {
       return response.error;

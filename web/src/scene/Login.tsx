@@ -7,7 +7,7 @@ import { Button } from "../component/Button";
 import { Head } from "../component/Head";
 import { TextField } from "../component/TextField";
 import { Center } from "../component/collection/container";
-import { Controls, Form, Main, Title } from "../component/collection/form";
+import { Controls, Form, Group, Title } from "../component/collection/form";
 import { any, insert } from "../utility/form";
 
 /**
@@ -72,9 +72,6 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
 
   /**
    * Object that contains a reason string of occurred error of each input.
-   *
-   * These reasons are used to retrieve translated error messages of each input
-   * that will be rendered next to the input itself.
    */
   @observable private reasons: Partial<Record<InputNames, ErrorReasons>> = {};
 
@@ -87,7 +84,7 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
         <Head title={this.translation.title} />
         <Form noValidate={true} onSubmit={this.handleSubmit}>
           <Title>{this.translation.title}</Title>
-          <Main>
+          <Group>
             {INPUTS.map((name, index) => (
               <TextField
                 key={name}
@@ -106,7 +103,7 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
                 value={this.values[name]}
               />
             ))}
-          </Main>
+          </Group>
           <Controls>
             <Button invalid={any(this.reasons)}>
               {this.translation.submit}
@@ -137,6 +134,7 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
 
     const { email, password } = this.values;
 
+    // Client side validation error reasons for each input.
     const reasons = {
       email: email.trim() === "" ? "empty" : undefined,
       password: password === "" ? "empty" : undefined

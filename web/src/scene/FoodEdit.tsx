@@ -1,107 +1,327 @@
-import { FoodSaveBody } from "api";
+import {
+  ErrorReasons,
+  NutritionDeclaration as ApiNutritionDeclaration,
+  Units
+} from "api";
+import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
+import { Scene, DefaultSceneProps } from "./Scene";
+import { Button } from "../component/Button";
+import {
+  Nutrients,
+  NutritionDeclaration,
+  NutritionDeclarationErrorReasons,
+  NutritionDeclarationValue
+} from "../component/NutritionDeclaration";
+import { Select } from "../component/Select";
+import { TextField } from "../component/TextField";
+import { Controls, Form, Group } from "../component/collection/form";
 import { SceneContext } from "./SceneContext";
-import { DefaultSceneProps, Scene } from "./Scene";
-import { Compact } from "../component/container/Compact";
-import { Fluid } from "../component/container/Fluid";
-import { Form, FormSubmitHandler, FormValues } from "../component/Input/Form";
-import { Food } from "../model/Food";
+import { any, insert } from "../utility/form";
 
 /**
- * Food editing scene props.
+ * Array of text field input names.
  */
-interface FoodEditProps {
+const TEXT_FIELDS = ["name", "barcode", "quantity"] as const;
+
+/**
+ * Union of all text field input names.
+ */
+type TextFieldNames = typeof TEXT_FIELDS[number];
+
+/**
+ * Union of all input names.
+ */
+type InputNames = TextFieldNames | "unit";
+
+/**
+ * Type of an object that maps input name to occurred error reason.
+ */
+type InputErrorReasons = Partial<Record<InputNames, ErrorReasons>>;
+
+/**
+ * Result of converting nutrition declaration component value to API nutrition
+ * declaration object.
+ */
+type ParseResult =
+  | { ok: true; value: ApiNutritionDeclaration }
+  | { ok: false; value: NutritionDeclarationErrorReasons };
+
+/**
+ * Text field input translation.
+ */
+interface TextFieldTranslation {
   /**
-   * Food model instance.
+   * Text field label text.
    */
-  food?: Food;
+  label: string;
+
+  /**
+   * Error messages of various error reasons input may have.
+   */
+  reasons: Partial<Record<ErrorReasons, string>>;
 }
 
 /**
- * Renders a form used to create or edit existing food element.
+ * Unit selection component translation.
+ */
+interface UnitSelectTranslation extends TextFieldTranslation {
+  /**
+   * Translations of unit options.
+   */
+  options: Record<Units, string>;
+}
+
+/**
+ * Food edit scene translation.
+ */
+interface FoodEditTranslation {
+  /**
+   * Registration form input translations.
+   */
+  inputs: {
+    [InputName in InputNames]: InputName extends TextFieldNames
+      ? TextFieldTranslation
+      : UnitSelectTranslation
+  };
+
+  /**
+   * Form submit button text.
+   */
+  submit: string;
+}
+
+/**
+ * Object type that maps food edit input names to occurred error reasons.
+ */
+type FoodEditErrorReasons = InputErrorReasons & {
+  nutritionDeclaration?: NutritionDeclarationErrorReasons;
+};
+
+/**
+ * Food editing scene that allows user to either create new or edit existing
+ * food product.
  */
 @inject("foods", "views")
 @observer
-export class FoodEdit extends Scene<"FoodEdit", FoodEditProps> {
+export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
   /**
-   * Initial food information form values.
+   * Form field values.
    */
-  private values?: FormValues<"foodInformation">;
+  @observable private values = {
+    name: "",
+    barcode: "",
+    quantity: "",
+    unit: undefined as Units | undefined,
+    nutritionDeclaration: {
+      energy: "",
+      fat: "",
+      carbohydrate: "",
+      protein: ""
+    } as NutritionDeclarationValue
+  };
 
   /**
-   * Creates a new instance of FoodEdit and creates initial form valuer object
-   * based on `food` prop, if provided.
+   * Object that contains error reasons of occurred errors of each input and
+   * error reasons for each declaration nutrients.
    */
-  public constructor(props: FoodEditProps & DefaultSceneProps<"FoodEdit">) {
+  @observable private reasons: FoodEditErrorReasons = {};
+
+  /**
+   * Creates `FoodEdit` scene instance and shows the same scene on the side if
+   * scene is rendered as the main scene.
+   */
+  public constructor(props: DefaultSceneProps<"FoodEdit">) {
     super(props);
 
-    const { food } = this.props;
-
-    if (food === undefined) {
-      return;
+    if (props.position === "main") {
+      this.props.views!.aside(new SceneContext("FoodEdit", undefined, {}));
     }
-
-    const { name, barcode, unit } = food;
-
-    type Nutrient = keyof typeof food.nutritionDeclaration;
-
-    const nutritionDeclaration: Partial<
-      Record<Nutrient, string | undefined>
-    > = {};
-
-    for (const nutrient in food.nutritionDeclaration) {
-      const value = food.nutritionDeclaration[nutrient as Nutrient];
-
-      nutritionDeclaration[nutrient as Nutrient] =
-        value === undefined ? undefined : value.toString();
-    }
-
-    this.values = {
-      name,
-      barcode: barcode || "",
-      unit,
-      nutritionDeclaration
-    };
   }
 
   /**
-   * Renders food information form.
+   * Renders food creation and editing form.
    */
   public render() {
-    const Container = this.props.position === "main" ? Compact : Fluid;
+    if (this.props.position === "main") {
+      return null;
+    }
 
     return (
-      <Container>
-        <Form
-          name="foodInformation"
-          onSubmit={this.handleSubmit}
-          values={this.values}
-        />
-      </Container>
+      <Form noValidate={true} onSubmit={this.handleSubmit}>
+        <Group>
+          {this.renderTextField("name")}
+          {this.renderTextField("barcode")}
+        </Group>
+
+        <Group>
+          {this.renderTextField("quantity")}
+
+          <Select
+            errorMessage={this.messageFor("unit")}
+            invalid={this.reasons.unit !== undefined}
+            label={this.translation.inputs.unit.label}
+            name="unit"
+            onChange={this.handleUnitChange}
+            options={[
+              { label: this.translation.inputs.unit.options.g, value: "g" },
+              { label: this.translation.inputs.unit.options.ml, value: "ml" }
+            ]}
+            value={this.values.unit}
+          />
+
+          <NutritionDeclaration
+            name="nutritionDeclaration"
+            onChange={this.handleDeclarationChange}
+            reasons={this.reasons.nutritionDeclaration}
+            value={this.values.nutritionDeclaration}
+          />
+        </Group>
+        <Controls>
+          <Button>{this.translation.submit}</Button>
+        </Controls>
+      </Form>
     );
   }
 
-  private handleSubmit: FormSubmitHandler<"foodInformation"> = async values => {
-    const { food, foods, position, views } = this.props;
+  /**
+   * Renders text field with name `name`.
+   *
+   * @param name Text field name which will be rendered.
+   */
+  private renderTextField = (name: TextFieldNames) => {
+    return (
+      <TextField
+        errorMessage={this.messageFor(name)}
+        invalid={this.reasons[name] !== undefined}
+        label={this.translation.inputs[name].label}
+        name={name}
+        onChange={this.handleTextFieldChange}
+        required={name !== "barcode"}
+        type={name === "barcode" ? "tel" : name === "name" ? "text" : "number"}
+        value={this.values[name]}
+      />
+    );
+  };
 
-    const body = {
-      id: food !== undefined ? food.id : undefined,
-      ...values
+  /**
+   * Updates text field value on input value change.
+   */
+  @action
+  private handleTextFieldChange = (name: TextFieldNames, value: string) => {
+    this.values[name] = value;
+  };
+
+  /**
+   * Updates unit value on unit selection change.
+   */
+  @action
+  private handleUnitChange = (name: "unit", value: Units | undefined) => {
+    this.values[name] = value;
+  };
+
+  /**
+   * Updates product nutrition declaration value on change.
+   */
+  @action
+  private handleDeclarationChange = (
+    name: "nutritionDeclaration",
+    value: NutritionDeclarationValue
+  ) => {
+    this.values[name] = value;
+  };
+
+  /**
+   * Prevents default form submit event and executes food item saving procedure
+   * instead.
+   */
+  @action
+  private handleSubmit: React.FormEventHandler<
+    HTMLFormElement
+  > = async event => {
+    event.preventDefault();
+
+    const {
+      name,
+      barcode,
+      quantity,
+      unit,
+      nutritionDeclaration: declaration
+    } = this.values;
+
+    const result = this.parse(declaration);
+
+    // Client side validation error reasons for each input.
+    const reasons: FoodEditErrorReasons = {
+      name: name.trim() === "" ? "empty" : undefined,
+      quantity:
+        quantity.trim() === ""
+          ? "empty"
+          : Number.isNaN(Number.parseFloat(quantity))
+          ? "invalid"
+          : undefined,
+      unit: unit === undefined ? "missing" : undefined,
+      nutritionDeclaration: result.ok ? undefined : result.value
     };
 
-    const error = await views!.load(
-      foods!.save((body as unknown) as FoodSaveBody) // Let backend handle the validation for now
+    const skip = any(reasons);
+
+    const error = await this.props.views!.load(
+      skip
+        ? undefined
+        : this.props.foods!.save(
+            undefined,
+            name,
+            barcode,
+            unit!,
+            result.value as ApiNutritionDeclaration
+          )
     );
 
-    if (error === undefined) {
-      if (position === "main") {
-        views!.redirect(new SceneContext("FoodSearch", {}, {}));
+    this.reasons = insert(reasons, error);
+  };
+
+  /**
+   * Returns an error message for input named `name`.
+   *
+   * @param name Input name.
+   */
+  private messageFor = (name: InputNames) => {
+    return this.reasons[name] !== undefined
+      ? this.translation.inputs[name].reasons[this.reasons[name]!]
+      : undefined;
+  };
+
+  /**
+   * Converts `NutritionDeclarationValue` type object to API nutrition
+   * declaration object and returns either `ApiNutritionDeclaration` type object
+   * or object that maps nutrient names to occurred error reasons.
+   */
+  private parse = (declaration: NutritionDeclarationValue): ParseResult => {
+    const reasons: NutritionDeclarationErrorReasons = {};
+    const result: Partial<ApiNutritionDeclaration> = {};
+
+    for (const nutrient of Object.keys(declaration) as Nutrients[]) {
+      const value = declaration[nutrient];
+
+      if (value === undefined) {
+        continue;
+      }
+
+      const numericValue = Number.parseFloat(value);
+
+      if (Number.isNaN(numericValue)) {
+        reasons[nutrient] = "invalid";
       } else {
-        views!.refocus();
+        result[nutrient] = numericValue;
       }
     }
 
-    return error;
+    if (any(reasons)) {
+      return { ok: false, value: reasons };
+    } else {
+      return { ok: true, value: result as ApiNutritionDeclaration };
+    }
   };
 }

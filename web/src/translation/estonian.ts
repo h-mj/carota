@@ -14,59 +14,8 @@ export const estonian: Translation = {
         message: "404"
       }
     },
-    DeclareNutrition: {
-      nutrients: {
-        carbohydrate: "Süsivesikud",
-        energy: "Energiasisaldus",
-        fat: "Rasvad",
-        fibre: "Kiudained",
-        monoUnsaturates: "Monoküllastumata rasvhapped",
-        polyols: "Polüoolid",
-        polyunsaturates: "Polüküllastumata rasvhapped",
-        protein: "Valgud",
-        salt: "Sool",
-        saturates: "Küllastunud rasvhapped",
-        starch: "Tärklis",
-        sugars: "Suhkrud"
-      },
-      units: {
-        g: "g",
-        kcal: "kcal"
-      }
-    },
-    Form: {
-      foodInformation: { submit: "Salvesta" }
-    },
     Head: {
       title: "Morkovka"
-    },
-    Input: {
-      barcode: {
-        label: "Sisestage triipkood",
-        reasons: {
-          empty: "Palun sisestage triipkood"
-        }
-      },
-      name: {
-        label: "Sisestage nimi",
-        reasons: {
-          empty: "Palun sisestage nimi"
-        }
-      },
-      nutritionDeclaration: {
-        label: "Toitumisalane teave",
-        reasons: {}
-      },
-      unit: {
-        label: "Valige ühik",
-        options: {
-          g: "g",
-          ml: "ml"
-        },
-        reasons: {
-          missing: "Palun valige ühik"
-        }
-      }
     },
     Navigation: {
       Administration: "Administratsioon",
@@ -82,14 +31,67 @@ export const estonian: Translation = {
       Settings: "Seaded",
       Unknown: "Vabandame, soovitud lehekülge ei leitud"
     },
-
     NotificationContainer: {
       loginInvalidCredentials: {
         message: "Vale e-posti aadress või parool."
       }
+    },
+    NutritionDeclaration: {
+      nutrients: {
+        carbohydrate: "Süsivesikud",
+        energy: "Energiasisaldus",
+        fat: "Rasvad",
+        fibre: "Kiudained",
+        monoUnsaturates: "Monoküllastumata rasvhapped",
+        polyols: "Polüoolid",
+        polyunsaturates: "Polüküllastumata rasvhapped",
+        protein: "Valgud",
+        salt: "Sool",
+        saturates: "Küllastunud rasvhapped",
+        starch: "Tärklis",
+        sugars: "Suhkrud"
+      },
+      title: "Toitumisalane teave",
+      units: {
+        g: "g",
+        kcal: "kcal"
+      }
     }
   },
   scenes: {
+    FoodEdit: {
+      inputs: {
+        barcode: {
+          label: "Triipkood",
+          reasons: {
+            empty: "Palun sisestage toiduaine triipkood."
+          }
+        },
+        name: {
+          label: "Nimetus",
+          reasons: {
+            empty: "Palun sisestage toiduaine nimetus."
+          }
+        },
+        unit: {
+          label: "Ühik",
+          options: {
+            g: "g",
+            ml: "ml"
+          },
+          reasons: {
+            missing: "Palun valige ühik."
+          }
+        },
+        quantity: {
+          label: "Logus",
+          reasons: {
+            empty: "Palun sisestage toiduaine kogus."
+          }
+        }
+      },
+      submit: "Salvesta"
+    },
     Login: {
       inputs: {
         email: {

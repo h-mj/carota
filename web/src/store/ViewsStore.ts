@@ -48,7 +48,7 @@ export class ViewsStore {
   /**
    * Main scene context.
    */
-  @observable private _main!: SceneContexts; // Set by calling `update` in constructor.
+  @observable private _main: SceneContexts = SceneContext.UNKNOWN;
 
   /**
    * Side scene context.

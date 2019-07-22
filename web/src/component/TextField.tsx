@@ -21,6 +21,11 @@ interface TextFieldProps<TName extends string> {
   autoFocus?: boolean;
 
   /**
+   * Whether or not render only input element.
+   */
+  basic?: boolean;
+
+  /**
    * Whether or not text field is disabled.
    */
   disabled?: boolean;
@@ -52,6 +57,11 @@ interface TextFieldProps<TName extends string> {
   onChange?: (name: TName, value: string) => void;
 
   /**
+   * Function that will be called when text field focus changes.
+   */
+  onFocusChange?: (name: TName, focus: boolean) => void;
+
+  /**
    * Text that will be shown inside the text field if it's empty.
    */
   placeholder?: string;
@@ -67,9 +77,19 @@ interface TextFieldProps<TName extends string> {
   required?: boolean;
 
   /**
+   * Text field input text align.
+   */
+  textAlign?: "left" | "center" | "right";
+
+  /**
    * Text field input value type.
    */
   type?: "email" | "number" | "password" | "search" | "tel" | "text";
+
+  /**
+   * Whether or not use underline style.
+   */
+  underline?: boolean;
 
   /**
    * Text field value.
@@ -90,53 +110,83 @@ export class TextField<TName extends string = string> extends Component<
   @observable private focused = false;
 
   /**
-   * Renders the text field.
+   * Renders the text field optionally alongside field, label and error message
+   * components.
    */
   public render() {
     const {
-      autoComplete,
-      autoFocus,
-      disabled,
+      basic,
       errorMessage,
+      disabled,
       invalid,
       label,
-      name,
-      placeholder,
-      readOnly,
-      required,
-      type,
-      value
+      underline
     } = this.props;
+
+    if (basic) {
+      return this.renderInput();
+    }
 
     return (
       <div>
-        <Field as="label" active={this.focused} invalid={invalid}>
+        <Field
+          as="label"
+          active={this.focused}
+          disabled={disabled}
+          invalid={invalid}
+          underline={underline}
+        >
           {label !== undefined && (
             <Label active={this.focused} invalid={invalid}>
               {label}
             </Label>
           )}
-          <Input
-            autoComplete={autoComplete ? "on" : "off"}
-            autoFocus={autoFocus}
-            disabled={disabled}
-            active={this.focused}
-            invalid={invalid}
-            name={name}
-            onBlur={this.handleFocusChange}
-            onChange={this.handleChange}
-            onFocus={this.handleFocusChange}
-            placeholder={placeholder}
-            readOnly={readOnly}
-            required={required}
-            type={type}
-            value={value}
-          />
+          {this.renderInput()}
         </Field>
         {errorMessage !== undefined && (
           <ErrorMessage>{errorMessage}</ErrorMessage>
         )}
       </div>
+    );
+  }
+
+  /**
+   * Renders input component.
+   */
+  private renderInput() {
+    const {
+      autoComplete,
+      autoFocus,
+      disabled,
+      invalid,
+      name,
+      placeholder,
+      readOnly,
+      required,
+      textAlign,
+      type,
+      value
+    } = this.props;
+
+    return (
+      <Input
+        active={this.focused}
+        autoComplete={autoComplete ? "on" : "off"}
+        autoFocus={autoFocus}
+        disabled={disabled}
+        invalid={invalid}
+        name={name}
+        onBlur={this.handleFocusChange}
+        onChange={this.handleChange}
+        onFocus={this.handleFocusChange}
+        onWheelCapture={this.handleWheelScrollCapture}
+        placeholder={placeholder}
+        readOnly={readOnly}
+        required={required}
+        textAlign={textAlign}
+        type={type}
+        value={value}
+      />
     );
   }
 
@@ -150,28 +200,67 @@ export class TextField<TName extends string = string> extends Component<
       return;
     }
 
-    onChange(name, event.target.value);
+    onChange(name, event.currentTarget.value);
   };
 
   /**
-   * Updates `focused` value on focus change of the input element.
+   * Updates `focused` value and calls `onFocusChange` callback function on
+   * focus change of the input element.
    */
   @action
   private handleFocusChange: React.FocusEventHandler<
     HTMLInputElement
   > = event => {
     this.focused = event.type === "focus";
+
+    const { name, onFocusChange } = this.props;
+
+    if (onFocusChange === undefined) {
+      return;
+    }
+
+    onFocusChange(name, this.focused);
   };
+
+  /**
+   * Prevents scroll wheel incrementing numeric input value by making input read
+   * only for a split second.
+   */
+  @action
+  private handleWheelScrollCapture: React.WheelEventHandler<
+    HTMLInputElement
+  > = async event => {
+    // Cache event target since synthetic events are nulled when await statement
+    // is reached.
+    const target = event.currentTarget;
+
+    target.readOnly = true;
+    await new Promise(resolve => window.setTimeout(resolve, 0));
+    target.readOnly = this.props.readOnly || false;
+  };
+}
+
+/**
+ * Input component props.
+ */
+interface InputProps extends StyleProps {
+  /**
+   * Text field input text align.
+   */
+  textAlign?: "left" | "center" | "right";
 }
 
 /**
  * Input element into which user enters the text.
  */
-const Input = styled.input<StyleProps>`
+const Input = styled.input<InputProps>`
   ${RESET};
 
+  min-width: calc(2 * ${({ theme }) => theme.PADDING});
   width: 100%;
   height: 100%;
+
+  flex: 1 1 0;
 
   padding: 0 calc(${({ theme }) => theme.PADDING} / 3);
   box-sizing: border-box;
@@ -179,9 +268,20 @@ const Input = styled.input<StyleProps>`
   color: ${({ theme }) => theme.PRIMARY_COLOR};
   caret-color: ${({ invalid, theme }) =>
     theme[invalid ? "INVALID_COLOR" : "ACTIVE_COLOR"]};
+  text-align: ${({ textAlign }) => textAlign || "left"};
 
   &::placeholder {
     color: ${({ theme }) => theme.SECONDARY_COLOR};
     opacity: initial;
+  }
+
+  /* Hide numeric input spinners on webkit and firefox based browsers. */
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    display: none;
+  }
+
+  &[type="number"] {
+    -moz-appearance: textfield;
   }
 `;

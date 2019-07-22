@@ -2,52 +2,22 @@ import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Component } from "./Component";
+import { Field } from "./collection/input";
 import { DURATION, fadeIn, fadeOut } from "../styling/animations";
 import { UNIT_HEIGHT } from "../styling/sizes";
-import { keyframes, State, StateProps, styled } from "../styling/theme";
-import { Field } from "./Input/Field";
-
-/**
- * Specifies notification type and its text message parameter names.
- */
-interface Types<TState extends State, TParameterNames extends string> {
-  /**
-   * Union of all text message parameter names.
-   */
-  parameterNames?: TParameterNames[];
-
-  /**
-   * Notification type.
-   */
-  state: TState;
-}
-
-/**
- * Returns `Types` type object which defines notification component state and
- * parameters based on notification name.
- *
- * @param state Notification component state.
- * @param parameterNames Notification component message parameter names.
- */
-const withTypes = <TState extends State, TParameterNames extends string>(
-  state: TState,
-  parameterNames?: TParameterNames[]
-): Types<TState, TParameterNames> => ({
-  state,
-  parameterNames
-});
+import { keyframes, styled, StyleProps } from "../styling/theme";
 
 /**
  * Maps notification name to notification type and message parameter names.
  */
-const NOTIFICATION_TYPES = {
-  loginInvalidCredentials: withTypes("invalid")
-};
+const NOTIFICATIONS = {
+  loginInvalidCredentials: { type: "error", parameters: [] }
+} as const;
 
 /**
  * Union of all notification names.
  */
-export type NotificationNames = keyof typeof NOTIFICATION_TYPES;
+export type NotificationNames = keyof typeof NOTIFICATIONS;
 
 /**
  * Notification message parameters type that maps parameter names of given notification name to string
@@ -55,13 +25,10 @@ export type NotificationNames = keyof typeof NOTIFICATION_TYPES;
  */
 export type NotificationMessageParameters<
   TNotificationNames extends NotificationNames
-> = typeof NOTIFICATION_TYPES[TNotificationNames] extends infer ITypes
-  ? ITypes extends Types<infer _, infer IParameterNames>
-    ? string extends IParameterNames
-      ? {}
-      : Record<IParameterNames, string>
-    : never
-  : never;
+> = Record<
+  typeof NOTIFICATIONS[TNotificationNames]["parameters"][number],
+  string
+>;
 
 /**
  * Notification object type.
@@ -196,9 +163,9 @@ export class NotificationContainer extends Component<
     return (
       <NotificationElement
         key={id}
+        invalid={NOTIFICATIONS[name].type === "error"}
         isActive={notifications.includes(notification)}
         onClick={() => this.props.views!.conceal(notification)}
-        state={NOTIFICATION_TYPES[name].state}
       >
         {message}
       </NotificationElement>
@@ -246,7 +213,7 @@ const moveOut = keyframes`
 /**
  * Actual notification component properties.
  */
-interface NotificationElementProps extends StateProps {
+interface NotificationElementProps extends StyleProps {
   /**
    * Whether or not this notification is active.
    */
@@ -261,8 +228,10 @@ const NotificationElement = styled(Field)<NotificationElementProps>`
   padding: 0 ${UNIT_HEIGHT / 4}rem;
   box-sizing: border-box;
 
-  animation: ${props => (props.isActive ? fadeIn : fadeOut)} ${DURATION}s,
-    ${props => (props.isActive ? moveIn : moveOut)} ${DURATION}s;
+  color: ${({ theme }) => theme.PRIMARY_COLOR};
+
+  animation: ${({ isActive }) => (isActive ? fadeIn : fadeOut)} ${DURATION}s,
+    ${({ isActive }) => (isActive ? moveIn : moveOut)} ${DURATION}s;
 
   cursor: pointer;
 `;

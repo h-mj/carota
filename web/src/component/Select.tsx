@@ -11,6 +11,11 @@ import { styled, StyleProps } from "../styling/theme";
  */
 interface SelectProps<TName extends string, TValues extends string> {
   /**
+   * Whether or not render only options component.
+   */
+  basic?: boolean;
+
+  /**
    * Whether or not select is disabled.
    */
   disabled?: boolean;
@@ -42,6 +47,11 @@ interface SelectProps<TName extends string, TValues extends string> {
   onChange?: (name: TName, value: TValues | undefined) => void;
 
   /**
+   * Function that will be called when focus state of any option changes.
+   */
+  onFocusChange?: (name: TName, focus: boolean) => void;
+
+  /**
    * Array of label-value pairs, where `label` will be visible to the user and
    * `value` is internal representation of the option.
    */
@@ -56,6 +66,11 @@ interface SelectProps<TName extends string, TValues extends string> {
    * Whether or not an option must be selected.
    */
   required?: boolean;
+
+  /**
+   * Whether or not use underline style.
+   */
+  underline?: boolean;
 
   /**
    * Selected option value.
@@ -77,49 +92,72 @@ export class Select<
   @observable private focused = false;
 
   /**
-   * Renders the select component.
+   * Renders the option optionally alongside field, label and error message
+   * components.
    */
   public render() {
     const {
+      basic,
       disabled,
       errorMessage,
       invalid,
       label,
-      options,
-      value
+      underline
     } = this.props;
+
+    if (basic) {
+      return this.renderOptions();
+    }
 
     return (
       <div>
-        <Field active={this.focused} invalid={invalid}>
+        <Field
+          active={this.focused}
+          disabled={disabled}
+          invalid={invalid}
+          underline={underline}
+        >
           {label !== undefined && (
             <Label active={this.focused} invalid={invalid}>
               {label}
             </Label>
           )}
-          {options !== undefined && (
-            <Options active={this.focused} invalid={invalid}>
-              {options.map(({ label: optionLabel, value: optionValue }) => (
-                <Option
-                  key={optionValue}
-                  disabled={disabled}
-                  onBlur={this.handleFocusChange}
-                  onClick={this.handleClick}
-                  onFocus={this.handleFocusChange}
-                  selected={value === optionValue}
-                  type="button"
-                  value={optionValue}
-                >
-                  <OptionLabel>{optionLabel}</OptionLabel>
-                </Option>
-              ))}
-            </Options>
-          )}
+          {this.renderOptions()}
         </Field>
         {errorMessage !== undefined && (
           <ErrorMessage>{errorMessage}</ErrorMessage>
         )}
       </div>
+    );
+  }
+
+  /**
+   * Renders options component.
+   */
+  private renderOptions() {
+    const { disabled, invalid, options, value } = this.props;
+
+    if (options === undefined) {
+      return null;
+    }
+
+    return (
+      <Options active={this.focused} invalid={invalid}>
+        {options.map(({ label: optionLabel, value: optionValue }) => (
+          <Option
+            key={optionValue}
+            disabled={disabled}
+            onBlur={this.handleFocusChange}
+            onClick={this.handleClick}
+            onFocus={this.handleFocusChange}
+            selected={value === optionValue}
+            type="button"
+            value={optionValue}
+          >
+            <OptionLabel>{optionLabel}</OptionLabel>
+          </Option>
+        ))}
+      </Options>
     );
   }
 
@@ -138,13 +176,22 @@ export class Select<
   };
 
   /**
-   * Updates `focused` value on option focus change.
+   * Updates `focused` value and calls `onFocusChange` callback function on
+   * focus change of any option elements.
    */
   @action
-  private handleFocusChange: React.FormEventHandler<
+  private handleFocusChange: React.FocusEventHandler<
     HTMLButtonElement
   > = event => {
     this.focused = event.type === "focus";
+
+    const { name, onFocusChange } = this.props;
+
+    if (onFocusChange === undefined) {
+      return;
+    }
+
+    onFocusChange(name, this.focused);
   };
 }
 

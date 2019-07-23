@@ -194,10 +194,8 @@ const Options = styled.div<StyleProps>`
 
   min-width: 0;
   width: 100%;
-  height: ${({ theme }) => theme.PADDING};
+  height: calc(${({ theme }) => theme.HEIGHT} / 2);
 
-  margin: 0
-    calc((${({ theme }) => theme.HEIGHT} - ${({ theme }) => theme.PADDING}) / 2);
   border: solid 1px
     ${({ active, invalid, theme }) =>
       invalid

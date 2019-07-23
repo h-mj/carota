@@ -210,7 +210,6 @@ const Box = styled.div<CheckBoxStateProps>`
 
   flex: 0 0 auto;
 
-  margin: 0 calc(${({ theme }) => theme.HEIGHT} / 4);
   color: ${({ active, checked, invalid, theme }) =>
     invalid
       ? theme.INVALID_COLOR

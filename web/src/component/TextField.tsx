@@ -340,9 +340,6 @@ const Input = styled.input<InputProps>`
 
   flex: 1 1 0;
 
-  padding: 0 calc(${({ theme }) => theme.PADDING} / 3);
-  box-sizing: border-box;
-
   color: ${({ theme }) => theme.PRIMARY_COLOR};
   caret-color: ${({ invalid, theme }) =>
     theme[invalid ? "INVALID_COLOR" : "ACTIVE_COLOR"]};
@@ -368,7 +365,7 @@ const Input = styled.input<InputProps>`
  * Component that displays the unit.
  */
 const Unit = styled.span<StyleProps>`
-  width: ${({ theme }) => theme.HEIGHT};
+  width: ${({ theme }) => theme.PADDING};
 
   display: flex;
   align-items: center;

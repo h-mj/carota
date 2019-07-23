@@ -220,6 +220,14 @@ const Field = styled.div<FieldProps>`
   transition: ${({ theme }) => theme.TRANSITION};
 
   ${({ underline }) => (underline ? underlineStyle : defaultStyle)};
+
+  & > * {
+    margin-left: calc(${({ theme }) => theme.PADDING} / 3);
+  }
+
+  & > *:last-child {
+    margin-right: calc(${({ theme }) => theme.PADDING} / 3);
+  }
 `;
 
 /**
@@ -233,6 +241,14 @@ const Label = styled.label`
 
   display: flex;
   align-items: center;
+
+  & > * {
+    margin-right: calc(${({ theme }) => theme.PADDING} / 3);
+  }
+
+  & > *:last-child {
+    margin-right: 0;
+  }
 `;
 
 /**
@@ -240,9 +256,6 @@ const Label = styled.label`
  */
 const Caption = styled.span<StyleProps>`
   min-width: 30%;
-
-  padding: 0 calc(${({ theme }) => theme.PADDING} / 3);
-  box-sizing: border-box;
 
   color: ${({ active, invalid, theme }) =>
     invalid

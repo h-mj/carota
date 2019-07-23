@@ -1,4 +1,5 @@
-import { styled, StyleProps, css } from "../../styling/theme";
+import * as React from "react";
+import { css, styled, StyleProps } from "../../styling/theme";
 
 /**
  * Component that displays the error message under `Label` component.
@@ -96,7 +97,8 @@ const underlineStyle = css<FieldProps>`
 `;
 
 /**
- * Field component that contains the caption and input element.
+ * Field component that usually contains some kind of input element with other
+ * helper labels.
  */
 export const Field = styled.div<FieldProps>`
   position: relative;
@@ -139,3 +141,88 @@ export const Label = styled.span<StyleProps>`
 
   transition: ${({ theme }) => theme.TRANSITION};
 `;
+
+/**
+ * Input wrapper component props.
+ */
+interface InputWrapperProps {
+  /**
+   * Whether or not input is active.
+   */
+  active?: boolean;
+
+  /**
+   * Whether or not render `Field` component as <label> element.
+   */
+  asLabel?: boolean;
+
+  /**
+   * Whether or not input is disabled.
+   */
+  disabled?: boolean;
+
+  /**
+   * Error message text that will be rendered under the field.
+   */
+  errorMessage?: string;
+
+  /**
+   * Whether or not input is invalid.
+   */
+  invalid?: boolean;
+
+  /**
+   * Label text that will be rendered next to the input.
+   */
+  label?: string;
+
+  /**
+   * Whether or not input is read only.
+   */
+  readOnly?: boolean;
+
+  /**
+   * Whether or not input is required.
+   */
+  required?: boolean;
+
+  /**
+   * Whether or not use underline style.
+   */
+  underline?: boolean;
+}
+
+/**
+ * Component that wraps some kind of input component.
+ *
+ * This component renders `Field` component, inside which `Label` component and
+ * `children` prop element, and `ErrorMessage` component.
+ */
+export const InputWrapper: React.FunctionComponent<InputWrapperProps> = ({
+  active,
+  asLabel,
+  children,
+  disabled,
+  errorMessage,
+  invalid,
+  label,
+  underline
+}) => (
+  <div>
+    <Field
+      as={asLabel ? "label" : undefined}
+      active={active}
+      disabled={disabled}
+      invalid={invalid}
+      underline={underline}
+    >
+      {label !== undefined && (
+        <Label active={active} disabled={disabled} invalid={invalid}>
+          {label}
+        </Label>
+      )}
+      {children}
+    </Field>
+    {errorMessage !== undefined && <ErrorMessage>{errorMessage}</ErrorMessage>}
+  </div>
+);

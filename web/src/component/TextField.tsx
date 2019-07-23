@@ -2,7 +2,7 @@ import { action, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
 import { Component } from "./Component";
-import { ErrorMessage, Field, Label } from "./collection/input";
+import { InputWrapper } from "./collection/input";
 import { RESET } from "../styling/stylesheets";
 import { styled, StyleProps } from "../styling/theme";
 
@@ -128,25 +128,17 @@ export class TextField<TName extends string = string> extends Component<
     }
 
     return (
-      <div>
-        <Field
-          as="label"
-          active={this.focused}
-          disabled={disabled}
-          invalid={invalid}
-          underline={underline}
-        >
-          {label !== undefined && (
-            <Label active={this.focused} invalid={invalid}>
-              {label}
-            </Label>
-          )}
-          {this.renderInput()}
-        </Field>
-        {errorMessage !== undefined && (
-          <ErrorMessage>{errorMessage}</ErrorMessage>
-        )}
-      </div>
+      <InputWrapper
+        active={this.focused}
+        asLabel={true}
+        disabled={disabled}
+        errorMessage={errorMessage}
+        invalid={invalid}
+        label={label}
+        underline={underline}
+      >
+        {this.renderInput()}
+      </InputWrapper>
     );
   }
 

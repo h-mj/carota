@@ -179,7 +179,7 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
           />
         </Group>
         <Controls>
-          <Button>{this.translation.submit}</Button>
+          <Button invalid={any(this.reasons)}>{this.translation.submit}</Button>
         </Controls>
       </Form>
     );

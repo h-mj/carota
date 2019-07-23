@@ -2,7 +2,6 @@ import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Component } from "./Component";
-import { Field } from "./collection/input";
 import { DURATION, fadeIn, fadeOut } from "../styling/animations";
 import { UNIT_HEIGHT } from "../styling/sizes";
 import { keyframes, styled, StyleProps } from "../styling/theme";
@@ -223,7 +222,7 @@ interface NotificationElementProps extends StyleProps {
 /**
  * Notification component that displays the message.
  */
-const NotificationElement = styled(Field)<NotificationElementProps>`
+const NotificationElement = styled.div<NotificationElementProps>`
   margin-top: ${UNIT_HEIGHT / 4}rem;
   padding: 0 ${UNIT_HEIGHT / 4}rem;
   box-sizing: border-box;

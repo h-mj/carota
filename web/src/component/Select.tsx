@@ -2,7 +2,7 @@ import { action, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
 import { Component } from "./Component";
-import { InputWrapper } from "./collection/input";
+import { InputWrapper } from "./InputWrapper";
 import { RESET } from "../styling/stylesheets";
 import { styled, StyleProps } from "../styling/theme";
 

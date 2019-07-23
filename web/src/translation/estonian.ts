@@ -83,8 +83,14 @@ export const estonian: Translation = {
             missing: "Palun valige ühik."
           }
         },
+        pieceQuantity: {
+          label: "Tüki kogus",
+          reasons: {
+            empty: "Palun sisestage ühe tüki kogus."
+          }
+        },
         quantity: {
-          label: "Logus",
+          label: "Kogus",
           reasons: {
             empty: "Palun sisestage toiduaine kogus."
           }

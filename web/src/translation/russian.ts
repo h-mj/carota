@@ -83,6 +83,12 @@ export const russian: Translation = {
             missing: "Пожалуйста, выберите единицу."
           }
         },
+        pieceQuantity: {
+          label: "Количество куска",
+          reasons: {
+            empty: "Пожалуйста, введите количество одного куска."
+          }
+        },
         quantity: {
           label: "Количество",
           reasons: {

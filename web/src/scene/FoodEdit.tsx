@@ -21,14 +21,9 @@ import { SceneContext } from "./SceneContext";
 import { any, insert } from "../utility/form";
 
 /**
- * Array of text field input names.
- */
-const TEXT_FIELDS = ["name", "barcode", "quantity"] as const;
-
-/**
  * Union of all text field input names.
  */
-type TextFieldNames = typeof TEXT_FIELDS[number];
+type TextFieldNames = "name" | "barcode" | "quantity" | "pieceQuantity";
 
 /**
  * Union of all input names.
@@ -119,7 +114,8 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
       fat: "",
       carbohydrate: "",
       protein: ""
-    } as NutritionDeclarationValue
+    } as NutritionDeclarationValue,
+    pieceQuantity: undefined as string | undefined
   };
 
   /**
@@ -179,6 +175,8 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
           value={this.values.nutritionDeclaration}
         />
 
+        {this.renderTextField("pieceQuantity")}
+
         <Controls>
           <Button invalid={any(this.reasons)}>{this.translation.submit}</Button>
         </Controls>
@@ -191,21 +189,25 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
    *
    * @param name Text field name which will be rendered.
    */
-  private renderTextField = (name: TextFieldNames) => {
-    return (
-      <TextField
-        errorMessage={this.messageFor(name)}
-        invalid={this.reasons[name] !== undefined}
-        label={this.translation.inputs[name].label}
-        name={name}
-        onChange={this.handleTextFieldChange}
-        optional={name === "barcode"}
-        required={name !== "barcode"}
-        type={name === "barcode" ? "tel" : name === "name" ? "text" : "number"}
-        value={this.values[name]}
-      />
-    );
-  };
+  private renderTextField = (name: TextFieldNames) => (
+    <TextField
+      errorMessage={this.messageFor(name)}
+      invalid={this.reasons[name] !== undefined}
+      label={this.translation.inputs[name].label}
+      name={name}
+      onChange={this.handleTextFieldChange}
+      optional={name === "barcode" || name === "pieceQuantity"}
+      required={name === "barcode" || name === "pieceQuantity"}
+      textAlign={name === "pieceQuantity" ? "right" : "left"}
+      type={name === "barcode" ? "tel" : name === "name" ? "text" : "number"}
+      unit={
+        name === "pieceQuantity" && this.values.unit !== undefined
+          ? this.translation.inputs.unit.options[this.values.unit!]
+          : undefined
+      }
+      value={this.values[name]}
+    />
+  );
 
   /**
    * Updates text field value on input value change.
@@ -249,10 +251,11 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
       barcode,
       quantity,
       unit,
-      nutritionDeclaration: declaration
+      nutritionDeclaration,
+      pieceQuantity
     } = this.values;
 
-    const result = this.parse(declaration);
+    const result = this.parse(nutritionDeclaration);
 
     // Client side validation error reasons for each input.
     const reasons: FoodEditErrorReasons = {
@@ -266,7 +269,14 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
           ? "invalid"
           : undefined,
       unit: unit === undefined ? "missing" : undefined,
-      nutritionDeclaration: result.ok ? undefined : result.value
+      nutritionDeclaration: result.ok ? undefined : result.value,
+      pieceQuantity:
+        pieceQuantity !== undefined && pieceQuantity.trim() === ""
+          ? "empty"
+          : pieceQuantity !== undefined &&
+            Number.isNaN(Number.parseFloat(pieceQuantity))
+          ? "invalid"
+          : undefined
     };
 
     const skip = any(reasons);
@@ -279,7 +289,10 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
             name,
             barcode,
             unit!,
-            result.value as ApiNutritionDeclaration
+            result.value as ApiNutritionDeclaration,
+            pieceQuantity === undefined
+              ? pieceQuantity
+              : Number.parseFloat(pieceQuantity)
           )
     );
 

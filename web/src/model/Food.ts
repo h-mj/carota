@@ -7,4 +7,5 @@ export class Food extends Model<Food, FoodData> implements FoodData {
   @observable barcode?: string | undefined;
   @observable unit!: Units;
   @observable nutritionDeclaration!: NutritionDeclaration;
+  @observable pieceQuantity?: number;
 }

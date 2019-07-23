@@ -73,6 +73,12 @@ export const english: Translation = {
             empty: "Please enter product name."
           }
         },
+        pieceQuantity: {
+          label: "Piece quantity",
+          reasons: {
+            empty: "Please enter quantity of one piece."
+          }
+        },
         unit: {
           label: "Unit",
           options: {

@@ -15,14 +15,16 @@ export class FoodsStore extends Store<Food> {
     name: string,
     barcode: string | undefined,
     unit: Units,
-    nutritionDeclaration: NutritionDeclaration
+    nutritionDeclaration: NutritionDeclaration,
+    pieceQuantity: number | undefined
   ) {
     const response = await post("food", "save", {
       id,
       name,
       barcode,
       unit,
-      nutritionDeclaration
+      nutritionDeclaration,
+      pieceQuantity
     });
 
     if ("error" in response) {

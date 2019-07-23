@@ -111,7 +111,7 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
    */
   @observable private values = {
     name: "",
-    barcode: "",
+    barcode: undefined as string | undefined,
     quantity: "",
     unit: undefined as Units | undefined,
     nutritionDeclaration: {
@@ -170,14 +170,15 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
             ]}
             value={this.values.unit}
           />
-
-          <NutritionDeclaration
-            name="nutritionDeclaration"
-            onChange={this.handleDeclarationChange}
-            reasons={this.reasons.nutritionDeclaration}
-            value={this.values.nutritionDeclaration}
-          />
         </Group>
+
+        <NutritionDeclaration
+          name="nutritionDeclaration"
+          onChange={this.handleDeclarationChange}
+          reasons={this.reasons.nutritionDeclaration}
+          value={this.values.nutritionDeclaration}
+        />
+
         <Controls>
           <Button invalid={any(this.reasons)}>{this.translation.submit}</Button>
         </Controls>
@@ -198,6 +199,7 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
         label={this.translation.inputs[name].label}
         name={name}
         onChange={this.handleTextFieldChange}
+        optional={name === "barcode"}
         required={name !== "barcode"}
         type={name === "barcode" ? "tel" : name === "name" ? "text" : "number"}
         value={this.values[name]}

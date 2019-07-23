@@ -114,12 +114,11 @@ export class Select<
         active={this.focused}
         disabled={disabled}
         errorMessage={errorMessage}
+        input={this.renderOptions()}
         invalid={invalid}
         label={label}
         underline={underline}
-      >
-        {this.renderOptions()}
-      </InputWrapper>
+      />
     );
   }
 

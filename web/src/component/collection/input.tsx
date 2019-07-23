@@ -2,6 +2,30 @@ import * as React from "react";
 import { css, styled, StyleProps } from "../../styling/theme";
 
 /**
+ * Component that displays the input label text.
+ */
+export const Caption = styled.span<StyleProps>`
+  min-width: 30%;
+
+  padding: 0 calc(${({ theme }) => theme.PADDING} / 3);
+  box-sizing: border-box;
+
+  color: ${({ active, invalid, theme }) =>
+    invalid
+      ? theme.INVALID_COLOR
+      : active
+      ? theme.ACTIVE_COLOR
+      : theme.SECONDARY_COLOR};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  user-select: none;
+
+  transition: ${({ theme }) => theme.TRANSITION};
+`;
+
+/**
  * Component that displays the error message under `Label` component.
  */
 export const ErrorMessage = styled.div`
@@ -119,27 +143,16 @@ export const Field = styled.div<FieldProps>`
 `;
 
 /**
- * Component that displays the label text.
+ * <label> element that usually contains some kind of label and input
+ * components, so that clicking on label component input would be activated.
  */
-export const Label = styled.span<StyleProps>`
-  min-width: 30%;
+export const Label = styled.label`
+  min-width: 0;
+  width: 100%;
+  height: 100%;
 
-  padding: 0 calc(${({ theme }) => theme.PADDING} / 3);
-  box-sizing: border-box;
-
-  color: ${({ active, invalid, theme }) =>
-    invalid
-      ? theme.INVALID_COLOR
-      : active
-      ? theme.ACTIVE_COLOR
-      : theme.SECONDARY_COLOR};
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  user-select: none;
-
-  transition: ${({ theme }) => theme.TRANSITION};
+  display: flex;
+  align-items: center;
 `;
 
 /**
@@ -152,9 +165,10 @@ interface InputWrapperProps {
   active?: boolean;
 
   /**
-   * Whether or not render `Field` component as <label> element.
+   * `InputWrapper` does not accept children. Use `input` and `prepend` props to
+   * render them.
    */
-  asLabel?: boolean;
+  children?: undefined;
 
   /**
    * Whether or not input is disabled.
@@ -172,9 +186,19 @@ interface InputWrapperProps {
   invalid?: boolean;
 
   /**
+   * Input component that will be wrapped.
+   */
+  input?: JSX.Element | null;
+
+  /**
    * Label text that will be rendered next to the input.
    */
   label?: string;
+
+  /**
+   * Element that will be rendered before input label component.
+   */
+  prepend?: JSX.Element | null;
 
   /**
    * Whether or not input is read only.
@@ -190,6 +214,11 @@ interface InputWrapperProps {
    * Whether or not use underline style.
    */
   underline?: boolean;
+
+  /**
+   * Whether or not wrap label and given children inside <label> element.
+   */
+  withLabel?: boolean;
 }
 
 /**
@@ -200,29 +229,43 @@ interface InputWrapperProps {
  */
 export const InputWrapper: React.FunctionComponent<InputWrapperProps> = ({
   active,
-  asLabel,
-  children,
   disabled,
   errorMessage,
+  input,
   invalid,
   label,
-  underline
-}) => (
-  <div>
-    <Field
-      as={asLabel ? "label" : undefined}
-      active={active}
-      disabled={disabled}
-      invalid={invalid}
-      underline={underline}
-    >
-      {label !== undefined && (
-        <Label active={active} disabled={disabled} invalid={invalid}>
-          {label}
-        </Label>
+  prepend,
+  underline,
+  withLabel
+}) => {
+  const LabelComponent = withLabel ? Label : React.Fragment;
+
+  return (
+    <div>
+      <Field
+        active={active}
+        disabled={disabled}
+        invalid={invalid}
+        underline={underline}
+      >
+        {prepend}
+        <LabelComponent>
+          {label !== undefined && (
+            <Caption
+              active={active}
+              disabled={disabled}
+              invalid={invalid}
+              title={label}
+            >
+              {label}
+            </Caption>
+          )}
+          {input}
+        </LabelComponent>
+      </Field>
+      {errorMessage !== undefined && (
+        <ErrorMessage>{errorMessage}</ErrorMessage>
       )}
-      {children}
-    </Field>
-    {errorMessage !== undefined && <ErrorMessage>{errorMessage}</ErrorMessage>}
-  </div>
-);
+    </div>
+  );
+};

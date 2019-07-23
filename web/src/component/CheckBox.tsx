@@ -111,15 +111,14 @@ export class CheckBox<TName extends string = string> extends Component<
     return (
       <InputWrapper
         active={this.focused}
-        asLabel={true}
         disabled={disabled}
         errorMessage={errorMessage}
+        input={this.renderCheckBox()}
         invalid={invalid}
         label={label}
         underline={underline}
-      >
-        {this.renderCheckBox()}
-      </InputWrapper>
+        withLabel={true}
+      />
     );
   }
 

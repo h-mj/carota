@@ -1,12 +1,9 @@
 import { ErrorReasons } from "api";
-import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Component } from "./Component";
-import { CheckBox } from "./CheckBox";
 import { TextField } from "./TextField";
-import { Field, Label } from "./collection/input";
-import { styled } from "../styling/theme";
+import { Group } from "./collection/form";
 
 /**
  * Array of nutrients where each nutrient will have corresponding text field
@@ -60,23 +57,6 @@ export type NutritionDeclarationValue = Record<RequiredNutrients, string> &
 export type NutritionDeclarationErrorReasons = Partial<
   Record<Nutrients, ErrorReasons>
 >;
-
-/**
- * Returns an object that maps nutrient name to whether or not its text field is disabled.
- */
-const getDisabled = (
-  value: NutritionDeclarationValue
-): Record<Nutrients, boolean> => {
-  const disabled: Partial<Record<Nutrients, boolean>> = {};
-
-  for (const nutrient of NUTRIENTS) {
-    disabled[nutrient] =
-      !(REQUIRED_NUTRIENTS as readonly string[]).includes(nutrient) &&
-      value[nutrient] === undefined;
-  }
-
-  return disabled as Record<Nutrients, boolean>;
-};
 
 /**
  * Nutrition declaration component props.
@@ -157,81 +137,29 @@ export class NutritionDeclaration<
   NutritionDeclarationTranslation
 > {
   /**
-   * Object that maps nutrient name to whether or not its text field is
-   * disabled.
-   */
-  @observable private disabled = getDisabled(this.props.value);
-
-  /**
-   * Nutrient name of currently focused text field.
-   */
-  @observable private focusedNutrient?: Nutrients;
-
-  /**
    * Renders text fields for each nutrient.
    */
   public render() {
-    return <Table>{NUTRIENTS.map(this.renderNutrientTextField)}</Table>;
+    return <Group>{NUTRIENTS.map(this.renderNutrientTextField)}</Group>;
   }
 
   /**
    * Renders a check box (if not required nutrient), label, text field and unit
    * component of a single nutrient.
    */
-  public renderNutrientTextField = (nutrient: Nutrients) => {
-    const disabled = this.disabled[nutrient];
-    const focused = this.focusedNutrient === nutrient;
-    const invalid =
-      this.props.reasons && this.props.reasons[nutrient] !== undefined;
-    const required = (REQUIRED_NUTRIENTS as readonly string[]).includes(
-      nutrient
-    );
-    const value = this.props.value[nutrient] || "";
-
-    return (
-      <Field
-        key={nutrient}
-        active={focused}
-        disabled={disabled}
-        invalid={invalid}
-        underline={true}
-      >
-        {!required && (
-          <CheckBox
-            basic={true}
-            invalid={invalid}
-            name={nutrient}
-            onChange={this.handleCheck}
-            onFocusChange={this.handleFocusChange}
-            value={!disabled}
-          />
-        )}
-        <Entry>
-          <Label
-            active={focused}
-            invalid={invalid}
-            title={this.translation.nutrients[nutrient]}
-          >
-            {this.translation.nutrients[nutrient]}
-          </Label>
-          <TextField
-            basic={true}
-            disabled={disabled}
-            invalid={invalid}
-            name={nutrient}
-            onChange={this.handleChange}
-            onFocusChange={this.handleFocusChange}
-            textAlign="right"
-            type="number"
-            value={value}
-          />
-          <Unit active={focused} invalid={invalid}>
-            {this.translation.units[nutrient === "energy" ? "kcal" : "g"]}
-          </Unit>
-        </Entry>
-      </Field>
-    );
-  };
+  public renderNutrientTextField = (nutrient: Nutrients) => (
+    <TextField
+      invalid={this.props.reasons && this.props.reasons[nutrient] !== undefined}
+      label={this.translation.nutrients[nutrient]}
+      name={nutrient}
+      onChange={this.handleChange}
+      optional={!(REQUIRED_NUTRIENTS as readonly string[]).includes(nutrient)}
+      textAlign="right"
+      type="number"
+      unit={this.translation.units[nutrient === "energy" ? "kcal" : "g"]}
+      value={this.props.value[nutrient]}
+    />
+  );
 
   /**
    * Calls `onChange` callback function prop on one nutrient amount change.
@@ -245,67 +173,4 @@ export class NutritionDeclaration<
 
     onChange(name, { ...value, [nutrient]: amount });
   };
-
-  /**
-   * Updates nutrient disabled state on check box checked state change and
-   * resets nutrient amount value.
-   */
-  @action
-  private handleCheck = (nutrient: Nutrients, check: boolean) => {
-    const { name, onChange, value } = this.props;
-
-    this.disabled[nutrient] = !check;
-
-    if (onChange === undefined) {
-      return;
-    }
-
-    onChange(name, { ...value, [nutrient]: check ? "" : undefined });
-  };
-
-  /**
-   * Updates currently focused nutrient on nutrient text field focus change.
-   */
-  @action
-  private handleFocusChange = (nutrient: Nutrients, focus: boolean) => {
-    this.focusedNutrient = focus ? nutrient : undefined;
-  };
 }
-
-/**
- * Component that contains all nutrient amount inputs.
- */
-const Table = styled.div`
-  border: solid 1px ${({ theme }) => theme.BORDER_COLOR};
-  border-radius: ${({ theme }) => theme.BORDER_RADIUS};
-`;
-
-/**
- * Entry component that contains label, input and unit components.
- *
- * This component is an <label> element, meaning that clicking on any of the
- * child components input will be focused thus increasing clickable area for the
- * input.
- */
-const Entry = styled.label`
-  min-width: 0;
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  align-items: center;
-
-  cursor: text;
-`;
-
-/**
- * Component that contains nutrient amount unit.
- */
-const Unit = styled(Label)`
-  min-width: initial;
-  width: ${({ theme }) => theme.HEIGHT};
-
-  display: flex;
-  flex: 0 0 auto;
-  justify-content: center;
-`;

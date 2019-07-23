@@ -1,7 +1,8 @@
-import { action, observable } from "mobx";
+import { action, computed, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
 import { Component } from "./Component";
+import { CheckBox } from "./CheckBox";
 import { InputWrapper } from "./collection/input";
 import { RESET } from "../styling/stylesheets";
 import { styled, StyleProps } from "../styling/theme";
@@ -9,7 +10,7 @@ import { styled, StyleProps } from "../styling/theme";
 /**
  * Text field component props.
  */
-interface TextFieldProps<TName extends string> {
+interface TextFieldProps<TName extends string, TOptional extends boolean> {
   /**
    * Whether or not text field should have autocomplete enabled.
    */
@@ -54,12 +55,19 @@ interface TextFieldProps<TName extends string> {
   /**
    * Function that will be called when text field value changes.
    */
-  onChange?: (name: TName, value: string) => void;
+  onChange?: TOptional extends true
+    ? (name: TName, value: string | undefined) => void
+    : (name: TName, value: string) => void;
 
   /**
    * Function that will be called when text field focus changes.
    */
   onFocusChange?: (name: TName, focus: boolean) => void;
+
+  /**
+   * Whether or not text field is optional.
+   */
+  optional?: TOptional;
 
   /**
    * Text that will be shown inside the text field if it's empty.
@@ -87,6 +95,11 @@ interface TextFieldProps<TName extends string> {
   type?: "email" | "number" | "password" | "search" | "tel" | "text";
 
   /**
+   * Text field input value unit that will be rendered after the input.
+   */
+  unit?: string;
+
+  /**
    * Whether or not use underline style.
    */
   underline?: boolean;
@@ -94,20 +107,21 @@ interface TextFieldProps<TName extends string> {
   /**
    * Text field value.
    */
-  value: string;
+  value: TOptional extends true ? string | undefined : string;
 }
 
 /**
  * Component that allows user to enter single line of text.
  */
 @observer
-export class TextField<TName extends string = string> extends Component<
-  TextFieldProps<TName>
-> {
+export class TextField<
+  TName extends string = string,
+  TOptional extends boolean = false
+> extends Component<TextFieldProps<TName, TOptional>> {
   /**
    * Whether or not text field input is in focus.
    */
-  @observable private focused = false;
+  @observable private _focused = false;
 
   /**
    * Renders the text field optionally alongside field, label and error message
@@ -120,6 +134,7 @@ export class TextField<TName extends string = string> extends Component<
       disabled,
       invalid,
       label,
+      value,
       underline
     } = this.props;
 
@@ -130,15 +145,15 @@ export class TextField<TName extends string = string> extends Component<
     return (
       <InputWrapper
         active={this.focused}
-        asLabel={true}
-        disabled={disabled}
+        disabled={disabled || value === undefined}
         errorMessage={errorMessage}
+        input={this.renderInput()}
         invalid={invalid}
         label={label}
+        prepend={this.renderCheckBox()}
         underline={underline}
-      >
-        {this.renderInput()}
-      </InputWrapper>
+        withLabel={true}
+      />
     );
   }
 
@@ -157,29 +172,85 @@ export class TextField<TName extends string = string> extends Component<
       required,
       textAlign,
       type,
+      unit,
       value
     } = this.props;
 
     return (
-      <Input
-        active={this.focused}
-        autoComplete={autoComplete ? "on" : "off"}
-        autoFocus={autoFocus}
+      <>
+        <Input
+          active={this.focused}
+          autoComplete={autoComplete ? "on" : "off"}
+          autoFocus={autoFocus}
+          disabled={disabled || value === undefined}
+          invalid={invalid}
+          name={name}
+          onBlur={this.handleFocusChange}
+          onChange={this.handleChange}
+          onFocus={this.handleFocusChange}
+          onWheelCapture={this.handleWheelScrollCapture}
+          placeholder={placeholder}
+          readOnly={readOnly}
+          required={required}
+          textAlign={textAlign}
+          type={type}
+          value={value || ""}
+        />
+        {unit !== undefined && (
+          <Unit active={this.focused} disabled={disabled} invalid={invalid}>
+            {unit}
+          </Unit>
+        )}
+      </>
+    );
+  }
+
+  /**
+   * Renders optional text field check box that will be rendered before the
+   * input label and is used to enable or disable given text field. If text
+   * field is not optional, returns `null`.
+   */
+  private renderCheckBox() {
+    const { disabled, invalid, name, optional, value } = this.props;
+
+    if (!optional) {
+      return null;
+    }
+
+    return (
+      <CheckBox
+        basic={true}
         disabled={disabled}
         invalid={invalid}
         name={name}
-        onBlur={this.handleFocusChange}
-        onChange={this.handleChange}
-        onFocus={this.handleFocusChange}
-        onWheelCapture={this.handleWheelScrollCapture}
-        placeholder={placeholder}
-        readOnly={readOnly}
-        required={required}
-        textAlign={textAlign}
-        type={type}
-        value={value}
+        onChange={this.handleCheck}
+        onFocusChange={this.handleCheckBoxFocusChange}
+        value={value !== undefined}
       />
     );
+  }
+
+  /**
+   * Returns whether or not text field is in focus.
+   */
+  @computed
+  private get focused() {
+    return this._focused;
+  }
+
+  /**
+   * Sets text field focus value and calls `onFocusChange` callback function prop.
+   */
+  private set focused(focused: boolean) {
+    this._focused = focused;
+
+    const { name, onFocusChange } = this.props;
+
+    if (onFocusChange === undefined) {
+      return;
+    }
+
+    onFocusChange(name, this.focused);
   }
 
   /**
@@ -196,6 +267,21 @@ export class TextField<TName extends string = string> extends Component<
   };
 
   /**
+   * Calls `onChange` callback function prop when user enables or disables the text field.
+   */
+  @action
+  private handleCheck = (name: TName, check: boolean) => {
+    // Assume text field is optional since only then this method is called.
+    const { onChange } = this.props as TextFieldProps<TName, true>;
+
+    if (onChange === undefined) {
+      return;
+    }
+
+    onChange(name, check ? "" : undefined);
+  };
+
+  /**
    * Updates `focused` value and calls `onFocusChange` callback function on
    * focus change of the input element.
    */
@@ -204,14 +290,14 @@ export class TextField<TName extends string = string> extends Component<
     HTMLInputElement
   > = event => {
     this.focused = event.type === "focus";
+  };
 
-    const { name, onFocusChange } = this.props;
-
-    if (onFocusChange === undefined) {
-      return;
-    }
-
-    onFocusChange(name, this.focused);
+  /**
+   * Updates text field focus state on check box focus change.
+   */
+  @action
+  private handleCheckBoxFocusChange = (_: TName, focused: boolean) => {
+    this.focused = focused;
   };
 
   /**
@@ -276,4 +362,27 @@ const Input = styled.input<InputProps>`
   &[type="number"] {
     -moz-appearance: textfield;
   }
+`;
+
+/**
+ * Component that displays the unit.
+ */
+const Unit = styled.span<StyleProps>`
+  width: ${({ theme }) => theme.HEIGHT};
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: ${({ active, invalid, theme }) =>
+    invalid
+      ? theme.INVALID_COLOR
+      : active
+      ? theme.ACTIVE_COLOR
+      : theme.SECONDARY_COLOR};
+  white-space: nowrap;
+
+  user-select: none;
+
+  transition: ${({ theme }) => theme.TRANSITION};
 `;

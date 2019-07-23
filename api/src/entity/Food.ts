@@ -47,6 +47,12 @@ export class Food extends BaseEntity {
   public unit!: Units;
 
   /**
+   * Quantity of one piece in units, if one piece of product exists.
+   */
+  @Column("float", { nullable: true })
+  public pieceQuantity!: number | null;
+
+  /**
    * Amount of energy in kilocalories.
    */
   @Column("float")
@@ -145,6 +151,7 @@ export class Food extends BaseEntity {
       fibre: this.fibre || undefined,
       protein: this.protein,
       salt: this.salt || undefined
-    }
+    },
+    pieceQuantity: this.pieceQuantity || undefined
   });
 }

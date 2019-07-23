@@ -399,6 +399,11 @@ export interface FoodSaveBody {
   unit: Units;
 
   /**
+   * Quantity of one piece in units, if one piece of product exists.
+   */
+  pieceQuantity?: number;
+
+  /**
    * Food nutrition declaration.
    */
   nutritionDeclaration: NutritionDeclaration;
@@ -442,4 +447,9 @@ export interface FoodData {
    * Food nutrition declaration.
    */
   nutritionDeclaration: NutritionDeclaration;
+
+  /**
+   * Quantity of one piece in units, if one piece of product exists.
+   */
+  pieceQuantity?: number;
 }

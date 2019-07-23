@@ -12,7 +12,7 @@ export const foodRouter = new Router();
 /**
  * Nutrient amount schema.
  */
-const nutrientAmount = is.number().precision(2);
+const amount = is.number().precision(2);
 
 /**
  * Save request body schema.
@@ -23,29 +23,34 @@ const SAVE_SCHEMA: Schema<"food", "save"> = {
     .guid()
     .optional(),
   name: is.string().trim(),
-  barcode: is
-    .string()
-    .allow("")
-    .optional(),
+  barcode: is.string().optional(),
   unit: is.string().valid(Object.keys(UNITS_ENUM)),
   nutritionDeclaration: {
-    energy: nutrientAmount,
-    fat: nutrientAmount,
-    saturates: nutrientAmount.optional(),
-    monoUnsaturates: nutrientAmount.optional(),
-    polyunsaturates: nutrientAmount.optional(),
-    carbohydrate: nutrientAmount,
-    sugars: nutrientAmount.optional(),
-    polyols: nutrientAmount.optional(),
-    starch: nutrientAmount.optional(),
-    fibre: nutrientAmount.optional(),
-    protein: nutrientAmount,
-    salt: nutrientAmount.optional()
-  }
+    energy: amount,
+    fat: amount,
+    saturates: amount.optional(),
+    monoUnsaturates: amount.optional(),
+    polyunsaturates: amount.optional(),
+    carbohydrate: amount,
+    sugars: amount.optional(),
+    polyols: amount.optional(),
+    starch: amount.optional(),
+    fibre: amount.optional(),
+    protein: amount,
+    salt: amount.optional()
+  },
+  pieceQuantity: amount.optional()
 };
 
 define(foodRouter, "food", "save", SAVE_SCHEMA, async context => {
-  const { id, name, barcode, unit, nutritionDeclaration } = context.state.body;
+  const {
+    id,
+    name,
+    barcode,
+    unit,
+    nutritionDeclaration,
+    pieceQuantity
+  } = context.state.body;
 
   if (id !== undefined && (await Food.findOne({ id })) === undefined) {
     throw createIdNotFoundError(id!, Food.name, ["id"]);
@@ -54,8 +59,9 @@ define(foodRouter, "food", "save", SAVE_SCHEMA, async context => {
   const food = Food.create({
     id,
     name,
-    barcode: barcode === "" ? undefined : barcode,
+    barcode,
     unit,
+    pieceQuantity,
     editor: context.state.account
   });
 

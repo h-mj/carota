@@ -257,6 +257,8 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
     // Client side validation error reasons for each input.
     const reasons: FoodEditErrorReasons = {
       name: name.trim() === "" ? "empty" : undefined,
+      barcode:
+        barcode !== undefined && barcode.trim() === "" ? "empty" : undefined,
       quantity:
         quantity.trim() === ""
           ? "empty"

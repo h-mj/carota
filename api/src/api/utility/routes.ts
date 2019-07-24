@@ -1,5 +1,5 @@
 import { Middleware } from "koa";
-import * as Router from "koa-router";
+import * as Router from "@koa/router";
 import { Actions, Controllers } from "../../../types";
 import { Schema, validator, ValidationState } from "../middleware/validator";
 import {

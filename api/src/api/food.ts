@@ -1,4 +1,4 @@
-import * as Router from "koa-router";
+import * as Router from "@koa/router";
 import { is, Schema } from "./middleware/validator";
 import { Food, UNITS_ENUM } from "../entity/Food";
 import { createIdNotFoundError } from "./utility/errors";

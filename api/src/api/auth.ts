@@ -1,4 +1,4 @@
-import * as Router from "koa-router";
+import * as Router from "@koa/router";
 import { compare, hash } from "bcryptjs";
 import { signToken } from "./middleware/authenticator";
 import { is, Schema } from "./middleware/validator";

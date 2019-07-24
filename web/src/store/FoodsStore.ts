@@ -1,4 +1,4 @@
-import { Body, Units, NutritionDeclaration } from "api";
+import { Body, NutritionDeclarationData, Units } from "api";
 import { Store } from "./Store";
 import { Food } from "../model/Food";
 import { post } from "../utility/client";
@@ -15,7 +15,7 @@ export class FoodsStore extends Store<Food> {
     name: string,
     barcode: string | undefined,
     unit: Units,
-    nutritionDeclaration: NutritionDeclaration,
+    nutritionDeclaration: NutritionDeclarationData,
     pieceQuantity: number | undefined
   ) {
     const response = await post("food", "save", {

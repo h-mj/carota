@@ -1,8 +1,4 @@
-import {
-  ErrorReasons,
-  NutritionDeclaration as ApiNutritionDeclaration,
-  Units
-} from "api";
+import { ErrorReasons, NutritionDeclarationData, Units } from "api";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -40,7 +36,7 @@ type InputErrorReasons = Partial<Record<InputNames, ErrorReasons>>;
  * declaration object.
  */
 type ParseResult =
-  | { ok: true; value: ApiNutritionDeclaration }
+  | { ok: true; value: NutritionDeclarationData }
   | { ok: false; value: NutritionDeclarationErrorReasons };
 
 /**
@@ -289,7 +285,7 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
             name,
             barcode,
             unit!,
-            result.value as ApiNutritionDeclaration,
+            result.value as NutritionDeclarationData,
             pieceQuantity === undefined
               ? pieceQuantity
               : Number.parseFloat(pieceQuantity)
@@ -311,13 +307,16 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
   };
 
   /**
-   * Converts `NutritionDeclarationValue` type object to API nutrition
-   * declaration object and returns either `ApiNutritionDeclaration` type object
-   * or object that maps nutrient names to occurred error reasons.
+   * Converts `NutritionDeclarationValue` type object to
+   * `NutritionDeclarationData` and and returns `ParseResult`.
+   *
+   * If `ParseResult` `ok` field is `true`, result value will be
+   * `NutritionDeclarationData` type object, otherwise
+   * `NutritionDeclarationErrorReasons` type.
    */
   private parse = (declaration: NutritionDeclarationValue): ParseResult => {
     const reasons: NutritionDeclarationErrorReasons = {};
-    const result: Partial<ApiNutritionDeclaration> = {};
+    const result: Partial<NutritionDeclarationData> = {};
 
     for (const nutrient of Object.keys(declaration) as Nutrients[]) {
       const value = declaration[nutrient];
@@ -338,7 +337,7 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
     if (any(reasons)) {
       return { ok: false, value: reasons };
     } else {
-      return { ok: true, value: result as ApiNutritionDeclaration };
+      return { ok: true, value: result as NutritionDeclarationData };
     }
   };
 }

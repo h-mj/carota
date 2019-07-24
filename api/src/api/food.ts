@@ -1,6 +1,6 @@
 import * as Router from "koa-router";
-import { Schema, is } from "./middleware/validator";
-import { UNITS_ENUM, Food } from "../entity/Food";
+import { is, Schema } from "./middleware/validator";
+import { Food, UNITS_ENUM } from "../entity/Food";
 import { createIdNotFoundError } from "./utility/errors";
 import { define } from "./utility/routes";
 
@@ -61,11 +61,10 @@ define(foodRouter, "food", "save", SAVE_SCHEMA, async context => {
     name,
     barcode,
     unit,
+    nutritionDeclaration,
     pieceQuantity,
     editor: context.state.account
   });
-
-  Object.assign(food, nutritionDeclaration);
 
   context.state.data = (await food.save()).toData();
 });

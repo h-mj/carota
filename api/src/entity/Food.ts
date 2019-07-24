@@ -7,6 +7,7 @@ import {
 } from "typeorm";
 import { Enum, FoodData, Units } from "../../types";
 import { Account } from "./Account";
+import { NutritionDeclaration } from "./NutritionDeclaration";
 
 /**
  * Object that is used as unit enumeration.
@@ -47,82 +48,16 @@ export class Food extends BaseEntity {
   public unit!: Units;
 
   /**
+   * Food item nutrition information.
+   */
+  @Column(() => NutritionDeclaration)
+  public nutritionDeclaration!: NutritionDeclaration;
+
+  /**
    * Quantity of one piece in units, if one piece of product exists.
    */
   @Column("float", { nullable: true })
   public pieceQuantity!: number | null;
-
-  /**
-   * Amount of energy in kilocalories.
-   */
-  @Column("float")
-  public energy!: number;
-
-  /**
-   * Amount of fat in grams.
-   */
-  @Column("float")
-  public fat!: number;
-
-  /**
-   * Amount of saturates in grams.
-   */
-  @Column("float", { nullable: true })
-  public saturates!: number | null;
-
-  /**
-   * Amount of mono-unsaturates in grams.
-   */
-  @Column("float", { nullable: true })
-  public monoUnsaturates!: number | null;
-
-  /**
-   * Amount of polyunsaturates in grams.
-   */
-  @Column("float", { nullable: true })
-  public polyunsaturates!: number | null;
-
-  /**
-   * Amount of carbohydrate in grams.
-   */
-  @Column("float")
-  public carbohydrate!: number;
-
-  /**
-   * Amount of sugars in grams.
-   */
-  @Column("float", { nullable: true })
-  public sugars!: number | null;
-
-  /**
-   * Amount of polyols in grams.
-   */
-  @Column("float", { nullable: true })
-  public polyols!: number | null;
-
-  /**
-   * Amount of starch in grams.
-   */
-  @Column("float", { nullable: true })
-  public starch!: number | null;
-
-  /**
-   * Amount of fibre in grams.
-   */
-  @Column("float", { nullable: true })
-  public fibre!: number | null;
-
-  /**
-   * Amount of protein in grams.
-   */
-  @Column("float")
-  public protein!: number;
-
-  /**
-   * Amount of salt in grams.
-   */
-  @Column("float", { nullable: true })
-  public salt!: number | null;
 
   /**
    * Account of last user who edited this food.
@@ -138,20 +73,7 @@ export class Food extends BaseEntity {
     name: this.name,
     barcode: this.barcode || undefined,
     unit: this.unit,
-    nutritionDeclaration: {
-      energy: this.energy,
-      fat: this.fat,
-      saturates: this.saturates || undefined,
-      monoUnsaturates: this.monoUnsaturates || undefined,
-      polyunsaturates: this.polyunsaturates || undefined,
-      carbohydrate: this.carbohydrate,
-      sugars: this.sugars || undefined,
-      polyols: this.polyols || undefined,
-      starch: this.starch || undefined,
-      fibre: this.fibre || undefined,
-      protein: this.protein,
-      salt: this.salt || undefined
-    },
+    nutritionDeclaration: this.nutritionDeclaration.toData(),
     pieceQuantity: this.pieceQuantity || undefined
   });
 }

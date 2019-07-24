@@ -312,7 +312,7 @@ export interface InvitationData {
 /**
  * Declares nutritional values of a product.
  */
-export interface NutritionDeclaration {
+export interface NutritionDeclarationData {
   /**
    * Amount of energy in kilocalories.
    */
@@ -399,14 +399,14 @@ export interface FoodSaveBody {
   unit: Units;
 
   /**
+   * Food nutrition declaration.
+   */
+  nutritionDeclaration: NutritionDeclarationData;
+
+  /**
    * Quantity of one piece in units, if one piece of product exists.
    */
   pieceQuantity?: number;
-
-  /**
-   * Food nutrition declaration.
-   */
-  nutritionDeclaration: NutritionDeclaration;
 }
 
 /**
@@ -446,7 +446,7 @@ export interface FoodData {
   /**
    * Food nutrition declaration.
    */
-  nutritionDeclaration: NutritionDeclaration;
+  nutritionDeclaration: NutritionDeclarationData;
 
   /**
    * Quantity of one piece in units, if one piece of product exists.

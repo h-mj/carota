@@ -8,7 +8,9 @@ import { NutritionDeclaration } from "./NutritionDeclaration";
 import { RootStore } from "../store/RootStore";
 
 /**
- * Maps component class names to the corresponding class.
+ * Maps component class names to the class itself which is used typing
+ * translation object. Must include all components that have some kind of
+ * translation defined.
  */
 interface ComponentMap {
   Alert: Alert;
@@ -27,17 +29,17 @@ type ComponentNames = keyof ComponentMap;
  * Keys of object `T` which values are `undefined`.
  */
 type UndefinedValueKeys<T> = {
-  [K in keyof T]: T[K] extends undefined ? K : never
+  [K in keyof T]: undefined extends T[K] ? K : never;
 }[keyof T];
 
 /**
- * Type that makes keys which values are `undefined` optional.
+ * Type of an object `T` which `undefined` valued keys are optional.
  */
 type MakeUndefinedOptional<T> = Omit<T, UndefinedValueKeys<T>> &
   { [K in UndefinedValueKeys<T>]?: undefined };
 
 /**
- * Maps a component class names `Names` to its translation type using `TMap`,
+ * Maps component class names `Names` to its translation type using `TMap`,
  * which maps component names to their component class types.
  */
 export type ClassTranslation<
@@ -45,14 +47,14 @@ export type ClassTranslation<
   TMap extends Record<TNames, Component<{}, {} | undefined>>
 > = MakeUndefinedOptional<
   {
-    [Name in TNames]: TMap[Name] extends Component<any, infer ITranslation>
+    [Name in TNames]: TMap[Name] extends Component<infer _, infer ITranslation>
       ? ITranslation
-      : never
+      : never;
   }
 >;
 
 /**
- * Maps a component class name to its translation type.
+ * Maps component class names to their translation types.
  */
 export type ComponentsTranslation = ClassTranslation<
   ComponentNames,
@@ -60,7 +62,8 @@ export type ComponentsTranslation = ClassTranslation<
 >;
 
 /**
- * Component base class used to easily define and retrieve translations.
+ * Component base class used to automatically define and retrieve typed
+ * translations.
  */
 export abstract class Component<
   TProps extends {} = {},

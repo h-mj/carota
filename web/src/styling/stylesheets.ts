@@ -1,7 +1,7 @@
 import { css } from "styled-components";
 
 /**
- * CSS rules that reset common preset rules.
+ * CSS rules that resets common browser predefined rules.
  */
 export const RESET = css`
   min-width: 0;

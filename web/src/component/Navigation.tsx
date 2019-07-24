@@ -4,12 +4,11 @@ import { SceneNames } from "../scene/Scene";
 import { Component } from "./Component";
 import { Anchor } from "./Anchor";
 import { DURATION } from "../styling/animations";
-import { UNIT_HEIGHT } from "../styling/sizes";
 import { styled } from "../styling/theme";
 
 /**
  * Navigation bar component that is used to navigate to different parts of the
- * application.
+ * application by clicking on anchor elements inside it.
  */
 @inject("views")
 @observer
@@ -19,7 +18,7 @@ export class Navigation extends Component<{}, Record<SceneNames, string>> {
    */
   public render() {
     const {
-      main: { sceneName: currentSceneName },
+      main: { sceneName },
       navigation
     } = this.props.views!;
 
@@ -34,7 +33,7 @@ export class Navigation extends Component<{}, Record<SceneNames, string>> {
             <Item
               key={index}
               context={context}
-              selected={currentSceneName === context.sceneName}
+              selected={sceneName === context.sceneName}
             >
               {this.translation[context.sceneName]}
             </Item>
@@ -58,7 +57,7 @@ const Container = styled.div`
  */
 const Bar = styled.nav`
   display: inline-flex;
-  padding: 0 ${UNIT_HEIGHT / 4}rem;
+  padding: 0 calc(${({ theme }) => theme.PADDING} / 2);
   box-sizing: border-box;
 `;
 
@@ -76,8 +75,8 @@ interface ItemProps {
  * One of the navigation bar items.
  */
 const Item = styled(Anchor)<ItemProps>`
-  height: ${UNIT_HEIGHT}rem;
-  padding: 0 ${UNIT_HEIGHT / 4}rem;
+  height: ${({ theme }) => theme.HEIGHT};
+  padding: 0 calc(${({ theme }) => theme.PADDING} / 2);
 
   display: flex;
   align-items: center;

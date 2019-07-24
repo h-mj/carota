@@ -6,16 +6,6 @@ import { keyframes } from "styled-components";
 export const DURATION = 0.125;
 
 /**
- * Default animation/duration timing function.
- */
-export const TIMING_FUNCTION = "cubic-bezier(0.4, 0.0, 0.2, 1)";
-
-/**
- * Default transition rule value.
- */
-export const TRANSITION = `${DURATION}s ${TIMING_FUNCTION}`;
-
-/**
  * Animation that fades a component in.
  */
 export const fadeIn = keyframes`

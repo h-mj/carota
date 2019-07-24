@@ -1,7 +1,8 @@
 import { styled } from "../../styling/theme";
 
 /**
- * Component that takes up whole screen and centers its children.
+ * Component that takes up whole screen and positions itc children in the middle
+ * of the component.
  */
 export const Center = styled.div`
   width: 100%;
@@ -14,7 +15,7 @@ export const Center = styled.div`
 `;
 
 /**
- * Component that fills entire browser viewport.
+ * Component that fills entire browser viewport on top of other components.
  */
 export const Overlay = styled.div`
   position: fixed;

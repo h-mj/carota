@@ -3,7 +3,6 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Component } from "./Component";
 import { DURATION, fadeIn, fadeOut } from "../styling/animations";
-import { UNIT_HEIGHT } from "../styling/sizes";
 import { keyframes, styled, StyleProps } from "../styling/theme";
 
 /**
@@ -72,7 +71,7 @@ export class Notification<TNotificationName extends NotificationNames> {
  * Union of all possible notification classes.
  */
 export type Notifications = {
-  [NotificationName in NotificationNames]: Notification<NotificationName>
+  [NotificationName in NotificationNames]: Notification<NotificationName>;
 }[NotificationNames];
 
 /**
@@ -95,7 +94,7 @@ export class NotificationContainer extends Component<
    * Stores all notifications that should be visible. Also includes "fading" notifications
    * that are no longer included in `notifications` prop.
    */
-  @observable private visibleNotifications: Array<Notifications> = [];
+  @observable private visibleNotifications: Notifications[] = [];
 
   /**
    * Adds new notifications to `visibleNotifications` array, and fades inactive notifications out.
@@ -189,8 +188,8 @@ export class NotificationContainer extends Component<
  */
 const NotificationBox = styled.div`
   position: fixed;
-  bottom: ${UNIT_HEIGHT / 4}rem;
-  left: ${UNIT_HEIGHT / 4}rem;
+  bottom: ${({ theme }) => theme.PADDING};
+  left: ${({ theme }) => theme.PADDING};
 `;
 
 /**
@@ -223,8 +222,8 @@ interface NotificationElementProps extends StyleProps {
  * Notification component that displays the message.
  */
 const NotificationElement = styled.div<NotificationElementProps>`
-  margin-top: ${UNIT_HEIGHT / 4}rem;
-  padding: 0 ${UNIT_HEIGHT / 4}rem;
+  margin-top: calc(${({ theme }) => theme.PADDING} / 3);
+  padding: 0 calc(${({ theme }) => theme.PADDING} / 3);
   box-sizing: border-box;
 
   color: ${({ theme }) => theme.PRIMARY_COLOR};

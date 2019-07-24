@@ -10,11 +10,11 @@ import {
   scaleIn,
   scaleOut
 } from "../styling/animations";
-import { UNIT_HEIGHT } from "../styling/sizes";
 import { keyframes, styled } from "../styling/theme";
 
 /**
- * Component that is shown when some part of the application is being loaded.
+ * Component that is shown when ViewsStore.load` function is awaiting some
+ * promise.
  */
 @inject("views")
 @observer
@@ -32,7 +32,7 @@ export class Loader extends Component {
   /**
    * Creates a new instance of `Loader` and updates loading state.
    */
-  public constructor(props: any) {
+  public constructor(props: {}) {
     super(props);
     this.update();
   }
@@ -125,12 +125,12 @@ const LoaderOverlay = styled(Overlay)<LoaderOverlayProps>`
 /**
  * Diameter of a disk in `rem`s.
  */
-const DISK_SIZE = UNIT_HEIGHT / 6;
+const DISK_SIZE = 0.5;
 
 /**
  * Offset between the start position of one disk and next one.
  */
-const DISK_OFFSET = UNIT_HEIGHT / 3;
+const DISK_OFFSET = 1;
 
 /**
  * Component that contains moving disks.

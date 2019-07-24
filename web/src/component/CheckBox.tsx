@@ -16,7 +16,7 @@ interface CheckBoxProps<TName extends string> {
   autoFocus?: boolean;
 
   /**
-   * Whether or not render only check box.
+   * Whether or not only render check box.
    */
   basic?: boolean;
 
@@ -52,7 +52,7 @@ interface CheckBoxProps<TName extends string> {
   onChange?: (name: TName, value: boolean) => void;
 
   /**
-   * Function that will be called when text field focus changes.
+   * Function that will be called when check box focus changes.
    */
   onFocusChange?: (name: TName, focus: boolean) => void;
 
@@ -62,17 +62,17 @@ interface CheckBoxProps<TName extends string> {
   readOnly?: boolean;
 
   /**
-   * Whether or not selecting check box is required.
+   * Whether or not check box must be checked.
    */
   required?: boolean;
 
   /**
-   * Whether or not use underline style.
+   * Whether or not should field use underline style.
    */
   underline?: boolean;
 
   /**
-   * Whether or not check box is selected.
+   * Whether or not check box is checked.
    */
   value: boolean;
 }
@@ -91,8 +91,8 @@ export class CheckBox<TName extends string = string> extends Component<
   @observable private focused = false;
 
   /**
-   * Renders a check box optionally alongside field, label and error message
-   * components.
+   * Renders a check box on its own if `basic` props is true, otherwise renders
+   * the check box inside `InputWrapper` component.
    */
   public render() {
     const {
@@ -123,7 +123,7 @@ export class CheckBox<TName extends string = string> extends Component<
   }
 
   /**
-   * Renders check box component.
+   * Renders the check box.
    */
   private renderCheckBox() {
     const {
@@ -200,7 +200,7 @@ interface CheckBoxStateProps extends StyleProps {
 }
 
 /**
- * Container that contains both read and fake check boxes.
+ * Container that contains both real and fake check boxes.
  */
 const Box = styled.div<CheckBoxStateProps>`
   position: relative;
@@ -225,7 +225,8 @@ const Box = styled.div<CheckBoxStateProps>`
 `;
 
 /**
- * The real invisible check box that is being checked/unchecked.
+ * The real invisible check box that is being checked/unchecked on top of which
+ * fake one is rendered.
  */
 const Input = styled.input`
   ${RESET};

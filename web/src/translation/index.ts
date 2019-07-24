@@ -2,16 +2,16 @@ import { ScenesTranslation } from "../scene/Scene";
 import { ComponentsTranslation } from "../component/Component";
 
 /**
- * Translation type that contains all other translations.
+ * Translation object type that contains all translated strings.
  */
 export interface Translation {
   /**
-   * Translation of components.
+   * Component translations.
    */
   components: ComponentsTranslation;
 
   /**
-   * Scene component translations.
+   * Scene translations.
    */
   scenes: ScenesTranslation;
 }

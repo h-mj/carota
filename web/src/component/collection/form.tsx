@@ -1,7 +1,8 @@
 import { styled } from "../../styling/theme";
 
 /**
- * Component that contains the submit button.
+ * Component that contains the form control components, for example form submit
+ * button.
  */
 export const Controls = styled.div`
   display: flex;
@@ -9,7 +10,7 @@ export const Controls = styled.div`
 `;
 
 /**
- * Form element.
+ * Form element that wraps `Main` and `Controls` components.
  */
 export const Form = styled.form`
   min-height: calc(9 * ${({ theme }) => theme.HEIGHT});
@@ -29,7 +30,7 @@ export const Form = styled.form`
 `;
 
 /**
- * Component that groups together multiple fields.
+ * Component that groups together multiple inputs.
  */
 export const Group = styled.div`
   width: 100%;

@@ -26,7 +26,7 @@ const TRANSLATIONS: Readonly<Record<Languages, Translation>> = {
 /**
  * Scene names that do not require authentication.
  */
-const NO_AUTHENTICATION_SCENE_NAMES: Readonly<Array<SceneNames>> = [
+const NO_AUTHENTICATION_SCENE_NAMES: readonly SceneNames[] = [
   "Login",
   "Register"
 ];
@@ -58,7 +58,7 @@ export class ViewsStore {
   /**
    * Array of notifications.
    */
-  @observable private _notifications: Array<Notifications> = [];
+  @observable private _notifications: Notifications[] = [];
 
   /**
    * Number of active loadings.

@@ -2,7 +2,7 @@ import { ErrorReasons, Languages } from "api";
 import { observable, action } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Scene } from "./Scene";
+import { DefaultSceneProps, Scene } from "./Scene";
 import { Alert } from "../component/Alert";
 import { Head } from "../component/Head";
 import { Select } from "../component/Select";
@@ -63,7 +63,7 @@ interface RegisterTranslation {
   inputs: {
     [InputName in InputNames]: InputName extends TextFieldNames
       ? TextFieldTranslation
-      : LanguageSelectTranslation
+      : LanguageSelectTranslation;
   };
 
   /**
@@ -111,7 +111,7 @@ export class Register extends Scene<"Register", {}, RegisterTranslation> {
   /**
    * Creates `Register` scene and initiates invitation ID verification.
    */
-  public constructor(props: any) {
+  public constructor(props: DefaultSceneProps<"Register">) {
     super(props);
     this.verify();
   }

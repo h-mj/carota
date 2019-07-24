@@ -3,8 +3,8 @@ import { rootStore } from "../store/RootStore";
 
 /**
  * Makes a `POST` request to route `/api/${controller}/${action}` with message
- * body as string version of parameter `body` and returns response message body
- * as JSON.
+ * body as string version of parameter `body` object and returns response
+ * message body as JSON.
  *
  * @param controller Controller name.
  * @param action Controllers action name.

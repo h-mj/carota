@@ -4,7 +4,7 @@ import { Store } from "../store/Store";
 /**
  * Type of data of given model `TModel`.
  */
-export type ModelData<TModel extends Model> = TModel extends Model<
+export type ModelData<TModel extends Model<TModel>> = TModel extends Model<
   infer _,
   infer IData
 >
@@ -14,7 +14,7 @@ export type ModelData<TModel extends Model> = TModel extends Model<
 /**
  * Type which constructor creates a model `TModel` instance.
  */
-export type ModelClass<TModel extends Model> = new (
+export type ModelClass<TModel extends Model<TModel>> = new (
   data: ModelData<TModel>,
   store: Store<TModel>
 ) => TModel;
@@ -22,7 +22,7 @@ export type ModelClass<TModel extends Model> = new (
 /**
  * Model base class.
  */
-export abstract class Model<TModel extends Model = any, TData = {}> {
+export abstract class Model<TModel extends Model<TModel>, TData = {}> {
   /**
    * ID of the model.
    */

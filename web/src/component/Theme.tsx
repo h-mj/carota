@@ -4,7 +4,8 @@ import { Component } from "./Component";
 import { createGlobalStyle, LIGHT, ThemeProvider } from "../styling/theme";
 
 /**
- * Renders `GlobalStyle` component and renders it's children wrapped in `ThemeProvider`.
+ * Renders `GlobalStyle` component and renders it's children wrapped in
+ * `ThemeProvider` which will provide the theme definition to its children.
  */
 @inject("views")
 @observer

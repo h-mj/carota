@@ -1,16 +1,16 @@
 import { ErrorReasons, Error } from "api";
 
 /**
- * Type of an object where `string` property values are either `ErrorReasons`,
- * `undefined` or this type itself.
+ * Type of an object where `string` type property values are either
+ * `ErrorReasons`, `undefined` or this type itself.
  */
-type ErrorReasonsTree = {
+interface ErrorReasonsTree {
   [P: string]: ErrorReasons | ErrorReasonsTree | undefined;
-};
+}
 
 /**
- * Returns whether or not `tree` object or its sub-trees have any `ErrorReasons`
- * values.
+ * Returns whether or not `tree` object or its sub-trees have any defined
+ * `ErrorReasons` values.
  */
 export const any = (tree: Readonly<ErrorReasonsTree>): boolean => {
   for (const property in tree) {
@@ -59,8 +59,8 @@ const put = (
 };
 
 /**
- * Inserts all error reasons to their paths of all occurred error `error`
- * details to error reasons tree `tree`.
+ * For each error detail of given error assigns occurred error reason to its
+ * path in the tree.
  *
  * @param tree Error reasons tree.
  * @param error Occurred API error.

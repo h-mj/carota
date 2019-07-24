@@ -12,7 +12,7 @@ interface InputWrapperProps {
 
   /**
    * `InputWrapper` does not accept children. Use `input` and `prepend` props to
-   * render them.
+   * render them instead.
    */
   children?: undefined;
 
@@ -32,7 +32,7 @@ interface InputWrapperProps {
   invalid?: boolean;
 
   /**
-   * Input component that will be wrapped.
+   * Wrapped input component.
    */
   input?: JSX.Element | null;
 
@@ -68,10 +68,8 @@ interface InputWrapperProps {
 }
 
 /**
- * Component that wraps some kind of input component.
- *
- * This component renders `Field` component, inside which `Label` component and
- * `children` prop element, and `ErrorMessage` component.
+ * Component that wraps an input component and renders field, error message and
+ * label components around it.
  */
 export const InputWrapper: React.FunctionComponent<InputWrapperProps> = ({
   active,
@@ -201,8 +199,7 @@ const underlineStyle = css<FieldProps>`
 `;
 
 /**
- * Field component that usually contains some kind of input element with other
- * helper labels.
+ * Field component that usually contains label and an input component.
  */
 const Field = styled.div<FieldProps>`
   position: relative;

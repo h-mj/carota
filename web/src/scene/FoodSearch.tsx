@@ -4,14 +4,13 @@ import * as React from "react";
 import { SceneContext } from "./SceneContext";
 import { Scene } from "./Scene";
 import { TextField } from "../component/TextField";
-import { UNIT_HEIGHT, BORDER_RADIUS } from "../styling/sizes";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
 
 @inject("foods", "views")
 @observer
 export class FoodSearch extends Scene<"FoodSearch"> {
-  @observable query = "";
+  @observable private query = "";
 
   public render() {
     const results = this.props.foods!.getAll();
@@ -53,7 +52,7 @@ export class FoodSearch extends Scene<"FoodSearch"> {
   private handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
     this.props.views!.aside(
       new SceneContext("FoodEdit", undefined, {
-        food: this.props.foods!.get((event.target as any).value)
+        food: this.props.foods!.get(event.currentTarget.value)
       })
     );
   };
@@ -62,11 +61,11 @@ export class FoodSearch extends Scene<"FoodSearch"> {
 const Results = styled.div`
   width: 100%;
 
-  margin-top: ${UNIT_HEIGHT / 4}rem;
+  margin-top: calc(${({ theme }) => theme.PADDING} / 3);
 
   color: ${({ theme }) => theme.BORDER_COLOR};
   box-shadow: 0 0 0 1px inset 0 0 0 1px;
-  border-radius: ${BORDER_RADIUS};
+  border-radius: ${({ theme }) => theme.BORDER_RADIUS};
 `;
 
 const Result = styled.button`
@@ -76,14 +75,14 @@ const Result = styled.button`
   align-items: center;
 
   width: 100%;
-  height: ${UNIT_HEIGHT}rem;
+  height: ${({ theme }) => theme.HEIGHT}rem;
 
-  padding: 0 ${UNIT_HEIGHT / 4}rem;
+  padding: 0 calc(${({ theme }) => theme.PADDING} / 3);
   box-sizing: border-box;
 
   color: ${({ theme }) => theme.BORDER_COLOR};
   box-shadow: 0 0 0 1px, inset 0 0 0 1px;
-  border-radius: ${BORDER_RADIUS}rem;
+  border-radius: ${({ theme }) => theme.BORDER_RADIUS};
 
   &:last-of-type {
     border-bottom: 0;

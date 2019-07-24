@@ -19,7 +19,7 @@ interface AnchorProps {
 }
 
 /**
- * Component that on click redirects user to given scene with some parameters.
+ * Component that changes main scene on click.
  */
 @inject("views")
 export class Anchor extends Component<AnchorProps> {
@@ -39,7 +39,7 @@ export class Anchor extends Component<AnchorProps> {
   }
 
   /**
-   * Prevents default anchor behavior and executes custom redirection logic instead.
+   * Prevents default anchor behavior and sets main scene context.
    */
   private handleClick: React.MouseEventHandler<HTMLAnchorElement> = event => {
     event.preventDefault();

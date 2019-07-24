@@ -24,7 +24,7 @@ interface HeadTranslation {
 }
 
 /**
- * Component that alters document head tag with updated document title.
+ * Component that updates document <head> element when `title` prop changes.
  */
 @inject("views")
 @observer

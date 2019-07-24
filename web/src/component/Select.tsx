@@ -55,7 +55,7 @@ interface SelectProps<TName extends string, TValues extends string> {
    * Array of label-value pairs, where `label` will be visible to the user and
    * `value` is internal representation of the option.
    */
-  options: Readonly<Array<{ label: string; value: TValues }>>;
+  options: readonly { label: string; value: TValues }[];
 
   /**
    * Whether or not text field is read only.

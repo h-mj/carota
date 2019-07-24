@@ -1,7 +1,7 @@
 import * as styledComponents from "styled-components";
 
 /**
- * Props that affect styling of a components.
+ * Props that usually affect styling of components.
  */
 export interface StyleProps {
   /**

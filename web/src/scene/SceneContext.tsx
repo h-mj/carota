@@ -173,7 +173,7 @@ export class SceneContext<TSceneName extends SceneNames> {
 
           url = url.replace(
             `{${parameter}}`,
-            (this.parameters as any)[parameter]
+            (this.parameters as Record<string, string>)[parameter]
           );
         }
       }
@@ -270,5 +270,5 @@ export class SceneContext<TSceneName extends SceneNames> {
  * Union of all possible scene context types.
  */
 export type SceneContexts = {
-  [SceneName in SceneNames]: SceneContext<SceneName>
+  [SceneName in SceneNames]: SceneContext<SceneName>;
 }[SceneNames];

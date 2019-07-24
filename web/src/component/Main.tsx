@@ -4,7 +4,7 @@ import { Component } from "./Component";
 import { Navigation } from "./Navigation";
 
 /**
- * Component responsible for rendering main scene.
+ * Component responsible for rendering main scene with navigation bar.
  */
 @inject("views")
 @observer

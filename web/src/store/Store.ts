@@ -4,7 +4,7 @@ import { Model, ModelClass, ModelData } from "../model/Model";
 /**
  * Base class for store classes.
  */
-export class Store<TModel extends Model> {
+export class Store<TModel extends Model<TModel>> {
   /**
    * Map that maps IDs to their model instances.
    */

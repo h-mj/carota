@@ -27,8 +27,8 @@ export interface DefaultSceneProps<TSceneName extends SceneNames> {
  */
 export type SceneProps<
   TSceneNames extends SceneNames
-> = typeof SCENES[TSceneNames] extends new (...args: any) => infer IClass
-  ? IClass extends Scene<any, infer IProps, any>
+> = typeof SCENES[TSceneNames] extends new (...args: infer _) => infer IClass
+  ? IClass extends Scene<infer _1, infer IProps, infer _2>
     ? IProps
     : never
   : never;
@@ -49,10 +49,10 @@ export interface DefaultSceneTranslation {
  */
 type SceneMap = {
   [SceneName in SceneNames]: typeof SCENES[SceneName] extends new (
-    ...args: any
+    ...args: infer _
   ) => infer IComponent
     ? IComponent
-    : never
+    : never;
 };
 
 /**

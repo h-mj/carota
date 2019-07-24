@@ -3,7 +3,6 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Component } from "./Component";
 import { Overlay } from "./collection/container";
-import { UNIT_HEIGHT } from "../styling/sizes";
 import { styled } from "../styling/theme";
 
 /**
@@ -30,7 +29,7 @@ export class Side extends Component {
   }
 
   /**
-   * Hides side scene when user clicks of `Overlay` itself.
+   * Hides side scene when user clicks on the `Overlay` component.
    */
   @action
   private handleOverlayClick: React.MouseEventHandler<
@@ -46,7 +45,7 @@ export class Side extends Component {
  * Component that contains the side scene.
  */
 const Container = styled.div`
-  max-width: ${8 * UNIT_HEIGHT}rem;
+  max-width: ${({ theme }) => theme.FORM_WIDTH};
   width: 100%;
   height: 100%;
 

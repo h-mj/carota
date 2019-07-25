@@ -20,13 +20,13 @@ export const russian: Translation = {
     Navigation: {
       Administration: "Администрация",
       Diet: "Диета",
-      FoodEdit: "Редактировать продукт",
+      Edit: "Редакция",
       History: "История",
       Home: "Главная",
       Login: "Вход",
       Logout: "Выход",
       Measurements: "Замеры",
-      Register: "Завести аккаунт",
+      Register: "Создать аккаунт",
       Search: "Поиск",
       Settings: "Настройки",
       Unknown: "К сожалению, запрошенная страница не была найдена"
@@ -38,7 +38,7 @@ export const russian: Translation = {
     }
   },
   scenes: {
-    FoodEdit: {
+    Edit: {
       inputs: {
         barcode: {
           label: "Штрих-код",
@@ -142,8 +142,8 @@ export const russian: Translation = {
           }
         }
       },
-      submit: "Завести аккаунт →",
-      title: "Завести аккаунт"
+      submit: "Создать аккаунт →",
+      title: "Создать аккаунт"
     }
   }
 };

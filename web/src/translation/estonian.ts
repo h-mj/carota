@@ -20,7 +20,7 @@ export const estonian: Translation = {
     Navigation: {
       Administration: "Administratsioon",
       Diet: "Dieet",
-      FoodEdit: "Toiduaine redaktsioon",
+      Edit: "Redaktsioon",
       History: "Ajalugu",
       Home: "Avaleht",
       Login: "Logige sisse",
@@ -38,7 +38,7 @@ export const estonian: Translation = {
     }
   },
   scenes: {
-    FoodEdit: {
+    Edit: {
       inputs: {
         barcode: {
           label: "Triipkood",

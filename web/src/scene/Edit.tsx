@@ -76,7 +76,7 @@ interface InputTranslation {
 /**
  * Food edit scene translation.
  */
-interface FoodEditTranslation {
+interface EditTranslation {
   /**
    * Registration form input translations.
    */
@@ -103,7 +103,7 @@ interface FoodEditTranslation {
 /**
  * Food editing form values object type.
  */
-interface FoodEditValues {
+interface EditValues {
   name: string;
   barcode?: string;
   quantity: string;
@@ -132,11 +132,11 @@ type ParseResult =
  */
 @inject("foods", "views")
 @observer
-export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
+export class Edit extends Scene<"Edit", {}, EditTranslation> {
   /**
    * Food editing form field values.
    */
-  @observable private values: FoodEditValues = {
+  @observable private values: EditValues = {
     name: "",
     quantity: "",
     nutritionDeclaration: {
@@ -150,17 +150,17 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
   /**
    * Object that contains error reasons of occurred errors for each value.
    */
-  @observable private reasons: ErrorReasonsFor<FoodEditValues> = {};
+  @observable private reasons: ErrorReasonsFor<EditValues> = {};
 
   /**
-   * Creates `FoodEdit` scene instance and shows the same scene on the side if
+   * Creates `Edit` scene instance and shows the same scene on the side if
    * scene is rendered as the main scene.
    */
-  public constructor(props: DefaultSceneProps<"FoodEdit">) {
+  public constructor(props: DefaultSceneProps<"Edit">) {
     super(props);
 
     if (props.position === "main") {
-      this.props.views!.aside(new SceneContext("FoodEdit", undefined, {}));
+      this.props.views!.aside(new SceneContext("Edit", undefined, {}));
     }
   }
 
@@ -299,7 +299,7 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
     const result = this.parse(nutritionDeclaration);
 
     // Client side validation error reasons for each input.
-    const reasons: ErrorReasonsFor<FoodEditValues> = {
+    const reasons: ErrorReasonsFor<EditValues> = {
       name: name.trim() === "" ? "empty" : undefined,
       barcode:
         barcode !== undefined && barcode.trim() === "" ? "empty" : undefined,

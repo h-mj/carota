@@ -20,7 +20,7 @@ export const english: Translation = {
     Navigation: {
       Administration: "Administration",
       Diet: "Diet",
-      FoodEdit: "Edit food",
+      Edit: "Edit",
       History: "History",
       Home: "Home",
       Login: "Sign in",
@@ -38,7 +38,7 @@ export const english: Translation = {
     }
   },
   scenes: {
-    FoodEdit: {
+    Edit: {
       inputs: {
         barcode: {
           label: "Barcode",

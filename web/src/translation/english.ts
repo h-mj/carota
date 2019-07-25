@@ -21,40 +21,19 @@ export const english: Translation = {
       Administration: "Administration",
       Diet: "Diet",
       FoodEdit: "Edit food",
-      FoodSearch: "Search food",
       History: "History",
       Home: "Home",
       Login: "Sign in",
       Logout: "Sign out",
       Measurements: "Measurements",
       Register: "Sign up",
+      Search: "Search",
       Settings: "Settings",
       Unknown: "We are sorry, the page you requested has not been found"
     },
     NotificationContainer: {
       loginInvalidCredentials: {
         message: "Incorrect email address or password."
-      }
-    },
-    NutritionDeclaration: {
-      nutrients: {
-        carbohydrate: "Carbohydrate",
-        energy: "Energy",
-        fat: "Fat",
-        fibre: "Fibre",
-        monoUnsaturates: "Mono-unsaturates",
-        polyols: "Polyols",
-        polyunsaturates: "Polyunsaturates",
-        protein: "Protein",
-        salt: "Salt",
-        saturates: "Saturates",
-        starch: "Starch",
-        sugars: "Sugars"
-      },
-      title: "Nutrition information",
-      units: {
-        g: "g",
-        kcal: "kcal"
       }
     }
   },
@@ -96,7 +75,25 @@ export const english: Translation = {
           }
         }
       },
-      submit: "Save"
+      nutrients: {
+        carbohydrate: "Carbohydrate",
+        energy: "Energy",
+        fat: "Fat",
+        fibre: "Fibre",
+        monoUnsaturates: "Mono-unsaturates",
+        polyols: "Polyols",
+        polyunsaturates: "Polyunsaturates",
+        protein: "Protein",
+        salt: "Salt",
+        saturates: "Saturates",
+        starch: "Starch",
+        sugars: "Sugars"
+      },
+      submit: "Save",
+      units: {
+        g: "g",
+        kcal: "kcal"
+      }
     },
     Login: {
       inputs: {

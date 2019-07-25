@@ -4,12 +4,6 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Scene, DefaultSceneProps } from "./Scene";
 import { Button } from "../component/Button";
-import {
-  Nutrients,
-  NutritionDeclaration,
-  NutritionDeclarationErrorReasons,
-  NutritionDeclarationValue
-} from "../component/NutritionDeclaration";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
 import { Controls, Form, Group } from "../component/collection/form";
@@ -17,7 +11,7 @@ import { SceneContext } from "./SceneContext";
 import { any, insert } from "../utility/form";
 
 /**
- * Union of all text field input names.
+ * Union of text field input names.
  */
 type TextFieldNames = "name" | "barcode" | "quantity" | "pieceQuantity";
 
@@ -30,6 +24,57 @@ type InputNames = TextFieldNames | "unit";
  * Type of an object that maps input name to occurred error reason.
  */
 type InputErrorReasons = Partial<Record<InputNames, ErrorReasons>>;
+
+/**
+ * Array of nutrients nutrition declaration contains.
+ */
+const NUTRIENTS = [
+  "energy",
+  "fat",
+  "saturates",
+  "monoUnsaturates",
+  "polyunsaturates",
+  "carbohydrate",
+  "sugars",
+  "polyols",
+  "starch",
+  "fibre",
+  "protein",
+  "salt"
+] as const;
+
+/**
+ * Union of all nutrient names.
+ */
+export type Nutrients = typeof NUTRIENTS[number];
+
+/**
+ * Array of required nutrients, other nutrient text fields will be optional.
+ */
+const REQUIRED_NUTRIENTS = [
+  "energy",
+  "fat",
+  "carbohydrate",
+  "protein"
+] as const;
+
+/**
+ * Union of all required nutrients.
+ */
+type RequiredNutrients = typeof REQUIRED_NUTRIENTS[number];
+
+/**
+ * Nutrient amount values.
+ */
+export type NutritionDeclarationValue = Record<RequiredNutrients, string> &
+  Partial<Record<Exclude<Nutrients, RequiredNutrients>, string>>;
+
+/**
+ * Object type that maps nutrient name to occurred error reason.
+ */
+export type NutritionDeclarationErrorReasons = Partial<
+  Record<Nutrients, ErrorReasons>
+>;
 
 /**
  * Result of converting nutrition declaration component value to API nutrition
@@ -74,13 +119,23 @@ interface FoodEditTranslation {
   inputs: {
     [InputName in InputNames]: InputName extends TextFieldNames
       ? TextFieldTranslation
-      : UnitSelectTranslation
+      : UnitSelectTranslation;
   };
+
+  /**
+   * Nutrient name translations.
+   */
+  nutrients: Record<Nutrients, string>;
 
   /**
    * Form submit button text.
    */
   submit: string;
+
+  /**
+   * Unit translations.
+   */
+  units: Record<"g" | "kcal", string>;
 }
 
 /**
@@ -164,12 +219,7 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
           />
         </Group>
 
-        <NutritionDeclaration
-          name="nutritionDeclaration"
-          onChange={this.handleDeclarationChange}
-          reasons={this.reasons.nutritionDeclaration}
-          value={this.values.nutritionDeclaration}
-        />
+        <Group>{NUTRIENTS.map(this.renderNutrientTextField)}</Group>
 
         {this.renderTextField("pieceQuantity")}
 
@@ -206,6 +256,27 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
   );
 
   /**
+   * Renders nutrient amount text field.
+   */
+  public renderNutrientTextField = (nutrient: Nutrients) => (
+    <TextField
+      key={nutrient}
+      invalid={
+        this.reasons.nutritionDeclaration &&
+        this.reasons.nutritionDeclaration[nutrient] !== undefined
+      }
+      label={this.translation.nutrients[nutrient]}
+      name={nutrient}
+      onChange={this.handleNutrientChange}
+      optional={!(REQUIRED_NUTRIENTS as readonly string[]).includes(nutrient)}
+      textAlign="right"
+      type="number"
+      unit={this.translation.units[nutrient === "energy" ? "kcal" : "g"]}
+      value={this.values.nutritionDeclaration[nutrient]}
+    />
+  );
+
+  /**
    * Updates text field value on input value change.
    */
   @action
@@ -214,21 +285,18 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
   };
 
   /**
+   * Updates nutrient amount on nutrient input value change.
+   */
+  @action
+  private handleNutrientChange = (nutrient: Nutrients, amount: string) => {
+    this.values.nutritionDeclaration[nutrient] = amount;
+  };
+
+  /**
    * Updates unit value on unit selection change.
    */
   @action
   private handleUnitChange = (name: "unit", value: Units | undefined) => {
-    this.values[name] = value;
-  };
-
-  /**
-   * Updates product nutrition declaration value on change.
-   */
-  @action
-  private handleDeclarationChange = (
-    name: "nutritionDeclaration",
-    value: NutritionDeclarationValue
-  ) => {
     this.values[name] = value;
   };
 

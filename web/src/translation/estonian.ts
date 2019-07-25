@@ -21,40 +21,19 @@ export const estonian: Translation = {
       Administration: "Administratsioon",
       Diet: "Dieet",
       FoodEdit: "Toiduaine redaktsioon",
-      FoodSearch: "Toiduaine otsing",
       History: "Ajalugu",
       Home: "Avaleht",
       Login: "Logige sisse",
       Logout: "Logige välja",
       Measurements: "Mõõdud",
       Register: "Looge konto",
+      Search: "Otsing",
       Settings: "Seaded",
       Unknown: "Vabandame, soovitud lehekülge ei leitud"
     },
     NotificationContainer: {
       loginInvalidCredentials: {
         message: "Vale e-posti aadress või parool."
-      }
-    },
-    NutritionDeclaration: {
-      nutrients: {
-        carbohydrate: "Süsivesikud",
-        energy: "Energiasisaldus",
-        fat: "Rasvad",
-        fibre: "Kiudained",
-        monoUnsaturates: "Monoküllastumata rasvhapped",
-        polyols: "Polüoolid",
-        polyunsaturates: "Polüküllastumata rasvhapped",
-        protein: "Valgud",
-        salt: "Sool",
-        saturates: "Küllastunud rasvhapped",
-        starch: "Tärklis",
-        sugars: "Suhkrud"
-      },
-      title: "Toitumisalane teave",
-      units: {
-        g: "g",
-        kcal: "kcal"
       }
     }
   },
@@ -96,7 +75,25 @@ export const estonian: Translation = {
           }
         }
       },
-      submit: "Salvesta"
+      nutrients: {
+        carbohydrate: "Süsivesikud",
+        energy: "Energiasisaldus",
+        fat: "Rasvad",
+        fibre: "Kiudained",
+        monoUnsaturates: "Monoküllastumata rasvhapped",
+        polyols: "Polüoolid",
+        polyunsaturates: "Polüküllastumata rasvhapped",
+        protein: "Valgud",
+        salt: "Sool",
+        saturates: "Küllastunud rasvhapped",
+        starch: "Tärklis",
+        sugars: "Suhkrud"
+      },
+      submit: "Salvesta",
+      units: {
+        g: "g",
+        kcal: "kcal"
+      }
     },
     Login: {
       inputs: {

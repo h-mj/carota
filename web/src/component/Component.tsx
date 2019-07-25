@@ -4,7 +4,6 @@ import { Alert } from "./Alert";
 import { Head } from "./Head";
 import { Navigation } from "./Navigation";
 import { NotificationContainer } from "./NotificationContainer";
-import { NutritionDeclaration } from "./NutritionDeclaration";
 import { RootStore } from "../store/RootStore";
 
 /**
@@ -17,7 +16,6 @@ interface ComponentMap {
   Head: Head;
   Navigation: Navigation;
   NotificationContainer: NotificationContainer;
-  NutritionDeclaration: NutritionDeclaration;
 }
 
 /**

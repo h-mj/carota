@@ -3,16 +3,15 @@ import { Scene, SceneNames, SceneProps } from "./Scene";
 import { Administration } from "./Administration";
 import { Diet } from "./Diet";
 import { FoodEdit } from "./FoodEdit";
-import { FoodSearch } from "./FoodSearch";
 import { History } from "./History";
 import { Home } from "./Home";
 import { Login } from "./Login";
 import { Logout } from "./Logout";
 import { Measurements } from "./Measurements";
 import { Register } from "./Register";
+import { Search } from "./Search";
 import { Settings } from "./Settings";
 import { Unknown } from "./Unknown";
-import { withParameters } from "../utility/types";
 
 /**
  * Type that defines some route's scene name and parameter names.
@@ -37,7 +36,7 @@ interface To<
  */
 const to = <TSceneName extends SceneNames, TParameterNames extends string>(
   sceneName: TSceneName,
-  parameterNames?: TParameterNames[]
+  ...parameterNames: TParameterNames[]
 ): To<TSceneName, TParameterNames> => ({
   sceneName,
   parameterNames
@@ -50,12 +49,12 @@ const ROUTES = {
   "/administration": to("Administration"),
   "/diet": to("Diet"),
   "/food/new": to("FoodEdit"),
-  "/food/search": to("FoodSearch"),
   "/history": to("History"),
   "/": to("Home"),
   "/logout": to("Logout"),
   "/measurements": to("Measurements"),
-  "/register/{invitationId}": to("Register", withParameters("invitationId")),
+  "/register/{invitationId}": to("Register", "invitationId"),
+  "/search": to("Search"),
   "/settings": to("Settings")
 } as const;
 
@@ -83,13 +82,13 @@ export const SCENES = {
   Administration: Administration,
   Diet: Diet,
   FoodEdit: FoodEdit,
-  FoodSearch: FoodSearch,
   History: History,
   Home: Home,
   Login: Login,
   Logout: Logout,
   Measurements: Measurements,
   Register: Register,
+  Search: Search,
   Settings: Settings,
   Unknown: Unknown
 } as const;

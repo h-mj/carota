@@ -21,40 +21,19 @@ export const russian: Translation = {
       Administration: "Администрация",
       Diet: "Диета",
       FoodEdit: "Редактировать продукт",
-      FoodSearch: "Поиск продуктов",
       History: "История",
       Home: "Главная",
       Login: "Вход",
       Logout: "Выход",
       Measurements: "Замеры",
       Register: "Завести аккаунт",
+      Search: "Поиск",
       Settings: "Настройки",
       Unknown: "К сожалению, запрошенная страница не была найдена"
     },
     NotificationContainer: {
       loginInvalidCredentials: {
         message: "Неверный адрес электронной почты или пароль."
-      }
-    },
-    NutritionDeclaration: {
-      nutrients: {
-        carbohydrate: "Углеводы",
-        energy: "Энергетическая ценность",
-        fat: "Жиры",
-        fibre: "Пищевые волокна",
-        monoUnsaturates: "Мононенасыщенные жирные кислоты",
-        polyols: "Многоатомные спирты",
-        polyunsaturates: "Полиненасыщенные жирные кислоты",
-        protein: "Белки",
-        salt: "Соль",
-        saturates: "Насыщенные жирные кислоты",
-        starch: "Крахмал",
-        sugars: "Сахара"
-      },
-      title: "Пищевая ценность",
-      units: {
-        g: "г",
-        kcal: "ккал"
       }
     }
   },
@@ -96,7 +75,25 @@ export const russian: Translation = {
           }
         }
       },
-      submit: "Сохранить"
+      nutrients: {
+        carbohydrate: "Углеводы",
+        energy: "Энергетическая ценность",
+        fat: "Жиры",
+        fibre: "Пищевые волокна",
+        monoUnsaturates: "Мононенасыщенные жирные кислоты",
+        polyols: "Многоатомные спирты",
+        polyunsaturates: "Полиненасыщенные жирные кислоты",
+        protein: "Белки",
+        salt: "Соль",
+        saturates: "Насыщенные жирные кислоты",
+        starch: "Крахмал",
+        sugars: "Сахара"
+      },
+      submit: "Сохранить",
+      units: {
+        g: "г",
+        kcal: "ккал"
+      }
     },
     Login: {
       inputs: {

@@ -54,10 +54,6 @@ export const russian: Translation = {
         },
         unit: {
           label: "Единица",
-          options: {
-            g: "г",
-            ml: "мл"
-          },
           reasons: {
             missing: "Пожалуйста, выберите единицу."
           }
@@ -92,7 +88,8 @@ export const russian: Translation = {
       submit: "Сохранить",
       units: {
         g: "г",
-        kcal: "ккал"
+        kcal: "ккал",
+        ml: "мл"
       }
     },
     Login: {

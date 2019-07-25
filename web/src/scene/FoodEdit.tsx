@@ -8,7 +8,7 @@ import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
 import { Controls, Form, Group } from "../component/collection/form";
 import { SceneContext } from "./SceneContext";
-import { any, insert } from "../utility/form";
+import { any, ErrorReasonsFor, insert } from "../utility/form";
 
 /**
  * Union of text field input names.
@@ -16,14 +16,9 @@ import { any, insert } from "../utility/form";
 type TextFieldNames = "name" | "barcode" | "quantity" | "pieceQuantity";
 
 /**
- * Union of all input names.
+ * Union of non nutrient input names.
  */
 type InputNames = TextFieldNames | "unit";
-
-/**
- * Type of an object that maps input name to occurred error reason.
- */
-type InputErrorReasons = Partial<Record<InputNames, ErrorReasons>>;
 
 /**
  * Array of nutrients nutrition declaration contains.
@@ -46,7 +41,7 @@ const NUTRIENTS = [
 /**
  * Union of all nutrient names.
  */
-export type Nutrients = typeof NUTRIENTS[number];
+type Nutrients = typeof NUTRIENTS[number];
 
 /**
  * Array of required nutrients, other nutrient text fields will be optional.
@@ -64,32 +59,11 @@ const REQUIRED_NUTRIENTS = [
 type RequiredNutrients = typeof REQUIRED_NUTRIENTS[number];
 
 /**
- * Nutrient amount values.
+ * Input translation.
  */
-export type NutritionDeclarationValue = Record<RequiredNutrients, string> &
-  Partial<Record<Exclude<Nutrients, RequiredNutrients>, string>>;
-
-/**
- * Object type that maps nutrient name to occurred error reason.
- */
-export type NutritionDeclarationErrorReasons = Partial<
-  Record<Nutrients, ErrorReasons>
->;
-
-/**
- * Result of converting nutrition declaration component value to API nutrition
- * declaration object.
- */
-type ParseResult =
-  | { ok: true; value: NutritionDeclarationData }
-  | { ok: false; value: NutritionDeclarationErrorReasons };
-
-/**
- * Text field input translation.
- */
-interface TextFieldTranslation {
+interface InputTranslation {
   /**
-   * Text field label text.
+   * Input label text.
    */
   label: string;
 
@@ -100,16 +74,6 @@ interface TextFieldTranslation {
 }
 
 /**
- * Unit selection component translation.
- */
-interface UnitSelectTranslation extends TextFieldTranslation {
-  /**
-   * Translations of unit options.
-   */
-  options: Record<Units, string>;
-}
-
-/**
  * Food edit scene translation.
  */
 interface FoodEditTranslation {
@@ -117,9 +81,7 @@ interface FoodEditTranslation {
    * Registration form input translations.
    */
   inputs: {
-    [InputName in InputNames]: InputName extends TextFieldNames
-      ? TextFieldTranslation
-      : UnitSelectTranslation;
+    [InputName in InputNames]: InputTranslation;
   };
 
   /**
@@ -135,15 +97,34 @@ interface FoodEditTranslation {
   /**
    * Unit translations.
    */
-  units: Record<"g" | "kcal", string>;
+  units: Record<"g" | "kcal" | "ml", string>;
 }
 
 /**
- * Object type that maps food edit input names to occurred error reasons.
+ * Food editing form values object type.
  */
-type FoodEditErrorReasons = InputErrorReasons & {
-  nutritionDeclaration?: NutritionDeclarationErrorReasons;
-};
+interface FoodEditValues {
+  name: string;
+  barcode?: string;
+  quantity: string;
+  unit?: Units;
+  nutritionDeclaration: NutritionDeclarationValues;
+  pieceQuantity?: string;
+}
+
+/**
+ * Nutrient amount values.
+ */
+type NutritionDeclarationValues = Record<RequiredNutrients, string> &
+  Partial<Record<Exclude<Nutrients, RequiredNutrients>, string>>;
+
+/**
+ * Result of converting nutrition declaration component value to API nutrition
+ * declaration object.
+ */
+type ParseResult =
+  | { ok: true; value: NutritionDeclarationData }
+  | { ok: false; value: ErrorReasonsFor<NutritionDeclarationValues> };
 
 /**
  * Food editing scene that allows user to either create new or edit existing
@@ -153,27 +134,23 @@ type FoodEditErrorReasons = InputErrorReasons & {
 @observer
 export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
   /**
-   * Form field values.
+   * Food editing form field values.
    */
-  @observable private values = {
+  @observable private values: FoodEditValues = {
     name: "",
-    barcode: undefined as string | undefined,
     quantity: "",
-    unit: undefined as Units | undefined,
     nutritionDeclaration: {
       energy: "",
       fat: "",
       carbohydrate: "",
       protein: ""
-    } as NutritionDeclarationValue,
-    pieceQuantity: undefined as string | undefined
+    } as NutritionDeclarationValues
   };
 
   /**
-   * Object that contains error reasons of occurred errors of each input and
-   * error reasons for each declaration nutrients.
+   * Object that contains error reasons of occurred errors for each value.
    */
-  @observable private reasons: FoodEditErrorReasons = {};
+  @observable private reasons: ErrorReasonsFor<FoodEditValues> = {};
 
   /**
    * Creates `FoodEdit` scene instance and shows the same scene on the side if
@@ -212,8 +189,8 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
             name="unit"
             onChange={this.handleUnitChange}
             options={[
-              { label: this.translation.inputs.unit.options.g, value: "g" },
-              { label: this.translation.inputs.unit.options.ml, value: "ml" }
+              { label: this.translation.units.g, value: "g" },
+              { label: this.translation.units.ml, value: "ml" }
             ]}
             value={this.values.unit}
           />
@@ -248,7 +225,7 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
       type={name === "barcode" ? "tel" : name === "name" ? "text" : "number"}
       unit={
         name === "pieceQuantity" && this.values.unit !== undefined
-          ? this.translation.inputs.unit.options[this.values.unit!]
+          ? this.translation.units[this.values.unit!]
           : undefined
       }
       value={this.values[name]}
@@ -322,7 +299,7 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
     const result = this.parse(nutritionDeclaration);
 
     // Client side validation error reasons for each input.
-    const reasons: FoodEditErrorReasons = {
+    const reasons: ErrorReasonsFor<FoodEditValues> = {
       name: name.trim() === "" ? "empty" : undefined,
       barcode:
         barcode !== undefined && barcode.trim() === "" ? "empty" : undefined,
@@ -364,27 +341,29 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
   };
 
   /**
-   * Returns an error message for input named `name`.
+   * Returns an error message for non nutrient input named `name`.
    *
    * @param name Input name.
    */
   private messageFor = (name: InputNames) => {
-    return this.reasons[name] !== undefined
-      ? this.translation.inputs[name].reasons[this.reasons[name]!]
+    const reason = this.reasons[name];
+
+    return reason !== undefined
+      ? this.translation.inputs[name].reasons[reason]
       : undefined;
   };
 
   /**
-   * Converts `NutritionDeclarationValue` type object to
+   * Converts `NutritionDeclarationValues` type object to
    * `NutritionDeclarationData` and and returns `ParseResult`.
    *
    * If `ParseResult` `ok` field is `true`, result value will be
    * `NutritionDeclarationData` type object, otherwise
-   * `NutritionDeclarationErrorReasons` type.
+   * `ErrorReasonsFor<NutritionDeclarationValue>` type.
    */
-  private parse = (declaration: NutritionDeclarationValue): ParseResult => {
-    const reasons: NutritionDeclarationErrorReasons = {};
-    const result: Partial<NutritionDeclarationData> = {};
+  private parse = (declaration: NutritionDeclarationValues): ParseResult => {
+    const data: Partial<NutritionDeclarationData> = {};
+    const reasons: ErrorReasonsFor<NutritionDeclarationValues> = {};
 
     for (const nutrient of Object.keys(declaration) as Nutrients[]) {
       const value = declaration[nutrient];
@@ -398,14 +377,14 @@ export class FoodEdit extends Scene<"FoodEdit", {}, FoodEditTranslation> {
       if (Number.isNaN(numericValue)) {
         reasons[nutrient] = "invalid";
       } else {
-        result[nutrient] = numericValue;
+        data[nutrient] = numericValue;
       }
     }
 
     if (any(reasons)) {
       return { ok: false, value: reasons };
     } else {
-      return { ok: true, value: result as NutritionDeclarationData };
+      return { ok: true, value: data as NutritionDeclarationData };
     }
   };
 }

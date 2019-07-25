@@ -1,6 +1,17 @@
 import { ErrorReasons, Error } from "api";
 
 /**
+ * Type of an object where `TValues` object properties are optional and their
+ * value is either `ErrorReasons` or if previously value was an object, then
+ * `ErrorReasonsFor` for that object instead.
+ */
+export type ErrorReasonsFor<TValues> = {
+  [P in keyof TValues]?: TValues[P] extends object
+    ? ErrorReasonsFor<TValues[P]>
+    : ErrorReasons;
+};
+
+/**
  * Type of an object where `string` type property values are either
  * `ErrorReasons`, `undefined` or this type itself.
  */

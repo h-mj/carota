@@ -60,10 +60,6 @@ export const english: Translation = {
         },
         unit: {
           label: "Unit",
-          options: {
-            g: "g",
-            ml: "ml"
-          },
           reasons: {
             missing: "Please select a unit."
           }
@@ -92,7 +88,8 @@ export const english: Translation = {
       submit: "Save",
       units: {
         g: "g",
-        kcal: "kcal"
+        kcal: "kcal",
+        ml: "ml"
       }
     },
     Login: {

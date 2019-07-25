@@ -54,10 +54,6 @@ export const estonian: Translation = {
         },
         unit: {
           label: "Ühik",
-          options: {
-            g: "g",
-            ml: "ml"
-          },
           reasons: {
             missing: "Palun valige ühik."
           }
@@ -92,7 +88,8 @@ export const estonian: Translation = {
       submit: "Salvesta",
       units: {
         g: "g",
-        kcal: "kcal"
+        kcal: "kcal",
+        ml: "ml"
       }
     },
     Login: {

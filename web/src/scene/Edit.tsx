@@ -1,4 +1,4 @@
-import { ErrorReasons, Units, FoodSaveBody } from "api";
+import { ErrorReasons, FoodSaveBody, Units } from "api";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -90,9 +90,7 @@ interface EditTranslation {
   /**
    * Registration form input translations.
    */
-  inputs: {
-    [InputName in InputNames]: InputTranslation;
-  };
+  inputs: { [InputName in InputNames]: InputTranslation };
 
   /**
    * Nutrient name translations.
@@ -111,9 +109,16 @@ interface EditTranslation {
 }
 
 /**
+ * Nutrient amount values.
+ */
+type NutritionDeclarationValues = Record<RequiredNutrients, string> &
+  Partial<Record<Exclude<Nutrients, RequiredNutrients>, string>>;
+
+/**
  * Food editing form values object type.
  */
 interface EditValues {
+  id?: string;
   name: string;
   barcode?: string;
   quantity: string;
@@ -121,12 +126,6 @@ interface EditValues {
   nutritionDeclaration: NutritionDeclarationValues;
   pieceQuantity?: string;
 }
-
-/**
- * Nutrient amount values.
- */
-type NutritionDeclarationValues = Record<RequiredNutrients, string> &
-  Partial<Record<Exclude<Nutrients, RequiredNutrients>, string>>;
 
 /**
  * Result of an function that returns different type of objects based on success
@@ -323,6 +322,7 @@ export class Edit extends Scene<"Edit", EditProps, EditTranslation> {
    */
   private getBody(): Result<FoodSaveBody, ErrorReasonsFor<EditValues>> {
     const {
+      id,
       name,
       barcode,
       quantity,
@@ -363,15 +363,33 @@ export class Edit extends Scene<"Edit", EditProps, EditTranslation> {
 
     if (any(reasons)) {
       return { ok: false, value: reasons };
-    } else {
-      return {
-        ok: true,
-        value: ({
-          id: this.props.food !== undefined ? this.props.food.id : undefined,
-          ...this.values
-        } as unknown) as FoodSaveBody
-      };
     }
+
+    const numericQuantity = Number.parseFloat(quantity);
+
+    return {
+      ok: true,
+      value: {
+        id,
+        name,
+        barcode,
+        unit: unit!,
+        nutritionDeclaration: Object.assign(
+          {},
+          ...NUTRIENTS.map(nutrient => ({
+            [nutrient]:
+              nutritionDeclaration[nutrient] === undefined
+                ? undefined
+                : Number.parseFloat(nutritionDeclaration[nutrient]!) /
+                  numericQuantity
+          }))
+        ),
+        pieceQuantity:
+          pieceQuantity === undefined
+            ? undefined
+            : Number.parseFloat(pieceQuantity)
+      }
+    };
   }
 
   /**
@@ -382,6 +400,7 @@ export class Edit extends Scene<"Edit", EditProps, EditTranslation> {
     const { food } = this.props;
 
     return {
+      id: food !== undefined ? food.id : undefined,
       name: food !== undefined ? food.name : "",
       barcode: food !== undefined ? food.barcode : undefined,
       quantity: food !== undefined ? "100" : "",
@@ -392,7 +411,7 @@ export class Edit extends Scene<"Edit", EditProps, EditTranslation> {
           [nutrient]:
             food !== undefined &&
             food.nutritionDeclaration[nutrient] !== undefined
-              ? food.nutritionDeclaration[nutrient]!.toString()
+              ? (100 * food.nutritionDeclaration[nutrient]!).toString()
               : (REQUIRED_NUTRIENTS as readonly Nutrients[]).includes(nutrient)
               ? ""
               : undefined

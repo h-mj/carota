@@ -76,7 +76,7 @@ const put = (
  * @param tree Error reasons tree.
  * @param error Occurred API error.
  */
-export const insert = <T extends ErrorReasonsTree>(
+export const append = <T extends ErrorReasonsTree>(
   tree: T,
   error?: Error
 ): T => {

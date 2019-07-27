@@ -1,4 +1,4 @@
-import { ErrorReasons, NutritionDeclarationData, Units } from "api";
+import { ErrorReasons, Units, FoodSaveBody } from "api";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -7,8 +7,8 @@ import { Button } from "../component/Button";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
 import { Controls, Form, Group } from "../component/collection/form";
-import { SceneContext } from "./SceneContext";
-import { any, ErrorReasonsFor, insert } from "../utility/form";
+import { Food } from "../model/Food";
+import { any, append, ErrorReasonsFor } from "../utility/form";
 
 /**
  * Union of text field input names.
@@ -57,6 +57,16 @@ const REQUIRED_NUTRIENTS = [
  * Union of all required nutrients.
  */
 type RequiredNutrients = typeof REQUIRED_NUTRIENTS[number];
+
+/**
+ * Edit scene props.
+ */
+interface EditProps {
+  /**
+   * Food item model that is being edited.
+   */
+  food?: Food;
+}
 
 /**
  * Input translation.
@@ -119,12 +129,12 @@ type NutritionDeclarationValues = Record<RequiredNutrients, string> &
   Partial<Record<Exclude<Nutrients, RequiredNutrients>, string>>;
 
 /**
- * Result of converting nutrition declaration component value to API nutrition
- * declaration object.
+ * Result of an function that returns different type of objects based on success
+ * of the operation.
  */
-type ParseResult =
-  | { ok: true; value: NutritionDeclarationData }
-  | { ok: false; value: ErrorReasonsFor<NutritionDeclarationValues> };
+type Result<TOkValue, TNotOkValue> =
+  | { ok: true; value: TOkValue }
+  | { ok: false; value: TNotOkValue };
 
 /**
  * Food editing scene that allows user to either create new or edit existing
@@ -132,20 +142,11 @@ type ParseResult =
  */
 @inject("foods", "views")
 @observer
-export class Edit extends Scene<"Edit", {}, EditTranslation> {
+export class Edit extends Scene<"Edit", EditProps, EditTranslation> {
   /**
    * Food editing form field values.
    */
-  @observable private values: EditValues = {
-    name: "",
-    quantity: "",
-    nutritionDeclaration: {
-      energy: "",
-      fat: "",
-      carbohydrate: "",
-      protein: ""
-    } as NutritionDeclarationValues
-  };
+  @observable private values: EditValues;
 
   /**
    * Object that contains error reasons of occurred errors for each value.
@@ -156,12 +157,14 @@ export class Edit extends Scene<"Edit", {}, EditTranslation> {
    * Creates `Edit` scene instance and shows the same scene on the side if
    * scene is rendered as the main scene.
    */
-  public constructor(props: DefaultSceneProps<"Edit">) {
+  public constructor(props: EditProps & DefaultSceneProps<"Edit">) {
     super(props);
 
-    if (props.position === "main") {
-      this.props.views!.aside(new SceneContext("Edit", undefined, {}));
+    if (this.props.position === "main") {
+      this.props.views!.aside("Edit", {});
     }
+
+    this.values = this.getValues();
   }
 
   /**
@@ -221,7 +224,7 @@ export class Edit extends Scene<"Edit", {}, EditTranslation> {
       onChange={this.handleTextFieldChange}
       optional={name === "barcode" || name === "pieceQuantity"}
       required={name === "barcode" || name === "pieceQuantity"}
-      textAlign={name === "pieceQuantity" ? "right" : "left"}
+      textAlign="right"
       type={name === "barcode" ? "tel" : name === "name" ? "text" : "number"}
       unit={
         name === "pieceQuantity" && this.values.unit !== undefined
@@ -287,57 +290,16 @@ export class Edit extends Scene<"Edit", {}, EditTranslation> {
   > = async event => {
     event.preventDefault();
 
-    const {
-      name,
-      barcode,
-      quantity,
-      unit,
-      nutritionDeclaration,
-      pieceQuantity
-    } = this.values;
-
-    const result = this.parse(nutritionDeclaration);
-
-    // Client side validation error reasons for each input.
-    const reasons: ErrorReasonsFor<EditValues> = {
-      name: name.trim() === "" ? "empty" : undefined,
-      barcode:
-        barcode !== undefined && barcode.trim() === "" ? "empty" : undefined,
-      quantity:
-        quantity.trim() === ""
-          ? "empty"
-          : Number.isNaN(Number.parseFloat(quantity))
-          ? "invalid"
-          : undefined,
-      unit: unit === undefined ? "missing" : undefined,
-      nutritionDeclaration: result.ok ? undefined : result.value,
-      pieceQuantity:
-        pieceQuantity !== undefined && pieceQuantity.trim() === ""
-          ? "empty"
-          : pieceQuantity !== undefined &&
-            Number.isNaN(Number.parseFloat(pieceQuantity))
-          ? "invalid"
-          : undefined
-    };
-
-    const skip = any(reasons);
-
+    const result = this.getBody();
     const error = await this.props.views!.load(
-      skip
-        ? undefined
-        : this.props.foods!.save(
-            undefined,
-            name,
-            barcode,
-            unit!,
-            result.value as NutritionDeclarationData,
-            pieceQuantity === undefined
-              ? pieceQuantity
-              : Number.parseFloat(pieceQuantity)
-          )
+      result.ok ? this.props.foods!.save(result.value) : undefined
     );
 
-    this.reasons = insert(reasons, error);
+    if (result.ok && error === undefined) {
+      this.props.views!.refocus();
+    }
+
+    this.reasons = append(result.ok ? {} : result.value, error);
   };
 
   /**
@@ -354,37 +316,92 @@ export class Edit extends Scene<"Edit", {}, EditTranslation> {
   };
 
   /**
-   * Converts `NutritionDeclarationValues` type object to
-   * `NutritionDeclarationData` and and returns `ParseResult`.
-   *
-   * If `ParseResult` `ok` field is `true`, result value will be
-   * `NutritionDeclarationData` type object, otherwise
-   * `ErrorReasonsFor<NutritionDeclarationValue>` type.
+   * Tries to convert `values` object into `FoodSaveBody` type object. If
+   * successful, `Result` type object with `ok` field with value `true` and
+   * `result` field with value `FoodSaveBody` will be returned, otherwise result
+   * will be `ErrorReasonsFor<EditValues>` typed object.
    */
-  private parse = (declaration: NutritionDeclarationValues): ParseResult => {
-    const data: Partial<NutritionDeclarationData> = {};
-    const reasons: ErrorReasonsFor<NutritionDeclarationValues> = {};
+  private getBody(): Result<FoodSaveBody, ErrorReasonsFor<EditValues>> {
+    const {
+      name,
+      barcode,
+      quantity,
+      unit,
+      nutritionDeclaration,
+      pieceQuantity
+    } = this.values;
 
-    for (const nutrient of Object.keys(declaration) as Nutrients[]) {
-      const value = declaration[nutrient];
-
-      if (value === undefined) {
-        continue;
-      }
-
-      const numericValue = Number.parseFloat(value);
-
-      if (Number.isNaN(numericValue)) {
-        reasons[nutrient] = "invalid";
-      } else {
-        data[nutrient] = numericValue;
-      }
-    }
+    const reasons = {
+      name: name.trim() === "" ? "empty" : undefined,
+      barcode:
+        barcode !== undefined && barcode.trim() === "" ? "empty" : undefined,
+      quantity:
+        quantity.trim() === ""
+          ? "empty"
+          : Number.isNaN(Number.parseFloat(quantity))
+          ? "invalid"
+          : undefined,
+      unit: unit === undefined ? "missing" : undefined,
+      nutritionDeclaration: Object.assign(
+        {},
+        ...NUTRIENTS.map(nutrient => ({
+          [nutrient as Nutrients]:
+            nutritionDeclaration[nutrient] !== undefined &&
+            Number.isNaN(Number.parseFloat(nutritionDeclaration[nutrient]!))
+              ? "invalid"
+              : undefined
+        }))
+      ) as ErrorReasonsFor<NutritionDeclarationValues>,
+      pieceQuantity:
+        pieceQuantity !== undefined && pieceQuantity.trim() === ""
+          ? "empty"
+          : pieceQuantity !== undefined &&
+            Number.isNaN(Number.parseFloat(pieceQuantity))
+          ? "invalid"
+          : undefined
+    } as const;
 
     if (any(reasons)) {
       return { ok: false, value: reasons };
     } else {
-      return { ok: true, value: data as NutritionDeclarationData };
+      return {
+        ok: true,
+        value: ({
+          id: this.props.food !== undefined ? this.props.food.id : undefined,
+          ...this.values
+        } as unknown) as FoodSaveBody
+      };
     }
-  };
+  }
+
+  /**
+   * Returns form values object based on`food` prop model based on default
+   * values.
+   */
+  private getValues(): EditValues {
+    const { food } = this.props;
+
+    return {
+      name: food !== undefined ? food.name : "",
+      barcode: food !== undefined ? food.barcode : undefined,
+      quantity: food !== undefined ? "100" : "",
+      unit: food !== undefined ? food.unit : undefined,
+      nutritionDeclaration: Object.assign(
+        {},
+        ...NUTRIENTS.map(nutrient => ({
+          [nutrient]:
+            food !== undefined &&
+            food.nutritionDeclaration[nutrient] !== undefined
+              ? food.nutritionDeclaration[nutrient]!.toString()
+              : (REQUIRED_NUTRIENTS as readonly Nutrients[]).includes(nutrient)
+              ? ""
+              : undefined
+        }))
+      ),
+      pieceQuantity:
+        food !== undefined && food.pieceQuantity !== undefined
+          ? food.pieceQuantity.toString()
+          : undefined
+    };
+  }
 }

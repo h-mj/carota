@@ -10,7 +10,7 @@ import { TextField } from "../component/TextField";
 import { Center } from "../component/collection/container";
 import { Controls, Form, Group, Title } from "../component/collection/form";
 import { Button } from "../component/Button";
-import { any, insert } from "../utility/form";
+import { any, append } from "../utility/form";
 
 /**
  * Array of text field names within registration form.
@@ -243,7 +243,7 @@ export class Register extends Scene<"Register", {}, RegisterTranslation> {
       this.props.views!.home();
     }
 
-    this.reasons = insert(reasons, error);
+    this.reasons = append(reasons, error);
   };
 
   /**

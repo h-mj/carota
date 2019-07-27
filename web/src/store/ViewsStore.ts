@@ -1,7 +1,7 @@
 import { Languages } from "api";
 import { computed, observable, action } from "mobx";
 import { SceneContext, SceneContexts } from "../scene/SceneContext";
-import { SceneNames } from "../scene/Scene";
+import { SceneNames, SceneProps } from "../scene/Scene";
 import {
   Notification,
   NotificationMessageParameters,
@@ -224,8 +224,31 @@ export class ViewsStore {
    *
    * @param context Side scene context.
    */
-  public aside(context: SceneContexts) {
-    this._side = context;
+  public aside<TSceneName extends SceneNames>(
+    context: SceneContext<TSceneName>
+  ): void;
+
+  /**
+   * Creates and sets a side scene context.
+   *
+   * @param sceneName Side scene name.
+   * @param props Scene component props.
+   */
+  public aside<TSceneName extends SceneNames>(
+    sceneName: TSceneName,
+    props: SceneProps<TSceneName>
+  ): void;
+
+  /**
+   * Sets a side scene context.
+   */
+  public aside<TSceneName extends SceneNames>(
+    nameOrContext: SceneContext<TSceneName> | TSceneName,
+    props?: SceneProps<TSceneName>
+  ) {
+    this._side = (typeof nameOrContext === "object"
+      ? nameOrContext
+      : new SceneContext(nameOrContext, undefined, props!)) as SceneContexts;
   }
 
   /**

@@ -8,7 +8,7 @@ import { Head } from "../component/Head";
 import { TextField } from "../component/TextField";
 import { Center } from "../component/collection/container";
 import { Controls, Form, Group, Title } from "../component/collection/form";
-import { any, insert } from "../utility/form";
+import { any, append } from "../utility/form";
 
 /**
  * Array of input names within login form.
@@ -156,6 +156,6 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
       this.props.views!.notify("loginInvalidCredentials", {});
     }
 
-    this.reasons = insert(reasons, error);
+    this.reasons = append(reasons, error);
   };
 }

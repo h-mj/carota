@@ -145,7 +145,7 @@ export class Select<
             type="button"
             value={optionValue}
           >
-            <OptionLabel>{optionLabel}</OptionLabel>
+            <OptionLabel title={optionLabel}>{optionLabel}</OptionLabel>
           </Option>
         ))}
       </Options>

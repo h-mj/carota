@@ -38,7 +38,8 @@ const TYPE_TO_REASON: Readonly<{ [type: string]: ErrorReasons }> = {
   "object.base": "invalid",
   "string.email": "invalid",
   "string.guid": "invalid",
-  "string.min": "invalid"
+  "string.min": "invalid",
+  "string.regex.base": "invalid"
 };
 
 /**
@@ -139,7 +140,8 @@ const TYPE_TO_MESSAGE: Readonly<{ [type: string]: string }> = {
   "object.base": 'Field "{field}" must be a valid object.',
   "string.email": 'Field "{field}" must be a valid email.',
   "string.guid": 'Field "{field}" must be a valid GUID.',
-  "string.min": 'Field "{field}" must be at least {length} characters long.'
+  "string.min": 'Field "{field}" must be at least {length} characters long.',
+  "string.regex.base": 'Field "{field}" does not match required pattern.'
 };
 
 /**

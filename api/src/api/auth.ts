@@ -43,7 +43,7 @@ defineNoAuth(authRouter, "auth", "login", LOGIN_SCHEMA, async context => {
  * Register request body schema.
  */
 const REGISTER_SCHEMA: Readonly<Schema<"auth", "register">> = {
-  name: is.string(),
+  name: is.string().trim(),
   language: is.string().valid(Object.keys(LANGUAGES_ENUM)),
   email: is
     .string()

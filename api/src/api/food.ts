@@ -23,7 +23,11 @@ const SAVE_SCHEMA: Schema<"food", "save"> = {
     .guid()
     .optional(),
   name: is.string().trim(),
-  barcode: is.string().optional(),
+  barcode: is
+    .string()
+    .trim()
+    .regex(/^\d{13}$/)
+    .optional(),
   unit: is.string().valid(Object.keys(UNITS_ENUM)),
   nutritionDeclaration: {
     energy: amount,

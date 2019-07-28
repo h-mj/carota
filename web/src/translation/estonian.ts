@@ -55,7 +55,7 @@ export const estonian: Translation = {
         unit: {
           label: "Ühik",
           reasons: {
-            missing: "Palun valige ühik."
+            invalid: "Palun valige ühik."
           }
         },
         pieceQuantity: {
@@ -124,7 +124,7 @@ export const estonian: Translation = {
             Russian: "русский"
           },
           reasons: {
-            missing: "Palun valige keel."
+            invalid: "Palun valige keel."
           }
         },
         name: {

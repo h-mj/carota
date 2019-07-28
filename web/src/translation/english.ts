@@ -61,7 +61,7 @@ export const english: Translation = {
         unit: {
           label: "Unit",
           reasons: {
-            missing: "Please select a unit."
+            invalid: "Please select a unit."
           }
         },
         quantity: {
@@ -124,7 +124,7 @@ export const english: Translation = {
             Russian: "русский"
           },
           reasons: {
-            missing: "Please select a language."
+            invalid: "Please select a language."
           }
         },
         name: {

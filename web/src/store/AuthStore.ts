@@ -1,4 +1,4 @@
-import { Languages } from "api";
+import { Body } from "api";
 import { action, autorun, computed, observable } from "mobx";
 import { RootStore } from "./RootStore";
 import { post } from "../utility/client";
@@ -67,8 +67,8 @@ export class AuthStore {
    * @param body Login request message body.
    */
   @action
-  public async login(email: string, password: string) {
-    const response = await post("auth", "login", { email, password });
+  public async login(body: Body<"auth", "login">) {
+    const response = await post("auth", "login", body);
 
     if ("error" in response) {
       return response.error;
@@ -87,20 +87,8 @@ export class AuthStore {
    * @param body Registration request message body.
    */
   @action
-  public async register(
-    language: Languages,
-    name: string,
-    email: string,
-    password: string,
-    invitationId: string
-  ) {
-    const response = await post("auth", "register", {
-      language,
-      name,
-      email,
-      password,
-      invitationId
-    });
+  public async register(body: Body<"auth", "register">) {
+    const response = await post("auth", "register", body);
 
     if ("error" in response) {
       return response.error;

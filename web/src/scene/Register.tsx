@@ -1,4 +1,4 @@
-import { ErrorReasons, Languages } from "api";
+import { AuthRegisterBody, Enum, ErrorReasons, Languages } from "api";
 import { observable, action } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -10,7 +10,8 @@ import { TextField } from "../component/TextField";
 import { Center } from "../component/collection/container";
 import { Controls, Form, Group, Title } from "../component/collection/form";
 import { Button } from "../component/Button";
-import { any, append } from "../utility/form";
+import { any, append, ErrorReasonsFor } from "../utility/form";
+import { to, translate, Translation } from "../utility/translation";
 
 /**
  * Array of text field names within registration form.
@@ -22,11 +23,6 @@ const TEXT_FIELDS = ["name", "email", "password"] as const;
  * `TEXT_FIELDS` array.
  */
 type TextFieldNames = typeof TEXT_FIELDS[number];
-
-/**
- * Union of all input names.
- */
-type InputNames = "language" | TextFieldNames;
 
 /**
  * Text field translation.
@@ -60,11 +56,8 @@ interface RegisterTranslation {
   /**
    * Registration form input translations.
    */
-  inputs: {
-    [InputName in InputNames]: InputName extends TextFieldNames
-      ? TextFieldTranslation
-      : LanguageSelectTranslation;
-  };
+  inputs: Record<TextFieldNames, TextFieldTranslation> &
+    Record<"language", LanguageSelectTranslation>;
 
   /**
    * Form submit button text.
@@ -83,6 +76,32 @@ interface RegisterTranslation {
 const GUID_V4_REGEX = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
 
 /**
+ * Enum like object used to validate whether or not string is a language string.
+ */
+const LANGUAGES_ENUM: Enum<Languages> = {
+  English: "English",
+  Estonian: "Estonian",
+  Russian: "Russian"
+};
+
+/**
+ * Register form input values.
+ */
+type RegisterValues = Record<TextFieldNames, string> &
+  Record<"language", Languages | undefined>;
+
+/**
+ * Translation object that translates `RegisterValues` into `AuthRegisterBody`.
+ */
+// prettier-ignore
+const TRANSLATION: Translation<RegisterValues, AuthRegisterBody> = {
+  language: to.string().options(LANGUAGES_ENUM).build(),
+  name: to.string().trim().notEmpty().build(),
+  email: to.string().trim().notEmpty().build(),
+  password: to.string().notEmpty().build()
+};
+
+/**
  * Scene that used to create a new account by filling in registration form.
  */
 @inject("auth", "invitations", "views")
@@ -96,8 +115,8 @@ export class Register extends Scene<"Register", {}, RegisterTranslation> {
   /**
    * Object that contains values of each input.
    */
-  @observable private values = {
-    language: undefined as Languages | undefined,
+  @observable private values: RegisterValues = {
+    language: undefined,
     name: "",
     email: "",
     password: ""
@@ -106,7 +125,7 @@ export class Register extends Scene<"Register", {}, RegisterTranslation> {
   /**
    * Object that contains error reasons of occurred errors of each input.
    */
-  @observable private reasons: Partial<Record<InputNames, ErrorReasons>> = {};
+  @observable private reasons: Partial<ErrorReasonsFor<RegisterValues>> = {};
 
   /**
    * Creates `Register` scene and initiates invitation ID verification.
@@ -214,36 +233,21 @@ export class Register extends Scene<"Register", {}, RegisterTranslation> {
   > = async event => {
     event.preventDefault();
 
-    const { language, name, email, password } = this.values;
-    const { invitationId } = this.props.parameters!;
-
-    // Client side validation error reasons for each input.
-    const reasons = {
-      language: language === undefined ? "missing" : undefined,
-      name: name.trim() === "" ? "empty" : undefined,
-      email: email.trim() === "" ? "empty" : undefined,
-      password: password.length < 8 ? "invalid" : undefined
-    } as const;
-
-    const skip = any(reasons);
-
+    const result = translate(this.values, TRANSLATION);
     const error = await this.props.views!.load(
-      skip
-        ? undefined
-        : this.props.auth!.register(
-            language!, // Language cannot be `undefined` since if it was server request would be skipped.
-            name,
-            email,
-            password,
-            invitationId
-          )
+      result.kind === "ok"
+        ? this.props.auth!.register({
+            ...result.value,
+            invitationId: this.props.parameters!.invitationId
+          })
+        : undefined
     );
 
-    if (error === undefined && !skip) {
+    if (result.kind === "ok" && error === undefined) {
       this.props.views!.home();
     }
 
-    this.reasons = append(reasons, error);
+    this.reasons = append(result.kind === "err" ? result.value : {}, error);
   };
 
   /**
@@ -255,7 +259,6 @@ export class Register extends Scene<"Register", {}, RegisterTranslation> {
 
     if (
       parameters === undefined ||
-      parameters.invitationId === undefined ||
       !GUID_V4_REGEX.test(parameters.invitationId)
     ) {
       this.valid = false;

@@ -1,4 +1,4 @@
-import { ErrorReasons } from "api";
+import { ErrorReasons, AuthLoginBody } from "api";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -8,7 +8,8 @@ import { Head } from "../component/Head";
 import { TextField } from "../component/TextField";
 import { Center } from "../component/collection/container";
 import { Controls, Form, Group, Title } from "../component/collection/form";
-import { any, append } from "../utility/form";
+import { any, append, ErrorReasonsFor } from "../utility/form";
+import { to, translate, Translation } from "../utility/translation";
 
 /**
  * Array of input names within login form.
@@ -56,6 +57,20 @@ interface LoginTranslation {
 }
 
 /**
+ * Login form values object type.
+ */
+type LoginValues = Record<InputNames, string>;
+
+/**
+ * Translation that transforms `LoginValues` type into `AuthLoginBody`.
+ */
+// prettier-ignore
+const TRANSLATION: Translation<LoginValues, AuthLoginBody> = {
+  email: to.string().trim().notEmpty().build(),
+  password: to.string().build()
+};
+
+/**
  * Scene that authenticates user using their email and password and on success
  * redirects to home page.
  */
@@ -65,7 +80,7 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
   /**
    * Object that contains values of each input.
    */
-  @observable private values = {
+  @observable private values: LoginValues = {
     email: "",
     password: ""
   };
@@ -73,7 +88,7 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
   /**
    * Object that contains a reason string of occurred error of each input.
    */
-  @observable private reasons: Partial<Record<InputNames, ErrorReasons>> = {};
+  @observable private reasons: ErrorReasonsFor<LoginValues> = {};
 
   /**
    * Renders the form and all of its inputs.
@@ -132,21 +147,12 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
   > = async event => {
     event.preventDefault();
 
-    const { email, password } = this.values;
-
-    // Client side validation error reasons for each input.
-    const reasons = {
-      email: email.trim() === "" ? "empty" : undefined,
-      password: password === "" ? "empty" : undefined
-    } as const;
-
-    const skip = any(reasons);
-
+    const result = translate(this.values, TRANSLATION);
     const error = await this.props.views!.load(
-      skip ? undefined : this.props.auth!.login(email, password)
+      result.kind === "ok" ? this.props.auth!.login(result.value) : undefined
     );
 
-    if (error === undefined && !skip) {
+    if (result.kind === "ok" && error === undefined) {
       // Update current scene so it matches the URL, since login scene overrides
       // it.
       this.props.views!.update();
@@ -156,6 +162,6 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
       this.props.views!.notify("loginInvalidCredentials", {});
     }
 
-    this.reasons = append(reasons, error);
+    this.reasons = append(result.kind === "err" ? result.value : {}, error);
   };
 }

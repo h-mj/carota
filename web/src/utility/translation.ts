@@ -1,7 +1,8 @@
-import { Enum } from "api";
+import { Enum, ErrorReasons } from "api";
+import { any } from "./form";
 
 /**
- * Successful validation result type which is immediately returned.
+ * Successful translation result type which is immediately returned.
  */
 interface Ok<O> {
   kind: "ok";
@@ -9,7 +10,7 @@ interface Ok<O> {
 }
 
 /**
- * Successful validation result type which is used as an input for next
+ * Successful translation result type which is used as an input for next
  * middleware in the chain. If no middleware proceeds, it is equivalent to an
  * `Ok<N>` result.
  */
@@ -19,7 +20,7 @@ interface Next<N> {
 }
 
 /**
- * Unsuccessful validation result type which is immediately returned.
+ * Unsuccessful translation result type which is immediately returned.
  */
 interface Err<E> {
   kind: "err";
@@ -42,14 +43,15 @@ const next = <N>(value: N): Next<N> => ({ kind: "next", value });
 const err = <E>(value: E): Err<E> => ({ kind: "err", value });
 
 /**
- * Validation function type that returns either `Ok<O>` or `Err<E>` type object.
+ * Translator function type that translates an object with type `I` into an
+ * object typed `O` and returns either `Ok<O>` or `Err<E>` type object.
  */
-interface Validator<I, O, E> {
+interface Translator<I, O, E> {
   (input: I): Ok<O> | Err<E>;
 }
 
 /**
- * Function type that is the building block of validation chains.
+ * Function type that is the building block of translation chains.
  *
  * Middleware function takes two arguments of type `I` and `P` as parameters and
  * returns either `Ok<O>`, `Next<N>` or `Err<E>` typed object.
@@ -59,123 +61,125 @@ interface Middleware<I, P, O, N, E> {
 }
 
 /**
- * Validation class base class.
+ * Translations class base class.
  */
-abstract class Validation<I, O, N, E> {
+abstract class Translations<I, O, N, E> {
   /**
    * Composition of all middleware functions in the chain.
    */
   protected middleware: Middleware<I, undefined, O, N, E>;
 
   /**
-   * Creates a new instance of `Validation` with given middleware function.
+   * Creates a new instance of `Translations` with given middleware function.
    */
   protected constructor(middleware: Middleware<I, undefined, O, N, E>) {
     this.middleware = middleware;
   }
 
   /**
-   * Converts middleware function into `Validator` typed function, that converts
-   * `Next<N>` middleware result type into `Ok<N>`. Validation function also has
-   * only one argument opposite to middleware function, which have two.
+   * Converts middleware function into `Translator` typed function. The
+   * difference between a `Translator` and `Middleware` is that translator
+   * converts `Next<N>` middleware result type into `Ok<N>`. Translator function
+   * also has only one argument opposite to middleware function, which have two.
    */
-  public build = (): Validator<I, O | N, E> => input => {
+  public build = (): Translator<I, O | N, E> => input => {
     const result = this.middleware(input, undefined);
     return result.kind === "next" ? ok(result.value) : result;
   };
 }
 
 /**
- * Unknown type validator builder class.
+ * Unknown type translation builder class.
  */
 // prettier-ignore
-class UnknownValidation<I, O, N, E> extends Validation<I, O, N, E> {
+class UnknownTranslations<I, O, N, E> extends Translations<I, O, N, E> {
   /**
-   * Starting validation object instance which all validation objects expand.
+   * Starting translation builder object instance which is the head of all
+   * translation chains.
    */
-  public static readonly INSTANCE = new UnknownValidation<unknown, never, unknown, never>(input => next(input));
+  public static readonly INSTANCE = new UnknownTranslations<unknown, never, unknown, never>(input => next(input));
 
   /**
    * Validates that an unknown type is a boolean.
    */
   public boolean = () =>
-    new BooleanValidation(compose(this.middleware, UnknownValidation.boolean, undefined));
+    new BooleanTranslations(compose(this.middleware, UnknownTranslations.boolean, undefined));
 
   /**
    * Validates that an unknown type is null.
    */
   public null = () =>
-    new NullValidation(compose(this.middleware, UnknownValidation.null, undefined));
+    new NullTranslations(compose(this.middleware, UnknownTranslations.null, undefined));
 
   /**
    * Validates that an unknown type is a number.
    */
   public number = () =>
-    new NumberValidation(compose(this.middleware, UnknownValidation.number, undefined));
+    new NumberTranslations(compose(this.middleware, UnknownTranslations.number, undefined));
 
   /**
    * Validates that an unknown type if an object excluding null.
    */
   public object = () =>
-    new ObjectValidation(compose(this.middleware, UnknownValidation.object, undefined));
+    new ObjectTranslations(compose(this.middleware, UnknownTranslations.object, undefined));
 
   /**
    * Allows value to be `undefined` and returns immediately if it is, otherwise
    * value is carried through the middleware chain.
    */
   public optional = () =>
-    new UnknownValidation(compose(this.middleware, UnknownValidation.optional, undefined));
+    new UnknownTranslations(compose(this.middleware, UnknownTranslations.optional, undefined));
 
   /**
    * Validates that an unknown type is a string.
    */
-  public string =
-    () => new StringValidation(compose(this.middleware, UnknownValidation.string, undefined));
+  public string = () =>
+    new StringTranslations(compose(this.middleware, UnknownTranslations.string, undefined));
 
   /**
    * Validates that an unknown type is undefined.
    */
-  public undefined =
-    () => new UndefinedValidation(compose(this.middleware, UnknownValidation.undefined, undefined));
+  public undefined = () =>
+    new UndefinedTranslations(compose(this.middleware, UnknownTranslations.undefined, undefined));
 
   /**
-   * Boolean validation middleware.
+   * Boolean translation middleware.
    */
   private static boolean: Middleware<unknown, undefined, never, boolean, "invalid"> = input =>
     (typeof input === "boolean" ? next(input) : err("invalid"));
 
   /**
-   * Null value validation middleware.
+   * Null value translation middleware.
    */
   private static null: Middleware<unknown, undefined, never, null, "invalid"> = input =>
     (input === null ? next(input) : err("invalid"));
 
   /**
-   * Number validation middleware.
+   * Number translation middleware.
    */
   private static number: Middleware<unknown, undefined, never, number, "invalid"> = input =>
     (typeof input === "number" ? next(input) : err("invalid"));
 
   /**
-   * Object validation middleware.
+   * Object translation middleware.
    */
   private static object: Middleware<unknown, undefined, never, object, "invalid"> = input =>
     typeof input === "object" && input !== null ? next(input) : err("invalid");
 
   /**
-   * Optional type validation middleware.
+   * Optional type translation middleware.
    */
   private static optional: Middleware<unknown, undefined, undefined, unknown, never> = input =>
     (input === undefined ? ok(input) : next(input));
 
   /**
-   * String validation middleware.
+   * String translation middleware.
    */
   private static string: Middleware<unknown, undefined, never, string, "invalid"> = input =>
     (typeof input === "string" ? next(input) : err("invalid"));
 
   /**
-   * Undefined value validation middleware.
+   * Undefined value translation middleware.
    */
   private static undefined: Middleware<unknown, undefined, never, undefined, "invalid"> = input =>
     (input === undefined ? next(input) : err("invalid"));
@@ -185,48 +189,60 @@ class UnknownValidation<I, O, N, E> extends Validation<I, O, N, E> {
  * Boolean type validator builder class.
  */
 // prettier-ignore
-class BooleanValidation<I, O, N extends boolean, E> extends UnknownValidation<I, O, N, E> {}
+class BooleanTranslations<I, O, N extends boolean, E> extends UnknownTranslations<I, O, N, E> {}
 
 /**
- * Null value validator builder class.
+ * Null value translation builder class.
  */
 // prettier-ignore
-class NullValidation<I, O, E> extends UnknownValidation<I, O, null, E> {}
+class NullTranslations<I, O, E> extends UnknownTranslations<I, O, null, E> {}
 
 /**
- * Number type validator builder class.
+ * Number type translation builder class.
  */
 // prettier-ignore
-class NumberValidation<I, O, N extends number, E> extends UnknownValidation<I, O, N, E> {}
+class NumberTranslations<I, O, N extends number, E> extends UnknownTranslations<I, O, N, E> {}
 
 /**
- * Object type validator builder class.
+ * Object type translation builder class.
  */
 // prettier-ignore
-class ObjectValidation<I, O, N extends object, E> extends UnknownValidation<I, O, N, E> {}
+class ObjectTranslations<I, O, N extends object, E> extends UnknownTranslations<I, O, N, E> {}
 
 /**
- * String type validator builder class.
+ * String type translation builder class.
  */
 // prettier-ignore
-class StringValidation<I, O, N extends string, E> extends UnknownValidation<I, O, N, E> {
+class StringTranslations<I, O, N extends string, E> extends UnknownTranslations<I, O, N, E> {
+  /**
+   * Validates that string is not empty.
+   */
+  public notEmpty = () =>
+    new StringTranslations(compose(this.middleware, StringTranslations.notEmpty, undefined));
+
   /**
    * Validates whether string is one of the given options.
    */
   public options = <T extends string>(options: Enum<T>) =>
-    new StringValidation(compose(this.middleware, StringValidation.options(), options));
+    new StringTranslations(compose(this.middleware, StringTranslations.options(), options));
 
   /**
    * Converts string type value into a float.
    */
   public parseFloat = () =>
-    new NumberValidation(compose(this.middleware, StringValidation.parseFloat, undefined));
+    new NumberTranslations(compose(this.middleware, StringTranslations.parseFloat, undefined));
 
   /**
    * Trims string type value.
    */
   public trim = () =>
-    new StringValidation(compose(this.middleware, StringValidation.trim, undefined));
+    new StringTranslations(compose(this.middleware, StringTranslations.trim, undefined));
+
+  /**
+   * Middleware that validates whether given string is not empty.
+   */
+  private static notEmpty: Middleware<string, undefined, never, string, "empty"> = input =>
+    input === "" ? err("empty") : next(input);
 
   /**
    * Middleware that checks whether given input is one of the options.
@@ -252,10 +268,10 @@ class StringValidation<I, O, N extends string, E> extends UnknownValidation<I, O
 }
 
 /**
- * Undefined value validator builder class.
+ * Undefined value translation builder class.
  */
 // prettier-ignore
-class UndefinedValidation<I, O, E> extends UnknownValidation<I, O, undefined, E> {}
+class UndefinedTranslations<I, O, E> extends UnknownTranslations<I, O, undefined, E> {}
 
 /**
  * Returns the composition of two middleware functions.
@@ -274,6 +290,37 @@ const compose = <I1, O1, N1 extends I2, E1, I2, P, O2, N2, E2>(
 };
 
 /**
- * Instance of validator builder class.
+ * Instance of translation builder class.
  */
-export const is = UnknownValidation.INSTANCE;
+export const to = UnknownTranslations.INSTANCE;
+
+/**
+ * Translation of object `F` properties to same named properties of object `T`.
+ */
+export type Translation<F, T> = {
+  [P in keyof F & keyof T]: Translator<F[P], T[P], ErrorReasons>
+};
+
+type Valid<F, T> = { [P in keyof Translation<F, T>]: T[P] };
+
+type Invalid<F, T> = Partial<Record<keyof Translation<F, T>, ErrorReasons>>;
+
+export const translate = <F, T = never>(
+  from: F,
+  translation: Translation<F, T>
+): Ok<Valid<F, T>> | Err<Invalid<F, T>> => {
+  const oks: Partial<Valid<F, T>> = {};
+  const errs: Invalid<F, T> = {};
+
+  for (const property of Object.keys(translation) as (keyof F & keyof T)[]) {
+    const result = translation[property](from[property]);
+
+    if (result.kind === "ok") {
+      oks[property] = result.value;
+    } else {
+      errs[property] = result.value;
+    }
+  }
+
+  return any(errs) ? err(errs) : ok(oks as Valid<F, T>);
+};

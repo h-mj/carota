@@ -1,4 +1,9 @@
-import { ErrorReasons, FoodSaveBody, Units } from "api";
+import {
+  ErrorReasons,
+  FoodSaveBody,
+  NutritionDeclarationData,
+  Units
+} from "api";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -9,6 +14,7 @@ import { TextField } from "../component/TextField";
 import { Controls, Form, Group } from "../component/collection/form";
 import { Food } from "../model/Food";
 import { any, append, ErrorReasonsFor } from "../utility/form";
+import { from } from "../utility/shift";
 
 /**
  * Union of text field input names.
@@ -128,12 +134,50 @@ interface EditValues {
 }
 
 /**
- * Result of an function that returns different type of objects based on success
- * of the operation.
+ * Blueprint using which `NutritionDeclarationValues` type object is transformed
+ * into `NutritionDeclarationData` object.
  */
-type Result<TOkValue, TNotOkValue> =
-  | { ok: true; value: TOkValue }
-  | { ok: false; value: TNotOkValue };
+// prettier-ignore
+const NUTRITION_DECLARATION_BLUEPRINT = {
+  energy: from<string>().parseFloat().build(),
+  fat: from<string>().parseFloat().build(),
+  saturates: from<string | undefined>().optional().parseFloat().build(),
+  monoUnsaturates: from<string | undefined>().optional().parseFloat().build(),
+  polyunsaturates: from<string | undefined>().optional().parseFloat().build(),
+  carbohydrate: from<string>().parseFloat().build(),
+  sugars: from<string | undefined>().optional().parseFloat().build(),
+  polyols: from<string | undefined>().optional().parseFloat().build(),
+  starch: from<string | undefined>().optional().parseFloat().build(),
+  fibre: from<string | undefined>().optional().parseFloat().build(),
+  protein: from<string>().parseFloat().build(),
+  salt: from<string | undefined>().optional().parseFloat().build()
+};
+
+/**
+ * Blueprint using which `EditValues` type object is transformed into
+ * `FoodSaveBody` object.
+ */
+// prettier-ignore
+const FOOD_BLUEPRINT = {
+  id: from<string | undefined>().build(),
+  name: from<string>().notEmpty().build(),
+  barcode: from<string | undefined>().optional().notEmpty().build(),
+  quantity: from<string>().notEmpty().parseFloat().set(undefined).build(),
+  unit: from<Units | undefined>().string().build(),
+  nutritionDeclaration: from<NutritionDeclarationValues>()
+    .construct<NutritionDeclarationData, typeof NUTRITION_DECLARATION_BLUEPRINT>(
+      NUTRITION_DECLARATION_BLUEPRINT
+    )
+    .build(),
+  pieceQuantity: from<string | undefined>().optional().notEmpty().parseFloat().build()
+};
+
+/**
+ * Function that transforms `EditValues` type object into `FoodSaveBody` type
+ * object.
+ */
+// prettier-ignore
+const FOOD_TRANSFORMATION = from<EditValues>().construct<FoodSaveBody, typeof FOOD_BLUEPRINT>(FOOD_BLUEPRINT).build();
 
 /**
  * Food editing scene that allows user to either create new or edit existing
@@ -289,16 +333,31 @@ export class Edit extends Scene<"Edit", EditProps, EditTranslation> {
   > = async event => {
     event.preventDefault();
 
-    const result = this.getBody();
+    const result = FOOD_TRANSFORMATION(this.values);
+
+    if (result.kind === "Ok") {
+      // Normalize all nutrient values per unit.
+      const { quantity } = this.values;
+      const { nutritionDeclaration } = result.value;
+
+      for (const nutrient of NUTRIENTS) {
+        const value = nutritionDeclaration[nutrient];
+
+        if (value !== undefined) {
+          nutritionDeclaration[nutrient] = value / Number.parseFloat(quantity);
+        }
+      }
+    }
+
     const error = await this.props.views!.load(
-      result.ok ? this.props.foods!.save(result.value) : undefined
+      result.kind === "Ok" ? this.props.foods!.save(result.value) : undefined
     );
 
-    if (result.ok && error === undefined) {
+    if (result.kind === "Ok" && error === undefined) {
       this.props.views!.refocus();
     }
 
-    this.reasons = append(result.ok ? {} : result.value, error);
+    this.reasons = append(result.kind === "Err" ? result.value : {}, error);
   };
 
   /**
@@ -313,84 +372,6 @@ export class Edit extends Scene<"Edit", EditProps, EditTranslation> {
       ? this.translation.inputs[name].reasons[reason]
       : undefined;
   };
-
-  /**
-   * Tries to convert `values` object into `FoodSaveBody` type object. If
-   * successful, `Result` type object with `ok` field with value `true` and
-   * `result` field with value `FoodSaveBody` will be returned, otherwise result
-   * will be `ErrorReasonsFor<EditValues>` typed object.
-   */
-  private getBody(): Result<FoodSaveBody, ErrorReasonsFor<EditValues>> {
-    const {
-      id,
-      name,
-      barcode,
-      quantity,
-      unit,
-      nutritionDeclaration,
-      pieceQuantity
-    } = this.values;
-
-    const reasons = {
-      name: name.trim() === "" ? "empty" : undefined,
-      barcode:
-        barcode !== undefined && barcode.trim() === "" ? "empty" : undefined,
-      quantity:
-        quantity.trim() === ""
-          ? "empty"
-          : Number.isNaN(Number.parseFloat(quantity))
-          ? "invalid"
-          : undefined,
-      unit: unit === undefined ? "missing" : undefined,
-      nutritionDeclaration: Object.assign(
-        {},
-        ...NUTRIENTS.map(nutrient => ({
-          [nutrient as Nutrients]:
-            nutritionDeclaration[nutrient] !== undefined &&
-            Number.isNaN(Number.parseFloat(nutritionDeclaration[nutrient]!))
-              ? "invalid"
-              : undefined
-        }))
-      ) as ErrorReasonsFor<NutritionDeclarationValues>,
-      pieceQuantity:
-        pieceQuantity !== undefined && pieceQuantity.trim() === ""
-          ? "empty"
-          : pieceQuantity !== undefined &&
-            Number.isNaN(Number.parseFloat(pieceQuantity))
-          ? "invalid"
-          : undefined
-    } as const;
-
-    if (any(reasons)) {
-      return { ok: false, value: reasons };
-    }
-
-    const numericQuantity = Number.parseFloat(quantity);
-
-    return {
-      ok: true,
-      value: {
-        id,
-        name,
-        barcode,
-        unit: unit!,
-        nutritionDeclaration: Object.assign(
-          {},
-          ...NUTRIENTS.map(nutrient => ({
-            [nutrient]:
-              nutritionDeclaration[nutrient] === undefined
-                ? undefined
-                : Number.parseFloat(nutritionDeclaration[nutrient]!) /
-                  numericQuantity
-          }))
-        ),
-        pieceQuantity:
-          pieceQuantity === undefined
-            ? undefined
-            : Number.parseFloat(pieceQuantity)
-      }
-    };
-  }
 
   /**
    * Returns form values object based on`food` prop model based on default

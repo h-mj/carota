@@ -61,6 +61,7 @@ interface Steps {
   optional: <I>() => Step<I, undefined, Exclude<I, undefined>, never>;
   options: <I, T>(...options: readonly T[]) => Step<I, never, T, "invalid">;
   parseFloat: <I extends string>() => Step<I, never, number, "invalid">;
+  set: <I, T>(value: T) => Step<I, never, T, never>;
   string: <I>() => Step<I, never, I & string, "invalid">;
   trim: <I extends string>() => Step<I, never, string, never>;
   undefined: <I>() => Step<I, never, I & undefined, "invalid">;
@@ -141,6 +142,11 @@ interface BaseShift<I, O, N, E> {
    * result with value `"invalid"` is returned.
    */
   options: <T>(...options: readonly T[]) => Shift<I, O, T, E | "invalid">;
+
+  /**
+   * Sets current input value of transformation.
+   */
+  set: <T>(value: T) => Shift<I, O, T, E>;
 
   /**
    * If value is a string, transformation continues, otherwise error `"invalid"`
@@ -328,6 +334,11 @@ const STEPS: Steps = {
   },
 
   /**
+   * Sets current input value.
+   */
+  set: value => () => next(value),
+
+  /**
    * If input is a `string`, transformation continues, otherwise `Err` with
    * value `"invalid"` is returned.
    */
@@ -430,6 +441,10 @@ class Builder<I, O, N, E> implements ShiftUnion<I, O, N, E> {
 
   public string() {
     return this.append(STEPS.string<N>());
+  }
+
+  public set<T>(value: T) {
+    return this.append(STEPS.set<N, T>(value));
   }
 
   public undefined() {

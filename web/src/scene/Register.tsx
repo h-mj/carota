@@ -1,4 +1,4 @@
-import { AuthRegisterBody, Enum, ErrorReasons, Languages } from "api";
+import { AuthRegisterBody, ErrorReasons, Languages } from "api";
 import { observable, action } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -11,7 +11,7 @@ import { Center } from "../component/collection/container";
 import { Controls, Form, Group, Title } from "../component/collection/form";
 import { Button } from "../component/Button";
 import { any, append, ErrorReasonsFor } from "../utility/form";
-import { to, translate, Translation } from "../utility/translation";
+import { from } from "../utility/shift";
 
 /**
  * Array of text field names within registration form.
@@ -76,30 +76,31 @@ interface RegisterTranslation {
 const GUID_V4_REGEX = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
 
 /**
- * Enum like object used to validate whether or not string is a language string.
- */
-const LANGUAGES_ENUM: Enum<Languages> = {
-  English: "English",
-  Estonian: "Estonian",
-  Russian: "Russian"
-};
-
-/**
  * Register form input values.
  */
 type RegisterValues = Record<TextFieldNames, string> &
   Record<"language", Languages | undefined>;
 
 /**
- * Translation object that translates `RegisterValues` into `AuthRegisterBody`.
+ * Blueprint object that is used to transform `RegisterValues` into
+ * `AuthRegisterBody` without `invitationId` property.
  */
 // prettier-ignore
-const TRANSLATION: Translation<RegisterValues, AuthRegisterBody> = {
-  language: to.string().options(LANGUAGES_ENUM).build(),
-  name: to.string().trim().notEmpty().build(),
-  email: to.string().trim().notEmpty().build(),
-  password: to.string().notEmpty().build()
+const BLUEPRINT = {
+  language: from<Languages | undefined>().string().build(),
+  name: from<string>().trim().notEmpty().build(),
+  email: from<string>().trim().notEmpty().build(),
+  password: from<string>().notEmpty().build()
 };
+
+/**
+ * Transformation function that transforms `RegisterValues` into
+ * `AuthRegisterBody` without `invitation` property.
+ */
+// prettier-ignore
+const TRANSFORMATION = from<RegisterValues>()
+  .construct<Omit<AuthRegisterBody, "invitationId">, typeof BLUEPRINT>(BLUEPRINT)
+  .build();
 
 /**
  * Scene that used to create a new account by filling in registration form.
@@ -233,9 +234,9 @@ export class Register extends Scene<"Register", {}, RegisterTranslation> {
   > = async event => {
     event.preventDefault();
 
-    const result = translate(this.values, TRANSLATION);
+    const result = TRANSFORMATION(this.values);
     const error = await this.props.views!.load(
-      result.kind === "ok"
+      result.kind === "Ok"
         ? this.props.auth!.register({
             ...result.value,
             invitationId: this.props.parameters!.invitationId
@@ -243,11 +244,11 @@ export class Register extends Scene<"Register", {}, RegisterTranslation> {
         : undefined
     );
 
-    if (result.kind === "ok" && error === undefined) {
+    if (result.kind === "Ok" && error === undefined) {
       this.props.views!.home();
     }
 
-    this.reasons = append(result.kind === "err" ? result.value : {}, error);
+    this.reasons = append(result.kind === "Err" ? result.value : {}, error);
   };
 
   /**

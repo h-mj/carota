@@ -9,7 +9,7 @@ import { TextField } from "../component/TextField";
 import { Center } from "../component/collection/container";
 import { Controls, Form, Group, Title } from "../component/collection/form";
 import { any, append, ErrorReasonsFor } from "../utility/form";
-import { to, translate, Translation } from "../utility/translation";
+import { from } from "../utility/shift";
 
 /**
  * Array of input names within login form.
@@ -62,13 +62,21 @@ interface LoginTranslation {
 type LoginValues = Record<InputNames, string>;
 
 /**
- * Translation that transforms `LoginValues` type into `AuthLoginBody`.
+ * Blueprint that is used to transform `LoginValues` type into `AuthLoginBody`.
+ * type
  */
 // prettier-ignore
-const TRANSLATION: Translation<LoginValues, AuthLoginBody> = {
-  email: to.string().trim().notEmpty().build(),
-  password: to.string().build()
+const BLUEPRINT = {
+  email: from<string>().trim().notEmpty().build(),
+  password: from<string>().notEmpty().build()
 };
+
+/**
+ * Function that transforms `LoginValues` into `AuthLoginBody`.
+ */
+const TRANSFORMATION = from<LoginValues>()
+  .construct<AuthLoginBody, typeof BLUEPRINT>(BLUEPRINT)
+  .build();
 
 /**
  * Scene that authenticates user using their email and password and on success
@@ -147,12 +155,12 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
   > = async event => {
     event.preventDefault();
 
-    const result = translate(this.values, TRANSLATION);
+    const result = TRANSFORMATION(this.values);
     const error = await this.props.views!.load(
-      result.kind === "ok" ? this.props.auth!.login(result.value) : undefined
+      result.kind === "Ok" ? this.props.auth!.login(result.value) : undefined
     );
 
-    if (result.kind === "ok" && error === undefined) {
+    if (result.kind === "Ok" && error === undefined) {
       // Update current scene so it matches the URL, since login scene overrides
       // it.
       this.props.views!.update();
@@ -162,6 +170,8 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
       this.props.views!.notify("loginInvalidCredentials", {});
     }
 
-    this.reasons = append(result.kind === "err" ? result.value : {}, error);
+    console.log(result);
+
+    this.reasons = append(result.kind === "Err" ? result.value : {}, error);
   };
 }

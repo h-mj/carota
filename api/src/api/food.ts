@@ -12,7 +12,7 @@ export const foodRouter = new Router();
 /**
  * Nutrient amount schema.
  */
-const amount = is.number().precision(2);
+const amount = is.number().precision(4);
 
 /**
  * Save request body schema.

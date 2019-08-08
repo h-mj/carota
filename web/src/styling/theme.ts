@@ -29,6 +29,8 @@ export interface Theme {
   padding: string;
   formWidth: string;
   borderRadius: string;
+  blue: string;
+  green: string;
   orange: string;
   red: string;
   primaryColor: string;
@@ -58,8 +60,10 @@ export const LIGHT: Readonly<Theme> = {
   padding: "2.5rem",
   formWidth: "28rem",
   borderRadius: "0.4375rem",
-  orange: "rgb(255, 125, 0)",
-  red: "rgb(222, 0, 0)",
+  blue: "rgb(33, 70, 139)",
+  green: "rgb(0, 122, 77)",
+  orange: "rgb(237, 145, 33)",
+  red: "rgb(222, 56, 49)",
   primaryColor: "rgba(0, 0, 0, 0.88)",
   secondaryColor: "rgba(0, 0, 0, 0.44)",
   backgroundColor: "rgb(255, 255, 255)",

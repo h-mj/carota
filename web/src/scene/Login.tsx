@@ -170,8 +170,6 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
       this.props.views!.notify("loginInvalidCredentials", {});
     }
 
-    console.log(result);
-
     this.reasons = append(result.kind === "Err" ? result.value : {}, error);
   };
 }

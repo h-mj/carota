@@ -130,17 +130,13 @@ interface FieldProps extends StyleProps {
 const defaultStyle = css<FieldProps>`
   border: solid 1px
     ${({ active, invalid, theme }) =>
-      invalid
-        ? theme.INVALID_COLOR
-        : active
-        ? theme.ACTIVE_COLOR
-        : theme.BORDER_COLOR};
-  border-radius: ${({ theme }) => theme.BORDER_RADIUS};
+      invalid ? theme.red : active ? theme.orange : theme.borderColor};
+  border-radius: ${({ theme }) => theme.borderRadius};
   box-shadow: ${({ active, invalid, theme }) =>
     invalid
-      ? `inset 0 0 0 1px ${theme.INVALID_COLOR}`
+      ? `inset 0 0 0 1px ${theme.red}`
       : active
-      ? `inset 0 0 0 1px ${theme.ACTIVE_COLOR}`
+      ? `inset 0 0 0 1px ${theme.orange}`
       : "none"};
 `;
 
@@ -151,49 +147,45 @@ const underlineStyle = css<FieldProps>`
   border-top: solid 1px
     ${({ active, disabled, invalid, theme }) =>
       invalid
-        ? theme.INVALID_COLOR
+        ? theme.red
         : active
-        ? theme.ACTIVE_COLOR
+        ? theme.orange
         : disabled
-        ? theme.DISABLED_BACKGROUND_COLOR
-        : theme.BACKGROUND_COLOR};
+        ? theme.disabledBackgroundColor
+        : theme.backgroundColor};
 
   border-bottom: solid 1px
     ${({ active, invalid, theme }) =>
-      invalid
-        ? theme.INVALID_COLOR
-        : active
-        ? theme.ACTIVE_COLOR
-        : theme.BORDER_COLOR};
+      invalid ? theme.red : active ? theme.orange : theme.borderColor};
 
   box-shadow: ${({ active, invalid, theme }) =>
     invalid
-      ? `0 1px 0 0 ${theme.INVALID_COLOR}, 0 -1px 0 0 ${theme.INVALID_COLOR}`
+      ? `0 1px 0 0 ${theme.red}, 0 -1px 0 0 ${theme.red}`
       : active
-      ? `0 1px 0 0 ${theme.ACTIVE_COLOR}, 0 -1px 0 0 ${theme.ACTIVE_COLOR}`
+      ? `0 1px 0 0 ${theme.orange}, 0 -1px 0 0 ${theme.orange}`
       : "none"};
 
   &:first-child {
     border-top: 0;
     border-radius: ${({ theme }) =>
-      `${theme.BORDER_RADIUS} ${theme.BORDER_RADIUS} 0 0`};
+      `${theme.borderRadius} ${theme.borderRadius} 0 0`};
     box-shadow: ${({ active, invalid, theme }) =>
       invalid
-        ? `0 1px 0 0 ${theme.INVALID_COLOR}`
+        ? `0 1px 0 0 ${theme.red}`
         : active
-        ? `0 1px 0 0 ${theme.ACTIVE_COLOR}`
+        ? `0 1px 0 0 ${theme.orange}`
         : "none"};
   }
 
   &:last-child:not(:first-child) {
     border-bottom: 0;
     border-radius: ${({ theme }) =>
-      `0 0 ${theme.BORDER_RADIUS} ${theme.BORDER_RADIUS}`};
+      `0 0 ${theme.borderRadius} ${theme.borderRadius}`};
     box-shadow: ${({ active, invalid, theme }) =>
       invalid
-        ? `0 -1px 0 0 ${theme.INVALID_COLOR}`
+        ? `0 -1px 0 0 ${theme.red}`
         : active
-        ? `0 -1px 0 0 ${theme.ACTIVE_COLOR}`
+        ? `0 -1px 0 0 ${theme.orange}`
         : "none"};
   }
 `;
@@ -205,25 +197,25 @@ const Field = styled.div<FieldProps>`
   position: relative;
   z-index: ${({ active, invalid }) => (active ? 2 : invalid ? 1 : 0)};
 
-  height: ${({ theme }) => theme.HEIGHT};
+  height: ${({ theme }) => theme.height};
 
   display: flex;
   align-items: center;
 
   background-color: ${({ disabled, theme }) =>
-    disabled ? theme.DISABLED_BACKGROUND_COLOR : theme.BACKGROUND_COLOR};
+    disabled ? theme.disabledBackgroundColor : theme.backgroundColor};
   box-sizing: border-box;
 
-  transition: ${({ theme }) => theme.TRANSITION};
+  transition: ${({ theme }) => theme.transition};
 
   ${({ underline }) => (underline ? underlineStyle : defaultStyle)};
 
   & > * {
-    margin-left: calc(${({ theme }) => theme.PADDING} / 3);
+    margin-left: calc(${({ theme }) => theme.padding} / 3);
   }
 
   & > *:last-child {
-    margin-right: calc(${({ theme }) => theme.PADDING} / 3);
+    margin-right: calc(${({ theme }) => theme.padding} / 3);
   }
 `;
 
@@ -240,7 +232,7 @@ const Label = styled.label`
   align-items: center;
 
   & > * {
-    margin-right: calc(${({ theme }) => theme.PADDING} / 3);
+    margin-right: calc(${({ theme }) => theme.padding} / 3);
   }
 
   & > *:last-child {
@@ -255,27 +247,23 @@ const Caption = styled.span<StyleProps>`
   min-width: 30%;
 
   color: ${({ active, invalid, theme }) =>
-    invalid
-      ? theme.INVALID_COLOR
-      : active
-      ? theme.ACTIVE_COLOR
-      : theme.SECONDARY_COLOR};
+    invalid ? theme.red : active ? theme.orange : theme.secondaryColor};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
   user-select: none;
 
-  transition: ${({ theme }) => theme.TRANSITION};
+  transition: ${({ theme }) => theme.transition};
 `;
 
 /**
  * Component that displays the error message under the field component.
  */
 const ErrorMessage = styled.div`
-  margin-top: calc(${({ theme }) => theme.PADDING} / 6);
+  margin-top: calc(${({ theme }) => theme.padding} / 6);
 
-  color: ${({ theme }) => theme.INVALID_COLOR};
+  color: ${({ theme }) => theme.red};
   font-size: 0.7rem;
   letter-spacing: 0;
 `;

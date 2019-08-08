@@ -205,23 +205,19 @@ interface CheckBoxStateProps extends StyleProps {
 const Box = styled.div<CheckBoxStateProps>`
   position: relative;
 
-  width: calc(${({ theme }) => theme.HEIGHT} / 2);
-  height: calc(${({ theme }) => theme.HEIGHT} / 2);
+  width: calc(${({ theme }) => theme.height} / 2);
+  height: calc(${({ theme }) => theme.height} / 2);
 
   flex: 0 0 auto;
 
   color: ${({ active, checked, invalid, theme }) =>
-    invalid
-      ? theme.INVALID_COLOR
-      : active || checked
-      ? theme.ACTIVE_COLOR
-      : theme.BORDER_COLOR};
-  border-radius: ${({ theme }) => theme.BORDER_RADIUS};
+    invalid ? theme.red : active || checked ? theme.orange : theme.borderColor};
+  border-radius: ${({ theme }) => theme.borderRadius};
   box-shadow: inset 0 0 0
     ${({ active, checked, invalid, theme }) =>
-      checked ? theme.PADDING : active || invalid ? "2px" : "1px"};
+      checked ? theme.padding : active || invalid ? "2px" : "1px"};
 
-  transition: ${({ theme }) => theme.TRANSITION};
+  transition: ${({ theme }) => theme.transition};
 `;
 
 /**
@@ -249,16 +245,16 @@ const Check = styled.div<CheckBoxStateProps>`
   transform: translateX(-50%) translateY(-50%) rotateZ(45deg)
     scale(${({ checked }) => (checked ? 1 : 0)});
 
-  width: calc(${({ theme }) => theme.HEIGHT} / 12);
-  height: calc(${({ theme }) => theme.HEIGHT} / 6);
+  width: calc(${({ theme }) => theme.height} / 12);
+  height: calc(${({ theme }) => theme.height} / 6);
 
-  border-bottom: calc(${({ theme }) => theme.PADDING} / 12) solid;
-  border-right: calc(${({ theme }) => theme.PADDING} / 12) solid;
+  border-bottom: calc(${({ theme }) => theme.padding} / 12) solid;
+  border-right: calc(${({ theme }) => theme.padding} / 12) solid;
 
   color: ${({ invalid, theme }) =>
-    invalid ? theme.BACKGROUND_COLOR : theme.PRIMARY_COLOR};
+    invalid ? theme.backgroundColor : theme.primaryColor};
 
-  transition: ${({ theme }) => theme.TRANSITION};
+  transition: ${({ theme }) => theme.transition};
 
   pointer-events: none;
 `;

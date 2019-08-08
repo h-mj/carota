@@ -111,7 +111,7 @@ const LoaderOverlay = styled(Overlay)<LoaderOverlayProps>`
   justify-content: center;
   align-items: center;
 
-  background-color: ${({ theme }) => theme.BACKGROUND_COLOR};
+  background-color: ${({ theme }) => theme.backgroundColor};
   opacity: 0.95;
 
   animation: ${props => (props.isActive ? fadeIn : fadeOut)} ${DURATION}s
@@ -160,7 +160,7 @@ const Disk = styled.div`
 
   border-radius: ${DISK_SIZE / 2}rem;
 
-  background-color: ${({ theme }) => theme.ACTIVE_COLOR};
+  background-color: ${({ theme }) => theme.orange};
 
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 

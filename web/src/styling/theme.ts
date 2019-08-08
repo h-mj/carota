@@ -24,18 +24,18 @@ export interface StyleProps {
  * Theme definition.
  */
 export interface Theme {
-  BORDER_COLOR: string;
-  HEIGHT: string;
-  PADDING: string;
-  FORM_WIDTH: string;
-  BORDER_RADIUS: string;
-  ACTIVE_COLOR: string;
-  INVALID_COLOR: string;
-  PRIMARY_COLOR: string;
-  SECONDARY_COLOR: string;
-  BACKGROUND_COLOR: string;
-  DISABLED_BACKGROUND_COLOR: string;
-  TRANSITION: string;
+  borderColor: string;
+  height: string;
+  padding: string;
+  formWidth: string;
+  borderRadius: string;
+  orange: string;
+  red: string;
+  primaryColor: string;
+  secondaryColor: string;
+  backgroundColor: string;
+  disabledBackgroundColor: string;
+  transition: string;
 }
 
 /**
@@ -53,16 +53,16 @@ export const {
  * Light theme definition.
  */
 export const LIGHT: Readonly<Theme> = {
-  BORDER_COLOR: "rgb(222, 222, 222)",
-  HEIGHT: "3.5rem",
-  PADDING: "2.5rem",
-  FORM_WIDTH: "28rem",
-  BORDER_RADIUS: "0.4375rem",
-  ACTIVE_COLOR: "rgb(255, 125, 0)",
-  INVALID_COLOR: "rgb(222, 0, 0)",
-  PRIMARY_COLOR: "rgba(0, 0, 0, 0.88)",
-  SECONDARY_COLOR: "rgba(0, 0, 0, 0.44)",
-  BACKGROUND_COLOR: "rgb(255, 255, 255)",
-  DISABLED_BACKGROUND_COLOR: "rgb(245, 245, 245)",
-  TRANSITION: "0.1s cubic-bezier(0.4, 0.0, 0.2, 1)"
+  borderColor: "rgb(222, 222, 222)",
+  height: "3.5rem",
+  padding: "2.5rem",
+  formWidth: "28rem",
+  borderRadius: "0.4375rem",
+  orange: "rgb(255, 125, 0)",
+  red: "rgb(222, 0, 0)",
+  primaryColor: "rgba(0, 0, 0, 0.88)",
+  secondaryColor: "rgba(0, 0, 0, 0.44)",
+  backgroundColor: "rgb(255, 255, 255)",
+  disabledBackgroundColor: "rgb(245, 245, 245)",
+  transition: "0.1s cubic-bezier(0.4, 0.0, 0.2, 1)"
 };

@@ -2,9 +2,10 @@ import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Scene } from "./Scene";
+import { Component } from "../component/Component";
 import { TextField } from "../component/TextField";
-import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
+import { Food } from "../model/Food";
 
 /**
  * Scene which is used for selecting a food item by searching it by its name.
@@ -25,6 +26,7 @@ export class Search extends Scene<"Search"> {
       <>
         <Controls>
           <TextField
+            autoFocus={true}
             name="query"
             value={this.query}
             onChange={this.handleChange}
@@ -33,9 +35,7 @@ export class Search extends Scene<"Search"> {
         </Controls>
         <Results>
           {this.props.foods!.getAll().map(food => (
-            <Result key={food.id} onClick={this.handleClick} value={food.id}>
-              {food.name}
-            </Result>
+            <Result key={food.id} food={food} />
           ))}
         </Results>
       </>
@@ -55,55 +55,141 @@ export class Search extends Scene<"Search"> {
       this.props.foods!.clear();
     }
   };
-
-  /**
-   * Shows food item editing scene on the side when user clicks on food item
-   * result.
-   */
-  @action
-  private handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
-    this.props.views!.aside("Edit", {
-      food: this.props.foods!.get(event.currentTarget.value)
-    });
-  };
 }
 
 const Controls = styled.div`
   position: sticky;
   top: 0;
 
-  padding: calc(${({ theme }) => theme.PADDING} / 3)
-    ${({ theme }) => theme.PADDING};
+  padding: calc(${({ theme }) => theme.padding} / 3)
+    ${({ theme }) => theme.padding};
   box-sizing: border-box;
 
-  border-bottom: solid 1px ${({ theme }) => theme.BORDER_COLOR};
+  border-bottom: solid 1px ${({ theme }) => theme.borderColor};
 
-  background-color: ${({ theme }) => theme.BACKGROUND_COLOR};
+  background-color: ${({ theme }) => theme.backgroundColor};
 `;
 
 const Results = styled.div`
-  padding: ${({ theme }) => theme.PADDING};
+  padding: ${({ theme }) => theme.padding};
   box-sizing: border-box;
 
   flex: 1 1 auto;
 
   display: inline-grid;
-  gap: calc(${({ theme }) => theme.PADDING} / 3);
+  gap: calc(${({ theme }) => theme.padding} / 3);
   grid-template-columns: repeat(
     auto-fill,
-    minmax(calc(4 * ${({ theme }) => theme.HEIGHT}), 1fr)
+    minmax(calc(4 * ${({ theme }) => theme.height}), 1fr)
   );
   grid-template-rows: max-content;
 `;
 
-const Result = styled.button`
-  ${RESET};
+/**
+ * Result component props.
+ */
+interface ResultProps {
+  /**
+   * Corresponding food model instance.
+   */
+  food: Food;
+}
 
-  height: calc(4 * ${({ theme }) => theme.HEIGHT});
+@inject("views")
+@observer
+class Result extends Component<ResultProps> {
+  public render() {
+    const { name, nutritionDeclaration } = this.props.food;
 
-  border: solid 1px ${({ theme }) => theme.BORDER_COLOR};
-  border-radius: ${({ theme }) => theme.BORDER_RADIUS};
+    return (
+      <ResultContainer onClick={this.handleClick}>
+        <Name>{name}</Name>
+        <Nutrients>
+          <Nutrient>
+            <Title>Energy</Title>
+            <Amount>{100 * nutritionDeclaration.energy}</Amount>
+          </Nutrient>
+          <Nutrient>
+            <Title>Fat</Title>
+            <Amount>{100 * nutritionDeclaration.fat}</Amount>
+          </Nutrient>
+          <Nutrient>
+            <Title>Carbs</Title>
+            <Amount>{100 * nutritionDeclaration.carbohydrate}</Amount>
+          </Nutrient>
+          <Nutrient>
+            <Title>Protein</Title>
+            <Amount>{100 * nutritionDeclaration.protein}</Amount>
+          </Nutrient>
+        </Nutrients>
+      </ResultContainer>
+    );
+  }
+
+  /**
+   * Shows food item editing scene on the side when user clicks on food item
+   * result.
+   */
+  @action
+  private handleClick: React.MouseEventHandler<HTMLDivElement> = () => {
+    this.props.views!.aside("Edit", {
+      food: this.props.food
+    });
+  };
+}
+
+const ResultContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  height: calc(4 * ${({ theme }) => theme.height});
+
+  border: solid 1px ${({ theme }) => theme.borderColor};
+  border-radius: ${({ theme }) => theme.borderRadius};
   box-sizing: border-box;
 
   cursor: pointer;
+`;
+
+const Name = styled.div`
+  width: 100%;
+
+  flex: 1 1 auto;
+
+  padding: calc(${({ theme }) => theme.padding} / 3);
+  box-sizing: border-box;
+
+  color: ${({ theme }) => theme.primaryColor};
+`;
+
+const Nutrients = styled.div`
+  width: 100%;
+  height: ${({ theme }) => theme.height};
+
+  display: flex;
+
+  border-top: solid 1px ${({ theme }) => theme.borderColor};
+  box-sizing: border-box;
+`;
+
+const Nutrient = styled.div`
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Title = styled.div`
+  font-size: 0.7rem;
+  letter-spacing: 0;
+  padding-bottom: calc(${({ theme }) => theme.padding} / 9);
+`;
+
+const Amount = styled.div`
+  display: flex;
+  align-items: flex-end;
+  color: ${({ theme }) => theme.primaryColor};
 `;

@@ -57,7 +57,7 @@ const Container = styled.div`
  */
 const Bar = styled.nav`
   display: inline-flex;
-  padding: 0 calc(${({ theme }) => theme.PADDING} / 2);
+  padding: 0 calc(${({ theme }) => theme.padding} / 2);
   box-sizing: border-box;
 `;
 
@@ -75,15 +75,15 @@ interface ItemProps {
  * One of the navigation bar items.
  */
 const Item = styled(Anchor)<ItemProps>`
-  height: ${({ theme }) => theme.HEIGHT};
-  padding: 0 calc(${({ theme }) => theme.PADDING} / 2);
+  height: ${({ theme }) => theme.height};
+  padding: 0 calc(${({ theme }) => theme.padding} / 2);
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   color: ${({ selected, theme }) =>
-    selected ? theme.PRIMARY_COLOR : theme.SECONDARY_COLOR};
+    selected ? theme.primaryColor : theme.secondaryColor};
   text-decoration: none;
   white-space: nowrap;
 

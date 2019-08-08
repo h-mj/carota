@@ -334,19 +334,18 @@ interface InputProps extends StyleProps {
 const Input = styled.input<InputProps>`
   ${RESET};
 
-  min-width: calc(2 * ${({ theme }) => theme.PADDING});
+  min-width: calc(2 * ${({ theme }) => theme.padding});
   width: 100%;
   height: 100%;
 
   flex: 1 1 0;
 
-  color: ${({ theme }) => theme.PRIMARY_COLOR};
-  caret-color: ${({ invalid, theme }) =>
-    theme[invalid ? "INVALID_COLOR" : "ACTIVE_COLOR"]};
+  color: ${({ theme }) => theme.primaryColor};
+  caret-color: ${({ invalid, theme }) => (invalid ? theme.red : theme.orange)};
   text-align: ${({ textAlign }) => textAlign || "left"};
 
   &::placeholder {
-    color: ${({ theme }) => theme.SECONDARY_COLOR};
+    color: ${({ theme }) => theme.secondaryColor};
     opacity: initial;
   }
 
@@ -365,21 +364,17 @@ const Input = styled.input<InputProps>`
  * Component that displays the unit.
  */
 const Unit = styled.span<StyleProps>`
-  width: ${({ theme }) => theme.PADDING};
+  width: ${({ theme }) => theme.padding};
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   color: ${({ active, invalid, theme }) =>
-    invalid
-      ? theme.INVALID_COLOR
-      : active
-      ? theme.ACTIVE_COLOR
-      : theme.SECONDARY_COLOR};
+    invalid ? theme.red : active ? theme.orange : theme.secondaryColor};
   white-space: nowrap;
 
   user-select: none;
 
-  transition: ${({ theme }) => theme.TRANSITION};
+  transition: ${({ theme }) => theme.transition};
 `;

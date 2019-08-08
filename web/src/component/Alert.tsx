@@ -97,9 +97,9 @@ export class Alert<
  * Alert title text component.
  */
 const Title = styled.div`
-  max-width: ${({ theme }) => theme.FORM_WIDTH};
-  margin-bottom: calc(${({ theme }) => theme.PADDING} / 3);
-  color: ${({ theme }) => theme.PRIMARY_COLOR};
+  max-width: ${({ theme }) => theme.formWidth};
+  margin-bottom: calc(${({ theme }) => theme.padding} / 3);
+  color: ${({ theme }) => theme.primaryColor};
   font-size: 2rem;
   letter-spacing: -0.022em;
   line-height: 2.5rem;
@@ -109,8 +109,8 @@ const Title = styled.div`
  * Alert message text component.
  */
 const Message = styled.div`
-  max-width: ${({ theme }) => theme.FORM_WIDTH};
-  color: ${({ theme }) => theme.SECONDARY_COLOR};
+  max-width: ${({ theme }) => theme.formWidth};
+  color: ${({ theme }) => theme.secondaryColor};
   line-height: 1.5rem;
   text-align: justify;
 `;

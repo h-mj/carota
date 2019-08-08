@@ -45,12 +45,12 @@ export class Side extends Component {
  * Component that contains the side scene.
  */
 const Container = styled.div`
-  max-width: ${({ theme }) => theme.FORM_WIDTH};
+  max-width: ${({ theme }) => theme.formWidth};
   width: 100%;
   height: 100%;
 
   overflow: auto;
 
-  background-color: ${({ theme }) => theme.BACKGROUND_COLOR};
+  background-color: ${({ theme }) => theme.backgroundColor};
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.22);
 `;

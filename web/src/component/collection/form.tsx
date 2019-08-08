@@ -13,15 +13,15 @@ export const Controls = styled.div`
  * Form element that wraps `Main` and `Controls` components.
  */
 export const Form = styled.form`
-  min-height: calc(9 * ${({ theme }) => theme.HEIGHT});
-  max-width: ${({ theme }) => theme.FORM_WIDTH};
+  min-height: calc(9 * ${({ theme }) => theme.height});
+  max-width: ${({ theme }) => theme.formWidth};
   width: 100%;
 
-  padding: ${({ theme }) => theme.PADDING};
+  padding: ${({ theme }) => theme.padding};
   box-sizing: border-box;
 
   & > * {
-    margin-bottom: ${({ theme }) => theme.PADDING};
+    margin-bottom: ${({ theme }) => theme.padding};
   }
 
   & > *:last-child {
@@ -36,7 +36,7 @@ export const Group = styled.div`
   width: 100%;
 
   & > * {
-    margin-bottom: calc(${({ theme }) => theme.PADDING} / 3);
+    margin-bottom: calc(${({ theme }) => theme.padding} / 3);
   }
 
   & > *:last-child {
@@ -48,8 +48,8 @@ export const Group = styled.div`
  * Component that displays title text.
  */
 export const Title = styled.div`
-  line-height: ${({ theme }) => theme.HEIGHT};
-  color: ${({ theme }) => theme.PRIMARY_COLOR};
+  line-height: ${({ theme }) => theme.height};
+  color: ${({ theme }) => theme.primaryColor};
   font-size: 1.5rem;
   text-align: center;
 `;

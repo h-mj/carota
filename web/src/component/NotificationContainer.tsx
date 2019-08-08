@@ -71,7 +71,7 @@ export class Notification<TNotificationName extends NotificationNames> {
  * Union of all possible notification classes.
  */
 export type Notifications = {
-  [NotificationName in NotificationNames]: Notification<NotificationName>;
+  [NotificationName in NotificationNames]: Notification<NotificationName>
 }[NotificationNames];
 
 /**
@@ -161,8 +161,8 @@ export class NotificationContainer extends Component<
     return (
       <NotificationElement
         key={id}
+        active={notifications.includes(notification)}
         invalid={NOTIFICATIONS[name].type === "error"}
-        isActive={notifications.includes(notification)}
         onClick={() => this.props.views!.conceal(notification)}
       >
         {message}
@@ -188,8 +188,8 @@ export class NotificationContainer extends Component<
  */
 const NotificationBox = styled.div`
   position: fixed;
-  bottom: ${({ theme }) => theme.PADDING};
-  left: ${({ theme }) => theme.PADDING};
+  bottom: ${({ theme }) => theme.padding};
+  left: ${({ theme }) => theme.padding};
 `;
 
 /**
@@ -209,27 +209,33 @@ const moveOut = keyframes`
 `;
 
 /**
- * Actual notification component properties.
- */
-interface NotificationElementProps extends StyleProps {
-  /**
-   * Whether or not this notification is active.
-   */
-  isActive: boolean;
-}
-
-/**
  * Notification component that displays the message.
  */
-const NotificationElement = styled.div<NotificationElementProps>`
-  margin-top: calc(${({ theme }) => theme.PADDING} / 3);
-  padding: 0 calc(${({ theme }) => theme.PADDING} / 3);
+const NotificationElement = styled.div<StyleProps>`
+  height: ${({ theme }) => theme.height};
+
+  display: flex;
+  align-items: center;
+
+  margin-top: calc(${({ theme }) => theme.padding} / 3);
+  padding: 0 calc(${({ theme }) => theme.padding} / 3);
   box-sizing: border-box;
 
-  color: ${({ theme }) => theme.PRIMARY_COLOR};
+  border: solid 1px
+    ${({ active, invalid, theme }) =>
+      invalid ? theme.red : active ? theme.orange : theme.borderColor};
+  border-radius: ${({ theme }) => theme.borderRadius};
+  box-shadow: ${({ active, invalid, theme }) =>
+    invalid
+      ? `inset 0 0 0 1px ${theme.red}`
+      : active
+      ? `inset 0 0 0 1px ${theme.orange}`
+      : "none"};
 
-  animation: ${({ isActive }) => (isActive ? fadeIn : fadeOut)} ${DURATION}s,
-    ${({ isActive }) => (isActive ? moveIn : moveOut)} ${DURATION}s;
+  color: ${({ theme }) => theme.primaryColor};
+
+  animation: ${({ active }) => (active ? fadeIn : fadeOut)} ${DURATION}s,
+    ${({ active }) => (active ? moveIn : moveOut)} ${DURATION}s;
 
   cursor: pointer;
 `;

@@ -194,25 +194,21 @@ const Options = styled.div<StyleProps>`
 
   min-width: 0;
   width: 100%;
-  height: calc(${({ theme }) => theme.HEIGHT} / 2);
+  height: calc(${({ theme }) => theme.height} / 2);
 
   border: solid 1px
     ${({ active, invalid, theme }) =>
-      invalid
-        ? theme.INVALID_COLOR
-        : active
-        ? theme.ACTIVE_COLOR
-        : theme.BORDER_COLOR};
-  border-radius: ${({ theme }) => theme.BORDER_RADIUS};
+      invalid ? theme.red : active ? theme.orange : theme.borderColor};
+  border-radius: ${({ theme }) => theme.borderRadius};
   box-shadow: ${({ active, invalid, theme }) =>
     invalid
-      ? `inset 0 0 0 1px ${theme.INVALID_COLOR}`
+      ? `inset 0 0 0 1px ${theme.red}`
       : active
-      ? `inset 0 0 0 1px ${theme.ACTIVE_COLOR}`
+      ? `inset 0 0 0 1px ${theme.orange}`
       : "none"};
   box-sizing: border-box;
 
-  transition: ${({ theme }) => theme.TRANSITION};
+  transition: ${({ theme }) => theme.transition};
 `;
 
 /**
@@ -239,11 +235,11 @@ const Option = styled.button<OptionProps>`
   height: 100%;
 
   color: ${({ selected, theme }) =>
-    theme[selected ? "PRIMARY_COLOR" : "SECONDARY_COLOR"]};
+    selected ? theme.primaryColor : theme.secondaryColor};
 
   cursor: pointer;
 
-  transition: ${({ theme }) => theme.TRANSITION};
+  transition: ${({ theme }) => theme.transition};
 `;
 
 /**
@@ -254,6 +250,6 @@ const OptionLabel = styled.span`
   white-space: nowrap;
   text-overflow: ellipsis;
 
-  padding: 0 calc(${({ theme }) => theme.PADDING} / 6);
+  padding: 0 calc(${({ theme }) => theme.padding} / 6);
   box-sizing: border-box;
 `;

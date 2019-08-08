@@ -73,17 +73,17 @@ interface ButtonElementProps {
 const ButtonElement = styled.button<ButtonElementProps>`
   ${RESET};
 
-  height: ${({ theme }) => theme.PADDING};
-  padding: 0 ${({ theme }) => theme.PADDING};
+  height: ${({ theme }) => theme.padding};
+  padding: 0 ${({ theme }) => theme.padding};
 
-  border-radius: ${({ theme }) => theme.BORDER_RADIUS};
+  border-radius: ${({ theme }) => theme.borderRadius};
   background-color: ${({ invalid, theme }) =>
-    theme[invalid ? "INVALID_COLOR" : "ACTIVE_COLOR"]};
+    invalid ? theme.red : theme.orange};
 
   color: ${({ invalid, theme }) =>
-    theme[invalid ? "BACKGROUND_COLOR" : "PRIMARY_COLOR"]};
+    invalid ? theme.backgroundColor : theme.primaryColor};
 
   cursor: pointer;
 
-  transition: ${({ theme }) => theme.TRANSITION};
+  transition: ${({ theme }) => theme.transition};
 `;

@@ -39,8 +39,8 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
   @import url("https://rsms.me/inter/inter.css");
 
   html {
-    background-color: ${({ theme }) => theme.BACKGROUND_COLOR};
-    color: ${({ theme }) => theme.SECONDARY_COLOR};
+    background-color: ${({ theme }) => theme.backgroundColor};
+    color: ${({ theme }) => theme.secondaryColor};
 
     font-family: "Inter", sans-serif;
     font-size: 16px;

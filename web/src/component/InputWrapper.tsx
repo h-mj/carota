@@ -85,7 +85,7 @@ export const InputWrapper: React.FunctionComponent<InputWrapperProps> = ({
   const LabelComponent = withLabel ? Label : React.Fragment;
 
   return (
-    <div>
+    <Wrapper>
       <Field
         active={active}
         disabled={disabled}
@@ -110,9 +110,16 @@ export const InputWrapper: React.FunctionComponent<InputWrapperProps> = ({
       {errorMessage !== undefined && (
         <ErrorMessage>{errorMessage}</ErrorMessage>
       )}
-    </div>
+    </Wrapper>
   );
 };
+
+/**
+ * Wrapper component.
+ */
+const Wrapper = styled.div`
+  width: 100%;
+`;
 
 /**
  * Field component props.

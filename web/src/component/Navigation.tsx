@@ -3,7 +3,6 @@ import * as React from "react";
 import { SceneNames } from "../scene/Scene";
 import { Component } from "./Component";
 import { Anchor } from "./Anchor";
-import { DURATION } from "../styling/animations";
 import { styled } from "../styling/theme";
 
 /**
@@ -87,5 +86,5 @@ const Item = styled(Anchor)<ItemProps>`
   text-decoration: none;
   white-space: nowrap;
 
-  transition: ${DURATION}s;
+  transition: ${({ theme }) => theme.transition};
 `;

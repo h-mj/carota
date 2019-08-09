@@ -8,6 +8,7 @@ import { Head } from "../component/Head";
 import { TextField } from "../component/TextField";
 import { Center } from "../component/collection/container";
 import { Controls, Form, Group, Title } from "../component/collection/form";
+import { Logo } from "../component/collection/icons";
 import { any, append, ErrorReasonsFor } from "../utility/form";
 import { from } from "../utility/shift";
 
@@ -106,7 +107,11 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
       <Center>
         <Head title={this.translation.title} />
         <Form noValidate={true} onSubmit={this.handleSubmit}>
-          <Title>{this.translation.title}</Title>
+          <Group>
+            <Logo />
+            <Title>{this.translation.title}</Title>
+          </Group>
+
           <Group>
             {INPUTS.map((name, index) => (
               <TextField
@@ -127,6 +132,7 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
               />
             ))}
           </Group>
+
           <Controls>
             <Button invalid={any(this.reasons)}>
               {this.translation.submit}

@@ -48,7 +48,6 @@ const to = <TSceneName extends SceneNames, TParameterNames extends string>(
 const ROUTES = {
   "/administration": to("Administration"),
   "/diet": to("Diet"),
-  "/edit": to("Edit"),
   "/history": to("History"),
   "/": to("Home"),
   "/logout": to("Logout"),

@@ -12,6 +12,7 @@ import {
 } from "../component/collection/icons";
 import { styled } from "../styling/theme";
 import { Food } from "../model/Food";
+import { from } from "../utility/shift";
 
 /**
  * Names of nutrients that will be included in food information table.
@@ -41,6 +42,14 @@ const FORMAT_OPTIONS = {
 };
 
 /**
+ * Query string validator.
+ */
+const QUERY_VALIDATOR = from<string>()
+  .trim()
+  .notEmpty()
+  .build();
+
+/**
  * Scene which is used for selecting a food item by searching it by its name.
  */
 @inject("foods", "views")
@@ -58,6 +67,11 @@ export class Search extends Scene<"Search"> {
   private timeoutId: number | undefined;
 
   /**
+   * Whether or not search is successfully completed.
+   */
+  @observable private completed = false;
+
+  /**
    * Renders search bar and search results.
    */
   public render() {
@@ -72,11 +86,14 @@ export class Search extends Scene<"Search"> {
             type="search"
           />
         </Controls>
-        <SearchResults>
-          {this.props.foods!.getAll().map(food => (
-            <SearchResult key={food.id} food={food} />
-          ))}
-        </SearchResults>
+        {this.completed && (
+          <SearchResults>
+            {this.props.foods!.getAll().map(food => (
+              <SearchResult key={food.id} food={food} />
+            ))}
+            <Add onClick={this.showEditor}>+</Add>
+          </SearchResults>
+        )}
       </>
     );
   }
@@ -94,18 +111,32 @@ export class Search extends Scene<"Search"> {
     }
 
     this.timeoutId = window.setTimeout(this.search, 500);
+    this.completed = false;
   };
 
   /**
    * Makes a search request if query is valid.
    */
   @action
-  private search = () => {
-    if (this.query.trim() !== "") {
-      this.props.foods!.search(this.query.trim());
+  private search = async () => {
+    const result = QUERY_VALIDATOR(this.query);
+
+    if (result.kind === "Ok") {
+      await this.props.foods!.search(result.value);
     } else {
       this.props.foods!.clear();
     }
+
+    this.completed = result.kind === "Ok";
+    this.timeoutId = undefined;
+  };
+
+  /**
+   * Shows food editor when user clicks on add result.
+   */
+  @action
+  private showEditor = () => {
+    this.props.views!.aside("Edit", {});
   };
 }
 
@@ -228,6 +259,8 @@ export class SearchResult extends Component<
  * Component that contains found food item information.
  */
 const ResultContainer = styled.div`
+  min-height: calc(3 * ${({ theme }) => theme.height});
+
   display: flex;
   flex-direction: column;
 
@@ -246,6 +279,17 @@ const ResultContainer = styled.div`
   & > *:last-child {
     margin-bottom: 0;
   }
+`;
+
+/**
+ * Custom result element that is used to create a food item.
+ */
+const Add = styled(ResultContainer)`
+  align-items: center;
+  justify-content: center;
+
+  color: ${({ theme }) => theme.orange};
+  font-size: 3.5rem;
 `;
 
 /**

@@ -7,7 +7,7 @@ import {
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Scene, DefaultSceneProps } from "./Scene";
+import { Scene } from "./Scene";
 import { Button } from "../component/Button";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
@@ -189,7 +189,7 @@ export class Edit extends Scene<"Edit", EditProps, EditTranslation> {
   /**
    * Food editing form field values.
    */
-  @observable private values: EditValues;
+  @observable private values: EditValues = this.getValues();
 
   /**
    * Object that contains error reasons of occurred errors for each value.
@@ -197,27 +197,9 @@ export class Edit extends Scene<"Edit", EditProps, EditTranslation> {
   @observable private reasons: ErrorReasonsFor<EditValues> = {};
 
   /**
-   * Creates `Edit` scene instance and shows the same scene on the side if
-   * scene is rendered as the main scene.
-   */
-  public constructor(props: EditProps & DefaultSceneProps<"Edit">) {
-    super(props);
-
-    if (this.props.position === "main") {
-      this.props.views!.aside("Edit", {});
-    }
-
-    this.values = this.getValues();
-  }
-
-  /**
    * Renders food creation and editing form.
    */
   public render() {
-    if (this.props.position === "main") {
-      return null;
-    }
-
     return (
       <Form noValidate={true} onSubmit={this.handleSubmit}>
         <Group>

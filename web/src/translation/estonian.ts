@@ -35,6 +35,14 @@ export const estonian: Translation = {
       loginInvalidCredentials: {
         message: "Vale e-posti aadress või parool."
       }
+    },
+    SearchResult: {
+      per: "100{unit} kohta:",
+      units: {
+        g: "g",
+        kcal: "kcal",
+        ml: "ml"
+      }
     }
   },
   scenes: {

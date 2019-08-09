@@ -35,6 +35,14 @@ export const russian: Translation = {
       loginInvalidCredentials: {
         message: "Неверный адрес электронной почты или пароль."
       }
+    },
+    SearchResult: {
+      per: "На 100{unit}:",
+      units: {
+        g: "г",
+        kcal: "ккал",
+        ml: "мл"
+      }
     }
   },
   scenes: {

@@ -4,8 +4,41 @@ import * as React from "react";
 import { Scene } from "./Scene";
 import { Component } from "../component/Component";
 import { TextField } from "../component/TextField";
+import {
+  Carbohydrate,
+  Energy,
+  Fat,
+  Protein
+} from "../component/collection/icons";
 import { styled } from "../styling/theme";
 import { Food } from "../model/Food";
+
+/**
+ * Names of nutrients that will be included in food information table.
+ */
+const NUTRIENTS = ["energy", "protein", "fat", "carbohydrate"] as const;
+
+/**
+ * Union of information table nutrient names.
+ */
+type Nutrient = typeof NUTRIENTS[number];
+
+/**
+ * Object that maps nutrient names to its icon components.
+ */
+const ICONS: Record<Nutrient, React.FunctionComponent> = {
+  carbohydrate: Carbohydrate,
+  energy: Energy,
+  fat: Fat,
+  protein: Protein
+};
+
+/**
+ * `number.toLocaleString` function options.
+ */
+const FORMAT_OPTIONS = {
+  minimumFractionDigits: 1
+};
 
 /**
  * Scene which is used for selecting a food item by searching it by its name.
@@ -17,6 +50,12 @@ export class Search extends Scene<"Search"> {
    * Search query string.
    */
   @observable private query = "";
+
+  /**
+   * ID of a timeout after which search request is made. Used to limit search
+   * requests when user is still typing.
+   */
+  private timeoutId: number | undefined;
 
   /**
    * Renders search bar and search results.
@@ -33,30 +72,46 @@ export class Search extends Scene<"Search"> {
             type="search"
           />
         </Controls>
-        <Results>
+        <SearchResults>
           {this.props.foods!.getAll().map(food => (
-            <Result key={food.id} food={food} />
+            <SearchResult key={food.id} food={food} />
           ))}
-        </Results>
+        </SearchResults>
       </>
     );
   }
 
   /**
-   * Updates query value when text field input changes.
+   * Updates query value and sets or overrides a timeout after which search
+   * request is made.
    */
   @action
   private handleChange = (name: "query", value: string) => {
     this[name] = value;
 
-    if (value.trim() !== "") {
-      this.props.foods!.search(value.trim());
+    if (this.timeoutId !== undefined) {
+      window.clearTimeout(this.timeoutId);
+    }
+
+    this.timeoutId = window.setTimeout(this.search, 500);
+  };
+
+  /**
+   * Makes a search request if query is valid.
+   */
+  @action
+  private search = () => {
+    if (this.query.trim() !== "") {
+      this.props.foods!.search(this.query.trim());
     } else {
       this.props.foods!.clear();
     }
   };
 }
 
+/**
+ * Component that wraps search controls which include the search bar.
+ */
 const Controls = styled.div`
   position: sticky;
   top: 0;
@@ -70,7 +125,10 @@ const Controls = styled.div`
   background-color: ${({ theme }) => theme.backgroundColor};
 `;
 
-const Results = styled.div`
+/**
+ * Grid that contains all search results.
+ */
+const SearchResults = styled.div`
   padding: ${({ theme }) => theme.padding};
   box-sizing: border-box;
 
@@ -80,7 +138,7 @@ const Results = styled.div`
   gap: calc(${({ theme }) => theme.padding} / 3);
   grid-template-columns: repeat(
     auto-fill,
-    minmax(calc(4 * ${({ theme }) => theme.height}), 1fr)
+    minmax(calc(3 * ${({ theme }) => theme.height}), 1fr)
   );
   grid-template-rows: max-content;
 `;
@@ -88,40 +146,68 @@ const Results = styled.div`
 /**
  * Result component props.
  */
-interface ResultProps {
+interface SearchResultProps {
   /**
    * Corresponding food model instance.
    */
   food: Food;
 }
 
+/**
+ * Search result translation.
+ */
+interface SearchResultTranslation {
+  units: Record<"g" | "kcal" | "ml", string>;
+  per: string;
+}
+
+/**
+ * Single result that displays food item name along with nutrition table.
+ */
 @inject("views")
 @observer
-class Result extends Component<ResultProps> {
+export class SearchResult extends Component<
+  SearchResultProps,
+  SearchResultTranslation
+> {
+  /**
+   * Renders food item information.
+   */
   public render() {
-    const { name, nutritionDeclaration } = this.props.food;
+    const { name, nutritionDeclaration, unit } = this.props.food;
 
     return (
       <ResultContainer onClick={this.handleClick}>
         <Name>{name}</Name>
-        <Nutrients>
-          <Nutrient>
-            <Title>Energy</Title>
-            <Amount>{100 * nutritionDeclaration.energy}</Amount>
-          </Nutrient>
-          <Nutrient>
-            <Title>Fat</Title>
-            <Amount>{100 * nutritionDeclaration.fat}</Amount>
-          </Nutrient>
-          <Nutrient>
-            <Title>Carbs</Title>
-            <Amount>{100 * nutritionDeclaration.carbohydrate}</Amount>
-          </Nutrient>
-          <Nutrient>
-            <Title>Protein</Title>
-            <Amount>{100 * nutritionDeclaration.protein}</Amount>
-          </Nutrient>
-        </Nutrients>
+
+        <span>
+          {this.translation.per.replace("{unit}", this.translation.units[unit])}
+        </span>
+
+        <div>
+          {NUTRIENTS.map(nutrient => {
+            const IconComponent = ICONS[nutrient];
+
+            return (
+              <Nutrient key={nutrient}>
+                <Icon>
+                  <IconComponent />
+                </Icon>
+
+                <Amount>
+                  {(100 * nutritionDeclaration[nutrient]).toLocaleString(
+                    "et-EE",
+                    FORMAT_OPTIONS
+                  )}
+                </Amount>
+
+                <Unit>
+                  {this.translation.units[nutrient === "energy" ? "kcal" : "g"]}
+                </Unit>
+              </Nutrient>
+            );
+          })}
+        </div>
       </ResultContainer>
     );
   }
@@ -138,58 +224,72 @@ class Result extends Component<ResultProps> {
   };
 }
 
+/**
+ * Component that contains found food item information.
+ */
 const ResultContainer = styled.div`
   display: flex;
   flex-direction: column;
 
-  height: calc(4 * ${({ theme }) => theme.height});
-
-  border: solid 1px ${({ theme }) => theme.borderColor};
-  border-radius: ${({ theme }) => theme.borderRadius};
-  box-sizing: border-box;
-
-  cursor: pointer;
-`;
-
-const Name = styled.div`
-  width: 100%;
-
-  flex: 1 1 auto;
-
   padding: calc(${({ theme }) => theme.padding} / 3);
   box-sizing: border-box;
 
+  border: solid 1px ${({ theme }) => theme.borderColor};
+  border-radius: ${({ theme }) => theme.borderRadius};
+
+  cursor: pointer;
+
+  & > * {
+    margin-bottom: calc(${({ theme }) => theme.padding} / 3);
+  }
+
+  & > *:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+/**
+ * Food item name wrapper.
+ */
+const Name = styled.div`
+  width: 100%;
+  flex: 1 1 auto;
   color: ${({ theme }) => theme.primaryColor};
 `;
 
-const Nutrients = styled.div`
-  width: 100%;
-  height: ${({ theme }) => theme.height};
-
-  display: flex;
-
-  border-top: solid 1px ${({ theme }) => theme.borderColor};
-  box-sizing: border-box;
-`;
-
+/**
+ * Single row of nutrient table.
+ */
 const Nutrient = styled.div`
-  width: 100%;
-  height: 100%;
-
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
 `;
 
-const Title = styled.div`
-  font-size: 0.7rem;
-  letter-spacing: 0;
-  padding-bottom: calc(${({ theme }) => theme.padding} / 9);
+/**
+ * Nutrient icon wrapper that resizes the icon inside.
+ */
+const Icon = styled.div`
+  & > * {
+    width: calc(${({ theme }) => theme.padding} / 2);
+    height: calc(${({ theme }) => theme.padding} / 2);
+  }
 `;
 
-const Amount = styled.div`
-  display: flex;
-  align-items: flex-end;
+/**
+ * Displays nutrient amount value.
+ */
+const Amount = styled.span`
+  width: 100%;
   color: ${({ theme }) => theme.primaryColor};
+  font-feature-settings: "tnum" 1;
+  text-align: center;
+`;
+
+/**
+ * Displays nutrient amount unit.
+ */
+const Unit = styled.span`
+  width: ${({ theme }) => theme.height};
+  color: ${({ theme }) => theme.secondaryColor};
+  text-align: center;
 `;

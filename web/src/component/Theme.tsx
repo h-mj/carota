@@ -47,6 +47,10 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
     letter-spacing: -0.011rem;
   }
 
+  @supports (font-variation-settings: normal) {
+    html { font-family: 'Inter var', sans-serif; }
+  }
+
   body {
     margin: 0;
     overflow: ${props => (props.hideOverflow ? "hidden" : "auto")};

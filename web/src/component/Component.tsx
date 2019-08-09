@@ -4,6 +4,7 @@ import { Alert } from "./Alert";
 import { Head } from "./Head";
 import { Navigation } from "./Navigation";
 import { NotificationContainer } from "./NotificationContainer";
+import { SearchResult } from "../scene/Search";
 import { RootStore } from "../store/RootStore";
 
 /**
@@ -16,6 +17,7 @@ interface ComponentMap {
   Head: Head;
   Navigation: Navigation;
   NotificationContainer: NotificationContainer;
+  SearchResult: SearchResult;
 }
 
 /**
@@ -27,7 +29,7 @@ type ComponentNames = keyof ComponentMap;
  * Keys of object `T` which values are `undefined`.
  */
 type UndefinedValueKeys<T> = {
-  [K in keyof T]: undefined extends T[K] ? K : never;
+  [K in keyof T]: undefined extends T[K] ? K : never
 }[keyof T];
 
 /**
@@ -47,7 +49,7 @@ export type ClassTranslation<
   {
     [Name in TNames]: TMap[Name] extends Component<infer _, infer ITranslation>
       ? ITranslation
-      : never;
+      : never
   }
 >;
 

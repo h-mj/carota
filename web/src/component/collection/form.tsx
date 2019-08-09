@@ -13,7 +13,6 @@ export const Controls = styled.div`
  * Form element that wraps `Main` and `Controls` components.
  */
 export const Form = styled.form`
-  min-height: calc(9 * ${({ theme }) => theme.height});
   max-width: ${({ theme }) => theme.formWidth};
   width: 100%;
 

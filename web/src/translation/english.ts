@@ -35,6 +35,14 @@ export const english: Translation = {
       loginInvalidCredentials: {
         message: "Incorrect email address or password."
       }
+    },
+    SearchResult: {
+      per: "Per 100{unit}:",
+      units: {
+        g: "g",
+        kcal: "kcal",
+        ml: "ml"
+      }
     }
   },
   scenes: {

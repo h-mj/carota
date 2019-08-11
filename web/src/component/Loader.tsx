@@ -42,7 +42,7 @@ export class Loader extends Component<"Loader"> {
    * Updates loading component on component update.
    */
   @action
-  public componentWillUpdate() {
+  public componentDidUpdate() {
     this.update();
   }
 

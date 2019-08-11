@@ -107,7 +107,7 @@ export class NotificationContainer extends Component<
   /**
    * Adds new notifications to `visibleNotifications` array, and fades inactive notifications out.
    */
-  public componentWillUpdate() {
+  public componentDidUpdate() {
     const { notifications } = this.props.views!;
 
     // Add new notifications to `visibleNotifications`,

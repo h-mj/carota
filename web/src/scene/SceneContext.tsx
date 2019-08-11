@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Scene, SceneNames, SceneProps } from "./Scene";
+import { SceneNames, SceneProps } from "./Scene";
 import { Administration } from "./Administration";
 import { Diet } from "./Diet";
 import { Edit } from "./Edit";
@@ -137,7 +137,7 @@ export class SceneContext<TSceneName extends SceneNames> {
    * Renders the scene component.
    */
   public render(position: ScenePosition) {
-    const SceneComponent: typeof Scene = SCENES[this.sceneName];
+    const SceneComponent: typeof React.Component = SCENES[this.sceneName];
 
     return (
       <SceneComponent
@@ -268,5 +268,5 @@ export class SceneContext<TSceneName extends SceneNames> {
  * Union of all possible scene context types.
  */
 export type SceneContexts = {
-  [SceneName in SceneNames]: SceneContext<SceneName>;
+  [SceneName in SceneNames]: SceneContext<SceneName>
 }[SceneNames];

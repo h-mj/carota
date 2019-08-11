@@ -10,7 +10,14 @@ import { styled } from "../styling/theme";
  */
 @inject("views")
 @observer
-export class Side extends Component {
+export class Side extends Component<"Side"> {
+  /**
+   * Sets the name of this component.
+   */
+  public constructor(props: {}) {
+    super("Side", props);
+  }
+
   /**
    * Renders side scene container and the scene itself.
    */

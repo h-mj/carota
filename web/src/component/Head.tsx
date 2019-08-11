@@ -24,11 +24,21 @@ interface HeadTranslation {
 }
 
 /**
- * Component that updates document <head> element when `title` prop changes.
+ * Component that updates document `<head>` element when `title` prop changes.
  */
 @inject("views")
 @observer
-export class Head extends Component<HeadProps, HeadTranslation> {
+export class Head extends Component<"Head", HeadProps, HeadTranslation> {
+  /**
+   * Sets the name of this component.
+   */
+  public constructor(props: HeadProps) {
+    super("Head", props);
+  }
+
+  /**
+   * Renders `Helmet` component that updated document `<head>` element.
+   */
   public render() {
     return (
       <Helmet>

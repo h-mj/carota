@@ -8,7 +8,14 @@ import { Navigation } from "./Navigation";
  */
 @inject("views")
 @observer
-export class Main extends Component {
+export class Main extends Component<"Main"> {
+  /**
+   * Sets the name of this component.
+   */
+  public constructor(props: {}) {
+    super("Main", props);
+  }
+
   /**
    * Renders a navigation bar and main scene components.
    */

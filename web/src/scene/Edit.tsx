@@ -7,7 +7,7 @@ import {
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Scene } from "./Scene";
+import { DefaultSceneProps, Scene } from "./Scene";
 import { Button } from "../component/Button";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
@@ -195,6 +195,13 @@ export class Edit extends Scene<"Edit", EditProps, EditTranslation> {
    * Object that contains error reasons of occurred errors for each value.
    */
   @observable private reasons: ErrorReasonsFor<EditValues> = {};
+
+  /**
+   * Sets the name of this scene.
+   */
+  public constructor(props: EditProps & DefaultSceneProps<"Edit">) {
+    super("Edit", props);
+  }
 
   /**
    * Renders food creation and editing form.

@@ -9,7 +9,18 @@ import { createGlobalStyle, LIGHT, ThemeProvider } from "../styling/theme";
  */
 @inject("views")
 @observer
-export class Theme extends Component {
+export class Theme extends Component<"Theme"> {
+  /**
+   * Sets the name of this component.
+   */
+  public constructor(props: {}) {
+    super("Theme", props);
+  }
+
+  /**
+   * Renders `ThemeProvider` that provides theme definition to all children
+   * components alongside global theme component.
+   */
   public render() {
     return (
       <ThemeProvider theme={LIGHT}>

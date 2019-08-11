@@ -22,7 +22,14 @@ interface AnchorProps {
  * Component that changes main scene on click.
  */
 @inject("views")
-export class Anchor extends Component<AnchorProps> {
+export class Anchor extends Component<"Anchor", AnchorProps> {
+  /**
+   * Sets the name of this component.
+   */
+  public constructor(props: AnchorProps) {
+    super("Anchor", props);
+  }
+
   /**
    * Renders an anchor component.
    */

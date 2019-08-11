@@ -1,156 +1,156 @@
 import { Translation } from ".";
 
 export const english: Translation = {
-  components: {
-    Alert: {
-      invalidInvitation: {
-        title: "We are sorry, this sign up address is invalid.",
-        message:
-          "An account has already been created using this sign up address or the address is invalid. If you haven't already created an account using this web address, please contact the person who invited you."
-      },
-      unknown: {
-        title: "We are sorry, the page you requested has not been found.",
-        message:
-          "The web address may be misspelled or the page you're looking for is no longer available."
-      }
+  Alert: {
+    invalidInvitation: {
+      message:
+        "An account has already been created using this sign up address or the address is invalid. If you haven't already created an account using this web address, please contact the person who invited you.",
+      title: "We are sorry, this sign up address is invalid."
     },
-    Head: {
-      title: "Morkovka"
-    },
-    Navigation: {
-      Administration: "Administration",
-      Diet: "Diet",
-      Edit: "Edit",
-      History: "History",
-      Home: "Home",
-      Login: "Sign in",
-      Logout: "Sign out",
-      Measurements: "Measurements",
-      Register: "Sign up",
-      Search: "Search",
-      Settings: "Settings",
-      Unknown: "We are sorry, the page you requested has not been found"
-    },
-    NotificationContainer: {
-      loginInvalidCredentials: {
-        message: "Incorrect email address or password."
-      }
-    },
-    SearchResult: {
-      per: "Per 100{unit}:",
-      units: {
-        g: "g",
-        kcal: "kcal",
-        ml: "ml"
-      }
+    unknown: {
+      message:
+        "The web address may be misspelled or the page you're looking for is no longer available.",
+      title: "We are sorry, the page you requested has not been found."
     }
   },
-  scenes: {
-    Edit: {
-      inputs: {
-        barcode: {
-          label: "Barcode",
-          reasons: {
-            empty: "Please enter product barcode."
-          }
-        },
-        name: {
-          label: "Name",
-          reasons: {
-            empty: "Please enter product name."
-          }
-        },
-        pieceQuantity: {
-          label: "Piece quantity",
-          reasons: {
-            empty: "Please enter quantity of one piece."
-          }
-        },
-        unit: {
-          label: "Unit",
-          reasons: {
-            invalid: "Please select a unit."
-          }
-        },
-        quantity: {
-          label: "Quantity",
-          reasons: {
-            empty: "Please enter product quantity."
-          }
+  Edit: {
+    inputs: {
+      barcode: {
+        label: "Barcode",
+        reasons: {
+          empty: "Please enter product barcode."
         }
       },
-      nutrients: {
-        carbohydrate: "Carbohydrate",
-        energy: "Energy",
-        fat: "Fat",
-        fibre: "Fibre",
-        monoUnsaturates: "Mono-unsaturates",
-        polyols: "Polyols",
-        polyunsaturates: "Polyunsaturates",
-        protein: "Protein",
-        salt: "Salt",
-        saturates: "Saturates",
-        starch: "Starch",
-        sugars: "Sugars"
+      name: {
+        label: "Name",
+        reasons: {
+          empty: "Please enter product name."
+        }
       },
-      submit: "Save",
-      units: {
-        g: "g",
-        kcal: "kcal",
-        ml: "ml"
+      pieceQuantity: {
+        label: "Piece quantity",
+        reasons: {
+          empty: "Please enter quantity of one piece."
+        }
+      },
+      quantity: {
+        label: "Quantity",
+        reasons: {
+          empty: "Please enter product quantity."
+        }
+      },
+      unit: {
+        label: "Unit",
+        reasons: {
+          invalid: "Please select a unit."
+        }
       }
     },
-    Login: {
-      inputs: {
-        email: {
-          label: "Email",
-          reasons: { empty: "Please enter an email address." }
-        },
-        password: {
-          label: "Password",
-          reasons: { empty: "Please enter a password." }
-        }
-      },
-      submit: "Sign in →",
-      title: "Sign in"
+    nutrients: {
+      carbohydrate: "Carbohydrate",
+      energy: "Energy",
+      fat: "Fat",
+      fibre: "Fibre",
+      monoUnsaturates: "Mono-unsaturates",
+      polyols: "Polyols",
+      polyunsaturates: "Polyunsaturates",
+      protein: "Protein",
+      salt: "Salt",
+      saturates: "Saturates",
+      starch: "Starch",
+      sugars: "Sugars"
     },
-    Register: {
-      inputs: {
-        email: {
-          label: "Email",
-          reasons: {
-            conflict: "Entered email address is already in use.",
-            empty: "Please enter an email address.",
-            invalid: "Please enter a valid email address."
-          }
-        },
-        language: {
-          label: "Language",
-          options: {
-            English: "English",
-            Estonian: "eesti",
-            Russian: "русский"
-          },
-          reasons: {
-            invalid: "Please select a language."
-          }
-        },
-        name: {
-          label: "Name",
-          reasons: {
-            empty: "Please enter a name."
-          }
-        },
-        password: {
-          label: "Password",
-          reasons: {
-            empty: "Please enter a password.",
-            invalid: "Password must be at least 8 characters long."
-          }
+    submit: "Save",
+    units: {
+      g: "g",
+      kcal: "kcal",
+      ml: "ml"
+    }
+  },
+  Head: {
+    title: "Morkovka"
+  },
+  Login: {
+    inputs: {
+      email: {
+        label: "Email",
+        reasons: {
+          empty: "Please enter an email address."
         }
       },
-      submit: "Create account →",
-      title: "Create account"
+      password: {
+        label: "Password",
+        reasons: {
+          empty: "Please enter a password."
+        }
+      }
+    },
+    submit: "Sign in →",
+    title: "Sign in"
+  },
+  Navigation: {
+    Administration: "Administration",
+    Diet: "Diet",
+    Edit: "Edit",
+    History: "History",
+    Home: "Home",
+    Login: "Sign in",
+    Logout: "Sign out",
+    Measurements: "Measurements",
+    Register: "Sign up",
+    Search: "Search",
+    Settings: "Settings",
+    Unknown: "We are sorry, the page you requested has not been found"
+  },
+  NotificationContainer: {
+    loginInvalidCredentials: {
+      message: "Incorrect email address or password."
+    }
+  },
+  Register: {
+    inputs: {
+      email: {
+        label: "Email",
+        reasons: {
+          conflict: "Entered email address is already in use.",
+          empty: "Please enter an email address.",
+          invalid: "Please enter a valid email address."
+        }
+      },
+      language: {
+        label: "Language",
+        options: {
+          English: "English",
+          Estonian: "eesti",
+          Russian: "русский"
+        },
+        reasons: {
+          invalid: "Please select a language."
+        }
+      },
+      name: {
+        label: "Name",
+        reasons: {
+          empty: "Please enter a name."
+        }
+      },
+      password: {
+        label: "Password",
+        reasons: {
+          empty: "Please enter a password.",
+          invalid: "Password must be at least 8 characters long."
+        }
+      }
+    },
+    submit: "Create account →",
+    title: "Create account"
+  },
+  SearchResult: {
+    per: "Per 100{unit}:",
+    units: {
+      g: "g",
+      kcal: "kcal",
+      ml: "ml"
     }
   }
 };

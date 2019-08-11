@@ -83,12 +83,20 @@ interface CheckBoxProps<TName extends string> {
  */
 @observer
 export class CheckBox<TName extends string = string> extends Component<
+  "CheckBox",
   CheckBoxProps<TName>
 > {
   /**
    * Whether or not check box is focused.
    */
   @observable private focused = false;
+
+  /**
+   * Sets the name of this component.
+   */
+  public constructor(props: CheckBoxProps<TName>) {
+    super("CheckBox", props);
+  }
 
   /**
    * Renders a check box on its own if `basic` props is true, otherwise renders

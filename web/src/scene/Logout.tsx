@@ -7,11 +7,11 @@ import { DefaultSceneProps, Scene } from "./Scene";
 @inject("auth", "views")
 export class Logout extends Scene<"Logout"> {
   /**
-   * Executes `logout` function, that logs user out.
+   * Creates `Logout` scene instance, sets its name and executes `logout`
+   * function, that logs user out.
    */
-  public constructor(props: DefaultSceneProps<"Login">) {
-    super(props);
-
+  public constructor(props: DefaultSceneProps<"Logout">) {
+    super("Logout", props);
     this.logout();
   }
 

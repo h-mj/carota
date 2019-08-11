@@ -129,10 +129,11 @@ export class Register extends Scene<"Register", {}, RegisterTranslation> {
   @observable private reasons: Partial<ErrorReasonsFor<RegisterValues>> = {};
 
   /**
-   * Creates `Register` scene and initiates invitation ID verification.
+   * Creates `Register` scene, sets the name of the scene and initiates
+   * invitation ID verification.
    */
   public constructor(props: DefaultSceneProps<"Register">) {
-    super(props);
+    super("Register", props);
     this.verify();
   }
 

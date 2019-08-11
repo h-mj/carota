@@ -18,7 +18,7 @@ import { keyframes, styled } from "../styling/theme";
  */
 @inject("views")
 @observer
-export class Loader extends Component {
+export class Loader extends Component<"Loader"> {
   /**
    * ID of a timeout that sets `timeoutId` back to `0`.
    */
@@ -30,10 +30,11 @@ export class Loader extends Component {
   private previousIsLoading = false;
 
   /**
-   * Creates a new instance of `Loader` and updates loading state.
+   * Creates a new instance of `Loader`, sets its name and updates loading
+   * state.
    */
   public constructor(props: {}) {
-    super(props);
+    super("Loader", props);
     this.update();
   }
 

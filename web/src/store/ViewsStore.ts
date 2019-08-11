@@ -220,15 +220,6 @@ export class ViewsStore {
   }
 
   /**
-   * Sets a side scene context.
-   *
-   * @param context Side scene context.
-   */
-  public aside<TSceneName extends SceneNames>(
-    context: SceneContext<TSceneName>
-  ): void;
-
-  /**
    * Creates and sets a side scene context.
    *
    * @param sceneName Side scene name.
@@ -237,18 +228,8 @@ export class ViewsStore {
   public aside<TSceneName extends SceneNames>(
     sceneName: TSceneName,
     props: SceneProps<TSceneName>
-  ): void;
-
-  /**
-   * Sets a side scene context.
-   */
-  public aside<TSceneName extends SceneNames>(
-    nameOrContext: SceneContext<TSceneName> | TSceneName,
-    props?: SceneProps<TSceneName>
-  ) {
-    this._side = (typeof nameOrContext === "object"
-      ? nameOrContext
-      : new SceneContext(nameOrContext, undefined, props!)) as SceneContexts;
+  ): void {
+    this._side = new SceneContext(sceneName, undefined, props) as SceneContexts;
   }
 
   /**

@@ -60,9 +60,17 @@ interface AlertTranslation {
 export class Alert<
   TAlertName extends AlertNames = AlertNames
 > extends Component<
+  "Alert",
   AlertProps<TAlertName>,
   Record<AlertNames, AlertTranslation>
 > {
+  /**
+   * Sets the name of this component.
+   */
+  public constructor(props: AlertProps<TAlertName>) {
+    super("Alert", props);
+  }
+
   /**
    * Renders an alert component.
    */

@@ -2,7 +2,7 @@ import { ErrorReasons, AuthLoginBody } from "api";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Scene } from "./Scene";
+import { DefaultSceneProps, Scene } from "./Scene";
 import { Button } from "../component/Button";
 import { Head } from "../component/Head";
 import { TextField } from "../component/TextField";
@@ -98,6 +98,13 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
    * Object that contains a reason string of occurred error of each input.
    */
   @observable private reasons: ErrorReasonsFor<LoginValues> = {};
+
+  /**
+   * Sets the name of this scene.
+   */
+  public constructor(props: DefaultSceneProps<"Login">) {
+    super("Login", props);
+  }
 
   /**
    * Renders the form and all of its inputs.

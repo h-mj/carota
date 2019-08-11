@@ -87,6 +87,7 @@ interface NotificationTranslation {
 @inject("views")
 @observer
 export class NotificationContainer extends Component<
+  "NotificationContainer",
   {},
   Record<NotificationNames, NotificationTranslation>
 > {
@@ -95,6 +96,13 @@ export class NotificationContainer extends Component<
    * that are no longer included in `notifications` prop.
    */
   @observable private visibleNotifications: Notifications[] = [];
+
+  /**
+   * Sets the name of this component.
+   */
+  public constructor(props: {}) {
+    super("NotificationContainer", props);
+  }
 
   /**
    * Adds new notifications to `visibleNotifications` array, and fades inactive notifications out.

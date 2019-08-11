@@ -11,7 +11,18 @@ import { styled } from "../styling/theme";
  */
 @inject("views")
 @observer
-export class Navigation extends Component<{}, Record<SceneNames, string>> {
+export class Navigation extends Component<
+  "Navigation",
+  {},
+  Record<SceneNames, string>
+> {
+  /**
+   * Sets the name of this component.
+   */
+  public constructor(props: {}) {
+    super("Navigation", props);
+  }
+
   /**
    * Renders a navigation bar with anchors to contexts provided by `ViewsStore`.
    */

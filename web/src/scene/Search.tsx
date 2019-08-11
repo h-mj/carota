@@ -1,7 +1,7 @@
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Scene } from "./Scene";
+import { DefaultSceneProps, Scene } from "./Scene";
 import { Component } from "../component/Component";
 import { TextField } from "../component/TextField";
 import {
@@ -70,6 +70,13 @@ export class Search extends Scene<"Search"> {
    * Whether or not search is successfully completed.
    */
   @observable private completed = false;
+
+  /**
+   * Sets the name of this scene.
+   */
+  public constructor(props: DefaultSceneProps<"Search">) {
+    super("Search", props);
+  }
 
   /**
    * Renders search bar and search results.
@@ -198,9 +205,17 @@ interface SearchResultTranslation {
 @inject("views")
 @observer
 export class SearchResult extends Component<
+  "SearchResult",
   SearchResultProps,
   SearchResultTranslation
 > {
+  /**
+   * Sets the name of this component.
+   */
+  public constructor(props: SearchResultProps) {
+    super("SearchResult", props);
+  }
+
   /**
    * Renders food item information.
    */

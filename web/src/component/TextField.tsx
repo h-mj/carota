@@ -117,11 +117,18 @@ interface TextFieldProps<TName extends string, TOptional extends boolean> {
 export class TextField<
   TName extends string = string,
   TOptional extends boolean = false
-> extends Component<TextFieldProps<TName, TOptional>> {
+> extends Component<"TextField", TextFieldProps<TName, TOptional>> {
   /**
    * Whether or not text field input is in focus.
    */
   @observable private _focused = false;
+
+  /**
+   * Sets the name of this component.
+   */
+  public constructor(props: TextFieldProps<TName, TOptional>) {
+    super("TextField", props);
+  }
 
   /**
    * Renders the text field optionally alongside field, label and error message

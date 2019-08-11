@@ -37,7 +37,14 @@ interface ButtonProps {
 /**
  * Button component.
  */
-export class Button extends Component<ButtonProps> {
+export class Button extends Component<"Button", ButtonProps> {
+  /**
+   * Sets the name of this component.
+   */
+  public constructor(props: ButtonProps) {
+    super("Button", props);
+  }
+
   /**
    * Renders the button.
    */

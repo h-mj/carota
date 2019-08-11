@@ -1,7 +1,7 @@
 import { Provider } from "mobx-react";
 import * as React from "react";
 import { render } from "react-dom";
-import { Loader } from "./component/Loader";
+import { LoadingOverlay } from "./component/LoadingOverlay";
 import { NotificationContainer } from "./component/NotificationContainer";
 import { Main } from "./component/Main";
 import { Side } from "./component/Side";
@@ -13,7 +13,7 @@ render(
     <Theme>
       <Main />
       <Side />
-      <Loader />
+      <LoadingOverlay />
       <NotificationContainer />
     </Theme>
   </Provider>,

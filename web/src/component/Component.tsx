@@ -5,7 +5,7 @@ import { Anchor } from "./Anchor";
 import { Button } from "./Button";
 import { CheckBox } from "./CheckBox";
 import { Head } from "./Head";
-import { Loader } from "./Loader";
+import { LoadingOverlay } from "./LoadingOverlay";
 import { Main } from "./Main";
 import { Navigation } from "./Navigation";
 import { NotificationContainer } from "./NotificationContainer";
@@ -28,7 +28,7 @@ interface ComponentMap extends SceneMap {
   Button: Button;
   CheckBox: CheckBox;
   Head: Head;
-  Loader: Loader;
+  LoadingOverlay: LoadingOverlay;
   Main: Main;
   Navigation: Navigation;
   NotificationContainer: NotificationContainer;

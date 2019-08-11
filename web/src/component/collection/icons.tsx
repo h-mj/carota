@@ -17,10 +17,10 @@ const GREEN = "#43b02a";
  * Project logo SVG image.
  */
 export const Logo: React.FunctionComponent = () => (
-  <svg viewBox="0 0 24 10">
-    <circle cx="21" cy="5" r="3" fill="rgb(255, 130, 0)" />
-    <circle cx="14" cy="5" r="4" fill="rgb(255, 130, 0)" />
-    <circle cx="5" cy="5" r="5" fill="rgb(67, 176, 42)" />
+  <svg viewBox="0 0 24 10" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="5" cy="5" r="5" fill={GREEN} />
+    <circle cx="14" cy="5" r="4" fill={ORANGE} />
+    <circle cx="21" cy="5" r="3" fill={ORANGE} />
   </svg>
 );
 
@@ -28,18 +28,8 @@ export const Logo: React.FunctionComponent = () => (
  * Energy SVG icon.
  */
 export const Energy: React.FunctionComponent = () => (
-  <svg viewBox="0 0 42 68">
-    <path
-      d="
-      M 29,0
-      L 19,30
-      L 42,30
-      L 13,68
-      L 23,40
-      L 0,40
-      "
-      fill="rgb(67, 176, 42)"
-    />
+  <svg viewBox="0 0 42 68" xmlns="http://www.w3.org/2000/svg">
+    <path d="m29 0l-10 30h23l-29 38 10-28h-23" fill={GREEN} />
   </svg>
 );
 
@@ -47,50 +37,14 @@ export const Energy: React.FunctionComponent = () => (
  * Protein SVG icon.
  */
 export const Protein: React.FunctionComponent = () => (
-  <svg viewBox="0 0 42 68">
+  <svg viewBox="0 0 42 68" xmlns="http://www.w3.org/2000/svg">
     <path
-      d="
-      M 0,8
-      L 42,4
-      L 42,12
-      L 0,16
-
-      M 0,24
-      L 42,20
-      L 42,28
-      L 0,32
-
-      M 0,40
-      L 42,36
-      L 42,44
-      L 0,48
-
-      M 0,56
-      L 42,52
-      L 42,60
-      L 0,64
-      "
-      fill="rgb(107, 156, 222)"
+      d="m0 8l42-4v8l-42 4m0 8l42-4v8l-42 4m0 8l42-4v8l-42 4m0 8l42-4v8l-42 4"
+      fill="#6b9cde"
     />
-
     <path
-      d="
-      M 0,8
-      L 42,20
-      L 42,28
-      L 0,16
-
-      M 0,24
-      L 42,36
-      L 42,44
-      L 0,32
-
-      M 0,40
-      L 42,52
-      L 42,60
-      L 0,48
-      "
-      fill="rgb(155,199,255)"
+      d="m0 8l42 12v8l-42-12m0 8l42 12v8l-42-12m0 8l42 12v8l-42-12"
+      fill="#9bc7ff"
     />
   </svg>
 );
@@ -99,16 +53,8 @@ export const Protein: React.FunctionComponent = () => (
  * Fat SVG icon.
  */
 export const Fat: React.FunctionComponent = () => (
-  <svg viewBox="0 0 42 68">
-    <path
-      d="
-      M 21,3
-      L 3,33
-      A 21,21 0,1,0 39,33
-      L 21,3
-      "
-      fill="rgb(255, 130, 0)"
-    />
+  <svg viewBox="0 0 42 68" xmlns="http://www.w3.org/2000/svg">
+    <path d="m21 3l-18 30a21 21 0 1 0 36 0l-18-30" fill={ORANGE} />
   </svg>
 );
 
@@ -116,37 +62,10 @@ export const Fat: React.FunctionComponent = () => (
  * Carbohydrate SVG icon.
  */
 export const Carbohydrate: React.FunctionComponent = () => (
-  <svg viewBox="0 0 42 68">
+  <svg viewBox="0 0 42 68" xmlns="http://www.w3.org/2000/svg">
     <path
-      d="
-      M 21,28
-      A 20,20 0,0,0 21,0
-      A 20,20 0,0,0 21,28
-
-      M 0,16
-      A 20,20 0,0,0 20,36
-      A 20,20 0,0,0 0,16
-
-      M 0,32
-      A 20,20 0,0,0 20,52
-      A 20,20 0,0,0 0,32
-
-      M 0,48
-      A 20,20 0,0,0 20,68
-      A 20,20 0,0,0 0,48
-
-      M 42,16
-      A 20,20 0,0,0 22,36
-      A 20,20 0,0,0 42,16
-
-      M 42,32
-      A 20,20 0,0,0 22,52
-      A 20,20 0,0,0 42,32
-
-      M 42,48
-      A 20,20 0,0,0 22,68
-      A 20,20 0,0,0 42,48"
-      fill="rgb(250, 188, 31)"
+      d="m21 28a20 20 0 0 0 0 -28 20 20 0 0 0 0 28m-21-12a20 20 0 0 0 20 20 20 20 0 0 0 -20 -20m0 16a20 20 0 0 0 20 20 20 20 0 0 0 -20 -20m0 16a20 20 0 0 0 20 20 20 20 0 0 0 -20 -20m42-32a20 20 0 0 0 -20 20 20 20 0 0 0 20 -20m0 16a20 20 0 0 0 -20 20 20 20 0 0 0 20 -20m0 16a20 20 0 0 0 -20 20 20 20 0 0 0 20 -20"
+      fill="#fabc1f"
     />
   </svg>
 );

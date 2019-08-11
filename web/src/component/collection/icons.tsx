@@ -1,22 +1,21 @@
 import * as React from "react";
-import { styled } from "../../styling/theme";
 
 /**
  * Project logo SVG image.
  */
 export const Logo: React.FunctionComponent = () => (
-  <SVG viewBox="0 0 24 10">
+  <svg viewBox="0 0 24 10">
     <circle cx="21" cy="5" r="3" fill="rgb(255, 130, 0)" />
     <circle cx="14" cy="5" r="4" fill="rgb(255, 130, 0)" />
     <circle cx="5" cy="5" r="5" fill="rgb(67, 176, 42)" />
-  </SVG>
+  </svg>
 );
 
 /**
  * Energy SVG icon.
  */
 export const Energy: React.FunctionComponent = () => (
-  <SVG viewBox="0 0 42 68">
+  <svg viewBox="0 0 42 68">
     <path
       d="
       M 29,0
@@ -28,14 +27,14 @@ export const Energy: React.FunctionComponent = () => (
       "
       fill="rgb(67, 176, 42)"
     />
-  </SVG>
+  </svg>
 );
 
 /**
  * Protein SVG icon.
  */
 export const Protein: React.FunctionComponent = () => (
-  <SVG viewBox="0 0 42 68">
+  <svg viewBox="0 0 42 68">
     <path
       d="
       M 0,8
@@ -80,14 +79,14 @@ export const Protein: React.FunctionComponent = () => (
       "
       fill="rgb(155,199,255)"
     />
-  </SVG>
+  </svg>
 );
 
 /**
  * Fat SVG icon.
  */
 export const Fat: React.FunctionComponent = () => (
-  <SVG viewBox="0 0 42 68">
+  <svg viewBox="0 0 42 68">
     <path
       d="
       M 21,3
@@ -97,14 +96,14 @@ export const Fat: React.FunctionComponent = () => (
       "
       fill="rgb(255, 130, 0)"
     />
-  </SVG>
+  </svg>
 );
 
 /**
  * Carbohydrate SVG icon.
  */
 export const Carbohydrate: React.FunctionComponent = () => (
-  <SVG viewBox="0 0 42 68">
+  <svg viewBox="0 0 42 68">
     <path
       d="
       M 21,28
@@ -136,12 +135,5 @@ export const Carbohydrate: React.FunctionComponent = () => (
       A 20,20 0,0,0 42,48"
       fill="rgb(250, 188, 31)"
     />
-  </SVG>
+  </svg>
 );
-
-/**
- * SVG element with defined default width.
- */
-const SVG = styled.svg`
-  width: 2rem;
-`;

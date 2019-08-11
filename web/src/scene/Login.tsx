@@ -9,6 +9,7 @@ import { TextField } from "../component/TextField";
 import { Center } from "../component/collection/container";
 import { Controls, Form, Group, Title } from "../component/collection/form";
 import { Logo } from "../component/collection/icons";
+import { styled } from "../styling/theme";
 import { any, append, ErrorReasonsFor } from "../utility/form";
 import { from } from "../utility/shift";
 
@@ -115,7 +116,10 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
         <Head title={this.translation.title} />
         <Form noValidate={true} onSubmit={this.handleSubmit}>
           <Group>
-            <Logo />
+            <LogoContainer>
+              <Logo />
+            </LogoContainer>
+
             <Title>{this.translation.title}</Title>
           </Group>
 
@@ -186,3 +190,10 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
     this.reasons = append(result.kind === "Err" ? result.value : {}, error);
   };
 }
+
+/**
+ * Component that contains the logo.
+ */
+const LogoContainer = styled.div`
+  width: ${({ theme }) => theme.padding};
+`;

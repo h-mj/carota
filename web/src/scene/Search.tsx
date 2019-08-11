@@ -15,24 +15,19 @@ import { Food } from "../model/Food";
 import { from } from "../utility/shift";
 
 /**
- * Names of nutrients that will be included in food information table.
+ * Object that maps nutrient names to its icon components.
  */
-const NUTRIENTS = ["energy", "protein", "fat", "carbohydrate"] as const;
+const ICONS = {
+  energy: Energy,
+  fat: Fat,
+  protein: Protein,
+  carbohydrate: Carbohydrate
+} as const;
 
 /**
  * Union of information table nutrient names.
  */
-type Nutrient = typeof NUTRIENTS[number];
-
-/**
- * Object that maps nutrient names to its icon components.
- */
-const ICONS: Record<Nutrient, React.FunctionComponent> = {
-  carbohydrate: Carbohydrate,
-  energy: Energy,
-  fat: Fat,
-  protein: Protein
-};
+type Nutrient = keyof typeof ICONS;
 
 /**
  * `number.toLocaleString` function options.
@@ -170,15 +165,13 @@ const SearchResults = styled.div`
   padding: ${({ theme }) => theme.padding};
   box-sizing: border-box;
 
-  flex: 1 1 auto;
-
-  display: inline-grid;
+  display: grid;
   gap: calc(${({ theme }) => theme.padding} / 3);
   grid-template-columns: repeat(
     auto-fill,
     minmax(calc(3 * ${({ theme }) => theme.height}), 1fr)
   );
-  grid-template-rows: max-content;
+  grid-template-rows: min-content;
 `;
 
 /**
@@ -226,34 +219,32 @@ export class SearchResult extends Component<
       <ResultContainer onClick={this.handleClick}>
         <Name>{name}</Name>
 
-        <span>
-          {this.translation.per.replace("{unit}", this.translation.units[unit])}
-        </span>
+        <Stats>
+          <div>
+            {this.translation.per.replace(
+              "{unit}",
+              this.translation.units[unit]
+            )}
+          </div>
 
-        <div>
-          {NUTRIENTS.map(nutrient => {
-            const IconComponent = ICONS[nutrient];
+          {Object.entries(ICONS).map(([nutrient, IconComponent]) => (
+            <Nutrient key={nutrient}>
+              <Icon>
+                <IconComponent />
+              </Icon>
 
-            return (
-              <Nutrient key={nutrient}>
-                <Icon>
-                  <IconComponent />
-                </Icon>
+              <Amount>
+                {(
+                  100 * nutritionDeclaration[nutrient as Nutrient]
+                ).toLocaleString("et-EE", FORMAT_OPTIONS)}
+              </Amount>
 
-                <Amount>
-                  {(100 * nutritionDeclaration[nutrient]).toLocaleString(
-                    "et-EE",
-                    FORMAT_OPTIONS
-                  )}
-                </Amount>
-
-                <Unit>
-                  {this.translation.units[nutrient === "energy" ? "kcal" : "g"]}
-                </Unit>
-              </Nutrient>
-            );
-          })}
-        </div>
+              <Unit>
+                {this.translation.units[nutrient === "energy" ? "kcal" : "g"]}
+              </Unit>
+            </Nutrient>
+          ))}
+        </Stats>
       </ResultContainer>
     );
   }
@@ -271,10 +262,10 @@ export class SearchResult extends Component<
 }
 
 /**
- * Component that contains found food item information.
+ * Component that contains information about a food item.
  */
 const ResultContainer = styled.div`
-  min-height: calc(3 * ${({ theme }) => theme.height});
+  min-height: 11.5rem;
 
   display: flex;
   flex-direction: column;
@@ -289,6 +280,19 @@ const ResultContainer = styled.div`
 
   & > * {
     margin-bottom: calc(${({ theme }) => theme.padding} / 3);
+  }
+
+  & > *:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+/**
+ * Food nutritional stats wrapper.
+ */
+const Stats = styled.div`
+  & > * {
+    margin-bottom: calc(${({ theme }) => theme.padding} / 6);
   }
 
   & > *:last-child {
@@ -322,15 +326,20 @@ const Name = styled.div`
 const Nutrient = styled.div`
   display: flex;
   align-items: center;
+
+  & > * {
+    width: 100%;
+  }
 `;
 
 /**
  * Nutrient icon wrapper that resizes the icon inside.
  */
-const Icon = styled.div`
+const Icon = styled.span`
+  height: calc(${({ theme }) => theme.padding} / 2);
+
   & > * {
-    width: calc(${({ theme }) => theme.padding} / 2);
-    height: calc(${({ theme }) => theme.padding} / 2);
+    height: 100%;
   }
 `;
 
@@ -348,7 +357,6 @@ const Amount = styled.span`
  * Displays nutrient amount unit.
  */
 const Unit = styled.span`
-  width: ${({ theme }) => theme.height};
   color: ${({ theme }) => theme.secondaryColor};
-  text-align: center;
+  text-align: right;
 `;

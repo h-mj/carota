@@ -51,8 +51,8 @@ export const Group = styled.div`
  * Component that displays title text.
  */
 export const Title = styled.div`
-  line-height: ${({ theme }) => theme.height};
   color: ${({ theme }) => theme.primaryColor};
   font-size: 1.5rem;
+  line-height: 1.5rem;
   text-align: center;
 `;

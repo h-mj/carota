@@ -8,6 +8,6 @@ import { NotFoundError } from "../error/NotFoundError";
  * middleware is reached, then none of the previously run functions handled the
  * request.
  */
-export const absence = (): Middleware => async () => {
+export const absence = (): Middleware => async (): Promise<void> => {
   throw new NotFoundError();
 };

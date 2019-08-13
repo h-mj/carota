@@ -14,7 +14,7 @@ import { UnauthorizedError } from "../../error/UnauthorizedError";
  *
  * @throws `BadRequestError` if `bodyParser` fails to parse the body.
  */
-export const bodyParserOnError = () => {
+export const bodyParserOnError = (): never => {
   const message = "Invalid JSON object in the request body message.";
 
   throw new BadRequestError(message, {
@@ -149,7 +149,9 @@ const TYPE_TO_MESSAGE: Readonly<{ [type: string]: string }> = {
  *
  * @param error Given `ValidationError`.
  */
-export const createValidationError = (error: ValidationError) => {
+export const createValidationError = (
+  error: ValidationError
+): BadRequestError => {
   const details: ErrorDetail[] = [];
 
   for (const detail of error.details) {
@@ -210,7 +212,9 @@ export const createValidationError = (error: ValidationError) => {
  *
  * @param fields One or more invalid fields.
  */
-export const createInvalidCredentialsError = (...paths: string[][]) => {
+export const createInvalidCredentialsError = (
+  ...paths: string[][]
+): UnauthorizedError => {
   const message = `Incorrect ${paths
     .map(path => path[path.length - 1])
     .join(", ")
@@ -237,7 +241,7 @@ export const createIdNotFoundError = (
   id: string,
   entity: string,
   path: string[]
-) => {
+): BadRequestError => {
   const message = `${entity} with ID "${id}" does not exist.`;
 
   return new BadRequestError(message, {
@@ -252,7 +256,9 @@ export const createIdNotFoundError = (
  *
  * @param field Field, which value must be unique.
  */
-export const createUniqueConstraintError = (path: string[]) => {
+export const createUniqueConstraintError = (
+  path: string[]
+): BadRequestError => {
   const message = `Field "${path[path.length - 1]}" must be unique.`;
 
   return new BadRequestError(message, {

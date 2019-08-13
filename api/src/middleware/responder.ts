@@ -6,7 +6,10 @@ import { InternalServerErrorError } from "../error/InternalServerError";
  * Returns a middleware that wraps the whole application, handles all thrown
  * errors and creates a response to the request.
  */
-export const responder = (): Middleware => async (context, next) => {
+export const responder = (): Middleware => async (
+  context,
+  next
+): Promise<void> => {
   try {
     await next();
 

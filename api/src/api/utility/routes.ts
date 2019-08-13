@@ -27,7 +27,7 @@ export const defineNoAuth = <
   action: TAction,
   schema: Schema<TController, TAction>,
   middleware: Middleware<ValidationState<TController, TAction>>
-) => {
+): void => {
   router.post(`/${controller}/${action}`, validator(schema), middleware);
 };
 
@@ -53,7 +53,7 @@ export const define = <
   middleware: Middleware<
     AuthenticationState & ValidationState<TController, TAction>
   >
-) => {
+): void => {
   router.post(
     `/${controller}/${action}`,
     authenticator(),

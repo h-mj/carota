@@ -11,7 +11,7 @@ import * as mount from "koa-mount";
 import { api } from "./api";
 import { serve } from "./serve";
 
-async function main() {
+async function main(): Promise<void> {
   await createConnection();
 
   let invitation = await Invitation.findOne();
@@ -33,7 +33,7 @@ async function main() {
     .use(mount("/api", api))
     .use(mount(serve))
     .use(absence())
-    .listen(process.env.PORT!);
+    .listen(process.env.PORT || 3000);
 }
 
 main();

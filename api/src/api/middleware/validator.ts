@@ -70,22 +70,20 @@ export const validator = <
 ): Middleware<ValidationState<TController, TAction>> => async (
   context,
   next
-) => {
-  if (schema === undefined) {
-    return next();
+): Promise<void> => {
+  if (schema !== undefined) {
+    const { error, value } = Joi.validate<Body<TController, TAction>>(
+      context.request.body,
+      schema,
+      VALIDATION_OPTIONS
+    );
+
+    if (error !== null) {
+      throw createValidationError(error);
+    }
+
+    context.state.body = value;
   }
 
-  const { error, value } = Joi.validate<Body<TController, TAction>>(
-    context.request.body,
-    schema,
-    VALIDATION_OPTIONS
-  );
-
-  if (error !== null) {
-    throw createValidationError(error);
-  }
-
-  context.state.body = value;
-
-  return next();
+  await next();
 };

@@ -1,8 +1,9 @@
 import { Middleware } from "koa";
-import { ForbiddenError } from "../../error/ForbiddenError";
 import { sign, verify } from "jsonwebtoken";
 import { Account } from "../../entity/Account";
 import { BadRequestError } from "../../error/BadRequestError";
+import { ForbiddenError } from "../../error/ForbiddenError";
+import { InternalServerErrorError } from "../../error/InternalServerError";
 
 /**
  * Type of payload within JWT.
@@ -30,8 +31,29 @@ const createPayload = (account: Account): Payload => {
  *
  * @param account Account from which payload is created.
  */
-export const signToken = (account: Account) => {
-  return sign(createPayload(account), process.env.SECRET!);
+export const signToken = (account: Account): string => {
+  if (process.env.SECRET === undefined) {
+    throw new InternalServerErrorError(
+      'Environment variable "SECRET" is undefined'
+    );
+  }
+
+  return sign(createPayload(account), process.env.SECRET);
+};
+
+/**
+ * Verifies JWT and returns its payload.
+ *
+ * @param token JWT which will be verified.
+ */
+const verifyToken = (token: string): Payload => {
+  if (process.env.SECRET === undefined) {
+    throw new InternalServerErrorError(
+      'Environment variable "SECRET" is undefined'
+    );
+  }
+
+  return verify(token, process.env.SECRET) as Payload;
 };
 
 /**
@@ -57,7 +79,7 @@ export interface AuthenticationState {
 export const authenticator = (): Middleware<AuthenticationState> => async (
   context,
   next
-) => {
+): Promise<void> => {
   const header = context.request.get("Authorization");
 
   if (header === "") {
@@ -85,7 +107,7 @@ export const authenticator = (): Middleware<AuthenticationState> => async (
   let payload: Payload;
 
   try {
-    payload = verify(parts[1], process.env.SECRET!) as Payload;
+    payload = verifyToken(parts[1]) as Payload;
   } catch (error) {
     throw new ForbiddenError(
       'Token provided in header field "Authorization" is incorrect.',

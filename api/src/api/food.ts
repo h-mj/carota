@@ -57,7 +57,7 @@ define(foodRouter, "food", "save", SAVE_SCHEMA, async context => {
   } = context.state.body;
 
   if (id !== undefined && (await Food.findOne({ id })) === undefined) {
-    throw createIdNotFoundError(id!, Food.name, ["id"]);
+    throw createIdNotFoundError(id, Food.name, ["id"]);
   }
 
   const food = Food.create({
@@ -79,7 +79,7 @@ define(foodRouter, "food", "save", SAVE_SCHEMA, async context => {
  *
  * @param query Search query string.
  */
-const matches = (query: string) => (food: Food) => {
+const matches = (query: string) => (food: Food): boolean => {
   const name = food.name.toLowerCase();
 
   return (

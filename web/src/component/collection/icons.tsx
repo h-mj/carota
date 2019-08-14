@@ -76,8 +76,8 @@ export const Carbohydrate: React.FunctionComponent = () => (
 export const Loading: React.FunctionComponent = () => (
   <Circles width={24} height={10}>
     <Circle offset={0} radius={5} color={GREEN} keyframes={scaleIn} />
-    <Circle offset={0} radius={5} color={GREEN} keyframes={MOVE_5} />
-    <Circle offset={10} radius={4} color={ORANGE} keyframes={MOVE_4} />
+    <Circle offset={0} radius={5} color={GREEN} keyframes={move(5, ORANGE)} />
+    <Circle offset={10} radius={4} color={ORANGE} keyframes={move(4, ORANGE)} />
     <Circle offset={18} radius={3} color={ORANGE} keyframes={scaleOut} />
   </Circles>
 );
@@ -107,8 +107,8 @@ interface CirclesProps {
  */
 const Circles = styled.div<CirclesProps>`
   position: relative;
-  width: calc(${props => props.width} * ${UNIT});
-  height: calc(${props => props.height} * ${UNIT});
+  width: calc(${({ width }) => width} * ${UNIT});
+  height: calc(${({ height }) => height} * ${UNIT});
 `;
 
 /**
@@ -137,57 +137,37 @@ interface CircleProps {
 }
 
 /**
- * Returns keyframes that change circle radius from `radius` to `radius - 1` and background color from `from` to `to`.
+ * Returns keyframes that change circle radius to `radius - 1` and background to `to`.
  *
  * @param radius Initial circle radius.
- * @param from Initial circle background color.
  * @param to Final circle background color.
  */
-const move = (radius: number, from: string, to: string) => keyframes`
-  from {
-    transform: translateX(0);
-    top: calc((5 - ${radius}) * ${UNIT});
-    width: calc(${2 * radius} * ${UNIT});
-    height: calc(${2 * radius} * ${UNIT});
-    background-color: ${from};
-  }
-
+const move = (radius: number, to: string) => keyframes`
   33% {
     background-color: ${to};
   }
 
   to {
-    transform: translateX(calc(${2 * radius} * ${UNIT}));
-    top: calc((5 - ${radius - 1}) * ${UNIT});
-    width: calc(${2 * radius - 2} * ${UNIT});
-    height: calc(${2 * radius - 2} * ${UNIT});
+    transform: translate(calc(${2 * radius} * ${UNIT}), ${UNIT});
+    width: calc(${2 * (radius - 1)} * ${UNIT});
+    height: calc(${2 * (radius - 1)} * ${UNIT});
     background-color: ${to};
   }
 `;
-
-/**
- * Move animation keyframes of circle with radius 5.
- */
-const MOVE_5 = move(5, GREEN, ORANGE);
-
-/**
- * Move animation keyframes of circle with radius 4.
- */
-const MOVE_4 = move(4, ORANGE, ORANGE);
 
 /**
  * Circle component that either scales in or out or moves to the right.
  */
 const Circle = styled.div<CircleProps>`
   position: absolute;
-  top: calc((5 - ${({ radius }) => radius}) * ${UNIT});
-  left: calc(${props => props.offset} * ${UNIT});
+  top: calc(${({ radius }) => 5 - radius} * ${UNIT});
+  left: calc(${({ offset }) => offset} * ${UNIT});
 
   width: calc(${({ radius }) => 2 * radius} * ${UNIT});
   height: calc(${({ radius }) => 2 * radius} * ${UNIT});
 
   background-color: ${({ color }) => color};
-  border-radius: calc(${props => props.radius} * ${UNIT});
+  border-radius: 50%;
 
   animation: ${({ keyframes }) => keyframes} 0.5s infinite forwards;
 `;

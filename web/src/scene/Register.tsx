@@ -248,7 +248,7 @@ export class Register extends SceneComponent<
       result.kind === "Ok"
         ? this.props.auth!.register({
             ...result.value,
-            invitationId: this.props.parameters!.invitationId
+            invitationId: this.props.scene.parameters!.invitationId
           })
         : undefined
     );
@@ -265,7 +265,7 @@ export class Register extends SceneComponent<
    */
   @action
   private verify = async () => {
-    const { parameters } = this.props;
+    const { parameters } = this.props.scene;
 
     if (
       parameters === undefined ||

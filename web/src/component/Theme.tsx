@@ -19,7 +19,7 @@ export class Theme extends Component {
     return (
       <ThemeProvider theme={LIGHT}>
         <>
-          <GlobalStyle hideOverflow={this.props.views!.hideOverflow} />
+          <GlobalStyle />
           {this.props.children}
         </>
       </ThemeProvider>
@@ -28,19 +28,9 @@ export class Theme extends Component {
 }
 
 /**
- * Global style properties.
- */
-interface GlobalStyleProps {
-  /**
-   * Whether or not body overflow must be hidden.
-   */
-  hideOverflow: boolean;
-}
-
-/**
  * Global style that contains styling defined in global stylesheet.
  */
-const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
+const GlobalStyle = createGlobalStyle`
   @import url("https://rsms.me/inter/inter.css");
 
   html {
@@ -58,16 +48,9 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
 
   body {
     margin: 0;
-    overflow: ${props => (props.hideOverflow ? "hidden" : "auto")};
   }
 
   html, body, #root {
     height: 100%;
-  }
-
-  #root {
-    position: relative;
-    display: flex;
-    flex-direction: column;
   }
 `;

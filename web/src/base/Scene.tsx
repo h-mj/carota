@@ -96,7 +96,7 @@ export const SCENE_COMPONENTS = {
 /**
  * Union of scene positions.
  */
-export type ScenePosition = "main" | "side";
+export type RenderPosition = "center" | "left";
 
 /**
  * Object that holds the information needed to render a scene.
@@ -105,48 +105,50 @@ export class Scene<TSceneName extends SceneNames> {
   /**
    * Scene name.
    */
-  public name: TSceneName;
+  public readonly name: TSceneName;
 
   /**
    * Scene route parameters.
    */
-  public parameters: RouteParameters<TSceneName>;
+  public readonly parameters: RouteParameters<TSceneName>;
 
   /**
    * Scene component props.
    */
-  public props: SceneComponentProps<TSceneName>;
+  public readonly props: SceneComponentProps<TSceneName>;
 
   /**
-   * Creates a new instance of `SceneContext`.
+   * Scene rendering position.
+   */
+  public readonly position: RenderPosition;
+
+  /**
+   * Creates a new instance of `Scene`.
    *
    * @param name Scene name.
    * @param parameters Scene route parameters.
    * @param props Scene component props.
+   * @param position Scene rendering position.
    */
   public constructor(
     name: TSceneName,
     parameters: RouteParameters<TSceneName>,
-    props: SceneComponentProps<TSceneName>
+    props: SceneComponentProps<TSceneName>,
+    position: RenderPosition = "center"
   ) {
     this.name = name;
     this.parameters = parameters;
     this.props = props;
+    this.position = position;
   }
 
   /**
    * Renders the scene component.
    */
-  public render(position: ScenePosition) {
+  public render() {
     const SceneComponent: typeof React.Component = SCENE_COMPONENTS[this.name];
 
-    return (
-      <SceneComponent
-        parameters={this.parameters}
-        position={position}
-        {...this.props}
-      />
-    );
+    return <SceneComponent scene={this} {...this.props} />;
   }
 
   /**
@@ -189,8 +191,7 @@ export class Scene<TSceneName extends SceneNames> {
   }
 
   /**
-   * Context of scene on index path and to which is redirected to after
-   * registration.
+   * Scene on index path and to which is redirected to after registration.
    */
   public static HOME: Readonly<Scenes> = new Scene("Home", {}, {});
 
@@ -238,9 +239,9 @@ export class Scene<TSceneName extends SceneNames> {
       }
 
       return new Scene(
-        ROUTES[route as keyof typeof ROUTES].name,
+        ROUTES[route as keyof typeof ROUTES].name as SceneNames,
         parameters,
-        {}
+        {} as SceneComponentProps<SceneNames>
       ) as Scenes;
     }
 

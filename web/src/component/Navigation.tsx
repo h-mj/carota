@@ -29,7 +29,7 @@ export class Navigation extends TranslatedComponent<
    */
   public render() {
     const {
-      main: { name },
+      root: { name },
       navigation
     } = this.props.views!;
 

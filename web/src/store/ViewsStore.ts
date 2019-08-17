@@ -1,7 +1,7 @@
 import { Languages } from "api";
 import { action, computed, observable } from "mobx";
 
-import { Scene, Scenes } from "../base/Scene";
+import { RenderPosition, Scene, Scenes } from "../base/Scene";
 import { SceneComponentProps, SceneNames } from "../base/SceneComponent";
 import {
   Notification,
@@ -34,7 +34,7 @@ const NO_AUTHENTICATION_SCENE_NAMES: readonly SceneNames[] = [
 
 /**
  * Store that stores information about current state of the view, including
- * language, main and side scenes, active notifications, and waiting reasons.
+ * language, active scenes, active notifications, and waiting reasons.
  *
  * It is also responsible for retrieving correct scene name and parameters based
  * on current URL and updating current URL on redirection.
@@ -46,14 +46,9 @@ export class ViewsStore {
   @observable private _language: Languages = "English";
 
   /**
-   * Main scene.
+   * Array of active scenes.
    */
-  @observable private _main: Scenes = Scene.UNKNOWN;
-
-  /**
-   * Side scene.
-   */
-  @observable private _side?: Scenes;
+  @observable private _scenes: Scenes[];
 
   /**
    * Array of notifications.
@@ -71,12 +66,14 @@ export class ViewsStore {
   private _rootStore: RootStore;
 
   /**
-   * Creates a new instance of `ScenesStore`, updates main scene based on
-   * current URL and adds a history state pop listener that also updates main
+   * Creates a new instance of `ScenesStore`, updates root scene based on
+   * current URL and adds a history state pop listener that also updates root
    * scene based on changed pathname.
    */
   public constructor(rootStore: RootStore) {
+    this._scenes = [];
     this._rootStore = rootStore;
+
     this.update();
     window.addEventListener("popstate", () => this.update(), false);
   }
@@ -90,18 +87,17 @@ export class ViewsStore {
   }
 
   /**
-   * Returns main scene object.
+   * Returns an array of active scenes.
    */
-  @computed
-  public get main() {
-    return this._main;
+  public get scenes() {
+    return this._scenes;
   }
 
   /**
-   * Returns side scene object.
+   * Returns root scene.
    */
-  public get side() {
-    return this._side;
+  public get root() {
+    return this._scenes[0];
   }
 
   /**
@@ -121,20 +117,12 @@ export class ViewsStore {
   }
 
   /**
-   * Whether or not body overflow should be hidden so that user can not scroll.
-   */
-  @computed
-  public get hideOverflow() {
-    return this.loading || this.side !== undefined;
-  }
-
-  /**
    * Returns a list of navigable scenes that will be included in
    * navigation bar.
    */
   @computed
   public get navigation() {
-    if (NO_AUTHENTICATION_SCENE_NAMES.includes(this._main.name)) {
+    if (NO_AUTHENTICATION_SCENE_NAMES.includes(this.root.name)) {
       return undefined;
     }
 
@@ -159,9 +147,9 @@ export class ViewsStore {
   }
 
   /**
-   * Sets main scene.
+   * Sets root scene.
    *
-   * This function also resets side scene.
+   * This method also removes all active scenes except the root scene.
    *
    * @param scene Scene that will be new main scene.
    */
@@ -169,15 +157,14 @@ export class ViewsStore {
   public redirect(scene: Scenes) {
     const { authenticated } = this._rootStore.auth;
 
-    // If user authentication status is the same as scene's authentication
-    // requirement.
-    if (!authenticated === NO_AUTHENTICATION_SCENE_NAMES.includes(scene.name)) {
-      this._main = scene;
-    } else {
-      this._main = authenticated ? Scene.UNKNOWN : Scene.GATEWAY;
+    // If user authentication status is opposite to scene's authentication
+    // requirement, show unknown scene if user is authenticated, otherwise show
+    // gateway (login) scene.
+    if (authenticated === NO_AUTHENTICATION_SCENE_NAMES.includes(scene.name)) {
+      scene = authenticated ? Scene.UNKNOWN : Scene.GATEWAY;
     }
 
-    this.refocus();
+    this._scenes = [scene];
 
     const url = scene.getUrl();
 
@@ -211,23 +198,29 @@ export class ViewsStore {
   }
 
   /**
-   * Creates and sets a side scene.
+   * Adds a new active scene on top of the scenes array.
    *
-   * @param name Side scene name.
+   * @param position Render position where scene will be rendered to.
+   * @param name Name of the scene.
    * @param props Scene component props.
    */
-  public aside<TSceneName extends SceneNames>(
+  public push<TSceneName extends SceneNames>(
+    position: RenderPosition,
     name: TSceneName,
     props: SceneComponentProps<TSceneName>
   ): void {
-    this._side = new Scene(name, undefined, props) as Scenes;
+    this._scenes.push(new Scene(name, undefined, props, position) as Scenes);
   }
 
   /**
-   * Hides all scenes except main.
+   * Hides all scenes that are before `scene` in active scene stack including the scene itself.
    */
-  public refocus() {
-    this._side = undefined;
+  public pop(scene: Scenes) {
+    if (!this._scenes.includes(scene)) {
+      return;
+    }
+
+    while (this._scenes.pop() !== scene);
   }
 
   /**
@@ -243,7 +236,7 @@ export class ViewsStore {
   public notify<TNotificationName extends NotificationNames>(
     name: TNotificationName,
     parameters: NotificationMessageParameters<TNotificationName>,
-    timeout = 5
+    timeout = 0
   ) {
     const notification = new Notification(name, parameters);
 

@@ -5,8 +5,8 @@ import * as React from "react";
 import { Component } from "../base/Component";
 import { DURATION, fadeIn, fadeOut } from "../styling/animations";
 import { styled } from "../styling/theme";
-import { Overlay } from "./collection/container";
 import { Loading } from "./collection/icons";
+import { Overlay } from "./Overlay";
 
 /**
  * Component that is shown when ViewsStore.load` function is awaiting some
@@ -104,8 +104,7 @@ const Container = styled(Overlay)<Container>`
   justify-content: center;
   align-items: center;
 
-  background-color: ${({ theme }) => theme.backgroundColor};
-  opacity: 0.95;
+  background-color: ${({ theme }) => theme.translucentBackgroundColor};
 
   animation: ${props => (props.active ? fadeIn : fadeOut)} ${DURATION}s forwards;
 

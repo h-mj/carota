@@ -14,7 +14,7 @@ interface AnchorProps {
   className?: string;
 
   /**
-   * Context of a scene to which this anchor will redirect to.
+   * Scene to which this anchor will redirect to.
    */
   scene: Scenes;
 }

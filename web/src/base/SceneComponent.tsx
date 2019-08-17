@@ -1,4 +1,4 @@
-import { RouteParameters, SCENE_COMPONENTS, ScenePosition } from "./Scene";
+import { SCENE_COMPONENTS, Scene } from "./Scene";
 import { TranslatedComponent } from "./TranslatedComponent";
 
 /**
@@ -11,14 +11,9 @@ export type SceneNames = keyof typeof SCENE_COMPONENTS;
  */
 export interface DefaultSceneComponentProps<TSceneName extends SceneNames> {
   /**
-   * Parameters of this scene.
+   * Scene of this component.
    */
-  parameters: RouteParameters<TSceneName>;
-
-  /**
-   * Position where the scene will be rendered to.
-   */
-  position: ScenePosition;
+  scene: Scene<TSceneName>;
 }
 
 /**

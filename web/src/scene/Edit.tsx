@@ -347,7 +347,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
     );
 
     if (result.kind === "Ok" && error === undefined) {
-      this.props.views!.refocus();
+      this.props.views!.pop(this.props.scene);
     }
 
     this.reasons = append(result.kind === "Err" ? result.value : {}, error);

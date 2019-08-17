@@ -142,7 +142,7 @@ export class Search extends SceneComponent<"Search"> {
    */
   @action
   private showEditor = () => {
-    this.props.views!.aside("Edit", {});
+    this.props.views!.push("left", "Edit", {});
   };
 }
 
@@ -259,7 +259,7 @@ export class SearchResult extends TranslatedComponent<
    */
   @action
   private handleClick: React.MouseEventHandler<HTMLDivElement> = () => {
-    this.props.views!.aside("Edit", {
+    this.props.views!.push("left", "Edit", {
       food: this.props.food
     });
   };

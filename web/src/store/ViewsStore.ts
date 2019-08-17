@@ -236,7 +236,7 @@ export class ViewsStore {
   public notify<TNotificationName extends NotificationNames>(
     name: TNotificationName,
     parameters: NotificationMessageParameters<TNotificationName>,
-    timeout = 0
+    timeout = 5
   ) {
     const notification = new Notification(name, parameters);
 

@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { StyleProps, css, styled } from "../styling/theme";
+import { StyleProps, styled } from "../styling/theme";
 
 /**
  * Input wrapper component props.
@@ -58,11 +58,6 @@ interface InputWrapperProps {
   required?: boolean;
 
   /**
-   * Whether or not use underline style.
-   */
-  underline?: boolean;
-
-  /**
    * Whether or not wrap label and given children inside <label> element.
    */
   withLabel?: boolean;
@@ -80,19 +75,13 @@ export const InputWrapper: React.FunctionComponent<InputWrapperProps> = ({
   invalid,
   label,
   prepend,
-  underline,
   withLabel
 }) => {
   const LabelComponent = withLabel ? Label : React.Fragment;
 
   return (
     <Wrapper>
-      <Field
-        active={active}
-        disabled={disabled}
-        invalid={invalid}
-        underline={underline}
-      >
+      <Field active={active} disabled={disabled} invalid={invalid}>
         {prepend}
         <LabelComponent>
           {label !== undefined && (
@@ -123,85 +112,9 @@ const Wrapper = styled.div`
 `;
 
 /**
- * Field component props.
- */
-interface FieldProps extends StyleProps {
-  /**
-   * Whether or not underline field style should be used.
-   */
-  underline?: boolean;
-}
-
-/**
- * Default style of field component.
- */
-const defaultStyle = css<FieldProps>`
-  border: solid 1px
-    ${({ active, invalid, theme }) =>
-      invalid ? theme.red : active ? theme.orange : theme.borderColor};
-  border-radius: ${({ theme }) => theme.borderRadius};
-  box-shadow: ${({ active, invalid, theme }) =>
-    invalid
-      ? `inset 0 0 0 1px ${theme.red}`
-      : active
-      ? `inset 0 0 0 1px ${theme.orange}`
-      : "none"};
-`;
-
-/**
- * Underline style of field component.
- */
-const underlineStyle = css<FieldProps>`
-  border-top: solid 1px
-    ${({ active, disabled, invalid, theme }) =>
-      invalid
-        ? theme.red
-        : active
-        ? theme.orange
-        : disabled
-        ? theme.disabledBackgroundColor
-        : theme.backgroundColor};
-
-  border-bottom: solid 1px
-    ${({ active, invalid, theme }) =>
-      invalid ? theme.red : active ? theme.orange : theme.borderColor};
-
-  box-shadow: ${({ active, invalid, theme }) =>
-    invalid
-      ? `0 1px 0 0 ${theme.red}, 0 -1px 0 0 ${theme.red}`
-      : active
-      ? `0 1px 0 0 ${theme.orange}, 0 -1px 0 0 ${theme.orange}`
-      : "none"};
-
-  &:first-child {
-    border-top: 0;
-    border-radius: ${({ theme }) =>
-      `${theme.borderRadius} ${theme.borderRadius} 0 0`};
-    box-shadow: ${({ active, invalid, theme }) =>
-      invalid
-        ? `0 1px 0 0 ${theme.red}`
-        : active
-        ? `0 1px 0 0 ${theme.orange}`
-        : "none"};
-  }
-
-  &:last-child:not(:first-child) {
-    border-bottom: 0;
-    border-radius: ${({ theme }) =>
-      `0 0 ${theme.borderRadius} ${theme.borderRadius}`};
-    box-shadow: ${({ active, invalid, theme }) =>
-      invalid
-        ? `0 -1px 0 0 ${theme.red}`
-        : active
-        ? `0 -1px 0 0 ${theme.orange}`
-        : "none"};
-  }
-`;
-
-/**
  * Field component that usually contains label and an input component.
  */
-const Field = styled.div<FieldProps>`
+const Field = styled.div<StyleProps>`
   position: relative;
   z-index: ${({ active, invalid }) => (active ? 2 : invalid ? 1 : 0)};
 
@@ -214,9 +127,18 @@ const Field = styled.div<FieldProps>`
     disabled ? theme.disabledBackgroundColor : theme.backgroundColor};
   box-sizing: border-box;
 
-  transition: ${({ theme }) => theme.transition};
+  border: solid 1px
+    ${({ active, invalid, theme }) =>
+      invalid ? theme.red : active ? theme.orange : theme.borderColor};
+  border-radius: ${({ theme }) => theme.borderRadius};
+  box-shadow: ${({ active, invalid, theme }) =>
+    invalid
+      ? `inset 0 0 0 1px ${theme.red}`
+      : active
+      ? `inset 0 0 0 1px ${theme.orange}`
+      : "none"};
 
-  ${({ underline }) => (underline ? underlineStyle : defaultStyle)};
+  transition: ${({ theme }) => theme.transition};
 
   & > * {
     margin-left: calc(${({ theme }) => theme.padding} / 3);

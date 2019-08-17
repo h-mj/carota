@@ -68,11 +68,6 @@ interface CheckBoxProps<TName extends string> {
   required?: boolean;
 
   /**
-   * Whether or not should field use underline style.
-   */
-  underline?: boolean;
-
-  /**
    * Whether or not check box is checked.
    */
   value: boolean;
@@ -96,14 +91,7 @@ export class CheckBox<TName extends string = string> extends Component<
    * the check box inside `InputWrapper` component.
    */
   public render() {
-    const {
-      basic,
-      disabled,
-      errorMessage,
-      invalid,
-      label,
-      underline
-    } = this.props;
+    const { basic, disabled, errorMessage, invalid, label } = this.props;
 
     if (basic) {
       return this.renderCheckBox();
@@ -117,7 +105,6 @@ export class CheckBox<TName extends string = string> extends Component<
         input={this.renderCheckBox()}
         invalid={invalid}
         label={label}
-        underline={underline}
         withLabel={true}
       />
     );

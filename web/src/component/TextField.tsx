@@ -101,11 +101,6 @@ interface TextFieldProps<TName extends string, TOptional extends boolean> {
   unit?: string;
 
   /**
-   * Whether or not use underline style.
-   */
-  underline?: boolean;
-
-  /**
    * Text field value.
    */
   value: TOptional extends true ? string | undefined : string;
@@ -129,15 +124,7 @@ export class TextField<
    * components.
    */
   public render() {
-    const {
-      basic,
-      errorMessage,
-      disabled,
-      invalid,
-      label,
-      value,
-      underline
-    } = this.props;
+    const { basic, errorMessage, disabled, invalid, label, value } = this.props;
 
     if (basic) {
       return this.renderInput();
@@ -152,7 +139,6 @@ export class TextField<
         invalid={invalid}
         label={label}
         prepend={this.renderCheckBox()}
-        underline={underline}
         withLabel={true}
       />
     );

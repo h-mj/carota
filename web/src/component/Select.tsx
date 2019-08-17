@@ -69,11 +69,6 @@ interface SelectProps<TName extends string, TValues extends string> {
   required?: boolean;
 
   /**
-   * Whether or not use underline style.
-   */
-  underline?: boolean;
-
-  /**
    * Selected option value.
    */
   value: TValues | undefined;
@@ -97,14 +92,7 @@ export class Select<
    * components.
    */
   public render() {
-    const {
-      basic,
-      disabled,
-      errorMessage,
-      invalid,
-      label,
-      underline
-    } = this.props;
+    const { basic, disabled, errorMessage, invalid, label } = this.props;
 
     if (basic) {
       return this.renderOptions();
@@ -118,7 +106,6 @@ export class Select<
         input={this.renderOptions()}
         invalid={invalid}
         label={label}
-        underline={underline}
       />
     );
   }

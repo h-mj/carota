@@ -157,6 +157,8 @@ export class ViewsStore {
   public redirect(scene: Scenes) {
     const { authenticated } = this._rootStore.auth;
 
+    const url = scene.getUrl();
+
     // If user authentication status is opposite to scene's authentication
     // requirement, show unknown scene if user is authenticated, otherwise show
     // gateway (login) scene.
@@ -165,8 +167,6 @@ export class ViewsStore {
     }
 
     this._scenes = [scene];
-
-    const url = scene.getUrl();
 
     if (url !== window.location.pathname) {
       window.history.pushState(null, "", url);
@@ -194,7 +194,7 @@ export class ViewsStore {
       return this.home();
     }
 
-    this.redirect(Scene.from(window.location.pathname) || Scene.UNKNOWN);
+    this.redirect(scene || Scene.UNKNOWN);
   }
 
   /**

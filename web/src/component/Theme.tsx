@@ -1,7 +1,8 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Component } from "./Component";
-import { createGlobalStyle, LIGHT, ThemeProvider } from "../styling/theme";
+
+import { Component } from "../base/Component";
+import { LIGHT, ThemeProvider, createGlobalStyle } from "../styling/theme";
 
 /**
  * Renders `GlobalStyle` component and renders it's children wrapped in
@@ -9,14 +10,7 @@ import { createGlobalStyle, LIGHT, ThemeProvider } from "../styling/theme";
  */
 @inject("views")
 @observer
-export class Theme extends Component<"Theme"> {
-  /**
-   * Sets the name of this component.
-   */
-  public constructor(props: {}) {
-    super("Theme", props);
-  }
-
+export class Theme extends Component {
   /**
    * Renders `ThemeProvider` that provides theme definition to all children
    * components alongside global theme component.

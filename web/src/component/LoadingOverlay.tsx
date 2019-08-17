@@ -1,11 +1,12 @@
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Component } from "./Component";
-import { Overlay } from "./collection/container";
-import { Loading } from "./collection/icons";
+
+import { Component } from "../base/Component";
 import { DURATION, fadeIn, fadeOut } from "../styling/animations";
 import { styled } from "../styling/theme";
+import { Overlay } from "./collection/container";
+import { Loading } from "./collection/icons";
 
 /**
  * Component that is shown when ViewsStore.load` function is awaiting some
@@ -13,7 +14,7 @@ import { styled } from "../styling/theme";
  */
 @inject("views")
 @observer
-export class LoadingOverlay extends Component<"LoadingOverlay"> {
+export class LoadingOverlay extends Component {
   /**
    * Whether or not loading overlay is visible.
    */
@@ -29,7 +30,7 @@ export class LoadingOverlay extends Component<"LoadingOverlay"> {
    * state.
    */
   public constructor(props: {}) {
-    super("LoadingOverlay", props);
+    super(props);
     this.update();
   }
 

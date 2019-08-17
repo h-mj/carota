@@ -1,6 +1,7 @@
-import * as React from "react";
 import { inject, observer } from "mobx-react";
-import { Component } from "./Component";
+import * as React from "react";
+
+import { Component } from "../base/Component";
 import { Navigation } from "./Navigation";
 
 /**
@@ -8,14 +9,7 @@ import { Navigation } from "./Navigation";
  */
 @inject("views")
 @observer
-export class Main extends Component<"Main"> {
-  /**
-   * Sets the name of this component.
-   */
-  public constructor(props: {}) {
-    super("Main", props);
-  }
-
+export class Main extends Component {
   /**
    * Renders a navigation bar and main scene components.
    */

@@ -1,17 +1,18 @@
 import * as React from "react";
-import { SceneNames, SceneProps } from "./Scene";
-import { Administration } from "./Administration";
-import { Diet } from "./Diet";
-import { Edit } from "./Edit";
-import { History } from "./History";
-import { Home } from "./Home";
-import { Login } from "./Login";
-import { Logout } from "./Logout";
-import { Measurements } from "./Measurements";
-import { Register } from "./Register";
-import { Search } from "./Search";
-import { Settings } from "./Settings";
-import { Unknown } from "./Unknown";
+
+import { Administration } from "../scene/Administration";
+import { Diet } from "../scene/Diet";
+import { Edit } from "../scene/Edit";
+import { History } from "../scene/History";
+import { Home } from "../scene/Home";
+import { Login } from "../scene/Login";
+import { Logout } from "../scene/Logout";
+import { Measurements } from "../scene/Measurements";
+import { Register } from "../scene/Register";
+import { Search } from "../scene/Search";
+import { Settings } from "../scene/Settings";
+import { Unknown } from "../scene/Unknown";
+import { SceneComponentProps, SceneNames } from "./SceneComponent";
 
 /**
  * Type that defines some route's scene name and parameter names.
@@ -28,7 +29,7 @@ interface To<
   /**
    * Route scene name.
    */
-  sceneName: TSceneName;
+  name: TSceneName;
 }
 
 /**
@@ -38,7 +39,7 @@ const to = <TSceneName extends SceneNames, TParameterNames extends string>(
   sceneName: TSceneName,
   ...parameterNames: TParameterNames[]
 ): To<TSceneName, TParameterNames> => ({
-  sceneName,
+  name: sceneName,
   parameterNames
 });
 
@@ -74,10 +75,10 @@ export type RouteParameters<TSceneNames extends SceneNames> =
       : never);
 
 /**
- * Object where scene names are mapped to its class. This object is used to
- * retrieve scene component by its name.
+ * Object where scene names are mapped to its component. This object is used to
+ * retrieve scene's component by its name.
  */
-export const SCENES = {
+export const SCENE_COMPONENTS = {
   Administration: Administration,
   Diet: Diet,
   Edit: Edit,
@@ -100,11 +101,11 @@ export type ScenePosition = "main" | "side";
 /**
  * Object that holds the information needed to render a scene.
  */
-export class SceneContext<TSceneName extends SceneNames> {
+export class Scene<TSceneName extends SceneNames> {
   /**
    * Scene name.
    */
-  public sceneName: TSceneName;
+  public name: TSceneName;
 
   /**
    * Scene route parameters.
@@ -114,21 +115,21 @@ export class SceneContext<TSceneName extends SceneNames> {
   /**
    * Scene component props.
    */
-  public props: SceneProps<TSceneName>;
+  public props: SceneComponentProps<TSceneName>;
 
   /**
    * Creates a new instance of `SceneContext`.
    *
-   * @param sceneName Scene name.
+   * @param name Scene name.
    * @param parameters Scene route parameters.
    * @param props Scene component props.
    */
   public constructor(
-    sceneName: TSceneName,
+    name: TSceneName,
     parameters: RouteParameters<TSceneName>,
-    props: SceneProps<TSceneName>
+    props: SceneComponentProps<TSceneName>
   ) {
-    this.sceneName = sceneName;
+    this.name = name;
     this.parameters = parameters;
     this.props = props;
   }
@@ -137,7 +138,7 @@ export class SceneContext<TSceneName extends SceneNames> {
    * Renders the scene component.
    */
   public render(position: ScenePosition) {
-    const SceneComponent: typeof React.Component = SCENES[this.sceneName];
+    const SceneComponent: typeof React.Component = SCENE_COMPONENTS[this.name];
 
     return (
       <SceneComponent
@@ -149,13 +150,13 @@ export class SceneContext<TSceneName extends SceneNames> {
   }
 
   /**
-   * Returns an URL corresponding to this scene context, or
-   * `window.location.pathname`, if this context doesn't have a matching route.
+   * Returns this scene's corresponding URL or `window.location.pathname`, if
+   * this scene doesn't have a matching route.
    */
   public getUrl(): string {
     forRoute: for (const route in ROUTES) {
-      // If route's scene name is not context's scene name, skip.
-      if (ROUTES[route as keyof typeof ROUTES].sceneName !== this.sceneName) {
+      // If route's scene name is not this scene's name, skip.
+      if (ROUTES[route as keyof typeof ROUTES].name !== this.name) {
         continue;
       }
 
@@ -191,47 +192,30 @@ export class SceneContext<TSceneName extends SceneNames> {
    * Context of scene on index path and to which is redirected to after
    * registration.
    */
-  public static HOME: Readonly<SceneContexts> = new SceneContext(
-    "Home",
-    {},
-    {}
-  );
+  public static HOME: Readonly<Scenes> = new Scene("Home", {}, {});
 
   /**
-   * Context of a scene that is shown if user is not authenticated but tries to
-   * access a scene that requires authentication.
+   * Scene that is shown if user is not authenticated but tries to access a
+   * scene that requires authentication.
    */
-  public static GATEWAY: Readonly<SceneContexts> = new SceneContext(
-    "Login",
-    undefined,
-    {}
-  );
+  public static GATEWAY: Readonly<Scenes> = new Scene("Login", undefined, {});
 
   /**
-   * Context of a scene that is shown if no other scenes match current URL.
+   * Scene that is shown if no other scenes match current URL.
    */
-  public static UNKNOWN: Readonly<SceneContexts> = new SceneContext(
-    "Unknown",
-    undefined,
-    {}
-  );
+  public static UNKNOWN: Readonly<Scenes> = new Scene("Unknown", undefined, {});
 
   /**
    * Scene which is used to exit the application.
    */
-  public static EXIT: Readonly<SceneContexts> = new SceneContext(
-    "Logout",
-    {},
-    {}
-  );
+  public static EXIT: Readonly<Scenes> = new Scene("Logout", {}, {});
 
   /**
-   * Returns a scene context from given URL. `undefined` if no scenes match the
-   * URL.
+   * Returns a scene from given URL. `undefined` if no scenes match the URL.
    *
    * @param url URL string.
    */
-  public static from(url: string): SceneContexts | undefined {
+  public static from(url: string): Scenes | undefined {
     forRoute: for (const route in ROUTES) {
       const urlParts = url.split("/");
       const routeParts = route.split("/");
@@ -253,11 +237,11 @@ export class SceneContext<TSceneName extends SceneNames> {
         }
       }
 
-      return new SceneContext(
-        ROUTES[route as keyof typeof ROUTES].sceneName,
+      return new Scene(
+        ROUTES[route as keyof typeof ROUTES].name,
         parameters,
         {}
-      ) as SceneContexts;
+      ) as Scenes;
     }
 
     return undefined;
@@ -265,8 +249,8 @@ export class SceneContext<TSceneName extends SceneNames> {
 }
 
 /**
- * Union of all possible scene context types.
+ * Union of all possible scene types.
  */
-export type SceneContexts = {
-  [SceneName in SceneNames]: SceneContext<SceneName>
+export type Scenes = {
+  [SceneName in SceneNames]: Scene<SceneName>
 }[SceneNames];

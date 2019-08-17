@@ -1,9 +1,10 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { SceneNames } from "../scene/Scene";
-import { Component } from "./Component";
-import { Anchor } from "./Anchor";
+
+import { SceneNames } from "../base/SceneComponent";
+import { TranslatedComponent } from "../base/TranslatedComponent";
 import { styled } from "../styling/theme";
+import { Anchor } from "./Anchor";
 
 /**
  * Navigation bar component that is used to navigate to different parts of the
@@ -11,7 +12,7 @@ import { styled } from "../styling/theme";
  */
 @inject("views")
 @observer
-export class Navigation extends Component<
+export class Navigation extends TranslatedComponent<
   "Navigation",
   {},
   Record<SceneNames, string>
@@ -24,11 +25,11 @@ export class Navigation extends Component<
   }
 
   /**
-   * Renders a navigation bar with anchors to contexts provided by `ViewsStore`.
+   * Renders a navigation bar with anchors to scenes provided by `ViewsStore`.
    */
   public render() {
     const {
-      main: { sceneName },
+      main: { name },
       navigation
     } = this.props.views!;
 
@@ -39,13 +40,9 @@ export class Navigation extends Component<
     return (
       <Container>
         <Bar>
-          {navigation.map((context, index) => (
-            <Item
-              key={index}
-              context={context}
-              selected={sceneName === context.sceneName}
-            >
-              {this.translation[context.sceneName]}
+          {navigation.map(scene => (
+            <Item key={scene.name} scene={scene} selected={name === scene.name}>
+              {this.translation[scene.name]}
             </Item>
           ))}
         </Bar>

@@ -1,7 +1,10 @@
-import { DefaultSceneProps, Scene } from "./Scene";
+import {
+  DefaultSceneComponentProps,
+  SceneComponent
+} from "../base/SceneComponent";
 
-export class History extends Scene<"History"> {
-  public constructor(props: DefaultSceneProps<"History">) {
+export class History extends SceneComponent<"History"> {
+  public constructor(props: DefaultSceneComponentProps<"History">) {
     super("History", props);
   }
 

@@ -1,4 +1,4 @@
-import { ComponentsTranslation } from "../component/Component";
+import { ComponentsTranslation } from "../base/TranslatedComponent";
 
 /**
  * Translation object type that contains all translated strings.

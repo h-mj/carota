@@ -1,23 +1,17 @@
 import { action } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Component } from "./Component";
-import { Overlay } from "./collection/container";
+
+import { Component } from "../base/Component";
 import { styled } from "../styling/theme";
+import { Overlay } from "./collection/container";
 
 /**
  * Component responsible for rendering side scene.
  */
 @inject("views")
 @observer
-export class Side extends Component<"Side"> {
-  /**
-   * Sets the name of this component.
-   */
-  public constructor(props: {}) {
-    super("Side", props);
-  }
-
+export class Side extends Component {
   /**
    * Renders side scene container and the scene itself.
    */

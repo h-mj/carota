@@ -1,7 +1,10 @@
-import { DefaultSceneProps, Scene } from "./Scene";
+import {
+  DefaultSceneComponentProps,
+  SceneComponent
+} from "../base/SceneComponent";
 
-export class Settings extends Scene<"Settings"> {
-  public constructor(props: DefaultSceneProps<"Settings">) {
+export class Settings extends SceneComponent<"Settings"> {
+  public constructor(props: DefaultSceneComponentProps<"Settings">) {
     super("Settings", props);
   }
 

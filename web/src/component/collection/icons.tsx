@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Keyframes } from "styled-components";
+
 import { scaleIn, scaleOut } from "../../styling/animations";
 import { keyframes, styled } from "../../styling/theme";
 

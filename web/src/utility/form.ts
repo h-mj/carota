@@ -1,4 +1,4 @@
-import { ErrorReasons, Error } from "api";
+import { Error, ErrorReasons } from "api";
 
 /**
  * Type of an object where `TValues` object properties are optional and their

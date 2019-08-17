@@ -1,4 +1,5 @@
 import { action, observable } from "mobx";
+
 import { Model, ModelClass, ModelData } from "../model/Model";
 
 /**

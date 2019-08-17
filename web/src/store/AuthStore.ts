@@ -1,7 +1,8 @@
 import { Body } from "api";
 import { action, autorun, computed, observable } from "mobx";
-import { RootStore } from "./RootStore";
+
 import { post } from "../utility/client";
+import { RootStore } from "./RootStore";
 
 /**
  * Store responsible for storing and updating JSON Web Token string used for

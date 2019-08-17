@@ -1,10 +1,11 @@
 import { action, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import { Component } from "./Component";
-import { InputWrapper } from "./InputWrapper";
+
+import { Component } from "../base/Component";
 import { RESET } from "../styling/stylesheets";
-import { styled, StyleProps } from "../styling/theme";
+import { StyleProps, styled } from "../styling/theme";
+import { InputWrapper } from "./InputWrapper";
 
 /**
  * Select component props.
@@ -85,18 +86,11 @@ interface SelectProps<TName extends string, TValues extends string> {
 export class Select<
   TName extends string = string,
   TValues extends string = string
-> extends Component<"Select", SelectProps<TName, TValues>> {
+> extends Component<SelectProps<TName, TValues>> {
   /**
    * Whether one of the options is focused.
    */
   @observable private focused = false;
-
-  /**
-   * Sets the name of this component.
-   */
-  public constructor(props: SelectProps<TName, TValues>) {
-    super("Select", props);
-  }
 
   /**
    * Renders the option optionally alongside field, label and error message

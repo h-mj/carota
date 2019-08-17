@@ -1,7 +1,8 @@
 import { inject } from "mobx-react";
 import * as React from "react";
-import { SceneContexts } from "../scene/SceneContext";
-import { Component } from "./Component";
+
+import { Component } from "../base/Component";
+import { Scenes } from "../base/Scene";
 
 /**
  * Anchor component props.
@@ -15,21 +16,14 @@ interface AnchorProps {
   /**
    * Context of a scene to which this anchor will redirect to.
    */
-  context: SceneContexts;
+  scene: Scenes;
 }
 
 /**
  * Component that changes main scene on click.
  */
 @inject("views")
-export class Anchor extends Component<"Anchor", AnchorProps> {
-  /**
-   * Sets the name of this component.
-   */
-  public constructor(props: AnchorProps) {
-    super("Anchor", props);
-  }
-
+export class Anchor extends Component<AnchorProps> {
   /**
    * Renders an anchor component.
    */
@@ -37,7 +31,7 @@ export class Anchor extends Component<"Anchor", AnchorProps> {
     return (
       <a
         className={this.props.className}
-        href={this.props.context.getUrl()}
+        href={this.props.scene.getUrl()}
         onClick={this.handleClick}
       >
         {this.props.children}
@@ -46,10 +40,10 @@ export class Anchor extends Component<"Anchor", AnchorProps> {
   }
 
   /**
-   * Prevents default anchor behavior and sets main scene context.
+   * Prevents default anchor behavior and sets main scene.
    */
   private handleClick: React.MouseEventHandler<HTMLAnchorElement> = event => {
     event.preventDefault();
-    this.props.views!.redirect(this.props.context);
+    this.props.views!.redirect(this.props.scene);
   };
 }

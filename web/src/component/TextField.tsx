@@ -1,11 +1,12 @@
 import { action, computed, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import { Component } from "./Component";
+
+import { Component } from "../base/Component";
+import { RESET } from "../styling/stylesheets";
+import { StyleProps, styled } from "../styling/theme";
 import { CheckBox } from "./CheckBox";
 import { InputWrapper } from "./InputWrapper";
-import { RESET } from "../styling/stylesheets";
-import { styled, StyleProps } from "../styling/theme";
 
 /**
  * Text field component props.
@@ -117,18 +118,11 @@ interface TextFieldProps<TName extends string, TOptional extends boolean> {
 export class TextField<
   TName extends string = string,
   TOptional extends boolean = false
-> extends Component<"TextField", TextFieldProps<TName, TOptional>> {
+> extends Component<TextFieldProps<TName, TOptional>> {
   /**
    * Whether or not text field input is in focus.
    */
   @observable private _focused = false;
-
-  /**
-   * Sets the name of this component.
-   */
-  public constructor(props: TextFieldProps<TName, TOptional>) {
-    super("TextField", props);
-  }
 
   /**
    * Renders the text field optionally alongside field, label and error message

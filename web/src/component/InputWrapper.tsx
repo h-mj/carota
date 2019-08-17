@@ -1,5 +1,6 @@
 import * as React from "react";
-import { css, styled, StyleProps } from "../styling/theme";
+
+import { StyleProps, css, styled } from "../styling/theme";
 
 /**
  * Input wrapper component props.

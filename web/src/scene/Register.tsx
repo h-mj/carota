@@ -1,16 +1,20 @@
 import { AuthRegisterBody, ErrorReasons, Languages } from "api";
-import { observable, action } from "mobx";
+import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { DefaultSceneProps, Scene } from "./Scene";
+
+import {
+  DefaultSceneComponentProps,
+  SceneComponent
+} from "../base/SceneComponent";
 import { Alert } from "../component/Alert";
+import { Button } from "../component/Button";
+import { Center } from "../component/collection/container";
+import { Controls, Form, Group, Title } from "../component/collection/form";
 import { Head } from "../component/Head";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
-import { Center } from "../component/collection/container";
-import { Controls, Form, Group, Title } from "../component/collection/form";
-import { Button } from "../component/Button";
-import { any, append, ErrorReasonsFor } from "../utility/form";
+import { ErrorReasonsFor, any, append } from "../utility/form";
 import { from } from "../utility/shift";
 
 /**
@@ -107,7 +111,11 @@ const TRANSFORMATION = from<RegisterValues>()
  */
 @inject("auth", "invitations", "views")
 @observer
-export class Register extends Scene<"Register", {}, RegisterTranslation> {
+export class Register extends SceneComponent<
+  "Register",
+  {},
+  RegisterTranslation
+> {
   /**
    * Whether or not invitation within route parameters is valid.
    */
@@ -132,7 +140,7 @@ export class Register extends Scene<"Register", {}, RegisterTranslation> {
    * Creates `Register` scene, sets the name of the scene and initiates
    * invitation ID verification.
    */
-  public constructor(props: DefaultSceneProps<"Register">) {
+  public constructor(props: DefaultSceneComponentProps<"Register">) {
     super("Register", props);
     this.verify();
   }

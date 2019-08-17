@@ -1,8 +1,9 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Component } from "./Component";
-import { Center } from "./collection/container";
+
+import { TranslatedComponent } from "../base/TranslatedComponent";
 import { styled } from "../styling/theme";
+import { Center } from "./collection/container";
 
 /**
  * Maps alert names to it's translated text message parameter names.
@@ -59,7 +60,7 @@ interface AlertTranslation {
 @observer
 export class Alert<
   TAlertName extends AlertNames = AlertNames
-> extends Component<
+> extends TranslatedComponent<
   "Alert",
   AlertProps<TAlertName>,
   Record<AlertNames, AlertTranslation>

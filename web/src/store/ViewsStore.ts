@@ -1,18 +1,19 @@
 import { Languages } from "api";
-import { computed, observable, action } from "mobx";
-import { SceneContext, SceneContexts } from "../scene/SceneContext";
-import { SceneNames, SceneProps } from "../scene/Scene";
+import { action, computed, observable } from "mobx";
+
+import { Scene, Scenes } from "../base/Scene";
+import { SceneComponentProps, SceneNames } from "../base/SceneComponent";
 import {
   Notification,
   NotificationMessageParameters,
   NotificationNames,
   Notifications
 } from "../component/NotificationContainer";
-import { RootStore } from "./RootStore";
 import { Translation } from "../translation";
 import { english } from "../translation/english";
 import { estonian } from "../translation/estonian";
 import { russian } from "../translation/russian";
+import { RootStore } from "./RootStore";
 
 /**
  * Object that stores each language's translation object.
@@ -33,8 +34,7 @@ const NO_AUTHENTICATION_SCENE_NAMES: readonly SceneNames[] = [
 
 /**
  * Store that stores information about current state of the view, including
- * language, main and side scene contexts, active notifications, and waiting
- * reasons.
+ * language, main and side scenes, active notifications, and waiting reasons.
  *
  * It is also responsible for retrieving correct scene name and parameters based
  * on current URL and updating current URL on redirection.
@@ -46,14 +46,14 @@ export class ViewsStore {
   @observable private _language: Languages = "English";
 
   /**
-   * Main scene context.
+   * Main scene.
    */
-  @observable private _main: SceneContexts = SceneContext.UNKNOWN;
+  @observable private _main: Scenes = Scene.UNKNOWN;
 
   /**
-   * Side scene context.
+   * Side scene.
    */
-  @observable private _side?: SceneContexts;
+  @observable private _side?: Scenes;
 
   /**
    * Array of notifications.
@@ -73,7 +73,7 @@ export class ViewsStore {
   /**
    * Creates a new instance of `ScenesStore`, updates main scene based on
    * current URL and adds a history state pop listener that also updates main
-   * scene context based on changed pathname.
+   * scene based on changed pathname.
    */
   public constructor(rootStore: RootStore) {
     this._rootStore = rootStore;
@@ -90,7 +90,7 @@ export class ViewsStore {
   }
 
   /**
-   * Returns main scene context object.
+   * Returns main scene object.
    */
   @computed
   public get main() {
@@ -98,7 +98,7 @@ export class ViewsStore {
   }
 
   /**
-   * Returns side scene context object.
+   * Returns side scene object.
    */
   public get side() {
     return this._side;
@@ -129,23 +129,23 @@ export class ViewsStore {
   }
 
   /**
-   * Returns a list of navigable scene contexts that will be included in
+   * Returns a list of navigable scenes that will be included in
    * navigation bar.
    */
   @computed
   public get navigation() {
-    if (NO_AUTHENTICATION_SCENE_NAMES.includes(this._main.sceneName)) {
+    if (NO_AUTHENTICATION_SCENE_NAMES.includes(this._main.name)) {
       return undefined;
     }
 
     return [
-      new SceneContext("Home", {}, {}),
-      new SceneContext("Diet", {}, {}),
-      new SceneContext("Measurements", {}, {}),
-      new SceneContext("History", {}, {}),
-      new SceneContext("Administration", {}, {}),
-      new SceneContext("Settings", {}, {}),
-      new SceneContext("Logout", {}, {})
+      new Scene("Home", {}, {}),
+      new Scene("Diet", {}, {}),
+      new Scene("Measurements", {}, {}),
+      new Scene("History", {}, {}),
+      new Scene("Administration", {}, {}),
+      new Scene("Settings", {}, {}),
+      new Scene("Logout", {}, {})
     ];
   }
 
@@ -159,30 +159,27 @@ export class ViewsStore {
   }
 
   /**
-   * Sets main scene context.
+   * Sets main scene.
    *
-   * This function also resets side scene context.
+   * This function also resets side scene.
    *
-   * @param context Scene context that will be new main scene context.
+   * @param scene Scene that will be new main scene.
    */
   @action
-  public redirect(context: SceneContexts) {
+  public redirect(scene: Scenes) {
     const { authenticated } = this._rootStore.auth;
 
     // If user authentication status is the same as scene's authentication
     // requirement.
-    if (
-      !authenticated ===
-      NO_AUTHENTICATION_SCENE_NAMES.includes(context.sceneName)
-    ) {
-      this._main = context;
+    if (!authenticated === NO_AUTHENTICATION_SCENE_NAMES.includes(scene.name)) {
+      this._main = scene;
     } else {
-      this._main = authenticated ? SceneContext.UNKNOWN : SceneContext.GATEWAY;
+      this._main = authenticated ? Scene.UNKNOWN : Scene.GATEWAY;
     }
 
     this.refocus();
 
-    const url = context.getUrl();
+    const url = scene.getUrl();
 
     if (url !== window.location.pathname) {
       window.history.pushState(null, "", url);
@@ -194,42 +191,36 @@ export class ViewsStore {
    */
   @action
   public home() {
-    this.redirect(SceneContext.HOME);
+    this.redirect(Scene.HOME);
   }
 
   /**
-   * Updates main scene context based on current URL and authentication status.
+   * Updates main scene based on current URL and authentication status.
    */
   @action
   public update() {
     const { authenticated } = this._rootStore.auth;
-    const context = SceneContext.from(window.location.pathname);
+    const scene = Scene.from(window.location.pathname);
 
     // If user is unauthenticated and tries to access the logout scene, redirect to home.
-    if (
-      !authenticated &&
-      context !== undefined &&
-      context.sceneName === "Logout"
-    ) {
+    if (!authenticated && scene !== undefined && scene.name === "Logout") {
       return this.home();
     }
 
-    this.redirect(
-      SceneContext.from(window.location.pathname) || SceneContext.UNKNOWN
-    );
+    this.redirect(Scene.from(window.location.pathname) || Scene.UNKNOWN);
   }
 
   /**
-   * Creates and sets a side scene context.
+   * Creates and sets a side scene.
    *
-   * @param sceneName Side scene name.
+   * @param name Side scene name.
    * @param props Scene component props.
    */
   public aside<TSceneName extends SceneNames>(
-    sceneName: TSceneName,
-    props: SceneProps<TSceneName>
+    name: TSceneName,
+    props: SceneComponentProps<TSceneName>
   ): void {
-    this._side = new SceneContext(sceneName, undefined, props) as SceneContexts;
+    this._side = new Scene(name, undefined, props) as Scenes;
   }
 
   /**

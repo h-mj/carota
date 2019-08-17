@@ -1,9 +1,10 @@
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Component } from "./Component";
+
+import { TranslatedComponent } from "../base/TranslatedComponent";
 import { DURATION, fadeIn, fadeOut } from "../styling/animations";
-import { keyframes, styled, StyleProps } from "../styling/theme";
+import { StyleProps, keyframes, styled } from "../styling/theme";
 
 /**
  * Maps notification name to notification type and message parameter names.
@@ -86,7 +87,7 @@ interface NotificationTranslation {
  */
 @inject("views")
 @observer
-export class NotificationContainer extends Component<
+export class NotificationContainer extends TranslatedComponent<
   "NotificationContainer",
   {},
   Record<NotificationNames, NotificationTranslation>

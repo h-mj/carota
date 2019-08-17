@@ -1,10 +1,11 @@
-import { observable, action } from "mobx";
+import { action, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
-import { Component } from "./Component";
-import { InputWrapper } from "./InputWrapper";
-import { styled, StyleProps } from "../styling/theme";
+
+import { Component } from "../base/Component";
 import { RESET } from "../styling/stylesheets";
+import { StyleProps, styled } from "../styling/theme";
+import { InputWrapper } from "./InputWrapper";
 
 /**
  * Check box component props.
@@ -83,20 +84,12 @@ interface CheckBoxProps<TName extends string> {
  */
 @observer
 export class CheckBox<TName extends string = string> extends Component<
-  "CheckBox",
   CheckBoxProps<TName>
 > {
   /**
    * Whether or not check box is focused.
    */
   @observable private focused = false;
-
-  /**
-   * Sets the name of this component.
-   */
-  public constructor(props: CheckBoxProps<TName>) {
-    super("CheckBox", props);
-  }
 
   /**
    * Renders a check box on its own if `basic` props is true, otherwise renders

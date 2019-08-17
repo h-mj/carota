@@ -1,7 +1,8 @@
 import { Body } from "api";
-import { Store } from "./Store";
+
 import { Food } from "../model/Food";
 import { post } from "../utility/client";
+import { Store } from "./Store";
 
 /**
  * Store that stores and manages food models.

@@ -1,6 +1,7 @@
 import * as React from "react";
+
+import { Component } from "../base/Component";
 import { RESET } from "../styling/stylesheets";
-import { Component } from "./Component";
 import { styled } from "../styling/theme";
 
 /**
@@ -37,14 +38,7 @@ interface ButtonProps {
 /**
  * Button component.
  */
-export class Button extends Component<"Button", ButtonProps> {
-  /**
-   * Sets the name of this component.
-   */
-  public constructor(props: ButtonProps) {
-    super("Button", props);
-  }
-
+export class Button extends Component<ButtonProps> {
   /**
    * Renders the button.
    */

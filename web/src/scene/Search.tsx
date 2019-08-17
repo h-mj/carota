@@ -1,17 +1,21 @@
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { DefaultSceneProps, Scene } from "./Scene";
-import { Component } from "../component/Component";
-import { TextField } from "../component/TextField";
+
+import {
+  DefaultSceneComponentProps,
+  SceneComponent
+} from "../base/SceneComponent";
+import { TranslatedComponent } from "../base/TranslatedComponent";
 import {
   Carbohydrate,
   Energy,
   Fat,
   Protein
 } from "../component/collection/icons";
-import { styled } from "../styling/theme";
+import { TextField } from "../component/TextField";
 import { Food } from "../model/Food";
+import { styled } from "../styling/theme";
 import { from } from "../utility/shift";
 
 /**
@@ -49,7 +53,7 @@ const QUERY_VALIDATOR = from<string>()
  */
 @inject("foods", "views")
 @observer
-export class Search extends Scene<"Search"> {
+export class Search extends SceneComponent<"Search"> {
   /**
    * Search query string.
    */
@@ -69,7 +73,7 @@ export class Search extends Scene<"Search"> {
   /**
    * Sets the name of this scene.
    */
-  public constructor(props: DefaultSceneProps<"Search">) {
+  public constructor(props: DefaultSceneComponentProps<"Search">) {
     super("Search", props);
   }
 
@@ -197,7 +201,7 @@ interface SearchResultTranslation {
  */
 @inject("views")
 @observer
-export class SearchResult extends Component<
+export class SearchResult extends TranslatedComponent<
   "SearchResult",
   SearchResultProps,
   SearchResultTranslation

@@ -1,6 +1,6 @@
-import { Store } from "./Store";
 import { Invitation } from "../model/Invitation";
 import { post } from "../utility/client";
+import { Store } from "./Store";
 
 /**
  * Store that stores and manages invitation models.

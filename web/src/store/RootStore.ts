@@ -1,9 +1,9 @@
+import { Food } from "../model/Food";
+import { Invitation } from "../model/Invitation";
 import { AuthStore } from "./AuthStore";
 import { FoodsStore } from "./FoodsStore";
 import { InvitationsStore } from "./InvitationsStore";
 import { ViewsStore } from "./ViewsStore";
-import { Food } from "../model/Food";
-import { Invitation } from "../model/Invitation";
 
 /**
  * Store that stores all other stores.

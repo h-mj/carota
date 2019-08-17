@@ -1,16 +1,20 @@
-import { ErrorReasons, AuthLoginBody } from "api";
+import { AuthLoginBody, ErrorReasons } from "api";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { DefaultSceneProps, Scene } from "./Scene";
+
+import {
+  DefaultSceneComponentProps,
+  SceneComponent
+} from "../base/SceneComponent";
 import { Button } from "../component/Button";
-import { Head } from "../component/Head";
-import { TextField } from "../component/TextField";
 import { Center } from "../component/collection/container";
 import { Controls, Form, Group, Title } from "../component/collection/form";
 import { Logo } from "../component/collection/icons";
+import { Head } from "../component/Head";
+import { TextField } from "../component/TextField";
 import { styled } from "../styling/theme";
-import { any, append, ErrorReasonsFor } from "../utility/form";
+import { ErrorReasonsFor, any, append } from "../utility/form";
 import { from } from "../utility/shift";
 
 /**
@@ -86,7 +90,7 @@ const TRANSFORMATION = from<LoginValues>()
  */
 @inject("auth", "views")
 @observer
-export class Login extends Scene<"Login", {}, LoginTranslation> {
+export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
   /**
    * Object that contains values of each input.
    */
@@ -103,7 +107,7 @@ export class Login extends Scene<"Login", {}, LoginTranslation> {
   /**
    * Sets the name of this scene.
    */
-  public constructor(props: DefaultSceneProps<"Login">) {
+  public constructor(props: DefaultSceneComponentProps<"Login">) {
     super("Login", props);
   }
 

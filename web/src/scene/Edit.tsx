@@ -7,13 +7,17 @@ import {
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { DefaultSceneProps, Scene } from "./Scene";
+
+import {
+  DefaultSceneComponentProps,
+  SceneComponent
+} from "../base/SceneComponent";
 import { Button } from "../component/Button";
+import { Controls, Form, Group } from "../component/collection/form";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
-import { Controls, Form, Group } from "../component/collection/form";
 import { Food } from "../model/Food";
-import { any, append, ErrorReasonsFor } from "../utility/form";
+import { ErrorReasonsFor, any, append } from "../utility/form";
 import { from } from "../utility/shift";
 
 /**
@@ -185,7 +189,7 @@ const FOOD_TRANSFORMATION = from<EditValues>().construct<FoodSaveBody, typeof FO
  */
 @inject("foods", "views")
 @observer
-export class Edit extends Scene<"Edit", EditProps, EditTranslation> {
+export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   /**
    * Food editing form field values.
    */
@@ -199,7 +203,7 @@ export class Edit extends Scene<"Edit", EditProps, EditTranslation> {
   /**
    * Sets the name of this scene.
    */
-  public constructor(props: EditProps & DefaultSceneProps<"Edit">) {
+  public constructor(props: EditProps & DefaultSceneComponentProps<"Edit">) {
     super("Edit", props);
   }
 

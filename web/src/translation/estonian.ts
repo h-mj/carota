@@ -85,6 +85,7 @@ export const estonian: Translation = {
         }
       }
     },
+    invalidCredentials: "Vale e-posti aadress või parool.",
     submit: "Sisenege →",
     title: "Sisenege"
   },
@@ -101,11 +102,6 @@ export const estonian: Translation = {
     Search: "Otsing",
     Settings: "Seaded",
     Unknown: "Vabandame, soovitud lehekülge ei leitud"
-  },
-  NotificationContainer: {
-    loginInvalidCredentials: {
-      message: "Vale e-posti aadress või parool."
-    }
   },
   Register: {
     inputs: {

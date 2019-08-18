@@ -26,6 +26,7 @@ export interface StyleProps {
 export interface Theme {
   borderColor: string;
   height: string;
+  lineHeight: string;
   padding: string;
   formWidth: string;
   borderRadius: string;
@@ -58,6 +59,7 @@ export const {
 export const LIGHT: Readonly<Theme> = {
   borderColor: "rgb(222, 222, 222)",
   height: "3.5rem",
+  lineHeight: "1.25rem",
   padding: "2.5rem",
   formWidth: "30rem",
   borderRadius: "0.4375rem",

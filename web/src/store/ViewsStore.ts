@@ -3,12 +3,7 @@ import { action, computed, observable } from "mobx";
 
 import { RenderPosition, Scene, Scenes } from "../base/Scene";
 import { SceneComponentProps, SceneNames } from "../base/SceneComponent";
-import {
-  Notification,
-  NotificationMessageParameters,
-  NotificationNames,
-  Notifications
-} from "../component/NotificationContainer";
+import { Notification, NotificationType } from "../component/Notifications";
 import { Translation } from "../translation";
 import { english } from "../translation/english";
 import { estonian } from "../translation/estonian";
@@ -53,7 +48,7 @@ export class ViewsStore {
   /**
    * Array of notifications.
    */
-  @observable private _notifications: Notifications[] = [];
+  @observable private _notifications: Notification[] = [];
 
   /**
    * Number of active loadings.
@@ -89,6 +84,7 @@ export class ViewsStore {
   /**
    * Returns an array of active scenes.
    */
+  @computed
   public get scenes() {
     return this._scenes;
   }
@@ -96,6 +92,7 @@ export class ViewsStore {
   /**
    * Returns root scene.
    */
+  @computed
   public get root() {
     return this._scenes[0];
   }
@@ -204,6 +201,7 @@ export class ViewsStore {
    * @param name Name of the scene.
    * @param props Scene component props.
    */
+  @action
   public push<TSceneName extends SceneNames>(
     position: RenderPosition,
     name: TSceneName,
@@ -215,6 +213,7 @@ export class ViewsStore {
   /**
    * Hides all scenes that are before `scene` in active scene stack including the scene itself.
    */
+  @action
   public pop(scene: Scenes) {
     if (!this._scenes.includes(scene)) {
       return;
@@ -224,34 +223,39 @@ export class ViewsStore {
   }
 
   /**
-   * Creates and adds a notification to notifications array and adds an
-   * `timeout` second timeout after which the notification is removed from the
-   * array.
+   * Creates a notification with given text and type and adds it to an array of
+   * active notifications. If timeout is not zero, timeout is created which
+   * removes the notification after `timeout` seconds.
    *
-   * @param name Notification name.
-   * @param parameters Notification message parameters.
-   * @param timeout Timeout in seconds after which notification is removed.
+   * @param text Notification text.
+   * @param type Type of the notification, which affects the styling.
+   * @param timeout Timeout in seconds after which notification is concealed.
    */
   @action
-  public notify<TNotificationName extends NotificationNames>(
-    name: TNotificationName,
-    parameters: NotificationMessageParameters<TNotificationName>,
-    timeout = 5
-  ) {
-    const notification = new Notification(name, parameters);
+  public notify(text: string, type: NotificationType, timeout = 5) {
+    const notification: Notification = observable({
+      id:
+        Math.random()
+          .toString(36)
+          .substring(2) + Date.now().toString(36),
+      text,
+      type
+    });
 
     this._notifications.push(notification);
 
     if (timeout > 0) {
-      setTimeout(this.conceal, timeout * 1000, notification);
+      window.setTimeout(this.conceal, 1000 * timeout, notification);
     }
   }
 
   /**
    * Removes a notification from notifications array.
+   *
+   * @param notification The notification which will be removed.
    */
   @action
-  public conceal = (notification: Notifications) => {
+  public conceal = (notification: Notification) => {
     const index = this._notifications.indexOf(notification);
 
     if (index === -1) {
@@ -282,6 +286,6 @@ export class ViewsStore {
    */
   @action
   public async wait(timeout: number) {
-    return new Promise(resolve => setTimeout(resolve, 1000 * timeout));
+    return new Promise(resolve => window.setTimeout(resolve, 1000 * timeout));
   }
 }

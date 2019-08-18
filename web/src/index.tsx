@@ -3,7 +3,7 @@ import * as React from "react";
 import { render } from "react-dom";
 
 import { LoadingOverlay } from "./component/LoadingOverlay";
-import { NotificationContainer } from "./component/NotificationContainer";
+import { Notifications } from "./component/Notifications";
 import { Stage } from "./component/Stage";
 import { Theme } from "./component/Theme";
 import { rootStore } from "./store/RootStore";
@@ -13,7 +13,7 @@ render(
     <Theme>
       <Stage />
       <LoadingOverlay />
-      <NotificationContainer />
+      <Notifications />
     </Theme>
   </Provider>,
   document.getElementById("root")

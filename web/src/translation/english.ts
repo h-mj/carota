@@ -85,6 +85,7 @@ export const english: Translation = {
         }
       }
     },
+    invalidCredentials: "Incorrect email address or password.",
     submit: "Sign in →",
     title: "Sign in"
   },
@@ -101,11 +102,6 @@ export const english: Translation = {
     Search: "Search",
     Settings: "Settings",
     Unknown: "We are sorry, the page you requested has not been found"
-  },
-  NotificationContainer: {
-    loginInvalidCredentials: {
-      message: "Incorrect email address or password."
-    }
   },
   Register: {
     inputs: {

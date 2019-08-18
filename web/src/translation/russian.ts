@@ -85,6 +85,7 @@ export const russian: Translation = {
         }
       }
     },
+    invalidCredentials: "Неверный адрес электронной почты или пароль.",
     submit: "Вход →",
     title: "Вход"
   },
@@ -101,11 +102,6 @@ export const russian: Translation = {
     Search: "Поиск",
     Settings: "Настройки",
     Unknown: "К сожалению, запрошенная страница не была найдена"
-  },
-  NotificationContainer: {
-    loginInvalidCredentials: {
-      message: "Неверный адрес электронной почты или пароль."
-    }
   },
   Register: {
     inputs: {

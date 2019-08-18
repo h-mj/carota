@@ -3,7 +3,6 @@ import { computed } from "mobx";
 import { Alert } from "../component/Alert";
 import { Head } from "../component/Head";
 import { Navigation } from "../component/Navigation";
-import { NotificationContainer } from "../component/NotificationContainer";
 import { SearchResult } from "../scene/Search";
 import { Component } from "./Component";
 import { SceneComponentMap } from "./SceneComponent";
@@ -15,7 +14,6 @@ interface TranslatedComponentMap extends SceneComponentMap {
   Alert: Alert;
   Head: Head;
   Navigation: Navigation;
-  NotificationContainer: NotificationContainer;
   SearchResult: SearchResult;
 }
 

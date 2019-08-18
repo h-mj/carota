@@ -52,6 +52,11 @@ interface LoginTranslation {
   inputs: Record<InputNames, InputTranslation>;
 
   /**
+   * Invalid credentials notification text.
+   */
+  invalidCredentials: string;
+
+  /**
    * Page title.
    */
   title: string;
@@ -188,7 +193,7 @@ export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
     }
 
     if (error !== undefined && error.code === 401 /* Unauthorized */) {
-      this.props.views!.notify("loginInvalidCredentials", {});
+      this.props.views!.notify(this.translation.invalidCredentials, "error");
     }
 
     this.reasons = append(result.kind === "Err" ? result.value : {}, error);

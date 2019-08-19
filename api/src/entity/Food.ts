@@ -5,17 +5,15 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn
 } from "typeorm";
-import { Enum, FoodData, Units } from "../../types";
+
+import { FoodData, Units } from "../../types";
 import { Account } from "./Account";
 import { NutritionDeclaration } from "./NutritionDeclaration";
 
 /**
- * Object that is used as unit enumeration.
+ * Array of valid units.
  */
-export const UNITS_ENUM: Enum<Units> = {
-  g: "g",
-  ml: "ml"
-};
+export const UNITS: readonly Units[] = ["g", "ml"];
 
 /**
  * Entity that holds information about a specific food alongside its nutritional
@@ -44,7 +42,7 @@ export class Food extends BaseEntity {
   /**
    * Serving unit.
    */
-  @Column("enum", { enum: UNITS_ENUM })
+  @Column("enum", { enum: UNITS })
   public unit!: Units;
 
   /**
@@ -54,7 +52,8 @@ export class Food extends BaseEntity {
   public nutritionDeclaration!: NutritionDeclaration;
 
   /**
-   * Quantity of one piece in units, if one piece of product exists.
+   * Quantity of one piece in units, `null` if one piece of the product does not
+   * exists.
    */
   @Column("float", { nullable: true })
   public pieceQuantity!: number | null;

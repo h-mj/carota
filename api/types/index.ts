@@ -192,14 +192,6 @@ export interface ErrorContext {
 export type ErrorContextElement = string | number | string[];
 
 /**
- * Type that is used to create enum like objects with given constants
- * `TConstants`.
- */
-export type Enum<TConstants extends string> = {
-  [Constant in TConstants]: Constant;
-};
-
-/**
  * Union of all languages.
  */
 export type Languages = "English" | "Estonian" | "Russian";

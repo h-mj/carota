@@ -7,33 +7,28 @@ import {
   OneToOne,
   PrimaryGeneratedColumn
 } from "typeorm";
-import { AccountRights, AccountTypes, Enum, Languages } from "../../types";
+
+import { AccountRights, AccountTypes, Languages } from "../../types";
 import { Person } from "./Person";
 
 /**
- * Object that is used as language enumeration.
+ * Array of valid languages.
  */
-export const LANGUAGES_ENUM: Readonly<Enum<Languages>> = {
-  English: "English",
-  Estonian: "Estonian",
-  Russian: "Russian"
-};
+export const LANGUAGES: readonly Languages[] = [
+  "English",
+  "Estonian",
+  "Russian"
+];
 
 /**
- * Object that is used as account type enumeration.
+ * Array of valid account types.
  */
-export const ACCOUNT_TYPES_ENUM: Readonly<Enum<AccountTypes>> = {
-  Adviser: "Adviser",
-  Default: "Default"
-};
+export const ACCOUNT_TYPES: readonly AccountTypes[] = ["Adviser", "Default"];
 
 /**
- * Object that is used as account rights enumeration.
+ * Array of valid account rights.
  */
-export const ACCOUNT_RIGHTS_ENUM: Readonly<Enum<AccountRights>> = {
-  All: "All",
-  Default: "Default"
-};
+export const ACCOUNT_RIGHTS: readonly AccountRights[] = ["All", "Default"];
 
 /**
  * Application account which is used to save registered users and verify them on
@@ -56,7 +51,7 @@ export class Account extends BaseEntity {
   /**
    * User interface language.
    */
-  @Column("enum", { enum: LANGUAGES_ENUM })
+  @Column("enum", { enum: LANGUAGES })
   public language!: Languages;
 
   /**
@@ -96,12 +91,12 @@ export class Account extends BaseEntity {
    * - `Adviser` type accounts can invite advisees and advise them.
    * - `Default` type accounts cannot invite other users nor advise other users.
    */
-  @Column("enum", { enum: ACCOUNT_TYPES_ENUM })
+  @Column("enum", { enum: ACCOUNT_TYPES })
   public type!: AccountTypes;
 
   /**
    * Account rights.
    */
-  @Column("enum", { enum: ACCOUNT_RIGHTS_ENUM })
+  @Column("enum", { enum: ACCOUNT_RIGHTS })
   public rights!: AccountRights;
 }

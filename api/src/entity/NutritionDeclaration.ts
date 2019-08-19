@@ -1,4 +1,5 @@
 import { Column } from "typeorm";
+
 import { NutritionDeclarationData } from "../../types";
 
 /**
@@ -8,73 +9,73 @@ export class NutritionDeclaration {
   /**
    * Amount of energy in kilocalories.
    */
-  @Column("float")
+  @Column("float4")
   public energy!: number;
 
   /**
    * Amount of fat in grams.
    */
-  @Column("float")
+  @Column("float4")
   public fat!: number;
 
   /**
    * Amount of saturates in grams.
    */
-  @Column("float", { nullable: true })
+  @Column("float4", { nullable: true })
   public saturates!: number | null;
 
   /**
    * Amount of mono-unsaturates in grams.
    */
-  @Column("float", { nullable: true })
+  @Column("float4", { nullable: true })
   public monoUnsaturates!: number | null;
 
   /**
    * Amount of polyunsaturates in grams.
    */
-  @Column("float", { nullable: true })
+  @Column("float4", { nullable: true })
   public polyunsaturates!: number | null;
 
   /**
    * Amount of carbohydrate in grams.
    */
-  @Column("float")
+  @Column("float4")
   public carbohydrate!: number;
 
   /**
    * Amount of sugars in grams.
    */
-  @Column("float", { nullable: true })
+  @Column("float4", { nullable: true })
   public sugars!: number | null;
 
   /**
    * Amount of polyols in grams.
    */
-  @Column("float", { nullable: true })
+  @Column("float4", { nullable: true })
   public polyols!: number | null;
 
   /**
    * Amount of starch in grams.
    */
-  @Column("float", { nullable: true })
+  @Column("float4", { nullable: true })
   public starch!: number | null;
 
   /**
    * Amount of fibre in grams.
    */
-  @Column("float", { nullable: true })
+  @Column("float4", { nullable: true })
   public fibre!: number | null;
 
   /**
    * Amount of protein in grams.
    */
-  @Column("float")
+  @Column("float4")
   public protein!: number;
 
   /**
    * Amount of salt in grams.
    */
-  @Column("float", { nullable: true })
+  @Column("float4", { nullable: true })
   public salt!: number | null;
 
   /**

@@ -1,13 +1,18 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { Enum, Sexes } from "../../types";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToOne,
+  PrimaryGeneratedColumn
+} from "typeorm";
+
+import { Sexes } from "../../types";
+import { Account } from "./Account";
 
 /**
- * Object that is used as sex enumeration.
+ * Array of valid sexes.
  */
-export const SexesEnum: Enum<Sexes> = {
-  Female: "Female",
-  Male: "Male"
-};
+export const SEXES: readonly Sexes[] = ["Female", "Male"];
 
 /**
  * Model that holds unchanging information about account users body used to
@@ -24,7 +29,7 @@ export class Person extends BaseEntity {
   /**
    * Person's sex.
    */
-  @Column("enum", { enum: SexesEnum })
+  @Column("enum", { enum: SEXES })
   public sex!: Sexes;
 
   /**
@@ -32,4 +37,10 @@ export class Person extends BaseEntity {
    */
   @Column("date")
   public dateOfBirth!: string;
+
+  /**
+   * Person's account.
+   */
+  @OneToOne(() => Account, { nullable: false })
+  public account!: Account;
 }

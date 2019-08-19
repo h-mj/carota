@@ -5,8 +5,9 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn
 } from "typeorm";
+
 import { AccountRights, AccountTypes, InvitationData } from "../../types";
-import { Account, ACCOUNT_RIGHTS_ENUM, ACCOUNT_TYPES_ENUM } from "./Account";
+import { ACCOUNT_RIGHTS, ACCOUNT_TYPES, Account } from "./Account";
 
 /**
  * Model that is used to register new accounts and assign advisers, inviters,
@@ -37,13 +38,13 @@ export class Invitation extends BaseEntity {
   /**
    * Account type of future account.
    */
-  @Column("enum", { enum: ACCOUNT_TYPES_ENUM })
+  @Column("enum", { enum: ACCOUNT_TYPES })
   public type!: AccountTypes;
 
   /**
    * Account rights of future account.
    */
-  @Column("enum", { enum: ACCOUNT_RIGHTS_ENUM })
+  @Column("enum", { enum: ACCOUNT_RIGHTS })
   public rights!: AccountRights;
 
   /**

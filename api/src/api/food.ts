@@ -1,6 +1,7 @@
 import * as Router from "@koa/router";
-import { is, Schema } from "./middleware/validator";
-import { Food, UNITS_ENUM } from "../entity/Food";
+
+import { Food, UNITS } from "../entity/Food";
+import { Schema, is } from "./middleware/validator";
 import { createIdNotFoundError } from "./utility/errors";
 import { define } from "./utility/routes";
 
@@ -28,7 +29,7 @@ const SAVE_SCHEMA: Schema<"food", "save"> = {
     .trim()
     .regex(/^\d{13}$/)
     .optional(),
-  unit: is.string().valid(Object.keys(UNITS_ENUM)),
+  unit: is.string().valid(UNITS),
   nutritionDeclaration: {
     energy: amount,
     fat: amount,

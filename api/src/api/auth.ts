@@ -1,9 +1,10 @@
 import * as Router from "@koa/router";
 import { compare, hash } from "bcryptjs";
-import { signToken } from "./middleware/authenticator";
-import { is, Schema } from "./middleware/validator";
-import { Account, LANGUAGES_ENUM } from "../entity/Account";
+
+import { Account, LANGUAGES } from "../entity/Account";
 import { Invitation } from "../entity/Invitation";
+import { signToken } from "./middleware/authenticator";
+import { Schema, is } from "./middleware/validator";
 import {
   createIdNotFoundError,
   createInvalidCredentialsError
@@ -44,7 +45,7 @@ defineNoAuth(authRouter, "auth", "login", LOGIN_SCHEMA, async context => {
  */
 const REGISTER_SCHEMA: Readonly<Schema<"auth", "register">> = {
   name: is.string().trim(),
-  language: is.string().valid(Object.keys(LANGUAGES_ENUM)),
+  language: is.string().valid(LANGUAGES),
   email: is
     .string()
     .trim()

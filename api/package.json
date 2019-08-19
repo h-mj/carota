@@ -4,7 +4,10 @@
   "private": true,
   "types": "types/index.ts",
   "scripts": {
-    "start": "nodemon -x node -r ts-node/register -r dotenv/config src/index.ts",
+    "start": "cd build && node -r dotenv/config src/index.js",
+    "build": "yarn run clean && tsc && cp .env build/",
+    "clean": "rm -rf build",
+    "dev": "nodemon -x node -r ts-node/register -r dotenv/config src/index.ts",
     "typeorm": "node -r ts-node/register ./node_modules/typeorm/cli.js"
   },
   "dependencies": {

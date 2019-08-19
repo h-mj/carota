@@ -13,14 +13,14 @@ import { callCatch } from "./utility/queries";
 import { defineNoAuth } from "./utility/routes";
 
 /**
- * Router, which handles all routes related to authentication.
+ * Router, which handles all routes related to accounts.
  */
-export const authRouter = new Router();
+export const accountRouter = new Router();
 
 /**
  * Login request body schema.
  */
-const LOGIN_SCHEMA: Readonly<Schema<"auth", "login">> = {
+const LOGIN_SCHEMA: Readonly<Schema<"account", "login">> = {
   email: is
     .string()
     .trim()
@@ -28,7 +28,7 @@ const LOGIN_SCHEMA: Readonly<Schema<"auth", "login">> = {
   password: is.string()
 };
 
-defineNoAuth(authRouter, "auth", "login", LOGIN_SCHEMA, async context => {
+defineNoAuth(accountRouter, "account", "login", LOGIN_SCHEMA, async context => {
   const { email, password } = context.state.body;
 
   const account = await Account.findOne({ email });
@@ -43,7 +43,7 @@ defineNoAuth(authRouter, "auth", "login", LOGIN_SCHEMA, async context => {
 /**
  * Register request body schema.
  */
-const REGISTER_SCHEMA: Readonly<Schema<"auth", "register">> = {
+const REGISTER_SCHEMA: Readonly<Schema<"account", "register">> = {
   name: is.string().trim(),
   language: is.string().valid(LANGUAGES),
   email: is
@@ -55,33 +55,45 @@ const REGISTER_SCHEMA: Readonly<Schema<"auth", "register">> = {
   invitationId: is.string().guid()
 };
 
-defineNoAuth(authRouter, "auth", "register", REGISTER_SCHEMA, async context => {
-  const { name, language, email, password, invitationId } = context.state.body;
+defineNoAuth(
+  accountRouter,
+  "account",
+  "register",
+  REGISTER_SCHEMA,
+  async context => {
+    const {
+      name,
+      language,
+      email,
+      password,
+      invitationId
+    } = context.state.body;
 
-  const invitation = await Invitation.findOne({ id: invitationId });
+    const invitation = await Invitation.findOne({ id: invitationId });
 
-  if (invitation === undefined) {
-    throw createIdNotFoundError(invitationId, Invitation.name, [
-      "invitationId"
-    ]);
+    if (invitation === undefined) {
+      throw createIdNotFoundError(invitationId, Invitation.name, [
+        "invitationId"
+      ]);
+    }
+
+    const { adviser, inviter, type, rights } = invitation;
+
+    const template = Account.create({
+      name,
+      language,
+      email,
+      hash: await hash(password, 12),
+      adviser,
+      inviter,
+      type,
+      rights
+    });
+
+    const account = await callCatch(() => template.save());
+
+    await invitation.remove();
+
+    context.state.data = { token: signToken(account) };
   }
-
-  const { adviser, inviter, type, rights } = invitation;
-
-  const template = Account.create({
-    name,
-    language,
-    email,
-    hash: await hash(password, 12),
-    adviser,
-    inviter,
-    type,
-    rights
-  });
-
-  const account = await callCatch(() => template.save());
-
-  await invitation.remove();
-
-  context.state.data = { token: signToken(account) };
-});
+);

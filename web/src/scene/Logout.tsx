@@ -8,7 +8,7 @@ import {
 /**
  * Scene that, when constructed, logs user out after some timeout.
  */
-@inject("auth", "views")
+@inject("accounts", "views")
 export class Logout extends SceneComponent<"Logout"> {
   /**
    * Creates `Logout` scene instance, sets its name and executes `logout`
@@ -30,11 +30,11 @@ export class Logout extends SceneComponent<"Logout"> {
    * Function that logs user out and redirects to home page after some timeout.
    */
   private async logout() {
-    const { auth, views } = this.props;
+    const { accounts, views } = this.props;
 
     await views!.load(undefined);
 
-    auth!.logout();
+    accounts!.logout();
     views!.home();
   }
 }

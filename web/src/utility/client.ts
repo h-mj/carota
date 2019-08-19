@@ -24,7 +24,7 @@ export const post = async <
 
   headers.append("Content-Type", "application/json");
 
-  const { authorization } = rootStore.auth;
+  const { authorization } = rootStore.accounts;
 
   if (authorization) {
     headers.append("Authorization", authorization);

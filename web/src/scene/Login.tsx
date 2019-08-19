@@ -1,4 +1,4 @@
-import { AuthLoginBody, ErrorReasons } from "api";
+import { AccountLoginBody, ErrorReasons } from "api";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -73,7 +73,7 @@ interface LoginTranslation {
 type LoginValues = Record<InputNames, string>;
 
 /**
- * Blueprint that is used to transform `LoginValues` type into `AuthLoginBody`.
+ * Blueprint that is used to transform `LoginValues` type into `AccountLoginBody`.
  * type
  */
 // prettier-ignore
@@ -83,17 +83,17 @@ const BLUEPRINT = {
 };
 
 /**
- * Function that transforms `LoginValues` into `AuthLoginBody`.
+ * Function that transforms `LoginValues` into `AccountLoginBody`.
  */
 const TRANSFORMATION = from<LoginValues>()
-  .construct<AuthLoginBody, typeof BLUEPRINT>(BLUEPRINT)
+  .construct<AccountLoginBody, typeof BLUEPRINT>(BLUEPRINT)
   .build();
 
 /**
  * Scene that authenticates user using their email and password and on success
  * redirects to home page.
  */
-@inject("auth", "views")
+@inject("accounts", "views")
 @observer
 export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
   /**
@@ -183,7 +183,9 @@ export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
 
     const result = TRANSFORMATION(this.values);
     const error = await this.props.views!.load(
-      result.kind === "Ok" ? this.props.auth!.login(result.value) : undefined
+      result.kind === "Ok"
+        ? this.props.accounts!.login(result.value)
+        : undefined
     );
 
     if (result.kind === "Ok" && error === undefined) {

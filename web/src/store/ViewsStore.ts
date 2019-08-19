@@ -152,7 +152,7 @@ export class ViewsStore {
    */
   @action
   public redirect(scene: Scenes) {
-    const { authenticated } = this._rootStore.auth;
+    const { authenticated } = this._rootStore.accounts;
 
     const url = scene.getUrl();
 
@@ -183,7 +183,7 @@ export class ViewsStore {
    */
   @action
   public update() {
-    const { authenticated } = this._rootStore.auth;
+    const { authenticated } = this._rootStore.accounts;
     const scene = Scene.from(window.location.pathname);
 
     // If user is unauthenticated and tries to access the logout scene, redirect to home.

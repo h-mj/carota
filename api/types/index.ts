@@ -1,43 +1,43 @@
 /**
- * Type that describes all available controllers, actions of each controller and
- * request body message and response data types of each action.
+ * Defines controllers, their actions, and request and response message body
+ * data types.
  */
 interface Api {
-  auth: {
-    login: Types<AuthLoginBody, AuthData>;
-    register: Types<AuthRegisterBody, AuthData>;
+  account: {
+    login: Query<AccountLoginBody, TokenData>;
+    register: Query<AccountRegisterBody, TokenData>;
   };
   food: {
-    save: Types<FoodSaveBody, FoodData>;
-    search: Types<FoodSearchBody, FoodData[]>;
+    save: Query<FoodSaveBody, FoodData>;
+    search: Query<FoodSearchBody, FoodData[]>;
   };
   invitation: {
-    get: Types<InvitationGetBody, InvitationData>;
+    get: Query<IdBody, InvitationData>;
   };
 }
 
 /**
- * Describes the request body type and response data type of some action.
+ * Defines the request body type and response data type of some action.
  */
-interface Types<TBody, TData> {
+interface Query<TBody, TData> {
   /**
-   * Type of object that is within request message body.
+   * Type of an object within request message body.
    */
   body: TBody;
 
   /**
-   * Type of field `data` of the object within response message body.
+   * Property `data` inside the object within response message body value type.
    */
   data: TData;
 }
 
 /**
- * Controller type.
+ * Union of controller names.
  */
 export type Controllers = keyof Api;
 
 /**
- * Actions type of given controller `TController`.
+ * Union of actions of controller `TController`.
  */
 export type Actions<TController extends Controllers> = keyof Api[TController];
 
@@ -47,7 +47,7 @@ export type Actions<TController extends Controllers> = keyof Api[TController];
 export type Body<
   TController extends Controllers,
   TAction extends Actions<TController>
-> = Api[TController][TAction] extends Types<infer IBody, infer _>
+> = Api[TController][TAction] extends Query<infer IBody, infer _>
   ? IBody
   : never;
 
@@ -57,7 +57,7 @@ export type Body<
 export type Data<
   TController extends Controllers,
   TAction extends Actions<TController>
-> = Api[TController][TAction] extends Types<infer _, infer IData>
+> = Api[TController][TAction] extends Query<infer _, infer IData>
   ? IData
   : never;
 
@@ -219,7 +219,7 @@ export type Units = "g" | "ml";
 /**
  * Login request message body type.
  */
-export interface AuthLoginBody {
+export interface AccountLoginBody {
   /**
    * Account email.
    */
@@ -234,7 +234,7 @@ export interface AuthLoginBody {
 /**
  * Register request message body type.
  */
-export interface AuthRegisterBody {
+export interface AccountRegisterBody {
   /**
    * Personal name.
    */
@@ -262,27 +262,27 @@ export interface AuthRegisterBody {
 }
 
 /**
- * Invitation get message body type.
+ * Entity request by ID body.
  */
-export interface InvitationGetBody {
+export interface IdBody {
   /**
-   * Invitation ID, which validity is being checked.
+   * ID of the requested entity.
    */
   id: string;
 }
 
 /**
- * Login response message data type.
+ * Generated JSON Web Token data type.
  */
-export interface AuthData {
+export interface TokenData {
   /**
-   * Generated JWT token.
+   * Generated JSON Web Token.
    */
   token: string;
 }
 
 /**
- * Invitation check response message data type.
+ * Invitation entity data type.
  */
 export interface InvitationData {
   /**

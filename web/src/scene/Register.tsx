@@ -1,4 +1,4 @@
-import { AuthRegisterBody, ErrorReasons, Languages } from "api";
+import { AccountRegisterBody, ErrorReasons, Languages } from "api";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -87,7 +87,7 @@ type RegisterValues = Record<TextFieldNames, string> &
 
 /**
  * Blueprint object that is used to transform `RegisterValues` into
- * `AuthRegisterBody` without `invitationId` property.
+ * `AccountRegisterBody` without `invitationId` property.
  */
 // prettier-ignore
 const BLUEPRINT = {
@@ -99,17 +99,17 @@ const BLUEPRINT = {
 
 /**
  * Transformation function that transforms `RegisterValues` into
- * `AuthRegisterBody` without `invitation` property.
+ * `AccountRegisterBody` without `invitation` property.
  */
 // prettier-ignore
 const TRANSFORMATION = from<RegisterValues>()
-  .construct<Omit<AuthRegisterBody, "invitationId">, typeof BLUEPRINT>(BLUEPRINT)
+  .construct<Omit<AccountRegisterBody, "invitationId">, typeof BLUEPRINT>(BLUEPRINT)
   .build();
 
 /**
  * Scene that used to create a new account by filling in registration form.
  */
-@inject("auth", "invitations", "views")
+@inject("accounts", "invitations", "views")
 @observer
 export class Register extends SceneComponent<
   "Register",
@@ -246,7 +246,7 @@ export class Register extends SceneComponent<
     const result = TRANSFORMATION(this.values);
     const error = await this.props.views!.load(
       result.kind === "Ok"
-        ? this.props.auth!.register({
+        ? this.props.accounts!.register({
             ...result.value,
             invitationId: this.props.scene.parameters!.invitationId
           })

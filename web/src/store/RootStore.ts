@@ -1,6 +1,6 @@
 import { Food } from "../model/Food";
 import { Invitation } from "../model/Invitation";
-import { AuthStore } from "./AuthStore";
+import { AccountsStore } from "./AccountsStore";
 import { FoodsStore } from "./FoodsStore";
 import { InvitationsStore } from "./InvitationsStore";
 import { ViewsStore } from "./ViewsStore";
@@ -9,7 +9,7 @@ import { ViewsStore } from "./ViewsStore";
  * Store that stores all other stores.
  */
 export class RootStore {
-  public auth: AuthStore;
+  public accounts: AccountsStore;
   public foods: FoodsStore;
   public invitations: InvitationsStore;
   public views: ViewsStore;
@@ -18,7 +18,7 @@ export class RootStore {
    * Creates the root store and initializes all other stores.
    */
   public constructor() {
-    this.auth = new AuthStore(this);
+    this.accounts = new AccountsStore(this);
     this.foods = new FoodsStore(Food);
     this.invitations = new InvitationsStore(Invitation);
     this.views = new ViewsStore(this);
@@ -28,7 +28,7 @@ export class RootStore {
    * Clears all stores.
    */
   public clear() {
-    this.auth.clear();
+    this.accounts.clear();
     this.foods.clear();
     this.invitations.clear();
   }

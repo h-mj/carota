@@ -5,10 +5,9 @@ import { post } from "../utility/client";
 import { RootStore } from "./RootStore";
 
 /**
- * Store responsible for storing and updating JSON Web Token string used for
- * authentication on the server side.
+ * Store responsible for storing and updating account information of current user.
  */
-export class AuthStore {
+export class AccountsStore {
   /**
    * JSON Web Token.
    */
@@ -20,7 +19,7 @@ export class AuthStore {
   private rootStore: RootStore;
 
   /**
-   * Creates a new instance of `AuthStore`.
+   * Creates a new instance of `AccountStore`.
    *
    * Assigns token inside `localStorage` to field `token` and creates an
    * `autorun` that updates token value inside `localStorage` any time field
@@ -68,8 +67,8 @@ export class AuthStore {
    * @param body Login request message body.
    */
   @action
-  public async login(body: Body<"auth", "login">) {
-    const response = await post("auth", "login", body);
+  public async login(body: Body<"account", "login">) {
+    const response = await post("account", "login", body);
 
     if ("error" in response) {
       return response.error;
@@ -88,8 +87,8 @@ export class AuthStore {
    * @param body Registration request message body.
    */
   @action
-  public async register(body: Body<"auth", "register">) {
-    const response = await post("auth", "register", body);
+  public async register(body: Body<"account", "register">) {
+    const response = await post("account", "register", body);
 
     if ("error" in response) {
       return response.error;

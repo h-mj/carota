@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { Administration } from "../scene/Administration";
+import { Amount } from "../scene/Amount";
 import { Diet } from "../scene/Diet";
 import { Edit } from "../scene/Edit";
 import { History } from "../scene/History";
@@ -80,6 +81,7 @@ export type RouteParameters<TSceneNames extends SceneNames> =
  */
 export const SCENE_COMPONENTS = {
   Administration: Administration,
+  Amount: Amount,
   Diet: Diet,
   Edit: Edit,
   History: History,
@@ -96,7 +98,7 @@ export const SCENE_COMPONENTS = {
 /**
  * Union of scene positions.
  */
-export type RenderPosition = "center" | "left";
+export type RenderPosition = "center" | "left" | "main";
 
 /**
  * Object that holds the information needed to render a scene.
@@ -134,7 +136,7 @@ export class Scene<TSceneName extends SceneNames> {
     name: TSceneName,
     parameters: RouteParameters<TSceneName>,
     props: SceneComponentProps<TSceneName>,
-    position: RenderPosition = "center"
+    position: RenderPosition = "main"
   ) {
     this.name = name;
     this.parameters = parameters;

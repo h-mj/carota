@@ -259,9 +259,7 @@ export class SearchResult extends TranslatedComponent<
    */
   @action
   private handleClick: React.MouseEventHandler<HTMLDivElement> = () => {
-    this.props.views!.push("left", "Edit", {
-      food: this.props.food
-    });
+    this.props.views!.push("center", "Amount", {});
   };
 }
 

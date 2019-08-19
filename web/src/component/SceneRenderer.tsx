@@ -1,11 +1,13 @@
+import { action } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 
 import { Component } from "../base/Component";
-import { Scenes } from "../base/Scene";
+import { RenderPosition, Scenes } from "../base/Scene";
 import { styled } from "../styling/theme";
 import { Navigation } from "./Navigation";
 import { Overlay } from "./Overlay";
+import { TitleBar } from "./TitleBar";
 
 /**
  * Scene rendered props.
@@ -27,19 +29,43 @@ export class SceneRenderer extends Component<SceneRendererProps> {
    * Renders the scene to correct position.
    */
   public render() {
-    const { position } = this.props.scene;
-
-    const Container = position === "left" ? Left : React.Fragment;
+    const { scene } = this.props;
+    const { position } = scene;
+    const Container = CONTAINERS[position];
 
     return (
-      <SceneOverlay translucent={position !== "center"}>
+      <SceneOverlay onClick={this.handleClick} position={position}>
         <Container>
-          {this.props.views!.root === this.props.scene && <Navigation />}
-          {this.props.scene.render()}
+          {this.props.views!.root === scene ? (
+            <Navigation />
+          ) : (
+            <TitleBar onClose={this.pop} />
+          )}
+          {scene.render()}
         </Container>
       </SceneOverlay>
     );
   }
+
+  /**
+   * Pops rendered scene when user clicks on the overlay.
+   */
+  @action
+  private handleClick: React.MouseEventHandler<HTMLDivElement> = event => {
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+
+    this.pop();
+  };
+
+  /**
+   * Pops rendered scene from active scenes.
+   */
+  @action
+  private pop = () => {
+    this.props.views!.pop(this.props.scene);
+  };
 }
 
 /**
@@ -47,29 +73,54 @@ export class SceneRenderer extends Component<SceneRendererProps> {
  */
 interface SceneOverlayProps {
   /**
-   * Whether or not overlay is translucent.
+   * Scene rendering position.
    */
-  translucent: boolean;
+  position: RenderPosition;
 }
 
 /**
  * Extended overlay component that contains a scene component.
  */
 const SceneOverlay = styled(Overlay)<SceneOverlayProps>`
-  background-color: ${({ theme, translucent }) =>
-    translucent ? theme.translucentBackgroundColor : theme.backgroundColor};
+  background-color: ${({ theme }) => theme.translucentBackgroundColor};
+
+  display: flex;
+  align-items: center;
+  justify-content: ${({ position }) =>
+    position === "main" ? "center" : position};
 `;
 
 /**
- * Component that is rendered on the left of the screen.
+ * Container that is rendered on the whole screen.
  */
-const Left = styled.div`
-  max-width: ${({ theme }) => theme.formWidth};
+const Main = styled.div`
   width: 100%;
   height: 100%;
-
   overflow: auto;
-
   background-color: ${({ theme }) => theme.backgroundColor};
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.22);
 `;
+
+/**
+ * Container that is rendered on the left of the screen.
+ */
+const Left = styled(Main)`
+  max-width: ${({ theme }) => theme.formWidth};
+`;
+
+/**
+ * Container that is rendered in the center of the screen.
+ */
+const Center = styled(Main)`
+  max-width: ${({ theme }) => theme.formWidth};
+  height: initial;
+  border-radius: ${({theme}) => theme.borderRadius};
+`;
+
+/**
+ * Maps render positions to their wrapper container components.
+ */
+const CONTAINERS = {
+  center: Center,
+  left: Left,
+  main: Main
+};

@@ -104,7 +104,7 @@ const Container = styled(Overlay)<Container>`
   justify-content: center;
   align-items: center;
 
-  background-color: ${({ theme }) => theme.translucentBackgroundColor};
+  background-color: ${({ theme }) => theme.backgroundColor};
 
   animation: ${props => (props.active ? fadeIn : fadeOut)} ${DURATION}s forwards;
 

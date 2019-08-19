@@ -91,6 +91,7 @@ export const russian: Translation = {
   },
   Navigation: {
     Administration: "Администрация",
+    Amount: "Количество",
     Diet: "Диета",
     Edit: "Редакция",
     History: "История",

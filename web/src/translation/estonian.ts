@@ -91,6 +91,7 @@ export const estonian: Translation = {
   },
   Navigation: {
     Administration: "Administratsioon",
+    Amount: "Kogus",
     Diet: "Dieet",
     Edit: "Redaktsioon",
     History: "Ajalugu",

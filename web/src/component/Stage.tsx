@@ -14,8 +14,8 @@ export class Stage extends Component {
    * Renders all active scenes.
    */
   public render() {
-    return this.props.views!.scenes.map(scene => (
-      <SceneRenderer key={scene.name} scene={scene} />
+    return this.props.views!.scenes.map((scene, index) => (
+      <SceneRenderer key={`${scene.name}:${index}`} scene={scene} />
     ));
   }
 }

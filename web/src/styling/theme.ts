@@ -70,7 +70,7 @@ export const LIGHT: Readonly<Theme> = {
   primaryColor: "rgba(0, 0, 0, 0.88)",
   secondaryColor: "rgba(0, 0, 0, 0.44)",
   backgroundColor: "rgb(255, 255, 255)",
-  translucentBackgroundColor: "rgba(255, 255, 255, 0.95)",
+  translucentBackgroundColor: "rgba(0, 0, 0, 0.25)",
   disabledBackgroundColor: "rgb(245, 245, 245)",
   transition: "0.1s cubic-bezier(0.4, 0.0, 0.2, 1)"
 };

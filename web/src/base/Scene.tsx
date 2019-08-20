@@ -195,23 +195,23 @@ export class Scene<TSceneName extends SceneNames> {
   /**
    * Scene on index path and to which is redirected to after registration.
    */
-  public static HOME: Readonly<Scenes> = new Scene("Home", {}, {});
+  public static readonly HOME = new Scene("Home", {}, {});
 
   /**
    * Scene that is shown if user is not authenticated but tries to access a
    * scene that requires authentication.
    */
-  public static GATEWAY: Readonly<Scenes> = new Scene("Login", undefined, {});
+  public static readonly GATEWAY = new Scene("Login", undefined, {});
 
   /**
    * Scene that is shown if no other scenes match current URL.
    */
-  public static UNKNOWN: Readonly<Scenes> = new Scene("Unknown", undefined, {});
+  public static readonly UNKNOWN = new Scene("Unknown", undefined, {});
 
   /**
    * Scene which is used to exit the application.
    */
-  public static EXIT: Readonly<Scenes> = new Scene("Logout", {}, {});
+  public static readonly EXIT = new Scene("Logout", {}, {});
 
   /**
    * Returns a scene from given URL. `undefined` if no scenes match the URL.

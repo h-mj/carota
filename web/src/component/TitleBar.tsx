@@ -58,7 +58,8 @@ const Close = styled.button`
   width: ${({ theme }) => theme.height};
   height: ${({ theme }) => theme.height};
 
-  font-size: 2rem;
+  color: ${({ theme }) => theme.secondaryColor};
+  font-size: 1.5rem;
 
   cursor: pointer;
 `;

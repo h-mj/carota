@@ -207,7 +207,9 @@ export class ViewsStore {
     name: TSceneName,
     props: SceneComponentProps<TSceneName>
   ): void {
-    this._scenes.push(new Scene(name, undefined, props, position) as Scenes);
+    const scene = new Scene(name, undefined, props, position);
+
+    this._scenes.push((scene as unknown) as Scenes);
   }
 
   /**

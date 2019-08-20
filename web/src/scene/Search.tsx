@@ -95,7 +95,7 @@ export class Search extends SceneComponent<"Search"> {
         {this.completed && (
           <SearchResults>
             {this.props.foods!.getAll().map(food => (
-              <SearchResult key={food.id} food={food} />
+              <SearchResult key={food.id} food={food} select={this.select} />
             ))}
             <Add onClick={this.showEditor}>+</Add>
           </SearchResults>
@@ -144,6 +144,15 @@ export class Search extends SceneComponent<"Search"> {
   private showEditor = () => {
     this.props.views!.push("left", "Edit", {});
   };
+
+  /**
+   * Food item and quantity selection callback.
+   */
+  @action
+  private select = (food: Food, quantity: number) => {
+    console.log(`Selected ${quantity}${food.unit} of ${food.name}`);
+    this.props.views!.update(); // Refresh the page.
+  };
 }
 
 /**
@@ -186,6 +195,11 @@ interface SearchResultProps {
    * Corresponding food model instance.
    */
   food: Food;
+
+  /**
+   * Food item selection callback.
+   */
+  select: (food: Food, quantity: number) => void;
 }
 
 /**
@@ -262,7 +276,10 @@ export class SearchResult extends TranslatedComponent<
    */
   @action
   private handleClick: React.MouseEventHandler<HTMLDivElement> = () => {
-    this.props.views!.push("center", "Quantity", { food: this.props.food });
+    this.props.views!.push("center", "Quantity", {
+      food: this.props.food,
+      select: this.props.select
+    });
   };
 }
 

@@ -237,11 +237,11 @@ export class SearchResult extends TranslatedComponent<
                 <IconComponent />
               </Icon>
 
-              <Amount>
+              <Quantity>
                 {(
                   100 * nutritionDeclaration[nutrient as Nutrient]
                 ).toLocaleString("et-EE", FORMAT_OPTIONS)}
-              </Amount>
+              </Quantity>
 
               <Unit>
                 {this.translation.units[nutrient === "energy" ? "kcal" : "g"]}
@@ -254,12 +254,11 @@ export class SearchResult extends TranslatedComponent<
   }
 
   /**
-   * Shows food item editing scene on the side when user clicks on food item
-   * result.
+   * Shows quantity selection when user clicks of food item.
    */
   @action
   private handleClick: React.MouseEventHandler<HTMLDivElement> = () => {
-    this.props.views!.push("center", "Amount", {});
+    this.props.views!.push("center", "Quantity", { food: this.props.food });
   };
 }
 
@@ -346,9 +345,9 @@ const Icon = styled.span`
 `;
 
 /**
- * Displays nutrient amount value.
+ * Displays nutrient quantity.
  */
-const Amount = styled.span`
+const Quantity = styled.span`
   width: 100%;
   color: ${({ theme }) => theme.primaryColor};
   font-feature-settings: "tnum" 1;

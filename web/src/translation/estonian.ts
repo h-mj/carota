@@ -91,7 +91,6 @@ export const estonian: Translation = {
   },
   Navigation: {
     Administration: "Administratsioon",
-    Amount: "Kogus",
     Diet: "Dieet",
     Edit: "Redaktsioon",
     History: "Ajalugu",
@@ -100,6 +99,7 @@ export const estonian: Translation = {
     Logout: "Logige välja",
     Measurements: "Mõõdud",
     Register: "Looge konto",
+    Quantity: "Quantity",
     Search: "Otsing",
     Settings: "Seaded",
     Unknown: "Vabandame, soovitud lehekülge ei leitud"

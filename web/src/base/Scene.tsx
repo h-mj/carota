@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import { Administration } from "../scene/Administration";
-import { Amount } from "../scene/Amount";
 import { Diet } from "../scene/Diet";
 import { Edit } from "../scene/Edit";
 import { History } from "../scene/History";
@@ -9,6 +8,7 @@ import { Home } from "../scene/Home";
 import { Login } from "../scene/Login";
 import { Logout } from "../scene/Logout";
 import { Measurements } from "../scene/Measurements";
+import { Quantity } from "../scene/Quantity";
 import { Register } from "../scene/Register";
 import { Search } from "../scene/Search";
 import { Settings } from "../scene/Settings";
@@ -81,7 +81,6 @@ export type RouteParameters<TSceneNames extends SceneNames> =
  */
 export const SCENE_COMPONENTS = {
   Administration: Administration,
-  Amount: Amount,
   Diet: Diet,
   Edit: Edit,
   History: History,
@@ -89,6 +88,7 @@ export const SCENE_COMPONENTS = {
   Login: Login,
   Logout: Logout,
   Measurements: Measurements,
+  Quantity: Quantity,
   Register: Register,
   Search: Search,
   Settings: Settings,

@@ -91,7 +91,6 @@ export const russian: Translation = {
   },
   Navigation: {
     Administration: "Администрация",
-    Amount: "Количество",
     Diet: "Диета",
     Edit: "Редакция",
     History: "История",
@@ -99,6 +98,7 @@ export const russian: Translation = {
     Login: "Вход",
     Logout: "Выход",
     Measurements: "Замеры",
+    Quantity: "Количество",
     Register: "Создать аккаунт",
     Search: "Поиск",
     Settings: "Настройки",

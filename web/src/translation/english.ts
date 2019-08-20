@@ -91,7 +91,6 @@ export const english: Translation = {
   },
   Navigation: {
     Administration: "Administration",
-    Amount: "Amount",
     Diet: "Diet",
     Edit: "Edit",
     History: "History",
@@ -99,6 +98,7 @@ export const english: Translation = {
     Login: "Sign in",
     Logout: "Sign out",
     Measurements: "Measurements",
+    Quantity: "Quantity",
     Register: "Sign up",
     Search: "Search",
     Settings: "Settings",

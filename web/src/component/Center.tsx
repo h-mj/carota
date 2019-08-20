@@ -1,4 +1,4 @@
-import { styled } from "../../styling/theme";
+import { styled } from "../styling/theme";
 
 /**
  * Component that takes up whole screen and positions itc children in the middle

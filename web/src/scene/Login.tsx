@@ -8,9 +8,10 @@ import {
   SceneComponent
 } from "../base/SceneComponent";
 import { Button } from "../component/Button";
-import { Center } from "../component/collection/container";
-import { Controls, Form, Group, Title } from "../component/collection/form";
+import { Center } from "../component/Center";
+import { Controls, Form, Title } from "../component/collection/form";
 import { Logo } from "../component/collection/icons";
+import { Group } from "../component/Group";
 import { Head } from "../component/Head";
 import { TextField } from "../component/TextField";
 import { styled } from "../styling/theme";
@@ -207,4 +208,6 @@ export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
  */
 const LogoContainer = styled.div`
   width: ${({ theme }) => theme.padding};
+  margin-left: auto;
+  margin-right: auto;
 `;

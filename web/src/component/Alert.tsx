@@ -3,7 +3,7 @@ import * as React from "react";
 
 import { TranslatedComponent } from "../base/TranslatedComponent";
 import { styled } from "../styling/theme";
-import { Center } from "./collection/container";
+import { Center } from "./Center";
 
 /**
  * Maps alert names to it's translated text message parameter names.

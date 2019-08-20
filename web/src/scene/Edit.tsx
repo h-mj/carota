@@ -13,7 +13,8 @@ import {
   SceneComponent
 } from "../base/SceneComponent";
 import { Button } from "../component/Button";
-import { Controls, Form, Group } from "../component/collection/form";
+import { Controls, Form } from "../component/collection/form";
+import { Group } from "../component/Group";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
 import { Food } from "../model/Food";

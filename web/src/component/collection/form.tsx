@@ -29,25 +29,6 @@ export const Form = styled.form`
 `;
 
 /**
- * Component that groups together multiple components.
- */
-export const Group = styled.div`
-  width: 100%;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  & > * {
-    margin-bottom: calc(${({ theme }) => theme.padding} / 3);
-  }
-
-  & > *:last-child {
-    margin-bottom: 0;
-  }
-`;
-
-/**
  * Component that displays title text.
  */
 export const Title = styled.div`

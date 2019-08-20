@@ -9,8 +9,9 @@ import {
 } from "../base/SceneComponent";
 import { Alert } from "../component/Alert";
 import { Button } from "../component/Button";
-import { Center } from "../component/collection/container";
-import { Controls, Form, Group, Title } from "../component/collection/form";
+import { Center } from "../component/Center";
+import { Controls, Form, Title } from "../component/collection/form";
+import { Group } from "../component/Group";
 import { Head } from "../component/Head";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";

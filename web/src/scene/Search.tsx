@@ -192,7 +192,9 @@ interface SearchResultProps {
  * Search result translation.
  */
 interface SearchResultTranslation {
-  units: Record<"g" | "kcal" | "ml", string>;
+  /**
+   * Quantities per 100 units text.
+   */
   per: string;
 }
 
@@ -227,27 +229,29 @@ export class SearchResult extends TranslatedComponent<
           <div>
             {this.translation.per.replace(
               "{unit}",
-              this.translation.units[unit]
+              this.props.views!.translation.units[unit]
             )}
           </div>
 
-          {Object.entries(ICONS).map(([nutrient, IconComponent]) => (
-            <Nutrient key={nutrient}>
-              <Icon>
-                <IconComponent />
-              </Icon>
+          {Object.entries(ICONS).map(([nutrient, IconComponent]) => {
+            const quantity = (
+              100 * nutritionDeclaration[nutrient as Nutrient]
+            ).toLocaleString("et-EE", FORMAT_OPTIONS);
 
-              <Quantity>
-                {(
-                  100 * nutritionDeclaration[nutrient as Nutrient]
-                ).toLocaleString("et-EE", FORMAT_OPTIONS)}
-              </Quantity>
+            const unit = this.props.views!.translation.units[
+              nutrient === "energy" ? "kcal" : "g"
+            ];
 
-              <Unit>
-                {this.translation.units[nutrient === "energy" ? "kcal" : "g"]}
-              </Unit>
-            </Nutrient>
-          ))}
+            return (
+              <Nutrient key={nutrient}>
+                <Icon>
+                  <IconComponent />
+                </Icon>
+                <Quantity>{quantity}</Quantity>
+                <Unit>{unit}</Unit>
+              </Nutrient>
+            );
+          })}
         </Stats>
       </ResultContainer>
     );

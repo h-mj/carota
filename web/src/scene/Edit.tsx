@@ -112,11 +112,6 @@ interface EditTranslation {
    * Form submit button text.
    */
   submit: string;
-
-  /**
-   * Unit translations.
-   */
-  units: Record<"g" | "kcal" | "ml", string>;
 }
 
 /**
@@ -229,8 +224,8 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
             name="unit"
             onChange={this.handleUnitChange}
             options={[
-              { label: this.translation.units.g, value: "g" },
-              { label: this.translation.units.ml, value: "ml" }
+              { label: this.props.views!.translation.units.g, value: "g" },
+              { label: this.props.views!.translation.units.ml, value: "ml" }
             ]}
             value={this.values.unit}
           />
@@ -265,7 +260,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
       type={name === "barcode" ? "tel" : name === "name" ? "text" : "number"}
       unit={
         name === "pieceQuantity" && this.values.unit !== undefined
-          ? this.translation.units[this.values.unit!]
+          ? this.props.views!.translation.units[this.values.unit!]
           : undefined
       }
       value={this.values[name]}
@@ -288,7 +283,11 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
       optional={!(REQUIRED_NUTRIENTS as readonly string[]).includes(nutrient)}
       textAlign="right"
       type="number"
-      unit={this.translation.units[nutrient === "energy" ? "kcal" : "g"]}
+      unit={
+        this.props.views!.translation.units[
+          nutrient === "energy" ? "kcal" : "g"
+        ]
+      }
       value={this.values.nutritionDeclaration[nutrient]}
     />
   );

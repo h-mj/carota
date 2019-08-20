@@ -151,7 +151,7 @@ export class Search extends SceneComponent<"Search"> {
   @action
   private select = (food: Food, quantity: number) => {
     console.log(`Selected ${quantity}${food.unit} of ${food.name}`);
-    this.props.views!.update(); // Refresh the page.
+    this.props.views!.refresh(); // Refresh the page.
   };
 }
 

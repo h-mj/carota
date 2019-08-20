@@ -192,7 +192,7 @@ export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
     if (result.kind === "Ok" && error === undefined) {
       // Update current scene so it matches the URL, since login scene overrides
       // it.
-      this.props.views!.update();
+      this.props.views!.refresh();
     }
 
     if (error !== undefined && error.code === 401 /* Unauthorized */) {

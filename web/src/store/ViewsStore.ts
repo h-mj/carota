@@ -69,8 +69,8 @@ export class ViewsStore {
     this._scenes = [];
     this._rootStore = rootStore;
 
-    this.update();
-    window.addEventListener("popstate", () => this.update(), false);
+    this.refresh();
+    window.addEventListener("popstate", () => this.refresh(), false);
   }
 
   /**
@@ -182,7 +182,7 @@ export class ViewsStore {
    * Updates main scene based on current URL and authentication status.
    */
   @action
-  public update() {
+  public refresh() {
     const { authenticated } = this._rootStore.accounts;
     const scene = Scene.from(window.location.pathname);
 

@@ -100,6 +100,10 @@ export const estonian: Translation = {
       Settings: "Seaded",
       Unknown: "Vabandame, soovitud lehekülge ei leitud"
     },
+    Quantity: {
+      quantity: "Kogus",
+      select: "Valige"
+    },
     Register: {
       inputs: {
         email: {

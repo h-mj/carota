@@ -100,6 +100,10 @@ export const russian: Translation = {
       Settings: "Настройки",
       Unknown: "К сожалению, запрошенная страница не была найдена"
     },
+    Quantity: {
+      quantity: "Количество",
+      select: "Выбрать"
+    },
     Register: {
       inputs: {
         email: {

@@ -36,11 +36,30 @@ const TRANSFORMATION = from<string>()
   .build();
 
 /**
+ * Quantity scene component translation.I
+ */
+interface QuantityTranslation {
+  /**
+   * Quantity text label translation.
+   */
+  quantity: string;
+
+  /**
+   * Select button translation.
+   */
+  select: string;
+}
+
+/**
  * Scene component that is used to select a quantity of some food item.
  */
 @inject("views")
 @observer
-export class Quantity extends SceneComponent<"Quantity", QuantityProps> {
+export class Quantity extends SceneComponent<
+  "Quantity",
+  QuantityProps,
+  QuantityTranslation
+> {
   /**
    * Selected quantity value.
    */
@@ -69,14 +88,16 @@ export class Quantity extends SceneComponent<"Quantity", QuantityProps> {
         <TextField
           autoFocus={true}
           invalid={this.invalid}
+          label={this.translation.quantity}
           name="quantity"
           onChange={this.handleChange}
+          textAlign="right"
           type="number"
           unit={this.props.views!.translation.units[this.props.food.unit]}
           value={this.quantity}
         />
         <Controls>
-          <Button>Select</Button>
+          <Button invalid={this.invalid}>{this.translation.quantity}</Button>
         </Controls>
       </Form>
     );

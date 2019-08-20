@@ -100,6 +100,10 @@ export const english: Translation = {
       Settings: "Settings",
       Unknown: "We are sorry, the page you requested has not been found"
     },
+    Quantity: {
+      quantity: "Quantity",
+      select: "Select"
+    },
     Register: {
       inputs: {
         email: {

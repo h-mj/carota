@@ -306,62 +306,62 @@ export interface InvitationData {
  */
 export interface NutritionDeclarationData {
   /**
-   * Amount of energy in kilocalories.
+   * Quantity of energy in kilocalories.
    */
   energy: number;
 
   /**
-   * Amount of fat in grams.
+   * Quantity of fat in grams.
    */
   fat: number;
 
   /**
-   * Amount of saturates in grams.
+   * Quantity of saturates in grams.
    */
   saturates?: number;
 
   /**
-   * Amount of mono-unsaturates in grams.
+   * Quantity of mono-unsaturates in grams.
    */
   monoUnsaturates?: number;
 
   /**
-   * Amount of polyunsaturates in grams.
+   * Quantity of polyunsaturates in grams.
    */
   polyunsaturates?: number;
 
   /**
-   * Amount of carbohydrate in grams.
+   * Quantity of carbohydrate in grams.
    */
   carbohydrate: number;
 
   /**
-   * Amount of sugars in grams.
+   * Quantity of sugars in grams.
    */
   sugars?: number;
 
   /**
-   * Amount of polyols in grams.
+   * Quantity of polyols in grams.
    */
   polyols?: number;
 
   /**
-   * Amount of starch in grams.
+   * Quantity of starch in grams.
    */
   starch?: number;
 
   /**
-   * Amount of fibre in grams.
+   * Quantity of fibre in grams.
    */
   fibre?: number;
 
   /**
-   * Amount of protein in grams.
+   * Quantity of protein in grams.
    */
   protein: number;
 
   /**
-   * Amount of salt in grams.
+   * Quantity of salt in grams.
    */
   salt?: number;
 }

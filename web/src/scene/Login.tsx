@@ -1,4 +1,5 @@
-import { AccountLoginBody, ErrorReasons } from "api";
+import { ErrorReasons } from "api";
+import { deviate } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -16,7 +17,6 @@ import { Head } from "../component/Head";
 import { TextField } from "../component/TextField";
 import { styled } from "../styling/theme";
 import { ErrorReasonsFor, any, append } from "../utility/form";
-import { from } from "../utility/shift";
 
 /**
  * Array of input names within login form.
@@ -74,21 +74,14 @@ interface LoginTranslation {
 type LoginValues = Record<InputNames, string>;
 
 /**
- * Blueprint that is used to transform `LoginValues` type into `AccountLoginBody`.
- * type
- */
-// prettier-ignore
-const BLUEPRINT = {
-  email: from<string>().trim().notEmpty().build(),
-  password: from<string>().notEmpty().build()
-};
-
-/**
  * Function that transforms `LoginValues` into `AccountLoginBody`.
  */
-const TRANSFORMATION = from<LoginValues>()
-  .construct<AccountLoginBody, typeof BLUEPRINT>(BLUEPRINT)
-  .build();
+const toBody = deviate<LoginValues>().shape({
+  email: deviate<string>()
+    .trim()
+    .notEmpty(),
+  password: deviate<string>().notEmpty()
+});
 
 /**
  * Scene that authenticates user using their email and password and on success
@@ -182,14 +175,14 @@ export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
   > = async event => {
     event.preventDefault();
 
-    const result = TRANSFORMATION(this.values);
+    const result = toBody(this.values);
     const error = await this.props.views!.load(
-      result.kind === "Ok"
+      result.kind !== "Err"
         ? this.props.accounts!.login(result.value)
         : undefined
     );
 
-    if (result.kind === "Ok" && error === undefined) {
+    if (result.kind !== "Err" && error === undefined) {
       // Update current scene so it matches the URL, since login scene overrides
       // it.
       this.props.views!.refresh();

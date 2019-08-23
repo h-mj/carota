@@ -1,9 +1,5 @@
-import {
-  ErrorReasons,
-  FoodSaveBody,
-  NutritionDeclarationData,
-  Units
-} from "api";
+import { ErrorReasons, Units } from "api";
+import { deviate } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -19,7 +15,6 @@ import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
 import { Food } from "../model/Food";
 import { ErrorReasonsFor, any, append } from "../utility/form";
-import { from } from "../utility/shift";
 
 /**
  * Union of text field input names.
@@ -134,50 +129,48 @@ interface EditValues {
 }
 
 /**
- * Blueprint using which `NutritionDeclarationValues` type object is transformed
- * into `NutritionDeclarationData` object.
+ * Converts a string into floating point number.
  */
-// prettier-ignore
-const NUTRITION_DECLARATION_BLUEPRINT = {
-  energy: from<string>().parseFloat().build(),
-  fat: from<string>().parseFloat().build(),
-  saturates: from<string | undefined>().optional().parseFloat().build(),
-  monoUnsaturates: from<string | undefined>().optional().parseFloat().build(),
-  polyunsaturates: from<string | undefined>().optional().parseFloat().build(),
-  carbohydrate: from<string>().parseFloat().build(),
-  sugars: from<string | undefined>().optional().parseFloat().build(),
-  polyols: from<string | undefined>().optional().parseFloat().build(),
-  starch: from<string | undefined>().optional().parseFloat().build(),
-  fibre: from<string | undefined>().optional().parseFloat().build(),
-  protein: from<string>().parseFloat().build(),
-  salt: from<string | undefined>().optional().parseFloat().build()
-};
+const parseFloat = deviate<string>()
+  .trim()
+  .notEmpty()
+  .toNumber();
 
 /**
- * Blueprint using which `EditValues` type object is transformed into
- * `FoodSaveBody` object.
+ * Allows value to be `undefined`, otherwise converts it to a float.
  */
-// prettier-ignore
-const FOOD_BLUEPRINT = {
-  id: from<string | undefined>().build(),
-  name: from<string>().notEmpty().build(),
-  barcode: from<string | undefined>().optional().notEmpty().build(),
-  quantity: from<string>().notEmpty().parseFloat().set(undefined).build(),
-  unit: from<Units | undefined>().string().build(),
-  nutritionDeclaration: from<NutritionDeclarationValues>()
-    .construct<NutritionDeclarationData, typeof NUTRITION_DECLARATION_BLUEPRINT>(
-      NUTRITION_DECLARATION_BLUEPRINT
-    )
-    .build(),
-  pieceQuantity: from<string | undefined>().optional().notEmpty().parseFloat().build()
-};
+const optionalParseFloat = deviate<string | undefined>()
+  .optional()
+  .append(parseFloat);
 
 /**
  * Function that transforms `EditValues` type object into `FoodSaveBody` type
  * object.
  */
 // prettier-ignore
-const FOOD_TRANSFORMATION = from<EditValues>().construct<FoodSaveBody, typeof FOOD_BLUEPRINT>(FOOD_BLUEPRINT).build();
+const toBody = deviate<EditValues>().shape({
+  id: deviate<string | undefined>(),
+  name: deviate<string>().notEmpty(),
+  barcode: deviate<string | undefined>().optional().notEmpty(),
+  quantity: deviate<string>().append(parseFloat).set(undefined),
+  unit: deviate<Units | undefined>().string(),
+  nutritionDeclaration: deviate<NutritionDeclarationValues>()
+    .shape({
+        energy: parseFloat,
+        fat: parseFloat,
+        saturates: optionalParseFloat,
+        monoUnsaturates: optionalParseFloat,
+        polyunsaturates: optionalParseFloat,
+        carbohydrate: parseFloat,
+        sugars: optionalParseFloat,
+        polyols: optionalParseFloat,
+        starch: optionalParseFloat,
+        fibre: optionalParseFloat,
+        protein: parseFloat,
+        salt: optionalParseFloat
+      }),
+  pieceQuantity: optionalParseFloat
+});
 
 /**
  * Food editing scene that allows user to either create new or edit existing
@@ -326,9 +319,9 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   > = async event => {
     event.preventDefault();
 
-    const result = FOOD_TRANSFORMATION(this.values);
+    const result = toBody(this.values);
 
-    if (result.kind === "Ok") {
+    if (result.kind !== "Err") {
       // Normalize all nutrient values per unit.
       const { quantity } = this.values;
       const { nutritionDeclaration } = result.value;
@@ -343,14 +336,18 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
     }
 
     const error = await this.props.views!.load(
-      result.kind === "Ok" ? this.props.foods!.save(result.value) : undefined
+      result.kind !== "Err" ? this.props.foods!.save(result.value) : undefined
     );
 
-    if (result.kind === "Ok" && error === undefined) {
+    if (result.kind !== "Err" && error === undefined) {
       this.props.views!.pop(this.props.scene);
     }
 
-    this.reasons = append(result.kind === "Err" ? result.value : {}, error);
+    // TODO: convert errors to ErrorReasons
+    this.reasons = append(
+      result.kind !== "Err" ? {} : (result.value as any),
+      error
+    );
   };
 
   /**

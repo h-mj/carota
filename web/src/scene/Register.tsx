@@ -1,4 +1,5 @@
-import { AccountRegisterBody, ErrorReasons, Languages } from "api";
+import { ErrorReasons, Languages } from "api";
+import { deviate } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -16,7 +17,6 @@ import { Head } from "../component/Head";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
 import { ErrorReasonsFor, any, append } from "../utility/form";
-import { from } from "../utility/shift";
 
 /**
  * Array of text field names within registration form.
@@ -87,25 +87,16 @@ type RegisterValues = Record<TextFieldNames, string> &
   Record<"language", Languages | undefined>;
 
 /**
- * Blueprint object that is used to transform `RegisterValues` into
- * `AccountRegisterBody` without `invitationId` property.
- */
-// prettier-ignore
-const BLUEPRINT = {
-  language: from<Languages | undefined>().string().build(),
-  name: from<string>().trim().notEmpty().build(),
-  email: from<string>().trim().notEmpty().build(),
-  password: from<string>().notEmpty().build()
-};
-
-/**
  * Transformation function that transforms `RegisterValues` into
- * `AccountRegisterBody` without `invitation` property.
+ * `AccountRegisterBody`.
  */
 // prettier-ignore
-const TRANSFORMATION = from<RegisterValues>()
-  .construct<Omit<AccountRegisterBody, "invitationId">, typeof BLUEPRINT>(BLUEPRINT)
-  .build();
+const toBody = deviate<RegisterValues>().shape({
+  language: deviate<Languages | undefined>().string(),
+  name: deviate<string>().trim().notEmpty(),
+  email: deviate<string>().trim().notEmpty(),
+  password: deviate<string>().notEmpty()
+});
 
 /**
  * Scene that used to create a new account by filling in registration form.
@@ -244,9 +235,9 @@ export class Register extends SceneComponent<
   > = async event => {
     event.preventDefault();
 
-    const result = TRANSFORMATION(this.values);
+    const result = toBody(this.values);
     const error = await this.props.views!.load(
-      result.kind === "Ok"
+      result.kind !== "Err"
         ? this.props.accounts!.register({
             ...result.value,
             invitationId: this.props.scene.parameters!.invitationId
@@ -258,7 +249,11 @@ export class Register extends SceneComponent<
       this.props.views!.home();
     }
 
-    this.reasons = append(result.kind === "Err" ? result.value : {}, error);
+    // TODO: convert errors to ErrorReasons
+    this.reasons = append(
+      result.kind !== "Err" ? {} : (result.value as any),
+      error
+    );
   };
 
   /**

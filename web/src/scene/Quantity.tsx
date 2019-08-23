@@ -1,3 +1,4 @@
+import { deviate } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -10,7 +11,6 @@ import { Button } from "../component/Button";
 import { Controls, Form } from "../component/collection/form";
 import { TextField } from "../component/TextField";
 import { Food } from "../model/Food";
-import { from } from "../utility/shift";
 
 /**
  * Quantity scene component props.
@@ -30,10 +30,10 @@ interface QuantityProps {
 /**
  * Transformation that transforms string quantity to numeric value.
  */
-const TRANSFORMATION = from<string>()
+const validate = deviate<string>()
   .trim()
-  .parseFloat()
-  .build();
+  .notEmpty()
+  .toNumber();
 
 /**
  * Quantity scene component translation.I
@@ -119,9 +119,9 @@ export class Quantity extends SceneComponent<
   private handleSubmit: React.FormEventHandler<HTMLFormElement> = event => {
     event.preventDefault();
 
-    const result = TRANSFORMATION(this.quantity);
+    const result = validate(this.quantity);
 
-    if (result.kind === "Ok") {
+    if (result.kind !== "Err") {
       this.props.select(this.props.food, result.value);
     } else {
       this.invalid = true;

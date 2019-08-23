@@ -1,3 +1,4 @@
+import { deviate } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -16,7 +17,6 @@ import {
 import { TextField } from "../component/TextField";
 import { Food } from "../model/Food";
 import { styled } from "../styling/theme";
-import { from } from "../utility/shift";
 
 /**
  * Object that maps nutrient names to its icon components.
@@ -43,10 +43,9 @@ const FORMAT_OPTIONS = {
 /**
  * Query string validator.
  */
-const QUERY_VALIDATOR = from<string>()
+const validate = deviate<string>()
   .trim()
-  .notEmpty()
-  .build();
+  .notEmpty();
 
 /**
  * Scene which is used for selecting a food item by searching it by its name.
@@ -125,15 +124,15 @@ export class Search extends SceneComponent<"Search"> {
    */
   @action
   private search = async () => {
-    const result = QUERY_VALIDATOR(this.query);
+    const result = validate(this.query);
 
-    if (result.kind === "Ok") {
+    if (result.kind !== "Err") {
       await this.props.foods!.search(result.value);
     } else {
       this.props.foods!.clear();
     }
 
-    this.completed = result.kind === "Ok";
+    this.completed = result.kind !== "Err";
     this.timeoutId = undefined;
   };
 

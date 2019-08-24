@@ -192,7 +192,7 @@ export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
       this.props.views!.notify(this.translation.invalidCredentials, "error");
     }
 
-    this.reasons = append(result.kind === "Err" ? result.value : {}, error);
+    this.reasons = append(result.kind !== "Err" ? {} : result.value, error);
   };
 }
 

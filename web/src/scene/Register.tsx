@@ -245,7 +245,7 @@ export class Register extends SceneComponent<
         : undefined
     );
 
-    if (result.kind === "Ok" && error === undefined) {
+    if (result.kind !== "Err" && error === undefined) {
       this.props.views!.home();
     }
 

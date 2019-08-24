@@ -134,6 +134,7 @@ interface EditValues {
 const parseFloat = deviate<string>()
   .trim()
   .notEmpty()
+  .replace(",", ".")
   .toNumber();
 
 /**
@@ -153,7 +154,7 @@ const toBody = deviate<EditValues>().shape({
   name: deviate<string>().notEmpty(),
   barcode: deviate<string | undefined>().optional().notEmpty(),
   quantity: deviate<string>().append(parseFloat).set(undefined),
-  unit: deviate<Units | undefined>().string(),
+  unit: deviate<Units | undefined>().defined(),
   nutritionDeclaration: deviate<NutritionDeclarationValues>()
     .shape({
         energy: parseFloat,

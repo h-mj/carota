@@ -92,7 +92,7 @@ type RegisterValues = Record<TextFieldNames, string> &
  */
 // prettier-ignore
 const toBody = deviate<RegisterValues>().shape({
-  language: deviate<Languages | undefined>().string(),
+  language: deviate<Languages | undefined>().defined(),
   name: deviate<string>().trim().notEmpty(),
   email: deviate<string>().trim().notEmpty(),
   password: deviate<string>().notEmpty()

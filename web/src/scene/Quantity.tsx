@@ -33,6 +33,7 @@ interface QuantityProps {
 const validate = deviate<string>()
   .trim()
   .notEmpty()
+  .replace(",", ".")
   .toNumber();
 
 /**

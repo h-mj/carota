@@ -97,7 +97,7 @@ export class Quantity extends SceneComponent<
           value={this.quantity}
         />
         <Controls>
-          <Button invalid={this.invalid}>{this.translation.quantity}</Button>
+          <Button invalid={this.invalid}>{this.translation.select}</Button>
         </Controls>
       </Form>
     );

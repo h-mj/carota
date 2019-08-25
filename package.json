@@ -2,9 +2,12 @@
   "name": "carota",
   "version": "0.0.0",
   "private": true,
+  "workspaces": [
+    "packages/api",
+    "packages/web"
+  ],
   "scripts": {
     "build": "./scripts/build.sh",
-    "postinstall": "lerna bootstrap",
     "start": "./scripts/start.sh"
   },
   "dependencies": {

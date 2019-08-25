@@ -3685,10 +3685,10 @@ detect-port-alt@1.1.6:
     address "^1.0.1"
     debug "^2.6.0"
 
-deviator@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/deviator/-/deviator-0.1.3.tgz#ee73c5f11084f953c206945b818cfd8567edcc66"
-  integrity sha512-u9qk72B0eGBG4HQFf7rYPYylnvHiKXIF/dGoA+l0s37sJS3ZCa2/iyS58GA0EmkxDRLvz3pfXoOq3mrmruI/Sg==
+deviator@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/deviator/-/deviator-0.1.5.tgz#9634412f53bd6b60b7c7f1929351b1e68fcccc1d"
+  integrity sha512-nNrR4wsoukoEaPJfMHRAXAJr+mSGLueUNqELCJ258WlDnb+/XDDGD93rbFM+4s0sD4VA4UPOodpJ3g6BzPZBnA==
 
 diff-sequences@^24.9.0:
   version "24.9.0"

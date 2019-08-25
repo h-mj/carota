@@ -237,7 +237,7 @@ export class Register extends SceneComponent<
 
     const result = toBody(this.values);
     const error = await this.props.views!.load(
-      result.kind !== "Err"
+      result.ok
         ? this.props.accounts!.register({
             ...result.value,
             invitationId: this.props.scene.parameters!.invitationId
@@ -245,15 +245,12 @@ export class Register extends SceneComponent<
         : undefined
     );
 
-    if (result.kind !== "Err" && error === undefined) {
+    if (result.ok && error === undefined) {
       this.props.views!.home();
     }
 
     // TODO: convert errors to ErrorReasons
-    this.reasons = append(
-      result.kind !== "Err" ? {} : (result.value as any),
-      error
-    );
+    this.reasons = append(result.ok ? {} : (result.value as any), error);
   };
 
   /**

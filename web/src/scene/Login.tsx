@@ -177,12 +177,10 @@ export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
 
     const result = toBody(this.values);
     const error = await this.props.views!.load(
-      result.kind !== "Err"
-        ? this.props.accounts!.login(result.value)
-        : undefined
+      result.ok ? this.props.accounts!.login(result.value) : undefined
     );
 
-    if (result.kind !== "Err" && error === undefined) {
+    if (result.ok && error === undefined) {
       // Update current scene so it matches the URL, since login scene overrides
       // it.
       this.props.views!.refresh();
@@ -192,7 +190,7 @@ export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
       this.props.views!.notify(this.translation.invalidCredentials, "error");
     }
 
-    this.reasons = append(result.kind !== "Err" ? {} : result.value, error);
+    this.reasons = append(result.ok ? {} : result.value, error);
   };
 }
 

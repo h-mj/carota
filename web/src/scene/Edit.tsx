@@ -322,7 +322,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
 
     const result = toBody(this.values);
 
-    if (result.kind !== "Err") {
+    if (result.ok) {
       // Normalize all nutrient values per unit.
       const { quantity } = this.values;
       const { nutritionDeclaration } = result.value;
@@ -337,18 +337,15 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
     }
 
     const error = await this.props.views!.load(
-      result.kind !== "Err" ? this.props.foods!.save(result.value) : undefined
+      result.ok ? this.props.foods!.save(result.value) : undefined
     );
 
-    if (result.kind !== "Err" && error === undefined) {
+    if (result.ok && error === undefined) {
       this.props.views!.pop(this.props.scene);
     }
 
     // TODO: convert errors to ErrorReasons
-    this.reasons = append(
-      result.kind !== "Err" ? {} : (result.value as any),
-      error
-    );
+    this.reasons = append(result.ok ? {} : (result.value as any), error);
   };
 
   /**

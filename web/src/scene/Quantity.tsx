@@ -122,7 +122,7 @@ export class Quantity extends SceneComponent<
 
     const result = validate(this.quantity);
 
-    if (result.kind !== "Err") {
+    if (result.ok) {
       this.props.select(this.props.food, result.value);
     } else {
       this.invalid = true;

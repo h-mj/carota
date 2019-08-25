@@ -126,13 +126,13 @@ export class Search extends SceneComponent<"Search"> {
   private search = async () => {
     const result = validate(this.query);
 
-    if (result.kind !== "Err") {
+    if (result.ok) {
       await this.props.foods!.search(result.value);
     } else {
       this.props.foods!.clear();
     }
 
-    this.completed = result.kind !== "Err";
+    this.completed = result.ok;
     this.timeoutId = undefined;
   };
 

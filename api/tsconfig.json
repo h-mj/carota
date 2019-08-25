@@ -3,7 +3,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
     "lib": ["esnext"],
     "module": "commonjs",
     "moduleResolution": "node",

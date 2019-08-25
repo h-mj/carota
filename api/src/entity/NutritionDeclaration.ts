@@ -1,7 +1,5 @@
 import { Column } from "typeorm";
 
-import { NutritionDeclarationData } from "../../types";
-
 /**
  * Class that holds nutrition information of some product.
  */
@@ -79,9 +77,10 @@ export class NutritionDeclaration {
   public salt!: number | null;
 
   /**
-   * Creates `NutritionDeclarationData` type object from this instance.
+   * Returns a representation of this model that will be transferred to the
+   * client.
    */
-  public toData = (): NutritionDeclarationData => ({
+  public toData = () => ({
     energy: this.energy,
     fat: this.fat,
     saturates: this.saturates || undefined,
@@ -96,3 +95,10 @@ export class NutritionDeclaration {
     salt: this.salt || undefined
   });
 }
+
+/**
+ * Nutrition declaration model data transfer object type.
+ */
+export type NutritionDeclarationData = ReturnType<
+  NutritionDeclaration["toData"]
+>;

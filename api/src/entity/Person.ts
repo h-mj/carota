@@ -6,13 +6,17 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 
-import { Sexes } from "../../types";
 import { Account } from "./Account";
 
 /**
  * Array of valid sexes.
  */
-export const SEXES: readonly Sexes[] = ["Female", "Male"];
+export const SEXES = ["Female", "Male"] as const;
+
+/**
+ * Union of valid sexes.
+ */
+export type Sexes = typeof SEXES[number];
 
 /**
  * Model that holds unchanging information about account users body used to

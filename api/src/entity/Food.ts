@@ -6,14 +6,18 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 
-import { FoodData, Units } from "../../types";
 import { Account } from "./Account";
 import { NutritionDeclaration } from "./NutritionDeclaration";
 
 /**
- * Array of valid units.
+ * Array of valid food amount units.
  */
-export const UNITS: readonly Units[] = ["g", "ml"];
+export const UNITS = ["g", "ml"] as const;
+
+/**
+ * Union of valid food amount units.
+ */
+export type Units = typeof UNITS[number];
 
 /**
  * Entity that holds information about a specific food alongside its nutritional
@@ -65,9 +69,10 @@ export class Food extends BaseEntity {
   public editor!: Account;
 
   /**
-   * Creates `FoodData` type object from this instance.
+   * Returns a representation of this model that will be transferred to the
+   * client.
    */
-  public toData = (): FoodData => ({
+  public toData = () => ({
     id: this.id,
     name: this.name,
     barcode: this.barcode || undefined,
@@ -76,3 +81,8 @@ export class Food extends BaseEntity {
     pieceQuantity: this.pieceQuantity || undefined
   });
 }
+
+/**
+ * Food model data transfer object type.
+ */
+export type FoodData = ReturnType<Food["toData"]>;

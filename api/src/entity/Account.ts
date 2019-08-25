@@ -8,27 +8,37 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 
-import { AccountRights, AccountTypes, Languages } from "../../types";
 import { Person } from "./Person";
 
 /**
  * Array of valid languages.
  */
-export const LANGUAGES: readonly Languages[] = [
-  "English",
-  "Estonian",
-  "Russian"
-];
+export const LANGUAGES = ["English", "Estonian", "Russian"] as const;
+
+/**
+ * Union of valid languages.
+ */
+export type Languages = typeof LANGUAGES[number];
 
 /**
  * Array of valid account types.
  */
-export const ACCOUNT_TYPES: readonly AccountTypes[] = ["Adviser", "Default"];
+export const ACCOUNT_TYPES = ["Adviser", "Default"] as const;
+
+/**
+ * Union of valid account types.
+ */
+export type AccountTypes = typeof ACCOUNT_TYPES[number];
 
 /**
  * Array of valid account rights.
  */
-export const ACCOUNT_RIGHTS: readonly AccountRights[] = ["All", "Default"];
+export const ACCOUNT_RIGHTS = ["All", "Default"] as const;
+
+/**
+ * Union of valid account rights.
+ */
+export type AccountRights = typeof ACCOUNT_RIGHTS[number];
 
 /**
  * Application account which is used to save registered users and verify them on

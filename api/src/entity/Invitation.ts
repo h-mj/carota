@@ -6,8 +6,13 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 
-import { AccountRights, AccountTypes, InvitationData } from "../../types";
-import { ACCOUNT_RIGHTS, ACCOUNT_TYPES, Account } from "./Account";
+import {
+  ACCOUNT_RIGHTS,
+  ACCOUNT_TYPES,
+  Account,
+  AccountRights,
+  AccountTypes
+} from "./Account";
 
 /**
  * Model that is used to register new accounts and assign advisers, inviters,
@@ -48,11 +53,17 @@ export class Invitation extends BaseEntity {
   public rights!: AccountRights;
 
   /**
-   * Creates `InvitationData` type object from this instance.
+   * Returns a representation of this model that will be transferred to the
+   * client.
    */
-  public toData = (): InvitationData => ({
+  public toData = () => ({
     id: this.id,
     type: this.type,
     rights: this.rights
   });
 }
+
+/**
+ * Invitation model data transfer object type.
+ */
+export type InvitationData = ReturnType<Invitation["toData"]>;

@@ -1,3 +1,9 @@
+import { AccountRights, AccountTypes, Languages } from "../src/entity/Account";
+import { FoodData, Units } from "../src/entity/Food";
+import { InvitationData } from "../src/entity/Invitation";
+import { NutritionDeclarationData } from "../src/entity/NutritionDeclaration";
+import { Sexes } from "../src/entity/Person";
+
 /**
  * Defines controllers, their actions, and request and response message body
  * data types.
@@ -194,27 +200,27 @@ export type ErrorContextElement = string | number | string[];
 /**
  * Union of all languages.
  */
-export type Languages = "English" | "Estonian" | "Russian";
+export type Languages = Languages;
 
 /**
  * Union of all account types.
  */
-export type AccountTypes = "Default" | "Adviser";
+export type AccountTypes = AccountTypes;
 
 /**
  * Union of all account rights.
  */
-export type AccountRights = "Default" | "All";
+export type AccountRights = AccountRights;
 
 /**
  * Union of all sexes.
  */
-export type Sexes = "Female" | "Male";
+export type Sexes = Sexes;
 
 /**
  * Union of all units.
  */
-export type Units = "g" | "ml";
+export type Units = Units;
 
 /**
  * Login request message body type.
@@ -284,87 +290,12 @@ export interface TokenData {
 /**
  * Invitation entity data type.
  */
-export interface InvitationData {
-  /**
-   * Invitation ID.
-   */
-  id: string;
-
-  /**
-   * Account type of future account.
-   */
-  type: string;
-
-  /**
-   * Account rights of future account.
-   */
-  rights: string;
-}
+export type InvitationData = InvitationData;
 
 /**
  * Declares nutritional values of a product.
  */
-export interface NutritionDeclarationData {
-  /**
-   * Quantity of energy in kilocalories.
-   */
-  energy: number;
-
-  /**
-   * Quantity of fat in grams.
-   */
-  fat: number;
-
-  /**
-   * Quantity of saturates in grams.
-   */
-  saturates?: number;
-
-  /**
-   * Quantity of mono-unsaturates in grams.
-   */
-  monoUnsaturates?: number;
-
-  /**
-   * Quantity of polyunsaturates in grams.
-   */
-  polyunsaturates?: number;
-
-  /**
-   * Quantity of carbohydrate in grams.
-   */
-  carbohydrate: number;
-
-  /**
-   * Quantity of sugars in grams.
-   */
-  sugars?: number;
-
-  /**
-   * Quantity of polyols in grams.
-   */
-  polyols?: number;
-
-  /**
-   * Quantity of starch in grams.
-   */
-  starch?: number;
-
-  /**
-   * Quantity of fibre in grams.
-   */
-  fibre?: number;
-
-  /**
-   * Quantity of protein in grams.
-   */
-  protein: number;
-
-  /**
-   * Quantity of salt in grams.
-   */
-  salt?: number;
-}
+export type NutritionDeclarationData = NutritionDeclarationData;
 
 /**
  * Save food request message body type.
@@ -414,34 +345,4 @@ export interface FoodSearchBody {
 /**
  * Save food response message data type.
  */
-export interface FoodData {
-  /**
-   * Food ID.
-   */
-  id: string;
-
-  /**
-   * The name of the food.
-   */
-  name: string;
-
-  /**
-   * Barcode of the food, if exists.
-   */
-  barcode?: string;
-
-  /**
-   * Serving unit.
-   */
-  unit: Units;
-
-  /**
-   * Food nutrition declaration.
-   */
-  nutritionDeclaration: NutritionDeclarationData;
-
-  /**
-   * Quantity of one piece in units, if one piece of product exists.
-   */
-  pieceQuantity?: number;
-}
+export type FoodData = FoodData;

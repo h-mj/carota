@@ -1,5 +1,5 @@
 #! /bin/sh
 
-cd api
+cd packages/api
 
 yarn start

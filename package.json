@@ -3,8 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "./scripts/start.sh",
     "build": "./scripts/build.sh",
-    "preinstall": "./scripts/preinstall.sh"
+    "postinstall": "lerna bootstrap",
+    "start": "./scripts/start.sh"
+  },
+  "dependencies": {
+    "lerna": "^3.16.4"
   }
 }

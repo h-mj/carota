@@ -4760,10 +4760,10 @@ detect-port-alt@1.1.6:
     address "^1.0.1"
     debug "^2.6.0"
 
-deviator@^0.1.5:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/deviator/-/deviator-0.1.5.tgz#9634412f53bd6b60b7c7f1929351b1e68fcccc1d"
-  integrity sha512-nNrR4wsoukoEaPJfMHRAXAJr+mSGLueUNqELCJ258WlDnb+/XDDGD93rbFM+4s0sD4VA4UPOodpJ3g6BzPZBnA==
+deviator@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/deviator/-/deviator-0.2.0.tgz#160323d5a7b874402ee392e5e823b30f8f5bb0a3"
+  integrity sha512-RraeiWZlngwYHLSt8wXKTTp+ujsqOatKUuoWWALYr1ezZLSsYBX4LMxerDhyQ7fNektQtOBbLGExB/EtIPPVFg==
 
 dezalgo@^1.0.0:
   version "1.0.3"

@@ -135,7 +135,8 @@ const parseFloat = deviate<string>()
   .trim()
   .notEmpty()
   .replace(",", ".")
-  .toNumber();
+  .toNumber()
+  .ge(0);
 
 /**
  * Allows value to be `undefined`, otherwise converts it to a float.
@@ -153,7 +154,7 @@ const toBody = deviate<EditValues>().shape({
   id: deviate<string | undefined>(),
   name: deviate<string>().notEmpty(),
   barcode: deviate<string | undefined>().optional().notEmpty(),
-  quantity: deviate<string>().append(parseFloat).set(undefined),
+  quantity: deviate<string>().append(parseFloat),
   unit: deviate<Units | undefined>().defined(),
   nutritionDeclaration: deviate<NutritionDeclarationValues>()
     .shape({
@@ -323,17 +324,20 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
     const result = toBody(this.values);
 
     if (result.ok) {
-      // Normalize all nutrient values per unit.
-      const { quantity } = this.values;
-      const { nutritionDeclaration } = result.value;
+      const { nutritionDeclaration, quantity } = result.value;
 
+      // Normalize all nutrient values per unit.
       for (const nutrient of NUTRIENTS) {
         const value = nutritionDeclaration[nutrient];
 
         if (value !== undefined) {
-          nutritionDeclaration[nutrient] = value / Number.parseFloat(quantity);
+          nutritionDeclaration[nutrient] = value / quantity;
         }
       }
+
+      // Remove quantity property from result value since API does not allow
+      // unknown properties.
+      delete result.value.quantity;
     }
 
     const error = await this.props.views!.load(

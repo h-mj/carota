@@ -34,7 +34,8 @@ const validate = deviate<string>()
   .trim()
   .notEmpty()
   .replace(",", ".")
-  .toNumber();
+  .toNumber()
+  .gt(0);
 
 /**
  * Quantity scene component translation.I

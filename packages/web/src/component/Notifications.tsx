@@ -116,8 +116,9 @@ export class Notifications extends Component {
 const Container = styled.div`
   position: fixed;
 
+  top: ${({ theme }) => theme.padding};
   left: ${({ theme }) => theme.padding};
-  bottom: ${({ theme }) => theme.padding};
+  right: ${({ theme }) => theme.padding};
 `;
 
 /**

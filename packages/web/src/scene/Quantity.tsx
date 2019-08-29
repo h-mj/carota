@@ -31,6 +31,26 @@ interface QuantityProps {
 }
 
 /**
+ * Translation of an input.
+ */
+interface InputTranslation {
+  /**
+   * Helper text translation.
+   */
+  helper: string;
+
+  /**
+   * Label translation.
+   */
+  label: string;
+
+  /**
+   * Error translations.
+   */
+  reasons: Record<string, string>;
+}
+
+/**
  * Quantity scene component translation.I
  */
 interface QuantityTranslation {
@@ -45,14 +65,9 @@ interface QuantityTranslation {
   ml: string;
 
   /**
-   * Quantity text label translation.
+   * Quantity input translation.
    */
-  quantity: string;
-
-  /**
-   * Quantity text field helper text.
-   */
-  quantityHelper: string;
+  quantity: InputTranslation;
 
   /**
    * Select button translation.
@@ -60,14 +75,9 @@ interface QuantityTranslation {
   select: string;
 
   /**
-   * Unit select label translation.
+   * Unit input translation.
    */
-  unit: string;
-
-  /**
-   * Unit select helper text.
-   */
-  unitHelper: string;
+  unit: InputTranslation;
 }
 
 /**
@@ -162,12 +172,17 @@ export class Quantity extends SceneComponent<
 
     return (
       <Select
-        helperMessage={this.translation.unitHelper.replace(
+        errorMessage={
+          this.reasons.unit !== undefined
+            ? this.translation.unit.reasons[this.reasons.unit]
+            : undefined
+        }
+        helperMessage={this.translation.unit.helper.replace(
           "{unit}",
           this.translation[this.props.food.unit]
         )}
         invalid={this.reasons.unit !== undefined}
-        label={this.translation.unit}
+        label={this.translation.unit.label}
         name="unit"
         options={options}
         value={this.values.unit}
@@ -183,9 +198,14 @@ export class Quantity extends SceneComponent<
     return (
       <TextField
         autoFocus={this.props.food.pieceQuantity === undefined}
-        helperMessage={this.translation.quantityHelper}
+        errorMessage={
+          this.reasons.quantity !== undefined
+            ? this.translation.quantity.reasons[this.reasons.quantity]
+            : undefined
+        }
+        helperMessage={this.translation.quantity.helper}
         invalid={this.reasons.quantity !== undefined}
-        label={this.translation.quantity}
+        label={this.translation.quantity.label}
         name="quantity"
         onChange={this.handleChange}
         textAlign="right"

@@ -94,7 +94,7 @@ type RegisterValues = Record<TextFieldNames, string> &
 const toBody = deviate<RegisterValues>().shape({
   language: deviate<Languages | undefined>().defined(),
   name: deviate<string>().trim().notEmpty(),
-  email: deviate<string>().trim().notEmpty(),
+  email: deviate<string>().trim().email(),
   password: deviate<string>().notEmpty()
 });
 

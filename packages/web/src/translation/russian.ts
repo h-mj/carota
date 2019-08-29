@@ -43,7 +43,7 @@ export const russian: Translation = {
         unit: {
           label: "Единица",
           reasons: {
-            invalid: "Пожалуйста, выберите единицу."
+            undefined: "Пожалуйста, выберите единицу."
           }
         }
       },
@@ -103,11 +103,23 @@ export const russian: Translation = {
     Quantity: {
       g: "граммах",
       ml: "миллилитрах",
-      quantity: "Количество",
-      quantityHelper: "Пожалуйста, введите количество продукта:",
+      quantity: {
+        helper: "Пожалуйста, введите количество продукта:",
+        label: "Количество",
+        reasons: {
+          empty: "Пожалуйста, введите количество продукта.",
+          not_a_number: "Пожалуйста, введите правильное количество.",
+          less_than_or_equals: "Пожалуйста, введите количество больше 0."
+        }
+      },
       select: "Выбрать",
-      unit: "Единица",
-      unitHelper: "Количество продукта в {unit} или в штуках?"
+      unit: {
+        helper: "Количество продукта в {unit} или в штуках?",
+        label: "Единица",
+        reasons: {
+          undefined: "Пожалуйста, выберите единицу."
+        }
+      }
     },
     Register: {
       inputs: {
@@ -116,7 +128,7 @@ export const russian: Translation = {
           reasons: {
             conflict: "Введенный адрес электронной почты уже используется.",
             empty: "Пожалуйста, введите адрес электронной почты.",
-            invalid:
+            not_email:
               "Пожалуйста, введите действительный адрес электронной почты."
           }
         },
@@ -128,7 +140,7 @@ export const russian: Translation = {
             Russian: "русский"
           },
           reasons: {
-            invalid: "Пожалуйста, выберите язык."
+            undefined: "Пожалуйста, выберите язык."
           }
         },
         name: {

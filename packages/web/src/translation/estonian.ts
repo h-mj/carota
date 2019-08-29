@@ -43,7 +43,7 @@ export const estonian: Translation = {
         unit: {
           label: "Ühik",
           reasons: {
-            invalid: "Palun valige ühik."
+            undefined: "Palun valige ühik."
           }
         }
       },
@@ -103,11 +103,23 @@ export const estonian: Translation = {
     Quantity: {
       g: "grammides",
       ml: "milliliitrites",
-      quantity: "Kogus",
-      quantityHelper: "Palun sisestage toiduaine kogus:",
+      quantity: {
+        helper: "Palun sisestage toiduaine kogus:",
+        label: "Kogus",
+        reasons: {
+          empty: "Palun sisestage toiduaine kogus.",
+          not_a_number: "Palun sistestage korrektne kogus.",
+          less_than_or_equals: "Palun sistestage kogus mis on suurem kui 0."
+        }
+      },
       select: "Valige",
-      unit: "Ühik",
-      unitHelper: "Kas toiduaine kogus on {ühik} või tükkides?"
+      unit: {
+        helper: "Kas toiduaine kogus on {ühik} või tükkides?",
+        label: "Ühik",
+        reasons: {
+          undefined: "Palun valige toiduaine ühik."
+        }
+      }
     },
     Register: {
       inputs: {
@@ -116,7 +128,7 @@ export const estonian: Translation = {
           reasons: {
             conflict: "Sisestatud e-posti aadress on juba kasutuses.",
             empty: "Palun sisestage e-posti aadress.",
-            invalid: "Palun sisestage kehtiv e-posti aadress."
+            not_email: "Palun sisestage kehtiv e-posti aadress."
           }
         },
         language: {
@@ -127,7 +139,7 @@ export const estonian: Translation = {
             Russian: "русский"
           },
           reasons: {
-            invalid: "Palun valige keel."
+            undefined: "Palun valige keel."
           }
         },
         name: {

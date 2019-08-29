@@ -43,7 +43,7 @@ export const english: Translation = {
         unit: {
           label: "Unit",
           reasons: {
-            invalid: "Please select a unit."
+            undefined: "Please select a unit."
           }
         }
       },
@@ -103,11 +103,23 @@ export const english: Translation = {
     Quantity: {
       g: "grams",
       ml: "milliliters",
-      quantity: "Quantity",
-      quantityHelper: "Please enter product quantity:",
+      quantity: {
+        helper: "Please enter product quantity:",
+        label: "Quantity",
+        reasons: {
+          empty: "Please enter product quantity.",
+          not_a_number: "Please enter correct quantity.",
+          less_than_or_equals: "Please enter quantity that is greater than 0."
+        }
+      },
       select: "Select",
-      unit: "Unit",
-      unitHelper: "Is product quantity in {unit} or in pieces?"
+      unit: {
+        helper: "Is product quantity in {unit} or in pieces?",
+        label: "Unit",
+        reasons: {
+          undefined: "Please select a unit."
+        }
+      }
     },
     Register: {
       inputs: {
@@ -116,7 +128,7 @@ export const english: Translation = {
           reasons: {
             conflict: "Entered email address is already in use.",
             empty: "Please enter an email address.",
-            invalid: "Please enter a valid email address."
+            not_email: "Please enter a valid email address."
           }
         },
         language: {
@@ -127,7 +139,7 @@ export const english: Translation = {
             Russian: "русский"
           },
           reasons: {
-            invalid: "Please select a language."
+            undefined: "Please select a language."
           }
         },
         name: {

@@ -28,6 +28,11 @@ interface InputWrapperProps {
   errorMessage?: string;
 
   /**
+   * Helper message that will be rendered above the field.
+   */
+  helperMessage?: string;
+
+  /**
    * Whether or not input is invalid.
    */
   invalid?: boolean;
@@ -71,6 +76,7 @@ export const InputWrapper: React.FunctionComponent<InputWrapperProps> = ({
   active,
   disabled,
   errorMessage,
+  helperMessage,
   input,
   invalid,
   label,
@@ -81,6 +87,11 @@ export const InputWrapper: React.FunctionComponent<InputWrapperProps> = ({
 
   return (
     <Wrapper>
+      {helperMessage !== undefined && (
+        <HelperMessage active={active} disabled={disabled} invalid={invalid}>
+          {helperMessage}
+        </HelperMessage>
+      )}
       <Field active={active} disabled={disabled} invalid={invalid}>
         {prepend}
         <LabelComponent>
@@ -109,6 +120,18 @@ export const InputWrapper: React.FunctionComponent<InputWrapperProps> = ({
  */
 const Wrapper = styled.div`
   width: 100%;
+`;
+
+/**
+ * Helper text above the input.
+ */
+const HelperMessage = styled.div<StyleProps>`
+  margin-bottom: calc(${({ theme }) => theme.padding} / 6);
+
+  color: ${({ active, invalid, theme }) =>
+    invalid ? theme.red : active ? theme.orange : theme.secondaryColor};
+
+  transition: ${({ theme }) => theme.transition};
 `;
 
 /**

@@ -32,6 +32,11 @@ interface CheckBoxProps<TName extends string> {
   errorMessage?: string;
 
   /**
+   * Helper message that will be rendered above the the check box field.
+   */
+  helperMessage?: string;
+
+  /**
    * Whether or not check box is invalid.
    */
   invalid?: boolean;
@@ -91,7 +96,14 @@ export class CheckBox<TName extends string = string> extends Component<
    * the check box inside `InputWrapper` component.
    */
   public render() {
-    const { basic, disabled, errorMessage, invalid, label } = this.props;
+    const {
+      basic,
+      disabled,
+      errorMessage,
+      helperMessage,
+      invalid,
+      label
+    } = this.props;
 
     if (basic) {
       return this.renderCheckBox();
@@ -102,6 +114,7 @@ export class CheckBox<TName extends string = string> extends Component<
         active={this.focused}
         disabled={disabled}
         errorMessage={errorMessage}
+        helperMessage={helperMessage}
         input={this.renderCheckBox()}
         invalid={invalid}
         label={label}

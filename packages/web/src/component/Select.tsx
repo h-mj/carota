@@ -27,6 +27,11 @@ interface SelectProps<TName extends string, TValues extends string> {
   errorMessage?: string;
 
   /**
+   * Helper message that will be rendered above the the select.
+   */
+  helperMessage?: string;
+
+  /**
    * Whether or not select is invalid.
    */
   invalid?: boolean;
@@ -92,7 +97,14 @@ export class Select<
    * components.
    */
   public render() {
-    const { basic, disabled, errorMessage, invalid, label } = this.props;
+    const {
+      basic,
+      disabled,
+      errorMessage,
+      helperMessage,
+      invalid,
+      label
+    } = this.props;
 
     if (basic) {
       return this.renderOptions();
@@ -103,6 +115,7 @@ export class Select<
         active={this.focused}
         disabled={disabled}
         errorMessage={errorMessage}
+        helperMessage={helperMessage}
         input={this.renderOptions()}
         invalid={invalid}
         label={label}

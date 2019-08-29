@@ -38,6 +38,11 @@ interface TextFieldProps<TName extends string, TOptional extends boolean> {
   errorMessage?: string;
 
   /**
+   * Helper message that will be rendered above the the text field.
+   */
+  helperMessage?: string;
+
+  /**
    * Whether or not text field is invalid.
    */
   invalid?: boolean;
@@ -124,7 +129,15 @@ export class TextField<
    * components.
    */
   public render() {
-    const { basic, errorMessage, disabled, invalid, label, value } = this.props;
+    const {
+      basic,
+      errorMessage,
+      helperMessage,
+      disabled,
+      invalid,
+      label,
+      value
+    } = this.props;
 
     if (basic) {
       return this.renderInput();
@@ -135,6 +148,7 @@ export class TextField<
         active={this.focused}
         disabled={disabled || value === undefined}
         errorMessage={errorMessage}
+        helperMessage={helperMessage}
         input={this.renderInput()}
         invalid={invalid}
         label={label}

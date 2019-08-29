@@ -1,5 +1,5 @@
-import { HttpError } from "./HttpError";
 import { ErrorDetail } from "../../types";
+import { HttpError } from "./HttpError";
 
 /**
  * HTTP 401 (Unauthorized) error.

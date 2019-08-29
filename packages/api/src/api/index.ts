@@ -1,10 +1,10 @@
 import * as Koa from "koa";
 import * as bodyParser from "koa-bodyparser";
 
+import { bodyParserOnError } from "../utility/errors";
 import { accountRouter } from "./account";
 import { foodRouter } from "./food";
 import { invitationRouter } from "./invitation";
-import { bodyParserOnError } from "./utility/errors";
 
 /**
  * `bodyParser` middleware options.

@@ -1,7 +1,7 @@
 import * as Router from "@koa/router";
 import { Middleware } from "koa";
 
-import { Actions, Controllers } from "../../../types";
+import { Actions, Controllers } from "../../types";
 import {
   AuthenticationState,
   authenticator

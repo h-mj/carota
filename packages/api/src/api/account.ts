@@ -4,13 +4,13 @@ import { deviate } from "deviator";
 
 import { Account, LANGUAGES } from "../entity/Account";
 import { Invitation } from "../entity/Invitation";
-import { signToken } from "./middleware/authenticator";
+import { signToken } from "../middleware/authenticator";
 import {
   createIdNotFoundError,
   createInvalidCredentialsError
-} from "./utility/errors";
-import { callCatch } from "./utility/queries";
-import { defineNoAuth } from "./utility/routes";
+} from "../utility/errors";
+import { callCatch } from "../utility/queries";
+import { defineNoAuth } from "../utility/routes";
 
 /**
  * Router, which handles all routes related to accounts.

@@ -1,7 +1,7 @@
 import { Deviation } from "deviator/lib/deviator";
 import { Middleware } from "koa";
 
-import { Actions, Body, Controllers, Data } from "../../../types";
+import { Actions, Body, Controllers, Data } from "../../types";
 import { createValidationError } from "../utility/errors";
 
 /**

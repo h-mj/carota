@@ -1,4 +1,5 @@
 import { Middleware } from "koa";
+
 import { NotFoundError } from "../error/NotFoundError";
 
 /**

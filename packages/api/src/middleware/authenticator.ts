@@ -1,9 +1,10 @@
-import { Middleware } from "koa";
 import { sign, verify } from "jsonwebtoken";
-import { Account } from "../../entity/Account";
-import { BadRequestError } from "../../error/BadRequestError";
-import { ForbiddenError } from "../../error/ForbiddenError";
-import { InternalServerErrorError } from "../../error/InternalServerError";
+import { Middleware } from "koa";
+
+import { Account } from "../entity/Account";
+import { BadRequestError } from "../error/BadRequestError";
+import { ForbiddenError } from "../error/ForbiddenError";
+import { InternalServerErrorError } from "../error/InternalServerError";
 
 /**
  * Type of payload within JWT.

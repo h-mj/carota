@@ -2,8 +2,8 @@ import * as Router from "@koa/router";
 import { deviate } from "deviator";
 
 import { Food, UNITS } from "../entity/Food";
-import { createIdNotFoundError } from "./utility/errors";
-import { define } from "./utility/routes";
+import { createIdNotFoundError } from "../utility/errors";
+import { define } from "../utility/routes";
 
 /**
  * Router, which handles all routes related to food.

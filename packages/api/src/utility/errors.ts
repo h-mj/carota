@@ -1,6 +1,6 @@
-import { ErrorDetail } from "../../../types";
-import { BadRequestError } from "../../error/BadRequestError";
-import { UnauthorizedError } from "../../error/UnauthorizedError";
+import { ErrorDetail } from "../../types";
+import { BadRequestError } from "../error/BadRequestError";
+import { UnauthorizedError } from "../error/UnauthorizedError";
 import { ErrorTree } from "../middleware/validator";
 
 /**

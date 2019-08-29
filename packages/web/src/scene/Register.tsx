@@ -1,4 +1,4 @@
-import { ErrorReasons, Languages } from "api";
+import { Languages } from "api";
 import { deviate } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
@@ -16,7 +16,7 @@ import { Group } from "../component/Group";
 import { Head } from "../component/Head";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
-import { ErrorReasonsFor, any, append } from "../utility/form";
+import { ErrorsFor, any, append } from "../utility/form";
 
 /**
  * Array of text field names within registration form.
@@ -41,7 +41,7 @@ interface TextFieldTranslation {
   /**
    * Error messages of various error reasons input may have.
    */
-  reasons: Partial<Record<ErrorReasons, string>>;
+  reasons: Partial<Record<string, string>>;
 }
 
 /**
@@ -126,7 +126,7 @@ export class Register extends SceneComponent<
   /**
    * Object that contains error reasons of occurred errors of each input.
    */
-  @observable private reasons: Partial<ErrorReasonsFor<RegisterValues>> = {};
+  @observable private reasons: Partial<ErrorsFor<RegisterValues>> = {};
 
   /**
    * Creates `Register` scene, sets the name of the scene and initiates
@@ -249,8 +249,7 @@ export class Register extends SceneComponent<
       this.props.views!.home();
     }
 
-    // TODO: convert errors to ErrorReasons
-    this.reasons = append(result.ok ? {} : (result.value as any), error);
+    this.reasons = append(result.ok ? {} : result.value, error);
   };
 
   /**

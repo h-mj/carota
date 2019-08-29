@@ -1,7 +1,7 @@
 import * as Router from "@koa/router";
+import { deviate } from "deviator";
 
 import { Invitation } from "../entity/Invitation";
-import { Schema, is } from "./middleware/validator";
 import { createIdNotFoundError } from "./utility/errors";
 import { defineNoAuth } from "./utility/routes";
 
@@ -11,17 +11,18 @@ import { defineNoAuth } from "./utility/routes";
 export const invitationRouter = new Router();
 
 /**
- * Invitation get request body schema.
+ * Invitation get request body validator.
  */
-const INVITATION_GET_SCHEMA: Readonly<Schema<"invitation", "get">> = {
-  id: is.string().guid()
-};
+// prettier-ignore
+const invitationGetValidator = deviate().object().shape({
+  id: deviate().string().guid()
+});
 
 defineNoAuth(
   invitationRouter,
   "invitation",
   "get",
-  INVITATION_GET_SCHEMA,
+  invitationGetValidator,
   async context => {
     const { id } = context.state.body;
     const invitation = await Invitation.findOne({ id });

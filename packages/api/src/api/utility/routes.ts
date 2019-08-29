@@ -1,21 +1,22 @@
-import { Middleware } from "koa";
 import * as Router from "@koa/router";
+import { Middleware } from "koa";
+
 import { Actions, Controllers } from "../../../types";
-import { Schema, validator, ValidationState } from "../middleware/validator";
 import {
-  authenticator,
-  AuthenticationState
+  AuthenticationState,
+  authenticator
 } from "../middleware/authenticator";
+import { ValidationState, Validator, validate } from "../middleware/validator";
 
 /**
  * Defines a route on router `router` with url based on controller and action
- * names, validation middleware using schema `schema` and middleware
+ * names, validation middleware which uses `validator` and middleware
  * `middleware`. `authentication` middleware is not used.
  *
  * @param router Router on which route is defined.
  * @param controller Controller name.
  * @param action Controllers action name.
- * @param schema Schema using which request body is validated.
+ * @param validator Validator which is used to validate the request body.
  * @param middleware Middleware that is run on this route.
  */
 export const defineNoAuth = <
@@ -25,21 +26,21 @@ export const defineNoAuth = <
   router: Router,
   controller: TController,
   action: TAction,
-  schema: Schema<TController, TAction>,
+  validator: Validator<TController, TAction>,
   middleware: Middleware<ValidationState<TController, TAction>>
 ): void => {
-  router.post(`/${controller}/${action}`, validator(schema), middleware);
+  router.post(`/${controller}/${action}`, validate(validator), middleware);
 };
 
 /**
  * Defines a route on router `router` with url based on controller and action
- * names, validation middleware using schema `schema`, authentication middleware
- * and middleware `middleware`.
+ * names, validation middleware which uses `validator`, authentication
+ * middleware and middleware `middleware`.
  *
  * @param router Router on which route is defined.
  * @param controller Controller name.
  * @param action Controllers action name.
- * @param schema Schema using which request body is validated.
+ * @param validator Validator which is used to validate the request body.
  * @param middleware Middleware that is run on this route.
  */
 export const define = <
@@ -49,7 +50,7 @@ export const define = <
   router: Router,
   controller: TController,
   action: TAction,
-  schema: Schema<TController, TAction>,
+  validator: Validator<TController, TAction>,
   middleware: Middleware<
     AuthenticationState & ValidationState<TController, TAction>
   >
@@ -57,7 +58,7 @@ export const define = <
   router.post(
     `/${controller}/${action}`,
     authenticator(),
-    validator(schema),
+    validate(validator),
     middleware
   );
 };

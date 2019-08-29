@@ -1,4 +1,4 @@
-import { ErrorReasons, Units } from "api";
+import { Units } from "api";
 import { deviate } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
@@ -14,7 +14,7 @@ import { Group } from "../component/Group";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
 import { Food } from "../model/Food";
-import { ErrorReasonsFor, any, append } from "../utility/form";
+import { ErrorsFor, any, append } from "../utility/form";
 
 /**
  * Union of text field input names.
@@ -86,7 +86,7 @@ interface InputTranslation {
   /**
    * Error messages of various error reasons input may have.
    */
-  reasons: Partial<Record<ErrorReasons, string>>;
+  reasons: Partial<Record<string, string>>;
 }
 
 /**
@@ -189,7 +189,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   /**
    * Object that contains error reasons of occurred errors for each value.
    */
-  @observable private reasons: ErrorReasonsFor<EditValues> = {};
+  @observable private reasons: ErrorsFor<EditValues> = {};
 
   /**
    * Sets the name of this scene.
@@ -343,8 +343,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
       this.props.views!.pop(this.props.scene);
     }
 
-    // TODO: convert errors to ErrorReasons
-    this.reasons = append(result.ok ? {} : (result.value as any), error);
+    this.reasons = append(result.ok ? {} : result.value, error);
   };
 
   /**

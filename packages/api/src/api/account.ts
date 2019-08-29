@@ -1,10 +1,10 @@
 import * as Router from "@koa/router";
 import { compare, hash } from "bcryptjs";
+import { deviate } from "deviator";
 
 import { Account, LANGUAGES } from "../entity/Account";
 import { Invitation } from "../entity/Invitation";
 import { signToken } from "./middleware/authenticator";
-import { Schema, is } from "./middleware/validator";
 import {
   createIdNotFoundError,
   createInvalidCredentialsError
@@ -18,48 +18,49 @@ import { defineNoAuth } from "./utility/routes";
 export const accountRouter = new Router();
 
 /**
- * Login request body schema.
+ * Login request body validator.
  */
-const LOGIN_SCHEMA: Readonly<Schema<"account", "login">> = {
-  email: is
-    .string()
-    .trim()
-    .lowercase(),
-  password: is.string()
-};
-
-defineNoAuth(accountRouter, "account", "login", LOGIN_SCHEMA, async context => {
-  const { email, password } = context.state.body;
-
-  const account = await Account.findOne({ email });
-
-  if (account === undefined || !(await compare(password, account.hash))) {
-    throw createInvalidCredentialsError(["email"], ["password"]);
-  }
-
-  context.state.data = { token: signToken(account) };
+// prettier-ignore
+const accountLoginValidator =  deviate().object().shape({
+  email: deviate().string().trim().lowercase().notEmpty(),
+  password: deviate().string().notEmpty()
 });
 
+defineNoAuth(
+  accountRouter,
+  "account",
+  "login",
+  accountLoginValidator,
+  async context => {
+    const { email, password } = context.state.body;
+
+    const account = await Account.findOne({ email });
+
+    if (account === undefined || !(await compare(password, account.hash))) {
+      throw createInvalidCredentialsError(["email"], ["password"]);
+    }
+
+    context.state.data = { token: signToken(account) };
+  }
+);
+
 /**
- * Register request body schema.
+ * Account register request body validator.
  */
-const REGISTER_SCHEMA: Readonly<Schema<"account", "register">> = {
-  name: is.string().trim(),
-  language: is.string().valid(LANGUAGES),
-  email: is
-    .string()
-    .trim()
-    .lowercase()
-    .email(),
-  password: is.string().min(8),
-  invitationId: is.string().guid()
-};
+// prettier-ignore
+const accountRegisterValidator = deviate().object().shape({
+  name: deviate().string().trim().notEmpty(),
+  language: deviate().string().options(LANGUAGES),
+  email: deviate().string().trim().lowercase().email(),
+  password: deviate().string().notEmpty(),
+  invitationId: deviate().string().guid()
+});
 
 defineNoAuth(
   accountRouter,
   "account",
   "register",
-  REGISTER_SCHEMA,
+  accountRegisterValidator,
   async context => {
     const {
       name,

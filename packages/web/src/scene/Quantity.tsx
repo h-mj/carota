@@ -13,7 +13,7 @@ import { Controls, Form } from "../component/collection/form";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
 import { Food } from "../model/Food";
-import { ErrorReasonsFor, any } from "../utility/form";
+import { ErrorsFor, any } from "../utility/form";
 
 /**
  * Quantity scene component props.
@@ -119,7 +119,7 @@ export class Quantity extends SceneComponent<
   /**
    * Whether or not entered quantity is invalid.
    */
-  @observable private reasons: ErrorReasonsFor<FormValues> = {};
+  @observable private reasons: ErrorsFor<FormValues> = {};
 
   /**
    * Sets the name of the scene of this component.
@@ -229,8 +229,7 @@ export class Quantity extends SceneComponent<
 
       this.props.select(this.props.food, quantity);
     } else {
-      // TODO: Convert error strings to ErrorReasons
-      this.reasons = result.value as any;
+      this.reasons = result.value;
     }
   };
 }

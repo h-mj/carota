@@ -1,29 +1,28 @@
-import { Error, ErrorReasons } from "api";
+import { Error } from "api";
 
 /**
  * Type of an object where `TValues` object properties are optional and their
- * value is either `ErrorReasons` or if previously value was an object, then
- * `ErrorReasonsFor` for that object instead.
+ * value is either `string` or if previously value was an object, then
+ * `ErrorsFor` for that object instead.
  */
-export type ErrorReasonsFor<TValues> = {
+export type ErrorsFor<TValues> = {
   [P in keyof TValues]?: TValues[P] extends object
-    ? ErrorReasonsFor<TValues[P]>
-    : ErrorReasons;
+    ? ErrorsFor<TValues[P]>
+    : string;
 };
 
 /**
  * Type of an object where `string` type property values are either
- * `ErrorReasons`, `undefined` or this type itself.
+ * `string`, `undefined` or this type itself.
  */
-interface ErrorReasonsTree {
-  [P: string]: ErrorReasons | ErrorReasonsTree | undefined;
+interface ErrorTree {
+  [P: string]: undefined | string | ErrorTree;
 }
 
 /**
- * Returns whether or not `tree` object or its sub-trees have any defined
- * `ErrorReasons` values.
+ * Returns whether or not `tree` object or its sub-trees have any defined values.
  */
-export const any = (tree: Readonly<ErrorReasonsTree>): boolean => {
+export const any = (tree: Readonly<ErrorTree>): boolean => {
   for (const property in tree) {
     const value = tree[property];
 
@@ -45,11 +44,7 @@ export const any = (tree: Readonly<ErrorReasonsTree>): boolean => {
  * @param path Path to the erroneous field.
  * @param reason Field error reason.
  */
-const put = (
-  reasons: ErrorReasonsTree,
-  path: string[],
-  reason: ErrorReasons
-) => {
+const put = (reasons: ErrorTree, path: string[], reason: string) => {
   let node = reasons;
 
   const [field, ...steps] = path.slice().reverse();
@@ -76,10 +71,7 @@ const put = (
  * @param tree Error reasons tree.
  * @param error Occurred API error.
  */
-export const append = <T extends ErrorReasonsTree>(
-  tree: T,
-  error?: Error
-): T => {
+export const append = <T extends ErrorTree>(tree: T, error?: Error): T => {
   if (error === undefined || error.details === undefined) {
     return tree;
   }

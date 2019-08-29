@@ -137,12 +137,7 @@ export interface ErrorDetail {
   /**
    * Reason phrase of the the occurred error.
    */
-  reason: ErrorReasons;
-
-  /**
-   * Extra information about the occurred error.
-   */
-  context?: ErrorContext;
+  reason: string;
 
   /**
    * Human readable error message.
@@ -170,32 +165,6 @@ export interface ErrorLocation {
  * Part of the request message where the error occurred.
  */
 export type ErrorLocationParts = "request-line" | "headers" | "body";
-
-/**
- * Error reason type containing all possible reasons.
- */
-export type ErrorReasons =
-  | "conflict"
-  | "empty"
-  | "incorrect"
-  | "invalid"
-  | "missing"
-  | "unexpected";
-
-/**
- * Extra information about the occurred error.
- *
- * For example if there's a string length validation, then the limit must be
- * provided in some field.
- */
-export interface ErrorContext {
-  [key: string]: ErrorContextElement;
-}
-
-/**
- * Type of context field value.
- */
-export type ErrorContextElement = string | number | string[];
 
 /**
  * Union of all languages.

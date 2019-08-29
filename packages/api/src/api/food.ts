@@ -1,7 +1,7 @@
 import * as Router from "@koa/router";
+import { deviate } from "deviator";
 
 import { Food, UNITS } from "../entity/Food";
-import { Schema, is } from "./middleware/validator";
 import { createIdNotFoundError } from "./utility/errors";
 import { define } from "./utility/routes";
 
@@ -11,43 +11,46 @@ import { define } from "./utility/routes";
 export const foodRouter = new Router();
 
 /**
- * Nutrient amount schema.
+ * Nutrient quantity validator.
  */
-const amount = is.number().precision(4);
+const quantity = deviate()
+  .number()
+  .round(4);
 
 /**
- * Save request body schema.
+ * Optional nutrient quantity validator.
  */
-const SAVE_SCHEMA: Schema<"food", "save"> = {
-  id: is
-    .string()
-    .guid()
-    .optional(),
-  name: is.string().trim(),
-  barcode: is
-    .string()
-    .trim()
-    .regex(/^\d{13}$/)
-    .optional(),
-  unit: is.string().valid(UNITS),
-  nutritionDeclaration: {
-    energy: amount,
-    fat: amount,
-    saturates: amount.optional(),
-    monoUnsaturates: amount.optional(),
-    polyunsaturates: amount.optional(),
-    carbohydrate: amount,
-    sugars: amount.optional(),
-    polyols: amount.optional(),
-    starch: amount.optional(),
-    fibre: amount.optional(),
-    protein: amount,
-    salt: amount.optional()
-  },
-  pieceQuantity: amount.optional()
-};
+const optionalQuantity = deviate()
+  .optional()
+  .append(quantity);
 
-define(foodRouter, "food", "save", SAVE_SCHEMA, async context => {
+/**
+ * Food save request body validator.
+ */
+// prettier-ignore
+const foodSaveValidator = deviate().object().shape({
+  id: deviate().optional().string().guid(),
+  name: deviate().string().trim().notEmpty(),
+  barcode: deviate().optional().string().trim().regex(/^\d{13}$/),
+  unit: deviate().string().options(UNITS),
+  nutritionDeclaration: deviate().object().shape({
+    energy: quantity,
+    fat: quantity,
+    saturates: optionalQuantity,
+    monoUnsaturates: optionalQuantity,
+    polyunsaturates: optionalQuantity,
+    carbohydrate: quantity,
+    sugars: optionalQuantity,
+    polyols: optionalQuantity,
+    starch: optionalQuantity,
+    fibre: optionalQuantity,
+    protein: quantity,
+    salt: optionalQuantity
+  }),
+  pieceQuantity: optionalQuantity
+});
+
+define(foodRouter, "food", "save", foodSaveValidator, async context => {
   const {
     id,
     name,
@@ -93,13 +96,14 @@ const matches = (query: string) => (food: Food): boolean => {
 };
 
 /**
- * Search request body schema.
+ * Search request body validator.
  */
-const SEARCH_SCHEMA: Schema<"food", "search"> = {
-  query: is.string()
-};
+// prettier-ignore
+const foodSearchValidator = deviate().object().shape({
+  query: deviate().string().notEmpty()
+});
 
-define(foodRouter, "food", "search", SEARCH_SCHEMA, async context => {
+define(foodRouter, "food", "search", foodSearchValidator, async context => {
   const foods = await Food.find();
 
   context.state.data = foods

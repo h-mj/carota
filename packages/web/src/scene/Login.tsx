@@ -1,4 +1,3 @@
-import { ErrorReasons } from "api";
 import { deviate } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
@@ -16,7 +15,7 @@ import { Group } from "../component/Group";
 import { Head } from "../component/Head";
 import { TextField } from "../component/TextField";
 import { styled } from "../styling/theme";
-import { ErrorReasonsFor, any, append } from "../utility/form";
+import { ErrorsFor, any, append } from "../utility/form";
 
 /**
  * Array of input names within login form.
@@ -40,7 +39,7 @@ interface InputTranslation {
   /**
    * Error messages of various error reasons input may have.
    */
-  reasons: Partial<Record<ErrorReasons, string>>;
+  reasons: Partial<Record<string, string>>;
 }
 
 /**
@@ -101,7 +100,7 @@ export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
   /**
    * Object that contains a reason string of occurred error of each input.
    */
-  @observable private reasons: ErrorReasonsFor<LoginValues> = {};
+  @observable private reasons: ErrorsFor<LoginValues> = {};
 
   /**
    * Sets the name of this scene.

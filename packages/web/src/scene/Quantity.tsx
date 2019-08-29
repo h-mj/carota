@@ -35,12 +35,12 @@ interface QuantityProps {
  */
 interface QuantityTranslation {
   /**
-   * Full gram unit translation that will be inserted into unitHelper test.
+   * Full gram unit translation that will be inserted into unitHelper text.
    */
   g: string;
 
   /**
-   * Full ml unit translation that will be inserted into unitHelper test.
+   * Full ml unit translation that will be inserted into unitHelper text.
    */
   ml: string;
 
@@ -171,7 +171,7 @@ export class Quantity extends SceneComponent<
         name="unit"
         options={options}
         value={this.values.unit}
-        onChange={this.handleUnitChange}
+        onChange={this.handleChange}
       />
     );
   }
@@ -201,22 +201,14 @@ export class Quantity extends SceneComponent<
   }
 
   /**
-   * Updates quantity value when value of text field changes.
+   * Updates input value on value change.
    */
   @action
-  private handleChange = (name: "quantity", value: string) => {
-    this.values[name] = value;
-  };
-
-  /**
-   * Updates quantity unit when value of select changes.
-   */
-  @action
-  private handleUnitChange = (
-    name: "unit",
-    unit: Units | "pcs" | undefined
+  private handleChange = <T extends keyof FormValues>(
+    name: T,
+    value: FormValues[T]
   ) => {
-    this.values[name] = unit;
+    this.values[name] = value;
   };
 
   /**

@@ -217,7 +217,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
             invalid={this.reasons.unit !== undefined}
             label={this.translation.inputs.unit.label}
             name="unit"
-            onChange={this.handleUnitChange}
+            onChange={this.handleChange}
             options={[
               { label: this.props.views!.translation.units.g, value: "g" },
               { label: this.props.views!.translation.units.ml, value: "ml" }
@@ -248,7 +248,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
       invalid={this.reasons[name] !== undefined}
       label={this.translation.inputs[name].label}
       name={name}
-      onChange={this.handleTextFieldChange}
+      onChange={this.handleChange}
       optional={name === "barcode" || name === "pieceQuantity"}
       required={name === "barcode" || name === "pieceQuantity"}
       textAlign="right"
@@ -288,10 +288,13 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   );
 
   /**
-   * Updates text field value on input value change.
+   * Updates input value on value change.
    */
   @action
-  private handleTextFieldChange = (name: TextFieldNames, value: string) => {
+  private handleChange = <T extends InputNames>(
+    name: T,
+    value: EditValues[T]
+  ) => {
     this.values[name] = value;
   };
 
@@ -301,14 +304,6 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   @action
   private handleNutrientChange = (nutrient: Nutrients, amount: string) => {
     this.values.nutritionDeclaration[nutrient] = amount;
-  };
-
-  /**
-   * Updates unit value on unit selection change.
-   */
-  @action
-  private handleUnitChange = (name: "unit", value: Units | undefined) => {
-    this.values[name] = value;
   };
 
   /**

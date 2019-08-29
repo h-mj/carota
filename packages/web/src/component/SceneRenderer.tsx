@@ -97,6 +97,10 @@ const Main = styled.div`
   width: 100%;
   height: 100%;
   overflow: auto;
+
+  display: flex;
+  flex-direction: column;
+
   background-color: ${({ theme }) => theme.backgroundColor};
 `;
 
@@ -113,7 +117,12 @@ const Left = styled(Main)`
 const Center = styled(Main)`
   max-width: ${({ theme }) => theme.formWidth};
   height: initial;
-  border-radius: ${({theme}) => theme.borderRadius};
+  border-radius: ${({ theme }) => theme.borderRadius};
+
+  @media screen and (max-width: ${({ theme }) => theme.formWidth}) {
+    height: 100%;
+    border-radius: 0;
+  }
 `;
 
 /**

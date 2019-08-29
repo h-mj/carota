@@ -6,7 +6,12 @@ import { styled } from "../../styling/theme";
  */
 export const Controls = styled.div`
   display: flex;
+  align-items: flex-end;
   justify-content: flex-end;
+
+  @media screen and (max-width: ${({ theme }) => theme.formWidth}) {
+    flex-grow: 1;
+  }
 `;
 
 /**
@@ -15,6 +20,9 @@ export const Controls = styled.div`
 export const Form = styled.form`
   max-width: ${({ theme }) => theme.formWidth};
   width: 100%;
+
+  display: flex;
+  flex-direction: column;
 
   padding: ${({ theme }) => theme.padding};
   box-sizing: border-box;
@@ -25,6 +33,10 @@ export const Form = styled.form`
 
   & > *:last-child {
     margin-bottom: 0;
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.formWidth}) {
+    flex-grow: 1;
   }
 `;
 

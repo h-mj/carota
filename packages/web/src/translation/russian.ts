@@ -101,8 +101,13 @@ export const russian: Translation = {
       Unknown: "К сожалению, запрошенная страница не была найдена"
     },
     Quantity: {
+      g: "граммах",
+      ml: "миллилитрах",
       quantity: "Количество",
-      select: "Выбрать"
+      quantityHelper: "Пожалуйста, введите количество продукта:",
+      select: "Выбрать",
+      unit: "Единица",
+      unitHelper: "Количество продукта в {unit} или в штуках?"
     },
     Register: {
       inputs: {

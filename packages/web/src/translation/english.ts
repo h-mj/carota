@@ -101,8 +101,13 @@ export const english: Translation = {
       Unknown: "We are sorry, the page you requested has not been found"
     },
     Quantity: {
+      g: "grams",
+      ml: "milliliters",
       quantity: "Quantity",
-      select: "Select"
+      quantityHelper: "Please enter product quantity:",
+      select: "Select",
+      unit: "Unit",
+      unitHelper: "Is product quantity in {unit} or in pieces?"
     },
     Register: {
       inputs: {

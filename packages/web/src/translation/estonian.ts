@@ -101,8 +101,13 @@ export const estonian: Translation = {
       Unknown: "Vabandame, soovitud lehekülge ei leitud"
     },
     Quantity: {
+      g: "grammides",
+      ml: "milliliitrites",
       quantity: "Kogus",
-      select: "Valige"
+      quantityHelper: "Palun sisestage toiduaine kogus:",
+      select: "Valige",
+      unit: "Ühik",
+      unitHelper: "Kas toiduaine kogus on {ühik} või tükkides?"
     },
     Register: {
       inputs: {

@@ -38,7 +38,7 @@ export class ViewsStore {
   /**
    * Current interface language.
    */
-  @observable private _language: Languages = "English";
+  @observable private _language: Languages = "Russian";
 
   /**
    * Array of active scenes.

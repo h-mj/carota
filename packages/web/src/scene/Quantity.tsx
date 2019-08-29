@@ -1,3 +1,4 @@
+import { Units } from "api";
 import { deviate } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
@@ -9,8 +10,10 @@ import {
 } from "../base/SceneComponent";
 import { Button } from "../component/Button";
 import { Controls, Form } from "../component/collection/form";
+import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
 import { Food } from "../model/Food";
+import { ErrorReasonsFor, any } from "../utility/form";
 
 /**
  * Quantity scene component props.
@@ -28,29 +31,72 @@ interface QuantityProps {
 }
 
 /**
- * Transformation that transforms string quantity to numeric value.
- */
-const validate = deviate<string>()
-  .trim()
-  .notEmpty()
-  .replace(",", ".")
-  .toNumber()
-  .gt(0);
-
-/**
  * Quantity scene component translation.I
  */
 interface QuantityTranslation {
+  /**
+   * Full gram unit translation that will be inserted into unitHelper test.
+   */
+  g: string;
+
+  /**
+   * Full ml unit translation that will be inserted into unitHelper test.
+   */
+  ml: string;
+
   /**
    * Quantity text label translation.
    */
   quantity: string;
 
   /**
+   * Quantity text field helper text.
+   */
+  quantityHelper: string;
+
+  /**
    * Select button translation.
    */
   select: string;
+
+  /**
+   * Unit select label translation.
+   */
+  unit: string;
+
+  /**
+   * Unit select helper text.
+   */
+  unitHelper: string;
 }
+
+/**
+ * Quantity selection form values.
+ */
+interface FormValues {
+  /**
+   * Selected quantity value.
+   */
+  quantity: string;
+
+  /**
+   * Product quantity unit.
+   */
+  unit?: Units | "pcs";
+}
+
+/**
+ * Function that validates form values.
+ */
+const validate = deviate<FormValues>().shape({
+  quantity: deviate<string>()
+    .trim()
+    .notEmpty()
+    .replace(",", ".")
+    .toNumber()
+    .gt(0),
+  unit: deviate<Units | "pcs" | undefined>().defined()
+});
 
 /**
  * Scene component that is used to select a quantity of some food item.
@@ -63,14 +109,17 @@ export class Quantity extends SceneComponent<
   QuantityTranslation
 > {
   /**
-   * Selected quantity value.
+   * Quantity selection form values.
    */
-  @observable private quantity = "";
+  @observable private values: FormValues = {
+    quantity: "",
+    unit: this.props.food.unit
+  };
 
   /**
    * Whether or not entered quantity is invalid.
    */
-  @observable private invalid = false;
+  @observable private reasons: ErrorReasonsFor<FormValues> = {};
 
   /**
    * Sets the name of the scene of this component.
@@ -87,21 +136,67 @@ export class Quantity extends SceneComponent<
   public render() {
     return (
       <Form noValidate={true} onSubmit={this.handleSubmit}>
-        <TextField
-          autoFocus={true}
-          invalid={this.invalid}
-          label={this.translation.quantity}
-          name="quantity"
-          onChange={this.handleChange}
-          textAlign="right"
-          type="number"
-          unit={this.props.views!.translation.units[this.props.food.unit]}
-          value={this.quantity}
-        />
+        {this.renderUnitInput()}
+        {this.renderQuantityInput()}
+
         <Controls>
-          <Button invalid={this.invalid}>{this.translation.select}</Button>
+          <Button invalid={any(this.reasons)}>{this.translation.select}</Button>
         </Controls>
       </Form>
+    );
+  }
+
+  /**
+   * Renders unit select component.
+   */
+  private renderUnitInput() {
+    if (this.props.food.pieceQuantity === undefined) {
+      // Can't be measured in pieces so do not render anything.
+      return null;
+    }
+
+    const options = ([this.props.food.unit, "pcs"] as const).map(unit => ({
+      label: this.props.views!.translation.units[unit],
+      value: unit
+    }));
+
+    return (
+      <Select
+        helperMessage={this.translation.unitHelper.replace(
+          "{unit}",
+          this.translation[this.props.food.unit]
+        )}
+        invalid={this.reasons.unit !== undefined}
+        label={this.translation.unit}
+        name="unit"
+        options={options}
+        value={this.values.unit}
+        onChange={this.handleUnitChange}
+      />
+    );
+  }
+
+  /**
+   * Renders quantity text field.
+   */
+  private renderQuantityInput() {
+    return (
+      <TextField
+        autoFocus={this.props.food.pieceQuantity === undefined}
+        helperMessage={this.translation.quantityHelper}
+        invalid={this.reasons.quantity !== undefined}
+        label={this.translation.quantity}
+        name="quantity"
+        onChange={this.handleChange}
+        textAlign="right"
+        type="number"
+        unit={
+          this.values.unit !== undefined
+            ? this.props.views!.translation.units[this.values.unit]
+            : undefined
+        }
+        value={this.values.quantity}
+      />
     );
   }
 
@@ -110,7 +205,18 @@ export class Quantity extends SceneComponent<
    */
   @action
   private handleChange = (name: "quantity", value: string) => {
-    this[name] = value;
+    this.values[name] = value;
+  };
+
+  /**
+   * Updates quantity unit when value of select changes.
+   */
+  @action
+  private handleUnitChange = (
+    name: "unit",
+    unit: Units | "pcs" | undefined
+  ) => {
+    this.values[name] = unit;
   };
 
   /**
@@ -121,12 +227,18 @@ export class Quantity extends SceneComponent<
   private handleSubmit: React.FormEventHandler<HTMLFormElement> = event => {
     event.preventDefault();
 
-    const result = validate(this.quantity);
+    const result = validate(this.values);
 
     if (result.ok) {
-      this.props.select(this.props.food, result.value);
+      const quantity =
+        result.value.unit === "pcs"
+          ? result.value.quantity * this.props.food.pieceQuantity!
+          : result.value.quantity;
+
+      this.props.select(this.props.food, quantity);
     } else {
-      this.invalid = true;
+      // TODO: Convert error strings to ErrorReasons
+      this.reasons = result.value as any;
     }
   };
 }

@@ -14,18 +14,35 @@ export const english: Translation = {
         title: "We are sorry, the page you requested has not been found."
       }
     },
+    Calendar: {
+      days: ["M", "T", "W", "T", "F", "S", "S"],
+      months: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ]
+    },
     Edit: {
       inputs: {
         barcode: {
           label: "Barcode",
           reasons: {
-            empty: "Please enter product barcode."
+            empty: "Please enter a product barcode."
           }
         },
         name: {
           label: "Name",
           reasons: {
-            empty: "Please enter product name."
+            empty: "Please enter a product name."
           }
         },
         pieceQuantity: {

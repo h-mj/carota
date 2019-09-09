@@ -1,6 +1,7 @@
 import { computed } from "mobx";
 
 import { Alert } from "../component/Alert";
+import { Calendar } from "../component/Calendar";
 import { Head } from "../component/Head";
 import { Navigation } from "../component/Navigation";
 import { SearchResult } from "../scene/Search";
@@ -12,6 +13,7 @@ import { SceneComponentMap } from "./SceneComponent";
  */
 interface TranslatedComponentMap extends SceneComponentMap {
   Alert: Alert;
+  Calendar: Calendar;
   Head: Head;
   Navigation: Navigation;
   SearchResult: SearchResult;
@@ -26,7 +28,7 @@ type TranslatedComponentNames = keyof TranslatedComponentMap;
  * Union of type `T` keys to which type `V` can be assigned.
  */
 type AssignableKeys<T, V> = {
-  [P in keyof T]: V extends T[P] ? P : never
+  [P in keyof T]: V extends T[P] ? P : never;
 }[keyof T];
 
 /**
@@ -41,7 +43,7 @@ type UndefinedOptional<T> = Omit<T, AssignableKeys<T, undefined>> &
  */
 export type ComponentsTranslation = UndefinedOptional<
   {
-    [Name in TranslatedComponentNames]: TranslatedComponentMap[Name]["translation"]
+    [Name in TranslatedComponentNames]: TranslatedComponentMap[Name]["translation"];
   }
 >;
 

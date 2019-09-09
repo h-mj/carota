@@ -14,6 +14,23 @@ export const estonian: Translation = {
         title: "Vabandame, soovitud lehekülge ei leitud."
       }
     },
+    Calendar: {
+      days: ["E", "T", "K", "N", "R", "L", "P"],
+      months: [
+        "Jaanuar",
+        "Veebruar",
+        "Märts",
+        "Aprill",
+        "Mai",
+        "Juuni",
+        "Juuli",
+        "August",
+        "September",
+        "Oktoober",
+        "November",
+        "Detsember"
+      ]
+    },
     Edit: {
       inputs: {
         barcode: {

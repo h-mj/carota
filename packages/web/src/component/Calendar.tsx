@@ -282,8 +282,12 @@ interface CellProps {
  * Component that contains a single date within a month.
  */
 const Cell = styled(Button)<CellProps>`
-  background-color: ${({ selected, theme }) =>
-    selected ? theme.orange : "transparent"};
+  border: ${({ current, selected, theme }) =>
+    current || selected
+      ? `solid 1px ${selected ? theme.orange : theme.borderColor}`
+      : "none"};
+  box-shadow: ${({ selected, theme }) =>
+    selected ? `inset 0 0 0 1px ${theme.orange}` : "none"};
   border-radius: ${({ theme }) => theme.borderRadius};
 
   color: ${({ current, isSunday, selected, theme }) =>
@@ -293,4 +297,6 @@ const Cell = styled(Button)<CellProps>`
       ? theme.orange
       : theme.secondaryColor};
   font-feature-settings: "tnum" 1;
+
+  transition: ${({ theme }) => theme.transition};
 `;

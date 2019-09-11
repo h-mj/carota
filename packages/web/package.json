@@ -4,10 +4,11 @@
   "private": true,
   "proxy": "http://localhost:3001",
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "develop": "react-scripts start",
+    "eject": "react-scripts eject",
+    "start": "react-scripts start",
+    "test": "react-scripts test"
   },
   "dependencies": {
     "@types/jest": "^24.0.18",

@@ -5,23 +5,13 @@ import { scaleIn, scaleOut } from "../../styling/animations";
 import { keyframes, styled } from "../../styling/theme";
 
 /**
- * Orange color.
- */
-const ORANGE = "#ff8200";
-
-/**
- * Green color.
- */
-const GREEN = "#43b02a";
-
-/**
  * Project logo SVG image.
  */
 export const Logo: React.FunctionComponent = () => (
   <svg viewBox="0 0 24 10" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="5" cy="5" r="5" fill={GREEN} />
-    <circle cx="14" cy="5" r="4" fill={ORANGE} />
-    <circle cx="21" cy="5" r="3" fill={ORANGE} />
+    <circle cx="5" cy="5" r="5" fill="#43b02a" />
+    <circle cx="14" cy="5" r="4" fill="#ff8200" />
+    <circle cx="21" cy="5" r="3" fill="#ff8200" />
   </svg>
 );
 
@@ -30,7 +20,7 @@ export const Logo: React.FunctionComponent = () => (
  */
 export const Energy: React.FunctionComponent = () => (
   <svg viewBox="0 0 42 68" xmlns="http://www.w3.org/2000/svg">
-    <path d="m29 0l-10 30h23l-29 38 10-28h-23" fill={GREEN} />
+    <path d="m29 0l-10 30h23l-29 38 10-28h-23" fill="#43b02a" />
   </svg>
 );
 
@@ -55,7 +45,7 @@ export const Protein: React.FunctionComponent = () => (
  */
 export const Fat: React.FunctionComponent = () => (
   <svg viewBox="0 0 42 68" xmlns="http://www.w3.org/2000/svg">
-    <path d="m21 3l-18 30a21 21 0 1 0 36 0l-18-30" fill={ORANGE} />
+    <path d="m21 3l-18 30a21 21 0 1 0 36 0l-18-30" fill="#ff8200" />
   </svg>
 );
 
@@ -74,12 +64,13 @@ export const Carbohydrate: React.FunctionComponent = () => (
 /**
  * Loading animation component.
  */
+// prettier-ignore
 export const Loading: React.FunctionComponent = () => (
   <Circles width={24} height={10}>
-    <Circle offset={0} radius={5} color={GREEN} keyframes={scaleIn} />
-    <Circle offset={0} radius={5} color={GREEN} keyframes={move(5, ORANGE)} />
-    <Circle offset={10} radius={4} color={ORANGE} keyframes={move(4, ORANGE)} />
-    <Circle offset={18} radius={3} color={ORANGE} keyframes={scaleOut} />
+    <Circle offset={0} radius={5} color="#43b02a" keyframes={scaleIn} />
+    <Circle offset={0} radius={5} color="#43b02a" keyframes={move(5, "#ff8200")} />
+    <Circle offset={10} radius={4} color="#ff8200" keyframes={move(4, "#ff8200")} />
+    <Circle offset={18} radius={3} color="#ff8200" keyframes={scaleOut} />
   </Circles>
 );
 

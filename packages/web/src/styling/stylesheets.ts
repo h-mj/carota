@@ -15,4 +15,5 @@ export const RESET = css`
   font-size: inherit;
   font-weight: inherit;
   letter-spacing: inherit;
+  text-align: left;
 `;

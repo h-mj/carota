@@ -60,6 +60,7 @@ const Close = styled.button`
 
   color: ${({ theme }) => theme.secondaryColor};
   font-size: 1.5rem;
+  text-align: center;
 
   cursor: pointer;
 `;

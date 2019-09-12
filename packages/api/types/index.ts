@@ -1,6 +1,13 @@
-import { AccountRights, AccountTypes, Languages } from "../src/entity/Account";
+import {
+  AccountData,
+  AccountRights,
+  AccountTypes,
+  Languages
+} from "../src/entity/Account";
+import { ConsumableData } from "../src/entity/Consumable";
 import { FoodData, Units } from "../src/entity/Food";
 import { InvitationData } from "../src/entity/Invitation";
+import { MealData } from "../src/entity/Meal";
 import { NutritionDeclarationData } from "../src/entity/NutritionDeclaration";
 import { Sexes } from "../src/entity/Person";
 
@@ -167,6 +174,11 @@ export interface ErrorLocation {
 export type ErrorLocationParts = "request-line" | "headers" | "body";
 
 /**
+ * Account model data type.
+ */
+export type AccountData = AccountData;
+
+/**
  * Union of all languages.
  */
 export type Languages = Languages;
@@ -182,14 +194,39 @@ export type AccountTypes = AccountTypes;
 export type AccountRights = AccountRights;
 
 /**
- * Union of all sexes.
+ * Consumable model data type.
  */
-export type Sexes = Sexes;
+export type ConsumableData = ConsumableData;
+
+/**
+ * Food model data type.
+ */
+export type FoodData = FoodData;
 
 /**
  * Union of all units.
  */
 export type Units = Units;
+
+/**
+ * Invitation model data type.
+ */
+export type InvitationData = InvitationData;
+
+/**
+ * Meal model data type.
+ */
+export type MealData = MealData;
+
+/**
+ * Food nutrition declaration data type.
+ */
+export type NutritionDeclarationData = NutritionDeclarationData;
+
+/**
+ * Union of all sexes.
+ */
+export type Sexes = Sexes;
 
 /**
  * Login request message body type.
@@ -257,16 +294,6 @@ export interface TokenData {
 }
 
 /**
- * Invitation entity data type.
- */
-export type InvitationData = InvitationData;
-
-/**
- * Declares nutritional values of a product.
- */
-export type NutritionDeclarationData = NutritionDeclarationData;
-
-/**
  * Save food request message body type.
  */
 export interface FoodSaveBody {
@@ -310,8 +337,3 @@ export interface FoodSearchBody {
    */
   query: string;
 }
-
-/**
- * Save food response message data type.
- */
-export type FoodData = FoodData;

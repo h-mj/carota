@@ -31,7 +31,7 @@ export class Consumable extends BaseEntity {
   /**
    * Food that was consumed.
    */
-  @ManyToOne(() => Food, { nullable: false })
+  @ManyToOne(() => Food, { nullable: false, eager: true })
   public food!: Food;
 
   /**
@@ -39,4 +39,19 @@ export class Consumable extends BaseEntity {
    */
   @Column("float4")
   public quantity!: number;
+
+  /**
+   * Returns a representation of this model that will be transferred to the
+   * client.
+   */
+  public toData = () => ({
+    id: this.id,
+    food: this.food.toData(),
+    quantity: this.quantity
+  });
 }
+
+/**
+ * Consumable model data transfer object type.
+ */
+export type ConsumableData = ReturnType<Consumable["toData"]>;

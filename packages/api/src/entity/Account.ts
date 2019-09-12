@@ -109,4 +109,22 @@ export class Account extends BaseEntity {
    */
   @Column("enum", { enum: ACCOUNT_RIGHTS })
   public rights!: AccountRights;
+
+  /**
+   * Returns a representation of this model that will be transferred to the
+   * client.
+   */
+  public toData = () => ({
+    id: this.id,
+    name: this.name,
+    language: this.language,
+    email: this.email,
+    type: this.type,
+    rights: this.rights
+  });
 }
+
+/**
+ * Account model data transfer object type.
+ */
+export type AccountData = ReturnType<Account["toData"]>;

@@ -14,8 +14,10 @@ import {
   Fat,
   Protein
 } from "../component/collection/icons";
+import { Diagram } from "../component/Diagram";
 import { TextField } from "../component/TextField";
 import { Food } from "../model/Food";
+import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
 
 /**
@@ -181,7 +183,7 @@ const SearchResults = styled.div`
   gap: calc(${({ theme }) => theme.padding} / 3);
   grid-template-columns: repeat(
     auto-fill,
-    minmax(calc(3 * ${({ theme }) => theme.height}), 1fr)
+    minmax(calc(${({ theme }) => theme.formWidth} / 2), 1fr)
   );
   grid-template-rows: min-content;
 `;
@@ -236,7 +238,14 @@ export class SearchResult extends TranslatedComponent<
 
     return (
       <ResultContainer onClick={this.handleClick}>
-        <Name>{name}</Name>
+        <Title>
+          <Name>{name}</Name>
+          <Diagram
+            carbohydrates={nutritionDeclaration.carbohydrate}
+            fat={nutritionDeclaration.fat}
+            protein={nutritionDeclaration.protein}
+          />
+        </Title>
 
         <Stats>
           <div>
@@ -274,7 +283,7 @@ export class SearchResult extends TranslatedComponent<
    * Shows quantity selection when user clicks of food item.
    */
   @action
-  private handleClick: React.MouseEventHandler<HTMLDivElement> = () => {
+  private handleClick: React.MouseEventHandler<HTMLButtonElement> = () => {
     this.props.views!.push("center", "Quantity", {
       food: this.props.food,
       select: this.props.select
@@ -285,7 +294,9 @@ export class SearchResult extends TranslatedComponent<
 /**
  * Component that contains information about a food item.
  */
-const ResultContainer = styled.div`
+const ResultContainer = styled.button`
+  ${RESET};
+
   min-height: 11.5rem;
 
   display: flex;
@@ -333,12 +344,32 @@ const Add = styled(ResultContainer)`
 `;
 
 /**
- * Food item name wrapper.
+ * Title component text line height.
+ */
+const TITLE_LINE_HEIGHT = "1.4rem";
+
+/**
+ * Food item title wrapper which contains the diagram and food item name.
+ */
+const Title = styled.div`
+  width: 100%;
+
+  display: flex;
+  flex: 1 1 auto;
+
+  & > *:last-child {
+    height: ${TITLE_LINE_HEIGHT};
+  }
+`;
+
+/**
+ * Food name container.
  */
 const Name = styled.div`
-  width: 100%;
-  flex: 1 1 auto;
+  flex-grow: 1;
+  margin-right: calc(${({ theme }) => theme.padding} / 6);
   color: ${({ theme }) => theme.primaryColor};
+  line-height: ${TITLE_LINE_HEIGHT};
 `;
 
 /**

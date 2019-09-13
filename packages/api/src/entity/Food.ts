@@ -65,7 +65,7 @@ export class Food extends BaseEntity {
   /**
    * Account of last user who edited this food.
    */
-  @ManyToOne(() => Account, { nullable: false })
+  @ManyToOne(() => Account, { nullable: false, eager: true })
   public editor!: Account;
 
   /**

@@ -31,7 +31,13 @@ export const english: Translation = {
         "December"
       ]
     },
+    Confirmation: {
+      cancel: "Cancel",
+      confirm: "Confirm"
+    },
     Edit: {
+      confirm: "Are you sure you want to delete this product?",
+      delete: "Delete",
       inputs: {
         barcode: {
           label: "Barcode",
@@ -107,6 +113,7 @@ export const english: Translation = {
     },
     Navigation: {
       Administration: "Administration",
+      Confirmation: "Confirmation",
       Diet: "Diet",
       Edit: "Edit",
       History: "History",

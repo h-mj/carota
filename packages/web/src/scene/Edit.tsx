@@ -94,6 +94,16 @@ interface InputTranslation {
  */
 interface EditTranslation {
   /**
+   * Delete confirmation message translation.
+   */
+  confirm: string;
+
+  /**
+   * Delete button text.
+   */
+  delete: string;
+
+  /**
    * Registration form input translations.
    */
   inputs: { [InputName in InputNames]: InputTranslation };
@@ -231,6 +241,15 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
         {this.renderTextField("pieceQuantity")}
 
         <Controls>
+          {this.props.food !== undefined && (
+            <Button
+              secondary={true}
+              type="button"
+              onClick={this.showConfirmation}
+            >
+              {this.translation.delete}
+            </Button>
+          )}
           <Button invalid={any(this.reasons)}>{this.translation.submit}</Button>
         </Controls>
       </Form>
@@ -344,6 +363,32 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
     }
 
     this.reasons = append(result.ok ? {} : result.value, error);
+  };
+
+  /**
+   * Shows confirmation screen when user clicks on delete button.
+   */
+  private showConfirmation = () => {
+    this.props.views!.push("center", "Confirmation", {
+      confirm: this.handleConfirmation,
+      message: this.translation.confirm
+    });
+  };
+
+  /**
+   * Deletes the food item if user confirmed the deletion.
+   */
+  @action
+  private handleConfirmation = async (confirmed: boolean) => {
+    if (!confirmed) {
+      return;
+    }
+
+    const { food, foods, scene, views } = this.props;
+
+    if ((await views!.load(foods!.delete(food!.id))) === undefined) {
+      views!.pop(scene);
+    }
   };
 
   /**

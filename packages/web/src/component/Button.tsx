@@ -9,19 +9,29 @@ import { styled } from "../styling/theme";
  */
 interface ButtonProps {
   /**
-   * Whether or not button should be automatically in focus.
+   * Whether button should be automatically in focus.
    */
   autoFocus?: boolean;
 
   /**
-   * Whether or not button is disabled.
+   * Whether button is disabled.
    */
   disabled?: boolean;
 
   /**
-   * Whether or not button is invalid.
+   * Whether button is invalid.
    */
   invalid?: boolean;
+
+  /**
+   * Button click event handler function.
+   */
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+
+  /**
+   * Whether button is secondary.
+   */
+  secondary?: boolean;
 
   /**
    * Button type, that changes the effect on parent <form> element when button
@@ -43,13 +53,23 @@ export class Button extends Component<ButtonProps> {
    * Renders the button.
    */
   public render() {
-    const { autoFocus, children, disabled, invalid, type } = this.props;
+    const {
+      autoFocus,
+      children,
+      disabled,
+      invalid,
+      onClick,
+      secondary,
+      type
+    } = this.props;
 
     return (
       <ButtonElement
         autoFocus={autoFocus}
         disabled={disabled}
         invalid={invalid}
+        onClick={onClick}
+        secondary={secondary}
         type={type}
       >
         {children}
@@ -63,9 +83,14 @@ export class Button extends Component<ButtonProps> {
  */
 interface ButtonElementProps {
   /**
-   * Whether or not button is invalid.
+   * Whether button is invalid.
    */
   invalid?: boolean;
+
+  /**
+   * Whether button is secondary.
+   */
+  secondary?: boolean;
 }
 
 /**
@@ -78,11 +103,17 @@ const ButtonElement = styled.button<ButtonElementProps>`
   padding: 0 ${({ theme }) => theme.padding};
 
   border-radius: ${({ theme }) => theme.borderRadius};
-  background-color: ${({ invalid, theme }) =>
-    invalid ? theme.red : theme.orange};
+  background-color: ${({ invalid, secondary, theme }) =>
+    secondary ? "none" : invalid ? theme.red : theme.orange};
 
-  color: ${({ invalid, theme }) =>
-    invalid ? theme.backgroundColor : theme.primaryColor};
+  color: ${({ invalid, secondary, theme }) =>
+    secondary
+      ? invalid
+        ? theme.red
+        : theme.orange
+      : invalid
+      ? theme.backgroundColor
+      : theme.primaryColor};
 
   cursor: pointer;
 

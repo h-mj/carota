@@ -31,7 +31,13 @@ export const estonian: Translation = {
         "Detsember"
       ]
     },
+    Confirmation: {
+      cancel: "Tühista",
+      confirm: "Kinnita"
+    },
     Edit: {
+      confirm: "Kas olete kindel, et soovite selle toiduaine ära kustutada?",
+      delete: "Kustutage",
       inputs: {
         barcode: {
           label: "Triipkood",
@@ -107,6 +113,7 @@ export const estonian: Translation = {
     },
     Navigation: {
       Administration: "Administratsioon",
+      Confirmation: "Kinnitus",
       Diet: "Dieet",
       Edit: "Redaktsioon",
       History: "Ajalugu",

@@ -4,6 +4,7 @@ import { css } from "styled-components";
  * CSS rules that resets common browser predefined rules.
  */
 export const RESET = css`
+  appearance: none;
   min-width: 0;
   border: none;
   outline: none;

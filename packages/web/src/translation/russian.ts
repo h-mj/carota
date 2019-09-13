@@ -31,7 +31,13 @@ export const russian: Translation = {
         "Декабрь"
       ]
     },
+    Confirmation: {
+      cancel: "Отмена",
+      confirm: "Подтвердить"
+    },
     Edit: {
+      confirm: "Вы уверены, что хотите удалить этот продукт?",
+      delete: "Удалить",
       inputs: {
         barcode: {
           label: "Штрих-код",
@@ -107,6 +113,7 @@ export const russian: Translation = {
     },
     Navigation: {
       Administration: "Администрация",
+      Confirmation: "Подтверждение",
       Diet: "Диета",
       Edit: "Редакция",
       History: "История",

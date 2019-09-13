@@ -7,7 +7,11 @@ import { styled } from "../../styling/theme";
 export const Controls = styled.div`
   display: flex;
   align-items: flex-end;
-  justify-content: flex-end;
+  justify-content: space-between;
+
+  & > *:only-child {
+    margin-left: auto;
+  }
 
   @media screen and (max-width: ${({ theme }) => theme.formWidth}) {
     flex-grow: 1;

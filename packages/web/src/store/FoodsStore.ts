@@ -1,4 +1,5 @@
 import { Body } from "api";
+import { action } from "mobx";
 
 import { Food } from "../model/Food";
 import { post } from "../utility/client";
@@ -37,6 +38,24 @@ export class FoodsStore extends Store<Food> {
 
     this.clear();
     response.data.map(this.add);
+
+    return undefined;
+  }
+
+  /**
+   * Makes a food deletion request.
+   *
+   * @param id Food Id which will be deleted.
+   */
+  @action
+  public async delete(id: string) {
+    const response = await post("food", "delete", { id });
+
+    if ("error" in response) {
+      return response.error;
+    }
+
+    this.remove(id);
 
     return undefined;
   }

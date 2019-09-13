@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { Administration } from "../scene/Administration";
+import { Confirmation } from "../scene/Confirmation";
 import { Diet } from "../scene/Diet";
 import { Edit } from "../scene/Edit";
 import { History } from "../scene/History";
@@ -81,6 +82,7 @@ export type RouteParameters<TSceneNames extends SceneNames> =
  */
 export const SCENE_COMPONENTS = {
   Administration: Administration,
+  Confirmation: Confirmation,
   Diet: Diet,
   Edit: Edit,
   History: History,
@@ -255,5 +257,5 @@ export class Scene<TSceneName extends SceneNames> {
  * Union of all possible scene types.
  */
 export type Scenes = {
-  [SceneName in SceneNames]: Scene<SceneName>
+  [SceneName in SceneNames]: Scene<SceneName>;
 }[SceneNames];

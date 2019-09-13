@@ -2,6 +2,7 @@ import * as Router from "@koa/router";
 import { deviate } from "deviator";
 
 import { Food, UNITS } from "../entity/Food";
+import { UnauthorizedError } from "../error/UnauthorizedError";
 import { createIdNotFoundError } from "../utility/errors";
 import { define } from "../utility/routes";
 
@@ -110,4 +111,36 @@ define(foodRouter, "food", "search", foodSearchValidator, async context => {
     .filter(matches(context.state.body.query))
     .map(food => food.toData())
     .slice(0, 20);
+});
+
+/**
+ * Deletion request body validator.
+ */
+// prettier-ignore
+const foodDeleteValidator = deviate().object().shape({
+  id: deviate().string().guid()
+});
+
+define(foodRouter, "food", "delete", foodDeleteValidator, async context => {
+  const {
+    account,
+    body: { id }
+  } = context.state;
+
+  const food = await Food.findOne({ id });
+
+  if (food === undefined) {
+    throw createIdNotFoundError(id, Food.name, ["id"]);
+  }
+
+  // Only last editor or account with sufficient rights can delete food items.
+  if (food.editor.id !== account.id && account.rights !== "All") {
+    throw new UnauthorizedError(
+      "Insufficient rights for deletion of this food item."
+    );
+  }
+
+  await food.remove();
+
+  context.state.data = true;
 });

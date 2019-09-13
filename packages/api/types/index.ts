@@ -21,6 +21,7 @@ interface Api {
     register: Query<AccountRegisterBody, TokenData>;
   };
   food: {
+    delete: Query<IdBody, boolean>;
     save: Query<FoodSaveBody, FoodData>;
     search: Query<FoodSearchBody, FoodData[]>;
   };

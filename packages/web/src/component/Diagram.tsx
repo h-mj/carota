@@ -33,9 +33,9 @@ export class Diagram extends Component<DiagramProps> {
   public render() {
     const { carbohydrates, fat, protein } = this.props;
 
-    const carbsRatio = 4 * Math.sqrt(carbohydrates);
-    const fatRatio = 9 * Math.sqrt(fat);
-    const proteinRatio = 4 * Math.sqrt(protein);
+    const carbsRatio = Math.sqrt(4 * carbohydrates);
+    const fatRatio = Math.sqrt(9 * fat);
+    const proteinRatio = Math.sqrt(4 * protein);
     const ratioSum = carbsRatio + fatRatio + proteinRatio;
 
     return (

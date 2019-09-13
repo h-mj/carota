@@ -54,13 +54,19 @@ export const english: Translation = {
         pieceQuantity: {
           label: "Quantity of one piece",
           reasons: {
-            empty: "Please enter quantity of one piece."
+            empty: "Please enter quantity of one piece.",
+            less_than_or_equals:
+              "Please enter one piece quantity that is greater than 0.",
+            not_a_number: "Please enter correct one piece quantity."
           }
         },
         quantity: {
           label: "Quantity",
           reasons: {
-            empty: "Please enter product quantity."
+            empty: "Please enter product quantity.",
+            less_than_or_equals:
+              "Please enter quantity that is greater than 0.",
+            not_a_number: "Please enter correct quantity."
           }
         },
         unit: {

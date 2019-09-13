@@ -181,7 +181,7 @@ const toBody = deviate<EditValues>().shape({
         protein: parseFloat,
         salt: optionalParseFloat
       }),
-  pieceQuantity: optionalParseFloat
+  pieceQuantity: optionalParseFloat.gt(0)
 });
 
 /**

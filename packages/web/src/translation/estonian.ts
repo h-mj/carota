@@ -80,6 +80,9 @@ export const estonian: Translation = {
       },
       submit: "Salvesta"
     },
+    FoodInfo: {
+      per: "100{unit} kohta:"
+    },
     Head: {
       title: "Morkovka"
     },
@@ -111,8 +114,8 @@ export const estonian: Translation = {
       Login: "Logige sisse",
       Logout: "Logige välja",
       Measurements: "Mõõdud",
-      Register: "Looge konto",
       Quantity: "Quantity",
+      Register: "Looge konto",
       Search: "Otsing",
       Settings: "Seaded",
       Unknown: "Vabandame, soovitud lehekülge ei leitud"
@@ -125,8 +128,8 @@ export const estonian: Translation = {
         label: "Kogus",
         reasons: {
           empty: "Palun sisestage toiduaine kogus.",
-          not_a_number: "Palun sistestage korrektne kogus.",
-          less_than_or_equals: "Palun sistestage kogus mis on suurem kui 0."
+          less_than_or_equals: "Palun sistestage kogus mis on suurem kui 0.",
+          not_a_number: "Palun sistestage korrektne kogus."
         }
       },
       select: "Valige",
@@ -175,9 +178,6 @@ export const estonian: Translation = {
       },
       submit: "Looge konto →",
       title: "Looge konto"
-    },
-    SearchResult: {
-      per: "100{unit} kohta:"
     }
   },
   units: {

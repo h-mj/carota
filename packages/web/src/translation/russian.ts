@@ -80,6 +80,9 @@ export const russian: Translation = {
       },
       submit: "Сохранить"
     },
+    FoodInfo: {
+      per: "На 100{unit}:"
+    },
     Head: {
       title: "Морковка"
     },
@@ -125,8 +128,8 @@ export const russian: Translation = {
         label: "Количество",
         reasons: {
           empty: "Пожалуйста, введите количество продукта.",
-          not_a_number: "Пожалуйста, введите правильное количество.",
-          less_than_or_equals: "Пожалуйста, введите количество больше 0."
+          less_than_or_equals: "Пожалуйста, введите количество больше 0.",
+          not_a_number: "Пожалуйста, введите правильное количество."
         }
       },
       select: "Выбрать",
@@ -176,9 +179,6 @@ export const russian: Translation = {
       },
       submit: "Создать аккаунт →",
       title: "Создать аккаунт"
-    },
-    SearchResult: {
-      per: "На 100{unit}:"
     }
   },
   units: {

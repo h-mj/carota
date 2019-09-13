@@ -80,6 +80,9 @@ export const english: Translation = {
       },
       submit: "Save"
     },
+    FoodInfo: {
+      per: "Per 100{unit}:"
+    },
     Head: {
       title: "Morkovka"
     },
@@ -125,8 +128,8 @@ export const english: Translation = {
         label: "Quantity",
         reasons: {
           empty: "Please enter product quantity.",
-          not_a_number: "Please enter correct quantity.",
-          less_than_or_equals: "Please enter quantity that is greater than 0."
+          less_than_or_equals: "Please enter quantity that is greater than 0.",
+          not_a_number: "Please enter correct quantity."
         }
       },
       select: "Select",
@@ -175,9 +178,6 @@ export const english: Translation = {
       },
       submit: "Create account →",
       title: "Create account"
-    },
-    SearchResult: {
-      per: "Per 100{unit}:"
     }
   },
   units: {

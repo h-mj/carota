@@ -7,40 +7,11 @@ import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
-import { TranslatedComponent } from "../base/TranslatedComponent";
-import {
-  Carbohydrate,
-  Energy,
-  Fat,
-  Protein
-} from "../component/collection/icons";
-import { Diagram } from "../component/Diagram";
+import { FoodInfo } from "../component/FoodInfo";
 import { TextField } from "../component/TextField";
 import { Food } from "../model/Food";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
-
-/**
- * Object that maps nutrient names to its icon components.
- */
-const ICONS = {
-  energy: Energy,
-  fat: Fat,
-  protein: Protein,
-  carbohydrate: Carbohydrate
-} as const;
-
-/**
- * Union of information table nutrient names.
- */
-type Nutrient = keyof typeof ICONS;
-
-/**
- * `number.toLocaleString` function options.
- */
-const FORMAT_OPTIONS = {
-  minimumFractionDigits: 1
-};
 
 /**
  * Query string validator.
@@ -94,12 +65,12 @@ export class Search extends SceneComponent<"Search"> {
           />
         </Controls>
         {this.completed && (
-          <SearchResults>
+          <Results>
             {this.props.foods!.getAll().map(food => (
-              <SearchResult key={food.id} food={food} select={this.select} />
+              <FoodInfo key={food.id} food={food} select={this.select} />
             ))}
             <Add onClick={this.showEditor}>+</Add>
-          </SearchResults>
+          </Results>
         )}
       </>
     );
@@ -147,7 +118,8 @@ export class Search extends SceneComponent<"Search"> {
   };
 
   /**
-   * Food item and quantity selection callback.
+   * Callback function which is called when user clicks on a product and selects
+   * its quantity in opened `Quantity` scene.
    */
   @action
   private select = (food: Food, quantity: number) => {
@@ -173,9 +145,9 @@ const Controls = styled.div`
 `;
 
 /**
- * Grid that contains all search results.
+ * Grid that contains all food information components of found food items.
  */
-const SearchResults = styled.div`
+const Results = styled.div`
   padding: ${({ theme }) => theme.padding};
   box-sizing: border-box;
 
@@ -189,255 +161,23 @@ const SearchResults = styled.div`
 `;
 
 /**
- * Result component props.
+ * Button that on click opens food creation scene.
  */
-interface SearchResultProps {
-  /**
-   * Corresponding food model instance.
-   */
-  food: Food;
+const Add = styled.button`
+  ${RESET};
 
-  /**
-   * Food item selection callback.
-   */
-  select: (food: Food, quantity: number) => void;
-}
-
-/**
- * Search result translation.
- */
-interface SearchResultTranslation {
-  /**
-   * Quantities per 100 units text.
-   */
-  per: string;
-}
-
-/**
- * Single result that displays food item name along with nutrition table.
- */
-@inject("views")
-@observer
-export class SearchResult extends TranslatedComponent<
-  "SearchResult",
-  SearchResultProps,
-  SearchResultTranslation
-> {
-  /**
-   * Sets the name of this component.
-   */
-  public constructor(props: SearchResultProps) {
-    super("SearchResult", props);
-  }
-
-  /**
-   * Renders food item information.
-   */
-  public render() {
-    const { name, nutritionDeclaration, unit } = this.props.food;
-
-    return (
-      <ResultContainer onClick={this.handleClick}>
-        <Title>
-          <Name>{name}</Name>
-
-          <Edit onClick={this.handleEditClick}>
-            <Diagram
-              carbohydrates={nutritionDeclaration.carbohydrate}
-              fat={nutritionDeclaration.fat}
-              protein={nutritionDeclaration.protein}
-            />
-          </Edit>
-        </Title>
-
-        <Stats>
-          <div>
-            {this.translation.per.replace(
-              "{unit}",
-              this.props.views!.translation.units[unit]
-            )}
-          </div>
-
-          {Object.entries(ICONS).map(([nutrient, IconComponent]) => {
-            const quantity = (
-              100 * nutritionDeclaration[nutrient as Nutrient]
-            ).toLocaleString("et-EE", FORMAT_OPTIONS);
-
-            const unit = this.props.views!.translation.units[
-              nutrient === "energy" ? "kcal" : "g"
-            ];
-
-            return (
-              <Nutrient key={nutrient}>
-                <Icon>
-                  <IconComponent />
-                </Icon>
-                <Quantity>{quantity}</Quantity>
-                <Unit>{unit}</Unit>
-              </Nutrient>
-            );
-          })}
-        </Stats>
-      </ResultContainer>
-    );
-  }
-
-  /**
-   * Shows quantity selection when user clicks of food item.
-   */
-  @action
-  private handleClick = () => {
-    this.props.views!.push("center", "Quantity", {
-      food: this.props.food,
-      select: this.props.select
-    });
-  };
-
-  /**
-   * Displays food editing form when user clicks on edit button.
-   */
-  @action
-  private handleEditClick: React.MouseEventHandler<
-    HTMLButtonElement
-  > = event => {
-    event.stopPropagation();
-
-    this.props.views!.push("left", "Edit", {
-      food: this.props.food
-    });
-  };
-}
-
-/**
- * Component that contains information about a food item.
- */
-const ResultContainer = styled.div`
   min-height: 11.5rem;
-
-  display: flex;
-  flex-direction: column;
-
-  padding: calc(${({ theme }) => theme.padding} / 3);
-  box-sizing: border-box;
 
   border: solid 1px ${({ theme }) => theme.borderColor};
   border-radius: ${({ theme }) => theme.borderRadius};
+  box-sizing: border-box;
 
-  cursor: pointer;
-
-  & > * {
-    margin-bottom: calc(${({ theme }) => theme.padding} / 3);
-  }
-
-  & > *:last-child {
-    margin-bottom: 0;
-  }
-`;
-
-/**
- * Food nutritional stats wrapper.
- */
-const Stats = styled.div`
-  & > * {
-    margin-bottom: calc(${({ theme }) => theme.padding} / 6);
-  }
-
-  & > *:last-child {
-    margin-bottom: 0;
-  }
-`;
-
-/**
- * Custom result element that is used to create a food item.
- */
-const Add = styled(ResultContainer)`
+  display: flex;
   align-items: center;
   justify-content: center;
 
   color: ${({ theme }) => theme.orange};
   font-size: 3.5rem;
-`;
-
-/**
- * Title component text line height.
- */
-const TITLE_LINE_HEIGHT = "1.4rem";
-
-/**
- * Food item title wrapper which contains the diagram and food item name.
- */
-const Title = styled.div`
-  width: 100%;
-
-  display: flex;
-  flex: 1 1 auto;
-`;
-
-/**
- * Button which contains product name.
- */
-const Name = styled.button`
-  ${RESET};
-
-  display: flex;
-  flex-grow: 1;
-
-  margin-right: calc(${({ theme }) => theme.padding} / 6);
-  color: ${({ theme }) => theme.primaryColor};
-  line-height: ${TITLE_LINE_HEIGHT};
 
   cursor: pointer;
-`;
-
-/**
- * Product edit button.
- */
-const Edit = styled.button`
-  ${RESET};
-
-  height: ${TITLE_LINE_HEIGHT};
-  flex-shrink: 0;
-
-  cursor: pointer;
-`;
-
-/**
- * Single row of nutrient table.
- */
-const Nutrient = styled.div`
-  display: flex;
-  align-items: center;
-
-  & > * {
-    width: 100%;
-  }
-`;
-
-/**
- * Nutrient icon wrapper that resizes the icon inside.
- */
-const Icon = styled.span`
-  height: calc(${({ theme }) => theme.padding} / 2);
-
-  & > * {
-    height: 100%;
-  }
-`;
-
-/**
- * Displays nutrient quantity.
- */
-const Quantity = styled.span`
-  width: 100%;
-  color: ${({ theme }) => theme.primaryColor};
-  font-feature-settings: "tnum" 1;
-  text-align: center;
-`;
-
-/**
- * Displays nutrient amount unit.
- */
-const Unit = styled.span`
-  color: ${({ theme }) => theme.secondaryColor};
-  text-align: right;
 `;

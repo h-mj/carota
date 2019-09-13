@@ -186,7 +186,9 @@ const Title = styled.div`
 const Name = styled.button`
   ${RESET};
 
-  display: flex;
+  min-height: ${TITLE_LINE_HEIGHT};
+  height: min-content;
+
   flex-grow: 1;
 
   padding: calc(${({ theme }) => theme.padding} / 3);
@@ -194,6 +196,7 @@ const Name = styled.button`
 
   color: ${({ theme }) => theme.primaryColor};
   line-height: ${TITLE_LINE_HEIGHT};
+  word-break: break-all;
 
   cursor: pointer;
 `;

@@ -207,6 +207,9 @@ const Edit = styled.button`
   height: ${TITLE_LINE_HEIGHT};
   flex-shrink: 0;
 
+  display: flex;
+  align-items: center;
+
   padding: calc(${({ theme }) => theme.padding} / 3);
   box-sizing: content-box;
 

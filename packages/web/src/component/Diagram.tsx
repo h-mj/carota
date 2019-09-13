@@ -33,16 +33,16 @@ export class Diagram extends Component<DiagramProps> {
   public render() {
     const { carbohydrates, fat, protein } = this.props;
 
-    const carbsSqrt = Math.sqrt(carbohydrates);
-    const fatSqrt = Math.sqrt(fat);
-    const proteinSqrt = Math.sqrt(protein);
-    const sqrtSum = carbsSqrt + fatSqrt + proteinSqrt;
+    const carbsRatio = 4 * Math.sqrt(carbohydrates);
+    const fatRatio = 9 * Math.sqrt(fat);
+    const proteinRatio = 4 * Math.sqrt(protein);
+    const ratioSum = carbsRatio + fatRatio + proteinRatio;
 
     return (
       <Bar>
-        <NutrientPercentage color="#ff8200" diameter={fatSqrt / sqrtSum} />
-        <NutrientPercentage color="#6b9cde" diameter={proteinSqrt / sqrtSum} />
-        <NutrientPercentage color="#fabc1f" diameter={carbsSqrt / sqrtSum} />
+        <NutrientPercentage color="#ff8200" diameter={fatRatio / ratioSum} />
+        <NutrientPercentage color="#6b9cde" diameter={proteinRatio / ratioSum} />
+        <NutrientPercentage color="#fabc1f" diameter={carbsRatio / ratioSum} />
       </Bar>
     );
   }
@@ -54,6 +54,7 @@ export class Diagram extends Component<DiagramProps> {
 const Bar = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
 `;
 
 /**
@@ -76,10 +77,10 @@ interface NutrientPercentageProps {
  */
 const NutrientPercentage = styled.div<NutrientPercentageProps>`
   width: calc(
-    ${({ diameter }) => diameter} * ${({ theme }) => theme.padding} / 2
+    ${({ diameter }) => diameter} * ${({ theme }) => theme.height} / 2
   );
   height: calc(
-    ${({ diameter }) => diameter} * ${({ theme }) => theme.padding} / 2
+    ${({ diameter }) => diameter} * ${({ theme }) => theme.height} / 2
   );
   border-radius: 50%;
   background-color: ${({ color }) => color};

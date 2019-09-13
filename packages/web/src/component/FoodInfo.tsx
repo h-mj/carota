@@ -158,17 +158,11 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding: calc(${({ theme }) => theme.padding} / 3);
-  box-sizing: border-box;
-
   border: solid 1px ${({ theme }) => theme.borderColor};
   border-radius: ${({ theme }) => theme.borderRadius};
+  box-sizing: border-box;
 
   cursor: pointer;
-
-  & > *:not(:last-child) {
-    margin-bottom: calc(${({ theme }) => theme.padding} / 3);
-  }
 `;
 
 /**
@@ -183,7 +177,7 @@ const Title = styled.div`
   width: 100%;
 
   display: flex;
-  flex: 1 1 auto;
+  flex-grow: 1;
 `;
 
 /**
@@ -195,7 +189,9 @@ const Name = styled.button`
   display: flex;
   flex-grow: 1;
 
-  margin-right: calc(${({ theme }) => theme.padding} / 6);
+  padding: calc(${({ theme }) => theme.padding} / 3);
+  box-sizing: content-box;
+
   color: ${({ theme }) => theme.primaryColor};
   line-height: ${TITLE_LINE_HEIGHT};
 
@@ -211,7 +207,7 @@ const Edit = styled.button`
   height: ${TITLE_LINE_HEIGHT};
   flex-shrink: 0;
 
-  padding: 0 calc(${({ theme }) => theme.padding} / 3);
+  padding: calc(${({ theme }) => theme.padding} / 3);
   box-sizing: content-box;
 
   cursor: pointer;
@@ -221,6 +217,10 @@ const Edit = styled.button`
  * Food nutritional stats wrapper.
  */
 const Stats = styled.div`
+  padding: calc(${({ theme }) => theme.padding} / 3);
+  padding-top: 0;
+  box-sizing: border-box;
+
   & > *:not(:last-child) {
     margin-bottom: calc(${({ theme }) => theme.padding} / 6);
   }

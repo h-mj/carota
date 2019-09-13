@@ -52,7 +52,7 @@ export const estonian: Translation = {
           }
         },
         pieceQuantity: {
-          label: "Tüki kogus",
+          label: "Ühe tüki kogus",
           reasons: {
             empty: "Palun sisestage ühe tüki kogus."
           }

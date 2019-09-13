@@ -52,9 +52,9 @@ export const russian: Translation = {
           }
         },
         pieceQuantity: {
-          label: "Количество куска",
+          label: "Количество одной штуки",
           reasons: {
-            empty: "Пожалуйста, введите количество одного куска."
+            empty: "Пожалуйста, введите количество одной штуки."
           }
         },
         quantity: {

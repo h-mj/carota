@@ -52,7 +52,7 @@ export const english: Translation = {
           }
         },
         pieceQuantity: {
-          label: "Piece quantity",
+          label: "Quantity of one piece",
           reasons: {
             empty: "Please enter quantity of one piece."
           }

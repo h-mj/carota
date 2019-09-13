@@ -164,7 +164,7 @@ const toBody = deviate<EditValues>().shape({
   id: deviate<string | undefined>(),
   name: deviate<string>().notEmpty(),
   barcode: deviate<string | undefined>().optional().notEmpty(),
-  quantity: deviate<string>().append(parseFloat),
+  quantity: deviate<string>().append(parseFloat).gt(0),
   unit: deviate<Units | undefined>().defined(),
   nutritionDeclaration: deviate<NutritionDeclarationValues>()
     .shape({
@@ -243,6 +243,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
         <Controls>
           {this.props.food !== undefined && (
             <Button
+              invalid={any(this.reasons)}
               secondary={true}
               type="button"
               onClick={this.showConfirmation}

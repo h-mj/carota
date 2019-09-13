@@ -27,12 +27,8 @@ export const Form = styled.form`
   padding: ${({ theme }) => theme.padding};
   box-sizing: border-box;
 
-  & > * {
+  & > *:not(:last-child) {
     margin-bottom: ${({ theme }) => theme.padding};
-  }
-
-  & > *:last-child {
-    margin-bottom: 0;
   }
 
   @media screen and (max-width: ${({ theme }) => theme.formWidth}) {

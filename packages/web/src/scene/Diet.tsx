@@ -75,12 +75,8 @@ const Main = styled.div`
 
   overflow-y: auto;
 
-  & > * {
+  & > *:not(:last-child) {
     border-bottom: solid 1px ${({ theme }) => theme.borderColor};
-  }
-
-  & > *:last-child {
-    border-bottom: 0;
   }
 `;
 

@@ -166,12 +166,8 @@ const Container = styled.div`
 
   cursor: pointer;
 
-  & > * {
+  & > *:not(:last-child) {
     margin-bottom: calc(${({ theme }) => theme.padding} / 3);
-  }
-
-  & > *:last-child {
-    margin-bottom: 0;
   }
 `;
 
@@ -215,6 +211,9 @@ const Edit = styled.button`
   height: ${TITLE_LINE_HEIGHT};
   flex-shrink: 0;
 
+  padding: 0 calc(${({ theme }) => theme.padding} / 3);
+  box-sizing: content-box;
+
   cursor: pointer;
 `;
 
@@ -222,12 +221,8 @@ const Edit = styled.button`
  * Food nutritional stats wrapper.
  */
 const Stats = styled.div`
-  & > * {
+  & > *:not(:last-child) {
     margin-bottom: calc(${({ theme }) => theme.padding} / 6);
-  }
-
-  & > *:last-child {
-    margin-bottom: 0;
   }
 `;
 

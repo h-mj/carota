@@ -184,12 +184,8 @@ const Label = styled.label`
   display: flex;
   align-items: center;
 
-  & > * {
+  & > *:not(:last-child) {
     margin-right: calc(${({ theme }) => theme.padding} / 3);
-  }
-
-  & > *:last-child {
-    margin-right: 0;
   }
 `;
 

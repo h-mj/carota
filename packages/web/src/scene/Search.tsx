@@ -240,11 +240,14 @@ export class SearchResult extends TranslatedComponent<
       <ResultContainer onClick={this.handleClick}>
         <Title>
           <Name>{name}</Name>
-          <Diagram
-            carbohydrates={nutritionDeclaration.carbohydrate}
-            fat={nutritionDeclaration.fat}
-            protein={nutritionDeclaration.protein}
-          />
+
+          <Edit onClick={this.handleEditClick}>
+            <Diagram
+              carbohydrates={nutritionDeclaration.carbohydrate}
+              fat={nutritionDeclaration.fat}
+              protein={nutritionDeclaration.protein}
+            />
+          </Edit>
         </Title>
 
         <Stats>
@@ -283,10 +286,24 @@ export class SearchResult extends TranslatedComponent<
    * Shows quantity selection when user clicks of food item.
    */
   @action
-  private handleClick: React.MouseEventHandler<HTMLButtonElement> = () => {
+  private handleClick = () => {
     this.props.views!.push("center", "Quantity", {
       food: this.props.food,
       select: this.props.select
+    });
+  };
+
+  /**
+   * Displays food editing form when user clicks on edit button.
+   */
+  @action
+  private handleEditClick: React.MouseEventHandler<
+    HTMLButtonElement
+  > = event => {
+    event.stopPropagation();
+
+    this.props.views!.push("left", "Edit", {
+      food: this.props.food
     });
   };
 }
@@ -294,9 +311,7 @@ export class SearchResult extends TranslatedComponent<
 /**
  * Component that contains information about a food item.
  */
-const ResultContainer = styled.button`
-  ${RESET};
-
+const ResultContainer = styled.div`
   min-height: 11.5rem;
 
   display: flex;
@@ -356,20 +371,34 @@ const Title = styled.div`
 
   display: flex;
   flex: 1 1 auto;
-
-  & > *:last-child {
-    height: ${TITLE_LINE_HEIGHT};
-  }
 `;
 
 /**
- * Food name container.
+ * Button which contains product name.
  */
-const Name = styled.div`
+const Name = styled.button`
+  ${RESET};
+
+  display: flex;
   flex-grow: 1;
+
   margin-right: calc(${({ theme }) => theme.padding} / 6);
   color: ${({ theme }) => theme.primaryColor};
   line-height: ${TITLE_LINE_HEIGHT};
+
+  cursor: pointer;
+`;
+
+/**
+ * Product edit button.
+ */
+const Edit = styled.button`
+  ${RESET};
+
+  height: ${TITLE_LINE_HEIGHT};
+  flex-shrink: 0;
+
+  cursor: pointer;
 `;
 
 /**

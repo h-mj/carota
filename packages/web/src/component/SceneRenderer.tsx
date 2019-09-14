@@ -14,6 +14,16 @@ import { TitleBar } from "./TitleBar";
  */
 interface SceneRendererProps {
   /**
+   * Whether this scenes is the first element in the scene stack.
+   */
+  first: boolean;
+
+  /**
+   * Whether this scene is overlaid by another scene.
+   */
+  overlaid: boolean;
+
+  /**
    * Scene which will be rendered.
    */
   scene: Scenes;
@@ -26,21 +36,44 @@ interface SceneRendererProps {
 @observer
 export class SceneRenderer extends Component<SceneRendererProps> {
   /**
+   * Scene overlay ref.
+   */
+  private overlayRef = React.createRef<HTMLDivElement>();
+
+  /**
+   * Adds focus event listener that focuses back into an element in the overlay
+   * when focus escapes the overlay.
+   */
+  public componentDidMount() {
+    document.documentElement.focus();
+    document.addEventListener("focus", this.focus, true);
+  }
+
+  /**
+   * Remove added focus event listener.
+   */
+  public componentWillUnmount() {
+    document.removeEventListener("focus", this.focus, true);
+  }
+
+  /**
    * Renders the scene to correct position.
    */
   public render() {
-    const { scene } = this.props;
+    const { first, overlaid, scene } = this.props;
     const { position } = scene;
     const Container = CONTAINERS[position];
 
     return (
-      <SceneOverlay onClick={this.handleClick} position={position}>
+      <SceneOverlay
+        aria-hidden={overlaid}
+        onClick={this.handleClick}
+        overlaid={overlaid}
+        position={position}
+        ref={this.overlayRef}
+      >
         <Container>
-          {this.props.views!.root === scene ? (
-            <Navigation />
-          ) : (
-            <TitleBar onClose={this.pop} />
-          )}
+          {first ? <Navigation /> : <TitleBar onClose={this.pop} />}
           {scene.render()}
         </Container>
       </SceneOverlay>
@@ -66,7 +99,42 @@ export class SceneRenderer extends Component<SceneRendererProps> {
   private pop = () => {
     this.props.views!.pop(this.props.scene);
   };
+
+  /**
+   * Focuses on the first focuseable overlay element if currently active element is outside this overlay.
+   */
+  private focus = (event: FocusEvent) => {
+    const { current } = this.overlayRef;
+
+    if (
+      this.props.overlaid ||
+      !document.hasFocus() ||
+      document.activeElement === null ||
+      document.activeElement === document.body ||
+      document.activeElement === document.documentElement ||
+      current === null ||
+      current.contains(document.activeElement)
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const targets = current.querySelectorAll(FOCUSABLE_ELEMENT_SELECTOR);
+
+    if (targets.length === 0) {
+      return;
+    }
+
+    ((targets[0] as unknown) as HTMLElement).focus();
+  };
 }
+
+/**
+ * Focusable element selector.
+ */
+const FOCUSABLE_ELEMENT_SELECTOR =
+  'a[href], area[href], button:not([disabled]), embed, iframe, input:not([disabled]), object, select:not([disabled]), textarea:not([disabled]), *[tabindex]:not([tabindex^="-"]), *[contenteditable]';
 
 /**
  * Scene overlay props.
@@ -76,6 +144,11 @@ interface SceneOverlayProps {
    * Scene rendering position.
    */
   position: RenderPosition;
+
+  /**
+   * Whether or not there's another overlay above this one.
+   */
+  overlaid: boolean;
 }
 
 /**
@@ -88,6 +161,8 @@ const SceneOverlay = styled(Overlay)<SceneOverlayProps>`
   align-items: center;
   justify-content: ${({ position }) =>
     position === "main" ? "center" : position};
+
+  pointer-events: ${({ overlaid }) => (overlaid ? "none" : "initial")};
 `;
 
 /**

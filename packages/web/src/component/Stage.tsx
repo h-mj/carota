@@ -14,8 +14,15 @@ export class Stage extends Component {
    * Renders all active scenes.
    */
   public render() {
-    return this.props.views!.scenes.map((scene, index) => (
-      <SceneRenderer key={`${scene.name}:${index}`} scene={scene} />
+    const { scenes } = this.props.views!;
+
+    return scenes.map((scene, index) => (
+      <SceneRenderer
+        key={`${scene.name}:${index}`}
+        first={index === 0}
+        overlaid={index !== scenes.length - 1}
+        scene={scene}
+      />
     ));
   }
 }

@@ -50,6 +50,9 @@ const Bar = styled.div`
   width: 100%;
   height: ${({ theme }) => theme.height};
 
+  display: flex;
+  justify-items: flex-end;
+
   border-bottom: solid 1px ${({ theme }) => theme.borderColor};
 `;
 
@@ -57,7 +60,6 @@ const Bar = styled.div`
  * Title text container.
  */
 const Title = styled.div`
-  height: 100%;
   padding-left: ${({ theme }) => theme.padding};
 
   display: flex;
@@ -73,9 +75,9 @@ const Title = styled.div`
 const Close = styled.button`
   ${RESET};
 
-  float: right;
-
   height: ${({ theme }) => theme.height};
+
+  margin-left: auto;
   padding: 0 ${({ theme }) => theme.padding};
 
   color: ${({ theme }) => theme.secondaryColor};

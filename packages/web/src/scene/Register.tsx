@@ -269,6 +269,6 @@ export class Register extends SceneComponent<
       return this.props.views!.unknown();
     }
 
-    this.loaded = invitation !== undefined;
+    this.loaded = true;
   };
 }

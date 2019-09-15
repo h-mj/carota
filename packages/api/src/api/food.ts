@@ -1,8 +1,9 @@
-import * as Router from "@koa/router";
 import { deviate } from "deviator";
 
+import * as Router from "@koa/router";
+
 import { Food, UNITS } from "../entity/Food";
-import { UnauthorizedError } from "../error/UnauthorizedError";
+import { ForbiddenError } from "../error/ForbiddenError";
 import { createIdNotFoundError } from "../utility/errors";
 import { define } from "../utility/routes";
 
@@ -52,6 +53,7 @@ const foodSaveValidator = deviate().object().shape({
 });
 
 define(foodRouter, "food", "save", foodSaveValidator, async context => {
+  const { account } = context.state;
   const {
     id,
     name,
@@ -61,8 +63,16 @@ define(foodRouter, "food", "save", foodSaveValidator, async context => {
     pieceQuantity
   } = context.state.body;
 
-  if (id !== undefined && (await Food.findOne({ id })) === undefined) {
-    throw createIdNotFoundError(id, Food.name, ["id"]);
+  if (id !== undefined) {
+    const food = await Food.findOne({ id });
+
+    if (food === undefined) {
+      throw createIdNotFoundError(id, Food.name, ["id"]);
+    }
+
+    if (account.id !== food.editor.id && account.rights !== "All") {
+      throw new ForbiddenError("You can not edit this food item.");
+    }
   }
 
   const food = Food.create({
@@ -133,11 +143,9 @@ define(foodRouter, "food", "delete", foodDeleteValidator, async context => {
     throw createIdNotFoundError(id, Food.name, ["id"]);
   }
 
-  // Only last editor or account with sufficient rights can delete food items.
-  if (food.editor.id !== account.id && account.rights !== "All") {
-    throw new UnauthorizedError(
-      "Insufficient rights for deletion of this food item."
-    );
+  // Allow only accounts with all rights to delete food items.
+  if (account.rights !== "All") {
+    throw new ForbiddenError("You can not delete this food item.");
   }
 
   await food.remove();

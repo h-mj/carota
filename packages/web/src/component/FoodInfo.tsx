@@ -197,7 +197,7 @@ const Name = styled.button`
 
   color: ${({ theme }) => theme.primaryColor};
   line-height: ${TITLE_LINE_HEIGHT};
-  word-break: break-all;
+  word-break: break-word;
 
   cursor: pointer;
 `;

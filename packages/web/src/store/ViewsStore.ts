@@ -1,8 +1,13 @@
 import { Languages } from "api";
 import { action, computed, observable } from "mobx";
 
-import { RenderPosition, Scene, Scenes } from "../base/Scene";
-import { SceneComponentProps, SceneNames } from "../base/SceneComponent";
+import {
+  RenderPosition,
+  Scene,
+  SceneNames,
+  SceneSceneComponentProps,
+  Scenes
+} from "../base/Scene";
 import { Notification, NotificationType } from "../component/Notifications";
 import { Translation } from "../translation";
 import { english } from "../translation/english";
@@ -205,7 +210,7 @@ export class ViewsStore {
   public push<TSceneName extends SceneNames>(
     position: RenderPosition,
     name: TSceneName,
-    props: SceneComponentProps<TSceneName>
+    props: SceneSceneComponentProps<TSceneName>
   ): void {
     const scene = new Scene(name, undefined, props, position);
 

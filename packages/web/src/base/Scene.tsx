@@ -1,28 +1,64 @@
-import * as React from "react";
+import { SceneComponentNames, SceneComponentProps } from "./SceneComponent";
 
-import { Administration } from "../scene/Administration";
-import { Confirmation } from "../scene/Confirmation";
-import { Diet } from "../scene/Diet";
-import { Edit } from "../scene/Edit";
-import { History } from "../scene/History";
-import { Home } from "../scene/Home";
-import { Login } from "../scene/Login";
-import { Logout } from "../scene/Logout";
-import { Measurements } from "../scene/Measurements";
-import { Quantity } from "../scene/Quantity";
-import { Register } from "../scene/Register";
-import { Search } from "../scene/Search";
-import { Settings } from "../scene/Settings";
-import { Unknown } from "../scene/Unknown";
-import { SceneComponentProps, SceneNames } from "./SceneComponent";
+/**
+ * Union of scene names.
+ */
+export type SceneNames =
+  | "Administration"
+  | "Confirmation"
+  | "Diet"
+  | "Edit"
+  | "History"
+  | "Home"
+  | "Login"
+  | "Logout"
+  | "Measurements"
+  | "Quantity"
+  | "Register"
+  | "Search"
+  | "Settings"
+  | "Unknown";
+
+/**
+ * Object that maps scene name to its scene component name.
+ */
+const SCENE_TO_COMPONENT_NAME = {
+  Administration: "Administration",
+  Confirmation: "Confirmation",
+  Diet: "Diet",
+  Edit: "Edit",
+  History: "History",
+  Home: "Home",
+  Login: "Login",
+  Logout: "Logout",
+  Measurements: "Measurements",
+  Quantity: "Quantity",
+  Register: "Register",
+  Search: "Search",
+  Settings: "Settings",
+  Unknown: "Unknown"
+} as const;
+
+/**
+ * Scene component name of a scene named `TName`.
+ */
+export type SceneSceneComponentName<
+  TName extends SceneNames
+> = typeof SCENE_TO_COMPONENT_NAME[TName];
+
+/**
+ * Scene names of a scene component named `TName`. Opposite to `SceneSceneComponentName`.
+ */
+export type SceneComponentSceneNames<TName extends SceneComponentNames> = {
+  [Name in SceneNames]: typeof SCENE_TO_COMPONENT_NAME[Name] extends TName
+    ? Name
+    : never;
+}[SceneNames];
 
 /**
  * Type that defines some route's scene name and parameter names.
  */
-interface To<
-  TSceneName extends SceneNames,
-  TParameterNames extends string = never
-> {
+interface To<TName extends SceneNames, TParameterNames extends string = never> {
   /**
    * Route parameter names type.
    */
@@ -31,16 +67,16 @@ interface To<
   /**
    * Route scene name.
    */
-  name: TSceneName;
+  name: TName;
 }
 
 /**
  * Creates an object that defines some route's scene name and parameter names.
  */
-const to = <TSceneName extends SceneNames, TParameterNames extends string>(
-  sceneName: TSceneName,
+const to = <TName extends SceneNames, TParameterNames extends string>(
+  sceneName: TName,
   ...parameterNames: TParameterNames[]
-): To<TSceneName, TParameterNames> => ({
+): To<TName, TParameterNames> => ({
   name: sceneName,
   parameterNames
 });
@@ -77,25 +113,11 @@ export type RouteParameters<TSceneNames extends SceneNames> =
       : never);
 
 /**
- * Object where scene names are mapped to its component. This object is used to
- * retrieve scene's component by its name.
+ * Scene named `TName` scene component props type.
  */
-export const SCENE_COMPONENTS = {
-  Administration: Administration,
-  Confirmation: Confirmation,
-  Diet: Diet,
-  Edit: Edit,
-  History: History,
-  Home: Home,
-  Login: Login,
-  Logout: Logout,
-  Measurements: Measurements,
-  Quantity: Quantity,
-  Register: Register,
-  Search: Search,
-  Settings: Settings,
-  Unknown: Unknown
-} as const;
+export type SceneSceneComponentProps<
+  TName extends SceneNames
+> = SceneComponentProps<SceneSceneComponentName<TName>>;
 
 /**
  * Union of scene positions.
@@ -105,21 +127,26 @@ export type RenderPosition = "center" | "left" | "main";
 /**
  * Object that holds the information needed to render a scene.
  */
-export class Scene<TSceneName extends SceneNames> {
+export class Scene<TName extends SceneNames> {
   /**
    * Scene name.
    */
-  public readonly name: TSceneName;
+  public readonly name: TName;
 
   /**
    * Scene route parameters.
    */
-  public readonly parameters: RouteParameters<TSceneName>;
+  public readonly parameters: RouteParameters<TName>;
 
   /**
-   * Scene component props.
+   * Scene scene component name.
    */
-  public readonly props: SceneComponentProps<TSceneName>;
+  public readonly componentName: SceneSceneComponentName<TName>;
+
+  /**
+   * Scene scene component props.
+   */
+  public readonly props: SceneSceneComponentProps<TName>;
 
   /**
    * Scene rendering position.
@@ -135,24 +162,16 @@ export class Scene<TSceneName extends SceneNames> {
    * @param position Scene rendering position.
    */
   public constructor(
-    name: TSceneName,
-    parameters: RouteParameters<TSceneName>,
-    props: SceneComponentProps<TSceneName>,
+    name: TName,
+    parameters: RouteParameters<TName>,
+    props: SceneSceneComponentProps<TName>,
     position: RenderPosition = "main"
   ) {
     this.name = name;
     this.parameters = parameters;
+    this.componentName = SCENE_TO_COMPONENT_NAME[name];
     this.props = props;
     this.position = position;
-  }
-
-  /**
-   * Renders the scene component.
-   */
-  public render() {
-    const SceneComponent: typeof React.Component = SCENE_COMPONENTS[this.name];
-
-    return <SceneComponent scene={this} {...this.props} />;
   }
 
   /**
@@ -209,11 +228,6 @@ export class Scene<TSceneName extends SceneNames> {
    * Scene that is shown if no other scenes match current URL.
    */
   public static readonly UNKNOWN = new Scene("Unknown", undefined, {});
-
-  /**
-   * Scene which is used to exit the application.
-   */
-  public static readonly EXIT = new Scene("Logout", {}, {});
 
   /**
    * Returns a scene from given URL. `undefined` if no scenes match the URL.

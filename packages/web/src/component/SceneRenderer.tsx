@@ -4,10 +4,44 @@ import * as React from "react";
 
 import { Component } from "../base/Component";
 import { RenderPosition, Scenes } from "../base/Scene";
+import { Administration } from "../scene/Administration";
+import { Confirmation } from "../scene/Confirmation";
+import { Diet } from "../scene/Diet";
+import { Edit } from "../scene/Edit";
+import { History } from "../scene/History";
+import { Home } from "../scene/Home";
+import { Login } from "../scene/Login";
+import { Logout } from "../scene/Logout";
+import { Measurements } from "../scene/Measurements";
+import { Quantity } from "../scene/Quantity";
+import { Register } from "../scene/Register";
+import { Search } from "../scene/Search";
+import { Settings } from "../scene/Settings";
+import { Unknown } from "../scene/Unknown";
 import { styled } from "../styling/theme";
 import { Navigation } from "./Navigation";
 import { Overlay } from "./Overlay";
 import { TitleBar } from "./TitleBar";
+
+/**
+ * Object where scene component names are mapped to their classes.
+ */
+const SCENE_COMPONENTS = {
+  Administration: Administration,
+  Confirmation: Confirmation,
+  Diet: Diet,
+  Edit: Edit,
+  History: History,
+  Home: Home,
+  Login: Login,
+  Logout: Logout,
+  Measurements: Measurements,
+  Quantity: Quantity,
+  Register: Register,
+  Search: Search,
+  Settings: Settings,
+  Unknown: Unknown
+} as const;
 
 /**
  * Scene rendered props.
@@ -74,10 +108,21 @@ export class SceneRenderer extends Component<SceneRendererProps> {
       >
         <Container>
           {first ? <Navigation /> : <TitleBar onClose={this.pop} />}
-          {scene.render()}
+          {this.renderSceneComponent()}
         </Container>
       </SceneOverlay>
     );
+  }
+
+  /**
+   * Renders scene component of specified scene.
+   */
+  private renderSceneComponent() {
+    const { scene } = this.props;
+    const SceneComponent: typeof React.Component =
+      SCENE_COMPONENTS[scene.componentName];
+
+    return <SceneComponent scene={scene} {...scene.props} />;
   }
 
   /**

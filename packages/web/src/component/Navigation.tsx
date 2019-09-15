@@ -1,7 +1,7 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 
-import { SceneNames } from "../base/SceneComponent";
+import { SceneNames } from "../base/Scene";
 import { TranslatedComponent } from "../base/TranslatedComponent";
 import { styled } from "../styling/theme";
 import { Anchor } from "./Anchor";

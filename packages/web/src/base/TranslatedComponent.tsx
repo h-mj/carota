@@ -9,7 +9,7 @@ import { Component } from "./Component";
 import { SceneComponentMap } from "./SceneComponent";
 
 /**
- * Maps translated component class names to the class itself.
+ * Maps translated component names to their classes.
  */
 interface TranslatedComponentMap extends SceneComponentMap {
   Alert: Alert;
@@ -20,7 +20,7 @@ interface TranslatedComponentMap extends SceneComponentMap {
 }
 
 /**
- * Union of all translated component class names.
+ * Union of all translated component names.
  */
 type TranslatedComponentNames = keyof TranslatedComponentMap;
 
@@ -41,11 +41,10 @@ type UndefinedOptional<T> = Omit<T, AssignableKeys<T, undefined>> &
  * Type of an object that maps names of all translated components to their
  * translation object types.
  */
-export type ComponentsTranslation = UndefinedOptional<
-  {
-    [Name in TranslatedComponentNames]: TranslatedComponentMap[Name]["translation"];
-  }
->;
+// prettier-ignore
+export type ComponentsTranslation = UndefinedOptional<{
+  [Name in TranslatedComponentNames]: TranslatedComponentMap[Name]["translation"];
+}>;
 
 /**
  * Translated component base class used to automatically define and retrieve

@@ -29,8 +29,8 @@ export class TitleBar extends Component<TitleBarProps> {
   public render() {
     return (
       <Bar>
-        <Close onClick={this.handleClick}>✗</Close>
         {this.props.title !== undefined && <Title>{this.props.title}</Title>}
+        <Close onClick={this.handleClick}>✗</Close>
       </Bar>
     );
   }

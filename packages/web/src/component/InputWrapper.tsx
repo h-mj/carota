@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { StyleProps, styled } from "../styling/theme";
+import { styled } from "../styling/theme";
 
 /**
  * Input wrapper component props.
@@ -123,9 +123,29 @@ const Wrapper = styled.div`
 `;
 
 /**
+ * Common input style props.
+ */
+export interface InputStyleProps {
+  /**
+   * Whether or not input is active.
+   */
+  active?: boolean;
+
+  /**
+   * Whether or not input is disabled.
+   */
+  disabled?: boolean;
+
+  /**
+   * Whether or not input is invalid.
+   */
+  invalid?: boolean;
+}
+
+/**
  * Helper text above the input.
  */
-const HelperMessage = styled.div<StyleProps>`
+const HelperMessage = styled.div<InputStyleProps>`
   margin-bottom: calc(${({ theme }) => theme.padding} / 6);
 
   color: ${({ active, invalid, theme }) =>
@@ -137,7 +157,7 @@ const HelperMessage = styled.div<StyleProps>`
 /**
  * Field component that usually contains label and an input component.
  */
-const Field = styled.div<StyleProps>`
+const Field = styled.div<InputStyleProps>`
   position: relative;
   z-index: ${({ active, invalid }) => (active ? 2 : invalid ? 1 : 0)};
 
@@ -192,7 +212,7 @@ const Label = styled.label`
 /**
  * Component that displays the input label text.
  */
-const Caption = styled.span<StyleProps>`
+const Caption = styled.span<InputStyleProps>`
   min-width: 30%;
 
   color: ${({ active, invalid, theme }) =>

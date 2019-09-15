@@ -4,8 +4,8 @@ import * as React from "react";
 
 import { Component } from "../base/Component";
 import { RESET } from "../styling/stylesheets";
-import { StyleProps, styled } from "../styling/theme";
-import { InputWrapper } from "./InputWrapper";
+import { styled } from "../styling/theme";
+import { InputStyleProps, InputWrapper } from "./InputWrapper";
 
 /**
  * Check box component props.
@@ -193,7 +193,7 @@ export class CheckBox<TName extends string = string> extends Component<
 /**
  * Props that affect the styling of `Box` and `Check` components.
  */
-interface CheckBoxStateProps extends StyleProps {
+interface CheckBoxStateProps extends InputStyleProps {
   /**
    * Whether or not check box is checked.
    */

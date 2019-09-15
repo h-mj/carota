@@ -1,24 +1,15 @@
 import * as styledComponents from "styled-components";
 
 /**
- * Props that usually affect styling of components.
+ * Export typed styled-component functions.
  */
-export interface StyleProps {
-  /**
-   * Whether or not component is active.
-   */
-  active?: boolean;
-
-  /**
-   * Whether or not component is disabled.
-   */
-  disabled?: boolean;
-
-  /**
-   * Whether or not component is invalid.
-   */
-  invalid?: boolean;
-}
+export const {
+  default: styled,
+  css,
+  createGlobalStyle,
+  keyframes,
+  ThemeProvider
+} = styledComponents as styledComponents.ThemedStyledComponentsModule<Theme>;
 
 /**
  * Theme definition.
@@ -41,17 +32,6 @@ export interface Theme {
   disabledBackgroundColor: string;
   transition: string;
 }
-
-/**
- * Export typed styled-component functions.
- */
-export const {
-  default: styled,
-  css,
-  createGlobalStyle,
-  keyframes,
-  ThemeProvider
-} = styledComponents as styledComponents.ThemedStyledComponentsModule<Theme>;
 
 /**
  * Light theme definition.

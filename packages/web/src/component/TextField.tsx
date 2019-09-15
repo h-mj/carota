@@ -4,9 +4,9 @@ import * as React from "react";
 
 import { Component } from "../base/Component";
 import { RESET } from "../styling/stylesheets";
-import { StyleProps, styled } from "../styling/theme";
+import { styled } from "../styling/theme";
 import { CheckBox } from "./CheckBox";
-import { InputWrapper } from "./InputWrapper";
+import { InputStyleProps, InputWrapper } from "./InputWrapper";
 
 /**
  * Text field component props.
@@ -322,7 +322,7 @@ export class TextField<
 /**
  * Input component props.
  */
-interface InputProps extends StyleProps {
+interface InputProps extends InputStyleProps {
   /**
    * Text field input text align.
    */
@@ -364,7 +364,7 @@ const Input = styled.input<InputProps>`
 /**
  * Component that displays the unit.
  */
-const Unit = styled.span<StyleProps>`
+const Unit = styled.span<InputStyleProps>`
   width: ${({ theme }) => theme.padding};
 
   display: flex;

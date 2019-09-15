@@ -4,8 +4,8 @@ import * as React from "react";
 
 import { Component } from "../base/Component";
 import { RESET } from "../styling/stylesheets";
-import { StyleProps, styled } from "../styling/theme";
-import { InputWrapper } from "./InputWrapper";
+import { styled } from "../styling/theme";
+import { InputStyleProps, InputWrapper } from "./InputWrapper";
 
 /**
  * Select component props.
@@ -190,7 +190,7 @@ export class Select<
 /**
  * Component that contains option components.
  */
-const Options = styled.div<StyleProps>`
+const Options = styled.div<InputStyleProps>`
   display: flex;
 
   min-width: 0;
@@ -215,7 +215,7 @@ const Options = styled.div<StyleProps>`
 /**
  * Option component props.
  */
-interface OptionProps extends StyleProps {
+interface OptionProps extends InputStyleProps {
   /**
    * Whether or not this option is selected.
    */

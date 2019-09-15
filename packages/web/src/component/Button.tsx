@@ -103,14 +103,19 @@ const ButtonElement = styled.button<ButtonElementProps>`
   padding: 0 ${({ theme }) => theme.padding};
 
   border-radius: ${({ theme }) => theme.borderRadius};
-  background-color: ${({ invalid, secondary, theme }) =>
-    secondary ? "none" : invalid ? theme.red : theme.orange};
+  ${({ invalid, secondary, theme }) =>
+    secondary &&
+    `border: solid 1px ${invalid ? theme.red : theme.borderColor}`};
+  ${({ invalid, secondary, theme }) =>
+    secondary && invalid && `box-shadow: inset 0 0 0 1px ${theme.red}`};
+  ${({ invalid, secondary, theme }) =>
+    !secondary && `background-color: ${invalid ? theme.red : theme.orange}`};
 
   color: ${({ invalid, secondary, theme }) =>
     secondary
       ? invalid
         ? theme.red
-        : theme.orange
+        : theme.secondaryColor
       : invalid
       ? theme.backgroundColor
       : theme.primaryColor};

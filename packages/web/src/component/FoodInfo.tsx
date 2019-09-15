@@ -10,12 +10,13 @@ import { Carbohydrate, Energy, Fat, Protein } from "./collection/icons";
 import { Diagram } from "./Diagram";
 
 /**
- * Object that maps nutrient names to its icon components.
+ * Object that maps nutrient names to its icon components. Product nutrient
+ * stats will be rendered in the same order as defined in this object.
  */
 const ICONS = {
   energy: Energy,
-  fat: Fat,
   protein: Protein,
+  fat: Fat,
   carbohydrate: Carbohydrate
 } as const;
 

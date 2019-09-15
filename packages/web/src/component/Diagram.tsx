@@ -38,11 +38,13 @@ export class Diagram extends Component<DiagramProps> {
     const proteinRatio = Math.sqrt(4 * protein);
     const ratioSum = carbsRatio + fatRatio + proteinRatio;
 
+    // prettier-ignore
     return (
       <Bar>
-        <NutrientPercentage color="#ff8200" diameter={fatRatio / ratioSum} />
-        <NutrientPercentage color="#6b9cde" diameter={proteinRatio / ratioSum} />
-        <NutrientPercentage color="#fabc1f" diameter={carbsRatio / ratioSum} />
+        {proteinRatio > 0 && <NutrientPercentage color="#6b9cde" diameter={proteinRatio / ratioSum} />}
+        {fatRatio > 0 && <NutrientPercentage color="#ff8200" diameter={fatRatio / ratioSum} />}
+        {carbsRatio > 0 && <NutrientPercentage color="#fabc1f" diameter={carbsRatio / ratioSum} />}
+        {ratioSum === 0 && <NutrientPercentage color="#dddddd" diameter={1} />}
       </Bar>
     );
   }
@@ -75,13 +77,10 @@ interface NutrientPercentageProps {
 /**
  * Circular container that fills `Bar` component proportionally to `diameter` prop.
  */
+// prettier-ignore
 const NutrientPercentage = styled.div<NutrientPercentageProps>`
-  width: calc(
-    ${({ diameter }) => diameter} * ${({ theme }) => theme.height} / 2
-  );
-  height: calc(
-    ${({ diameter }) => diameter} * ${({ theme }) => theme.height} / 2
-  );
+  width: calc(${({ diameter }) => diameter} * ${({ theme }) => theme.height} / 2);
+  height: calc(${({ diameter }) => diameter} * ${({ theme }) => theme.height} / 2);
   border-radius: 50%;
   background-color: ${({ color }) => color};
 `;

@@ -1,15 +1,28 @@
+import { inject } from "mobx-react";
 import * as React from "react";
 
 import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
-import { Alert } from "../component/Alert";
+import { Center } from "../component/Center";
+import { styled } from "../styling/theme";
 
 /**
- * Scene that is rendered if no other scenes match current URL.
+ * Unknown scene component translation.
  */
-export class Unknown extends SceneComponent<"Unknown"> {
+interface UnknownTranslation {
+  /**
+   * Page not found error message translation.
+   */
+  message: string;
+}
+
+/**
+ * Scene component that is rendered if no other scenes match current URL.
+ */
+@inject("views")
+export class Unknown extends SceneComponent<"Unknown", {}, UnknownTranslation> {
   /**
    * Sets the name of this scene.
    */
@@ -21,6 +34,42 @@ export class Unknown extends SceneComponent<"Unknown"> {
    * Renders an unknown page error.
    */
   public render() {
-    return <Alert name="unknown" parameters={{}} />;
+    return (
+      <Center>
+        <Wrapper>
+          <Message>{this.translation.message}</Message>
+          <Code>404</Code>
+        </Wrapper>
+      </Center>
+    );
   }
 }
+
+/**
+ * Wraps the message and code components and adds a padding around them.
+ */
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: ${({ theme }) => theme.padding};
+  box-sizing: border-box;
+`;
+
+/**
+ * 404 error message container.
+ */
+const Message = styled.div`
+  color: ${({ theme }) => theme.secondaryColor};
+  text-align: center;
+`;
+
+/**
+ * Error code container.
+ */
+const Code = styled.div`
+  color: ${({ theme }) => theme.primaryColor};
+  font-size: 25vmin;
+  text-align: center;
+`;

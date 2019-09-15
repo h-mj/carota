@@ -7,8 +7,8 @@ import {
   RenderPosition,
   Scene,
   SceneNames,
-  SceneSceneComponentProps,
   Scenes,
+  SceneSceneComponentProps,
   UNKNOWN_SCENE
 } from "../base/Scene";
 import { Notification, NotificationType } from "../component/Notifications";
@@ -184,6 +184,14 @@ export class ViewsStore {
   @action
   public home() {
     this.redirect(HOME_SCENE);
+  }
+
+  /**
+   * Redirects user to unknown scene.
+   */
+  @action
+  public unknown() {
+    this.redirect(UNKNOWN_SCENE);
   }
 
   /**

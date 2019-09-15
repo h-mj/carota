@@ -1,6 +1,5 @@
 import { computed } from "mobx";
 
-import { Alert } from "../component/Alert";
 import { Calendar } from "../component/Calendar";
 import { FoodInfo } from "../component/FoodInfo";
 import { Head } from "../component/Head";
@@ -12,7 +11,6 @@ import { SceneComponentMap } from "./SceneComponent";
  * Maps translated component names to their classes.
  */
 interface TranslatedComponentMap extends SceneComponentMap {
-  Alert: Alert;
   Calendar: Calendar;
   FoodInfo: FoodInfo;
   Head: Head;

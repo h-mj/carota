@@ -1,19 +1,7 @@
-import { Translation } from ".";
+import { Translation } from "./";
 
 export const english: Translation = {
   components: {
-    Alert: {
-      invalidInvitation: {
-        message:
-          "An account has already been created using this sign up address or the address is invalid. If you haven't already created an account using this web address, please contact the person who invited you.",
-        title: "We are sorry, this sign up address is invalid."
-      },
-      unknown: {
-        message:
-          "The web address may be misspelled or the page you're looking for is no longer available.",
-        title: "We are sorry, the page you requested has not been found."
-      }
-    },
     Calendar: {
       days: ["M", "T", "W", "T", "F", "S", "S"],
       months: [
@@ -194,6 +182,9 @@ export const english: Translation = {
       },
       submit: "Create account →",
       title: "Create account"
+    },
+    Unknown: {
+      message: "The page you're looking for can not be found."
     }
   },
   units: {

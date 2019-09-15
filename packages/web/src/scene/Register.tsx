@@ -8,7 +8,6 @@ import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
-import { Alert } from "../component/Alert";
 import { Button } from "../component/Button";
 import { Center } from "../component/Center";
 import { Controls, Form, Title } from "../component/collection/form";
@@ -16,7 +15,7 @@ import { Group } from "../component/Group";
 import { Head } from "../component/Head";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
-import { ErrorsFor, any, append } from "../utility/form";
+import { any, append, ErrorsFor } from "../utility/form";
 
 /**
  * Array of text field names within registration form.
@@ -109,9 +108,9 @@ export class Register extends SceneComponent<
   RegisterTranslation
 > {
   /**
-   * Whether or not invitation within route parameters is valid.
+   * Whether or not invitation ID has been checked.
    */
-  @observable private valid?: boolean;
+  @observable private loaded: boolean = false;
 
   /**
    * Object that contains values of each input.
@@ -141,12 +140,8 @@ export class Register extends SceneComponent<
    * Renders registration form.
    */
   public render() {
-    if (this.valid === undefined) {
+    if (!this.loaded) {
       return null;
-    }
-
-    if (!this.valid) {
-      return <Alert name="invalidInvitation" parameters={{}} />;
     }
 
     return (
@@ -263,13 +258,17 @@ export class Register extends SceneComponent<
       parameters === undefined ||
       !GUID_V4_REGEX.test(parameters.invitationId)
     ) {
-      this.valid = false;
-    } else {
-      const invitation = await this.props.views!.load(
-        this.props.invitations!.fetch(parameters.invitationId)
-      );
-
-      this.valid = invitation !== undefined;
+      return this.props.views!.unknown();
     }
+
+    const invitation = await this.props.views!.load(
+      this.props.invitations!.fetch(parameters.invitationId)
+    );
+
+    if (invitation === undefined) {
+      return this.props.views!.unknown();
+    }
+
+    this.loaded = invitation !== undefined;
   };
 }

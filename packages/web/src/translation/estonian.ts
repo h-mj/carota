@@ -1,19 +1,7 @@
-import { Translation } from ".";
+import { Translation } from "./";
 
 export const estonian: Translation = {
   components: {
-    Alert: {
-      invalidInvitation: {
-        message:
-          "Selle internetiaadressi abil on konto juba loodud või on tegemist vale aadressiga. Kui te pole kontot selle aadressiga loonud, palun võtke ühendust teid kutsunud isikuga.",
-        title:
-          "Vabandame, selle konto loomise lehekülje internetiaadress on kehtetu."
-      },
-      unknown: {
-        message: "404",
-        title: "Vabandame, soovitud lehekülge ei leitud."
-      }
-    },
     Calendar: {
       days: ["E", "T", "K", "N", "R", "L", "P"],
       months: [
@@ -194,6 +182,10 @@ export const estonian: Translation = {
       },
       submit: "Looge konto →",
       title: "Looge konto"
+    }
+    ,
+    Unknown: {
+      message: "Teie otsitavat lehte ei leitud."
     }
   },
   units: {

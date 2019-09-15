@@ -8,20 +8,21 @@ import {
 } from "../base/SceneComponent";
 import { Button } from "../component/Button";
 import { Controls, Form } from "../component/collection/form";
+import { SceneTitle } from "../component/SceneTitle";
 
 /**
  * Confirmation scene component props.
  */
 interface ConfirmationProps {
   /**
-   * Confirmation message.
-   */
-  message: string;
-
-  /**
    * Confirmation callback which will be called when user confirms or cancels the confirmation.
    */
   confirm: (confirmed: boolean) => void;
+
+  /**
+   * Confirmation message.
+   */
+  message: string;
 }
 
 /**
@@ -37,6 +38,11 @@ interface ConfirmationTranslation {
    * Confirm translation.
    */
   confirm: string;
+
+  /**
+   * Confirmation scene title translation.
+   */
+  title: string;
 }
 
 /**
@@ -65,6 +71,8 @@ export class Confirmation extends SceneComponent<
   public render() {
     return (
       <Form as="div">
+        <SceneTitle scene={this.props.scene} title={this.translation.title} />
+
         <Message>{this.props.message}</Message>
 
         <Controls>

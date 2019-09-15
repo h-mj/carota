@@ -33,11 +33,14 @@ export const russian: Translation = {
     },
     Confirmation: {
       cancel: "Отмена",
-      confirm: "Подтвердить"
+      confirm: "Подтвердить",
+      title: "Подтверждение"
     },
     Edit: {
+      addTitle: "Добавить продукт",
       confirm: "Вы уверены, что хотите удалить этот продукт?",
       delete: "Удалить",
+      editTitle: "Изменить продукт",
       inputs: {
         barcode: {
           label: "Штрих-код",

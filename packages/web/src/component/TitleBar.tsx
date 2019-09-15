@@ -12,6 +12,11 @@ interface TitleBarProps {
    * Close button click callback function.
    */
   onClose: () => void;
+
+  /**
+   * Title bar title text.
+   */
+  title?: string;
 }
 
 /**
@@ -25,6 +30,7 @@ export class TitleBar extends Component<TitleBarProps> {
     return (
       <Bar>
         <Close onClick={this.handleClick}>✗</Close>
+        {this.props.title !== undefined && <Title>{this.props.title}</Title>}
       </Bar>
     );
   }
@@ -48,6 +54,20 @@ const Bar = styled.div`
 `;
 
 /**
+ * Title text container.
+ */
+const Title = styled.div`
+  height: 100%;
+  padding-left: ${({ theme }) => theme.padding};
+
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+
+  color: ${({ theme }) => theme.secondaryColor};
+`;
+
+/**
  * Close button component.
  */
 const Close = styled.button`
@@ -55,8 +75,8 @@ const Close = styled.button`
 
   float: right;
 
-  width: ${({ theme }) => theme.height};
   height: ${({ theme }) => theme.height};
+  padding: 0 ${({ theme }) => theme.padding};
 
   color: ${({ theme }) => theme.secondaryColor};
   font-size: 1.5rem;

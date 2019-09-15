@@ -107,7 +107,11 @@ export class SceneRenderer extends Component<SceneRendererProps> {
         ref={this.overlayRef}
       >
         <Container>
-          {first ? <Navigation /> : <TitleBar onClose={this.pop} />}
+          {first ? (
+            <Navigation />
+          ) : (
+            <TitleBar onClose={this.pop} title={scene.title} />
+          )}
           {this.renderSceneComponent()}
         </Container>
       </SceneOverlay>

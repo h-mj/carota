@@ -2,11 +2,14 @@ import { Languages } from "api";
 import { action, computed, observable } from "mobx";
 
 import {
+  GATEWAY_SCENE,
+  HOME_SCENE,
   RenderPosition,
   Scene,
   SceneNames,
   SceneSceneComponentProps,
-  Scenes
+  Scenes,
+  UNKNOWN_SCENE
 } from "../base/Scene";
 import { Notification, NotificationType } from "../component/Notifications";
 import { Translation } from "../translation";
@@ -165,7 +168,7 @@ export class ViewsStore {
     // requirement, show unknown scene if user is authenticated, otherwise show
     // gateway (login) scene.
     if (authenticated === NO_AUTHENTICATION_SCENE_NAMES.includes(scene.name)) {
-      scene = authenticated ? Scene.UNKNOWN : Scene.GATEWAY;
+      scene = authenticated ? UNKNOWN_SCENE : GATEWAY_SCENE;
     }
 
     this._scenes = [scene];
@@ -180,7 +183,7 @@ export class ViewsStore {
    */
   @action
   public home() {
-    this.redirect(Scene.HOME);
+    this.redirect(HOME_SCENE);
   }
 
   /**
@@ -196,7 +199,7 @@ export class ViewsStore {
       return this.home();
     }
 
-    this.redirect(scene || Scene.UNKNOWN);
+    this.redirect(scene || UNKNOWN_SCENE);
   }
 
   /**

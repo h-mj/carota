@@ -33,11 +33,14 @@ export const estonian: Translation = {
     },
     Confirmation: {
       cancel: "Tühista",
-      confirm: "Kinnita"
+      confirm: "Kinnita",
+      title: "Kinnitus"
     },
     Edit: {
+      addTitle: "Lisa toiduaine",
       confirm: "Kas olete kindel, et soovite selle toiduaine ära kustutada?",
       delete: "Kustutage",
+      editTitle: "Redigeeri toiduainet",
       inputs: {
         barcode: {
           label: "Triipkood",

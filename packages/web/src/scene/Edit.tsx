@@ -11,6 +11,7 @@ import {
 import { Button } from "../component/Button";
 import { Controls, Form } from "../component/collection/form";
 import { Group } from "../component/Group";
+import { SceneTitle } from "../component/SceneTitle";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
 import { Food } from "../model/Food";
@@ -94,6 +95,11 @@ interface InputTranslation {
  */
 interface EditTranslation {
   /**
+   * Scene title if new food item is being created.
+   */
+  addTitle: string;
+
+  /**
    * Delete confirmation message translation.
    */
   confirm: string;
@@ -102,6 +108,11 @@ interface EditTranslation {
    * Delete button text.
    */
   delete: string;
+
+  /**
+   * Scene title if existing food item is being edited.
+   */
+  editTitle: string;
 
   /**
    * Registration form input translations.
@@ -166,21 +177,20 @@ const toBody = deviate<EditValues>().shape({
   barcode: deviate<string | undefined>().optional().notEmpty(),
   quantity: deviate<string>().append(parseFloat).gt(0),
   unit: deviate<Units | undefined>().defined(),
-  nutritionDeclaration: deviate<NutritionDeclarationValues>()
-    .shape({
-        energy: parseFloat,
-        fat: parseFloat,
-        saturates: optionalParseFloat,
-        monoUnsaturates: optionalParseFloat,
-        polyunsaturates: optionalParseFloat,
-        carbohydrate: parseFloat,
-        sugars: optionalParseFloat,
-        polyols: optionalParseFloat,
-        starch: optionalParseFloat,
-        fibre: optionalParseFloat,
-        protein: parseFloat,
-        salt: optionalParseFloat
-      }),
+  nutritionDeclaration: deviate<NutritionDeclarationValues>().shape({
+    energy: parseFloat,
+    fat: parseFloat,
+    saturates: optionalParseFloat,
+    monoUnsaturates: optionalParseFloat,
+    polyunsaturates: optionalParseFloat,
+    carbohydrate: parseFloat,
+    sugars: optionalParseFloat,
+    polyols: optionalParseFloat,
+    starch: optionalParseFloat,
+    fibre: optionalParseFloat,
+    protein: parseFloat,
+    salt: optionalParseFloat
+  }),
   pieceQuantity: optionalParseFloat.gt(0)
 });
 
@@ -212,8 +222,19 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
    * Renders food creation and editing form.
    */
   public render() {
+    const { food, scene, views } = this.props;
+
     return (
       <Form noValidate={true} onSubmit={this.handleSubmit}>
+        <SceneTitle
+          scene={scene}
+          title={
+            food === undefined
+              ? this.translation.addTitle
+              : this.translation.editTitle
+          }
+        />
+
         <Group>
           {this.renderTextField("name")}
           {this.renderTextField("barcode")}
@@ -229,8 +250,8 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
             name="unit"
             onChange={this.handleChange}
             options={[
-              { label: this.props.views!.translation.units.g, value: "g" },
-              { label: this.props.views!.translation.units.ml, value: "ml" }
+              { label: views!.translation.units.g, value: "g" },
+              { label: views!.translation.units.ml, value: "ml" }
             ]}
             value={this.values.unit}
           />
@@ -241,7 +262,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
         {this.renderTextField("pieceQuantity")}
 
         <Controls>
-          {this.props.food !== undefined && (
+          {food !== undefined && (
             <Button
               invalid={any(this.reasons)}
               secondary={true}

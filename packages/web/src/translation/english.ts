@@ -33,11 +33,14 @@ export const english: Translation = {
     },
     Confirmation: {
       cancel: "Cancel",
-      confirm: "Confirm"
+      confirm: "Confirm",
+      title: "Confirmation"
     },
     Edit: {
+      addTitle: "Add product",
       confirm: "Are you sure you want to delete this product?",
       delete: "Delete",
+      editTitle: "Edit product",
       inputs: {
         barcode: {
           label: "Barcode",

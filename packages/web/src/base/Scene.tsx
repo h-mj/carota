@@ -1,3 +1,5 @@
+import { observable } from "mobx";
+
 import { SceneComponentNames, SceneComponentProps } from "./SceneComponent";
 
 /**
@@ -154,6 +156,12 @@ export class Scene<TName extends SceneNames> {
   public readonly position: RenderPosition;
 
   /**
+   * Scene title which if set is used by `TitleBar` component to display
+   * currently active scene title.
+   */
+  @observable public title?: string;
+
+  /**
    * Creates a new instance of `Scene`.
    *
    * @param name Scene name.
@@ -214,22 +222,6 @@ export class Scene<TName extends SceneNames> {
   }
 
   /**
-   * Scene on index path and to which is redirected to after registration.
-   */
-  public static readonly HOME = new Scene("Home", {}, {});
-
-  /**
-   * Scene that is shown if user is not authenticated but tries to access a
-   * scene that requires authentication.
-   */
-  public static readonly GATEWAY = new Scene("Login", undefined, {});
-
-  /**
-   * Scene that is shown if no other scenes match current URL.
-   */
-  public static readonly UNKNOWN = new Scene("Unknown", undefined, {});
-
-  /**
    * Returns a scene from given URL. `undefined` if no scenes match the URL.
    *
    * @param url URL string.
@@ -266,6 +258,22 @@ export class Scene<TName extends SceneNames> {
     return undefined;
   }
 }
+
+/**
+ * Scene on index path and to which user is redirected after registration.
+ */
+export const HOME_SCENE = new Scene("Home", {}, {});
+
+/**
+ * Scene that is shown if user is not authenticated but tries to access a
+ * scene that requires authentication.
+ */
+export const GATEWAY_SCENE = new Scene("Login", undefined, {});
+
+/**
+ * Scene that is shown if no other scenes match current URL.
+ */
+export const UNKNOWN_SCENE = new Scene("Unknown", undefined, {});
 
 /**
  * Union of all possible scene types.

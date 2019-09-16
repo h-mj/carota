@@ -3,7 +3,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 
 import { TranslatedComponent } from "../base/TranslatedComponent";
-import { Food as FoodModel } from "../model/Food";
+import { FoodModel } from "../model/FoodModel";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
 import { Carbohydrate, Energy, Fat, Protein } from "./collection/icons";

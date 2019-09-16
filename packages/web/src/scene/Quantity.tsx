@@ -12,8 +12,8 @@ import { Button } from "../component/Button";
 import { Controls, Form } from "../component/collection/form";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
-import { Food } from "../model/Food";
-import { ErrorsFor, any } from "../utility/form";
+import { FoodModel } from "../model/FoodModel";
+import { any, ErrorsFor } from "../utility/form";
 
 /**
  * Quantity scene component props.
@@ -22,12 +22,12 @@ interface QuantityProps {
   /**
    * Food item which quantity is being selected.
    */
-  food: Food;
+  food: FoodModel;
 
   /**
    * Food item selection callback.
    */
-  select: (food: Food, quantity: number) => void;
+  select: (food: FoodModel, quantity: number) => void;
 }
 
 /**

@@ -14,8 +14,8 @@ import { Group } from "../component/Group";
 import { SceneTitle } from "../component/SceneTitle";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
-import { Food } from "../model/Food";
-import { ErrorsFor, any, append } from "../utility/form";
+import { FoodModel } from "../model/FoodModel";
+import { any, append, ErrorsFor } from "../utility/form";
 
 /**
  * Union of text field input names.
@@ -72,7 +72,7 @@ interface EditProps {
   /**
    * Food item model that is being edited.
    */
-  food?: Food;
+  food?: FoodModel;
 }
 
 /**

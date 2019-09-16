@@ -9,7 +9,7 @@ import {
 } from "../base/SceneComponent";
 import { Food } from "../component/Food";
 import { TextField } from "../component/TextField";
-import { Food as FoodModel } from "../model/Food";
+import { FoodModel } from "../model/FoodModel";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
 

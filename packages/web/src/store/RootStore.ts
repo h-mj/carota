@@ -1,6 +1,6 @@
-import { Food } from "../model/Food";
-import { Invitation } from "../model/Invitation";
-import { Meal } from "../model/Meal";
+import { FoodModel } from "../model/FoodModel";
+import { InvitationModel } from "../model/InvitationModel";
+import { MealModel } from "../model/MealModel";
 import { AccountsStore } from "./AccountsStore";
 import { FoodsStore } from "./FoodsStore";
 import { InvitationsStore } from "./InvitationsStore";
@@ -22,9 +22,9 @@ export class RootStore {
    */
   public constructor() {
     this.accounts = new AccountsStore(this);
-    this.foods = new FoodsStore(Food);
-    this.invitations = new InvitationsStore(Invitation);
-    this.meals = new MealsStore(Meal);
+    this.foods = new FoodsStore(FoodModel);
+    this.invitations = new InvitationsStore(InvitationModel);
+    this.meals = new MealsStore(MealModel);
     this.views = new ViewsStore(this);
   }
 

@@ -1,55 +1,48 @@
-import { observable, set } from "mobx";
-
 import { Store } from "../store/Store";
 
 /**
- * Type of data of given model `TModel`.
+ * Generic data type.
  */
-export type ModelData<TModel extends Model<TModel>> = TModel extends Model<
-  infer _,
-  infer IData
->
-  ? IData
-  : never;
-
-/**
- * Type which constructor creates a model `TModel` instance.
- */
-export type ModelClass<TModel extends Model<TModel>> = new (
-  data: ModelData<TModel>,
-  store: Store<TModel>
-) => TModel;
+export interface Data {
+  /**
+   * Generic data ID.
+   */
+  id: string;
+}
 
 /**
  * Model base class.
  */
-export abstract class Model<TModel extends Model<TModel>, TData = {}> {
+export abstract class Model<
+  TModel extends Model<TModel, TData>,
+  TData extends Data
+> {
   /**
    * ID of the model.
    */
-  @observable public id!: string;
+  public readonly id!: string;
 
   /**
    * Store that stores and manages this model.
    */
-  protected store: Store<TModel>;
+  protected readonly store: Store<TModel, TData>;
 
   /**
    * Creates a new instance of some model.
    *
-   * @param data Model data object which field values will be assigned to the
-   * corresponding model fields.
+   * @param data Model data object which ID will be assigned to the model's ID.
    * @param store Store that stores and manages this model.
    */
-  public constructor(data: TData, store: Store<TModel>) {
+  public constructor(data: TData, store: Store<TModel, TData>) {
+    this.id = data.id;
     this.store = store;
-    set(this, data);
   }
-
-  /**
-   * Included so that TypeScript's infer would work, since it uses object
-   * structure to determine types.
-   */
-  // @ts-ignore
-  private dataType?: TData;
 }
+
+/**
+ * Type which constructor creates a model `TModel` instance.
+ */
+export type ModelClass<
+  TModel extends Model<TModel, TData>,
+  TData extends Data
+> = new (data: TData, store: Store<TModel, TData>) => TModel;

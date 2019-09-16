@@ -1,11 +1,11 @@
 import { action, observable } from "mobx";
 
-import { Model, ModelClass, ModelData } from "../model/Model";
+import { Data, Model, ModelClass } from "../model/Model";
 
 /**
  * Base class for store classes.
  */
-export class Store<TModel extends Model<TModel>> {
+export class Store<TModel extends Model<TModel, TData>, TData extends Data> {
   /**
    * Map that maps IDs to their model instances.
    */
@@ -14,12 +14,12 @@ export class Store<TModel extends Model<TModel>> {
   /**
    * Model class.
    */
-  private modelClass: ModelClass<TModel>;
+  private modelClass: ModelClass<TModel, TData>;
 
   /**
    * Creates a new instance of `Store`.
    */
-  public constructor(modelClass: ModelClass<TModel>) {
+  public constructor(modelClass: ModelClass<TModel, TData>) {
     this.modelClass = modelClass;
   }
 
@@ -46,7 +46,7 @@ export class Store<TModel extends Model<TModel>> {
    * @param model Model instance or model data.
    */
   @action
-  public add = (model: TModel | ModelData<TModel>) => {
+  public add = (model: TModel | TData) => {
     const instance =
       model instanceof Model ? model : new this.modelClass(model, this);
 

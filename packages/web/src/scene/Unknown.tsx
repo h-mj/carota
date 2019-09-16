@@ -62,6 +62,7 @@ const Wrapper = styled.div`
  */
 const Message = styled.div`
   color: ${({ theme }) => theme.secondaryColor};
+  line-height: 1.4rem;
   text-align: center;
 `;
 
@@ -71,5 +72,6 @@ const Message = styled.div`
 const Code = styled.div`
   color: ${({ theme }) => theme.primaryColor};
   font-size: 25vmin;
+  line-height: 25vmin;
   text-align: center;
 `;

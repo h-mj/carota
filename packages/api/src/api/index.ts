@@ -2,9 +2,63 @@ import * as Koa from "koa";
 import * as bodyParser from "koa-bodyparser";
 
 import { bodyParserOnError } from "../utility/errors";
-import { accountRouter } from "./account";
-import { foodRouter } from "./food";
-import { invitationRouter } from "./invitation";
+import { AccountController, accountRouter } from "./account";
+import { FoodController, foodRouter } from "./food";
+import { InvitationController, invitationRouter } from "./invitation";
+
+/**
+ * Defines all API controllers.
+ */
+interface Api {
+  account: AccountController;
+  food: FoodController;
+  invitation: InvitationController;
+}
+
+/**
+ * Defines the request body type and response data type of some endpoint.
+ */
+export interface Query<TBody, TData> {
+  /**
+   * Type of an object within request message body.
+   */
+  body: TBody;
+
+  /**
+   * Property `data` inside the object within response message body value type.
+   */
+  data: TData;
+}
+
+/**
+ * Union of controller names.
+ */
+export type Controllers = keyof Api;
+
+/**
+ * Union of endpoints of controller `TController`.
+ */
+export type Endpoints<TController extends Controllers> = keyof Api[TController];
+
+/**
+ * Body type of endpoint `TEndpoint` of controller `TController`.
+ */
+export type Body<
+  TController extends Controllers,
+  TEndpoint extends Endpoints<TController>
+> = Api[TController][TEndpoint] extends Query<infer IBody, infer _>
+  ? IBody
+  : never;
+
+/**
+ * Data type of endpoint `TEndpoint` of controller `TController`.
+ */
+export type Data<
+  TController extends Controllers,
+  TEndpoint extends Endpoints<TController>
+> = Api[TController][TEndpoint] extends Query<infer _, infer IData>
+  ? IData
+  : never;
 
 /**
  * `bodyParser` middleware options.

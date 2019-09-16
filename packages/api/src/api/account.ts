@@ -1,8 +1,9 @@
-import * as Router from "@koa/router";
 import { compare, hash } from "bcryptjs";
 import { deviate } from "deviator";
 
-import { Account, LANGUAGES } from "../entity/Account";
+import * as Router from "@koa/router";
+
+import { Account, LANGUAGES, Languages } from "../entity/Account";
 import { Invitation } from "../entity/Invitation";
 import { signToken } from "../middleware/authenticator";
 import {
@@ -11,6 +12,7 @@ import {
 } from "../utility/errors";
 import { callCatch } from "../utility/queries";
 import { defineNoAuth } from "../utility/routes";
+import { Query } from "./";
 
 /**
  * Router, which handles all routes related to accounts.
@@ -18,10 +20,44 @@ import { defineNoAuth } from "../utility/routes";
 export const accountRouter = new Router();
 
 /**
+ * Account controller endpoints and their request message body and response
+ * message body data types.
+ */
+export interface AccountController {
+  login: Query<LoginBody, TokenData>;
+  register: Query<RegisterBody, TokenData>;
+}
+
+/**
+ * Login request message body type.
+ */
+export interface LoginBody {
+  /**
+   * Account email.
+   */
+  email: string;
+
+  /**
+   * Account password.
+   */
+  password: string;
+}
+
+/**
+ * Generated JSON Web Token data type.
+ */
+export interface TokenData {
+  /**
+   * Generated JSON Web Token.
+   */
+  token: string;
+}
+
+/**
  * Login request body validator.
  */
 // prettier-ignore
-const accountLoginValidator =  deviate().object().shape({
+const loginValidator =  deviate().object().shape({
   email: deviate().string().trim().lowercase().notEmpty(),
   password: deviate().string().notEmpty()
 });
@@ -30,7 +66,7 @@ defineNoAuth(
   accountRouter,
   "account",
   "login",
-  accountLoginValidator,
+  loginValidator,
   async context => {
     const { email, password } = context.state.body;
 
@@ -45,10 +81,40 @@ defineNoAuth(
 );
 
 /**
+ * Register request message body type.
+ */
+export interface RegisterBody {
+  /**
+   * Personal name.
+   */
+  name: string;
+
+  /**
+   * Account language.
+   */
+  language: Languages;
+
+  /**
+   * Account email.
+   */
+  email: string;
+
+  /**
+   * Account password.
+   */
+  password: string;
+
+  /**
+   * Invitation ID.
+   */
+  invitationId: string;
+}
+
+/**
  * Account register request body validator.
  */
 // prettier-ignore
-const accountRegisterValidator = deviate().object().shape({
+const registerValidator = deviate().object().shape({
   name: deviate().string().trim().notEmpty(),
   language: deviate().string().options(LANGUAGES),
   email: deviate().string().trim().lowercase().email(),
@@ -60,7 +126,7 @@ defineNoAuth(
   accountRouter,
   "account",
   "register",
-  accountRegisterValidator,
+  registerValidator,
   async context => {
     const {
       name,

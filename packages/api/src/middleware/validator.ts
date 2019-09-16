@@ -1,7 +1,7 @@
 import { Deviation } from "deviator/lib/deviator";
 import { Middleware } from "koa";
 
-import { Actions, Body, Controllers, Data } from "../../types";
+import { Body, Controllers, Data, Endpoints } from "../api";
 import { createValidationError } from "../utility/errors";
 
 /**
@@ -14,31 +14,31 @@ export type ErrorTree = undefined | string | { [P: string]: ErrorTree };
  */
 export type Validator<
   TController extends Controllers,
-  TAction extends Actions<TController>
+  TEndpoint extends Endpoints<TController>
 > = Deviation<
   unknown,
-  Body<TController, TAction>,
-  Body<TController, TAction>,
+  Body<TController, TEndpoint>,
+  Body<TController, TEndpoint>,
   ErrorTree
 >;
 
 /**
- * Middleware state type after validation of `TAction` action of `TController`
+ * Middleware state type after validation of `TEndpoint` endpoint of `TController`
  * controller request body has been run.
  */
 export interface ValidationState<
   TController extends Controllers,
-  TAction extends Actions<TController>
+  TEndpoint extends Endpoints<TController>
 > {
   /**
    * Body type of this route.
    */
-  body: Body<TController, TAction>;
+  body: Body<TController, TEndpoint>;
 
   /**
    * Data type of this route.
    */
-  data: Data<TController, TAction>;
+  data: Data<TController, TEndpoint>;
 }
 
 /**
@@ -52,10 +52,10 @@ export interface ValidationState<
  */
 export const validate = <
   TController extends Controllers,
-  TAction extends Actions<TController>
+  TEndpoint extends Endpoints<TController>
 >(
-  validator: Validator<TController, TAction>
-): Middleware<ValidationState<TController, TAction>> => async (
+  validator: Validator<TController, TEndpoint>
+): Middleware<ValidationState<TController, TEndpoint>> => async (
   context,
   next
 ): Promise<void> => {

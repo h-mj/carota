@@ -1,4 +1,68 @@
-import { ErrorDetail, ErrorResponse } from "../../types";
+/**
+ * Type that describes occurred error.
+ */
+export interface Error {
+  /**
+   * HTTP status code.
+   */
+  code: number;
+
+  /**
+   * Reason phrase of the status.
+   */
+  reason: string;
+
+  /**
+   * Human readable error message.
+   */
+  message?: string;
+
+  /**
+   * Error details detailing where and why the error occurred.
+   */
+  details?: ErrorDetail[];
+}
+
+/**
+ * Type that describes one of the locations and the reasons of the occurred error.
+ */
+export interface ErrorDetail {
+  /**
+   * Location of the error;
+   */
+  location: ErrorLocation;
+
+  /**
+   * Reason phrase of the the occurred error.
+   */
+  reason: string;
+
+  /**
+   * Human readable error message.
+   */
+  message?: string;
+}
+
+/**
+ * Type that describes the location of the occurred error.
+ */
+export interface ErrorLocation {
+  /**
+   * HTTP request message part that is related to the occurred error.
+   */
+  part: ErrorLocationParts;
+
+  /**
+   * Path to specific field that is related to the occurred error. `undefined`
+   * if there isn't a specific field that is related to the error.
+   */
+  path?: string[];
+}
+
+/**
+ * Part of the request message where the error occurred.
+ */
+export type ErrorLocationParts = "request-line" | "headers" | "body";
 
 /**
  * A HTTP error.
@@ -47,14 +111,12 @@ export abstract class HttpError {
   /**
    * Converts this error into a response object.
    */
-  public toResponse(): ErrorResponse {
+  public toError(): Error {
     return {
-      error: {
-        code: this.code,
-        reason: this.reason,
-        message: this.message,
-        details: this.details
-      }
+      code: this.code,
+      reason: this.reason,
+      message: this.message,
+      details: this.details
     };
   }
 

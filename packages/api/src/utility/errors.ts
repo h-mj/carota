@@ -1,5 +1,5 @@
-import { ErrorDetail } from "../../types";
 import { BadRequestError } from "../error/BadRequestError";
+import { ErrorDetail } from "../error/HttpError";
 import { UnauthorizedError } from "../error/UnauthorizedError";
 import { ErrorTree } from "../middleware/validator";
 

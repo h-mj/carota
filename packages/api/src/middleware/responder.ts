@@ -1,7 +1,41 @@
 import { Middleware } from "koa";
 
-import { HttpError } from "../error/HttpError";
+import { Controllers, Data, Endpoints } from "../api";
+import { Error, HttpError } from "../error/HttpError";
 import { InternalServerErrorError } from "../error/InternalServerError";
+
+/**
+ * Type of an object within response message body of endpoint `TEndpoint` of
+ * controller `TController`.
+ */
+export type Response<
+  TController extends Controllers,
+  TEndpoint extends Endpoints<TController>
+> = DataResponse<TController, TEndpoint> | ErrorResponse;
+
+/**
+ * Type of an object within response message body if request was handled
+ * successfully.
+ */
+export interface DataResponse<
+  TController extends Controllers,
+  TEndpoint extends Endpoints<TController>
+> {
+  /**
+   * Responded data.
+   */
+  data: Data<TController, TEndpoint>;
+}
+
+/**
+ * Type of an object within response message body if an error occurred.
+ */
+export interface ErrorResponse {
+  /**
+   * Occurred error description.
+   */
+  error: Error;
+}
 
 /**
  * Returns a middleware that wraps the whole application, handles all thrown
@@ -31,6 +65,8 @@ export const responder = (): Middleware => async (
 
     context.status = httpError.code;
     context.body =
-      context.method === "GET" ? httpError.toString() : httpError.toResponse();
+      context.method === "GET"
+        ? httpError.toString()
+        : { error: httpError.toError() };
   }
 };

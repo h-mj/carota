@@ -7,9 +7,9 @@ import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
-import { FoodInfo } from "../component/FoodInfo";
+import { Food } from "../component/Food";
 import { TextField } from "../component/TextField";
-import { Food } from "../model/Food";
+import { Food as FoodModel } from "../model/Food";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
 
@@ -67,7 +67,7 @@ export class Search extends SceneComponent<"Search"> {
         {this.completed && (
           <Results>
             {this.props.foods!.getAll().map(food => (
-              <FoodInfo key={food.id} food={food} select={this.select} />
+              <Food key={food.id} food={food} select={this.select} />
             ))}
             <Add onClick={this.showEditor}>+</Add>
           </Results>
@@ -122,7 +122,7 @@ export class Search extends SceneComponent<"Search"> {
    * its quantity in opened `Quantity` scene.
    */
   @action
-  private select = (food: Food, quantity: number) => {
+  private select = (food: FoodModel, quantity: number) => {
     console.log(`Selected ${quantity}${food.unit} of ${food.name}`);
     this.props.views!.refresh(); // Refresh the page.
   };

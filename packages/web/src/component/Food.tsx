@@ -3,7 +3,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 
 import { TranslatedComponent } from "../base/TranslatedComponent";
-import { Food } from "../model/Food";
+import { Food as FoodModel } from "../model/Food";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
 import { Carbohydrate, Energy, Fat, Protein } from "./collection/icons";
@@ -39,12 +39,12 @@ interface FoodInfoProps {
   /**
    * Corresponding food model instance.
    */
-  food: Food;
+  food: FoodModel;
 
   /**
    * Food item selection callback.
    */
-  select: (food: Food, quantity: number) => void;
+  select: (food: FoodModel, quantity: number) => void;
 }
 
 /**
@@ -62,8 +62,8 @@ interface FoodInfoTranslation {
  */
 @inject("views")
 @observer
-export class FoodInfo extends TranslatedComponent<
-  "FoodInfo",
+export class Food extends TranslatedComponent<
+  "Food",
   FoodInfoProps,
   FoodInfoTranslation
 > {
@@ -71,7 +71,7 @@ export class FoodInfo extends TranslatedComponent<
    * Sets the name of this component.
    */
   public constructor(props: FoodInfoProps) {
-    super("FoodInfo", props);
+    super("Food", props);
   }
 
   /**

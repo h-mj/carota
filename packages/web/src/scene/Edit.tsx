@@ -1,5 +1,5 @@
-import { Units } from "api";
-import { deviate } from "deviator";
+import { NutritionDeclarationData, Units } from "api";
+import { deviate, ok } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -150,6 +150,63 @@ interface EditValues {
 }
 
 /**
+ * Initial form values when creating a new food item.
+ */
+const DEFAULT_EDIT_VALUES: Readonly<EditValues> = {
+  name: "",
+  quantity: "",
+  nutritionDeclaration: {
+    carbohydrate: "",
+    energy: "",
+    fat: "",
+    protein: ""
+  }
+};
+
+/**
+ * Multiples floating point number by 100 and converts to string.
+ */
+const nutrientToString = deviate<number>().append(number =>
+  ok((100 * number).toString())
+);
+
+/**
+ * If value is `undefined`, returns `undefined` immediately, otherwise multiples
+ * floating point number by 100 and converts to string.
+ */
+const optionalNutrientToString = deviate<number | undefined>()
+  .optional()
+  .append(nutrientToString);
+
+/**
+ * Function that transforms `FoodModel` type object into `EditValues` type
+ * object. Opposite to `toBody`.
+ */
+// prettier-ignore
+const toValues = deviate<FoodModel>().shape({
+  id: deviate<string>(),
+  name: deviate<string>(),
+  barcode: deviate<string | undefined>(),
+  quantity: deviate().set("100"),
+  unit: deviate<Units>(),
+  nutritionDeclaration: deviate<NutritionDeclarationData>().shape({
+    energy: nutrientToString,
+    fat: nutrientToString,
+    saturates: optionalNutrientToString,
+    monoUnsaturates: optionalNutrientToString,
+    polyunsaturates: optionalNutrientToString,
+    carbohydrate: nutrientToString,
+    sugars: optionalNutrientToString,
+    polyols: optionalNutrientToString,
+    starch: optionalNutrientToString,
+    fibre: optionalNutrientToString,
+    protein: nutrientToString,
+    salt: optionalNutrientToString
+  }),
+  pieceQuantity: deviate<number | undefined>().optional().append(number => ok(number.toString()))
+});
+
+/**
  * Converts a string into floating point number.
  */
 const parseFloat = deviate<string>()
@@ -168,7 +225,7 @@ const optionalParseFloat = deviate<string | undefined>()
 
 /**
  * Function that transforms `EditValues` type object into `FoodSaveBody` type
- * object.
+ * object. Opposite to `toValues`.
  */
 // prettier-ignore
 const toBody = deviate<EditValues>().shape({
@@ -433,28 +490,16 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   private getValues(): EditValues {
     const { food } = this.props;
 
-    return {
-      id: food !== undefined ? food.id : undefined,
-      name: food !== undefined ? food.name : "",
-      barcode: food !== undefined ? food.barcode : undefined,
-      quantity: food !== undefined ? "100" : "",
-      unit: food !== undefined ? food.unit : undefined,
-      nutritionDeclaration: Object.assign(
-        {},
-        ...NUTRIENTS.map(nutrient => ({
-          [nutrient]:
-            food !== undefined &&
-            food.nutritionDeclaration[nutrient] !== undefined
-              ? (100 * food.nutritionDeclaration[nutrient]!).toString()
-              : (REQUIRED_NUTRIENTS as readonly Nutrients[]).includes(nutrient)
-              ? ""
-              : undefined
-        }))
-      ),
-      pieceQuantity:
-        food !== undefined && food.pieceQuantity !== undefined
-          ? food.pieceQuantity.toString()
-          : undefined
-    };
+    if (food === undefined) {
+      return DEFAULT_EDIT_VALUES;
+    }
+
+    const result = toValues(food);
+
+    if (!result.ok) {
+      return DEFAULT_EDIT_VALUES;
+    }
+
+    return result.value;
   }
 }

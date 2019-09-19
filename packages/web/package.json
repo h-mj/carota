@@ -18,7 +18,7 @@
     "@types/react-helmet": "^5.0.10",
     "@types/styled-components": "^4.1.19",
     "api": "0.0.0",
-    "deviator": "^0.2.4",
+    "deviator": "^0.3.0",
     "eslint": "^6.4.0",
     "eslint-config-prettier": "^6.3.0",
     "mobx": "^5.13.0",

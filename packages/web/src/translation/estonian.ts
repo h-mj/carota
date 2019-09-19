@@ -46,18 +46,18 @@ export const estonian: Translation = {
           label: "Ühe tüki kogus",
           reasons: {
             empty: "Palun sisestage ühe tüki kogus.",
-            less_than_or_equals:
+            lessThanOrEquals:
               "Palun sisestage ühe tüki kogus mis on suurem kui 0.",
-            not_a_number: "Palun sisestage korrektne ühe tüki kogus."
+            NaN: "Palun sisestage korrektne ühe tüki kogus."
           }
         },
         quantity: {
           label: "Kogus",
           reasons: {
             empty: "Palun sisestage toiduaine kogus.",
-            less_than_or_equals:
+            lessThanOrEquals:
               "Palun sisestage toiduaine kogus mis on suurem kui 0.",
-            not_a_number: "Palun sisestage korrektne toiduaine kogus."
+            NaN: "Palun sisestage korrektne toiduaine kogus."
           }
         },
         unit: {
@@ -132,8 +132,8 @@ export const estonian: Translation = {
         label: "Kogus",
         reasons: {
           empty: "Palun sisestage toiduaine kogus.",
-          less_than_or_equals: "Palun sistestage kogus mis on suurem kui 0.",
-          not_a_number: "Palun sistestage korrektne kogus."
+          lessThanOrEquals: "Palun sistestage kogus mis on suurem kui 0.",
+          NaN: "Palun sistestage korrektne kogus."
         }
       },
       select: "Valige",
@@ -152,7 +152,7 @@ export const estonian: Translation = {
           reasons: {
             conflict: "Sisestatud e-posti aadress on juba kasutuses.",
             empty: "Palun sisestage e-posti aadress.",
-            not_email: "Palun sisestage kehtiv e-posti aadress."
+            notEmail: "Palun sisestage kehtiv e-posti aadress."
           }
         },
         language: {
@@ -182,8 +182,7 @@ export const estonian: Translation = {
       },
       submit: "Looge konto →",
       title: "Looge konto"
-    }
-    ,
+    },
     Unknown: {
       message: "Teie otsitavat lehte ei leitud."
     }

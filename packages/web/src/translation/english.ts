@@ -46,18 +46,17 @@ export const english: Translation = {
           label: "Quantity of one piece",
           reasons: {
             empty: "Please enter quantity of one piece.",
-            less_than_or_equals:
+            lessThanOrEquals:
               "Please enter one piece quantity that is greater than 0.",
-            not_a_number: "Please enter correct one piece quantity."
+            NaN: "Please enter correct one piece quantity."
           }
         },
         quantity: {
           label: "Quantity",
           reasons: {
             empty: "Please enter product quantity.",
-            less_than_or_equals:
-              "Please enter quantity that is greater than 0.",
-            not_a_number: "Please enter correct quantity."
+            lessThanOrEquals: "Please enter quantity that is greater than 0.",
+            NaN: "Please enter correct quantity."
           }
         },
         unit: {
@@ -132,8 +131,8 @@ export const english: Translation = {
         label: "Quantity",
         reasons: {
           empty: "Please enter product quantity.",
-          less_than_or_equals: "Please enter quantity that is greater than 0.",
-          not_a_number: "Please enter correct quantity."
+          lessThanOrEquals: "Please enter quantity that is greater than 0.",
+          NaN: "Please enter correct quantity."
         }
       },
       select: "Select",
@@ -152,7 +151,7 @@ export const english: Translation = {
           reasons: {
             conflict: "Entered email address is already in use.",
             empty: "Please enter an email address.",
-            not_email: "Please enter a valid email address."
+            notEmail: "Please enter a valid email address."
           }
         },
         language: {

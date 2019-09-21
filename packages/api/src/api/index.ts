@@ -3,7 +3,10 @@ import * as bodyParser from "koa-bodyparser";
 
 import { bodyParserOnError } from "../utility/errors";
 import { AccountController, accountRouter } from "./account";
-import { AuthenticationController } from "./authentication";
+import {
+  AuthenticationController,
+  authenticationRouter
+} from "./authentication";
 import { FoodController, foodRouter } from "./food";
 import { InvitationController, invitationRouter } from "./invitation";
 
@@ -76,5 +79,6 @@ const BODY_PARSER_OPTIONS: Readonly<bodyParser.Options> = {
 export const api = new Koa()
   .use(bodyParser(BODY_PARSER_OPTIONS))
   .use(accountRouter.routes())
+  .use(authenticationRouter.routes())
   .use(foodRouter.routes())
   .use(invitationRouter.routes());

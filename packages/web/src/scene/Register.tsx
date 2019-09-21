@@ -93,8 +93,8 @@ type RegisterValues = Record<TextFieldNames, string> &
 const toBody = deviate<RegisterValues>().shape({
   language: deviate<Languages | undefined>().defined(),
   name: deviate<string>().trim().notEmpty(),
-  email: deviate<string>().trim().email(),
-  password: deviate<string>().notEmpty()
+  email: deviate<string>().trim().notEmpty().email(),
+  password: deviate<string>().notEmpty().minLen(8)
 });
 
 /**
@@ -110,7 +110,7 @@ export class Register extends SceneComponent<
   /**
    * Whether or not invitation ID has been checked.
    */
-  @observable private loaded: boolean = false;
+  @observable private loaded = false;
 
   /**
    * Object that contains values of each input.

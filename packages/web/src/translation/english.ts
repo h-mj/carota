@@ -175,7 +175,7 @@ export const english: Translation = {
           label: "Password",
           reasons: {
             empty: "Please enter a password.",
-            invalid: "Password must be at least 8 characters long."
+            lessThan: "Password must be at least 8 characters long."
           }
         }
       },

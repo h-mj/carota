@@ -176,7 +176,7 @@ export const estonian: Translation = {
           label: "Parool",
           reasons: {
             empty: "Palun sisestage salasõna.",
-            invalid: "Salasõna peab sisaldama vähemalt 8 tähemärki."
+            lessThan: "Salasõna peab sisaldama vähemalt 8 tähemärki."
           }
         }
       },

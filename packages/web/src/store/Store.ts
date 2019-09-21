@@ -1,25 +1,25 @@
 import { action, observable } from "mobx";
 
-import { Data, Model, ModelClass } from "../model/Model";
+import { Dto, Model, ModelClass } from "../model/Model";
 
 /**
  * Base class for store classes.
  */
-export class Store<TModel extends Model<TModel, TData>, TData extends Data> {
+export class Store<TModel extends Model<TModel, TDto>, TDto extends Dto> {
   /**
    * Map that maps IDs to their model instances.
    */
-  @observable private data: Map<string, TModel> = new Map();
+  @observable private models: Map<string, TModel> = new Map();
 
   /**
    * Model class.
    */
-  private modelClass: ModelClass<TModel, TData>;
+  private modelClass: ModelClass<TModel, TDto>;
 
   /**
    * Creates a new instance of `Store`.
    */
-  public constructor(modelClass: ModelClass<TModel, TData>) {
+  public constructor(modelClass: ModelClass<TModel, TDto>) {
     this.modelClass = modelClass;
   }
 
@@ -28,29 +28,29 @@ export class Store<TModel extends Model<TModel, TData>, TData extends Data> {
    * not exist.
    */
   public get = (id: string) => {
-    return this.data.get(id);
+    return this.models.get(id);
   };
 
   /**
    * Returns an array of all models.
    */
   public getAll = () => {
-    return Array.from(this.data.values());
+    return Array.from(this.models.values());
   };
 
   /**
-   * Creates a new model instance if model data is provided and adds and returns
-   * created instance to map `data`. If model instance is provided, adds and
-   * returns that instance instead.
+   * Creates a new model instance if model data transfer object is provided and
+   * adds and returns created instance to map `data`. If model instance is
+   * provided, adds and returns that instance instead.
    *
-   * @param model Model instance or model data.
+   * @param model Model instance or model data transfer object.
    */
   @action
-  public add = (model: TModel | TData) => {
+  public add = (model: TModel | TDto) => {
     const instance =
       model instanceof Model ? model : new this.modelClass(model, this);
 
-    this.data.set(instance.id, instance);
+    this.models.set(instance.id, instance);
 
     return instance;
   };
@@ -62,7 +62,7 @@ export class Store<TModel extends Model<TModel, TData>, TData extends Data> {
    */
   @action
   public remove = (id: string) => {
-    this.data.delete(id);
+    this.models.delete(id);
   };
 
   /**
@@ -70,6 +70,6 @@ export class Store<TModel extends Model<TModel, TData>, TData extends Data> {
    */
   @action
   public clear = () => {
-    this.data.clear();
+    this.models.clear();
   };
 }

@@ -7,9 +7,9 @@ import {
 } from "typeorm";
 
 import {
+  Account,
   ACCOUNT_RIGHTS,
   ACCOUNT_TYPES,
-  Account,
   AccountRights,
   AccountTypes
 } from "./Account";
@@ -53,10 +53,10 @@ export class Invitation extends BaseEntity {
   public rights!: AccountRights;
 
   /**
-   * Returns a representation of this model that will be transferred to the
+   * Returns a representation of this entity that will be transferred to the
    * client.
    */
-  public toData = () => ({
+  public toDto = () => ({
     id: this.id,
     type: this.type,
     rights: this.rights
@@ -64,6 +64,6 @@ export class Invitation extends BaseEntity {
 }
 
 /**
- * Invitation model data transfer object type.
+ * Invitation entity data transfer object type.
  */
-export type InvitationData = ReturnType<Invitation["toData"]>;
+export type InvitationDto = ReturnType<Invitation["toDto"]>;

@@ -69,20 +69,20 @@ export class Food extends BaseEntity {
   public editor!: Account;
 
   /**
-   * Returns a representation of this model that will be transferred to the
+   * Returns a representation of this entity that will be transferred to the
    * client.
    */
-  public toData = () => ({
+  public toDto = () => ({
     id: this.id,
     name: this.name,
     barcode: this.barcode || undefined,
     unit: this.unit,
-    nutritionDeclaration: this.nutritionDeclaration.toData(),
+    nutritionDeclaration: this.nutritionDeclaration.toDto(),
     pieceQuantity: this.pieceQuantity || undefined
   });
 }
 
 /**
- * Food model data transfer object type.
+ * Food entity data transfer object type.
  */
-export type FoodData = ReturnType<Food["toData"]>;
+export type FoodDto = ReturnType<Food["toDto"]>;

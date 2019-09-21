@@ -1,4 +1,4 @@
-import { Body, FoodData } from "api";
+import { Body, FoodDto } from "api";
 import { action } from "mobx";
 
 import { FoodModel } from "../model/FoodModel";
@@ -8,7 +8,7 @@ import { Store } from "./Store";
 /**
  * Store that stores and manages food models.
  */
-export class FoodsStore extends Store<FoodModel, FoodData> {
+export class FoodsStore extends Store<FoodModel, FoodDto> {
   /**
    * Creates or updates existing food product.
    */

@@ -122,10 +122,10 @@ export class Account extends BaseEntity {
   public rights!: AccountRights;
 
   /**
-   * Returns a representation of this model that will be transferred to the
+   * Returns a representation of this entity that will be transferred to the
    * client.
    */
-  public toData = () => ({
+  public toDto = () => ({
     id: this.id,
     name: this.name,
     language: this.language,
@@ -136,6 +136,6 @@ export class Account extends BaseEntity {
 }
 
 /**
- * Account model data transfer object type.
+ * Account entity data transfer object type.
  */
-export type AccountData = ReturnType<Account["toData"]>;
+export type AccountDto = ReturnType<Account["toDto"]>;

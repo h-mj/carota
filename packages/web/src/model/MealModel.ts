@@ -1,5 +1,5 @@
-import { MealData } from "api";
+import { MealDto } from "api";
 
 import { Model } from "./Model";
 
-export class MealModel extends Model<MealModel, MealData> {}
+export class MealModel extends Model<MealModel, MealDto> {}

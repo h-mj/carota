@@ -32,14 +32,14 @@ const generateAuthenticationTokenDtoValidator = deviate().object().shape({
 })
 
 /**
- * Generate authentication token request data transfer object.
+ * Generate authentication token request data transfer object type.
  */
 type GenerateAuthenticationTokenDto = Success<
   typeof generateAuthenticationTokenDtoValidator
 >;
 
 /**
- * Authentication token data transfer object.
+ * Authentication token data transfer object type.
  */
 export interface AuthenticationTokenDto {
   token: string;

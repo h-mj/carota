@@ -1,48 +1,43 @@
-import { deviate } from "deviator";
+import { deviate, Success } from "deviator";
 
 import * as Router from "@koa/router";
 
-import { Invitation, InvitationData } from "../entity/Invitation";
+import { Invitation, InvitationDto } from "../entity/Invitation";
 import { createIdNotFoundError } from "../utility/errors";
 import { defineNoAuth } from "../utility/routes";
 import { Query } from "./";
 
 /**
- * Router, which handles all routes related to invitations.
+ * Router which endpoints manage the invitation entities.
  */
 export const invitationRouter = new Router();
 
 /**
- * Invitation controller endpoints, their request message body and response
- * message body data types.
+ * Defines the request and response message body types of invitation router
+ * endpoints.
  */
 export interface InvitationController {
-  get: Query<GetBody, InvitationData>;
+  get: Query<GetInvitationDto, InvitationDto>;
 }
 
 /**
- * Get request message body type.
- */
-interface GetBody {
-  /**
-   * ID of requested invitation.
-   */
-  id: string;
-}
-
-/**
- * Get request body validator.
+ * Validates get invitation request body.
  */
 // prettier-ignore
-const getValidator = deviate().object().shape({
+const getInvitationDtoValidator = deviate().object().shape({
   id: deviate().string().guid()
 });
+
+/**
+ * Get invitation request data transfer object type.
+ */
+type GetInvitationDto = Success<typeof getInvitationDtoValidator>;
 
 defineNoAuth(
   invitationRouter,
   "invitation",
   "get",
-  getValidator,
+  getInvitationDtoValidator,
   async context => {
     const { id } = context.state.body;
     const invitation = await Invitation.findOne({ id });
@@ -51,6 +46,6 @@ defineNoAuth(
       throw createIdNotFoundError(id, Invitation.name, ["id"]);
     }
 
-    context.state.data = invitation.toData();
+    context.state.data = invitation.toDto();
   }
 );

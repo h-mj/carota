@@ -1,62 +1,25 @@
-import { deviate } from "deviator";
+import { deviate, Success } from "deviator";
 
 import * as Router from "@koa/router";
 
-import { Food, FoodData, UNITS, Units } from "../entity/Food";
-import { NutritionDeclarationData } from "../entity/NutritionDeclaration";
+import { Food, FoodDto, UNITS } from "../entity/Food";
 import { ForbiddenError } from "../error/ForbiddenError";
 import { createIdNotFoundError } from "../utility/errors";
 import { define } from "../utility/routes";
 import { Query } from "./";
 
 /**
- * Router, which handles all routes related to food.
+ * Router which endpoints manage the food entities.
  */
 export const foodRouter = new Router();
 
 /**
- * Food controller endpoints, their request message body and response message
- * body data types.
+ * Defines the request and response message body types of food router endpoints.
  */
 export interface FoodController {
-  delete: Query<DeleteBody, boolean>;
-  save: Query<SaveBody, FoodData>;
-  search: Query<SearchBody, FoodData[]>;
-}
-
-/**
- * Save request message body type.
- */
-interface SaveBody {
-  /**
-   * Food ID, if updating.
-   */
-  id?: string;
-
-  /**
-   * The name of the food.
-   */
-  name: string;
-
-  /**
-   * Barcode of the food, if exists.
-   */
-  barcode?: string;
-
-  /**
-   * Serving unit.
-   */
-  unit: Units;
-
-  /**
-   * Food nutrition declaration.
-   */
-  nutritionDeclaration: NutritionDeclarationData;
-
-  /**
-   * Quantity of one piece in units, if one piece of product exists.
-   */
-  pieceQuantity?: number;
+  delete: Query<DeleteFoodDto, boolean>;
+  save: Query<SaveFoodDto, FoodDto>;
+  search: Query<SearchFoodDto, FoodDto[]>;
 }
 
 /**
@@ -74,10 +37,10 @@ const optionalQuantity = deviate()
   .append(quantity);
 
 /**
- * Save request body validator.
+ * Validates save food request body.
  */
 // prettier-ignore
-const saveValidator = deviate().object().shape({
+const saveFoodDtoValidator = deviate().object().shape({
   id: deviate().optional().string().guid(),
   name: deviate().string().trim().notEmpty(),
   barcode: deviate().optional().string().trim().regex(/^\d{13}$/),
@@ -99,7 +62,12 @@ const saveValidator = deviate().object().shape({
   pieceQuantity: optionalQuantity
 });
 
-define(foodRouter, "food", "save", saveValidator, async context => {
+/**
+ * Save food request data transfer object type.
+ */
+type SaveFoodDto = Success<typeof saveFoodDtoValidator>;
+
+define(foodRouter, "food", "save", saveFoodDtoValidator, async context => {
   const { account } = context.state;
   const {
     id,
@@ -132,18 +100,21 @@ define(foodRouter, "food", "save", saveValidator, async context => {
     editor: context.state.account
   });
 
-  context.state.data = (await food.save()).toData();
+  context.state.data = (await food.save()).toDto();
 });
 
 /**
- * Search request message body type.
+ * Validates search food request body.
  */
-interface SearchBody {
-  /**
-   * Search query string.
-   */
-  query: string;
-}
+// prettier-ignore
+const searchFoodDtoValidator = deviate().object().shape({
+  query: deviate().string().notEmpty()
+});
+
+/**
+ * Search food request data transfer object type.
+ */
+type SearchFoodDto = Success<typeof searchFoodDtoValidator>;
 
 /**
  * Returns a function that checks whether or not given food matches the query
@@ -163,42 +134,28 @@ const matches = (query: string) => (food: Food): boolean => {
   );
 };
 
-/**
- * Search request body validator.
- */
-// prettier-ignore
-const searchValidator = deviate().object().shape({
-  query: deviate().string().notEmpty()
-});
-
-define(foodRouter, "food", "search", searchValidator, async context => {
+define(foodRouter, "food", "search", searchFoodDtoValidator, async context => {
   const foods = await Food.find();
 
   context.state.data = foods
     .filter(matches(context.state.body.query))
-    .map(food => food.toData())
+    .map(food => food.toDto())
     .slice(0, 20);
 });
-
 /**
- * Delete request message body type.
- */
-interface DeleteBody {
-  /**
-   * Deletion target food ID.
-   */
-  id: string;
-}
-
-/**
- * Delete request body validator.
+ * Validates Delete food request body validator.
  */
 // prettier-ignore
-const deleteValidator = deviate().object().shape({
+const deleteFoodDtoValidator = deviate().object().shape({
   id: deviate().string().guid()
 });
 
-define(foodRouter, "food", "delete", deleteValidator, async context => {
+/**
+ * Delete food request data transfer object type.
+ */
+type DeleteFoodDto = Success<typeof deleteFoodDtoValidator>;
+
+define(foodRouter, "food", "delete", deleteFoodDtoValidator, async context => {
   const {
     account,
     body: { id }

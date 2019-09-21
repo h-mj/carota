@@ -1,4 +1,4 @@
-import { NutritionDeclarationData, Units } from "api";
+import { NutritionDeclarationDto, Units } from "api";
 import { deviate, ok } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
@@ -189,7 +189,7 @@ const toValues = deviate<FoodModel>().shape({
   barcode: deviate<string | undefined>(),
   quantity: deviate().set("100"),
   unit: deviate<Units>(),
-  nutritionDeclaration: deviate<NutritionDeclarationData>().shape({
+  nutritionDeclaration: deviate<NutritionDeclarationDto>().shape({
     energy: nutrientToString,
     fat: nutrientToString,
     saturates: optionalNutrientToString,

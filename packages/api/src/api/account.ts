@@ -13,7 +13,7 @@ import { Query } from "./";
 import { AuthenticationTokenDto } from "./authentication";
 
 /**
- * Router which endpoints manage the accounts.
+ * Router which endpoints manage the account entities.
  */
 export const accountRouter = new Router();
 
@@ -38,7 +38,7 @@ const createAccountDtoValidator = deviate().object().shape({
 });
 
 /**
- * Create account request data transfer object.
+ * Create account request data transfer object type.
  */
 type CreateAccountDto = Success<typeof createAccountDtoValidator>;
 

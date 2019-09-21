@@ -1,4 +1,4 @@
-import { InvitationData } from "api";
+import { InvitationDto } from "api";
 
 import { InvitationModel } from "../model/InvitationModel";
 import { post } from "../utility/client";
@@ -7,7 +7,7 @@ import { Store } from "./Store";
 /**
  * Store that stores and manages invitation models.
  */
-export class InvitationsStore extends Store<InvitationModel, InvitationData> {
+export class InvitationsStore extends Store<InvitationModel, InvitationDto> {
   /**
    * Fetches invitation data of invitation with ID `id`, creates and saves
    * corresponding invitation model and returns it.

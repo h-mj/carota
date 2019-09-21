@@ -77,10 +77,10 @@ export class NutritionDeclaration {
   public salt!: number | null;
 
   /**
-   * Returns a representation of this model that will be transferred to the
+   * Returns a representation of this entity that will be transferred to the
    * client.
    */
-  public toData = () => ({
+  public toDto = () => ({
     energy: this.energy,
     fat: this.fat,
     saturates: this.saturates || undefined,
@@ -97,8 +97,6 @@ export class NutritionDeclaration {
 }
 
 /**
- * Nutrition declaration model data transfer object type.
+ * Nutrition declaration data transfer object type.
  */
-export type NutritionDeclarationData = ReturnType<
-  NutritionDeclaration["toData"]
->;
+export type NutritionDeclarationDto = ReturnType<NutritionDeclaration["toDto"]>;

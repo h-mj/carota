@@ -41,17 +41,17 @@ export class Consumable extends BaseEntity {
   public quantity!: number;
 
   /**
-   * Returns a representation of this model that will be transferred to the
+   * Returns a representation of this entity that will be transferred to the
    * client.
    */
-  public toData = () => ({
+  public toDto = () => ({
     id: this.id,
-    food: this.food.toData(),
+    food: this.food.toDto(),
     quantity: this.quantity
   });
 }
 
 /**
- * Consumable model data transfer object type.
+ * Consumable entity data transfer object type.
  */
-export type ConsumableData = ReturnType<Consumable["toData"]>;
+export type ConsumableDto = ReturnType<Consumable["toDto"]>;

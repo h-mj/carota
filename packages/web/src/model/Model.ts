@@ -1,11 +1,11 @@
 import { Store } from "../store/Store";
 
 /**
- * Generic data type.
+ * Generic data transfer object type.
  */
-export interface Data {
+export interface Dto {
   /**
-   * Generic data ID.
+   * Generic data transfer object ID.
    */
   id: string;
 }
@@ -14,8 +14,8 @@ export interface Data {
  * Model base class.
  */
 export abstract class Model<
-  TModel extends Model<TModel, TData>,
-  TData extends Data
+  TModel extends Model<TModel, TDto>,
+  TDto extends Dto
 > {
   /**
    * ID of the model.
@@ -25,16 +25,17 @@ export abstract class Model<
   /**
    * Store that stores and manages this model.
    */
-  protected readonly store: Store<TModel, TData>;
+  protected readonly store: Store<TModel, TDto>;
 
   /**
    * Creates a new instance of some model.
    *
-   * @param data Model data object which ID will be assigned to the model's ID.
+   * @param dto Entity data transfer object which ID will be assigned to the
+   * model's ID.
    * @param store Store that stores and manages this model.
    */
-  public constructor(data: TData, store: Store<TModel, TData>) {
-    this.id = data.id;
+  public constructor(dto: TDto, store: Store<TModel, TDto>) {
+    this.id = dto.id;
     this.store = store;
   }
 }
@@ -43,6 +44,6 @@ export abstract class Model<
  * Type which constructor creates a model `TModel` instance.
  */
 export type ModelClass<
-  TModel extends Model<TModel, TData>,
-  TData extends Data
-> = new (data: TData, store: Store<TModel, TData>) => TModel;
+  TModel extends Model<TModel, TDto>,
+  TDto extends Dto
+> = new (data: TDto, store: Store<TModel, TDto>) => TModel;

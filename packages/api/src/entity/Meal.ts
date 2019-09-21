@@ -48,18 +48,18 @@ export class Meal extends BaseEntity {
   public consumables!: Consumable[];
 
   /**
-   * Returns a representation of this model that will be transferred to the
+   * Returns a representation of this entity that will be transferred to the
    * client.
    */
-  public toData = () => ({
+  public toDto = () => ({
     id: this.id,
     name: this.name,
     date: this.date,
-    consumables: this.consumables.map(consumable => consumable.toData())
+    consumables: this.consumables.map(consumable => consumable.toDto())
   });
 }
 
 /**
- * Meal model data transfer object type.
+ * Meal entity data transfer object type.
  */
-export type MealData = ReturnType<Meal["toData"]>;
+export type MealDto = ReturnType<Meal["toDto"]>;

@@ -7,9 +7,9 @@ import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
-import { Food } from "../component/Food";
+import { Foodstuff } from "../component/Foodstuff";
 import { TextField } from "../component/TextField";
-import { FoodModel } from "../model/FoodModel";
+import { FoodstuffModel } from "../model/FoodModel";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
 
@@ -21,9 +21,10 @@ const validate = deviate<string>()
   .notEmpty();
 
 /**
- * Scene which is used for selecting a food item by searching it by its name.
+ * Scene which is used for selecting a foodstuff by searching for it by its
+ * name.
  */
-@inject("foods", "views")
+@inject("foodstuffs", "views")
 @observer
 export class Search extends SceneComponent<"Search"> {
   /**
@@ -66,8 +67,8 @@ export class Search extends SceneComponent<"Search"> {
         </Controls>
         {this.completed && (
           <Results>
-            {this.props.foods!.getAll().map(food => (
-              <Food key={food.id} food={food} select={this.select} />
+            {this.props.foodstuffs!.getAll().map(food => (
+              <Foodstuff key={food.id} foodstuff={food} select={this.select} />
             ))}
             <Add onClick={this.showEditor}>+</Add>
           </Results>
@@ -100,9 +101,9 @@ export class Search extends SceneComponent<"Search"> {
     const result = validate(this.query);
 
     if (result.ok) {
-      await this.props.foods!.search(result.value);
+      await this.props.foodstuffs!.search(result.value);
     } else {
-      this.props.foods!.clear();
+      this.props.foodstuffs!.clear();
     }
 
     this.completed = result.ok;
@@ -118,12 +119,12 @@ export class Search extends SceneComponent<"Search"> {
   };
 
   /**
-   * Callback function which is called when user clicks on a product and selects
-   * its quantity in opened `Quantity` scene.
+   * Callback function which is called when user clicks on a foodstuff and
+   * selects its quantity in opened `Quantity` scene.
    */
   @action
-  private select = (food: FoodModel, quantity: number) => {
-    console.log(`Selected ${quantity}${food.unit} of ${food.name}`);
+  private select = (foodstuff: FoodstuffModel, quantity: number) => {
+    console.log(`Selected ${quantity}${foodstuff.unit} of ${foodstuff.name}`);
     this.props.views!.refresh(); // Refresh the page.
   };
 }
@@ -145,7 +146,7 @@ const Controls = styled.div`
 `;
 
 /**
- * Grid that contains all food information components of found food items.
+ * Grid that contains all food information components of found foodstuffs.
  */
 const Results = styled.div`
   padding: ${({ theme }) => theme.padding};
@@ -161,7 +162,7 @@ const Results = styled.div`
 `;
 
 /**
- * Button that on click opens food creation scene.
+ * Button that on click opens foodstuff addition scene.
  */
 const Add = styled.button`
   ${RESET};

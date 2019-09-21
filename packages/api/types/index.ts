@@ -7,7 +7,7 @@ export {
   Sexes
 } from "../src/entity/Account";
 export { ConsumableDto } from "../src/entity/Consumable";
-export { FoodDto, Units } from "../src/entity/Food";
+export { FoodstuffDto, Units } from "../src/entity/Foodstuff";
 export { InvitationDto } from "../src/entity/Invitation";
 export { MealDto } from "../src/entity/Meal";
 export { NutritionDeclarationDto } from "../src/entity/NutritionDeclaration";

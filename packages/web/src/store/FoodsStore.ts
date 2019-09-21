@@ -1,19 +1,21 @@
-import { Body, FoodDto } from "api";
+import { Body, FoodstuffDto } from "api";
 import { action } from "mobx";
 
-import { FoodModel } from "../model/FoodModel";
+import { FoodstuffModel } from "../model/FoodModel";
 import { post } from "../utility/client";
 import { Store } from "./Store";
 
 /**
- * Store that stores and manages food models.
+ * Store that stores and manages foodstuff models.
  */
-export class FoodsStore extends Store<FoodModel, FoodDto> {
+export class FoodsStore extends Store<FoodstuffModel, FoodstuffDto> {
   /**
-   * Creates or updates existing food product.
+   * Creates or updates existing foodstuff
+   *
+   * @param body Foodstuff save request data transfer object.
    */
-  public async save(body: Body<"food", "save">) {
-    const response = await post("food", "save", body);
+  public async save(body: Body<"foodstuff", "save">) {
+    const response = await post("foodstuff", "save", body);
 
     if ("error" in response) {
       return response.error;
@@ -25,12 +27,12 @@ export class FoodsStore extends Store<FoodModel, FoodDto> {
   }
 
   /**
-   * Replaces current food data with found food data.
+   * Makes a search foodstuff request with specified query.
    *
-   * @param body Food find request body.
+   * @param query Foodstuff search query.
    */
   public async search(query: string) {
-    const response = await post("food", "search", { query });
+    const response = await post("foodstuff", "search", { query });
 
     if ("error" in response) {
       return response.error;
@@ -43,13 +45,13 @@ export class FoodsStore extends Store<FoodModel, FoodDto> {
   }
 
   /**
-   * Makes a food deletion request.
+   * Makes a foodstuff deletion request.
    *
-   * @param id Food Id which will be deleted.
+   * @param id ID of a foodstuff which to deleted.
    */
   @action
   public async delete(id: string) {
-    const response = await post("food", "delete", { id });
+    const response = await post("foodstuff", "delete", { id });
 
     if ("error" in response) {
       return response.error;

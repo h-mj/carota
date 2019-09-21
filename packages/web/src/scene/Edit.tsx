@@ -14,7 +14,7 @@ import { Group } from "../component/Group";
 import { SceneTitle } from "../component/SceneTitle";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
-import { FoodModel } from "../model/FoodModel";
+import { FoodstuffModel } from "../model/FoodModel";
 import { any, append, ErrorsFor } from "../utility/form";
 
 /**
@@ -70,9 +70,9 @@ type RequiredNutrients = typeof REQUIRED_NUTRIENTS[number];
  */
 interface EditProps {
   /**
-   * Food item model that is being edited.
+   * Foodstuff model that is being edited.
    */
-  food?: FoodModel;
+  foodstuff?: FoodstuffModel;
 }
 
 /**
@@ -91,11 +91,11 @@ interface InputTranslation {
 }
 
 /**
- * Food edit scene translation.
+ * Foodstuff edit scene translation.
  */
 interface EditTranslation {
   /**
-   * Scene title if new food item is being created.
+   * Scene title if new foodstuff is being created.
    */
   addTitle: string;
 
@@ -110,7 +110,7 @@ interface EditTranslation {
   delete: string;
 
   /**
-   * Scene title if existing food item is being edited.
+   * Scene title if existing foodstuff is being edited.
    */
   editTitle: string;
 
@@ -137,7 +137,7 @@ type NutritionDeclarationValues = Record<RequiredNutrients, string> &
   Partial<Record<Exclude<Nutrients, RequiredNutrients>, string>>;
 
 /**
- * Food editing form values object type.
+ * Foodstuff editing form values object type.
  */
 interface EditValues {
   id?: string;
@@ -150,7 +150,7 @@ interface EditValues {
 }
 
 /**
- * Initial form values when creating a new food item.
+ * Initial form values when creating a new foodstuff.
  */
 const DEFAULT_EDIT_VALUES: Readonly<EditValues> = {
   name: "",
@@ -179,11 +179,11 @@ const optionalNutrientToString = deviate<number | undefined>()
   .append(nutrientToString);
 
 /**
- * Function that transforms `FoodModel` type object into `EditValues` type
- * object. Opposite to `toBody`.
+ * Function that transforms `FoodstuffModel` type object into `EditValues` type
+ * object.
  */
 // prettier-ignore
-const toValues = deviate<FoodModel>().shape({
+const toValues = deviate<FoodstuffModel>().shape({
   id: deviate<string>(),
   name: deviate<string>(),
   barcode: deviate<string | undefined>(),
@@ -224,8 +224,8 @@ const optionalParseFloat = deviate<string | undefined>()
   .append(parseFloat);
 
 /**
- * Function that transforms `EditValues` type object into `FoodSaveBody` type
- * object. Opposite to `toValues`.
+ * Function that transforms `EditValues` type object into `SaveFoodstuffDto`
+ * type object.
  */
 // prettier-ignore
 const toBody = deviate<EditValues>().shape({
@@ -252,14 +252,13 @@ const toBody = deviate<EditValues>().shape({
 });
 
 /**
- * Food editing scene that allows user to either create new or edit existing
- * food product.
+ * Scene that allows user to either create new or edit existing foodstuffs.
  */
-@inject("foods", "views")
+@inject("foodstuffs", "views")
 @observer
 export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   /**
-   * Food editing form field values.
+   * Foodstuff editing form field values.
    */
   @observable private values: EditValues = this.getValues();
 
@@ -276,17 +275,17 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   }
 
   /**
-   * Renders food creation and editing form.
+   * Renders foodstuff creation and editing form.
    */
   public render() {
-    const { food, scene, views } = this.props;
+    const { foodstuff, scene, views } = this.props;
 
     return (
       <Form noValidate={true} onSubmit={this.handleSubmit}>
         <SceneTitle
           scene={scene}
           title={
-            food === undefined
+            foodstuff === undefined
               ? this.translation.addTitle
               : this.translation.editTitle
           }
@@ -319,7 +318,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
         {this.renderTextField("pieceQuantity")}
 
         <Controls>
-          {food !== undefined && (
+          {foodstuff !== undefined && (
             <Button
               invalid={any(this.reasons)}
               secondary={true}
@@ -405,7 +404,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   };
 
   /**
-   * Prevents default form submit event and executes food item saving procedure
+   * Prevents default form submit event and executes foodstuff saving procedure
    * instead.
    */
   @action
@@ -427,14 +426,10 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
           nutritionDeclaration[nutrient] = value / quantity;
         }
       }
-
-      // Remove quantity property from result value since API does not allow
-      // unknown properties.
-      delete result.value.quantity;
     }
 
     const error = await this.props.views!.load(
-      result.ok ? this.props.foods!.save(result.value) : undefined
+      result.ok ? this.props.foodstuffs!.save(result.value) : undefined
     );
 
     if (result.ok && error === undefined) {
@@ -455,7 +450,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   };
 
   /**
-   * Deletes the food item if user confirmed the deletion.
+   * Deletes the foodstuff after user has confirmed the deletion.
    */
   @action
   private handleConfirmation = async (confirmed: boolean) => {
@@ -463,9 +458,9 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
       return;
     }
 
-    const { food, foods, scene, views } = this.props;
+    const { foodstuff, foodstuffs, scene, views } = this.props;
 
-    if ((await views!.load(foods!.delete(food!.id))) === undefined) {
+    if ((await views!.load(foodstuffs!.delete(foodstuff!.id))) === undefined) {
       views!.pop(scene);
     }
   };
@@ -484,17 +479,16 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   };
 
   /**
-   * Returns form values object based on`food` prop model based on default
-   * values.
+   * Returns initial form values.
    */
   private getValues(): EditValues {
-    const { food } = this.props;
+    const { foodstuff } = this.props;
 
-    if (food === undefined) {
+    if (foodstuff === undefined) {
       return DEFAULT_EDIT_VALUES;
     }
 
-    const result = toValues(food);
+    const result = toValues(foodstuff);
 
     if (!result.ok) {
       return DEFAULT_EDIT_VALUES;

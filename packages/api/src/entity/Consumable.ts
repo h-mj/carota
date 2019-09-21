@@ -7,14 +7,14 @@ import {
   Unique
 } from "typeorm";
 
-import { Food } from "./Food";
+import { Foodstuff } from "./Foodstuff";
 import { Meal } from "./Meal";
 
 /**
- * One of the consumed food items during a meal.
+ * Consumed foodstuff representation.
  */
 @Entity()
-@Unique(["meal", "food"])
+@Unique(["meal", "foodstuff"])
 export class Consumable extends BaseEntity {
   /**
    * Consumable ID.
@@ -23,19 +23,19 @@ export class Consumable extends BaseEntity {
   public id!: string;
 
   /**
-   * Meal that this consumed food item is part of.
+   * Meal that this consumed foodstuff is part of.
    */
   @ManyToOne(() => Meal, { nullable: false })
   public meal!: Meal;
 
   /**
-   * Food that was consumed.
+   * Foodstuff that was consumed.
    */
-  @ManyToOne(() => Food, { nullable: false, eager: true })
-  public food!: Food;
+  @ManyToOne(() => Foodstuff, { nullable: false, eager: true })
+  public foodstuff!: Foodstuff;
 
   /**
-   * Quantity of food that was consumed.
+   * Quantity of foodstuff that was consumed.
    */
   @Column("float4")
   public quantity!: number;
@@ -46,7 +46,7 @@ export class Consumable extends BaseEntity {
    */
   public toDto = () => ({
     id: this.id,
-    food: this.food.toDto(),
+    foodstuff: this.foodstuff.toDto(),
     quantity: this.quantity
   });
 }

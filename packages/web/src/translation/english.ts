@@ -25,21 +25,21 @@ export const english: Translation = {
       title: "Confirmation"
     },
     Edit: {
-      addTitle: "Add product",
-      confirm: "Are you sure you want to delete this product?",
+      addTitle: "Add foodstuff",
+      confirm: "Are you sure you want to delete this foodstuff?",
       delete: "Delete",
-      editTitle: "Edit product",
+      editTitle: "Edit foodstuff",
       inputs: {
         barcode: {
           label: "Barcode",
           reasons: {
-            empty: "Please enter a product barcode."
+            empty: "Please enter a barcode."
           }
         },
         name: {
           label: "Name",
           reasons: {
-            empty: "Please enter a product name."
+            empty: "Please enter a name of this foodstuff."
           }
         },
         pieceQuantity: {
@@ -54,7 +54,7 @@ export const english: Translation = {
         quantity: {
           label: "Quantity",
           reasons: {
-            empty: "Please enter product quantity.",
+            empty: "Please enter foodstuff quantity.",
             lessThanOrEquals: "Please enter quantity that is greater than 0.",
             NaN: "Please enter correct quantity."
           }
@@ -82,7 +82,7 @@ export const english: Translation = {
       },
       submit: "Save"
     },
-    Food: {
+    Foodstuff: {
       per: "Per 100{unit}:"
     },
     Head: {
@@ -127,17 +127,17 @@ export const english: Translation = {
       g: "grams",
       ml: "milliliters",
       quantity: {
-        helper: "Please enter product quantity:",
+        helper: "Please enter foodstuff quantity:",
         label: "Quantity",
         reasons: {
-          empty: "Please enter product quantity.",
+          empty: "Please enter foodstuff quantity.",
           lessThanOrEquals: "Please enter quantity that is greater than 0.",
           NaN: "Please enter correct quantity."
         }
       },
       select: "Select",
       unit: {
-        helper: "Is product quantity in {unit} or in pieces?",
+        helper: "Is the quantity in {unit} or in pieces?",
         label: "Unit",
         reasons: {
           undefined: "Please select a unit."

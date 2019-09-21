@@ -1,7 +1,7 @@
 import { Column } from "typeorm";
 
 /**
- * Class that holds nutrition information of some product.
+ * Class that holds nutrition information of some foodstuff.
  */
 export class NutritionDeclaration {
   /**

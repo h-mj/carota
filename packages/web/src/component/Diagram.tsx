@@ -24,7 +24,7 @@ interface DiagramProps {
 }
 
 /**
- * Component which is used to visually represent food item nutritional composition.
+ * Component which is used to visually represent foodstuff nutritional composition.
  */
 export class Diagram extends Component<DiagramProps> {
   /**

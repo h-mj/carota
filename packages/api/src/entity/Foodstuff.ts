@@ -20,11 +20,10 @@ export const UNITS = ["g", "ml"] as const;
 export type Units = typeof UNITS[number];
 
 /**
- * Entity that holds information about a specific food alongside its nutritional
- * information.
+ * Entity that holds information about a specific foodstuff item.
  */
 @Entity()
-export class Food extends BaseEntity {
+export class Foodstuff extends BaseEntity {
   /**
    * Food ID.
    */
@@ -32,13 +31,13 @@ export class Food extends BaseEntity {
   public id!: string;
 
   /**
-   * The name of the food.
+   * The name of the foodstuff.
    */
   @Column()
   public name!: string;
 
   /**
-   * Barcode of the food, if exists.
+   * Barcode of the foodstuff, if exists.
    */
   @Column("text", { nullable: true })
   public barcode!: string | null;
@@ -50,20 +49,20 @@ export class Food extends BaseEntity {
   public unit!: Units;
 
   /**
-   * Food item nutrition information.
+   * Foodstuff nutrition information.
    */
   @Column(() => NutritionDeclaration)
   public nutritionDeclaration!: NutritionDeclaration;
 
   /**
-   * Quantity of one piece in units, `null` if one piece of the product does not
-   * exists.
+   * Quantity of one piece in units, `null` if one piece of the foodstuff does
+   * not exists.
    */
   @Column("float", { nullable: true })
   public pieceQuantity!: number | null;
 
   /**
-   * Account of last user who edited this food.
+   * Account of last user who edited this foodstuff.
    */
   @ManyToOne(() => Account, { nullable: false, eager: true })
   public editor!: Account;
@@ -83,6 +82,6 @@ export class Food extends BaseEntity {
 }
 
 /**
- * Food entity data transfer object type.
+ * Foodstuff entity data transfer object type.
  */
-export type FoodDto = ReturnType<Food["toDto"]>;
+export type FoodstuffDto = ReturnType<Foodstuff["toDto"]>;

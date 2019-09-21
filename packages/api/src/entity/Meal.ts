@@ -12,7 +12,7 @@ import { Account } from "./Account";
 import { Consumable } from "./Consumable";
 
 /**
- * Collection of consumed food items.
+ * Collection of consumed foodstuffs during a single meal at some date.
  */
 @Entity()
 @Unique(["account", "name", "date"])
@@ -42,7 +42,7 @@ export class Meal extends BaseEntity {
   public date!: string;
 
   /**
-   * List of consumed food items.
+   * List of consumed foodstuffs.
    */
   @OneToMany(() => Consumable, consumable => consumable.meal, { eager: true })
   public consumables!: Consumable[];

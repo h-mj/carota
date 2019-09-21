@@ -3,14 +3,14 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 
 import { TranslatedComponent } from "../base/TranslatedComponent";
-import { FoodModel } from "../model/FoodModel";
+import { FoodstuffModel } from "../model/FoodModel";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
 import { Carbohydrate, Energy, Fat, Protein } from "./collection/icons";
 import { Diagram } from "./Diagram";
 
 /**
- * Object that maps nutrient names to its icon components. Product nutrient
+ * Object that maps nutrient names to its icon components. Foodstuff nutrient
  * stats will be rendered in the same order as defined in this object.
  */
 const ICONS = {
@@ -33,24 +33,24 @@ const FORMAT_OPTIONS = {
 };
 
 /**
- * Food info component props.
+ * Foodstuff component props.
  */
-interface FoodInfoProps {
+interface FoodstuffProps {
   /**
-   * Corresponding food model instance.
+   * Corresponding foodstuff model instance.
    */
-  food: FoodModel;
+  foodstuff: FoodstuffModel;
 
   /**
-   * Food item selection callback.
+   * Foodstuff selection callback.
    */
-  select: (food: FoodModel, quantity: number) => void;
+  select: (foodstuff: FoodstuffModel, quantity: number) => void;
 }
 
 /**
  * Search result translation.
  */
-interface FoodInfoTranslation {
+interface FoodstuffTranslation {
   /**
    * Quantities per 100 units text.
    */
@@ -58,27 +58,27 @@ interface FoodInfoTranslation {
 }
 
 /**
- * Component that displays information about specified food item.
+ * Component that displays information about specified foodstuff.
  */
 @inject("views")
 @observer
-export class Food extends TranslatedComponent<
-  "Food",
-  FoodInfoProps,
-  FoodInfoTranslation
+export class Foodstuff extends TranslatedComponent<
+  "Foodstuff",
+  FoodstuffProps,
+  FoodstuffTranslation
 > {
   /**
    * Sets the name of this component.
    */
-  public constructor(props: FoodInfoProps) {
-    super("Food", props);
+  public constructor(props: FoodstuffProps) {
+    super("Foodstuff", props);
   }
 
   /**
-   * Renders food item information.
+   * Renders specified foodstuff information.
    */
   public render() {
-    const { name, nutritionDeclaration, unit } = this.props.food;
+    const { name, nutritionDeclaration, unit } = this.props.foodstuff;
 
     return (
       <Container onClick={this.handleSelect}>
@@ -127,31 +127,31 @@ export class Food extends TranslatedComponent<
   }
 
   /**
-   * Shows quantity selection when user clicks on this food item.
+   * Shows quantity selection when user clicks on this component.
    */
   @action
   private handleSelect = () => {
     this.props.views!.push("center", "Quantity", {
-      food: this.props.food,
+      foodstuff: this.props.foodstuff,
       select: this.props.select
     });
   };
 
   /**
-   * Displays food editing form when user clicks on the edit button.
+   * Displays foodstuff editing form when user clicks on the edit button.
    */
   @action
   private handleEdit: React.MouseEventHandler<HTMLButtonElement> = event => {
     event.stopPropagation();
 
     this.props.views!.push("left", "Edit", {
-      food: this.props.food
+      foodstuff: this.props.foodstuff
     });
   };
 }
 
 /**
- * Component that contains information about a food item.
+ * Component that contains information about a foodstuff.
  */
 const Container = styled.div`
   min-height: 11.5rem;
@@ -172,7 +172,8 @@ const Container = styled.div`
 const TITLE_LINE_HEIGHT = "1.4rem";
 
 /**
- * Food item title wrapper which contains the diagram and food item name.
+ * Food item title wrapper which contains foodstuff name and nutrient diagram
+ * components.
  */
 const Title = styled.div`
   width: 100%;
@@ -182,7 +183,7 @@ const Title = styled.div`
 `;
 
 /**
- * Clickable food item name.
+ * Clickable foodstuff name component.
  */
 const Name = styled.button`
   ${RESET};
@@ -203,7 +204,7 @@ const Name = styled.button`
 `;
 
 /**
- * Food item edit button.
+ * Foodstuff edit button.
  */
 const Edit = styled.button`
   ${RESET};
@@ -221,7 +222,7 @@ const Edit = styled.button`
 `;
 
 /**
- * Food nutritional stats wrapper.
+ * Foodstuff nutritional stats wrapper.
  */
 const Stats = styled.div`
   padding: calc(${({ theme }) => theme.padding} / 3);

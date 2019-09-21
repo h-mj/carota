@@ -12,7 +12,7 @@ import { Button } from "../component/Button";
 import { Controls, Form } from "../component/collection/form";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
-import { FoodModel } from "../model/FoodModel";
+import { FoodstuffModel } from "../model/FoodModel";
 import { any, ErrorsFor } from "../utility/form";
 
 /**
@@ -20,14 +20,14 @@ import { any, ErrorsFor } from "../utility/form";
  */
 interface QuantityProps {
   /**
-   * Food item which quantity is being selected.
+   * Foodstuff which quantity is being selected.
    */
-  food: FoodModel;
+  foodstuff: FoodstuffModel;
 
   /**
-   * Food item selection callback.
+   * Foodstuff selection callback.
    */
-  select: (food: FoodModel, quantity: number) => void;
+  select: (foodstuff: FoodstuffModel, quantity: number) => void;
 }
 
 /**
@@ -51,7 +51,7 @@ interface InputTranslation {
 }
 
 /**
- * Quantity scene component translation.I
+ * Quantity scene component translation.
  */
 interface QuantityTranslation {
   /**
@@ -96,20 +96,16 @@ interface FormValues {
 }
 
 /**
- * Function that validates form values.
+ * Validates form values.
  */
+// prettier-ignore
 const validate = deviate<FormValues>().shape({
-  quantity: deviate<string>()
-    .trim()
-    .notEmpty()
-    .replace(",", ".")
-    .toNumber()
-    .gt(0),
+  quantity: deviate<string>().trim().notEmpty().replace(",", ".").toNumber().gt(0),
   unit: deviate<Units | "pcs" | undefined>().defined()
 });
 
 /**
- * Scene component that is used to select a quantity of some food item.
+ * Scene component that is used to select a quantity of some foodstuff.
  */
 @inject("views")
 @observer
@@ -123,7 +119,7 @@ export class Quantity extends SceneComponent<
    */
   @observable private values: FormValues = {
     quantity: "",
-    unit: this.props.food.unit
+    unit: this.props.foodstuff.unit
   };
 
   /**
@@ -160,12 +156,12 @@ export class Quantity extends SceneComponent<
    * Renders unit select component.
    */
   private renderUnitInput() {
-    if (this.props.food.pieceQuantity === undefined) {
+    if (this.props.foodstuff.pieceQuantity === undefined) {
       // Can't be measured in pieces so do not render anything.
       return null;
     }
 
-    const options = ([this.props.food.unit, "pcs"] as const).map(unit => ({
+    const options = ([this.props.foodstuff.unit, "pcs"] as const).map(unit => ({
       label: this.props.views!.translation.units[unit],
       value: unit
     }));
@@ -179,7 +175,7 @@ export class Quantity extends SceneComponent<
         }
         helperMessage={this.translation.unit.helper.replace(
           "{unit}",
-          this.translation[this.props.food.unit]
+          this.translation[this.props.foodstuff.unit]
         )}
         invalid={this.reasons.unit !== undefined}
         label={this.translation.unit.label}
@@ -197,7 +193,7 @@ export class Quantity extends SceneComponent<
   private renderQuantityInput() {
     return (
       <TextField
-        autoFocus={this.props.food.pieceQuantity === undefined}
+        autoFocus={this.props.foodstuff.pieceQuantity === undefined}
         errorMessage={
           this.reasons.quantity !== undefined
             ? this.translation.quantity.reasons[this.reasons.quantity]
@@ -244,10 +240,10 @@ export class Quantity extends SceneComponent<
     if (result.ok) {
       const quantity =
         result.value.unit === "pcs"
-          ? result.value.quantity * this.props.food.pieceQuantity!
+          ? result.value.quantity * this.props.foodstuff.pieceQuantity!
           : result.value.quantity;
 
-      this.props.select(this.props.food, quantity);
+      this.props.select(this.props.foodstuff, quantity);
     } else {
       this.reasons = result.value;
     }

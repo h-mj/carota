@@ -14,7 +14,7 @@ import { Group } from "../component/Group";
 import { SceneTitle } from "../component/SceneTitle";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
-import { FoodstuffModel } from "../model/FoodModel";
+import { FoodstuffModel } from "../model/FoodstuffModel";
 import { any, append, ErrorsFor } from "../utility/form";
 
 /**

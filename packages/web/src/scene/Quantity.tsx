@@ -12,7 +12,7 @@ import { Button } from "../component/Button";
 import { Controls, Form } from "../component/collection/form";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
-import { FoodstuffModel } from "../model/FoodModel";
+import { FoodstuffModel } from "../model/FoodstuffModel";
 import { any, ErrorsFor } from "../utility/form";
 
 /**

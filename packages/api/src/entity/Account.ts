@@ -2,13 +2,9 @@ import {
   BaseEntity,
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn
 } from "typeorm";
-
-import { Person } from "./Person";
 
 /**
  * Array of valid languages.
@@ -19,6 +15,16 @@ export const LANGUAGES = ["English", "Estonian", "Russian"] as const;
  * Union of valid languages.
  */
 export type Languages = typeof LANGUAGES[number];
+
+/**
+ * Array of valid sexes.
+ */
+export const SEXES = ["Female", "Male"] as const;
+
+/**
+ * Union of valid sexes.
+ */
+export type Sexes = typeof SEXES[number];
 
 /**
  * Array of valid account types.
@@ -71,17 +77,22 @@ export class Account extends BaseEntity {
   public email!: string;
 
   /**
+   * Account holder's sex.
+   */
+  @Column("enum", { enum: SEXES, nullable: true })
+  public sex!: Sexes | null;
+
+  /**
+   * Account holder's date of birth.
+   */
+  @Column("date", { nullable: true })
+  public dateOfBirth!: string | null;
+
+  /**
    * Account password hash.
    */
   @Column()
   public hash!: string;
-
-  /**
-   * Accounts person model instance.
-   */
-  @OneToOne(() => Person)
-  @JoinColumn()
-  public person!: Person | null;
 
   /**
    * Advisers account. `undefined` if account owner doesn't have an adviser.

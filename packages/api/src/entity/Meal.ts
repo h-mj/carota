@@ -8,14 +8,14 @@ import {
   Unique
 } from "typeorm";
 
+import { Account } from "./Account";
 import { Consumable } from "./Consumable";
-import { Person } from "./Person";
 
 /**
  * Collection of consumed food items.
  */
 @Entity()
-@Unique(["person", "name", "date"])
+@Unique(["account", "name", "date"])
 export class Meal extends BaseEntity {
   /**
    * Meal ID.
@@ -24,10 +24,10 @@ export class Meal extends BaseEntity {
   public id!: string;
 
   /**
-   * Person who had this meal.
+   * Account which created this meal.
    */
-  @ManyToOne(() => Person, { nullable: false })
-  public person!: Person;
+  @ManyToOne(() => Account, { nullable: false })
+  public account!: Account;
 
   /**
    * Meal name.

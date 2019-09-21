@@ -67,8 +67,8 @@ export class AccountsStore {
    * @param body Login request message body.
    */
   @action
-  public async login(body: Body<"account", "login">) {
-    const response = await post("account", "login", body);
+  public async login(body: Body<"authentication", "generateToken">) {
+    const response = await post("authentication", "generateToken", body);
 
     if ("error" in response) {
       return response.error;
@@ -87,8 +87,8 @@ export class AccountsStore {
    * @param body Registration request message body.
    */
   @action
-  public async register(body: Body<"account", "register">) {
-    const response = await post("account", "register", body);
+  public async register(body: Body<"account", "create">) {
+    const response = await post("account", "create", body);
 
     if ("error" in response) {
       return response.error;

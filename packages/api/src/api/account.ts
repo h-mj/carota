@@ -1,120 +1,35 @@
-import { compare, hash } from "bcryptjs";
-import { deviate } from "deviator";
+import { hash } from "bcryptjs";
+import { deviate, Success } from "deviator";
 
 import * as Router from "@koa/router";
 
-import { Account, LANGUAGES, Languages } from "../entity/Account";
+import { Account, LANGUAGES } from "../entity/Account";
 import { Invitation } from "../entity/Invitation";
-import { signToken } from "../middleware/authenticator";
-import {
-  createIdNotFoundError,
-  createInvalidCredentialsError
-} from "../utility/errors";
+import { generateToken } from "../middleware/authenticator";
+import { createIdNotFoundError } from "../utility/errors";
 import { callCatch } from "../utility/queries";
 import { defineNoAuth } from "../utility/routes";
 import { Query } from "./";
+import { AuthenticationTokenDto } from "./authentication";
 
 /**
- * Router, which handles all routes related to accounts.
+ * Router which endpoints manage the accounts.
  */
 export const accountRouter = new Router();
 
 /**
- * Account controller endpoints and their request message body and response
- * message body data types.
+ * Defines the request and response message body types of account router
+ * endpoints.
  */
 export interface AccountController {
-  login: Query<LoginBody, TokenData>;
-  register: Query<RegisterBody, TokenData>;
+  create: Query<CreateAccountDto, AuthenticationTokenDto>;
 }
 
 /**
- * Login request message body type.
- */
-export interface LoginBody {
-  /**
-   * Account email.
-   */
-  email: string;
-
-  /**
-   * Account password.
-   */
-  password: string;
-}
-
-/**
- * Generated JSON Web Token data type.
- */
-export interface TokenData {
-  /**
-   * Generated JSON Web Token.
-   */
-  token: string;
-}
-
-/**
- * Login request body validator.
+ * Validates create account request body.
  */
 // prettier-ignore
-const loginValidator =  deviate().object().shape({
-  email: deviate().string().trim().lowercase().notEmpty(),
-  password: deviate().string().notEmpty()
-});
-
-defineNoAuth(
-  accountRouter,
-  "account",
-  "login",
-  loginValidator,
-  async context => {
-    const { email, password } = context.state.body;
-
-    const account = await Account.findOne({ email });
-
-    if (account === undefined || !(await compare(password, account.hash))) {
-      throw createInvalidCredentialsError(["email"], ["password"]);
-    }
-
-    context.state.data = { token: signToken(account) };
-  }
-);
-
-/**
- * Register request message body type.
- */
-export interface RegisterBody {
-  /**
-   * Personal name.
-   */
-  name: string;
-
-  /**
-   * Account language.
-   */
-  language: Languages;
-
-  /**
-   * Account email.
-   */
-  email: string;
-
-  /**
-   * Account password.
-   */
-  password: string;
-
-  /**
-   * Invitation ID.
-   */
-  invitationId: string;
-}
-
-/**
- * Account register request body validator.
- */
-// prettier-ignore
-const registerValidator = deviate().object().shape({
+const createAccountDtoValidator = deviate().object().shape({
   name: deviate().string().trim().notEmpty(),
   language: deviate().string().options(LANGUAGES),
   email: deviate().string().trim().lowercase().email(),
@@ -122,11 +37,16 @@ const registerValidator = deviate().object().shape({
   invitationId: deviate().string().guid()
 });
 
+/**
+ * Create account request data transfer object.
+ */
+type CreateAccountDto = Success<typeof createAccountDtoValidator>;
+
 defineNoAuth(
   accountRouter,
   "account",
-  "register",
-  registerValidator,
+  "create",
+  createAccountDtoValidator,
   async context => {
     const {
       name,
@@ -161,6 +81,6 @@ defineNoAuth(
 
     await invitation.remove();
 
-    context.state.data = { token: signToken(account) };
+    context.state.data = { token: generateToken(account) };
   }
 );

@@ -32,7 +32,7 @@ const createPayload = (account: Account): Payload => {
  *
  * @param account Account from which payload is created.
  */
-export const signToken = (account: Account): string => {
+export const generateToken = (account: Account): string => {
   if (process.env.SECRET === undefined) {
     throw new InternalServerErrorError(
       'Environment variable "SECRET" is undefined'

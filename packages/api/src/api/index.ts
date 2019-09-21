@@ -3,6 +3,7 @@ import * as bodyParser from "koa-bodyparser";
 
 import { bodyParserOnError } from "../utility/errors";
 import { AccountController, accountRouter } from "./account";
+import { AuthenticationController } from "./authentication";
 import { FoodController, foodRouter } from "./food";
 import { InvitationController, invitationRouter } from "./invitation";
 
@@ -11,6 +12,7 @@ import { InvitationController, invitationRouter } from "./invitation";
  */
 interface Api {
   account: AccountController;
+  authentication: AuthenticationController;
   food: FoodController;
   invitation: InvitationController;
 }

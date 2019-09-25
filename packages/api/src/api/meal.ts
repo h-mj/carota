@@ -6,6 +6,7 @@ import * as Router from "@koa/router";
 import { MealDto } from "../../types";
 import { Account } from "../entity/Account";
 import { Meal } from "../entity/Meal";
+import { BadRequestError } from "../error/BadRequestError";
 import { ForbiddenError } from "../error/ForbiddenError";
 import { createIdNotFoundError } from "../utility/errors";
 import { define } from "../utility/routes";
@@ -91,9 +92,25 @@ const removeMealDtoValidator = deviate().object().shape({
 })
 
 /**
- * Remove meal request data transfer object.
+ * Remove meal request data transfer object type.
  */
 type RemoveMealDto = Success<typeof removeMealDtoValidator>;
+
+/**
+ * Removes a meal with specified ID from meal linked list and re-links the broken linked list.
+ */
+const unlink = async (meal: Meal) => {
+  const previous = await meal.previous;
+  const nextId = meal.nextId;
+
+  meal.nextId = null;
+  await meal.save();
+
+  if (previous !== undefined) {
+    previous.nextId = nextId;
+    await previous.save();
+  }
+};
 
 /**
  * Removes a meal with specified ID and fixes the meal linked list.
@@ -105,20 +122,74 @@ const remove = async ({ id }: RemoveMealDto, account: Account) => {
     throw createIdNotFoundError(id, Meal.name, ["id"]);
   }
 
-  if (meal.account.id !== account.id || account.rights !== "All") {
+  if (meal.accountId !== account.id || account.rights !== "All") {
     throw new ForbiddenError("You are not allowed to delete this meal.");
   }
 
-  const previous = await meal.previous;
+  await unlink(meal);
+  await meal.remove();
 
-  await meal.remove(); // This also sets `nextId` of previous meal to `null`.
+  return true as const;
+};
+
+/**
+ * Validates insert meal request body.
+ */
+// prettier-ignore
+const insertMealDtoValidator = deviate().object().shape({
+  id: deviate().string().guid(),
+  nextId: deviate().optional().string().guid()
+})
+
+/**
+ * Insert meal request data transfer object type.
+ */
+export type InsertMealDto = Success<typeof insertMealDtoValidator>;
+
+/**
+ * Changes meal order by moving meal with with ID `id` in front of meal with ID
+ * `nextId`. If `nextId` is `undefined`, then meal is moved to the back and will
+ * be the last at that date.
+ *
+ * Returns all meals with same date as meals with IDS `id` and `nextId` with
+ * updated order.
+ */
+const insert = async ({ id, nextId }: InsertMealDto, account: Account) => {
+  const meal = await Meal.findOne({ id });
+  const next =
+    nextId !== undefined ? await Meal.findOne({ id: nextId }) : undefined;
+
+  if (meal === undefined) {
+    throw createIdNotFoundError(id, Meal.name, ["id"]);
+  } else if (nextId !== undefined && next === undefined) {
+    throw createIdNotFoundError(nextId, Meal.name, ["nextId"]);
+  } else if (next !== undefined && meal.id === next.id) {
+    throw new BadRequestError("Cannot insert meal ahead of itself.");
+  } else if (next !== undefined && meal.accountId !== next.accountId) {
+    throw new BadRequestError("Meals are owned by different accounts.");
+  } else if (meal.accountId !== account.id) {
+    throw new ForbiddenError("You are not allowed to move this meal.");
+  }
+
+  const previous =
+    next !== undefined
+      ? await next.previous
+      : await Meal.findOne({ account, date: meal.date, nextId: null });
+
+  await unlink(meal);
 
   if (previous !== undefined) {
-    previous.nextId = meal.nextId;
+    previous.nextId = meal.id;
     await previous.save();
   }
 
-  return true as const;
+  if (next !== undefined) {
+    meal.nextId = next.id;
+    meal.date = next.date;
+    await meal.save();
+  }
+
+  return get(meal, account);
 };
 
 /**
@@ -127,6 +198,7 @@ const remove = async ({ id }: RemoveMealDto, account: Account) => {
 export interface MealController {
   add: Query<AddMealDto, MealDto>;
   get: Query<GetMealsDto, MealDto[]>;
+  insert: Query<InsertMealDto, MealDto[]>;
   remove: Query<RemoveMealDto, true>;
 }
 
@@ -138,4 +210,5 @@ export const mealRouter = new Router();
 // Define all meal controller endpoints.
 define(mealRouter, "meal", "add", addMealDtoValidator, add);
 define(mealRouter, "meal", "get", getMealsDtoValidator, get);
+define(mealRouter, "meal", "insert", insertMealDtoValidator, insert);
 define(mealRouter, "meal", "remove", removeMealDtoValidator, remove);

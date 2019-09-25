@@ -26,8 +26,14 @@ export class Meal extends BaseEntity {
   /**
    * Account which created this meal.
    */
-  @ManyToOne(() => Account, { eager: true, nullable: false })
+  @ManyToOne(() => Account, { nullable: false })
   public account!: Account;
+
+  /**
+   * Account ID.
+   */
+  @Column()
+  public accountId!: string;
 
   /**
    * Meal name.
@@ -56,10 +62,7 @@ export class Meal extends BaseEntity {
   /**
    * Meal that is after this meal in the order.
    */
-  @OneToOne(() => Meal, meal => meal.previous, {
-    cascade: true,
-    onDelete: "SET NULL"
-  })
+  @OneToOne(() => Meal, meal => meal.previous)
   @JoinColumn()
   public next!: Promise<Meal | undefined>;
 

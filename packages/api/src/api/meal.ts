@@ -1,5 +1,6 @@
 import { deviate, err, ok, Success } from "deviator";
 import { DateTime } from "luxon";
+import { Not } from "typeorm";
 
 import * as Router from "@koa/router";
 
@@ -110,6 +111,8 @@ const unlink = async (meal: Meal) => {
     previous.nextId = nextId;
     await previous.save();
   }
+
+  await meal.reload();
 };
 
 /**
@@ -171,12 +174,17 @@ const insert = async ({ id, nextId }: InsertMealDto, account: Account) => {
     throw new ForbiddenError("You are not allowed to move this meal.");
   }
 
+  await unlink(meal);
+
   const previous =
     next !== undefined
       ? await next.previous
-      : await Meal.findOne({ account, date: meal.date, nextId: null });
-
-  await unlink(meal);
+      : await Meal.findOne({
+          account,
+          id: Not(meal.id),
+          date: meal.date,
+          nextId: null
+        });
 
   if (previous !== undefined) {
     previous.nextId = meal.id;

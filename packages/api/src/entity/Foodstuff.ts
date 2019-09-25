@@ -62,10 +62,15 @@ export class Foodstuff extends BaseEntity {
   public pieceQuantity!: number | null;
 
   /**
+   * ID of editor account.
+   */
+  public editorId!: string;
+
+  /**
    * Account of last user who edited this foodstuff.
    */
-  @ManyToOne(() => Account, { nullable: false, eager: true })
-  public editor!: Account;
+  @ManyToOne(() => Account, { nullable: false })
+  public editor!: Promise<Account>;
 
   /**
    * Returns a representation of this entity that will be transferred to the

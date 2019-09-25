@@ -86,7 +86,7 @@ define(foodstuffRouter, "foodstuff", "save", saveFoodstuffDtoValidator, async co
       throw createIdNotFoundError(id, Foodstuff.name, ["id"]);
     }
 
-    if (account.id !== foodstuff.editor.id && account.rights !== "All") {
+    if (account.id !== foodstuff.editorId && account.rights !== "All") {
       throw new ForbiddenError("You can not edit this foodstuff.");
     }
   }
@@ -98,7 +98,7 @@ define(foodstuffRouter, "foodstuff", "save", saveFoodstuffDtoValidator, async co
     unit,
     nutritionDeclaration,
     pieceQuantity,
-    editor: context.state.account
+    editor: Promise.resolve(context.state.account)
   });
 
   context.state.data = (await template.save()).toDto();

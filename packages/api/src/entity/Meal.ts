@@ -2,8 +2,10 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn
 } from "typeorm";
 
@@ -46,6 +48,28 @@ export class Meal extends BaseEntity {
   public consumables!: Consumable[];
 
   /**
+   * Meal that precedes this meal.
+   */
+  @OneToOne(() => Meal, meal => meal.next)
+  public previous!: Promise<Meal | undefined>;
+
+  /**
+   * Meal that is after this meal in the order.
+   */
+  @OneToOne(() => Meal, meal => meal.previous, {
+    cascade: true,
+    onDelete: "SET NULL"
+  })
+  @JoinColumn()
+  public next!: Promise<Meal | undefined>;
+
+  /**
+   * ID of next meal.
+   */
+  @Column({ nullable: true })
+  public nextId!: string | null;
+
+  /**
    * Returns a representation of this entity that will be transferred to the
    * client.
    */
@@ -56,7 +80,8 @@ export class Meal extends BaseEntity {
     consumables:
       this.consumables != undefined
         ? this.consumables.map(consumable => consumable.toDto())
-        : []
+        : [],
+    nextId: this.nextId
   });
 }
 

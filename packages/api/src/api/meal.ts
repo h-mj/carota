@@ -66,9 +66,15 @@ define(mealRouter, "meal", "add", addMealDtoValidator, async context => {
     body: { name, date }
   } = context.state;
 
-  const template = Meal.create({ account, name, date });
+  const last = await Meal.findOne({ account, date, nextId: null });
+  const meal = await Meal.create({ account, name, date }).save();
 
-  context.state.data = (await template.save()).toDto();
+  if (last !== undefined) {
+    last.nextId = meal.id;
+    last.save();
+  }
+
+  context.state.data = meal.toDto();
 });
 
 /**
@@ -124,7 +130,14 @@ define(mealRouter, "meal", "delete", deleteMealDtoValidator, async context => {
     throw new ForbiddenError("You are not allowed to delete this meal.");
   }
 
+  const previous = await meal.previous;
+
   await meal.remove();
+
+  if (previous !== undefined) {
+    previous.nextId = meal.nextId;
+    await previous.save();
+  }
 
   context.state.data = true;
 });

@@ -4,25 +4,12 @@ import { DateTime } from "luxon";
 import * as Router from "@koa/router";
 
 import { MealDto } from "../../types";
+import { Account } from "../entity/Account";
 import { Meal } from "../entity/Meal";
 import { ForbiddenError } from "../error/ForbiddenError";
 import { createIdNotFoundError } from "../utility/errors";
 import { define } from "../utility/routes";
 import { Query } from "./";
-
-/**
- * Router which endpoints manage the invitation entities.
- */
-export const mealRouter = new Router();
-
-/**
- * Defines the request and response message body types of meal router endpoints.
- */
-export interface MealController {
-  add: Query<AddMealDto, MealDto>;
-  delete: Query<DeleteMealDto, true>;
-  get: Query<GetMealsDto, MealDto[]>;
-}
 
 /**
  * Checks whether date's string representation is a valid ISO date.
@@ -60,12 +47,10 @@ const addMealDtoValidator = deviate().object().shape({
  */
 type AddMealDto = Success<typeof addMealDtoValidator>;
 
-define(mealRouter, "meal", "add", addMealDtoValidator, async context => {
-  const {
-    account,
-    body: { name, date }
-  } = context.state;
-
+/**
+ * Adds a new meal with specified name and date as the last meal.
+ */
+const add = async ({ name, date }: AddMealDto, account: Account) => {
   const last = await Meal.findOne({ account, date, nextId: null });
   const meal = await Meal.create({ account, name, date }).save();
 
@@ -74,8 +59,8 @@ define(mealRouter, "meal", "add", addMealDtoValidator, async context => {
     last.save();
   }
 
-  context.state.data = meal.toDto();
-});
+  return meal.toDto();
+};
 
 /**
  * Validates get meals request body.
@@ -90,36 +75,30 @@ const getMealsDtoValidator = deviate().object().shape({
  */
 type GetMealsDto = Success<typeof getMealsDtoValidator>;
 
-define(mealRouter, "meal", "get", getMealsDtoValidator, async context => {
-  const {
-    account,
-    body: { date }
-  } = context.state;
-
-  context.state.data = (await Meal.find({ account, date })).map(meal =>
-    meal.toDto()
-  );
-});
+/**
+ * Returns all meals with specified date.
+ */
+const get = async ({ date }: GetMealsDto, account: Account) => {
+  return (await Meal.find({ account, date })).map(meal => meal.toDto());
+};
 
 /**
- * Validates delete meal request body.
+ * Validates remove meal request body.
  */
 // prettier-ignore
-const deleteMealDtoValidator = deviate().object().shape({
+const removeMealDtoValidator = deviate().object().shape({
   id: deviate().string().guid()
 })
 
 /**
- * Delete meal request data transfer object.
+ * Remove meal request data transfer object.
  */
-type DeleteMealDto = Success<typeof deleteMealDtoValidator>;
+type RemoveMealDto = Success<typeof removeMealDtoValidator>;
 
-define(mealRouter, "meal", "delete", deleteMealDtoValidator, async context => {
-  const {
-    account,
-    body: { id }
-  } = context.state;
-
+/**
+ * Removes a meal with specified ID and fixes the meal linked list.
+ */
+const remove = async ({ id }: RemoveMealDto, account: Account) => {
   const meal = await Meal.findOne({ id });
 
   if (meal === undefined) {
@@ -132,12 +111,31 @@ define(mealRouter, "meal", "delete", deleteMealDtoValidator, async context => {
 
   const previous = await meal.previous;
 
-  await meal.remove();
+  await meal.remove(); // This also sets `nextId` of previous meal to `null`.
 
   if (previous !== undefined) {
     previous.nextId = meal.nextId;
     await previous.save();
   }
 
-  context.state.data = true;
-});
+  return true as const;
+};
+
+/**
+ * Defines the request and response message body types of meal router endpoints.
+ */
+export interface MealController {
+  add: Query<AddMealDto, MealDto>;
+  get: Query<GetMealsDto, MealDto[]>;
+  remove: Query<RemoveMealDto, true>;
+}
+
+/**
+ * Router which endpoints manage the invitation entities.
+ */
+export const mealRouter = new Router();
+
+// Define all meal controller endpoints.
+define(mealRouter, "meal", "add", addMealDtoValidator, add);
+define(mealRouter, "meal", "get", getMealsDtoValidator, get);
+define(mealRouter, "meal", "remove", removeMealDtoValidator, remove);

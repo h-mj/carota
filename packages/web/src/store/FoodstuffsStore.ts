@@ -51,7 +51,7 @@ export class FoodstuffsStore extends Store<FoodstuffModel, FoodstuffDto> {
    */
   @action
   public async delete(id: string) {
-    const response = await post("foodstuff", "delete", { id });
+    const response = await post("foodstuff", "remove", { id });
 
     if ("error" in response) {
       return response.error;

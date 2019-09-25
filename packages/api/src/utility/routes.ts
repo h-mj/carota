@@ -2,12 +2,62 @@ import { Middleware } from "koa";
 
 import * as Router from "@koa/router";
 
-import { Controllers, Endpoints } from "../api";
+import { Body, Controllers, Data, Endpoints } from "../api";
+import { Account } from "../entity/Account";
 import {
   AuthenticationState,
   authenticator
 } from "../middleware/authenticator";
 import { validate, ValidationState, Validator } from "../middleware/validator";
+
+/**
+ * Endpoint handler function type.
+ */
+type Handler<
+  TController extends Controllers,
+  TEndpoint extends Endpoints<TController>
+> = (
+  body: Body<TController, TEndpoint>,
+  account: Account
+) => Promise<Data<TController, TEndpoint>>;
+
+/**
+ * Wraps specified handler inside a middleware.
+ */
+const wrap = <
+  TController extends Controllers,
+  TEndpoint extends Endpoints<TController>
+>(
+  handler: Handler<TController, TEndpoint>
+): Middleware<
+  AuthenticationState & ValidationState<TController, TEndpoint>
+> => async context => {
+  context.state.data = await handler(context.state.body, context.state.account);
+};
+
+/**
+ * No auth endpoint handler function type.
+ */
+type NoAuthHandler<
+  TController extends Controllers,
+  TEndpoint extends Endpoints<TController>
+> = (
+  body: Body<TController, TEndpoint>
+) => Promise<Data<TController, TEndpoint>>;
+
+/**
+ * Wraps specified no auth handler inside a middleware.
+ */
+const noAuthWrap = <
+  TController extends Controllers,
+  TEndpoint extends Endpoints<TController>
+>(
+  handler: NoAuthHandler<TController, TEndpoint>
+): Middleware<
+  AuthenticationState & ValidationState<TController, TEndpoint>
+> => async context => {
+  context.state.data = await handler(context.state.body);
+};
 
 /**
  * Defines a route on router `router` with url based on controller and endpoint
@@ -28,9 +78,13 @@ export const defineNoAuth = <
   controller: TController,
   endpoint: TEndpoint,
   validator: Validator<TController, TEndpoint>,
-  middleware: Middleware<ValidationState<TController, TEndpoint>>
+  handler: NoAuthHandler<TController, TEndpoint>
 ): void => {
-  router.post(`/${controller}/${endpoint}`, validate(validator), middleware);
+  router.post(
+    `/${controller}/${endpoint}`,
+    validate(validator),
+    noAuthWrap(handler)
+  );
 };
 
 /**
@@ -52,14 +106,12 @@ export const define = <
   controller: TController,
   endpoint: TEndpoint,
   validator: Validator<TController, TEndpoint>,
-  middleware: Middleware<
-    AuthenticationState & ValidationState<TController, TEndpoint>
-  >
+  handler: Handler<TController, TEndpoint>
 ): void => {
   router.post(
     `/${controller}/${endpoint}`,
     authenticator(),
     validate(validator),
-    middleware
+    wrap(handler)
   );
 };

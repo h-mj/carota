@@ -8,19 +8,6 @@ import { defineNoAuth } from "../utility/routes";
 import { Query } from "./";
 
 /**
- * Router which endpoints manage the invitation entities.
- */
-export const invitationRouter = new Router();
-
-/**
- * Defines the request and response message body types of invitation router
- * endpoints.
- */
-export interface InvitationController {
-  get: Query<GetInvitationDto, InvitationDto>;
-}
-
-/**
  * Validates get invitation request body.
  */
 // prettier-ignore
@@ -33,19 +20,37 @@ const getInvitationDtoValidator = deviate().object().shape({
  */
 type GetInvitationDto = Success<typeof getInvitationDtoValidator>;
 
+/**
+ * Returns data transfer object of invitation with specified ID.
+ */
+const get = async ({ id }: GetInvitationDto) => {
+  const invitation = await Invitation.findOne({ id });
+
+  if (invitation === undefined) {
+    throw createIdNotFoundError(id, Invitation.name, ["id"]);
+  }
+
+  return invitation.toDto();
+};
+
+/**
+ * Defines the request and response message body types of invitation router
+ * endpoints.
+ */
+export interface InvitationController {
+  get: Query<GetInvitationDto, InvitationDto>;
+}
+
+/**
+ * Router which endpoints manage the invitation entities.
+ */
+export const invitationRouter = new Router();
+
+// Define all invitation controller endpoints.
 defineNoAuth(
   invitationRouter,
   "invitation",
   "get",
   getInvitationDtoValidator,
-  async context => {
-    const { id } = context.state.body;
-    const invitation = await Invitation.findOne({ id });
-
-    if (invitation === undefined) {
-      throw createIdNotFoundError(id, Invitation.name, ["id"]);
-    }
-
-    context.state.data = invitation.toDto();
-  }
+  get
 );

@@ -5,25 +5,12 @@ import * as Router from "@koa/router";
 
 import { Account, LANGUAGES } from "../entity/Account";
 import { Invitation } from "../entity/Invitation";
-import { generateToken } from "../middleware/authenticator";
+import { signToken } from "../middleware/authenticator";
 import { createIdNotFoundError } from "../utility/errors";
 import { callCatch } from "../utility/queries";
 import { defineNoAuth } from "../utility/routes";
 import { Query } from "./";
 import { AuthenticationTokenDto } from "./authentication";
-
-/**
- * Router which endpoints manage the account entities.
- */
-export const accountRouter = new Router();
-
-/**
- * Defines the request and response message body types of account router
- * endpoints.
- */
-export interface AccountController {
-  create: Query<CreateAccountDto, AuthenticationTokenDto>;
-}
 
 /**
  * Validates create account request body.
@@ -42,45 +29,62 @@ const createAccountDtoValidator = deviate().object().shape({
  */
 type CreateAccountDto = Success<typeof createAccountDtoValidator>;
 
+/**
+ * Creates an account with specified fields and invitation.
+ */
+const create = async ({
+  name,
+  language,
+  email,
+  password,
+  invitationId
+}: CreateAccountDto) => {
+  const invitation = await Invitation.findOne({ id: invitationId });
+
+  if (invitation === undefined) {
+    throw createIdNotFoundError(invitationId, Invitation.name, [
+      "invitationId"
+    ]);
+  }
+
+  const { adviser, inviter, type, rights } = invitation;
+
+  const template = Account.create({
+    name,
+    language,
+    email,
+    hash: await hash(password, 12),
+    adviser,
+    inviter,
+    type,
+    rights
+  });
+
+  const account = await callCatch(() => template.save());
+
+  await invitation.remove();
+
+  return { token: signToken(account) };
+};
+
+/**
+ * Defines the request and response message body types of account router
+ * endpoints.
+ */
+export interface AccountController {
+  create: Query<CreateAccountDto, AuthenticationTokenDto>;
+}
+
+/**
+ * Router which endpoints manage the account entities.
+ */
+export const accountRouter = new Router();
+
+// Define all account controller endpoints.
 defineNoAuth(
   accountRouter,
   "account",
   "create",
   createAccountDtoValidator,
-  async context => {
-    const {
-      name,
-      language,
-      email,
-      password,
-      invitationId
-    } = context.state.body;
-
-    const invitation = await Invitation.findOne({ id: invitationId });
-
-    if (invitation === undefined) {
-      throw createIdNotFoundError(invitationId, Invitation.name, [
-        "invitationId"
-      ]);
-    }
-
-    const { adviser, inviter, type, rights } = invitation;
-
-    const template = Account.create({
-      name,
-      language,
-      email,
-      hash: await hash(password, 12),
-      adviser,
-      inviter,
-      type,
-      rights
-    });
-
-    const account = await callCatch(() => template.save());
-
-    await invitation.remove();
-
-    context.state.data = { token: generateToken(account) };
-  }
+  create
 );

@@ -2,26 +2,12 @@ import { deviate, Success } from "deviator";
 
 import * as Router from "@koa/router";
 
+import { Account } from "../entity/Account";
 import { Foodstuff, FoodstuffDto, UNITS } from "../entity/Foodstuff";
 import { ForbiddenError } from "../error/ForbiddenError";
 import { createIdNotFoundError } from "../utility/errors";
 import { define } from "../utility/routes";
 import { Query } from "./";
-
-/**
- * Router which endpoints manage the foodstuff entities.
- */
-export const foodstuffRouter = new Router();
-
-/**
- * Defines the request and response message body types of foodstuff router
- * endpoints.
- */
-export interface FoodController {
-  delete: Query<DeleteFoodstuffDto, true>;
-  save: Query<SaveFoodstuffDto, FoodstuffDto>;
-  search: Query<SearchFoodstuffDto, FoodstuffDto[]>;
-}
 
 /**
  * Nutrient quantity validator.
@@ -68,17 +54,20 @@ const saveFoodstuffDtoValidator = deviate().object().shape({
  */
 type SaveFoodstuffDto = Success<typeof saveFoodstuffDtoValidator>;
 
-define(foodstuffRouter, "foodstuff", "save", saveFoodstuffDtoValidator, async context => {
-  const { account } = context.state;
-  const {
+/**
+ * Creates or edits foodstuff with specified fields.
+ */
+const save = async (
+  {
     id,
     name,
     barcode,
     unit,
     nutritionDeclaration,
     pieceQuantity
-  } = context.state.body;
-
+  }: SaveFoodstuffDto,
+  account: Account
+) => {
   if (id !== undefined) {
     const foodstuff = await Foodstuff.findOne({ id });
 
@@ -98,11 +87,11 @@ define(foodstuffRouter, "foodstuff", "save", saveFoodstuffDtoValidator, async co
     unit,
     nutritionDeclaration,
     pieceQuantity,
-    editor: Promise.resolve(context.state.account)
+    editor: Promise.resolve(account)
   });
 
-  context.state.data = (await template.save()).toDto();
-});
+  return (await template.save()).toDto();
+};
 
 /**
  * Validates search foodstuff request body.
@@ -135,33 +124,35 @@ const matches = (query: string) => (foodstuff: Foodstuff): boolean => {
   );
 };
 
-define(foodstuffRouter, "foodstuff", "search", searchFoodstuffDtoValidator, async context => {
+/**
+ * Finds all foodstuffs that match specified query.
+ */
+const search = async ({ query }: SearchFoodstuffDto) => {
   const foodstuffs = await Foodstuff.find();
 
-  context.state.data = foodstuffs
-    .filter(matches(context.state.body.query))
+  return foodstuffs
+    .filter(matches(query))
     .map(food => food.toDto())
     .slice(0, 20);
-});
+};
+
 /**
- * Validates delete foodstuff request body validator.
+ * Validates remove foodstuff request body validator.
  */
 // prettier-ignore
-const deleteFoodstuffDtoValidator = deviate().object().shape({
+const removeFoodstuffDtoValidator = deviate().object().shape({
   id: deviate().string().guid()
 });
 
 /**
- * Delete foodstuff request data transfer object type.
+ * Remove foodstuff request data transfer object type.
  */
-type DeleteFoodstuffDto = Success<typeof deleteFoodstuffDtoValidator>;
+type RemoveFoodstuffDto = Success<typeof removeFoodstuffDtoValidator>;
 
-define(foodstuffRouter, "foodstuff", "delete", deleteFoodstuffDtoValidator, async context => {
-  const {
-    account,
-    body: { id }
-  } = context.state;
-
+/**
+ * Removes foodstuff with specified ID.
+ */
+const remove = async ({ id }: RemoveFoodstuffDto, account: Account) => {
   const foodstuff = await Foodstuff.findOne({ id });
 
   if (foodstuff === undefined) {
@@ -175,5 +166,25 @@ define(foodstuffRouter, "foodstuff", "delete", deleteFoodstuffDtoValidator, asyn
 
   await foodstuff.remove();
 
-  context.state.data = true;
-});
+  return true as const;
+};
+
+/**
+ * Defines the request and response message body types of foodstuff router
+ * endpoints.
+ */
+export interface FoodController {
+  remove: Query<RemoveFoodstuffDto, true>;
+  save: Query<SaveFoodstuffDto, FoodstuffDto>;
+  search: Query<SearchFoodstuffDto, FoodstuffDto[]>;
+}
+
+/**
+ * Router which endpoints manage the foodstuff entities.
+ */
+export const foodstuffRouter = new Router();
+
+// Define all foodstuff controller endpoints.
+define(foodstuffRouter, "foodstuff", "save", saveFoodstuffDtoValidator, save);
+define(foodstuffRouter, "foodstuff", "search", searchFoodstuffDtoValidator, search);
+define(foodstuffRouter, "foodstuff", "remove", removeFoodstuffDtoValidator, remove);

@@ -9,6 +9,7 @@ import {
 } from "./authentication";
 import { FoodController, foodstuffRouter } from "./foodstuff";
 import { InvitationController, invitationRouter } from "./invitation";
+import { MealController, mealRouter } from "./meal";
 
 /**
  * Defines all API controllers.
@@ -18,6 +19,7 @@ interface Api {
   authentication: AuthenticationController;
   foodstuff: FoodController;
   invitation: InvitationController;
+  meal: MealController;
 }
 
 /**
@@ -81,4 +83,5 @@ export const api = new Koa()
   .use(accountRouter.routes())
   .use(authenticationRouter.routes())
   .use(foodstuffRouter.routes())
-  .use(invitationRouter.routes());
+  .use(invitationRouter.routes())
+  .use(mealRouter.routes());

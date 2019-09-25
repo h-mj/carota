@@ -4,8 +4,7 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
-  Unique
+  PrimaryGeneratedColumn
 } from "typeorm";
 
 import { Account } from "./Account";
@@ -15,7 +14,6 @@ import { Consumable } from "./Consumable";
  * Collection of consumed foodstuffs during a single meal at some date.
  */
 @Entity()
-@Unique(["account", "name", "date"])
 export class Meal extends BaseEntity {
   /**
    * Meal ID.
@@ -26,7 +24,7 @@ export class Meal extends BaseEntity {
   /**
    * Account which created this meal.
    */
-  @ManyToOne(() => Account, { nullable: false })
+  @ManyToOne(() => Account, { eager: true, nullable: false })
   public account!: Account;
 
   /**
@@ -55,7 +53,10 @@ export class Meal extends BaseEntity {
     id: this.id,
     name: this.name,
     date: this.date,
-    consumables: this.consumables.map(consumable => consumable.toDto())
+    consumables:
+      this.consumables != undefined
+        ? this.consumables.map(consumable => consumable.toDto())
+        : []
   });
 }
 

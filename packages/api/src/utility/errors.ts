@@ -49,14 +49,11 @@ const createDetails = (tree: ErrorTree, path: string[] = []): ErrorDetail[] => {
  *
  * @param tree Specified `ErrorTree`.
  */
-export const createValidationError = (tree: ErrorTree): BadRequestError => {
-  console.log(createDetails(tree));
-
-  return new BadRequestError(
+export const createValidationError = (tree: ErrorTree): BadRequestError =>
+  new BadRequestError(
     "One or more fields failed validation.",
     ...createDetails(tree)
   );
-};
 
 /**
  * Creates a new `UnauthorizedError` based on invalid fields.

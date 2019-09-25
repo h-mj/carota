@@ -204,12 +204,13 @@ interface SceneOverlayProps {
  * Extended overlay component that contains a scene component.
  */
 const SceneOverlay = styled(Overlay)<SceneOverlayProps>`
-  background-color: ${({ theme }) => theme.translucentBackgroundColor};
-
   display: flex;
   align-items: center;
   justify-content: ${({ position }) =>
     position === "main" ? "center" : position};
+
+  background-color: ${({ overlaid, theme }) =>
+    overlaid ? "transparent" : theme.translucentBackgroundColor};
 
   pointer-events: ${({ overlaid }) => (overlaid ? "none" : "initial")};
 `;

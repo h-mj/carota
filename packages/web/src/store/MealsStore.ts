@@ -1,8 +1,7 @@
 import { MealDto } from "api/src/entity/Meal";
-import { action, observable, reaction } from "mobx";
+import { action, computed } from "mobx";
 
 import { MealModel } from "../model/MealModel";
-import { ModelClass } from "../model/Model";
 import { post } from "../utility/client";
 import { Store } from "./Store";
 
@@ -11,23 +10,10 @@ import { Store } from "./Store";
  */
 export class MealsStore extends Store<MealModel, MealDto> {
   /**
-   * Array of meal models in correct order.
+   * Array of ordered meals.
    */
-  @observable public ordered: MealModel[] = [];
-
-  /**
-   * Creates `MealsStore` instance an sets models change reaction that will
-   * update `ordered` array.
-   */
-  public constructor(modelClass: ModelClass<MealModel, MealDto>) {
-    super(modelClass);
-    reaction(() => this.getAll(), this.updateOrder);
-  }
-
-  /**
-   * Updates `ordered` array based on currently stored meal models.
-   */
-  private updateOrder = () => {
+  @computed
+  public get ordered() {
     const links: Map<string | undefined, string> = new Map();
 
     for (const meal of this.getAll()) {
@@ -42,8 +28,8 @@ export class MealsStore extends Store<MealModel, MealDto> {
       order.push(this.get(previous!)!);
     }
 
-    this.ordered = order.reverse();
-  };
+    return order.reverse();
+  }
 
   /**
    * Loads and replaces current data with meals with specified date.
@@ -79,12 +65,13 @@ export class MealsStore extends Store<MealModel, MealDto> {
       return response.error;
     }
 
-    // List created meal to the end of the meal linked list.
-    if (this.ordered.length > 0) {
-      this.ordered[this.ordered.length - 1].nextId = response.data.id;
-    }
+    const order = this.ordered;
 
     this.add(response.data);
+
+    if (order.length > 0) {
+      order[order.length - 1].nextId = response.data.id;
+    }
 
     return undefined;
   }
@@ -96,15 +83,24 @@ export class MealsStore extends Store<MealModel, MealDto> {
   public async move(id: string, index: number) {
     const meal = this.get(id)!;
     const order = this.ordered;
+
+    // Temporarily remove current meal from the array to find its subsequent
+    // meal.
     order.splice(order.indexOf(meal), 1);
 
     const next: MealModel | undefined = order[index];
     const nextId = next === undefined ? undefined : next.id;
 
-    // Insert the meal to correct position in `order` array so that currently
-    // visible meal order will be correct.
+    // Add meal back to its new position.
     order.splice(index, 0, meal);
 
+    // Update meal order.
+    for (let i = 0; i < order.length; ++i) {
+      order[i].nextId =
+        order[i + 1] === undefined ? undefined : order[i + 1].id;
+    }
+
+    // Make the move meal request so that order is updated on the server too.
     const response = await post("meal", "move", {
       id,
       date: meal.date,
@@ -115,9 +111,9 @@ export class MealsStore extends Store<MealModel, MealDto> {
       return response.error;
     }
 
-    // replace current meals with updated ones
-    this.clear();
-    response.data.map(this.add);
+    // Even though server returns updated meals, current meal order should be
+    // correct and there would not be any changes even if meals were to be
+    // updated, so the result is ignored.
 
     return undefined;
   }

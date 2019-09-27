@@ -57,7 +57,6 @@ export class Navigation extends TranslatedComponent<
 const Container = styled.div`
   overflow-x: auto;
   flex-shrink: 0;
-  border-bottom: solid 1px ${({ theme }) => theme.borderColor};
 `;
 
 /**

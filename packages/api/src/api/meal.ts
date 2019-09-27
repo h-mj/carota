@@ -136,31 +136,32 @@ const remove = async ({ id }: RemoveMealDto, account: Account) => {
 };
 
 /**
- * Validates insert meal request body.
+ * Validates move meal request body.
  */
 // prettier-ignore
-const insertMealDtoValidator = deviate().object().shape({
+const moveMealDtoValidator = deviate().object().shape({
   id: deviate().string().guid(),
+  date: deviate().string().append(validDate),
   nextId: deviate().optional().string().guid()
 })
 
 /**
- * Insert meal request data transfer object type.
+ * Move meal request data transfer object type.
  */
-export type InsertMealDto = Success<typeof insertMealDtoValidator>;
+export type MoveMealDto = Success<typeof moveMealDtoValidator>;
 
 /**
- * Changes meal order by moving meal with with ID `id` in front of meal with ID
- * `nextId`. If `nextId` is `undefined`, then meal is moved to the back and will
- * be the last at that date.
+ * Changes meal order by moving meal with with ID `id` to a specified `date` in
+ * front of meal with ID `nextId`. If `nextId` is `undefined`, then meal is
+ * moved to the back and will be the last at that date.
  *
  * Returns all meals with same date as meals with IDS `id` and `nextId` with
  * updated order.
  */
-const insert = async ({ id, nextId }: InsertMealDto, account: Account) => {
+const move = async ({ id, date, nextId }: MoveMealDto, account: Account) => {
   const meal = await Meal.findOne({ id });
   const next =
-    nextId !== undefined ? await Meal.findOne({ id: nextId }) : undefined;
+    nextId !== undefined ? await Meal.findOne({ id: nextId, date }) : undefined;
 
   if (meal === undefined) {
     throw createIdNotFoundError(id, Meal.name, ["id"]);
@@ -193,9 +194,10 @@ const insert = async ({ id, nextId }: InsertMealDto, account: Account) => {
 
   if (next !== undefined) {
     meal.nextId = next.id;
-    meal.date = next.date;
-    await meal.save();
   }
+
+  meal.date = date;
+  await meal.save();
 
   return get(meal, account);
 };
@@ -206,7 +208,7 @@ const insert = async ({ id, nextId }: InsertMealDto, account: Account) => {
 export interface MealController {
   add: Query<AddMealDto, MealDto>;
   get: Query<GetMealsDto, MealDto[]>;
-  insert: Query<InsertMealDto, MealDto[]>;
+  move: Query<MoveMealDto, MealDto[]>;
   remove: Query<RemoveMealDto, true>;
 }
 
@@ -218,5 +220,5 @@ export const mealRouter = new Router();
 // Define all meal controller endpoints.
 define(mealRouter, "meal", "add", addMealDtoValidator, add);
 define(mealRouter, "meal", "get", getMealsDtoValidator, get);
-define(mealRouter, "meal", "insert", insertMealDtoValidator, insert);
+define(mealRouter, "meal", "move", moveMealDtoValidator, move);
 define(mealRouter, "meal", "remove", removeMealDtoValidator, remove);

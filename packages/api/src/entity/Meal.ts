@@ -84,7 +84,7 @@ export class Meal extends BaseEntity {
       this.consumables != undefined
         ? this.consumables.map(consumable => consumable.toDto())
         : [],
-    nextId: this.nextId
+    nextId: this.nextId || undefined
   });
 }
 

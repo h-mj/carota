@@ -160,12 +160,12 @@ const NotificationContainer = styled.button<NotificationContainerProps>`
 
   display: block;
 
-  margin-top: calc(${({ theme }) => theme.padding} / 3);
+  margin-top: ${({ theme }) => theme.paddingSecondary};
   padding: calc(
       (${({ theme }) => theme.height} - ${({ theme }) => theme.lineHeight}) / 2 -
         1px
     )
-    calc(${({ theme }) => theme.padding} / 3);
+    ${({ theme }) => theme.paddingSecondary};
 
   border: solid 1px
     ${({ notificationType, theme }) =>

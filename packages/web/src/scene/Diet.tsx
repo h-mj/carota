@@ -122,8 +122,8 @@ const Main = styled.div`
  * Component that contains all meal components.
  */
 const Meals = styled.div`
-  & > *:not(:last-child) {
-    margin-bottom: ${({ theme }) => theme.padding};
+  & > * {
+    margin-top: ${({ theme }) => theme.padding};
   }
 `;
 

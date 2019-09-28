@@ -146,7 +146,7 @@ export interface InputStyleProps {
  * Helper text above the input.
  */
 const HelperMessage = styled.div<InputStyleProps>`
-  margin-bottom: calc(${({ theme }) => theme.padding} / 6);
+  margin-bottom: ${({ theme }) => theme.halfPaddingSecondary};
 
   color: ${({ active, invalid, theme }) =>
     invalid ? theme.red : active ? theme.orange : theme.secondaryColor};
@@ -184,11 +184,11 @@ const Field = styled.div<InputStyleProps>`
   transition: ${({ theme }) => theme.transition};
 
   & > * {
-    margin-left: calc(${({ theme }) => theme.padding} / 3);
+    margin-left: ${({ theme }) => theme.paddingSecondary};
   }
 
   & > *:last-child {
-    margin-right: calc(${({ theme }) => theme.padding} / 3);
+    margin-right: ${({ theme }) => theme.paddingSecondary};
   }
 `;
 
@@ -205,7 +205,7 @@ const Label = styled.label`
   align-items: center;
 
   & > *:not(:last-child) {
-    margin-right: calc(${({ theme }) => theme.padding} / 3);
+    margin-right: ${({ theme }) => theme.paddingSecondary};
   }
 `;
 
@@ -230,7 +230,7 @@ const Caption = styled.span<InputStyleProps>`
  * Component that displays the error message under the field component.
  */
 const ErrorMessage = styled.div`
-  margin-top: calc(${({ theme }) => theme.padding} / 6);
+  margin-top: ${({ theme }) => theme.halfPaddingSecondary};
 
   color: ${({ theme }) => theme.red};
   font-size: 0.7rem;

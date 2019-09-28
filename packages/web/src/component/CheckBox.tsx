@@ -206,8 +206,8 @@ interface CheckBoxStateProps extends InputStyleProps {
 const Box = styled.div<CheckBoxStateProps>`
   position: relative;
 
-  width: calc(${({ theme }) => theme.height} / 2);
-  height: calc(${({ theme }) => theme.height} / 2);
+  width: ${({ theme }) => theme.halfHeight};
+  height: ${({ theme }) => theme.halfHeight};
 
   flex: 0 0 auto;
 

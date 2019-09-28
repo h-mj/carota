@@ -64,7 +64,7 @@ const Container = styled.div`
  */
 const Bar = styled.nav`
   display: inline-flex;
-  padding: 0 calc(${({ theme }) => theme.padding} / 2);
+  padding: 0 ${({ theme }) => theme.halfPadding};
   box-sizing: border-box;
 `;
 
@@ -83,7 +83,7 @@ interface ItemProps {
  */
 const Item = styled(Anchor)<ItemProps>`
   height: ${({ theme }) => theme.height};
-  padding: 0 calc(${({ theme }) => theme.padding} / 2);
+  padding: 0 ${({ theme }) => theme.halfPadding};
 
   display: flex;
   align-items: center;

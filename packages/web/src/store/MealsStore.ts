@@ -67,11 +67,11 @@ export class MealsStore extends Store<MealModel, MealDto> {
 
     const order = this.ordered;
 
-    this.add(response.data);
-
     if (order.length > 0) {
       order[order.length - 1].nextId = response.data.id;
     }
+
+    this.add(response.data);
 
     return undefined;
   }

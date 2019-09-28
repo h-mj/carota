@@ -136,7 +136,7 @@ const Controls = styled.div`
   position: sticky;
   top: 0;
 
-  padding: calc(${({ theme }) => theme.padding} / 3)
+  padding: ${({ theme }) => theme.paddingSecondary}
     ${({ theme }) => theme.padding};
   box-sizing: border-box;
 
@@ -153,7 +153,7 @@ const Results = styled.div`
   box-sizing: border-box;
 
   display: grid;
-  gap: calc(${({ theme }) => theme.padding} / 3);
+  gap: ${({ theme }) => theme.paddingSecondary};
   grid-template-columns: repeat(
     auto-fill,
     minmax(calc(${({ theme }) => theme.formWidth} / 2), 1fr)

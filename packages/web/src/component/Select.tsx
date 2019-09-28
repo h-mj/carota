@@ -195,7 +195,7 @@ const Options = styled.div<InputStyleProps>`
 
   min-width: 0;
   width: 100%;
-  height: calc(${({ theme }) => theme.height} / 2);
+  height: ${({ theme }) => theme.halfHeight};
 
   border: solid 1px
     ${({ active, invalid, theme }) =>
@@ -251,6 +251,6 @@ const OptionLabel = styled.span`
   white-space: nowrap;
   text-overflow: ellipsis;
 
-  padding: 0 calc(${({ theme }) => theme.padding} / 6);
+  padding: 0 ${({ theme }) => theme.halfPaddingSecondary};
   box-sizing: border-box;
 `;

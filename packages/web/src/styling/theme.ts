@@ -17,8 +17,12 @@ export const {
 export interface Theme {
   borderColor: string;
   height: string;
+  halfHeight: string;
   lineHeight: string;
   padding: string;
+  halfPadding: string;
+  paddingSecondary: string;
+  halfPaddingSecondary: string;
   formWidth: string;
   borderRadius: string;
   blue: string;
@@ -39,8 +43,12 @@ export interface Theme {
 export const LIGHT: Readonly<Theme> = {
   borderColor: "rgb(222, 222, 222)",
   height: "3.5rem",
+  halfHeight: "1.75rem",
   lineHeight: "1.25rem",
   padding: "2.5rem",
+  halfPadding: "1.25rem",
+  paddingSecondary: "0.825rem",
+  halfPaddingSecondary: "0.4125rem",
   formWidth: "30rem",
   borderRadius: "0.4375rem",
   blue: "rgb(107, 156, 222)",

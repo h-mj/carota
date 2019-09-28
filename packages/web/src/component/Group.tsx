@@ -5,6 +5,6 @@ import { styled } from "../styling/theme";
  */
 export const Group = styled.div`
   & > *:not(:last-child) {
-    margin-bottom: calc(${({ theme }) => theme.padding} / 3);
+    margin-bottom: ${({ theme }) => theme.paddingSecondary};
   }
 `;

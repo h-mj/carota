@@ -167,11 +167,6 @@ const Container = styled.div`
 `;
 
 /**
- * Title component text line height.
- */
-const TITLE_LINE_HEIGHT = "1.4rem";
-
-/**
  * Food item title wrapper which contains foodstuff name and nutrient diagram
  * components.
  */
@@ -188,16 +183,16 @@ const Title = styled.div`
 const Name = styled.button`
   ${RESET};
 
-  min-height: ${TITLE_LINE_HEIGHT};
+  min-height: ${({ theme }) => theme.lineHeight};
   height: min-content;
 
   flex-grow: 1;
 
-  padding: calc(${({ theme }) => theme.padding} / 3);
+  padding: ${({ theme }) => theme.paddingSecondary};
   box-sizing: content-box;
 
   color: ${({ theme }) => theme.primaryColor};
-  line-height: ${TITLE_LINE_HEIGHT};
+  line-height: ${({ theme }) => theme.lineHeight};
   word-break: break-word;
 
   cursor: pointer;
@@ -209,13 +204,13 @@ const Name = styled.button`
 const Edit = styled.button`
   ${RESET};
 
-  height: ${TITLE_LINE_HEIGHT};
+  height: ${({ theme }) => theme.lineHeight};
   flex-shrink: 0;
 
   display: flex;
   align-items: center;
 
-  padding: calc(${({ theme }) => theme.padding} / 3);
+  padding: ${({ theme }) => theme.paddingSecondary};
   box-sizing: content-box;
 
   cursor: pointer;
@@ -225,12 +220,12 @@ const Edit = styled.button`
  * Foodstuff nutritional stats wrapper.
  */
 const Stats = styled.div`
-  padding: calc(${({ theme }) => theme.padding} / 3);
+  padding: ${({ theme }) => theme.paddingSecondary};
   padding-top: 0;
   box-sizing: border-box;
 
   & > *:not(:last-child) {
-    margin-bottom: calc(${({ theme }) => theme.padding} / 6);
+    margin-bottom: ${({ theme }) => theme.halfPaddingSecondary};
   }
 `;
 
@@ -250,7 +245,7 @@ const Nutrient = styled.div`
  * Nutrient icon wrapper that resizes the icon inside.
  */
 const Icon = styled.span`
-  height: calc(${({ theme }) => theme.padding} / 2);
+  height: ${({ theme }) => theme.lineHeight};
 
   & > * {
     height: 100%;

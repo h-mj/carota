@@ -1,6 +1,7 @@
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
+import { css } from "styled-components";
 
 import { TranslatedComponent } from "../base/TranslatedComponent";
 import { RESET } from "../styling/stylesheets";
@@ -123,14 +124,14 @@ export class Calendar extends TranslatedComponent<
 
     return (
       <Tabs>
-        <Button onClick={this.toggleExpand}>{this.expanded ? "↑" : "↓"}</Button>
-
         {Array.from({ length: TAB_DAY_COUNT }, () => {
           const date = toDateArray(dateIter);
           dateIter.setDate(dateIter.getDate() + 1);
 
           return this.renderDate(date, true);
         })}
+
+        <Button onClick={this.toggleExpand}>{this.expanded ? "↑" : "↓"}</Button>
       </Tabs>
     );
   }
@@ -170,10 +171,7 @@ export class Calendar extends TranslatedComponent<
   /**
    * Renders date button for specified date array with optional abbreviation.
    */
-  private renderDate(
-    date: readonly [number, number, number],
-    withAbbreviation = false
-  ) {
+  private renderDate(date: readonly [number, number, number], asTab = false) {
     const currentDate = toDateArray(new Date());
     const selectedDate = toDateArray(this.props.value);
 
@@ -184,12 +182,18 @@ export class Calendar extends TranslatedComponent<
         value={date.toString()}
       >
         <Day
+          asTab={asTab}
           current={equals(date, currentDate)}
           isSunday={new Date(...date).getDay() === 0}
           selected={equals(date, selectedDate)}
         >
-          {date[2]}
-          {withAbbreviation && ` ${this.translation.abbreviations[date[1]]}`}
+          <div>{date[2]}</div>
+
+          {asTab && (
+            <Abbreviation>
+              {this.translation.abbreviations[date[1]]}
+            </Abbreviation>
+          )}
         </Day>
       </Button>
     );
@@ -264,14 +268,15 @@ const Bar = styled.div`
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.backgroundColor};
   border-bottom: solid 1px ${({ theme }) => theme.borderColor};
-  overflow: auto;
 `;
 
 /**
  * Component that wraps date components of dates around currently selected date.
  */
 const Tabs = styled(Bar)`
-  display: flex;
+  display: grid;
+  grid-template-rows: ${({ theme }) => theme.height};
+  grid-template-columns: repeat(8, 1fr);
 `;
 
 /**
@@ -287,6 +292,10 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-auto-rows: ${({ theme }) => theme.height};
+
+  @media screen and (max-width: ${({ theme }) => theme.widthSmall}) {
+    padding: 0;
+  }
 `;
 
 /**
@@ -363,6 +372,11 @@ const Offset = styled.div<VoidProps>`
  */
 interface CellProps {
   /**
+   * Whether the cell should be rendered as tab.
+   */
+  asTab: boolean;
+
+  /**
    * Whether this date is current date.
    */
   current: boolean;
@@ -378,30 +392,56 @@ interface CellProps {
   isSunday: boolean;
 }
 
-const Day = styled.div<CellProps>`
-  height: ${({ theme }) => theme.halfHeight};
+/**
+ * Calendar day tab style.
+ */
+const tabStyle = css<CellProps>`
+  width: 100%;
+  height: ${({ theme }) => theme.height};
 
-  display: flex;
-  align-items: center;
+  border-bottom: solid 2px
+    ${({ current, selected, theme }) =>
+      selected ? theme.orange : current ? theme.borderColor : "transparent"};
+  border-top: solid 2px transparent;
+  box-sizing: border-box;
+`;
 
-  padding: 0 ${({ theme }) => theme.paddingSecondary};
-
-  border: ${({ current, selected, theme }) =>
-    current || selected
-      ? `solid 1px ${selected ? theme.orange : theme.borderColor}`
-      : "none"};
+/**
+ * Calendar day cell style.
+ */
+const cellStyle = css<CellProps>`
+  padding: ${({ theme }) => theme.paddingSecondary};
+  border: solid 1px
+    ${({ current, selected, theme }) =>
+      selected ? theme.orange : current ? theme.borderColor : "transparent"};
+  border-radius: ${({ theme }) => theme.borderRadius};
   box-shadow: ${({ selected, theme }) =>
     selected ? `inset 0 0 0 1px ${theme.orange}` : "none"};
-  border-radius: ${({ theme }) => theme.borderRadius};
+`;
 
-  color: ${({ current, isSunday, selected, theme }) =>
+/**
+ * Date day component.
+ */
+const Day = styled.div<CellProps>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  color: ${({ asTab, current, isSunday, selected, theme }) =>
     current || selected
       ? theme.primaryColor
-      : isSunday
+      : !asTab && isSunday
       ? theme.orange
       : theme.secondaryColor};
   font-feature-settings: "tnum" 1;
-  white-space: nowrap;
 
-  transition: ${({ theme }) => theme.transition};
+  ${({ asTab }) => (asTab ? tabStyle : cellStyle)};
+`;
+
+/**
+ * Month abbreviation container.
+ */
+const Abbreviation = styled.div`
+  font-size: 0.8rem;
 `;

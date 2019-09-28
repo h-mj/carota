@@ -46,24 +46,22 @@ export class Diet extends SceneComponent<"Diet"> {
           <Calendar value={this.date} onChange={this.setDate} />
         </Controls>
 
-        <Main>
-          <Plus fixed={true} onClick={this.handleAddClick}>
-            +
-          </Plus>
+        <DragDropContext onDragEnd={this.handleDragEnd}>
+          <Droppable droppableId="meals" type="meal">
+            {provided => (
+              <Meals ref={provided.innerRef} {...provided.droppableProps}>
+                {meals.map((meal, index) => (
+                  <Meal key={meal.id} meal={meal} index={index} />
+                ))}
+                {provided.placeholder}
+              </Meals>
+            )}
+          </Droppable>
+        </DragDropContext>
 
-          <DragDropContext onDragEnd={this.handleDragEnd}>
-            <Droppable droppableId="meals" type="meal">
-              {provided => (
-                <Meals ref={provided.innerRef} {...provided.droppableProps}>
-                  {meals.map((meal, index) => (
-                    <Meal key={meal.id} meal={meal} index={index} />
-                  ))}
-                  {provided.placeholder}
-                </Meals>
-              )}
-            </Droppable>
-          </DragDropContext>
-        </Main>
+        <Plus fixed={true} onClick={this.handleAddClick}>
+          +
+        </Plus>
       </>
     );
   }
@@ -110,20 +108,20 @@ const Controls = styled.div`
   border-bottom: solid 1px ${({ theme }) => theme.borderColor};
 `;
 
-const Main = styled.div``;
-
 /**
  * Component that contains all meal components.
  */
 const Meals = styled.div`
   max-width: ${({ theme }) => theme.widthMedium};
   width: 100%;
+  height: 100%;
 
   margin: auto;
   padding: ${({ theme }) => theme.padding};
+  padding-bottom: 0;
   box-sizing: border-box;
 
   & > * {
-    margin-top: ${({ theme }) => theme.padding};
+    margin-bottom: ${({ theme }) => theme.padding};
   }
 `;

@@ -1,6 +1,6 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 
 import { TranslatedComponent } from "../base/TranslatedComponent";
 
@@ -29,7 +29,11 @@ interface HeadTranslation {
  */
 @inject("views")
 @observer
-export class Head extends TranslatedComponent<"Head", HeadProps, HeadTranslation> {
+export class Head extends TranslatedComponent<
+  "Head",
+  HeadProps,
+  HeadTranslation
+> {
   /**
    * Sets the name of this component.
    */

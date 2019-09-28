@@ -233,18 +233,18 @@ const Main = styled.div`
  * Container that is rendered on the left of the screen.
  */
 const Left = styled(Main)`
-  max-width: ${({ theme }) => theme.formWidth};
+  max-width: ${({ theme }) => theme.widthSmall};
 `;
 
 /**
  * Container that is rendered in the center of the screen.
  */
 const Center = styled(Main)`
-  max-width: ${({ theme }) => theme.formWidth};
+  max-width: ${({ theme }) => theme.widthSmall};
   height: initial;
   border-radius: ${({ theme }) => theme.borderRadius};
 
-  @media screen and (max-width: ${({ theme }) => theme.formWidth}) {
+  @media screen and (max-width: ${({ theme }) => theme.widthSmall}) {
     height: 100%;
     border-radius: 0;
   }

@@ -26,6 +26,11 @@ interface CalendarProps {
  */
 interface CalendarTranslation {
   /**
+   * Array of translated month name abbreviations.
+   */
+  abbreviations: string[];
+
+  /**
    * Array of translated day labels.
    */
   days: string[];
@@ -55,6 +60,11 @@ const equals = (
 };
 
 /**
+ * Total number of days visible in tab form.
+ */
+const TAB_DAY_COUNT = 7;
+
+/**
  * Calendar component that is used to select a date.
  */
 @inject("views")
@@ -75,6 +85,11 @@ export class Calendar extends TranslatedComponent<
   @observable private year: number;
 
   /**
+   * Whether entire calendar should be rendered.
+   */
+  @observable private expanded = false;
+
+  /**
    * Creates a new `Calendar` component and initializes `month` and `year`
    * fields based on currently selected date.
    */
@@ -89,9 +104,41 @@ export class Calendar extends TranslatedComponent<
    * Renders the calendar component.
    */
   public render() {
-    const currentDate = toDateArray(new Date());
-    const selectedDate = toDateArray(this.props.value);
+    return (
+      <Bar>
+        <Wrapper>
+          {this.renderTabs()}
+          {this.expanded && this.renderCalendar()}
+        </Wrapper>
+      </Bar>
+    );
+  }
 
+  /**
+   * Renders `TAB_DAY_COUNT` dates around currently selected date.
+   */
+  private renderTabs() {
+    const dateIter = new Date(this.props.value);
+    dateIter.setDate(dateIter.getDate() - Math.floor(TAB_DAY_COUNT / 2));
+
+    return (
+      <Tabs>
+        <Button onClick={this.toggleExpand}>{this.expanded ? "↑" : "↓"}</Button>
+
+        {Array.from({ length: TAB_DAY_COUNT }, () => {
+          const date = toDateArray(dateIter);
+          dateIter.setDate(dateIter.getDate() + 1);
+
+          return this.renderDate(date, true);
+        })}
+      </Tabs>
+    );
+  }
+
+  /**
+   * Renders whole calendar.
+   */
+  private renderCalendar() {
     // Offset which is equal to the number of days from the start of the week
     // before the first day of current month.
     const offset = (new Date(this.year, this.month, 1).getDay() + 6) % 7;
@@ -113,23 +160,38 @@ export class Calendar extends TranslatedComponent<
 
         {offset !== 0 && <Offset size={offset} />}
 
-        {Array.from({ length: daysInMonth }, (_, i) => {
-          const date = [this.year, this.month, i + 1] as const;
-
-          return (
-            <Cell
-              key={date.toString()}
-              current={equals(date, currentDate)}
-              isSunday={new Date(...date).getDay() === 0}
-              onClick={this.handleClick}
-              selected={equals(date, selectedDate)}
-              value={date.toString()}
-            >
-              {date[2]}
-            </Cell>
-          );
-        })}
+        {Array.from({ length: daysInMonth }, (_, i) =>
+          this.renderDate([this.year, this.month, i + 1])
+        )}
       </Grid>
+    );
+  }
+
+  /**
+   * Renders date button for specified date array with optional abbreviation.
+   */
+  private renderDate(
+    date: readonly [number, number, number],
+    withAbbreviation = false
+  ) {
+    const currentDate = toDateArray(new Date());
+    const selectedDate = toDateArray(this.props.value);
+
+    return (
+      <Button
+        key={date.toString()}
+        onClick={this.handleClick}
+        value={date.toString()}
+      >
+        <Day
+          current={equals(date, currentDate)}
+          isSunday={new Date(...date).getDay() === 0}
+          selected={equals(date, selectedDate)}
+        >
+          {date[2]}
+          {withAbbreviation && ` ${this.translation.abbreviations[date[1]]}`}
+        </Day>
+      </Button>
     );
   }
 
@@ -160,6 +222,14 @@ export class Calendar extends TranslatedComponent<
   };
 
   /**
+   * Toggles whether full calendar is visible.
+   */
+  @action
+  private toggleExpand = () => {
+    this.expanded = !this.expanded;
+  };
+
+  /**
    * Calls `onChange` callback function when user clicks on any date.
    */
   @action
@@ -174,15 +244,45 @@ export class Calendar extends TranslatedComponent<
       .split(",")
       .map(value => Number.parseInt(value, 10));
 
+    this.year = year;
+    this.month = month;
+
     onChange(new Date(year, month, day));
   };
 }
 
 /**
+ * Container component that wraps both `Tabs` and `Grid` components.
+ */
+const Bar = styled.div`
+  height: ${({ theme }) => theme.height};
+`;
+
+/**
+ * Container that wraps all components.
+ */
+const Wrapper = styled.div`
+  background-color: ${({ theme }) => theme.backgroundColor};
+  border-bottom: solid 1px ${({ theme }) => theme.borderColor};
+  overflow: auto;
+`;
+
+/**
+ * Component that wraps date components of dates around currently selected date.
+ */
+const Tabs = styled(Bar)`
+  display: flex;
+`;
+
+/**
  * Calendar date grid component.
  */
 const Grid = styled.div`
-  max-width: ${({ theme }) => theme.formWidth};
+  max-width: ${({ theme }) => theme.widthMedium};
+  width: 100%;
+
+  padding: ${({ theme }) => theme.padding} 0;
+  margin: auto;
 
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -278,10 +378,14 @@ interface CellProps {
   isSunday: boolean;
 }
 
-/**
- * Component that contains a single date within a month.
- */
-const Cell = styled(Button)<CellProps>`
+const Day = styled.div<CellProps>`
+  height: ${({ theme }) => theme.halfHeight};
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 ${({ theme }) => theme.paddingSecondary};
+
   border: ${({ current, selected, theme }) =>
     current || selected
       ? `solid 1px ${selected ? theme.orange : theme.borderColor}`
@@ -297,6 +401,7 @@ const Cell = styled(Button)<CellProps>`
       ? theme.orange
       : theme.secondaryColor};
   font-feature-settings: "tnum" 1;
+  white-space: nowrap;
 
   transition: ${({ theme }) => theme.transition};
 `;

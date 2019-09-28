@@ -3,6 +3,20 @@ import { Translation } from "./";
 export const english: Translation = {
   components: {
     Calendar: {
+      abbreviations: [
+        "Jan.",
+        "Feb.",
+        "Mar.",
+        "Apr.",
+        "May",
+        "Jun.",
+        "Jul.",
+        "Aug.",
+        "Sep.",
+        "Oct.",
+        "Nov.",
+        "Dec."
+      ],
       days: ["M", "T", "W", "T", "F", "S", "S"],
       months: [
         "January",

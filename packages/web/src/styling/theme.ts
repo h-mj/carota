@@ -23,7 +23,8 @@ export interface Theme {
   halfPadding: string;
   paddingSecondary: string;
   halfPaddingSecondary: string;
-  formWidth: string;
+  widthSmall: string;
+  widthMedium: string;
   borderRadius: string;
   blue: string;
   green: string;
@@ -49,7 +50,8 @@ export const LIGHT: Readonly<Theme> = {
   halfPadding: "1.25rem",
   paddingSecondary: "0.825rem",
   halfPaddingSecondary: "0.4125rem",
-  formWidth: "30rem",
+  widthSmall: "30rem",
+  widthMedium: "60rem",
   borderRadius: "0.4375rem",
   blue: "rgb(107, 156, 222)",
   green: "rgb(67, 176, 42)",

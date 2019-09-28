@@ -41,6 +41,7 @@ export class Meal extends Component<MealProps> {
 const Container = styled.div`
   border: solid 1px ${({ theme }) => theme.borderColor};
   border-radius: ${({ theme }) => theme.borderRadius};
+  height: 20rem;
 `;
 
 const Title = styled.div`

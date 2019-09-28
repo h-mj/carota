@@ -3,6 +3,20 @@ import { Translation } from "./";
 export const russian: Translation = {
   components: {
     Calendar: {
+      abbreviations: [
+        "янв.",
+        "февр.",
+        "март",
+        "апр.",
+        "май",
+        "июнь",
+        "июль",
+        "авг.",
+        "сент.",
+        "окт.",
+        "нояб.",
+        "дек."
+      ],
       days: ["П", "В", "С", "Ч", "П", "С", "В"],
       months: [
         "Январь",

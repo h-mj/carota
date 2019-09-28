@@ -7,9 +7,9 @@ import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
-import { Button } from "../component/Button";
 import { Calendar } from "../component/Calendar";
 import { Meal } from "../component/Meal";
+import { Plus } from "../component/Plus";
 import { styled } from "../styling/theme";
 
 /**
@@ -41,27 +41,30 @@ export class Diet extends SceneComponent<"Diet"> {
     const meals = this.props.meals!.ordered;
 
     return (
-      <Container>
+      <>
+        <Controls>
+          <Calendar value={this.date} onChange={this.setDate} />
+        </Controls>
+
         <Main>
-          <Button onClick={this.handleAddClick}>Add</Button>
+          <Plus fixed={true} onClick={this.handleAddClick}>
+            +
+          </Plus>
+
           <DragDropContext onDragEnd={this.handleDragEnd}>
             <Droppable droppableId="meals" type="meal">
-              {({ droppableProps, innerRef, placeholder }) => (
-                <Meals ref={innerRef} {...droppableProps}>
+              {provided => (
+                <Meals ref={provided.innerRef} {...provided.droppableProps}>
                   {meals.map((meal, index) => (
                     <Meal key={meal.id} meal={meal} index={index} />
                   ))}
-                  {placeholder}
+                  {provided.placeholder}
                 </Meals>
               )}
             </Droppable>
           </DragDropContext>
         </Main>
-
-        <Side>
-          <Calendar value={this.date} onChange={this.setDate} />
-        </Side>
-      </Container>
+      </>
     );
   }
 
@@ -99,38 +102,28 @@ export class Diet extends SceneComponent<"Diet"> {
   };
 }
 
-/**
- * Wrapper component that contains all other components of this scene.
- */
-const Container = styled.div`
-  display: flex;
-  padding: ${({ theme }) => theme.padding};
+const Controls = styled.div`
+  position: sticky;
+  top: 0;
 
-  & > *:not(:last-child) {
-    margin-right: ${({ theme }) => theme.padding};
-  }
+  background-color: ${({ theme }) => theme.backgroundColor};
+  border-bottom: solid 1px ${({ theme }) => theme.borderColor};
 `;
 
-/**
- * Scene main content container.
- */
-const Main = styled.div`
-  width: 100%;
-`;
+const Main = styled.div``;
 
 /**
  * Component that contains all meal components.
  */
 const Meals = styled.div`
+  max-width: ${({ theme }) => theme.widthMedium};
+  width: 100%;
+
+  margin: auto;
+  padding: ${({ theme }) => theme.padding};
+  box-sizing: border-box;
+
   & > * {
     margin-top: ${({ theme }) => theme.padding};
   }
-`;
-
-/**
- * Container which is positioned on the right and contains the calendar component.
- */
-const Side = styled.div`
-  max-width: ${({ theme }) => theme.formWidth};
-  width: 100%;
 `;

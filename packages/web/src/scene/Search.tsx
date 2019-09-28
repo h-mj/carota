@@ -132,12 +132,12 @@ export class Search extends SceneComponent<"Search"> {
 /**
  * Component that wraps search controls which include the search bar.
  */
+// prettier-ignore
 const Controls = styled.div`
   position: sticky;
   top: 0;
 
-  padding: ${({ theme }) => theme.paddingSecondary}
-    ${({ theme }) => theme.padding};
+  padding: ${({ theme }) => theme.paddingSecondary} ${({ theme }) => theme.padding};
   box-sizing: border-box;
 
   border-bottom: solid 1px ${({ theme }) => theme.borderColor};
@@ -156,7 +156,7 @@ const Results = styled.div`
   gap: ${({ theme }) => theme.paddingSecondary};
   grid-template-columns: repeat(
     auto-fill,
-    minmax(calc(${({ theme }) => theme.formWidth} / 2), 1fr)
+    minmax(calc(${({ theme }) => theme.widthSmall} / 2), 1fr)
   );
   grid-template-rows: min-content;
 `;

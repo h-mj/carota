@@ -13,7 +13,7 @@ export const Controls = styled.div`
     margin-left: auto;
   }
 
-  @media screen and (max-width: ${({ theme }) => theme.formWidth}) {
+  @media screen and (max-width: ${({ theme }) => theme.widthSmall}) {
     flex-grow: 1;
   }
 `;
@@ -22,7 +22,7 @@ export const Controls = styled.div`
  * Form element that wraps `Main` and `Controls` components.
  */
 export const Form = styled.form`
-  max-width: ${({ theme }) => theme.formWidth};
+  max-width: ${({ theme }) => theme.widthSmall};
   width: 100%;
 
   display: flex;
@@ -35,7 +35,7 @@ export const Form = styled.form`
     margin-bottom: ${({ theme }) => theme.padding};
   }
 
-  @media screen and (max-width: ${({ theme }) => theme.formWidth}) {
+  @media screen and (max-width: ${({ theme }) => theme.widthSmall}) {
     flex-grow: 1;
   }
 `;

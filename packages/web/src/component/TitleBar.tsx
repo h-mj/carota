@@ -53,6 +53,11 @@ const Bar = styled.div`
   display: flex;
   justify-items: flex-end;
 
+  position: sticky;
+  z-index: 1;
+  top: 0;
+
+  background-color: ${({ theme }) => theme.backgroundColor};
   border-bottom: solid 1px ${({ theme }) => theme.borderColor};
 `;
 

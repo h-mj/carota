@@ -3,6 +3,20 @@ import { Translation } from "./";
 export const estonian: Translation = {
   components: {
     Calendar: {
+      abbreviations: [
+        "jaan",
+        "veebr",
+        "märts",
+        "apr",
+        "mai",
+        "juuni",
+        "juuli",
+        "aug",
+        "sept",
+        "okt",
+        "nov",
+        "dets"
+      ],
       days: ["E", "T", "K", "N", "R", "L", "P"],
       months: [
         "Jaanuar",

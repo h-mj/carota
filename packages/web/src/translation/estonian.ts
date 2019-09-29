@@ -3,20 +3,6 @@ import { Translation } from "./";
 export const estonian: Translation = {
   components: {
     Calendar: {
-      abbreviations: [
-        "jaan",
-        "veebr",
-        "märts",
-        "apr",
-        "mai",
-        "juuni",
-        "juuli",
-        "aug",
-        "sept",
-        "okt",
-        "nov",
-        "dets"
-      ],
       days: ["E", "T", "K", "N", "R", "L", "P"],
       months: [
         "Jaanuar",
@@ -196,6 +182,22 @@ export const estonian: Translation = {
       },
       submit: "Looge konto →",
       title: "Looge konto"
+    },
+    Tabs: {
+      abbreviations: [
+        "jaan",
+        "veebr",
+        "märts",
+        "apr",
+        "mai",
+        "juuni",
+        "juuli",
+        "aug",
+        "sept",
+        "okt",
+        "nov",
+        "dets"
+      ]
     },
     Unknown: {
       message: "Teie otsitavat lehte ei leitud."

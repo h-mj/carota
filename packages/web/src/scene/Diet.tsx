@@ -7,7 +7,7 @@ import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
-import { Calendar } from "../component/Calendar";
+import { DateSelect } from "../component/DateSelect/DateSelect";
 import { Meal } from "../component/Meal";
 import { Plus } from "../component/Plus";
 import { styled } from "../styling/theme";
@@ -43,7 +43,7 @@ export class Diet extends SceneComponent<"Diet"> {
     return (
       <>
         <Sticky>
-          <Calendar value={this.date} onChange={this.setDate} />
+          <DateSelect date={this.date} onChange={this.setDate} />
         </Sticky>
 
         <DragDropContext onDragEnd={this.handleDragEnd}>

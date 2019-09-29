@@ -5,7 +5,7 @@ import * as React from "react";
 import { TranslatedComponent } from "../../base/TranslatedComponent";
 import { RESET } from "../../styling/stylesheets";
 import { styled } from "../../styling/theme";
-import { equals, toDateArray } from "./DateSelect";
+import { DateArray, equals, toDateArray } from "./DateSelect";
 
 /**
  * Calendar component props.
@@ -130,7 +130,7 @@ export class Calendar extends TranslatedComponent<
   /**
    * Renders date button for specified date array with optional abbreviation.
    */
-  private renderDate(date: readonly [number, number, number]) {
+  private renderDate(date: DateArray) {
     const currentDate = toDateArray(new Date());
     const selectedDate = toDateArray(this.props.date);
 

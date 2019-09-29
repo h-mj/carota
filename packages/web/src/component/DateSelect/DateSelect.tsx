@@ -6,7 +6,7 @@ import { Component } from "../../base/Component";
 import { RESET } from "../../styling/stylesheets";
 import { styled } from "../../styling/theme";
 import { Calendar } from "./Calendar";
-import { TAB_COUNT, Tabs } from "./Tabs";
+import { TAB_RADIUS, Tabs } from "./Tabs";
 
 /**
  * Calendar component props.
@@ -24,18 +24,20 @@ interface CalendarProps {
 }
 
 /**
+ * Date array type.
+ */
+export type DateArray = readonly [number, number, number];
+
+/**
  * Converts a specified date to an array of form `[year, month, date]`.
  */
-export const toDateArray = (date: Date) =>
+export const toDateArray = (date: Date): DateArray =>
   [date.getFullYear(), date.getMonth(), date.getDate()] as const;
 
 /**
  * Returns whether specified array date equals another specified array date.
  */
-export const equals = (
-  date1: readonly [number, number, number],
-  date2: readonly [number, number, number]
-) => {
+export const equals = (date1: DateArray, date2: DateArray) => {
   return (
     date1[0] === date2[0] && date1[1] === date2[1] && date1[2] === date2[2]
   );
@@ -141,6 +143,7 @@ const Container = styled.div<ExpandedProps>`
  * Container component that wraps both `Tabs` and `Expand` components.
  */
 const Bar = styled.div`
+  min-width: 0;
   width: 100%;
   height: ${({ theme }) => theme.height};
   display: flex;
@@ -152,13 +155,16 @@ const Bar = styled.div`
 const Expand = styled.button<ExpandedProps>`
   ${RESET};
 
+  z-index: 1;
+
   max-width: ${({ theme }) => theme.height};
-  width: calc(100% / ${TAB_COUNT + 1});
+  width: calc(100% / ${2 * TAB_RADIUS + 2});
   height: 100%;
 
   flex-shrink: 0;
 
   border-bottom: solid 1px ${({ theme }) => theme.borderColor};
+  background-color: ${({ theme }) => theme.backgroundColor};
   text-align: center;
 
   cursor: pointer;

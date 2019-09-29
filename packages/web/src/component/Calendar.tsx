@@ -91,6 +91,16 @@ export class Calendar extends TranslatedComponent<
   @observable private expanded = false;
 
   /**
+   * Whether calendar should be rendered.
+   */
+  @observable private shouldRenderCalendar = false;
+
+  /**
+   * Timeout ID that sets whether calendar should be rendered to `false`.
+   */
+  private shouldRenderCalendarResetTimeoutId = 0;
+
+  /**
    * Creates a new `Calendar` component and initializes `month` and `year`
    * fields based on currently selected date.
    */
@@ -107,9 +117,9 @@ export class Calendar extends TranslatedComponent<
   public render() {
     return (
       <Bar>
-        <Wrapper>
+        <Wrapper expanded={this.expanded}>
           {this.renderTabs()}
-          {this.expanded && this.renderCalendar()}
+          {this.shouldRenderCalendar && this.renderCalendar()}
         </Wrapper>
       </Bar>
     );
@@ -131,7 +141,9 @@ export class Calendar extends TranslatedComponent<
           return this.renderDate(date, true);
         })}
 
-        <Button onClick={this.toggleExpand}>{this.expanded ? "↑" : "↓"}</Button>
+        <Expand expanded={this.expanded} onClick={this.toggleExpand}>
+          <span>↓</span>
+        </Expand>
       </Tabs>
     );
   }
@@ -231,6 +243,16 @@ export class Calendar extends TranslatedComponent<
   @action
   private toggleExpand = () => {
     this.expanded = !this.expanded;
+    window.clearTimeout(this.shouldRenderCalendarResetTimeoutId);
+
+    if (this.expanded) {
+      this.shouldRenderCalendar = true;
+    } else {
+      this.shouldRenderCalendarResetTimeoutId = setTimeout(
+        () => (this.shouldRenderCalendar = false),
+        1000
+      );
+    }
   };
 
   /**
@@ -263,11 +285,27 @@ const Bar = styled.div`
 `;
 
 /**
+ * Calendar expanded props.
+ */
+interface ExpandedProps {
+  /**
+   * Whether calendar is expanded.
+   */
+  expanded: boolean;
+}
+
+/**
  * Container that wraps all components.
  */
-const Wrapper = styled.div`
+const Wrapper = styled.div<ExpandedProps>`
+  max-height: ${({ expanded, theme }) => (expanded ? "100vh" : theme.height)};
+
+  overflow: hidden;
+
   background-color: ${({ theme }) => theme.backgroundColor};
-  border-bottom: solid 1px ${({ theme }) => theme.borderColor};
+  box-shadow: inset 0 -1px 0 0 ${({ theme }) => theme.borderColor};
+
+  transition: ${({ theme }) => theme.transitionSlow};
 `;
 
 /**
@@ -283,7 +321,7 @@ const Tabs = styled(Bar)`
  * Calendar date grid component.
  */
 const Grid = styled.div`
-  max-width: ${({ theme }) => theme.widthMedium};
+  max-width: ${({ theme }) => theme.widthSmall};
   width: 100%;
 
   padding: ${({ theme }) => theme.padding} 0;
@@ -312,6 +350,18 @@ const Button = styled.button`
   justify-content: center;
 
   cursor: pointer;
+`;
+
+/**
+ * Expand or minimize button component.
+ */
+const Expand = styled(Button)<ExpandedProps>`
+  border-bottom: solid 1px ${({ theme }) => theme.borderColor};
+
+  & > * {
+    transform: rotateX(${({ expanded }) => (expanded ? "180deg" : "0deg")});
+    transition: ${({ theme }) => theme.transitionSlow};
+  }
 `;
 
 /**
@@ -353,7 +403,7 @@ const Header = styled.div<HeaderProps>`
 /**
  * Offset component props.
  */
-interface VoidProps {
+interface OffsetProps {
   /**
    * Offset size in columns.
    */
@@ -363,7 +413,7 @@ interface VoidProps {
 /**
  * Offset that takes up specified number (`size` prop value) of cells.
  */
-const Offset = styled.div<VoidProps>`
+const Offset = styled.div<OffsetProps>`
   grid-column-start: span ${({ size }) => size};
 `;
 
@@ -399,10 +449,14 @@ const tabStyle = css<CellProps>`
   width: 100%;
   height: ${({ theme }) => theme.height};
 
-  border-bottom: solid 2px
-    ${({ current, selected, theme }) =>
-      selected ? theme.orange : current ? theme.borderColor : "transparent"};
-  border-top: solid 2px transparent;
+  border-top: ${({ current, selected }) =>
+    selected || current ? `solid 3px transparent` : `solid 1px transparent`};
+  border-bottom: ${({ current, selected, theme }) =>
+    selected
+      ? `solid 3px ${theme.orange}`
+      : current
+      ? `solid 3px ${theme.borderColor}`
+      : `solid 1px ${theme.borderColor}`};
   box-sizing: border-box;
 `;
 
@@ -435,6 +489,8 @@ const Day = styled.div<CellProps>`
       ? theme.orange
       : theme.secondaryColor};
   font-feature-settings: "tnum" 1;
+
+  transition: ${({ theme }) => theme.transition};
 
   ${({ asTab }) => (asTab ? tabStyle : cellStyle)};
 `;

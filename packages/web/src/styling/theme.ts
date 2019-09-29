@@ -36,6 +36,7 @@ export interface Theme {
   translucentBackgroundColor: string;
   disabledBackgroundColor: string;
   transition: string;
+  transitionSlow: string;
 }
 
 /**
@@ -62,5 +63,6 @@ export const LIGHT: Readonly<Theme> = {
   backgroundColor: "rgb(255, 255, 255)",
   translucentBackgroundColor: "rgba(0, 0, 0, 0.25)",
   disabledBackgroundColor: "rgb(245, 245, 245)",
-  transition: "0.1s cubic-bezier(0.4, 0.0, 0.2, 1)"
+  transition: "0.2s cubic-bezier(0.4, 0.0, 0.2, 1)",
+  transitionSlow: "0.4s cubic-bezier(0.4, 0.0, 0.2, 1)"
 };

@@ -42,9 +42,9 @@ export class Diet extends SceneComponent<"Diet"> {
 
     return (
       <>
-        <Controls>
+        <Sticky>
           <Calendar value={this.date} onChange={this.setDate} />
-        </Controls>
+        </Sticky>
 
         <DragDropContext onDragEnd={this.handleDragEnd}>
           <Droppable droppableId="meals" type="meal">
@@ -100,12 +100,14 @@ export class Diet extends SceneComponent<"Diet"> {
   };
 }
 
-const Controls = styled.div`
+/**
+ * Sticky wrapper component that wraps the `Calendar` component.
+ */
+const Sticky = styled.div`
   position: sticky;
   top: 0;
 
   background-color: ${({ theme }) => theme.backgroundColor};
-  border-bottom: solid 1px ${({ theme }) => theme.borderColor};
 `;
 
 /**

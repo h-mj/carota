@@ -1,7 +1,7 @@
 /**
- * Type that describes occurred error.
+ * Type that describes occurred error that will be transferred to the client.
  */
-export interface Error {
+export interface ErrorDto {
   /**
    * HTTP status code.
    */
@@ -111,7 +111,7 @@ export abstract class HttpError {
   /**
    * Converts this error into a response object.
    */
-  public toError(): Error {
+  public toError(): ErrorDto {
     return {
       code: this.code,
       reason: this.reason,

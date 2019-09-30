@@ -1,64 +1,85 @@
 import { Body, FoodstuffDto } from "api";
-import { action } from "mobx";
+import { computed, observable } from "mobx";
 
-import { FoodstuffModel } from "../model/FoodstuffModel";
-import { post } from "../utility/client";
-import { Store } from "./Store";
+import { Foodstuff } from "../model/Foodstuff";
+import { Rpc } from "../utility/rpc";
 
 /**
- * Store that stores and manages foodstuff models.
+ * Store which manages `Foodstuff` models.
  */
-export class FoodstuffsStore extends Store<FoodstuffModel, FoodstuffDto> {
+export class FoodstuffsStore {
   /**
-   * Creates or updates existing foodstuff
-   *
-   * @param body Foodstuff save request data transfer object.
+   * Stored foodstuff models.
+   */
+  @observable public models: Map<string, Foodstuff> = new Map();
+
+  /**
+   * Returns an array of stored foodstuff models.
+   */
+  @computed
+  public get foodstuffs() {
+    return Array.from(this.models.values());
+  }
+
+  /**
+   * Creates and stores invitation model of specified data transfer object.
+   */
+  private insert = (dto: FoodstuffDto) => {
+    const model = new Foodstuff(dto, this);
+    this.models.set(model.id, model);
+  };
+
+  /**
+   * Clears all stored data.
+   */
+  public clear() {
+    this.models.clear();
+  }
+
+  /**
+   * Removes foodstuff entity with specified ID.
+   */
+  public async remove(id: string) {
+    const result = await Rpc.call("foodstuff", "remove", { id });
+
+    if (!result.ok) {
+      return result.value;
+    }
+
+    this.models.delete(id);
+
+    return undefined;
+  }
+
+  /**
+   * Saves specified foodstuff entity.
    */
   public async save(body: Body<"foodstuff", "save">) {
-    const response = await post("foodstuff", "save", body);
+    const result = await Rpc.call("foodstuff", "save", body);
 
-    if ("error" in response) {
-      return response.error;
+    if (!result.ok) {
+      return result.value;
     }
 
-    this.add(response.data);
+    this.insert(result.value);
 
     return undefined;
   }
 
   /**
-   * Makes a search foodstuff request with specified query.
-   *
-   * @param query Foodstuff search query.
+   * Replaces currently stored foodstuffs with retrieved foodstuffs that match
+   * specified search query.
    */
   public async search(query: string) {
-    this.clear();
+    this.models.clear();
 
-    const response = await post("foodstuff", "search", { query });
+    const result = await Rpc.call("foodstuff", "search", { query });
 
-    if ("error" in response) {
-      return response.error;
+    if (!result.ok) {
+      return result.value;
     }
 
-    response.data.map(this.add);
-
-    return undefined;
-  }
-
-  /**
-   * Makes a foodstuff deletion request.
-   *
-   * @param id ID of a foodstuff which to deleted.
-   */
-  @action
-  public async delete(id: string) {
-    const response = await post("foodstuff", "remove", { id });
-
-    if ("error" in response) {
-      return response.error;
-    }
-
-    this.remove(id);
+    result.value.map(this.insert);
 
     return undefined;
   }

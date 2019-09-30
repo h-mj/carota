@@ -1,7 +1,7 @@
 import { Middleware } from "koa";
 
 import { Controllers, Data, Endpoints } from "../api";
-import { Error, HttpError } from "../error/HttpError";
+import { ErrorDto, HttpError } from "../error/HttpError";
 import { InternalServerErrorError } from "../error/InternalServerError";
 
 /**
@@ -25,6 +25,11 @@ export interface DataResponse<
    * Responded data.
    */
   data: Data<TController, TEndpoint>;
+
+  /**
+   * Occurred error data transfer object.
+   */
+  error: undefined;
 }
 
 /**
@@ -32,9 +37,14 @@ export interface DataResponse<
  */
 export interface ErrorResponse {
   /**
-   * Occurred error description.
+   * Responded data.
    */
-  error: Error;
+  data: undefined;
+
+  /**
+   * Occurred error data transfer object.
+   */
+  error: ErrorDto;
 }
 
 /**

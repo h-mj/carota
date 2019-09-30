@@ -82,7 +82,7 @@ export const english: Translation = {
       },
       submit: "Save"
     },
-    Foodstuff: {
+    FoodstuffInfo: {
       per: "Per 100{unit}:"
     },
     Head: {

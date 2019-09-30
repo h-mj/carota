@@ -1,6 +1,3 @@
-import { FoodstuffModel } from "../model/FoodstuffModel";
-import { InvitationModel } from "../model/InvitationModel";
-import { MealModel } from "../model/MealModel";
 import { AccountsStore } from "./AccountsStore";
 import { FoodstuffsStore } from "./FoodstuffsStore";
 import { InvitationsStore } from "./InvitationsStore";
@@ -22,9 +19,9 @@ export class RootStore {
    */
   public constructor() {
     this.accounts = new AccountsStore(this);
-    this.foodstuffs = new FoodstuffsStore(FoodstuffModel);
-    this.invitations = new InvitationsStore(InvitationModel);
-    this.meals = new MealsStore(MealModel);
+    this.foodstuffs = new FoodstuffsStore();
+    this.invitations = new InvitationsStore();
+    this.meals = new MealsStore();
     this.views = new ViewsStore(this);
   }
 
@@ -34,7 +31,6 @@ export class RootStore {
   public clear() {
     this.accounts.clear();
     this.foodstuffs.clear();
-    this.invitations.clear();
     this.meals.clear();
   }
 }

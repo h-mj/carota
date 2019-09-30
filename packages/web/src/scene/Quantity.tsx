@@ -12,7 +12,7 @@ import { Button } from "../component/Button";
 import { Controls, Form } from "../component/collection/form";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
-import { FoodstuffModel } from "../model/FoodstuffModel";
+import { Foodstuff } from "../model/Foodstuff";
 import { any, ErrorsFor } from "../utility/form";
 
 /**
@@ -22,12 +22,12 @@ interface QuantityProps {
   /**
    * Foodstuff which quantity is being selected.
    */
-  foodstuff: FoodstuffModel;
+  foodstuff: Foodstuff;
 
   /**
    * Foodstuff selection callback.
    */
-  select: (foodstuff: FoodstuffModel, quantity: number) => void;
+  select: (foodstuff: Foodstuff, quantity: number) => void;
 }
 
 /**

@@ -1,6 +1,6 @@
 import { styled } from "../styling/theme";
 
-export const Consumable = styled.div`
+export const ConsumableInfo = styled.div`
   width: 100%;
   height: ${({ theme }) => theme.height};
 

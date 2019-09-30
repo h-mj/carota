@@ -1,7 +1,7 @@
 import { Body } from "api";
 import { action, autorun, computed, observable } from "mobx";
 
-import { post } from "../utility/client";
+import { Rpc } from "../utility/rpc";
 import { RootStore } from "./RootStore";
 
 /**
@@ -68,13 +68,13 @@ export class AccountsStore {
    */
   @action
   public async login(body: Body<"authentication", "generateToken">) {
-    const response = await post("authentication", "generateToken", body);
+    const response = await Rpc.call("authentication", "generateToken", body);
 
-    if ("error" in response) {
-      return response.error;
+    if (!response.ok) {
+      return response.value;
     }
 
-    this.token = response.data.token;
+    this.token = response.value.token;
 
     return undefined;
   }
@@ -88,13 +88,13 @@ export class AccountsStore {
    */
   @action
   public async register(body: Body<"account", "create">) {
-    const response = await post("account", "create", body);
+    const response = await Rpc.call("account", "create", body);
 
-    if ("error" in response) {
-      return response.error;
+    if (!response.ok) {
+      return response.value;
     }
 
-    this.token = response.data.token;
+    this.token = response.value.token;
 
     return undefined;
   }

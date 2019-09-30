@@ -4,16 +4,16 @@ import * as React from "react";
 import { Draggable } from "react-beautiful-dnd";
 
 import { Component } from "../base/Component";
-import { FoodstuffModel } from "../model/FoodstuffModel";
-import { MealModel } from "../model/MealModel";
+import { Foodstuff } from "../model/Foodstuff";
+import { Meal } from "../model/Meal";
 import { styled } from "../styling/theme";
-import { Consumable } from "./Consumable";
+import { ConsumableInfo } from "./ConsumableInfo";
 import { Plus } from "./Plus";
 
 /**
  * Meal component props.
  */
-interface MealProps {
+interface MealInfoProps {
   /**
    * Meal index.
    */
@@ -22,7 +22,7 @@ interface MealProps {
   /**
    * Corresponding meal model instance.
    */
-  meal: MealModel;
+  meal: Meal;
 }
 
 /**
@@ -30,20 +30,21 @@ interface MealProps {
  */
 @inject("meals", "views")
 @observer
-export class Meal extends Component<MealProps> {
+export class MealInfo extends Component<MealInfoProps> {
   public render() {
     const { meal } = this.props;
+    const { consumables } = meal;
 
     return (
       <Draggable draggableId={meal.id} index={this.props.index}>
         {({ draggableProps, innerRef, dragHandleProps }) => (
           <Container ref={innerRef} {...draggableProps}>
             <Title {...dragHandleProps}>{meal.name}</Title>
-            {meal.consumables.map(consumable => (
-              <Consumable key={consumable.id}>
+            {consumables.map(consumable => (
+              <ConsumableInfo key={consumable.id}>
                 {consumable.quantity}
                 {consumable.foodstuff.unit} {consumable.foodstuff.name}
-              </Consumable>
+              </ConsumableInfo>
             ))}
 
             <PlusContainer>
@@ -64,8 +65,8 @@ export class Meal extends Component<MealProps> {
    * quantity.
    */
   @action
-  private select = (foodstuff: FoodstuffModel, quantity: number) => {
-    this.props.meals!.addConsumable(this.props.meal, foodstuff, quantity);
+  private select = (foodstuff: Foodstuff, quantity: number) => {
+    this.props.meal.consume(foodstuff, quantity);
     this.props.views!.refresh();
   };
 }

@@ -2,7 +2,7 @@ import { computed } from "mobx";
 
 import { Calendar } from "../component/DateSelect/Calendar";
 import { Tabs } from "../component/DateSelect/Tabs";
-import { Foodstuff } from "../component/Foodstuff";
+import { FoodstuffInfo } from "../component/FoodstuffInfo";
 import { Head } from "../component/Head";
 import { Component } from "./Component";
 import { SceneComponentMap } from "./SceneComponent";
@@ -12,7 +12,7 @@ import { SceneComponentMap } from "./SceneComponent";
  */
 interface TranslatedComponentMap extends SceneComponentMap {
   Calendar: Calendar;
-  Foodstuff: Foodstuff;
+  FoodstuffInfo: FoodstuffInfo;
   Head: Head;
   Tabs: Tabs;
 }

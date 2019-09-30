@@ -1,146 +1,163 @@
-import { MealDto } from "api/src/entity/Meal";
-import { action, computed } from "mobx";
+import { ConsumableDto, MealDto } from "api";
+import { observable } from "mobx";
 
-import { FoodstuffModel } from "../model/FoodstuffModel";
-import { MealModel } from "../model/MealModel";
-import { post } from "../utility/client";
-import { Store } from "./Store";
+import { Foodstuff } from "../model/Foodstuff";
+import { Meal } from "../model/Meal";
+import { Rpc } from "../utility/rpc";
 
 /**
- * Store that stores and manages meal models.
+ * Store which manages `Meal` models.
  */
-export class MealsStore extends Store<MealModel, MealDto> {
+export class MealsStore {
   /**
-   * Array of ordered meals.
+   * Stored meal models.
    */
-  @computed
-  public get ordered() {
+  @observable public models: Map<string, Meal> = new Map();
+
+  /**
+   * Returns an array of currently stored meal models in correct order.
+   */
+  public get meals() {
     const links: Map<string | undefined, string> = new Map();
 
-    for (const meal of this.getAll()) {
+    for (const meal of this.models.values()) {
       links.set(meal.nextId, meal.id);
     }
 
-    const order: MealModel[] = [];
-    let previous: string | undefined = undefined;
+    const meals: Meal[] = [];
+    let iterator: string | undefined = undefined;
 
-    while (links.has(previous)) {
-      previous = links.get(previous);
-      order.push(this.get(previous!)!);
+    while (links.has(iterator)) {
+      iterator = links.get(iterator);
+      meals.push(this.models.get(iterator!)!);
     }
 
-    return order.reverse();
+    return meals.reverse();
   }
 
   /**
-   * Loads and replaces current data with meals with specified date.
+   * Creates and stores meal model of specified `data transfer object`.
    */
-  @action
-  public async load(date: Date) {
-    this.clear();
+  private insert = (dto: MealDto) => {
+    const model = new Meal(dto, this);
+    this.models.set(model.id, model);
+  };
 
-    const response = await post("meal", "get", { date: date.toISOString() });
-
-    if ("error" in response) {
-      return response.error;
-    }
-
-    response.data.map(this.add);
-
-    return undefined;
+  /**
+   * Returns meal model with specified ID.
+   */
+  public id(id: string) {
+    return this.models.get(id)!;
   }
 
   /**
-   * Creates a meal with specified name and date.
-   *
-   * @param name Meal name.
-   * @param date Meal date.
+   * Clears all stored data.
    */
-  @action
-  public async create(name: string, date: Date) {
-    const response = await post("meal", "add", {
+  public clear() {
+    this.models.clear();
+  }
+
+  /**
+   * Adds a new meal with specified `name` and `date`.
+   */
+  public async add(name: string, date: Date) {
+    const result = await Rpc.call("meal", "add", {
       name,
       date: date.toISOString()
     });
 
-    if ("error" in response) {
-      return response.error;
+    if (!result.ok) {
+      return result.value;
     }
 
-    const order = this.ordered;
-
-    if (order.length > 0) {
-      order[order.length - 1].nextId = response.data.id;
-    }
-
-    this.add(response.data);
+    this.insert(result.value);
 
     return undefined;
   }
 
   /**
-   * Adds a consumable to specified meal.
+   * Sets `quantity` of consumed `foodstuff` during specified `meal`.
    */
-  @action
-  public async addConsumable(
-    meal: MealModel,
-    foodstuff: FoodstuffModel,
-    quantity: number
-  ) {
-    const response = await post("meal", "addConsumable", {
+  public async consume(meal: Meal, foodstuff: Foodstuff, quantity: number) {
+    const result = await Rpc.call("meal", "consume", {
       mealId: meal.id,
       foodstuffId: foodstuff.id,
       quantity
     });
 
-    if ("error" in response) {
-      return response.error;
+    if (!result.ok) {
+      return result.value;
     }
 
-    meal.consumables.push(response.data);
+    meal.consumables.push(result.value);
 
-    return null;
+    return undefined;
   }
 
   /**
-   * Moves a meal with specified ID to specified index in the order.
+   * Replaces currently stored meal models with meals with specified `date`.
    */
-  @action
-  public async move(id: string, index: number) {
-    const meal = this.get(id)!;
-    const order = this.ordered;
+  public async get(date: Date) {
+    this.models.clear();
+
+    const result = await Rpc.call("meal", "get", { date: date.toISOString() });
+
+    if (!result.ok) {
+      return result.value;
+    }
+
+    result.value.map(this.insert);
+
+    return undefined;
+  }
+
+  /**
+   * Moves specified `meal` within meal linked list to specified `index`.
+   */
+  public async move(meal: Meal, index: number) {
+    const meals = this.meals;
 
     // Temporarily remove current meal from the array to find its subsequent
     // meal.
-    order.splice(order.indexOf(meal), 1);
+    meals.splice(meals.indexOf(meal), 1);
 
-    const next: MealModel | undefined = order[index];
+    const next: Meal | undefined = meals[index];
     const nextId = next === undefined ? undefined : next.id;
 
     // Add meal back to its new position.
-    order.splice(index, 0, meal);
+    meals.splice(index, 0, meal);
 
     // Update meal order.
-    for (let i = 0; i < order.length; ++i) {
-      order[i].nextId =
-        order[i + 1] === undefined ? undefined : order[i + 1].id;
+    for (let i = 0; i < meals.length; ++i) {
+      meals[i].nextId =
+        meals[i + 1] === undefined ? undefined : meals[i + 1].id;
     }
 
     // Make the move meal request so that order is updated on the server too.
-    const response = await post("meal", "move", {
-      id,
+    const result = await Rpc.call("meal", "move", {
+      id: meal.id,
       date: meal.date,
       nextId
     });
 
-    if ("error" in response) {
-      return response.error;
+    if (!result.ok) {
+      return result.value;
     }
 
-    // Even though server returns updated meals, current meal order should be
-    // correct and there would not be any changes even if meals were to be
-    // updated, so the result is ignored.
-
     return undefined;
+  }
+
+  /**
+   * Removes specified `meal`.
+   */
+  public async remove(meal: Meal) {
+    throw new Error(meal.id);
+  }
+
+  /**
+   * Unconsumed specified `consumable`.
+   */
+  public async unconsume(consumable: ConsumableDto) {
+    throw new Error(consumable.id);
   }
 }

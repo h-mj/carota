@@ -3,7 +3,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 
 import { TranslatedComponent } from "../base/TranslatedComponent";
-import { FoodstuffModel } from "../model/FoodstuffModel";
+import { Foodstuff } from "../model/Foodstuff";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
 import { Carbohydrate, Energy, Fat, Protein } from "./collection/icons";
@@ -33,24 +33,24 @@ const FORMAT_OPTIONS = {
 };
 
 /**
- * Foodstuff component props.
+ * Foodstuff info component props.
  */
-interface FoodstuffProps {
+interface FoodstuffInfoProps {
   /**
    * Corresponding foodstuff model instance.
    */
-  foodstuff: FoodstuffModel;
+  foodstuff: Foodstuff;
 
   /**
    * Foodstuff selection callback.
    */
-  select: (foodstuff: FoodstuffModel, quantity: number) => void;
+  select: (foodstuff: Foodstuff, quantity: number) => void;
 }
 
 /**
- * Search result translation.
+ * Foodstuff info component translations.
  */
-interface FoodstuffTranslation {
+interface FoodstuffInfoTranslation {
   /**
    * Quantities per 100 units text.
    */
@@ -62,16 +62,16 @@ interface FoodstuffTranslation {
  */
 @inject("views")
 @observer
-export class Foodstuff extends TranslatedComponent<
-  "Foodstuff",
-  FoodstuffProps,
-  FoodstuffTranslation
+export class FoodstuffInfo extends TranslatedComponent<
+  "FoodstuffInfo",
+  FoodstuffInfoProps,
+  FoodstuffInfoTranslation
 > {
   /**
    * Sets the name of this component.
    */
-  public constructor(props: FoodstuffProps) {
-    super("Foodstuff", props);
+  public constructor(props: FoodstuffInfoProps) {
+    super("FoodstuffInfo", props);
   }
 
   /**

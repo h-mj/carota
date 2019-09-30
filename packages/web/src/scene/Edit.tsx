@@ -14,7 +14,7 @@ import { Group } from "../component/Group";
 import { SceneTitle } from "../component/SceneTitle";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
-import { FoodstuffModel } from "../model/FoodstuffModel";
+import { Foodstuff } from "../model/Foodstuff";
 import { any, append, ErrorsFor } from "../utility/form";
 
 /**
@@ -72,7 +72,7 @@ interface EditProps {
   /**
    * Foodstuff model that is being edited.
    */
-  foodstuff?: FoodstuffModel;
+  foodstuff?: Foodstuff;
 }
 
 /**
@@ -179,11 +179,11 @@ const optionalNutrientToString = deviate<number | undefined>()
   .append(nutrientToString);
 
 /**
- * Function that transforms `FoodstuffModel` type object into `EditValues` type
+ * Function that transforms `Foodstuff` type object into `EditValues` type
  * object.
  */
 // prettier-ignore
-const toValues = deviate<FoodstuffModel>().shape({
+const toValues = deviate<Foodstuff>().shape({
   id: deviate<string>(),
   name: deviate<string>(),
   barcode: deviate<string | undefined>(),
@@ -458,9 +458,9 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
       return;
     }
 
-    const { foodstuff, foodstuffs, scene, views } = this.props;
+    const { foodstuff, scene, views } = this.props;
 
-    if ((await views!.load(foodstuffs!.delete(foodstuff!.id))) === undefined) {
+    if ((await views!.load(foodstuff!.remove())) === undefined) {
       views!.pop(scene);
     }
   };

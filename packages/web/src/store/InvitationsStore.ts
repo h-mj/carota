@@ -1,26 +1,21 @@
-import { InvitationDto } from "api";
-
-import { InvitationModel } from "../model/InvitationModel";
-import { post } from "../utility/client";
-import { Store } from "./Store";
+import { Invitation } from "../model/Invitation";
+import { Rpc, success } from "../utility/rpc";
 
 /**
- * Store that stores and manages invitation models.
+ * Store which manages `Invitation` models.
  */
-export class InvitationsStore extends Store<InvitationModel, InvitationDto> {
+export class InvitationsStore {
   /**
-   * Fetches invitation data of invitation with ID `id`, creates and saves
-   * corresponding invitation model and returns it.
-   *
-   * @param id Invitation ID.
+   * Creates and returns invitation model from received invitation data transfer
+   * object of invitation with specified ID.
    */
-  public fetch = async (id: string) => {
-    const response = await post("invitation", "get", { id });
+  public async get(id: string) {
+    const result = await Rpc.call("invitation", "get", { id });
 
-    if ("error" in response) {
-      return undefined;
+    if (!result.ok) {
+      return result;
     }
 
-    return this.add(response.data);
-  };
+    return success(new Invitation(result.value));
+  }
 }

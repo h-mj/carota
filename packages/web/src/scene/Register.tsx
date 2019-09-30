@@ -261,11 +261,11 @@ export class Register extends SceneComponent<
       return this.props.views!.unknown();
     }
 
-    const invitation = await this.props.views!.load(
-      this.props.invitations!.fetch(parameters.invitationId)
+    const result = await this.props.views!.load(
+      this.props.invitations!.get(parameters.invitationId)
     );
 
-    if (invitation === undefined) {
+    if (!result.ok) {
       return this.props.views!.unknown();
     }
 

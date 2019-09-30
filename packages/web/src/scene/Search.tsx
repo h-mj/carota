@@ -7,9 +7,9 @@ import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
-import { Foodstuff } from "../component/Foodstuff";
+import { FoodstuffInfo } from "../component/FoodstuffInfo";
 import { TextField } from "../component/TextField";
-import { FoodstuffModel } from "../model/FoodstuffModel";
+import { Foodstuff } from "../model/Foodstuff";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
 
@@ -20,7 +20,7 @@ interface SearchProps {
   /**
    * Foodstuff select callback function.
    */
-  select: (foodstuff: FoodstuffModel, quantity: number) => void;
+  select: (foodstuff: Foodstuff, quantity: number) => void;
 }
 
 /**
@@ -79,10 +79,10 @@ export class Search extends SceneComponent<"Search", SearchProps> {
         </Controls>
         {this.completed && (
           <Results>
-            {this.props.foodstuffs!.getAll().map(food => (
-              <Foodstuff
-                key={food.id}
-                foodstuff={food}
+            {this.props.foodstuffs!.foodstuffs.map(foodstuff => (
+              <FoodstuffInfo
+                key={foodstuff.id}
+                foodstuff={foodstuff}
                 select={this.props.select}
               />
             ))}

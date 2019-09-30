@@ -83,7 +83,7 @@ export const estonian: Translation = {
       },
       submit: "Salvesta"
     },
-    Foodstuff: {
+    FoodstuffInfo: {
       per: "100{unit} kohta:"
     },
     Head: {

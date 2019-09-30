@@ -8,7 +8,7 @@ import {
   SceneComponent
 } from "../base/SceneComponent";
 import { DateSelect } from "../component/DateSelect/DateSelect";
-import { Meal } from "../component/Meal";
+import { MealInfo } from "../component/MealInfo";
 import { Plus } from "../component/Plus";
 import { styled } from "../styling/theme";
 
@@ -38,7 +38,7 @@ export class Diet extends SceneComponent<"Diet"> {
    * calendar component on the side, which is used to change the date.
    */
   public render() {
-    const meals = this.props.meals!.ordered;
+    const { meals } = this.props.meals!;
 
     return (
       <>
@@ -51,7 +51,7 @@ export class Diet extends SceneComponent<"Diet"> {
             {provided => (
               <Meals ref={provided.innerRef} {...provided.droppableProps}>
                 {meals.map((meal, index) => (
-                  <Meal key={meal.id} meal={meal} index={index} />
+                  <MealInfo key={meal.id} meal={meal} index={index} />
                 ))}
                 {provided.placeholder}
               </Meals>
@@ -72,7 +72,7 @@ export class Diet extends SceneComponent<"Diet"> {
   @action
   private setDate = async (date: Date) => {
     this.date = date;
-    await this.props.meals!.load(date);
+    await this.props.meals!.get(date);
   };
 
   /**
@@ -89,14 +89,11 @@ export class Diet extends SceneComponent<"Diet"> {
       return;
     }
 
-    await this.props.meals!.move(draggableId, index);
+    await this.props.meals!.move(this.props.meals!.id(draggableId), index);
   };
 
   private handleAddClick = () => {
-    this.props.meals!.create(
-      this.props.meals!.ordered.length.toString(),
-      this.date
-    );
+    this.props.meals!.add(this.props.meals!.meals.length.toString(), this.date);
   };
 }
 

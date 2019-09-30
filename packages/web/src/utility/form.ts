@@ -1,4 +1,4 @@
-import { Error } from "api";
+import { ErrorDto } from "api";
 
 /**
  * Type of an object where `TValues` object properties are optional and their
@@ -71,7 +71,7 @@ const put = (reasons: ErrorTree, path: string[], reason: string) => {
  * @param tree Error reasons tree.
  * @param error Occurred API error.
  */
-export const append = <T extends ErrorTree>(tree: T, error?: Error): T => {
+export const append = <T extends ErrorTree>(tree: T, error?: ErrorDto): T => {
   if (error === undefined || error.details === undefined) {
     return tree;
   }

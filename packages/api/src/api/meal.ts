@@ -67,26 +67,44 @@ const add = async ({ name, date }: AddMealDto, account: Account) => {
 };
 
 /**
- * Validates add consumable request body.
+ * Removes an entity with specified ID from entity linked list and re-links the broken linked list.
+ */
+const unlink = async (entity: Consumable | Meal) => {
+  const previous = await entity.previous;
+  const nextId = entity.nextId;
+
+  entity.nextId = null;
+  await entity.save();
+
+  if (previous !== undefined) {
+    previous.nextId = nextId;
+    await previous.save();
+  }
+
+  await entity.reload();
+};
+
+/**
+ * Validates consume request body.
  */
 // prettier-ignore
-const addConsumableDtoValidator = deviate().object().shape({
+const consumeDtoValidator = deviate().object().shape({
   mealId: deviate().string().guid(),
   foodstuffId: deviate().string().guid(),
   quantity: deviate().number().gt(0)
 })
 
 /**
- * Add consumable request data transfer object type.
+ * Consume request data transfer object type.
  */
-type AddConsumableDto = Success<typeof addConsumableDtoValidator>;
+type ConsumeDto = Success<typeof consumeDtoValidator>;
 
 /**
  * Adds a consumable to specified meal with specified quantity of specified
  * foodstuff.
  */
-const addConsumable = async (
-  { mealId, foodstuffId, quantity }: AddConsumableDto,
+const consume = async (
+  { mealId, foodstuffId, quantity }: ConsumeDto,
   account: Account
 ) => {
   const meal = await Meal.findOne(mealId);
@@ -103,22 +121,27 @@ const addConsumable = async (
     throw createIdNotFoundError(foodstuffId, Foodstuff.name, ["foodstuffId"]);
   }
 
-  if ((await Consumable.findOne({ meal, foodstuff })) !== undefined) {
-    throw new BadRequestError(
-      "Consumable with this meal and foodstuff already exists."
-    );
-  }
+  let consumable = await Consumable.findOne({ meal, foodstuff });
 
-  const last = await Consumable.findOne({ meal, nextId: null });
-  const consumable = await Consumable.create({
-    meal,
-    foodstuff,
-    quantity
-  }).save();
+  if (consumable !== undefined) {
+    consumable.quantity = quantity;
+    await consumable.save();
+  } else {
+    // Previous consumable does not exist. In which case create a new one and
+    // link the currently last consumable in the order with created consumable.
 
-  if (last !== undefined) {
-    last.nextId = consumable.id;
-    await last.save();
+    const last = await Consumable.findOne({ meal, nextId: null });
+
+    consumable = await Consumable.create({
+      meal,
+      foodstuff,
+      quantity
+    }).save();
+
+    if (last !== undefined) {
+      last.nextId = consumable.id;
+      await last.save();
+    }
   }
 
   return consumable.toDto();
@@ -145,91 +168,6 @@ const get = async ({ date }: GetMealsDto, account: Account) => {
 };
 
 /**
- * Validates remove meal request body.
- */
-// prettier-ignore
-const removeMealDtoValidator = deviate().object().shape({
-  id: deviate().string().guid()
-})
-
-/**
- * Remove meal request data transfer object type.
- */
-type RemoveMealDto = Success<typeof removeMealDtoValidator>;
-
-/**
- * Removes an entity with specified ID from entity linked list and re-links the broken linked list.
- */
-const unlink = async (entity: Consumable | Meal) => {
-  const previous = await entity.previous;
-  const nextId = entity.nextId;
-
-  entity.nextId = null;
-  await entity.save();
-
-  if (previous !== undefined) {
-    previous.nextId = nextId;
-    await previous.save();
-  }
-
-  await entity.reload();
-};
-
-/**
- * Removes a meal with specified ID and fixes the meal linked list.
- */
-const remove = async ({ id }: RemoveMealDto, account: Account) => {
-  const meal = await Meal.findOne({ id });
-
-  if (meal === undefined) {
-    throw createIdNotFoundError(id, Meal.name, ["id"]);
-  }
-
-  if (meal.accountId !== account.id || account.rights !== "All") {
-    throw new ForbiddenError("You are not allowed to delete this meal.");
-  }
-
-  await unlink(meal);
-  await meal.remove();
-
-  return true as const;
-};
-
-/**
- * Validates remove consumable request body.
- */
-// prettier-ignore
-const removeConsumableDtoValidator = deviate().object().shape({
-  id: deviate().string().guid()
-})
-
-/**
- * Remove consumable request data transfer object type.
- */
-type RemoveConsumableDto = Success<typeof removeConsumableDtoValidator>;
-
-/**
- * Removes consumable with specified `ID`.
- */
-const removeConsumable = async (
-  { id }: RemoveConsumableDto,
-  account: Account
-) => {
-  const consumable = await Consumable.findOne(id, { relations: ["meal"] });
-
-  if (consumable === undefined) {
-    throw createIdNotFoundError(id, Consumable.name, ["id"]);
-  } else if (consumable.meal.accountId !== account.id) {
-    throw new ForbiddenError("You are not allowed to remove this consumable.");
-  }
-
-  await unlink(consumable);
-  await consumable.remove();
-
-  return true as const;
-};
-
-/**
  * Validates move meal request body.
  */
 // prettier-ignore
@@ -242,7 +180,7 @@ const moveMealDtoValidator = deviate().object().shape({
 /**
  * Move meal request data transfer object type.
  */
-export type MoveMealDto = Success<typeof moveMealDtoValidator>;
+type MoveMealDto = Success<typeof moveMealDtoValidator>;
 
 /**
  * Changes meal order by moving meal with with ID `id` to a specified `date` in
@@ -293,7 +231,71 @@ const move = async ({ id, date, nextId }: MoveMealDto, account: Account) => {
   meal.date = date;
   await meal.save();
 
-  return get(meal, account);
+  return true as const;
+};
+
+/**
+ * Validates remove meal request body.
+ */
+// prettier-ignore
+const removeMealDtoValidator = deviate().object().shape({
+  id: deviate().string().guid()
+})
+
+/**
+ * Remove meal request data transfer object type.
+ */
+type RemoveMealDto = Success<typeof removeMealDtoValidator>;
+
+/**
+ * Removes a meal with specified ID and fixes the meal linked list.
+ */
+const remove = async ({ id }: RemoveMealDto, account: Account) => {
+  const meal = await Meal.findOne({ id });
+
+  if (meal === undefined) {
+    throw createIdNotFoundError(id, Meal.name, ["id"]);
+  }
+
+  if (meal.accountId !== account.id || account.rights !== "All") {
+    throw new ForbiddenError("You are not allowed to delete this meal.");
+  }
+
+  await unlink(meal);
+  await meal.remove();
+
+  return true as const;
+};
+
+/**
+ * Validates unconsume request body.
+ */
+// prettier-ignore
+const unconsumeDtoValidator = deviate().object().shape({
+  id: deviate().string().guid()
+})
+
+/**
+ * Unconsume request data transfer object type.
+ */
+type UnconsumeDto = Success<typeof unconsumeDtoValidator>;
+
+/**
+ * Removes consumable with specified `ID`.
+ */
+const unconsume = async ({ id }: UnconsumeDto, account: Account) => {
+  const consumable = await Consumable.findOne(id, { relations: ["meal"] });
+
+  if (consumable === undefined) {
+    throw createIdNotFoundError(id, Consumable.name, ["id"]);
+  } else if (consumable.meal.accountId !== account.id) {
+    throw new ForbiddenError("You are not allowed to remove this consumable.");
+  }
+
+  await unlink(consumable);
+  await consumable.remove();
+
+  return true as const;
 };
 
 /**
@@ -301,11 +303,11 @@ const move = async ({ id, date, nextId }: MoveMealDto, account: Account) => {
  */
 export interface MealController {
   add: Query<AddMealDto, MealDto>;
-  addConsumable: Query<AddConsumableDto, ConsumableDto>;
+  consume: Query<ConsumeDto, ConsumableDto>;
   get: Query<GetMealsDto, MealDto[]>;
-  move: Query<MoveMealDto, MealDto[]>;
+  move: Query<MoveMealDto, true>;
   remove: Query<RemoveMealDto, true>;
-  removeConsumable: Query<RemoveConsumableDto, true>;
+  unconsume: Query<UnconsumeDto, true>;
 }
 
 /**
@@ -315,8 +317,8 @@ export const mealRouter = new Router();
 
 // Define all meal controller endpoints.
 define(mealRouter, "meal", "add", addMealDtoValidator, add);
-define(mealRouter, "meal", "addConsumable", addConsumableDtoValidator, addConsumable);
+define(mealRouter, "meal", "consume", consumeDtoValidator, consume);
 define(mealRouter, "meal", "get", getMealsDtoValidator, get);
 define(mealRouter, "meal", "move", moveMealDtoValidator, move);
 define(mealRouter, "meal", "remove", removeMealDtoValidator, remove);
-define(mealRouter, "meal", "removeConsumable", removeConsumableDtoValidator, removeConsumable);
+define(mealRouter, "meal", "unconsume", unconsumeDtoValidator, unconsume);

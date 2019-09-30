@@ -32,13 +32,14 @@ export class FoodstuffsStore extends Store<FoodstuffModel, FoodstuffDto> {
    * @param query Foodstuff search query.
    */
   public async search(query: string) {
+    this.clear();
+
     const response = await post("foodstuff", "search", { query });
 
     if ("error" in response) {
       return response.error;
     }
 
-    this.clear();
     response.data.map(this.add);
 
     return undefined;

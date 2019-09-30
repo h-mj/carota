@@ -37,13 +37,14 @@ export class MealsStore extends Store<MealModel, MealDto> {
    */
   @action
   public async load(date: Date) {
+    this.clear();
+
     const response = await post("meal", "get", { date: date.toISOString() });
 
     if ("error" in response) {
       return response.error;
     }
 
-    this.clear();
     response.data.map(this.add);
 
     return undefined;

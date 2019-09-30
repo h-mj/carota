@@ -108,22 +108,6 @@ export const estonian: Translation = {
       submit: "Sisenege →",
       title: "Sisenege"
     },
-    Navigation: {
-      Administration: "Administratsioon",
-      Confirmation: "Kinnitus",
-      Diet: "Dieet",
-      Edit: "Redaktsioon",
-      History: "Ajalugu",
-      Home: "Avaleht",
-      Login: "Logige sisse",
-      Logout: "Logige välja",
-      Measurements: "Mõõdud",
-      Quantity: "Quantity",
-      Register: "Looge konto",
-      Search: "Otsing",
-      Settings: "Seaded",
-      Unknown: "Vabandame, soovitud lehekülge ei leitud"
-    },
     Quantity: {
       g: "grammides",
       ml: "milliliitrites",

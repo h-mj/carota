@@ -19,7 +19,6 @@ import { Search } from "../scene/Search";
 import { Settings } from "../scene/Settings";
 import { Unknown } from "../scene/Unknown";
 import { styled } from "../styling/theme";
-import { Navigation } from "./Navigation";
 import { Overlay } from "./Overlay";
 import { TitleBar } from "./TitleBar";
 
@@ -107,11 +106,7 @@ export class SceneRenderer extends Component<SceneRendererProps> {
         ref={this.overlayRef}
       >
         <Container>
-          {first ? (
-            <Navigation />
-          ) : (
-            <TitleBar onClose={this.pop} title={scene.title} />
-          )}
+          {!first && <TitleBar onClose={this.pop} title={scene.title} />}
           {this.renderSceneComponent()}
         </Container>
       </SceneOverlay>

@@ -107,22 +107,6 @@ export const english: Translation = {
       submit: "Sign in →",
       title: "Sign in"
     },
-    Navigation: {
-      Administration: "Administration",
-      Confirmation: "Confirmation",
-      Diet: "Diet",
-      Edit: "Edit",
-      History: "History",
-      Home: "Home",
-      Login: "Sign in",
-      Logout: "Sign out",
-      Measurements: "Measurements",
-      Quantity: "Quantity",
-      Register: "Sign up",
-      Search: "Search",
-      Settings: "Settings",
-      Unknown: "We are sorry, the page you requested has not been found"
-    },
     Quantity: {
       g: "grams",
       ml: "milliliters",

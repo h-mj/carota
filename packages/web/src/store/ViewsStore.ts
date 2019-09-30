@@ -122,27 +122,6 @@ export class ViewsStore {
   }
 
   /**
-   * Returns a list of navigable scenes that will be included in
-   * navigation bar.
-   */
-  @computed
-  public get navigation() {
-    if (NO_AUTHENTICATION_SCENE_NAMES.includes(this.root.name)) {
-      return undefined;
-    }
-
-    return [
-      new Scene("Home", {}, {}),
-      new Scene("Diet", {}, {}),
-      new Scene("Measurements", {}, {}),
-      new Scene("History", {}, {}),
-      new Scene("Administration", {}, {}),
-      new Scene("Settings", {}, {}),
-      new Scene("Logout", {}, {})
-    ];
-  }
-
-  /**
    * Sets interface language.
    *
    * @param language Language name.

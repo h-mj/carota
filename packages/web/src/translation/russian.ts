@@ -107,22 +107,6 @@ export const russian: Translation = {
       submit: "Вход →",
       title: "Вход"
     },
-    Navigation: {
-      Administration: "Администрация",
-      Confirmation: "Подтверждение",
-      Diet: "Диета",
-      Edit: "Редакция",
-      History: "История",
-      Home: "Главная",
-      Login: "Вход",
-      Logout: "Выход",
-      Measurements: "Замеры",
-      Quantity: "Количество",
-      Register: "Создать аккаунт",
-      Search: "Поиск",
-      Settings: "Настройки",
-      Unknown: "К сожалению, запрошенная страница не была найдена"
-    },
     Quantity: {
       g: "граммах",
       ml: "миллилитрах",

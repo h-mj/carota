@@ -4,7 +4,6 @@ import { Calendar } from "../component/DateSelect/Calendar";
 import { Tabs } from "../component/DateSelect/Tabs";
 import { Foodstuff } from "../component/Foodstuff";
 import { Head } from "../component/Head";
-import { Navigation } from "../component/Navigation";
 import { Component } from "./Component";
 import { SceneComponentMap } from "./SceneComponent";
 
@@ -15,7 +14,6 @@ interface TranslatedComponentMap extends SceneComponentMap {
   Calendar: Calendar;
   Foodstuff: Foodstuff;
   Head: Head;
-  Navigation: Navigation;
   Tabs: Tabs;
 }
 

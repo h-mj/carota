@@ -68,7 +68,7 @@ export class SceneRenderer extends Component<SceneRendererProps> {
    * when focus escapes the overlay.
    */
   public componentDidMount() {
-    document.documentElement.focus();
+    this.focus(); // Focuses on the first focusable element if current focus is outside this component.
     document.addEventListener("focus", this.focus, true);
   }
 
@@ -89,11 +89,12 @@ export class SceneRenderer extends Component<SceneRendererProps> {
 
     return (
       <SceneOverlay
-        aria-hidden={overlaid}
+        aria-hidden={overlaid ? true : undefined}
         onClick={this.handleClick}
         overlaid={overlaid}
         position={position}
         ref={this.overlayRef}
+        tabIndex={-1}
       >
         <Container>
           {!first && <TitleBar onClose={this.pop} title={scene.title} />}
@@ -137,7 +138,7 @@ export class SceneRenderer extends Component<SceneRendererProps> {
   /**
    * Focuses on the first focuseable overlay element if currently active element is outside this overlay.
    */
-  private focus = (event: FocusEvent) => {
+  private focus = (event?: FocusEvent) => {
     const { current } = this.overlayRef;
 
     if (
@@ -152,7 +153,9 @@ export class SceneRenderer extends Component<SceneRendererProps> {
       return;
     }
 
-    event.preventDefault();
+    if (event !== undefined) {
+      event.preventDefault();
+    }
 
     const targets = current.querySelectorAll(FOCUSABLE_ELEMENT_SELECTOR);
 

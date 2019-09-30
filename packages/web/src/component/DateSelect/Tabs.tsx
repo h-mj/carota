@@ -1,4 +1,4 @@
-import { action, observable } from "mobx";
+import { action } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
@@ -6,6 +6,55 @@ import styled from "styled-components";
 import { TranslatedComponent } from "../../base/TranslatedComponent";
 import { RESET } from "../../styling/stylesheets";
 import { DateArray, equals, toDateArray } from "./DateSelect";
+
+/**
+ * Number of tabs on both sides of selected date..
+ */
+export const TAB_RADIUS = 3;
+
+/**
+ * Compares two array dates and returns 0 if they are equal, positive number if
+ * `first` is before `second`, otherwise negative number.
+ */
+const compare = (first: DateArray, second: DateArray) => {
+  for (let i = 0; i < first.length; ++i) {
+    if (first[i] === second[i]) {
+      continue;
+    }
+
+    return first[i] - second[i];
+  }
+
+  return 0;
+};
+
+/**
+ * Returns an array of ordered date arrays that are around specified `center`
+ * and which distance in days is at most `radius`.
+ */
+const around = (center: DateArray, radius: number): DateArray[] => {
+  const dateIterator = new Date(...center);
+  dateIterator.setDate(dateIterator.getDate() - radius);
+
+  return Array.from({ length: 2 * radius + 1 }, () => {
+    const date = toDateArray(dateIterator);
+    dateIterator.setDate(dateIterator.getDate() + 1);
+    return date;
+  });
+};
+
+/**
+ * Merges two date array arrays into one. Returned array is ordered and does not
+ * have duplicate date arrays.
+ */
+const merge = (first: DateArray[], second: DateArray[]) => {
+  return first
+    .concat(second)
+    .sort(compare)
+    .filter((value, index, array) =>
+      index === 0 ? true : !equals(value, array[index - 1])
+    );
+};
 
 /**
  * Tabs component props.
@@ -33,55 +82,6 @@ interface TabsTranslations {
 }
 
 /**
- * Number of tabs on both sides of selected date..
- */
-export const TAB_RADIUS = 3;
-
-/**
- * Returns an array of ordered date arrays that are around specified `center`
- * and which distance in days is at most `radius`.
- */
-const getDatesAround = (center: DateArray, radius: number): DateArray[] => {
-  const dateIterator = new Date(...center);
-  dateIterator.setDate(dateIterator.getDate() - radius);
-
-  return Array.from({ length: 2 * radius + 1 }, () => {
-    const date = toDateArray(dateIterator);
-    dateIterator.setDate(dateIterator.getDate() + 1);
-    return date;
-  });
-};
-
-/**
- * Compares two array dates and returns 0 if they are equal, positive number if
- * `first` is before `second`, otherwise negative number.
- */
-const compare = (first: DateArray, second: DateArray) => {
-  for (let i = 0; i < first.length; ++i) {
-    if (first[i] === second[i]) {
-      continue;
-    }
-
-    return first[i] - second[i];
-  }
-
-  return 0;
-};
-
-/**
- * Merges two date array arrays into one. Returned array is ordered and does not
- * have duplicate date arrays.
- */
-const merge = (first: DateArray[], second: DateArray[]) => {
-  return first
-    .concat(second)
-    .sort(compare)
-    .filter((value, index, array) =>
-      index === 0 ? true : !equals(value, array[index - 1])
-    );
-};
-
-/**
  * Component that renders `VISIBLE_TAB_COUNT` tabs around specified current
  * date.
  */
@@ -93,19 +93,14 @@ export class Tabs extends TranslatedComponent<
   TabsTranslations
 > {
   /**
-   * Array of currently rendered tab date arrays.
+   * Previously selected date.
    */
-  @observable private dates: DateArray[];
+  private previousDate: DateArray;
 
   /**
-   * Comparison result between current selected date and previous selected date.
+   * Selected tab offset.
    */
-  private direction = 0;
-
-  /**
-   * ID of a timeout that removes unnecessary date arrays from `dates` array.
-   */
-  private clearDatesTimeoutId = 0;
+  private offset: number;
 
   /**
    * Sets the name of this component.
@@ -113,47 +108,35 @@ export class Tabs extends TranslatedComponent<
   public constructor(props: TabsProps) {
     super("Tabs", props);
 
-    this.dates = getDatesAround(toDateArray(props.date), TAB_RADIUS);
-  }
-
-  /**
-   * Load tab dates around new selected date.
-   */
-  public componentDidUpdate(previousProps: TabsProps) {
-    const date = toDateArray(this.props.date);
-    const previousDate = toDateArray(previousProps.date);
-
-    this.direction = compare(date, previousDate);
-
-    if (this.direction === 0) {
-      return;
-    }
-
-    this.dates = merge(this.dates, getDatesAround(date, TAB_RADIUS));
-    window.clearTimeout(this.clearDatesTimeoutId);
-
-    // Replaces `dates` array with dates around currently selected date.
-    this.clearDatesTimeoutId = window.setTimeout(
-      () => (this.dates = getDatesAround(date, TAB_RADIUS)),
-      1000
-    );
+    this.previousDate = toDateArray(props.date);
+    this.offset = 0;
   }
 
   /**
    * Aligns and renders all tab components.
    */
   public render() {
-    const currentDate = toDateArray(new Date());
     const selectedDate = toDateArray(this.props.date);
-    const offset =
-      (this.dates.length - 1) / 2 -
-      this.dates.findIndex(date => equals(date, selectedDate));
+    const currentDate = toDateArray(new Date());
+
+    const dates = merge(
+      around(this.previousDate, TAB_RADIUS),
+      around(selectedDate, TAB_RADIUS)
+    );
+
+    const index = dates.findIndex(date => equals(date, selectedDate));
+
+    this.offset +=
+      dates.findIndex(date => equals(date, selectedDate)) -
+      dates.findIndex(date => equals(date, this.previousDate));
+
+    this.previousDate = selectedDate;
 
     return (
       <Container>
         <Aligner>
-          <Positioner offset={offset}>
-            {this.dates.map(date => (
+          <Positioner anchor={index - this.offset} offset={this.offset}>
+            {dates.map(date => (
               <Tab
                 key={date.toString()}
                 current={equals(date, currentDate)}
@@ -209,7 +192,13 @@ const Aligner = styled.div`
  */
 interface PositionerProps {
   /**
-   * Currently selected date index offset from center.
+   * Theoretical index of `anchor` date within `dates` array. Can be out of
+   * bounds of the array.
+   */
+  anchor: number;
+
+  /**
+   * Currently selected date index offset from `anchor` index.
    */
   offset: number;
 }
@@ -220,16 +209,15 @@ interface PositionerProps {
  */
 const Positioner = styled.div<PositionerProps>`
   position: relative;
-  left: ${({ offset }) => 100 * offset}%;
+  left: ${({ anchor }) => -100 * anchor}%;
+  transform: translateX(${({ offset }) => -100 * offset}%);
 
   min-width: 0;
   height: 100%;
 
   display: flex;
-  justify-content: center;
 
-  transition: ${({ offset, theme }) =>
-    offset === 0 ? "none" : theme.transition};
+  transition: transform ${({ theme }) => theme.transitionSlow};
 `;
 
 /**

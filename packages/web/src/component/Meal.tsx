@@ -1,4 +1,5 @@
-import { inject } from "mobx-react";
+import { action } from "mobx";
+import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Draggable } from "react-beautiful-dnd";
 
@@ -27,7 +28,8 @@ interface MealProps {
 /**
  * Component that displays the information of a meal model.
  */
-@inject("views")
+@inject("meals", "views")
+@observer
 export class Meal extends Component<MealProps> {
   public render() {
     const { meal } = this.props;
@@ -61,8 +63,9 @@ export class Meal extends Component<MealProps> {
    * Callback function which is called when user selects foodstuff and its
    * quantity.
    */
+  @action
   private select = (foodstuff: FoodstuffModel, quantity: number) => {
-    console.log(foodstuff, quantity);
+    this.props.meals!.addConsumable(this.props.meal, foodstuff, quantity);
     this.props.views!.refresh();
   };
 }

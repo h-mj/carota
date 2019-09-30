@@ -1,6 +1,7 @@
 import { MealDto } from "api/src/entity/Meal";
 import { action, computed } from "mobx";
 
+import { FoodstuffModel } from "../model/FoodstuffModel";
 import { MealModel } from "../model/MealModel";
 import { post } from "../utility/client";
 import { Store } from "./Store";
@@ -74,6 +75,30 @@ export class MealsStore extends Store<MealModel, MealDto> {
     this.add(response.data);
 
     return undefined;
+  }
+
+  /**
+   * Adds a consumable to specified meal.
+   */
+  @action
+  public async addConsumable(
+    meal: MealModel,
+    foodstuff: FoodstuffModel,
+    quantity: number
+  ) {
+    const response = await post("meal", "addConsumable", {
+      mealId: meal.id,
+      foodstuffId: foodstuff.id,
+      quantity
+    });
+
+    if ("error" in response) {
+      return response.error;
+    }
+
+    meal.consumables.push(response.data);
+
+    return null;
   }
 
   /**

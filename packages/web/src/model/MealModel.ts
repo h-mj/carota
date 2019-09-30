@@ -1,4 +1,5 @@
 import { ConsumableDto, MealDto } from "api";
+import { observable } from "mobx";
 
 import { Store } from "../store/Store";
 import { Model } from "./Model";
@@ -6,7 +7,7 @@ import { Model } from "./Model";
 export class MealModel extends Model<MealModel, MealDto> {
   public name: string;
   public date: string;
-  public consumables: ConsumableDto[];
+  @observable public consumables: ConsumableDto[];
   public nextId: string | undefined;
 
   public constructor(dto: MealDto, store: Store<MealModel, MealDto>) {

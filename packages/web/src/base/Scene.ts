@@ -94,7 +94,6 @@ const ROUTES = {
   "/logout": to("Logout"),
   "/measurements": to("Measurements"),
   "/register/{invitationId}": to("Register", "invitationId"),
-  "/search": to("Search"),
   "/settings": to("Settings")
 } as const;
 

@@ -14,6 +14,16 @@ import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
 
 /**
+ * Search scene component props.
+ */
+interface SearchProps {
+  /**
+   * Foodstuff select callback function.
+   */
+  select: (foodstuff: FoodstuffModel, quantity: number) => void;
+}
+
+/**
  * Query string validator.
  */
 const validate = deviate<string>()
@@ -26,7 +36,7 @@ const validate = deviate<string>()
  */
 @inject("foodstuffs", "views")
 @observer
-export class Search extends SceneComponent<"Search"> {
+export class Search extends SceneComponent<"Search", SearchProps> {
   /**
    * Search query string.
    */
@@ -46,7 +56,9 @@ export class Search extends SceneComponent<"Search"> {
   /**
    * Sets the name of this scene.
    */
-  public constructor(props: DefaultSceneComponentProps<"Search">) {
+  public constructor(
+    props: SearchProps & DefaultSceneComponentProps<"Search">
+  ) {
     super("Search", props);
   }
 
@@ -68,7 +80,11 @@ export class Search extends SceneComponent<"Search"> {
         {this.completed && (
           <Results>
             {this.props.foodstuffs!.getAll().map(food => (
-              <Foodstuff key={food.id} foodstuff={food} select={this.select} />
+              <Foodstuff
+                key={food.id}
+                foodstuff={food}
+                select={this.props.select}
+              />
             ))}
             <Add onClick={this.showEditor}>+</Add>
           </Results>
@@ -116,16 +132,6 @@ export class Search extends SceneComponent<"Search"> {
   @action
   private showEditor = () => {
     this.props.views!.push("left", "Edit", {});
-  };
-
-  /**
-   * Callback function which is called when user clicks on a foodstuff and
-   * selects its quantity in opened `Quantity` scene.
-   */
-  @action
-  private select = (foodstuff: FoodstuffModel, quantity: number) => {
-    console.log(`Selected ${quantity}${foodstuff.unit} of ${foodstuff.name}`);
-    this.props.views!.refresh(); // Refresh the page.
   };
 }
 

@@ -3,7 +3,7 @@ import { action, computed, observable } from "mobx";
 
 import {
   GATEWAY_SCENE,
-  HOME_SCENE,
+  INDEX_SCENE,
   RenderPosition,
   Scene,
   SceneNames,
@@ -158,11 +158,11 @@ export class ViewsStore {
   }
 
   /**
-   * Redirects user to home scene.
+   * Redirects user to index scene.
    */
   @action
-  public home() {
-    this.redirect(HOME_SCENE);
+  public index() {
+    this.redirect(INDEX_SCENE);
   }
 
   /**
@@ -183,7 +183,7 @@ export class ViewsStore {
 
     // If user is unauthenticated and tries to access the logout scene, redirect to home.
     if (!authenticated && scene !== undefined && scene.name === "Logout") {
-      return this.home();
+      return this.index();
     }
 
     this.redirect(scene || UNKNOWN_SCENE);

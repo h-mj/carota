@@ -241,7 +241,7 @@ export class Register extends SceneComponent<
     );
 
     if (result.ok && error === undefined) {
-      this.props.views!.home();
+      this.props.views!.index();
     }
 
     this.reasons = append(result.ok ? {} : result.value, error);

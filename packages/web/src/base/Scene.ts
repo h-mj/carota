@@ -87,10 +87,11 @@ const to = <TName extends SceneNames, TParameterNames extends string>(
  * Defines routes and corresponding scene and route parameter names.
  */
 const ROUTES = {
+  "/": to("Diet"),
   "/administration": to("Administration"),
   "/diet": to("Diet"),
   "/history": to("History"),
-  "/": to("Home"),
+  "/home": to("Home"),
   "/logout": to("Logout"),
   "/measurements": to("Measurements"),
   "/register/{invitationId}": to("Register", "invitationId"),
@@ -261,7 +262,7 @@ export class Scene<TName extends SceneNames> {
 /**
  * Scene on index path and to which user is redirected after registration.
  */
-export const HOME_SCENE = new Scene("Home", {}, {});
+export const INDEX_SCENE = new Scene("Diet", {}, {});
 
 /**
  * Scene that is shown if user is not authenticated but tries to access a

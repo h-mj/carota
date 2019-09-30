@@ -35,6 +35,6 @@ export class Logout extends SceneComponent<"Logout"> {
     await views!.load(undefined);
 
     accounts!.logout();
-    views!.home();
+    views!.index();
   }
 }

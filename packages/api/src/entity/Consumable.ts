@@ -2,7 +2,9 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   Unique
 } from "typeorm";
@@ -25,7 +27,7 @@ export class Consumable extends BaseEntity {
   /**
    * Meal that this consumed foodstuff is part of.
    */
-  @ManyToOne(() => Meal, { nullable: false })
+  @ManyToOne(() => Meal, { nullable: false, onDelete: "CASCADE" })
   public meal!: Meal;
 
   /**
@@ -41,13 +43,33 @@ export class Consumable extends BaseEntity {
   public quantity!: number;
 
   /**
+   * Consumable that precedes this consumable.
+   */
+  @OneToOne(() => Consumable, consumable => consumable.next)
+  public previous!: Promise<Consumable | undefined>;
+
+  /**
+   * Consumable that is after this consumable in the order.
+   */
+  @OneToOne(() => Consumable, consumable => consumable.previous)
+  @JoinColumn()
+  public next!: Promise<Consumable | undefined>;
+
+  /**
+   * ID of next consumable.
+   */
+  @Column({ nullable: true })
+  public nextId!: string | null;
+
+  /**
    * Returns a representation of this entity that will be transferred to the
    * client.
    */
   public toDto = () => ({
     id: this.id,
     foodstuff: this.foodstuff.toDto(),
-    quantity: this.quantity
+    quantity: this.quantity,
+    nextId: this.nextId || undefined
   });
 }
 

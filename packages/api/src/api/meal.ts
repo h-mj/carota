@@ -6,6 +6,8 @@ import * as Router from "@koa/router";
 
 import { MealDto } from "../../types";
 import { Account } from "../entity/Account";
+import { Consumable, ConsumableDto } from "../entity/Consumable";
+import { Foodstuff } from "../entity/Foodstuff";
 import { Meal } from "../entity/Meal";
 import { BadRequestError } from "../error/BadRequestError";
 import { ForbiddenError } from "../error/ForbiddenError";
@@ -58,10 +60,68 @@ const add = async ({ name, date }: AddMealDto, account: Account) => {
 
   if (last !== undefined) {
     last.nextId = meal.id;
-    last.save();
+    await last.save();
   }
 
   return meal.toDto();
+};
+
+/**
+ * Validates add consumable request body.
+ */
+// prettier-ignore
+const addConsumableDtoValidator = deviate().object().shape({
+  mealId: deviate().string().guid(),
+  foodstuffId: deviate().string().guid(),
+  quantity: deviate().number().gt(0)
+})
+
+/**
+ * Add consumable request data transfer object type.
+ */
+type AddConsumableDto = Success<typeof addConsumableDtoValidator>;
+
+/**
+ * Adds a consumable to specified meal with specified quantity of specified
+ * foodstuff.
+ */
+const addConsumable = async (
+  { mealId, foodstuffId, quantity }: AddConsumableDto,
+  account: Account
+) => {
+  const meal = await Meal.findOne(mealId);
+
+  if (meal === undefined) {
+    throw createIdNotFoundError(mealId, Meal.name, ["mealId"]);
+  } else if (meal.accountId !== account.id) {
+    throw new ForbiddenError("You are not allowed to modify this meal.");
+  }
+
+  const foodstuff = await Foodstuff.findOne(foodstuffId);
+
+  if (foodstuff === undefined) {
+    throw createIdNotFoundError(foodstuffId, Foodstuff.name, ["foodstuffId"]);
+  }
+
+  if ((await Consumable.findOne({ meal, foodstuff })) !== undefined) {
+    throw new BadRequestError(
+      "Consumable with this meal and foodstuff already exists."
+    );
+  }
+
+  const last = await Consumable.findOne({ meal, nextId: null });
+  const consumable = await Consumable.create({
+    meal,
+    foodstuff,
+    quantity
+  }).save();
+
+  if (last !== undefined) {
+    last.nextId = consumable.id;
+    await last.save();
+  }
+
+  return consumable.toDto();
 };
 
 /**
@@ -98,21 +158,21 @@ const removeMealDtoValidator = deviate().object().shape({
 type RemoveMealDto = Success<typeof removeMealDtoValidator>;
 
 /**
- * Removes a meal with specified ID from meal linked list and re-links the broken linked list.
+ * Removes an entity with specified ID from entity linked list and re-links the broken linked list.
  */
-const unlink = async (meal: Meal) => {
-  const previous = await meal.previous;
-  const nextId = meal.nextId;
+const unlink = async (entity: Consumable | Meal) => {
+  const previous = await entity.previous;
+  const nextId = entity.nextId;
 
-  meal.nextId = null;
-  await meal.save();
+  entity.nextId = null;
+  await entity.save();
 
   if (previous !== undefined) {
     previous.nextId = nextId;
     await previous.save();
   }
 
-  await meal.reload();
+  await entity.reload();
 };
 
 /**
@@ -131,6 +191,40 @@ const remove = async ({ id }: RemoveMealDto, account: Account) => {
 
   await unlink(meal);
   await meal.remove();
+
+  return true as const;
+};
+
+/**
+ * Validates remove consumable request body.
+ */
+// prettier-ignore
+const removeConsumableDtoValidator = deviate().object().shape({
+  id: deviate().string().guid()
+})
+
+/**
+ * Remove consumable request data transfer object type.
+ */
+type RemoveConsumableDto = Success<typeof removeConsumableDtoValidator>;
+
+/**
+ * Removes consumable with specified `ID`.
+ */
+const removeConsumable = async (
+  { id }: RemoveConsumableDto,
+  account: Account
+) => {
+  const consumable = await Consumable.findOne(id, { relations: ["meal"] });
+
+  if (consumable === undefined) {
+    throw createIdNotFoundError(id, Consumable.name, ["id"]);
+  } else if (consumable.meal.accountId !== account.id) {
+    throw new ForbiddenError("You are not allowed to remove this consumable.");
+  }
+
+  await unlink(consumable);
+  await consumable.remove();
 
   return true as const;
 };
@@ -207,9 +301,11 @@ const move = async ({ id, date, nextId }: MoveMealDto, account: Account) => {
  */
 export interface MealController {
   add: Query<AddMealDto, MealDto>;
+  addConsumable: Query<AddConsumableDto, ConsumableDto>;
   get: Query<GetMealsDto, MealDto[]>;
   move: Query<MoveMealDto, MealDto[]>;
   remove: Query<RemoveMealDto, true>;
+  removeConsumable: Query<RemoveConsumableDto, true>;
 }
 
 /**
@@ -219,6 +315,8 @@ export const mealRouter = new Router();
 
 // Define all meal controller endpoints.
 define(mealRouter, "meal", "add", addMealDtoValidator, add);
+define(mealRouter, "meal", "addConsumable", addConsumableDtoValidator, addConsumable);
 define(mealRouter, "meal", "get", getMealsDtoValidator, get);
 define(mealRouter, "meal", "move", moveMealDtoValidator, move);
 define(mealRouter, "meal", "remove", removeMealDtoValidator, remove);
+define(mealRouter, "meal", "removeConsumable", removeConsumableDtoValidator, removeConsumable);

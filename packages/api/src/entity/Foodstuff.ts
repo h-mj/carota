@@ -70,7 +70,7 @@ export class Foodstuff extends BaseEntity {
    * Account of last user who edited this foodstuff.
    */
   @ManyToOne(() => Account, { nullable: false })
-  public editor!: Promise<Account>;
+  public editor!: Account;
 
   /**
    * Returns a representation of this entity that will be transferred to the

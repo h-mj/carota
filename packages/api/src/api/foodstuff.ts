@@ -87,7 +87,7 @@ const save = async (
     unit,
     nutritionDeclaration,
     pieceQuantity,
-    editor: Promise.resolve(account)
+    editor: account
   });
 
   return (await template.save()).toDto();

@@ -6,38 +6,28 @@ import { SceneComponentNames, SceneComponentProps } from "./SceneComponent";
  * Union of scene names.
  */
 export type SceneNames =
-  | "Administration"
   | "Confirmation"
   | "Diet"
   | "Edit"
-  | "History"
-  | "Home"
   | "Login"
   | "Logout"
-  | "Measurements"
   | "Quantity"
   | "Register"
   | "Search"
-  | "Settings"
   | "Unknown";
 
 /**
  * Object that maps scene name to its scene component name.
  */
 const SCENE_TO_COMPONENT_NAME = {
-  Administration: "Administration",
   Confirmation: "Confirmation",
   Diet: "Diet",
   Edit: "Edit",
-  History: "History",
-  Home: "Home",
   Login: "Login",
   Logout: "Logout",
-  Measurements: "Measurements",
   Quantity: "Quantity",
   Register: "Register",
   Search: "Search",
-  Settings: "Settings",
   Unknown: "Unknown"
 } as const;
 
@@ -88,14 +78,8 @@ const to = <TName extends SceneNames, TParameterNames extends string>(
  */
 const ROUTES = {
   "/": to("Diet"),
-  "/administration": to("Administration"),
-  "/diet": to("Diet"),
-  "/history": to("History"),
-  "/home": to("Home"),
   "/logout": to("Logout"),
-  "/measurements": to("Measurements"),
-  "/register/{invitationId}": to("Register", "invitationId"),
-  "/settings": to("Settings")
+  "/register/{invitationId}": to("Register", "invitationId")
 } as const;
 
 /**

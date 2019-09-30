@@ -1,16 +1,11 @@
-import { Administration } from "../scene/Administration";
 import { Confirmation } from "../scene/Confirmation";
 import { Diet } from "../scene/Diet";
 import { Edit } from "../scene/Edit";
-import { History } from "../scene/History";
-import { Home } from "../scene/Home";
 import { Login } from "../scene/Login";
 import { Logout } from "../scene/Logout";
-import { Measurements } from "../scene/Measurements";
 import { Quantity } from "../scene/Quantity";
 import { Register } from "../scene/Register";
 import { Search } from "../scene/Search";
-import { Settings } from "../scene/Settings";
 import { Unknown } from "../scene/Unknown";
 import { Scene, SceneComponentSceneNames } from "./Scene";
 import { TranslatedComponent } from "./TranslatedComponent";
@@ -19,19 +14,14 @@ import { TranslatedComponent } from "./TranslatedComponent";
  * Maps scene component names to their classes.
  */
 export interface SceneComponentMap {
-  Administration: Administration;
   Confirmation: Confirmation;
   Diet: Diet;
   Edit: Edit;
-  History: History;
-  Home: Home;
   Login: Login;
   Logout: Logout;
-  Measurements: Measurements;
   Quantity: Quantity;
   Register: Register;
   Search: Search;
-  Settings: Settings;
   Unknown: Unknown;
 }
 

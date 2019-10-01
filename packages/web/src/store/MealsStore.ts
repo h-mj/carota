@@ -7,6 +7,18 @@ import { Meal } from "../model/Meal";
 import { Rpc } from "../utility/rpc";
 
 /**
+ * Converts specified date to `YYYY-MM-DD` formatted string that ignores current
+ * timezone.
+ */
+const toDateString = (date: Date) => {
+  const year = date.getFullYear().toString();
+  const month = (date.getMonth() + 1).toString();
+  const day = date.getDate().toString();
+
+  return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+};
+
+/**
  * Store which manages `Meal` models.
  */
 export class MealsStore {
@@ -65,7 +77,7 @@ export class MealsStore {
   public async add(name: string, date: Date) {
     const result = await Rpc.call("meal", "add", {
       name,
-      date: date.toISOString()
+      date: toDateString(date)
     });
 
     if (!result.ok) {
@@ -116,7 +128,7 @@ export class MealsStore {
   public async get(date: Date) {
     this.models.clear();
 
-    const result = await Rpc.call("meal", "get", { date: date.toISOString() });
+    const result = await Rpc.call("meal", "get", { date: toDateString(date) });
 
     if (!result.ok) {
       return result.value;

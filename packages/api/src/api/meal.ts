@@ -121,27 +121,16 @@ const consume = async (
     throw createIdNotFoundError(foodstuffId, Foodstuff.name, ["foodstuffId"]);
   }
 
-  let consumable = await Consumable.findOne({ meal, foodstuff });
+  const last = await Consumable.findOne({ meal, nextId: null });
+  const consumable = await Consumable.create({
+    meal,
+    foodstuff,
+    quantity
+  }).save();
 
-  if (consumable !== undefined) {
-    consumable.quantity = quantity;
-    await consumable.save();
-  } else {
-    // Previous consumable does not exist. In which case create a new one and
-    // link the currently last consumable in the order with created consumable.
-
-    const last = await Consumable.findOne({ meal, nextId: null });
-
-    consumable = await Consumable.create({
-      meal,
-      foodstuff,
-      quantity
-    }).save();
-
-    if (last !== undefined) {
-      last.nextId = consumable.id;
-      await last.save();
-    }
+  if (last !== undefined) {
+    last.nextId = consumable.id;
+    await last.save();
   }
 
   return consumable.toDto();

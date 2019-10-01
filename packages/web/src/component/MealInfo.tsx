@@ -93,6 +93,10 @@ const Title = styled.div`
   box-sizing: border-box;
 `;
 
+/**
+ * Component that aligns `Plus` component exactly in the middle of meal on the
+ * border.
+ */
 const PlusContainer = styled.div`
   width: 100%;
   height: 0;

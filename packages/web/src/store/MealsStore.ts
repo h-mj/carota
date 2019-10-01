@@ -70,6 +70,12 @@ export class MealsStore {
       return result.value;
     }
 
+    // Append created meal to the linked list.
+    const meals = this.meals;
+    if (meals.length > 0) {
+      meals[meals.length - 1].nextId = result.value.id;
+    }
+
     this.insert(result.value);
 
     return undefined;
@@ -89,7 +95,13 @@ export class MealsStore {
       return result.value;
     }
 
-    meal.consumables.push(result.value);
+    // Append returned consumable to the linked list if it didn't exist already.
+    const consumables = meal.consumables;
+    if (consumables.length > 0 && !meal.has(result.value.id)) {
+      consumables[consumables.length - 1].nextId = result.value.id;
+    }
+
+    meal.insert(result.value);
 
     return undefined;
   }
@@ -106,7 +118,7 @@ export class MealsStore {
       return result.value;
     }
 
-    result.value.map(this.insert);
+    result.value.forEach(this.insert);
 
     return undefined;
   }

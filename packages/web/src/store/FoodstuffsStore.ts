@@ -79,7 +79,7 @@ export class FoodstuffsStore {
       return result.value;
     }
 
-    result.value.map(this.insert);
+    result.value.forEach(this.insert);
 
     return undefined;
   }

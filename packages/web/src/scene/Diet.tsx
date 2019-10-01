@@ -28,9 +28,7 @@ export class Diet extends SceneComponent<"Diet"> {
    */
   public constructor(props: DefaultSceneComponentProps<"Diet">) {
     super("Diet", props);
-
     this.setDate(new Date());
-    this.props.meals!.clear();
   }
 
   /**

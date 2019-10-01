@@ -3,17 +3,17 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Draggable } from "react-beautiful-dnd";
 
-import { Component } from "../base/Component";
-import { Foodstuff } from "../model/Foodstuff";
-import { Meal } from "../model/Meal";
-import { styled } from "../styling/theme";
-import { ConsumableInfo } from "./ConsumableInfo";
-import { Plus } from "./Plus";
+import { Component } from "../../base/Component";
+import { Foodstuff } from "../../model/Foodstuff";
+import { Meal } from "../../model/Meal";
+import { styled } from "../../styling/theme";
+import { ConsumableList } from "../ConsumableList/ConsumableList";
+import { Plus } from "../Plus";
 
 /**
- * Meal component props.
+ * Meal list entry component props.
  */
-interface MealInfoProps {
+interface MealEntryProps {
   /**
    * Meal index.
    */
@@ -30,23 +30,19 @@ interface MealInfoProps {
  */
 @inject("meals", "views")
 @observer
-export class MealInfo extends Component<MealInfoProps> {
+export class MealEntry extends Component<MealEntryProps> {
+  /**
+   * Renders components that display information of provided meal model.
+   */
   public render() {
     const { meal } = this.props;
-    const { consumables } = meal;
 
     return (
       <Draggable draggableId={meal.id} index={this.props.index}>
-        {({ draggableProps, innerRef, dragHandleProps }) => (
-          <Container ref={innerRef} {...draggableProps}>
-            <Title {...dragHandleProps}>{meal.name}</Title>
-            {consumables.map(consumable => (
-              <ConsumableInfo key={consumable.id}>
-                {consumable.quantity}
-                {consumable.foodstuff.unit} {consumable.foodstuff.name}
-              </ConsumableInfo>
-            ))}
-
+        {provided => (
+          <Container ref={provided.innerRef} {...provided.draggableProps}>
+            <Title {...provided.dragHandleProps}>{meal.name}</Title>
+            <ConsumableList meal={meal} />
             <PlusContainer>
               <Plus onClick={this.showSearch}>+</Plus>
             </PlusContainer>
@@ -56,6 +52,9 @@ export class MealInfo extends Component<MealInfoProps> {
     );
   }
 
+  /**
+   * Shows search scene when user clicks on `Plus` button component.
+   */
   public showSearch = () => {
     this.props.views!.push("main", "Search", { select: this.select });
   };
@@ -77,6 +76,7 @@ export class MealInfo extends Component<MealInfoProps> {
 const Container = styled.div`
   border: solid 1px ${({ theme }) => theme.borderColor};
   border-radius: ${({ theme }) => theme.borderRadius};
+  background-color: ${({ theme }) => theme.backgroundColor};
 `;
 
 /**

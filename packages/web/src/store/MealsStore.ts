@@ -1,6 +1,7 @@
 import { ConsumableDto, MealDto } from "api";
-import { observable } from "mobx";
+import { action, observable } from "mobx";
 
+import { Consumable } from "../model/Consumable";
 import { Foodstuff } from "../model/Foodstuff";
 import { Meal } from "../model/Meal";
 import { Rpc } from "../utility/rpc";
@@ -46,8 +47,8 @@ export class MealsStore {
   /**
    * Returns meal model with specified ID.
    */
-  public id(id: string) {
-    return this.models.get(id)!;
+  public withId(id: string) {
+    return this.models.get(id);
   }
 
   /**
@@ -60,6 +61,7 @@ export class MealsStore {
   /**
    * Adds a new meal with specified `name` and `date`.
    */
+  @action
   public async add(name: string, date: Date) {
     const result = await Rpc.call("meal", "add", {
       name,
@@ -84,6 +86,7 @@ export class MealsStore {
   /**
    * Sets `quantity` of consumed `foodstuff` during specified `meal`.
    */
+  @action
   public async consume(meal: Meal, foodstuff: Foodstuff, quantity: number) {
     const result = await Rpc.call("meal", "consume", {
       mealId: meal.id,
@@ -109,6 +112,7 @@ export class MealsStore {
   /**
    * Replaces currently stored meal models with meals with specified `date`.
    */
+  @action
   public async get(date: Date) {
     this.models.clear();
 
@@ -126,6 +130,7 @@ export class MealsStore {
   /**
    * Moves specified `meal` within meal linked list to specified `index`.
    */
+  @action
   public async move(meal: Meal, index: number) {
     const meals = this.meals;
 
@@ -146,9 +151,49 @@ export class MealsStore {
     }
 
     // Make the move meal request so that order is updated on the server too.
-    const result = await Rpc.call("meal", "move", {
-      id: meal.id,
-      date: meal.date,
+    const result = await Rpc.call("meal", "move", { id: meal.id, nextId });
+
+    if (!result.ok) {
+      return result.value;
+    }
+
+    return undefined;
+  }
+
+  /**
+   * Moves specified consumable to specified meal at specified index.
+   */
+  @action
+  public async reorder(consumable: Consumable, meal: Meal, index: number) {
+    // Delete consumable from its meal and relink the linked list.
+    const source = consumable.meal.consumables;
+
+    consumable.meal.delete(consumable);
+    source.splice(source.indexOf(consumable), 1);
+
+    for (let i = 0; i < source.length; ++i) {
+      source[i].nextId =
+        source[i + 1] === undefined ? undefined : source[i + 1].id;
+    }
+
+    // Add consumable to its target position and updates the linked list.
+    const target = meal.consumables;
+    const next: Consumable | undefined = target[index];
+    const nextId = next === undefined ? undefined : next.id;
+
+    meal.insert(consumable);
+    consumable.meal = meal;
+    target.splice(index, 0, consumable);
+
+    for (let i = 0; i < target.length; ++i) {
+      target[i].nextId =
+        target[i + 1] === undefined ? undefined : target[i + 1].id;
+    }
+
+    // Make the reorder consumable request so that order is updated on the server too.
+    const result = await Rpc.call("meal", "reorder", {
+      id: consumable.id,
+      mealId: meal.id,
       nextId
     });
 

@@ -1,14 +1,14 @@
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 
 import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
 import { DateSelect } from "../component/DateSelect/DateSelect";
-import { MealInfo } from "../component/MealInfo";
+import { MealList } from "../component/MealList/MealList";
 import { Plus } from "../component/Plus";
 import { styled } from "../styling/theme";
 
@@ -45,16 +45,7 @@ export class Diet extends SceneComponent<"Diet"> {
         </Sticky>
 
         <DragDropContext onDragEnd={this.handleDragEnd}>
-          <Droppable droppableId="meals" type="meal">
-            {provided => (
-              <Meals ref={provided.innerRef} {...provided.droppableProps}>
-                {meals.map((meal, index) => (
-                  <MealInfo key={meal.id} meal={meal} index={index} />
-                ))}
-                {provided.placeholder}
-              </Meals>
-            )}
-          </Droppable>
+          <MealList mealList={meals} />
         </DragDropContext>
 
         <Plus fixed={true} onClick={this.handleAddClick}>
@@ -76,18 +67,32 @@ export class Diet extends SceneComponent<"Diet"> {
   /**
    * Handles drag end event.
    */
-  private handleDragEnd = async ({ destination, draggableId }: DropResult) => {
-    if (destination === undefined || destination === null) {
+  private handleDragEnd = async (result: DropResult) => {
+    const { source, destination, draggableId, type } = result;
+
+    if (!destination) {
       return;
     }
 
-    const { droppableId, index } = destination;
-
-    if (droppableId !== "meals") {
+    if (
+      source.droppableId === destination.droppableId &&
+      source.index === destination.index
+    ) {
       return;
     }
 
-    await this.props.meals!.move(this.props.meals!.id(draggableId), index);
+    if (type === "meal") {
+      await this.props.meals!.move(
+        this.props.meals!.withId(draggableId)!,
+        destination.index
+      );
+    } else {
+      await this.props.meals!.reorder(
+        this.props.meals!.withId(source.droppableId)!.withId(draggableId)!,
+        this.props.meals!.withId(destination.droppableId)!,
+        destination.index
+      );
+    }
   };
 
   private handleAddClick = () => {
@@ -103,22 +108,4 @@ const Sticky = styled.div`
   top: 0;
 
   background-color: ${({ theme }) => theme.backgroundColor};
-`;
-
-/**
- * Component that contains all meal components.
- */
-const Meals = styled.div`
-  max-width: ${({ theme }) => theme.widthMedium};
-  width: 100%;
-  height: 100%;
-
-  margin: auto;
-  padding: ${({ theme }) => theme.padding};
-  padding-bottom: 0;
-  box-sizing: border-box;
-
-  & > * {
-    margin-bottom: ${({ theme }) => theme.padding};
-  }
 `;

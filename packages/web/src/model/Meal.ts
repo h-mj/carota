@@ -39,13 +39,30 @@ export class Meal {
   }
 
   /**
-   * Creates and stores consumable model of specified `data transfer object`.
+   * Optionally creates and stores consumable model of specified `data transfer
+   * object`.
    */
   @action
-  public insert = (dto: ConsumableDto) => {
-    const consumable = new Consumable(dto);
+  public insert = (dto: Consumable | ConsumableDto) => {
+    const consumable =
+      dto instanceof Consumable ? dto : new Consumable(dto, this);
     this.consumableMap.set(consumable.id, consumable);
   };
+
+  /**
+   * Returns stored consumable with specified id.
+   */
+  public withId(id: string) {
+    return this.consumableMap.get(id);
+  }
+
+  /**
+   * Deletes specified consumable from the storage.
+   */
+  @action
+  public delete(consumable: Consumable) {
+    this.consumableMap.delete(consumable.id);
+  }
 
   /**
    * Returns whether meal contains consumable with specified ID.

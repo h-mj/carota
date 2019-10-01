@@ -173,7 +173,6 @@ const get = async ({ date }: GetMealsDto, account: Account) => {
 // prettier-ignore
 const moveMealDtoValidator = deviate().object().shape({
   id: deviate().string().guid(),
-  date: deviate().string().append(validDate),
   nextId: deviate().optional().string().guid()
 })
 
@@ -190,10 +189,9 @@ type MoveMealDto = Success<typeof moveMealDtoValidator>;
  * Returns all meals with same date as meals with IDS `id` and `nextId` with
  * updated order.
  */
-const move = async ({ id, date, nextId }: MoveMealDto, account: Account) => {
-  const meal = await Meal.findOne({ id });
-  const next =
-    nextId !== undefined ? await Meal.findOne({ id: nextId, date }) : undefined;
+const move = async ({ id, nextId }: MoveMealDto, account: Account) => {
+  const meal = await Meal.findOne(id);
+  const next = nextId !== undefined ? await Meal.findOne(nextId) : undefined;
 
   if (meal === undefined) {
     throw createIdNotFoundError(id, Meal.name, ["id"]);
@@ -201,23 +199,20 @@ const move = async ({ id, date, nextId }: MoveMealDto, account: Account) => {
     throw createIdNotFoundError(nextId, Meal.name, ["nextId"]);
   } else if (next !== undefined && meal.id === next.id) {
     throw new BadRequestError("Cannot insert meal ahead of itself.");
-  } else if (next !== undefined && meal.accountId !== next.accountId) {
-    throw new BadRequestError("Meals are owned by different accounts.");
   } else if (meal.accountId !== account.id) {
     throw new ForbiddenError("You are not allowed to move this meal.");
+  } else if (next !== undefined && meal.accountId !== next.accountId) {
+    throw new BadRequestError("Meals are owned by different accounts.");
+  } else if (next !== undefined && meal.date !== next.date) {
+    throw new BadRequestError("Meals dates differ.");
   }
 
   await unlink(meal);
 
-  const previous =
-    next !== undefined
-      ? await next.previous
-      : await Meal.findOne({
-          account,
-          id: Not(meal.id),
-          date: meal.date,
-          nextId: null
-        });
+  // prettier-ignore
+  const previous = next !== undefined
+    ? await next.previous
+    : await Meal.findOne({ account, id: Not(meal.id), date: meal.date, nextId: null });
 
   if (previous !== undefined) {
     previous.nextId = meal.id;
@@ -226,10 +221,86 @@ const move = async ({ id, date, nextId }: MoveMealDto, account: Account) => {
 
   if (next !== undefined) {
     meal.nextId = next.id;
+    await meal.save();
   }
 
-  meal.date = date;
-  await meal.save();
+  return true as const;
+};
+
+/**
+ * Validates reorder consumable  request body.
+ */
+// prettier-ignore
+const reorderDtoValidator = deviate().object().shape({
+  id: deviate().string().guid(),
+  mealId: deviate().string().guid(),
+  nextId: deviate().optional().string().guid()
+})
+
+/**
+ * Reorder consumable request data transfer object type.
+ */
+type ReorderDto = Success<typeof reorderDtoValidator>;
+
+/**
+ * Reorders consumable with specified `id` so that it will be part of meal with
+ * ID `mealId` and before consumable with ID `nextId`. If `nextId` is
+ * `undefined`, specified consumable will be last consumable within consumables
+ * of specified meal.
+ */
+export const reorder = async (
+  { id, mealId, nextId }: ReorderDto,
+  account: Account
+) => {
+  const consumable = await Consumable.findOne(id);
+
+  if (consumable === undefined) {
+    throw createIdNotFoundError(id, Consumable.name, ["id"]);
+  }
+
+  const consumableMeal = await Meal.findOne(consumable.mealId);
+
+  if (consumableMeal === undefined || consumableMeal.accountId !== account.id) {
+    throw new ForbiddenError("Only consumable owner can move this consumable.");
+  }
+
+  const meal = await Meal.findOne(mealId);
+
+  if (meal === undefined) {
+    throw createIdNotFoundError(mealId, Meal.name, ["mealId"]);
+  } else if (meal.accountId !== account.id) {
+    throw new ForbiddenError("Move target meal is not owned by this account.");
+  }
+
+  const next =
+    nextId !== undefined ? await Consumable.findOne(nextId) : undefined;
+
+  if (nextId !== undefined && next === undefined) {
+    throw createIdNotFoundError(nextId, Consumable.name, ["nextId"]);
+  } else if (next !== undefined && next.mealId !== meal.id) {
+    throw new ForbiddenError(
+      "Specified succeeding meal is not part of target meal."
+    );
+  }
+
+  await unlink(consumable);
+
+  // prettier-ignore
+  const previous = next !== undefined
+    ? await next.previous
+    : await Consumable.findOne({ id: Not(consumable.id), meal, nextId: null });
+
+  if (previous !== undefined) {
+    previous.nextId = consumable.id;
+    await previous.save();
+  }
+
+  if (next !== undefined) {
+    consumable.nextId = next.id;
+  }
+
+  consumable.meal = meal;
+  await consumable.save();
 
   return true as const;
 };
@@ -306,6 +377,7 @@ export interface MealController {
   consume: Query<ConsumeDto, ConsumableDto>;
   get: Query<GetMealsDto, MealDto[]>;
   move: Query<MoveMealDto, true>;
+  reorder: Query<ReorderDto, true>;
   remove: Query<RemoveMealDto, true>;
   unconsume: Query<UnconsumeDto, true>;
 }
@@ -320,5 +392,6 @@ define(mealRouter, "meal", "add", addMealDtoValidator, add);
 define(mealRouter, "meal", "consume", consumeDtoValidator, consume);
 define(mealRouter, "meal", "get", getMealsDtoValidator, get);
 define(mealRouter, "meal", "move", moveMealDtoValidator, move);
+define(mealRouter, "meal", "reorder", reorderDtoValidator, reorder);
 define(mealRouter, "meal", "remove", removeMealDtoValidator, remove);
 define(mealRouter, "meal", "unconsume", unconsumeDtoValidator, unconsume);

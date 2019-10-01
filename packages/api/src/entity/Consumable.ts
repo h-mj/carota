@@ -5,8 +5,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToOne,
-  PrimaryGeneratedColumn,
-  Unique
+  PrimaryGeneratedColumn
 } from "typeorm";
 
 import { Foodstuff } from "./Foodstuff";
@@ -16,13 +15,18 @@ import { Meal } from "./Meal";
  * Consumed foodstuff representation.
  */
 @Entity()
-@Unique(["meal", "foodstuff"])
 export class Consumable extends BaseEntity {
   /**
    * Consumable ID.
    */
   @PrimaryGeneratedColumn("uuid")
   public id!: string;
+
+  /**
+   * ID of the meal entity.
+   */
+  @Column()
+  public mealId!: string;
 
   /**
    * Meal that this consumed foodstuff is part of.

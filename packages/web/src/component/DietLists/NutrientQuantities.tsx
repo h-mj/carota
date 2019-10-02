@@ -103,7 +103,7 @@ class NutrientQuantity extends Component<NutrientQuantityProps> {
       <Nutrient>
         <Icon />
         <Name>{this.props.model.quantityOf(this.props.nutrient)}</Name>
-        <Bar percentage={(100 * quantity) / whole} />
+        <Bar percentage={Math.round((10 * (100 * quantity)) / whole) / 10} />
       </Nutrient>
     );
   }

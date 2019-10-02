@@ -49,7 +49,9 @@ export class MealEntry extends Component<MealEntryProps> {
           >
             <TitleBar {...provided.dragHandleProps}>
               <Texts>{meal.name}</Texts>
-              <NutrientQuantities model={meal} />
+              {meal.consumables.length > 0 && (
+                <NutrientQuantities model={meal} />
+              )}
             </TitleBar>
 
             <Consumables meal={meal} />

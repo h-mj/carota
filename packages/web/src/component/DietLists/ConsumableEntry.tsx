@@ -81,9 +81,12 @@ const Container = styled.div<ContainerProps>`
       : `0 1px 0 0 ${theme.borderColor}`};
 
   border-radius: ${({ isDragging, theme }) =>
-    isDragging
-      ? theme.borderRadius
-      : `0 0 ${theme.borderRadius} ${theme.borderRadius}`};
+    isDragging ? theme.borderRadius : "0"};
+
+  &:last-child {
+    border-bottom-left-radius: ${({ theme }) => theme.borderRadius};
+    border-bottom-left-radius: ${({ theme }) => theme.borderRadius};
+  }
 
   border: solid 1px;
   box-sizing: border-box;

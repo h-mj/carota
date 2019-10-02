@@ -25,6 +25,8 @@ export const Texts = styled.div`
   }
 
   @media screen and (max-width: 50rem) {
-    padding-bottom: 0;
+    &:not(:only-child) {
+      padding-bottom: 0;
+    }
   }
 `;

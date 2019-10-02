@@ -80,6 +80,8 @@ export const russian: Translation = {
         starch: "Крахмал",
         sugars: "Сахара"
       },
+      nutrientsLabel: "Пищевая ценность",
+      nutrientsLabelPer: " на 100{unit}:",
       submit: "Сохранить"
     },
     FoodstuffInfo: {

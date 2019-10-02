@@ -49,10 +49,10 @@ export class Foodstuff extends BaseEntity {
   public unit!: Units;
 
   /**
-   * Foodstuff nutrition information.
+   * Net quantity of the foodstuff. `null` if foodstuff is not sold in packages.
    */
-  @Column(() => NutritionDeclaration)
-  public nutritionDeclaration!: NutritionDeclaration;
+  @Column("float", { nullable: true })
+  public quantity!: number | null;
 
   /**
    * Quantity of one piece in units, `null` if one piece of the foodstuff does
@@ -60,6 +60,12 @@ export class Foodstuff extends BaseEntity {
    */
   @Column("float", { nullable: true })
   public pieceQuantity!: number | null;
+
+  /**
+   * Foodstuff nutrition information.
+   */
+  @Column(() => NutritionDeclaration)
+  public nutritionDeclaration!: NutritionDeclaration;
 
   /**
    * ID of editor account.
@@ -80,6 +86,7 @@ export class Foodstuff extends BaseEntity {
     id: this.id,
     name: this.name,
     barcode: this.barcode || undefined,
+    quantity: this.quantity || undefined,
     unit: this.unit,
     nutritionDeclaration: this.nutritionDeclaration.toDto(),
     pieceQuantity: this.pieceQuantity || undefined

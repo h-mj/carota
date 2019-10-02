@@ -81,6 +81,8 @@ export const estonian: Translation = {
         starch: "Tärklis",
         sugars: "Suhkrud"
       },
+      nutrientsLabel: "Toitumisalane teave",
+      nutrientsLabelPer: " 100{unit} kohta",
       submit: "Salvesta"
     },
     FoodstuffInfo: {

@@ -49,3 +49,8 @@ export const Title = styled.div`
   line-height: 1.5rem;
   text-align: center;
 `;
+
+/**
+ * Form helper label.
+ */
+export const Label = styled.div``;

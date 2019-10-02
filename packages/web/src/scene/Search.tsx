@@ -131,7 +131,7 @@ export class Search extends SceneComponent<"Search", SearchProps> {
    */
   @action
   private showEditor = () => {
-    this.props.views!.push("left", "Edit", {});
+    this.props.views!.push("left", "Edit", { name: this.query });
   };
 }
 

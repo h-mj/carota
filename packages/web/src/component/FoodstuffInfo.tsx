@@ -103,9 +103,9 @@ export class FoodstuffInfo extends TranslatedComponent<
           </div>
 
           {Object.entries(ICONS).map(([nutrient, IconComponent]) => {
-            const quantity = (
-              100 * nutritionDeclaration[nutrient as Nutrient]
-            ).toLocaleString("et-EE", FORMAT_OPTIONS);
+            const quantity = nutritionDeclaration[
+              nutrient as Nutrient
+            ].toLocaleString("et-EE", FORMAT_OPTIONS);
 
             const unit = this.props.views!.translation.units[
               nutrient === "energy" ? "kcal" : "g"

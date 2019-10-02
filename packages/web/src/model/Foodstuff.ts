@@ -10,8 +10,10 @@ export class Foodstuff {
   public readonly name: string;
   public readonly barcode?: string;
   public readonly unit: Units;
-  public readonly nutritionDeclaration: NutritionDeclarationDto;
+  public readonly quantity?: number;
   public readonly pieceQuantity?: number;
+  public readonly nutritionDeclaration: NutritionDeclarationDto;
+
   private readonly store: FoodstuffsStore;
 
   /**
@@ -22,8 +24,9 @@ export class Foodstuff {
     this.name = dto.name;
     this.barcode = dto.barcode;
     this.unit = dto.unit;
-    this.nutritionDeclaration = dto.nutritionDeclaration;
+    this.quantity = dto.quantity;
     this.pieceQuantity = dto.pieceQuantity;
+    this.nutritionDeclaration = dto.nutritionDeclaration;
     this.store = store;
   }
 

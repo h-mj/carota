@@ -80,6 +80,8 @@ export const english: Translation = {
         starch: "Starch",
         sugars: "Sugars"
       },
+      nutrientsLabel: "Nutritional information",
+      nutrientsLabelPer: " per 100{unit}",
       submit: "Save"
     },
     FoodstuffInfo: {

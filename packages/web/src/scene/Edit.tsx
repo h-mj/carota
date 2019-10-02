@@ -9,7 +9,7 @@ import {
   SceneComponent
 } from "../base/SceneComponent";
 import { Button } from "../component/Button";
-import { Controls, Form } from "../component/collection/form";
+import { Controls, Form, Label } from "../component/collection/form";
 import { Group } from "../component/Group";
 import { SceneTitle } from "../component/SceneTitle";
 import { Select } from "../component/Select";
@@ -73,6 +73,11 @@ interface EditProps {
    * Foodstuff model that is being edited.
    */
   foodstuff?: Foodstuff;
+
+  /**
+   * Initial created foodstuff name.
+   */
+  name?: string;
 }
 
 /**
@@ -125,6 +130,16 @@ interface EditTranslation {
   nutrients: Record<Nutrients, string>;
 
   /**
+   * Nutritional information label translation.
+   */
+  nutrientsLabel: string;
+
+  /**
+   * Per 100 units label translation. Continuation of nutrientsLabel.
+   */
+  nutrientsLabelPer: string;
+
+  /**
    * Form submit button text.
    */
   submit: string;
@@ -143,18 +158,22 @@ interface EditValues {
   id?: string;
   name: string;
   barcode?: string;
-  quantity: string;
   unit?: Units;
+  quantity?: string;
   nutritionDeclaration: NutritionDeclarationValues;
   pieceQuantity?: string;
 }
+
+/**
+ * Set of optional fields that will have a check box in front of them.
+ */
+const OPTIONAL_FIELDS = new Set(["barcode", "quantity", "pieceQuantity"]);
 
 /**
  * Initial form values when creating a new foodstuff.
  */
 const DEFAULT_EDIT_VALUES: Readonly<EditValues> = {
   name: "",
-  quantity: "",
   nutritionDeclaration: {
     carbohydrate: "",
     energy: "",
@@ -164,19 +183,19 @@ const DEFAULT_EDIT_VALUES: Readonly<EditValues> = {
 };
 
 /**
- * Multiples floating point number by 100 and converts to string.
+ * Converts a number to string.
  */
-const nutrientToString = deviate<number>().append(number =>
-  ok((100 * number).toString())
+const numberToString = deviate<number>().append(number =>
+  ok(number.toString())
 );
 
 /**
- * If value is `undefined`, returns `undefined` immediately, otherwise multiples
- * floating point number by 100 and converts to string.
+ * If value is `undefined`, returns `undefined` immediately, otherwise number is
+ * converted to string.
  */
-const optionalNutrientToString = deviate<number | undefined>()
+const optionalNumberToString = deviate<number | undefined>()
   .optional()
-  .append(nutrientToString);
+  .append(numberToString);
 
 /**
  * Function that transforms `Foodstuff` type object into `EditValues` type
@@ -187,23 +206,23 @@ const toValues = deviate<Foodstuff>().shape({
   id: deviate<string>(),
   name: deviate<string>(),
   barcode: deviate<string | undefined>(),
-  quantity: deviate().set("100"),
   unit: deviate<Units>(),
+  quantity: deviate<number | undefined>().optional().append(number => ok(number.toString())),
+  pieceQuantity: deviate<number | undefined>().optional().append(number => ok(number.toString())),
   nutritionDeclaration: deviate<NutritionDeclarationDto>().shape({
-    energy: nutrientToString,
-    fat: nutrientToString,
-    saturates: optionalNutrientToString,
-    monoUnsaturates: optionalNutrientToString,
-    polyunsaturates: optionalNutrientToString,
-    carbohydrate: nutrientToString,
-    sugars: optionalNutrientToString,
-    polyols: optionalNutrientToString,
-    starch: optionalNutrientToString,
-    fibre: optionalNutrientToString,
-    protein: nutrientToString,
-    salt: optionalNutrientToString
-  }),
-  pieceQuantity: deviate<number | undefined>().optional().append(number => ok(number.toString()))
+    energy: numberToString,
+    fat: numberToString,
+    saturates: optionalNumberToString,
+    monoUnsaturates: optionalNumberToString,
+    polyunsaturates: optionalNumberToString,
+    carbohydrate: numberToString,
+    sugars: optionalNumberToString,
+    polyols: optionalNumberToString,
+    starch: optionalNumberToString,
+    fibre: optionalNumberToString,
+    protein: numberToString,
+    salt: optionalNumberToString
+  })
 });
 
 /**
@@ -232,8 +251,9 @@ const toBody = deviate<EditValues>().shape({
   id: deviate<string | undefined>(),
   name: deviate<string>().notEmpty(),
   barcode: deviate<string | undefined>().optional().notEmpty(),
-  quantity: deviate<string>().append(parseFloat).gt(0),
   unit: deviate<Units | undefined>().defined(),
+  quantity: optionalParseFloat,
+  pieceQuantity: optionalParseFloat.gt(0),
   nutritionDeclaration: deviate<NutritionDeclarationValues>().shape({
     energy: parseFloat,
     fat: parseFloat,
@@ -247,8 +267,7 @@ const toBody = deviate<EditValues>().shape({
     fibre: optionalParseFloat,
     protein: parseFloat,
     salt: optionalParseFloat
-  }),
-  pieceQuantity: optionalParseFloat.gt(0)
+  })
 });
 
 /**
@@ -260,7 +279,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   /**
    * Foodstuff editing form field values.
    */
-  @observable private values: EditValues = this.getValues();
+  @observable private values: EditValues;
 
   /**
    * Object that contains error reasons of occurred errors for each value.
@@ -272,6 +291,13 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
    */
   public constructor(props: EditProps & DefaultSceneComponentProps<"Edit">) {
     super("Edit", props);
+
+    this.values = this.getValues();
+
+    // Set initial name if it is provided.
+    if (this.props.foodstuff === undefined && this.props.name !== undefined) {
+      this.values.name = this.props.name;
+    }
   }
 
   /**
@@ -297,8 +323,6 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
         </Group>
 
         <Group>
-          {this.renderTextField("quantity")}
-
           <Select
             errorMessage={this.messageFor("unit")}
             invalid={this.reasons.unit !== undefined}
@@ -311,11 +335,24 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
             ]}
             value={this.values.unit}
           />
+
+          {this.renderTextField("quantity")}
+          {this.renderTextField("pieceQuantity")}
         </Group>
 
-        <Group>{NUTRIENTS.map(this.renderNutrientTextField)}</Group>
+        <Group>
+          <Label>
+            {this.translation.nutrientsLabel}
+            {this.values.unit !== undefined &&
+              this.translation.nutrientsLabelPer.replace(
+                "{unit}",
+                this.props.views!.translation.units[this.values.unit!]
+              )}
+            :
+          </Label>
 
-        {this.renderTextField("pieceQuantity")}
+          {NUTRIENTS.map(this.renderNutrientTextField)}
+        </Group>
 
         <Controls>
           {foodstuff !== undefined && (
@@ -346,12 +383,12 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
       label={this.translation.inputs[name].label}
       name={name}
       onChange={this.handleChange}
-      optional={name === "barcode" || name === "pieceQuantity"}
-      required={name === "barcode" || name === "pieceQuantity"}
+      optional={OPTIONAL_FIELDS.has(name)}
       textAlign="right"
       type={name === "barcode" ? "tel" : name === "name" ? "text" : "number"}
       unit={
-        name === "pieceQuantity" && this.values.unit !== undefined
+        (name === "quantity" || name === "pieceQuantity") &&
+        this.values.unit !== undefined
           ? this.props.views!.translation.units[this.values.unit!]
           : undefined
       }
@@ -414,19 +451,6 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
     event.preventDefault();
 
     const result = toBody(this.values);
-
-    if (result.ok) {
-      const { nutritionDeclaration, quantity } = result.value;
-
-      // Normalize all nutrient values per unit.
-      for (const nutrient of NUTRIENTS) {
-        const value = nutritionDeclaration[nutrient];
-
-        if (value !== undefined) {
-          nutritionDeclaration[nutrient] = value / quantity;
-        }
-      }
-    }
 
     const error = await this.props.views!.load(
       result.ok ? this.props.foodstuffs!.save(result.value) : undefined

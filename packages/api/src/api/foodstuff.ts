@@ -14,7 +14,8 @@ import { Query } from "./";
  */
 const quantity = deviate()
   .number()
-  .round(4);
+  .ge(0)
+  .round(2);
 
 /**
  * Optional nutrient quantity validator.
@@ -32,6 +33,8 @@ const saveFoodstuffDtoValidator = deviate().object().shape({
   name: deviate().string().trim().notEmpty(),
   barcode: deviate().optional().string().trim().regex(/^\d{13}$/),
   unit: deviate().string().options(UNITS),
+  quantity: optionalQuantity,
+  pieceQuantity: optionalQuantity,
   nutritionDeclaration: deviate().object().shape({
     energy: quantity,
     fat: quantity,
@@ -46,7 +49,6 @@ const saveFoodstuffDtoValidator = deviate().object().shape({
     protein: quantity,
     salt: optionalQuantity
   }),
-  pieceQuantity: optionalQuantity
 });
 
 /**
@@ -63,8 +65,9 @@ const save = async (
     name,
     barcode,
     unit,
-    nutritionDeclaration,
-    pieceQuantity
+    quantity,
+    pieceQuantity,
+    nutritionDeclaration
   }: SaveFoodstuffDto,
   account: Account
 ) => {
@@ -85,8 +88,9 @@ const save = async (
     name,
     barcode,
     unit,
-    nutritionDeclaration,
     pieceQuantity,
+    quantity,
+    nutritionDeclaration,
     editor: account
   });
 

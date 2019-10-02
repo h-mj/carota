@@ -120,11 +120,9 @@ const Nutrient = styled.div`
   height: 100%;
   flex-shrink: 0;
 
-  padding: 0 ${({ theme }) => theme.paddingSecondary};
-  box-sizing: border-box;
-
   display: flex;
   align-items: center;
+  justify-content: space-evenly;
 `;
 
 /**
@@ -156,7 +154,6 @@ const Bar = styled.div<BarProps>`
  * Nutrient name wrapper.
  */
 const Name = styled.div`
-  flex-grow: 1;
   margin-left: ${({ theme }) => theme.halfPaddingSecondary};
   text-align: center;
 `;

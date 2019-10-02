@@ -106,7 +106,8 @@ export class Diet extends SceneComponent<"Diet"> {
 const Sticky = styled.div`
   position: sticky;
   top: 0;
-  z-index: 1;
+
+  z-index: 2;
 
   background-color: ${({ theme }) => theme.backgroundColor};
 `;

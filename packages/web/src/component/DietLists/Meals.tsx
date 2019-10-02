@@ -43,7 +43,6 @@ export class Meals extends Component<MealsProps> {
 const Container = styled.div`
   max-width: ${({ theme }) => theme.widthMedium};
   width: 100%;
-  height: 100%;
 
   margin: auto;
   padding: ${({ theme }) => theme.padding};

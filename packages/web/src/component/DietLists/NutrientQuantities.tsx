@@ -85,6 +85,7 @@ interface NutrientQuantityProps {
 /**
  * Component that displays quantity of provided nutrient of provided model.
  */
+@observer
 class NutrientQuantity extends Component<NutrientQuantityProps> {
   /**
    * Displays quantity of provided nutrient.
@@ -125,7 +126,7 @@ const Nutrient = styled.div`
 
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
 `;
 
 /**
@@ -151,6 +152,8 @@ const Bar = styled.div<BarProps>`
 
   border-radius: ${({ theme }) => theme.borderRadius};
   background-color: ${({ theme }) => theme.translucentBackgroundColor};
+
+  transition: ${({ theme }) => theme.transition};
 `;
 
 /**

@@ -80,21 +80,14 @@ const Container = styled.div<ContainerProps>`
       ? `0 0 0 1px ${theme.orange}`
       : `0 1px 0 0 ${theme.borderColor}`};
 
-  border-radius: ${({ isDragging, theme }) =>
-    isDragging ? theme.borderRadius : "0"};
-
-  &:last-child {
-    border-bottom-left-radius: ${({ theme }) => theme.borderRadius};
-    border-bottom-right-radius: ${({ theme }) => theme.borderRadius};
-  }
-
   border: solid 1px;
-  box-sizing: border-box;
-
   border-color: ${({ isDragging, theme }) =>
     isDragging ? theme.orange : "transparent"};
   border-top-color: ${({ isDragging, theme }) =>
     isDragging ? theme.orange : theme.borderColor};
+  border-radius: ${({ isDragging, theme }) =>
+    isDragging ? theme.borderRadius : "0"};
+  box-sizing: border-box;
 
   background-color: ${({ theme }) => theme.backgroundColor};
 

@@ -85,7 +85,7 @@ const Container = styled.div<ContainerProps>`
 
   &:last-child {
     border-bottom-left-radius: ${({ theme }) => theme.borderRadius};
-    border-bottom-left-radius: ${({ theme }) => theme.borderRadius};
+    border-bottom-right-radius: ${({ theme }) => theme.borderRadius};
   }
 
   border: solid 1px;

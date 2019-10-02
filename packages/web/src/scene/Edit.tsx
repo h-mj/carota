@@ -378,6 +378,9 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
    */
   private renderTextField = (name: TextFieldNames) => (
     <TextField
+      autoFocus={
+        this.props.foodstuff === undefined && name === "name" ? true : undefined
+      }
       errorMessage={this.messageFor(name)}
       invalid={this.reasons[name] !== undefined}
       label={this.translation.inputs[name].label}

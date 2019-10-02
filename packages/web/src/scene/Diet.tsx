@@ -8,7 +8,7 @@ import {
   SceneComponent
 } from "../base/SceneComponent";
 import { DateSelect } from "../component/DateSelect/DateSelect";
-import { MealList } from "../component/MealList/MealList";
+import { Meals } from "../component/DietLists/Meals";
 import { Plus } from "../component/Plus";
 import { styled } from "../styling/theme";
 
@@ -45,7 +45,7 @@ export class Diet extends SceneComponent<"Diet"> {
         </Sticky>
 
         <DragDropContext onDragEnd={this.handleDragEnd}>
-          <MealList mealList={meals} />
+          <Meals mealList={meals} />
         </DragDropContext>
 
         <Plus fixed={true} onClick={this.handleAddClick}>
@@ -106,6 +106,7 @@ export class Diet extends SceneComponent<"Diet"> {
 const Sticky = styled.div`
   position: sticky;
   top: 0;
+  z-index: 1;
 
   background-color: ${({ theme }) => theme.backgroundColor};
 `;

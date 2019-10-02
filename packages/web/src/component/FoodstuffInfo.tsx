@@ -113,9 +113,9 @@ export class FoodstuffInfo extends TranslatedComponent<
 
             return (
               <Nutrient key={nutrient}>
-                <Icon>
+                <div>
                   <IconComponent />
-                </Icon>
+                </div>
                 <Quantity>{quantity}</Quantity>
                 <Unit>{unit}</Unit>
               </Nutrient>
@@ -238,17 +238,6 @@ const Nutrient = styled.div`
 
   & > * {
     width: 100%;
-  }
-`;
-
-/**
- * Nutrient icon wrapper that resizes the icon inside.
- */
-const Icon = styled.span`
-  height: ${({ theme }) => theme.lineHeight};
-
-  & > * {
-    height: 100%;
   }
 `;
 

@@ -7,8 +7,10 @@ import { Component } from "../../base/Component";
 import { Foodstuff } from "../../model/Foodstuff";
 import { Meal } from "../../model/Meal";
 import { styled } from "../../styling/theme";
-import { ConsumableList } from "../ConsumableList/ConsumableList";
 import { Plus } from "../Plus";
+import { Consumables } from "./Consumables";
+import { NutrientQuantities } from "./NutrientQuantities";
+import { Texts } from "./Texts";
 
 /**
  * Meal list entry component props.
@@ -39,10 +41,19 @@ export class MealEntry extends Component<MealEntryProps> {
 
     return (
       <Draggable draggableId={meal.id} index={this.props.index}>
-        {provided => (
-          <Container ref={provided.innerRef} {...provided.draggableProps}>
-            <Title {...provided.dragHandleProps}>{meal.name}</Title>
-            <ConsumableList meal={meal} />
+        {(provided, snapshot) => (
+          <Container
+            ref={provided.innerRef}
+            isDragging={snapshot.isDragging}
+            {...provided.draggableProps}
+          >
+            <TitleBar {...provided.dragHandleProps}>
+              <Texts>{meal.name}</Texts>
+              <NutrientQuantities model={meal} />
+            </TitleBar>
+
+            <Consumables meal={meal} />
+
             <PlusContainer>
               <Plus onClick={this.showSearch}>+</Plus>
             </PlusContainer>
@@ -71,26 +82,42 @@ export class MealEntry extends Component<MealEntryProps> {
 }
 
 /**
+ * Container component props.
+ */
+interface ContainerProps {
+  /**
+   * Whether the meal is being dragged.
+   */
+  isDragging: boolean;
+}
+
+/**
  * Container component that wraps all other components.
  */
-const Container = styled.div`
-  border: solid 1px ${({ theme }) => theme.borderColor};
+const Container = styled.div<ContainerProps>`
   border-radius: ${({ theme }) => theme.borderRadius};
+  border: solid 1px
+    ${({ isDragging, theme }) =>
+      isDragging ? theme.orange : theme.borderColor};
+  box-shadow: ${({ isDragging, theme }) =>
+    isDragging ? `0 0 0 1px ${theme.orange}` : "none"};
+
   background-color: ${({ theme }) => theme.backgroundColor};
+
+  transition: box-shadow ${({ theme }) => theme.transition},
+    border ${({ theme }) => theme.transition};
 `;
 
 /**
  * Meal title bar.
  */
-const Title = styled.div`
+const TitleBar = styled.div`
   width: 100%;
-  height: ${({ theme }) => theme.height};
-
   display: flex;
-  align-items: center;
 
-  padding: 0 ${({ theme }) => theme.paddingSecondary};
-  box-sizing: border-box;
+  @media screen and (max-width: 50rem) {
+    flex-direction: column;
+  }
 `;
 
 /**

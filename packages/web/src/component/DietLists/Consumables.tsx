@@ -8,9 +8,9 @@ import { styled } from "../../styling/theme";
 import { ConsumableEntry } from "./ConsumableEntry";
 
 /**
- * Meal consumable list component props.
+ * Consumables component props.
  */
-interface ConsumableListProps {
+interface ConsumablesProps {
   /**
    * Meal which consumables will be rendered within this component.
    */
@@ -18,10 +18,10 @@ interface ConsumableListProps {
 }
 
 /**
- * Component that displays a list of specified consumables.
+ * Component that displays all consumables of provided meal.
  */
 @observer
-export class ConsumableList extends Component<ConsumableListProps> {
+export class Consumables extends Component<ConsumablesProps> {
   /**
    * Renders a list of consumables.
    */
@@ -47,11 +47,4 @@ export class ConsumableList extends Component<ConsumableListProps> {
   }
 }
 
-const Container = styled.div`
-  padding: ${({ theme }) => theme.paddingSecondary};
-  padding-bottom: 0;
-
-  & > * {
-    margin-bottom: ${({ theme }) => theme.paddingSecondary};
-  }
-`;
+const Container = styled.div``;

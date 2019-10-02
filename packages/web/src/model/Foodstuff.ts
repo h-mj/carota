@@ -3,6 +3,21 @@ import { FoodstuffDto, NutritionDeclarationDto, Units } from "api";
 import { FoodstuffsStore } from "../store/FoodstuffsStore";
 
 /**
+ * Array of required nutrient names in most common order.
+ */
+export const REQUIRED_NUTRIENTS = [
+  "energy",
+  "protein",
+  "fat",
+  "carbohydrate"
+] as const;
+
+/**
+ * Union of required nutrients.
+ */
+export type RequiredNutrient = typeof REQUIRED_NUTRIENTS[number];
+
+/**
  * Foodstuff entity client-side representation.
  */
 export class Foodstuff {

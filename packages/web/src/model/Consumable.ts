@@ -1,6 +1,7 @@
 import { ConsumableDto, FoodstuffDto } from "api";
 import { observable } from "mobx";
 
+import { RequiredNutrient } from "./Foodstuff";
 import { Meal } from "./Meal";
 
 /**
@@ -22,5 +23,14 @@ export class Consumable {
     this.quantity = dto.quantity;
     this.nextId = dto.nextId;
     this.meal = meal;
+  }
+
+  /**
+   * Returns quantity of specified required nutrient.
+   */
+  public quantityOf(nutrient: RequiredNutrient) {
+    return (
+      (this.quantity / 100) * this.foodstuff.nutritionDeclaration[nutrient]
+    );
   }
 }

@@ -26,6 +26,8 @@ const fixedStyle = css`
 export const Plus = styled.button<PlusProps>`
   ${RESET};
 
+  z-index: 1;
+
   width: ${({ theme }) => theme.height};
   height: ${({ theme }) => theme.height};
 

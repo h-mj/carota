@@ -16,19 +16,27 @@ export const Logo: React.FunctionComponent = () => (
 );
 
 /**
+ * Icon SVG with default height.
+ */
+export const Icon = styled.svg`
+  height: ${({ theme }) => theme.iconHeight};
+  flex-shrink: 0;
+`;
+
+/**
  * Energy SVG icon.
  */
 export const Energy: React.FunctionComponent = () => (
-  <svg viewBox="0 0 42 68" xmlns="http://www.w3.org/2000/svg">
+  <Icon viewBox="0 0 42 68" xmlns="http://www.w3.org/2000/svg">
     <path d="m29 0l-10 30h23l-29 38 10-28h-23" fill="#43b02a" />
-  </svg>
+  </Icon>
 );
 
 /**
  * Protein SVG icon.
  */
 export const Protein: React.FunctionComponent = () => (
-  <svg viewBox="0 0 42 68" xmlns="http://www.w3.org/2000/svg">
+  <Icon viewBox="0 0 42 68" xmlns="http://www.w3.org/2000/svg">
     <path
       d="m0 8l42-4v8l-42 4m0 8l42-4v8l-42 4m0 8l42-4v8l-42 4m0 8l42-4v8l-42 4"
       fill="#6b9cde"
@@ -37,28 +45,28 @@ export const Protein: React.FunctionComponent = () => (
       d="m0 8l42 12v8l-42-12m0 8l42 12v8l-42-12m0 8l42 12v8l-42-12"
       fill="#9bc7ff"
     />
-  </svg>
+  </Icon>
 );
 
 /**
  * Fat SVG icon.
  */
 export const Fat: React.FunctionComponent = () => (
-  <svg viewBox="0 0 42 68" xmlns="http://www.w3.org/2000/svg">
+  <Icon viewBox="0 0 42 68" xmlns="http://www.w3.org/2000/svg">
     <path d="m21 3l-18 30a21 21 0 1 0 36 0l-18-30" fill="#ff8200" />
-  </svg>
+  </Icon>
 );
 
 /**
  * Carbohydrate SVG icon.
  */
 export const Carbohydrate: React.FunctionComponent = () => (
-  <svg viewBox="0 0 42 68" xmlns="http://www.w3.org/2000/svg">
+  <Icon viewBox="0 0 42 68" xmlns="http://www.w3.org/2000/svg">
     <path
       d="m21 28a20 20 0 0 0 0 -28 20 20 0 0 0 0 28m-21-12a20 20 0 0 0 20 20 20 20 0 0 0 -20 -20m0 16a20 20 0 0 0 20 20 20 20 0 0 0 -20 -20m0 16a20 20 0 0 0 20 20 20 20 0 0 0 -20 -20m42-32a20 20 0 0 0 -20 20 20 20 0 0 0 20 -20m0 16a20 20 0 0 0 -20 20 20 20 0 0 0 20 -20m0 16a20 20 0 0 0 -20 20 20 20 0 0 0 20 -20"
       fill="#fabc1f"
     />
-  </svg>
+  </Icon>
 );
 
 /**

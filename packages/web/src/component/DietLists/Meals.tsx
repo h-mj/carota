@@ -7,9 +7,9 @@ import { styled } from "../../styling/theme";
 import { MealEntry } from "./MealEntry";
 
 /**
- * Meal list component props.
+ * Meals component props.
  */
-interface MealListProps {
+interface MealsProps {
   /**
    * Array of meal models which information will be rendered.
    */
@@ -17,9 +17,9 @@ interface MealListProps {
 }
 
 /**
- * Component that displays information of each meal in specified meal list.
+ * Component that displays information of each meal in the provided meal list.
  */
-export class MealList extends Component<MealListProps> {
+export class Meals extends Component<MealsProps> {
   /**
    * Renders all provided meals.
    */

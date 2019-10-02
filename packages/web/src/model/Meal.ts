@@ -3,7 +3,7 @@ import { action, computed, observable } from "mobx";
 
 import { MealsStore } from "../store/MealsStore";
 import { Consumable } from "./Consumable";
-import { Foodstuff } from "./Foodstuff";
+import { Foodstuff, RequiredNutrient } from "./Foodstuff";
 
 /**
  * Meal entity client-side representation.
@@ -107,5 +107,15 @@ export class Meal {
   @action
   public async remove() {
     return this.store.remove(this);
+  }
+
+  /**
+   * Returns quantity of specified required nutrient.
+   */
+  public quantityOf(nutrient: RequiredNutrient) {
+    return this.consumables.reduce(
+      (sum, consumable) => sum + consumable.quantityOf(nutrient),
+      0
+    );
   }
 }

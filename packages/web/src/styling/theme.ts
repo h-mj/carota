@@ -19,6 +19,7 @@ export interface Theme {
   height: string;
   halfHeight: string;
   lineHeight: string;
+  iconHeight: string;
   padding: string;
   halfPadding: string;
   paddingSecondary: string;
@@ -47,6 +48,7 @@ export const LIGHT: Readonly<Theme> = {
   height: "3.5rem",
   halfHeight: "1.75rem",
   lineHeight: "1.25rem",
+  iconHeight: "1rem",
   padding: "2.5rem",
   halfPadding: "1.25rem",
   paddingSecondary: "0.825rem",
@@ -61,7 +63,7 @@ export const LIGHT: Readonly<Theme> = {
   primaryColor: "rgba(0, 0, 0, 0.88)",
   secondaryColor: "rgba(0, 0, 0, 0.44)",
   backgroundColor: "rgb(255, 255, 255)",
-  translucentBackgroundColor: "rgba(0, 0, 0, 0.25)",
+  translucentBackgroundColor: "rgba(0, 0, 0, 0.1)",
   disabledBackgroundColor: "rgb(245, 245, 245)",
   transition: "0.2s cubic-bezier(0.4, 0.0, 0.2, 1)",
   transitionSlow: "0.4s cubic-bezier(0.4, 0.0, 0.2, 1)"

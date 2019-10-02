@@ -115,6 +115,7 @@ const Container = styled.div<ContainerProps>`
 const TitleBar = styled.div`
   width: 100%;
   display: flex;
+  box-shadow: 0 1px 0 0 ${({ theme }) => theme.borderColor};
 
   @media screen and (max-width: 50rem) {
     flex-direction: column;

@@ -54,4 +54,5 @@ export class Consumables extends Component<ConsumablesProps> {
 const Container = styled.div`
   border-radius: 0 0 ${({ theme }) => theme.borderRadius} ${({ theme }) => theme.borderRadius};
   overflow: hidden;
+  min-height: ${({theme}) => theme.height};
 `;

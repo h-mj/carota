@@ -44,7 +44,7 @@ const Container = styled.div`
   max-width: ${({ theme }) => theme.widthMedium};
   width: 100%;
 
-  margin: auto;
+  margin: 0 auto;
   padding: ${({ theme }) => theme.padding};
   padding-bottom: 0;
   box-sizing: border-box;

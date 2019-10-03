@@ -102,12 +102,12 @@ class NutrientQuantity extends Component<NutrientQuantityProps> {
 
     return (
       <Nutrient>
+        <Bar percentage={(100 * quantity) / whole} />
         <Icon />
         <Name>
           {Math.round(10 * this.props.model.quantityOf(this.props.nutrient)) /
             10}
         </Name>
-        <Bar percentage={(100 * quantity) / whole} />
       </Nutrient>
     );
   }
@@ -147,11 +147,13 @@ const Bar = styled.div<BarProps>`
   position: absolute;
   left: 0;
 
+  z-index: -1;
+
   width: ${({ percentage }) => percentage}%;
   height: 100%;
 
   border-radius: ${({ theme }) => theme.borderRadius};
-  background-color: ${({ theme }) => theme.backgroundColorTranslucent};
+  background-color: ${({ theme }) => theme.backgroundColorDarker};
 
   transition: ${({ theme }) => theme.transition};
 `;

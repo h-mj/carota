@@ -26,6 +26,7 @@ export const Texts = styled.div`
 
   @media screen and (max-width: 50rem) {
     &:not(:only-child) {
+      padding-top: calc(${({ theme }) => theme.halfHeight} / 2);
       padding-bottom: 0;
     }
   }

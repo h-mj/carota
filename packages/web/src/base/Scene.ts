@@ -11,6 +11,7 @@ export type SceneNames =
   | "Edit"
   | "Login"
   | "Logout"
+  | "Name"
   | "Quantity"
   | "Register"
   | "Search"
@@ -25,6 +26,7 @@ const SCENE_TO_COMPONENT_NAME = {
   Edit: "Edit",
   Login: "Login",
   Logout: "Logout",
+  Name: "Name",
   Quantity: "Quantity",
   Register: "Register",
   Search: "Search",

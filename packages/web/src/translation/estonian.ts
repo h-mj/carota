@@ -110,11 +110,30 @@ export const estonian: Translation = {
       submit: "Sisenege →",
       title: "Sisenege"
     },
+    Name: {
+      label: "Nimetus",
+      meals: {
+        breakfast: "Hommikusöök",
+        lunch: "Lõunasöök",
+        dinner: "Õhtusöök"
+      },
+      or: "Või",
+      selectHelper: "Valige toidukorra nimetus:",
+      selectReasons: {
+        empty: "Palun valige uue toidukorra nimetus."
+      },
+      submit: "Looge",
+      textFieldHelper: "Sisestage uue toidukorra nimetus:",
+      textFieldReasons: {
+        empty: "Palun sisestage uue toidukorra nimetus."
+      },
+      title: "Looge toidukord"
+    },
     Quantity: {
       g: "grammides",
       ml: "milliliitrites",
       quantity: {
-        helper: "Palun sisestage toiduaine kogus:",
+        helper: "Sisestage toiduaine kogus:",
         label: "Kogus",
         reasons: {
           empty: "Palun sisestage toiduaine kogus.",

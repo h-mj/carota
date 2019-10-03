@@ -15,7 +15,7 @@ import { styled } from "../styling/theme";
 /**
  * Diet scene that is used to add, edit and delete the consumed meals at given date.
  */
-@inject("meals")
+@inject("meals", "views")
 @observer
 export class Diet extends SceneComponent<"Diet"> {
   /**
@@ -67,6 +67,7 @@ export class Diet extends SceneComponent<"Diet"> {
   /**
    * Handles drag end event.
    */
+  @action
   private handleDragEnd = async (result: DropResult) => {
     const { source, destination, draggableId, type } = result;
 
@@ -95,8 +96,24 @@ export class Diet extends SceneComponent<"Diet"> {
     }
   };
 
+  /**
+   * Shows name selection scene when user clicks on `Plus` button.
+   */
+  @action
   private handleAddClick = () => {
-    this.props.meals!.add(this.props.meals!.meals.length.toString(), this.date);
+    this.props.views!.push("center", "Name", {
+      onSelect: this.handleNameSelect
+    });
+  };
+
+  /**
+   * Creates a new meal with specified name. Used as a callback function for
+   * `Name` scene, that is used to select meal name.
+   */
+  @action
+  private handleNameSelect = (name: string) => {
+    this.props.meals!.add(name, this.date);
+    this.props.views!.popUntil(this.props.scene);
   };
 }
 

@@ -56,14 +56,14 @@ export abstract class TranslatedComponent<
   /**
    * Component name that is used to retrieve correct translations.
    */
-  private readonly name: TName;
+  private readonly __name: TName;
 
   /**
    * Creates a new instance of `Component` and sets the name of this component.
    */
   public constructor(name: TName, props: TProps) {
     super(props);
-    this.name = name;
+    this.__name = name;
   }
 
   /**
@@ -72,7 +72,7 @@ export abstract class TranslatedComponent<
   @computed
   public get translation(): TTranslation {
     return (this.props.views!.translation.components[
-      this.name
+      this.__name
     ] as unknown) as TTranslation;
   }
 }

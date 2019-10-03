@@ -195,19 +195,7 @@ const Options = styled.div<InputStyleProps>`
 
   min-width: 0;
   width: 100%;
-  height: ${({ theme }) => theme.halfHeight};
-
-  border: solid 1px
-    ${({ active, invalid, theme }) =>
-      invalid ? theme.red : active ? theme.orange : theme.borderColor};
-  border-radius: ${({ theme }) => theme.borderRadius};
-  box-shadow: ${({ active, invalid, theme }) =>
-    invalid
-      ? `inset 0 0 0 1px ${theme.red}`
-      : active
-      ? `inset 0 0 0 1px ${theme.orange}`
-      : "none"};
-  box-sizing: border-box;
+  height: 100%;
 
   transition: ${({ theme }) => theme.transition};
 `;

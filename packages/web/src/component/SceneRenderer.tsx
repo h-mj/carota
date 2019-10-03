@@ -9,6 +9,7 @@ import { Diet } from "../scene/Diet";
 import { Edit } from "../scene/Edit";
 import { Login } from "../scene/Login";
 import { Logout } from "../scene/Logout";
+import { Name } from "../scene/Name";
 import { Quantity } from "../scene/Quantity";
 import { Register } from "../scene/Register";
 import { Search } from "../scene/Search";
@@ -26,6 +27,7 @@ const SCENE_COMPONENTS = {
   Edit: Edit,
   Login: Login,
   Logout: Logout,
+  Name: Name,
   Quantity: Quantity,
   Register: Register,
   Search: Search,

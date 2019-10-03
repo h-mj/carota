@@ -64,6 +64,16 @@ export class MealsStore {
   }
 
   /**
+   * Returns whether meal with specified name exists.
+   */
+  public hasWithName(name: string) {
+    return (
+      Array.from(this.models.values()).find(meal => meal.name === name) !==
+      undefined
+    );
+  }
+
+  /**
    * Clears all stored data.
    */
   public clear() {

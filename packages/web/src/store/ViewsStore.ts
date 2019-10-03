@@ -201,14 +201,21 @@ export class ViewsStore {
     position: RenderPosition,
     name: TSceneName,
     props: SceneSceneComponentProps<TSceneName>
-  ): void {
-    const scene = new Scene(name, undefined, props, position);
+  ) {
+    const scene = (new Scene(
+      name,
+      undefined,
+      props,
+      position
+    ) as unknown) as Scenes;
 
-    this._scenes.push((scene as unknown) as Scenes);
+    this._scenes.push(scene);
+
+    return scene;
   }
 
   /**
-   * Hides all scenes that are before `scene` in active scene stack including the scene itself.
+   * Hides all scenes that are before specified `scene` in active scene stack including the scene itself.
    */
   @action
   public pop(scene: Scenes) {
@@ -217,6 +224,20 @@ export class ViewsStore {
     }
 
     while (this._scenes.pop() !== scene);
+  }
+
+  /**
+   * Hides all scenes that are before specified `scene` in active scene stack.
+   */
+  @action
+  public popUntil(scene: Scenes) {
+    if (!this._scenes.includes(scene)) {
+      return;
+    }
+
+    while (this._scenes[this._scenes.length - 1] !== scene) {
+      this._scenes.pop();
+    }
   }
 
   /**

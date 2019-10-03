@@ -4,6 +4,7 @@ import * as React from "react";
 import { Draggable } from "react-beautiful-dnd";
 
 import { Component } from "../../base/Component";
+import { Scenes } from "../../base/Scene";
 import { Foodstuff } from "../../model/Foodstuff";
 import { Meal } from "../../model/Meal";
 import { styled } from "../../styling/theme";
@@ -33,6 +34,11 @@ interface MealEntryProps {
 @inject("meals", "views")
 @observer
 export class MealEntry extends Component<MealEntryProps> {
+  /**
+   * Pushed search scene.
+   */
+  private scene?: Scenes;
+
   /**
    * Renders components that display information of provided meal model.
    */
@@ -68,7 +74,9 @@ export class MealEntry extends Component<MealEntryProps> {
    * Shows search scene when user clicks on `Plus` button component.
    */
   public showSearch = () => {
-    this.props.views!.push("main", "Search", { select: this.select });
+    this.scene = this.props.views!.push("main", "Search", {
+      select: this.select
+    });
   };
 
   /**
@@ -78,7 +86,7 @@ export class MealEntry extends Component<MealEntryProps> {
   @action
   private select = (foodstuff: Foodstuff, quantity: number) => {
     this.props.meal.consume(foodstuff, quantity);
-    this.props.views!.refresh();
+    this.props.views!.pop(this.scene!);
   };
 }
 

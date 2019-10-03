@@ -17,7 +17,7 @@ export const Texts = styled.div`
 
   box-sizing: border-box;
 
-  color: ${({ theme }) => theme.primaryColor};
+  color: ${({ theme }) => theme.colorPrimary};
   word-break: break-word;
 
   & > *:not(:last-child) {
@@ -26,7 +26,7 @@ export const Texts = styled.div`
 
   @media screen and (max-width: 50rem) {
     &:not(:only-child) {
-      padding-top: calc(${({ theme }) => theme.halfHeight} / 2);
+      padding-top: calc(${({ theme }) => theme.heightHalf} / 2);
       padding-bottom: 0;
     }
   }

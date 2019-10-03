@@ -146,10 +146,14 @@ export interface InputStyleProps {
  * Helper text above the input.
  */
 const HelperMessage = styled.div<InputStyleProps>`
-  margin-bottom: ${({ theme }) => theme.halfPaddingSecondary};
+  margin-bottom: ${({ theme }) => theme.paddingSecondaryHalf};
 
   color: ${({ active, invalid, theme }) =>
-    invalid ? theme.red : active ? theme.orange : theme.secondaryColor};
+    invalid
+      ? theme.colorRed
+      : active
+      ? theme.colorOrange
+      : theme.colorSecondary};
 
   transition: ${({ theme }) => theme.transition};
 `;
@@ -166,18 +170,22 @@ const Field = styled.div<InputStyleProps>`
   align-items: center;
 
   background-color: ${({ disabled, theme }) =>
-    disabled ? theme.disabledBackgroundColor : theme.backgroundColor};
+    disabled ? theme.backgroundColorDisabled : theme.backgroundColor};
   box-sizing: border-box;
 
   border: solid 1px
     ${({ active, invalid, theme }) =>
-      invalid ? theme.red : active ? theme.orange : theme.borderColor};
+      invalid
+        ? theme.colorRed
+        : active
+        ? theme.colorOrange
+        : theme.borderColor};
   border-radius: ${({ theme }) => theme.borderRadius};
   box-shadow: ${({ active, invalid, theme }) =>
     invalid
-      ? `inset 0 0 0 1px ${theme.red}`
+      ? `inset 0 0 0 1px ${theme.colorRed}`
       : active
-      ? `inset 0 0 0 1px ${theme.orange}`
+      ? `inset 0 0 0 1px ${theme.colorOrange}`
       : "none"};
 
   transition: ${({ theme }) => theme.transition};
@@ -215,7 +223,11 @@ const Caption = styled.span<InputStyleProps>`
   min-width: 30%;
 
   color: ${({ active, invalid, theme }) =>
-    invalid ? theme.red : active ? theme.orange : theme.secondaryColor};
+    invalid
+      ? theme.colorRed
+      : active
+      ? theme.colorOrange
+      : theme.colorSecondary};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -229,9 +241,9 @@ const Caption = styled.span<InputStyleProps>`
  * Component that displays the error message under the field component.
  */
 const ErrorMessage = styled.div`
-  margin-top: ${({ theme }) => theme.halfPaddingSecondary};
+  margin-top: ${({ theme }) => theme.paddingSecondaryHalf};
 
-  color: ${({ theme }) => theme.red};
+  color: ${({ theme }) => theme.colorRed};
   font-size: 0.7rem;
   letter-spacing: 0;
 `;

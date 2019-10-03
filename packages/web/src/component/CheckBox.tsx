@@ -206,13 +206,17 @@ interface CheckBoxStateProps extends InputStyleProps {
 const Box = styled.div<CheckBoxStateProps>`
   position: relative;
 
-  width: ${({ theme }) => theme.halfHeight};
-  height: ${({ theme }) => theme.halfHeight};
+  width: ${({ theme }) => theme.heightHalf};
+  height: ${({ theme }) => theme.heightHalf};
 
   flex: 0 0 auto;
 
   color: ${({ active, checked, invalid, theme }) =>
-    invalid ? theme.red : active || checked ? theme.orange : theme.borderColor};
+    invalid
+      ? theme.colorRed
+      : active || checked
+      ? theme.colorOrange
+      : theme.borderColor};
   border-radius: ${({ theme }) => theme.borderRadius};
   box-shadow: inset 0 0 0
     ${({ active, checked, invalid, theme }) =>
@@ -253,7 +257,7 @@ const Check = styled.div<CheckBoxStateProps>`
   border-right: calc(${({ theme }) => theme.padding} / 12) solid;
 
   color: ${({ invalid, theme }) =>
-    invalid ? theme.backgroundColor : theme.primaryColor};
+    invalid ? theme.backgroundColor : theme.colorPrimary};
 
   transition: ${({ theme }) => theme.transition};
 

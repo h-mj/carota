@@ -200,7 +200,7 @@ const SceneOverlay = styled(Overlay)<SceneOverlayProps>`
     position === "main" ? "center" : position};
 
   background-color: ${({ overlaid, theme }) =>
-    overlaid ? "transparent" : theme.translucentBackgroundColor};
+    overlaid ? "transparent" : theme.backgroundColorTranslucent};
 
   pointer-events: ${({ overlaid }) => (overlaid ? "none" : "initial")};
 `;

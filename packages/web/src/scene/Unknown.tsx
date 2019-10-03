@@ -61,7 +61,7 @@ const Wrapper = styled.div`
  * 404 error message container.
  */
 const Message = styled.div`
-  color: ${({ theme }) => theme.secondaryColor};
+  color: ${({ theme }) => theme.colorSecondary};
   line-height: 1.4rem;
   text-align: center;
 `;
@@ -70,7 +70,7 @@ const Message = styled.div`
  * Error code container.
  */
 const Code = styled.div`
-  color: ${({ theme }) => theme.primaryColor};
+  color: ${({ theme }) => theme.colorPrimary};
   font-size: 25vmin;
   line-height: 25vmin;
   text-align: center;

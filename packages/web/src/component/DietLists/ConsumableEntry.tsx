@@ -77,14 +77,14 @@ const Container = styled.div<ContainerProps>`
 
   box-shadow: ${({ isDragging, theme }) =>
     isDragging
-      ? `0 0 0 1px ${theme.orange}`
+      ? `0 0 0 1px ${theme.colorOrange}`
       : `0 1px 0 0 ${theme.borderColor}`};
 
   border: solid 1px;
   border-color: ${({ isDragging, theme }) =>
-    isDragging ? theme.orange : "transparent"};
+    isDragging ? theme.colorOrange : "transparent"};
   border-top-color: ${({ isDragging, theme }) =>
-    isDragging ? theme.orange : theme.borderColor};
+    isDragging ? theme.colorOrange : theme.borderColor};
   border-radius: ${({ isDragging, theme }) =>
     isDragging ? theme.borderRadius : "0"};
   box-sizing: border-box;
@@ -109,6 +109,6 @@ const Quantity = styled.span`
   flex-shrink: 0;
   justify-content: center;
 
-  color: ${({ theme }) => theme.secondaryColor};
+  color: ${({ theme }) => theme.colorSecondary};
   text-align: center;
 `;

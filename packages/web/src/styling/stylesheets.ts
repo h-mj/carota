@@ -1,4 +1,4 @@
-import { css } from "styled-components";
+import { css } from "./theme";
 
 /**
  * CSS rules that resets common browser predefined rules.

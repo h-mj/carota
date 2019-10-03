@@ -191,7 +191,7 @@ const Name = styled.button`
   padding: ${({ theme }) => theme.paddingSecondary};
   box-sizing: content-box;
 
-  color: ${({ theme }) => theme.primaryColor};
+  color: ${({ theme }) => theme.colorPrimary};
   line-height: ${({ theme }) => theme.lineHeight};
   word-break: break-word;
 
@@ -225,7 +225,7 @@ const Stats = styled.div`
   box-sizing: border-box;
 
   & > *:not(:last-child) {
-    margin-bottom: ${({ theme }) => theme.halfPaddingSecondary};
+    margin-bottom: ${({ theme }) => theme.paddingSecondaryHalf};
   }
 `;
 
@@ -246,7 +246,7 @@ const Nutrient = styled.div`
  */
 const Quantity = styled.span`
   width: 100%;
-  color: ${({ theme }) => theme.primaryColor};
+  color: ${({ theme }) => theme.colorPrimary};
   font-feature-settings: "tnum" 1;
   text-align: center;
 `;
@@ -255,6 +255,6 @@ const Quantity = styled.span`
  * Displays nutrient amount unit.
  */
 const Unit = styled.span`
-  color: ${({ theme }) => theme.secondaryColor};
+  color: ${({ theme }) => theme.colorSecondary};
   text-align: right;
 `;

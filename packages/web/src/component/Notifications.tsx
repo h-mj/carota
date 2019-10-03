@@ -169,16 +169,16 @@ const NotificationContainer = styled.button<NotificationContainerProps>`
 
   border: solid 1px
     ${({ notificationType, theme }) =>
-      notificationType === "error" ? theme.red : theme.green};
+      notificationType === "error" ? theme.colorRed : theme.colorGreen};
   box-shadow: ${({ notificationType, theme }) =>
     notificationType === "error"
-      ? `inset 0 0 0 1px ${theme.red}`
-      : `inset 0 0 0 1px ${theme.orange}`};
+      ? `inset 0 0 0 1px ${theme.colorRed}`
+      : `inset 0 0 0 1px ${theme.colorOrange}`};
 
   border-radius: ${({ theme }) => theme.borderRadius};
   background-color: ${({ theme }) => theme.backgroundColor};
 
-  color: ${({ theme }) => theme.primaryColor};
+  color: ${({ theme }) => theme.colorPrimary};
   line-height: ${({ theme }) => theme.lineHeight};
 
   animation: ${({ active }) => (active ? fadeIn : fadeOut)} ${DURATION}s,

@@ -2,7 +2,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 
 import { Component } from "../base/Component";
-import { LIGHT, ThemeProvider, createGlobalStyle } from "../styling/theme";
+import { createGlobalStyle, LIGHT, ThemeProvider } from "../styling/theme";
 
 /**
  * Renders `GlobalStyle` component and renders it's children wrapped in
@@ -35,7 +35,7 @@ const GlobalStyle = createGlobalStyle`
 
   html {
     background-color: ${({ theme }) => theme.backgroundColor};
-    color: ${({ theme }) => theme.secondaryColor};
+    color: ${({ theme }) => theme.colorSecondary};
 
     font-family: "Inter", sans-serif;
     font-size: 16px;

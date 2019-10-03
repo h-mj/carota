@@ -44,7 +44,7 @@ export const Form = styled.form`
  * Component that displays title text.
  */
 export const Title = styled.div`
-  color: ${({ theme }) => theme.primaryColor};
+  color: ${({ theme }) => theme.colorPrimary};
   font-size: 1.5rem;
   line-height: 1.5rem;
   text-align: center;

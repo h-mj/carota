@@ -105,20 +105,21 @@ const ButtonElement = styled.button<ButtonElementProps>`
   border-radius: ${({ theme }) => theme.borderRadius};
   ${({ invalid, secondary, theme }) =>
     secondary &&
-    `border: solid 1px ${invalid ? theme.red : theme.borderColor}`};
+    `border: solid 1px ${invalid ? theme.colorRed : theme.borderColor}`};
   ${({ invalid, secondary, theme }) =>
-    secondary && invalid && `box-shadow: inset 0 0 0 1px ${theme.red}`};
+    secondary && invalid && `box-shadow: inset 0 0 0 1px ${theme.colorRed}`};
   ${({ invalid, secondary, theme }) =>
-    !secondary && `background-color: ${invalid ? theme.red : theme.orange}`};
+    !secondary &&
+    `background-color: ${invalid ? theme.colorRed : theme.colorOrange}`};
 
   color: ${({ invalid, secondary, theme }) =>
     secondary
       ? invalid
-        ? theme.red
-        : theme.secondaryColor
+        ? theme.colorRed
+        : theme.colorSecondary
       : invalid
       ? theme.backgroundColor
-      : theme.primaryColor};
+      : theme.colorPrimary};
 
   cursor: pointer;
 

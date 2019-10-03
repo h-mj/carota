@@ -261,7 +261,7 @@ const DayComponent = styled.div<DayComponentProps>`
   justify-content: center;
 
   color: ${({ theme, isSunday }) =>
-    isSunday ? theme.orange : theme.secondaryColor};
+    isSunday ? theme.colorOrange : theme.colorSecondary};
 `;
 
 /**
@@ -321,10 +321,10 @@ const DateComponent = styled.div<DateComponentProps>`
 
   color: ${({ current, isSunday, selected, theme }) =>
     current || selected
-      ? theme.primaryColor
+      ? theme.colorPrimary
       : isSunday
-      ? theme.orange
-      : theme.secondaryColor};
+      ? theme.colorOrange
+      : theme.colorSecondary};
   font-feature-settings: "tnum" 1;
 
   transition: ${({ theme }) => theme.transition};
@@ -332,8 +332,12 @@ const DateComponent = styled.div<DateComponentProps>`
   padding: ${({ theme }) => theme.paddingSecondary};
   border: solid 1px
     ${({ current, selected, theme }) =>
-      selected ? theme.orange : current ? theme.borderColor : "transparent"};
+      selected
+        ? theme.colorOrange
+        : current
+        ? theme.borderColor
+        : "transparent"};
   border-radius: ${({ theme }) => theme.borderRadius};
   box-shadow: ${({ selected, theme }) =>
-    selected ? `inset 0 0 0 1px ${theme.orange}` : "none"};
+    selected ? `inset 0 0 0 1px ${theme.colorOrange}` : "none"};
 `;

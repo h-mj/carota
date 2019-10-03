@@ -1,10 +1,10 @@
 import { action } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import styled from "styled-components";
 
 import { TranslatedComponent } from "../../base/TranslatedComponent";
 import { RESET } from "../../styling/stylesheets";
+import { styled } from "../../styling/theme";
 import { DateArray, equals, toDateArray } from "./DateSelect";
 
 /**
@@ -249,14 +249,14 @@ const Tab = styled.button<TabProps>`
     selected || current ? `solid 3px transparent` : `solid 1px transparent`};
   border-bottom: ${({ current, selected, theme }) =>
     selected
-      ? `solid 3px ${theme.orange}`
+      ? `solid 3px ${theme.colorOrange}`
       : current
       ? `solid 3px ${theme.borderColor}`
       : `solid 1px ${theme.borderColor}`};
   box-sizing: border-box;
 
   color: ${({ current, selected, theme }) =>
-    current || selected ? theme.primaryColor : theme.secondaryColor};
+    current || selected ? theme.colorPrimary : theme.colorSecondary};
   font-feature-settings: "tnum" 1;
   text-align: center;
 

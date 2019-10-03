@@ -79,8 +79,8 @@ interface NutrientPercentageProps {
  */
 // prettier-ignore
 const NutrientPercentage = styled.div<NutrientPercentageProps>`
-  width: calc(${({ diameter }) => diameter} * ${({ theme }) => theme.halfHeight});
-  height: calc(${({ diameter }) => diameter} * ${({ theme }) => theme.halfHeight});
+  width: calc(${({ diameter }) => diameter} * ${({ theme }) => theme.heightHalf});
+  height: calc(${({ diameter }) => diameter} * ${({ theme }) => theme.heightHalf});
   border-radius: 50%;
   background-color: ${({ color }) => color};
 `;

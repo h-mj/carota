@@ -341,12 +341,13 @@ const Input = styled.input<InputProps>`
 
   flex: 1 1 0;
 
-  color: ${({ theme }) => theme.primaryColor};
-  caret-color: ${({ invalid, theme }) => (invalid ? theme.red : theme.orange)};
+  color: ${({ theme }) => theme.colorPrimary};
+  caret-color: ${({ invalid, theme }) =>
+    invalid ? theme.colorRed : theme.colorOrange};
   text-align: ${({ textAlign }) => textAlign || "left"};
 
   &::placeholder {
-    color: ${({ theme }) => theme.secondaryColor};
+    color: ${({ theme }) => theme.colorSecondary};
     opacity: initial;
   }
 
@@ -372,7 +373,11 @@ const Unit = styled.span<InputStyleProps>`
   justify-content: center;
 
   color: ${({ active, invalid, theme }) =>
-    invalid ? theme.red : active ? theme.orange : theme.secondaryColor};
+    invalid
+      ? theme.colorRed
+      : active
+      ? theme.colorOrange
+      : theme.colorSecondary};
   white-space: nowrap;
 
   user-select: none;

@@ -71,7 +71,7 @@ const Title = styled.div`
   flex-grow: 1;
   align-items: center;
 
-  color: ${({ theme }) => theme.secondaryColor};
+  color: ${({ theme }) => theme.colorSecondary};
 `;
 
 /**
@@ -85,7 +85,7 @@ const Close = styled.button`
   margin-left: auto;
   padding: 0 ${({ theme }) => theme.padding};
 
-  color: ${({ theme }) => theme.secondaryColor};
+  color: ${({ theme }) => theme.colorSecondary};
   font-size: 1.5rem;
   text-align: center;
 

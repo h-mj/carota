@@ -247,6 +247,6 @@ const Or = styled.div`
   & > span {
     padding: 0 ${({ theme }) => theme.paddingSecondary};
     background-color: ${({ theme }) => theme.backgroundColor};
-    color: ${({ theme }) => theme.secondaryColor};
+    color: ${({ theme }) => theme.colorSecondary};
   }
 `;

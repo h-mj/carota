@@ -1,6 +1,5 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import styled from "styled-components";
 
 import {
   DefaultSceneComponentProps,
@@ -9,6 +8,7 @@ import {
 import { Button } from "../component/Button";
 import { Controls, Form } from "../component/collection/form";
 import { SceneTitle } from "../component/SceneTitle";
+import { styled } from "../styling/theme";
 
 /**
  * Confirmation scene component props.
@@ -106,6 +106,6 @@ export class Confirmation extends SceneComponent<
  * Confirmation message container.
  */
 const Message = styled.div`
-  color: ${({ theme }) => theme.primaryColor};
+  color: ${({ theme }) => theme.colorPrimary};
   text-align: center;
 `;

@@ -32,12 +32,12 @@ export const Plus = styled.button<PlusProps>`
   height: ${({ theme }) => theme.height};
 
   border-radius: 50%;
-  background-color: ${({ theme }) => theme.orange};
+  background-color: ${({ theme }) => theme.colorOrange};
 
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2),
     0 0.1rem 0.25rem rgba(0, 0, 0, 0.1);
 
-  color: ${({ theme }) => theme.primaryColor};
+  color: ${({ theme }) => theme.colorPrimary};
   font-feature-settings: "case";
   font-size: 2rem;
   text-align: center;

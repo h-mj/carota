@@ -52,7 +52,7 @@ const Container = styled.div`
   grid-gap: ${({ theme }) => theme.paddingSecondary};
   grid-template-columns: repeat(4, 1fr);
 
-  padding: calc(${({ theme }) => theme.halfHeight} / 2)
+  padding: calc(${({ theme }) => theme.heightHalf} / 2)
     ${({ theme }) => theme.paddingSecondary};
   box-sizing: border-box;
 `;
@@ -151,7 +151,7 @@ const Bar = styled.div<BarProps>`
   height: 100%;
 
   border-radius: ${({ theme }) => theme.borderRadius};
-  background-color: ${({ theme }) => theme.translucentBackgroundColor};
+  background-color: ${({ theme }) => theme.backgroundColorTranslucent};
 
   transition: ${({ theme }) => theme.transition};
 `;
@@ -160,6 +160,6 @@ const Bar = styled.div<BarProps>`
  * Nutrient name wrapper.
  */
 const Name = styled.div`
-  margin-left: ${({ theme }) => theme.halfPaddingSecondary};
+  margin-left: ${({ theme }) => theme.paddingSecondaryHalf};
   text-align: center;
 `;

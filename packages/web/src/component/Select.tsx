@@ -224,7 +224,7 @@ const Option = styled.button<OptionProps>`
   height: 100%;
 
   color: ${({ selected, theme }) =>
-    selected ? theme.primaryColor : theme.secondaryColor};
+    selected ? theme.colorPrimary : theme.colorSecondary};
 
   cursor: pointer;
 
@@ -239,6 +239,6 @@ const OptionLabel = styled.span`
   white-space: nowrap;
   text-overflow: ellipsis;
 
-  padding: 0 ${({ theme }) => theme.halfPaddingSecondary};
+  padding: 0 ${({ theme }) => theme.paddingSecondaryHalf};
   box-sizing: border-box;
 `;

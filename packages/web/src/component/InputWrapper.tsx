@@ -159,7 +159,6 @@ const HelperMessage = styled.div<InputStyleProps>`
  */
 const Field = styled.div<InputStyleProps>`
   position: relative;
-  z-index: ${({ active, invalid }) => (active ? 2 : invalid ? 1 : 0)};
 
   height: ${({ theme }) => theme.height};
 

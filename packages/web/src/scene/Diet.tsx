@@ -1,7 +1,7 @@
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, DragStart, DropResult } from "react-beautiful-dnd";
 
 import {
   DefaultSceneComponentProps,
@@ -10,6 +10,7 @@ import {
 import { DateSelect } from "../component/DateSelect/DateSelect";
 import { Meals } from "../component/DietLists/Meals";
 import { Plus } from "../component/Plus";
+import { TrashCan } from "../component/TrashCan";
 import { styled } from "../styling/theme";
 
 /**
@@ -22,6 +23,16 @@ export class Diet extends SceneComponent<"Diet"> {
    * Current date which meals are currently shown.
    */
   @observable private date!: Date; // Initialized by calling `this.setDate` in constructor.
+
+  /**
+   * Current draggable type.
+   */
+  @observable private draggableType?: "meal" | "consumable";
+
+  /**
+   * Current draggable ID.
+   */
+  private draggableId?: string;
 
   /**
    * Sets the name of this scene.
@@ -44,8 +55,13 @@ export class Diet extends SceneComponent<"Diet"> {
           <DateSelect date={this.date} onChange={this.setDate} />
         </Sticky>
 
-        <DragDropContext onDragEnd={this.handleDragEnd}>
-          <Meals mealList={meals} />
+        <DragDropContext
+          onDragStart={this.handleDragStart}
+          onDragEnd={this.handleDragEnd}
+        >
+          <TrashCan isRemovable={this.isDraggableRemovable()} />
+
+          <Meals mealList={meals} draggableType={this.draggableType} />
         </DragDropContext>
 
         <Plus fixed={true} onClick={this.handleAddClick}>
@@ -54,6 +70,23 @@ export class Diet extends SceneComponent<"Diet"> {
       </>
     );
   }
+
+  /**
+   * Returns whether current draggable is removable.
+   */
+  private isDraggableRemovable = () => {
+    if (this.draggableType === undefined) {
+      return false;
+    }
+
+    if (this.draggableType === "consumable") {
+      return true;
+    }
+
+    return (
+      this.props.meals!.withId(this.draggableId!)!.consumables.length === 0
+    );
+  };
 
   /**
    * Sets currently active date to specified date.
@@ -65,11 +98,24 @@ export class Diet extends SceneComponent<"Diet"> {
   };
 
   /**
+   * Updates current draggable type on drag start.
+   */
+  @action
+  private handleDragStart = (initial: DragStart) => {
+    this.draggableType =
+      initial.source.droppableId === "meals" ? "meal" : "consumable";
+    this.draggableId = initial.draggableId;
+  };
+
+  /**
    * Handles drag end event.
    */
   @action
-  private handleDragEnd = async (result: DropResult) => {
-    const { source, destination, draggableId, type } = result;
+  private handleDragEnd = (result: DropResult) => {
+    const { source, destination, draggableId } = result;
+
+    const type = this.draggableType;
+    this.draggableType = undefined;
 
     if (!destination) {
       return;
@@ -83,16 +129,27 @@ export class Diet extends SceneComponent<"Diet"> {
     }
 
     if (type === "meal") {
-      await this.props.meals!.move(
-        this.props.meals!.withId(draggableId)!,
-        destination.index
-      );
+      const target = this.props.meals!.withId(draggableId)!;
+
+      if (destination.droppableId === "trashCan") {
+        this.props.meals!.remove(target);
+      } else {
+        this.props.meals!.move(target, destination.index);
+      }
     } else {
-      await this.props.meals!.reorder(
-        this.props.meals!.withId(source.droppableId)!.withId(draggableId)!,
-        this.props.meals!.withId(destination.droppableId)!,
-        destination.index
-      );
+      const target = this.props
+        .meals!.withId(source.droppableId)!
+        .withId(draggableId)!;
+
+      if (destination.droppableId === "trashCan") {
+        this.props.meals!.unconsume(target);
+      } else {
+        this.props.meals!.reorder(
+          target,
+          this.props.meals!.withId(destination.droppableId)!,
+          destination.index
+        );
+      }
     }
   };
 

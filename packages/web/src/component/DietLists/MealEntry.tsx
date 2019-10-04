@@ -18,6 +18,11 @@ import { Texts } from "./Texts";
  */
 interface MealEntryProps {
   /**
+   * Current draggable type.
+   */
+  draggableType?: "meal" | "consumable";
+
+  /**
    * Meal index.
    */
   index: number;
@@ -59,7 +64,7 @@ export class MealEntry extends Component<MealEntryProps> {
               {consumables.length > 0 && <NutrientQuantities model={meal} />}
             </TitleBar>
 
-            <Consumables meal={meal} />
+            <Consumables meal={meal} draggableType={this.props.draggableType} />
 
             <PlusContainer>
               <Plus onClick={this.showSearch}>+</Plus>

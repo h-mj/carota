@@ -204,6 +204,9 @@ export const russian: Translation = {
         "дек."
       ]
     },
+    TrashCan: {
+      delete: "Удалить"
+    },
     Unknown: {
       message: "Страница, которую Вы ищете, не может быть найдена."
     }

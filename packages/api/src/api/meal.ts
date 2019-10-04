@@ -315,10 +315,10 @@ const remove = async ({ id }: RemoveMealDto, account: Account) => {
 
   if (meal === undefined) {
     throw createIdNotFoundError(id, Meal.name, ["id"]);
-  }
-
-  if (meal.accountId !== account.id || account.rights !== "All") {
+  } else if (meal.accountId !== account.id || account.rights !== "All") {
     throw new ForbiddenError("You are not allowed to delete this meal.");
+  } else if (meal.consumables.length > 0) {
+    throw new BadRequestError("Only empty meals can be removed");
   }
 
   await unlink(meal);

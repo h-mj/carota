@@ -1,5 +1,5 @@
-import { ConsumableDto, MealDto } from "api";
-import { action, observable } from "mobx";
+import { MealDto } from "api";
+import { action, computed, observable } from "mobx";
 
 import { Consumable } from "../model/Consumable";
 import { Foodstuff } from "../model/Foodstuff";
@@ -30,6 +30,7 @@ export class MealsStore {
   /**
    * Returns an array of currently stored meal models in correct order.
    */
+  @computed
   public get meals() {
     const links: Map<string | undefined, string> = new Map();
 
@@ -51,6 +52,7 @@ export class MealsStore {
   /**
    * Creates and stores meal model of specified `data transfer object`.
    */
+  @action
   private insert = (dto: MealDto) => {
     const model = new Meal(dto, this);
     this.models.set(model.id, model);
@@ -76,6 +78,7 @@ export class MealsStore {
   /**
    * Clears all stored data.
    */
+  @action
   public clear() {
     this.models.clear();
   }
@@ -150,29 +153,40 @@ export class MealsStore {
   }
 
   /**
+   * Removes specified meal from storage and fixes the broken linked list.
+   */
+  @action
+  private unlinkMeal(meal: Meal) {
+    const meals = this.meals;
+
+    this.models.delete(meal.id);
+    meals.splice(meals.indexOf(meal), 1);
+
+    for (let i = 0; i < meals.length; ++i) {
+      meals[i].nextId =
+        meals[i + 1] === undefined ? undefined : meals[i + 1].id;
+    }
+  }
+
+  /**
    * Moves specified `meal` within meal linked list to specified `index`.
    */
   @action
   public async move(meal: Meal, index: number) {
+    this.unlinkMeal(meal);
+
     const meals = this.meals;
-
-    // Temporarily remove current meal from the array to find its subsequent
-    // meal.
-    meals.splice(meals.indexOf(meal), 1);
-
     const next: Meal | undefined = meals[index];
     const nextId = next === undefined ? undefined : next.id;
 
-    // Add meal back to its new position.
+    this.models.set(meal.id, meal);
     meals.splice(index, 0, meal);
 
-    // Update meal order.
     for (let i = 0; i < meals.length; ++i) {
       meals[i].nextId =
         meals[i + 1] === undefined ? undefined : meals[i + 1].id;
     }
 
-    // Make the move meal request so that order is updated on the server too.
     const result = await Rpc.call("meal", "move", { id: meal.id, nextId });
 
     if (!result.ok) {
@@ -183,11 +197,10 @@ export class MealsStore {
   }
 
   /**
-   * Moves specified consumable to specified meal at specified index.
+   * Deletes specified consumable from its meal and fixes the broken linked list.
    */
   @action
-  public async reorder(consumable: Consumable, meal: Meal, index: number) {
-    // Delete consumable from its meal and relink the linked list.
+  private unlinkConsumable(consumable: Consumable) {
     const source = consumable.meal.consumables;
 
     consumable.meal.delete(consumable);
@@ -197,6 +210,14 @@ export class MealsStore {
       source[i].nextId =
         source[i + 1] === undefined ? undefined : source[i + 1].id;
     }
+  }
+
+  /**
+   * Moves specified consumable to specified meal at specified index.
+   */
+  @action
+  public async reorder(consumable: Consumable, meal: Meal, index: number) {
+    this.unlinkConsumable(consumable);
 
     // Add consumable to its target position and updates the linked list.
     const target = meal.consumables;
@@ -229,14 +250,36 @@ export class MealsStore {
   /**
    * Removes specified `meal`.
    */
+  @action
   public async remove(meal: Meal) {
-    throw new Error(meal.id);
+    if (meal.consumables.length > 0) {
+      throw new Error("Tried to remove non-empty meal");
+    }
+
+    this.unlinkMeal(meal);
+
+    const result = await Rpc.call("meal", "remove", { id: meal.id });
+
+    if (!result.ok) {
+      return result.value;
+    }
+
+    return undefined;
   }
 
   /**
    * Unconsumed specified `consumable`.
    */
-  public async unconsume(consumable: ConsumableDto) {
-    throw new Error(consumable.id);
+  @action
+  public async unconsume(consumable: Consumable) {
+    this.unlinkConsumable(consumable);
+
+    const result = await Rpc.call("meal", "unconsume", { id: consumable.id });
+
+    if (!result.ok) {
+      return result.value;
+    }
+
+    return undefined;
   }
 }

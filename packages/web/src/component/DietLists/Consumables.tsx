@@ -12,6 +12,11 @@ import { ConsumableEntry } from "./ConsumableEntry";
  */
 interface ConsumablesProps {
   /**
+   * Current draggable type.
+   */
+  draggableType?: "meal" | "consumable";
+
+  /**
    * Meal which consumables will be rendered within this component.
    */
   meal: Meal;
@@ -29,7 +34,10 @@ export class Consumables extends Component<ConsumablesProps> {
     const { consumables } = this.props.meal;
 
     return (
-      <Droppable droppableId={this.props.meal.id} type="consumable">
+      <Droppable
+        droppableId={this.props.meal.id}
+        isDropDisabled={this.props.draggableType !== "consumable"}
+      >
         {provided => (
           <Container ref={provided.innerRef} {...provided.droppableProps}>
             {consumables.map((consumable, index) => (

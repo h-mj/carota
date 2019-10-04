@@ -204,6 +204,9 @@ export const estonian: Translation = {
         "dets"
       ]
     },
+    TrashCan: {
+      delete: "Kustutage"
+    },
     Unknown: {
       message: "Teie otsitavat lehte ei leitud."
     }

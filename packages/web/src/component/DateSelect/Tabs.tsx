@@ -144,7 +144,7 @@ export class Tabs extends TranslatedComponent<
                 selected={equals(date, selectedDate)}
                 value={date.toString()}
               >
-                <div>{date[2]}</div>
+                {date[2]}
                 <Abbreviation>
                   {this.translation.abbreviations[date[1]]}
                 </Abbreviation>
@@ -245,15 +245,12 @@ const Tab = styled.button<TabProps>`
   height: 100%;
   flex-shrink: 0;
 
-  border-top: ${({ current, selected }) =>
-    selected || current ? `solid 3px transparent` : `solid 1px transparent`};
-  border-bottom: ${({ current, selected, theme }) =>
+  box-shadow: ${({ current, selected, theme }) =>
     selected
-      ? `solid 3px ${theme.colorOrange}`
+      ? `inset 0 -4px 0 0 ${theme.colorOrange}`
       : current
-      ? `solid 3px ${theme.borderColor}`
-      : `solid 1px ${theme.borderColor}`};
-  box-sizing: border-box;
+      ? `inset 0 -4px 0 0 ${theme.borderColor}`
+      : `inset 0 -1px 0 0 ${theme.borderColor}`};
 
   color: ${({ current, selected, theme }) =>
     current || selected ? theme.colorPrimary : theme.colorSecondary};
@@ -268,6 +265,11 @@ const Tab = styled.button<TabProps>`
 /**
  * Month abbreviation container.
  */
-const Abbreviation = styled.div`
-  font-size: 0.8rem;
+const Abbreviation = styled.span`
+  margin-left: ${({ theme }) => theme.paddingSecondaryHalf};
+
+  @media screen and (max-width: 40rem) {
+    display: block;
+    font-size: 1rem;
+  }
 `;

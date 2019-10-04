@@ -14,7 +14,8 @@ import { Quantity } from "../scene/Quantity";
 import { Register } from "../scene/Register";
 import { Search } from "../scene/Search";
 import { Unknown } from "../scene/Unknown";
-import { styled } from "../styling/theme";
+import { fadeIn } from "../styling/animations";
+import { keyframes, styled } from "../styling/theme";
 import { Overlay } from "./Overlay";
 import { TitleBar } from "./TitleBar";
 
@@ -138,7 +139,7 @@ export class SceneRenderer extends Component<SceneRendererProps> {
   };
 
   /**
-   * Focuses on the first focuseable overlay element if currently active element is outside this overlay.
+   * Focuses on the first focusable overlay element if currently active element is outside this overlay.
    */
   private focus = (event?: FocusEvent) => {
     const { current } = this.overlayRef;
@@ -199,8 +200,9 @@ const SceneOverlay = styled(Overlay)<SceneOverlayProps>`
   justify-content: ${({ position }) =>
     position === "main" ? "center" : position};
 
-  background-color: ${({ overlaid, theme }) =>
-    overlaid ? "transparent" : theme.backgroundColorTranslucent};
+  background-color: ${({ theme }) => theme.backgroundColorTranslucent};
+
+  animation: ${fadeIn} ${({ theme }) => theme.transition};
 
   pointer-events: ${({ overlaid }) => (overlaid ? "none" : "initial")};
 `;
@@ -220,10 +222,41 @@ const Main = styled.div`
 `;
 
 /**
+ * Left component slide right animation.
+ */
+const slideRight = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
+/**
  * Container that is rendered on the left of the screen.
  */
 const Left = styled(Main)`
   max-width: ${({ theme }) => theme.widthSmall};
+  animation: ${slideRight} ${({ theme }) => theme.transition};
+`;
+
+/**
+ * Center component slide up animation.
+ */
+const slideUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(50%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 `;
 
 /**
@@ -233,6 +266,8 @@ const Center = styled(Main)`
   max-width: ${({ theme }) => theme.widthSmall};
   height: initial;
   border-radius: ${({ theme }) => theme.borderRadius};
+
+  animation: ${slideUp} ${({ theme }) => theme.transition};
 
   @media screen and (max-width: ${({ theme }) => theme.widthSmall}) {
     height: 100%;

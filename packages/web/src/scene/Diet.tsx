@@ -9,16 +9,27 @@ import {
 } from "../base/SceneComponent";
 import { DateSelect } from "../component/DateSelect/DateSelect";
 import { Meals } from "../component/DietLists/Meals";
+import { Head } from "../component/Head";
 import { Plus } from "../component/Plus";
 import { TrashCan } from "../component/TrashCan";
 import { styled } from "../styling/theme";
+
+/**
+ * Diet scene component translation.
+ */
+interface DietTranslation {
+  /**
+   * Page title translation.
+   */
+  title: string;
+}
 
 /**
  * Diet scene that is used to add, edit and delete the consumed meals at given date.
  */
 @inject("meals", "views")
 @observer
-export class Diet extends SceneComponent<"Diet"> {
+export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
   /**
    * Current date which meals are currently shown.
    */
@@ -51,6 +62,8 @@ export class Diet extends SceneComponent<"Diet"> {
 
     return (
       <>
+        <Head title={this.translation.title} />
+
         <Sticky>
           <DateSelect date={this.date} onChange={this.setDate} />
         </Sticky>

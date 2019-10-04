@@ -24,6 +24,9 @@ export const russian: Translation = {
       confirm: "Подтвердить",
       title: "Подтверждение"
     },
+    Diet: {
+      title: "Суточная потребления"
+    },
     Edit: {
       addTitle: "Добавить продукт",
       confirm: "Вы уверены, что хотите удалить этот продукт?",
@@ -141,6 +144,7 @@ export const russian: Translation = {
         }
       },
       select: "Выбрать",
+      title: "Выбрать количество",
       unit: {
         helper: "Количество продукта в {unit} или в штуках?",
         label: "Единица",
@@ -148,6 +152,9 @@ export const russian: Translation = {
           undefined: "Пожалуйста, выберите единицу."
         }
       }
+    },
+    Search: {
+      title: "Поиск"
     },
     Register: {
       inputs: {

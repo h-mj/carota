@@ -10,6 +10,7 @@ import {
 } from "../base/SceneComponent";
 import { Button } from "../component/Button";
 import { Controls, Form } from "../component/collection/form";
+import { SceneTitle } from "../component/SceneTitle";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
 import { Foodstuff } from "../model/Foodstuff";
@@ -73,6 +74,11 @@ interface QuantityTranslation {
    * Select button translation.
    */
   select: string;
+
+  /**
+   * Quantity scene title.
+   */
+  title: string;
 
   /**
    * Unit input translation.
@@ -142,6 +148,8 @@ export class Quantity extends SceneComponent<
   public render() {
     return (
       <Form noValidate={true} onSubmit={this.handleSubmit}>
+        <SceneTitle scene={this.props.scene} title={this.translation.title} />
+
         {this.renderUnitInput()}
         {this.renderQuantityInput()}
 

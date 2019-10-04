@@ -24,6 +24,9 @@ export const estonian: Translation = {
       confirm: "Kinnita",
       title: "Kinnitus"
     },
+    Diet: {
+      title: "Päevane tarbimine"
+    },
     Edit: {
       addTitle: "Lisa toiduaine",
       confirm: "Kas olete kindel, et soovite selle toiduaine ära kustutada?",
@@ -142,6 +145,7 @@ export const estonian: Translation = {
         }
       },
       select: "Valige",
+      title: "Valige kogus",
       unit: {
         helper: "Kas toiduaine kogus on {ühik} või tükkides?",
         label: "Ühik",
@@ -149,6 +153,9 @@ export const estonian: Translation = {
           undefined: "Palun valige toiduaine ühik."
         }
       }
+    },
+    Search: {
+      title: "Otsing"
     },
     Register: {
       inputs: {

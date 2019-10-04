@@ -8,10 +8,18 @@ import {
   SceneComponent
 } from "../base/SceneComponent";
 import { FoodstuffInfo } from "../component/FoodstuffInfo";
+import { SceneTitle } from "../component/SceneTitle";
 import { TextField } from "../component/TextField";
 import { Foodstuff } from "../model/Foodstuff";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
+
+/**
+ * Query string validator.
+ */
+const validate = deviate<string>()
+  .trim()
+  .notEmpty();
 
 /**
  * Search scene component props.
@@ -24,11 +32,14 @@ interface SearchProps {
 }
 
 /**
- * Query string validator.
+ * Search scene component translation.
  */
-const validate = deviate<string>()
-  .trim()
-  .notEmpty();
+interface SearchTranslation {
+  /**
+   * Search scene title translation.
+   */
+  title: string;
+}
 
 /**
  * Scene which is used for selecting a foodstuff by searching for it by its
@@ -36,7 +47,11 @@ const validate = deviate<string>()
  */
 @inject("foodstuffs", "views")
 @observer
-export class Search extends SceneComponent<"Search", SearchProps> {
+export class Search extends SceneComponent<
+  "Search",
+  SearchProps,
+  SearchTranslation
+> {
   /**
    * Search query string.
    */
@@ -68,6 +83,8 @@ export class Search extends SceneComponent<"Search", SearchProps> {
   public render() {
     return (
       <>
+        <SceneTitle scene={this.props.scene} title={this.translation.title} />
+
         <Controls>
           <TextField
             autoFocus={true}

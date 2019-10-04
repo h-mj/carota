@@ -24,6 +24,9 @@ export const english: Translation = {
       confirm: "Confirm",
       title: "Confirmation"
     },
+    Diet: {
+      title: "Daily intake"
+    },
     Edit: {
       addTitle: "Add foodstuff",
       confirm: "Are you sure you want to delete this foodstuff?",
@@ -141,6 +144,7 @@ export const english: Translation = {
         }
       },
       select: "Select",
+      title: "Select quantity",
       unit: {
         helper: "Is the quantity in {unit} or in pieces?",
         label: "Unit",
@@ -186,6 +190,9 @@ export const english: Translation = {
       },
       submit: "Create account →",
       title: "Create account"
+    },
+    Search: {
+      title: "Search"
     },
     Tabs: {
       abbreviations: [

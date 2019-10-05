@@ -270,6 +270,6 @@ const Abbreviation = styled.span`
 
   @media screen and (max-width: 40rem) {
     display: block;
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 `;

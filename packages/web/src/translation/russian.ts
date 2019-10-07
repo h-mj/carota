@@ -113,6 +113,10 @@ export const russian: Translation = {
       title: "Вход"
     },
     Name: {
+      createSubmit: "Создать",
+      createTitle: "Создать прием пищи",
+      editSubmit: "Переименование приема пищи",
+      editTitle: "Переименовать",
       label: "Название",
       meals: {
         breakfast: "Завтрак",
@@ -120,16 +124,14 @@ export const russian: Translation = {
         dinner: "Ужин"
       },
       or: "Или",
-      selectHelper: "Выберите название созданной приема пищи:",
+      selectHelper: "Выберите название приема пищи:",
       selectReasons: {
-        empty: "Пожалуйста, выберите название созданной приема пищи."
+        empty: "Пожалуйста, выберите название приема пищи."
       },
-      submit: "Создать",
-      textFieldHelper: "Введите название созданной приема пищи:",
+      textFieldHelper: "Введите название приема пищи:",
       textFieldReasons: {
-        empty: "Пожалуйста, введите название созданной приема пищи."
-      },
-      title: "Создать прием пищи"
+        empty: "Пожалуйста, введите название приема пищи."
+      }
     },
     Quantity: {
       g: "граммах",

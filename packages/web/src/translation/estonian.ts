@@ -31,7 +31,7 @@ export const estonian: Translation = {
       addTitle: "Lisa toiduaine",
       confirm: "Kas olete kindel, et soovite selle toiduaine ära kustutada?",
       delete: "Kustutage",
-      editTitle: "Redigeeri toiduainet",
+      editTitle: "Redigeerige toiduainet",
       inputs: {
         barcode: {
           label: "Triipkood",
@@ -114,6 +114,10 @@ export const estonian: Translation = {
       title: "Sisenege"
     },
     Name: {
+      createSubmit: "Looge",
+      createTitle: "Toidukorra loomine",
+      editSubmit: "Nimetage ümber",
+      editTitle: "Toidukorda ümbernimetamine",
       label: "Nimetus",
       meals: {
         breakfast: "Hommikusöök",
@@ -123,14 +127,12 @@ export const estonian: Translation = {
       or: "Või",
       selectHelper: "Valige toidukorra nimetus:",
       selectReasons: {
-        empty: "Palun valige uue toidukorra nimetus."
+        empty: "Palun valige toidukorra nimetus."
       },
-      submit: "Looge",
-      textFieldHelper: "Sisestage uue toidukorra nimetus:",
+      textFieldHelper: "Sisestage toidukorra nimetus:",
       textFieldReasons: {
-        empty: "Palun sisestage uue toidukorra nimetus."
-      },
-      title: "Looge toidukord"
+        empty: "Palun sisestage toidukorra nimetus."
+      }
     },
     Quantity: {
       g: "grammides",

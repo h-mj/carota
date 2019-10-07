@@ -10,7 +10,7 @@ import { Foodstuff, RequiredNutrient } from "./Foodstuff";
  */
 export class Meal {
   public readonly id: string;
-  public readonly name: string;
+  @observable public name: string;
   public readonly date: string;
 
   /**
@@ -107,6 +107,14 @@ export class Meal {
   @action
   public async remove() {
     return this.store.remove(this);
+  }
+
+  /**
+   * Renames this meal to specified name.
+   */
+  @action
+  public async rename(name: string) {
+    return this.store.rename(this, name);
   }
 
   /**

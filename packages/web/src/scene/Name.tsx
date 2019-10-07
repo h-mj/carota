@@ -32,6 +32,11 @@ const nameValidator = deviate<string>()
  */
 interface NameProps {
   /**
+   * Existing meal initial name.
+   */
+  name?: string;
+
+  /**
    * Name selection callback function.
    */
   onSelect: (name: string) => void;
@@ -41,6 +46,26 @@ interface NameProps {
  * Name component translation.
  */
 interface NameTranslation {
+  /**
+   * Create new meal submit button text.
+   */
+  createSubmit: string;
+
+  /**
+   * Create new meal title translation.
+   */
+  createTitle: string;
+
+  /**
+   * Edit meal submit button text.
+   */
+  editSubmit: string;
+
+  /**
+   * Edit meal title translation.
+   */
+  editTitle: string;
+
   /**
    * Name text field label text.
    */
@@ -67,11 +92,6 @@ interface NameTranslation {
   selectReasons: Record<string, string>;
 
   /**
-   * Submit button text.
-   */
-  submit: string;
-
-  /**
    * Name text field helper text.
    */
   textFieldHelper: string;
@@ -80,11 +100,6 @@ interface NameTranslation {
    * Translations of text field error reason messages.
    */
   textFieldReasons: Record<string, string>;
-
-  /**
-   * Scene title translation.
-   */
-  title: string;
 }
 
 /**
@@ -123,25 +138,37 @@ export class Name extends SceneComponent<"Name", NameProps, NameTranslation> {
    */
   public constructor(props: NameProps & DefaultSceneComponentProps<"Name">) {
     super("Name", props);
+
+    if (props.name === undefined) {
+      return;
+    }
+
+    this.values[
+      this.getUnusedPredefinedMealNames().includes(props.name)
+        ? "selectedName"
+        : "name"
+    ] = props.name;
   }
 
   /**
    * Renders name selection form.
    */
   public render() {
-    const options: { label: string; value: string }[] = [];
-
-    for (const name of PREDEFINED_MEAL_NAMES) {
-      const label = this.translation.meals[name];
-
-      if (!this.props.meals!.hasWithName(label)) {
-        options.push({ label, value: label });
-      }
-    }
+    const options = this.getUnusedPredefinedMealNames().map(label => ({
+      label,
+      value: label
+    }));
 
     return (
       <Form noValidate={true} onSubmit={this.handleSubmit}>
-        <SceneTitle scene={this.props.scene} title={this.translation.title} />
+        <SceneTitle
+          scene={this.props.scene}
+          title={
+            this.props.name !== undefined
+              ? this.translation.editTitle
+              : this.translation.createTitle
+          }
+        />
 
         {options.length > 0 && (
           <>
@@ -181,10 +208,31 @@ export class Name extends SceneComponent<"Name", NameProps, NameTranslation> {
         />
 
         <Controls>
-          <Button invalid={any(this.reasons)}>{this.translation.submit}</Button>
+          <Button invalid={any(this.reasons)}>
+            {this.props.name !== undefined
+              ? this.translation.editSubmit
+              : this.translation.createSubmit}
+          </Button>
         </Controls>
       </Form>
     );
+  }
+
+  /**
+   * Returns an array of translated unused predefined meal names.
+   */
+  private getUnusedPredefinedMealNames() {
+    const names: string[] = [];
+
+    for (const name of PREDEFINED_MEAL_NAMES) {
+      const label = this.translation.meals[name];
+
+      if (!this.props.meals!.hasWithName(label) || label === this.props.name) {
+        names.push(label);
+      }
+    }
+
+    return names;
   }
 
   /**

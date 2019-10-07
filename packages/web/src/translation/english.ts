@@ -113,6 +113,10 @@ export const english: Translation = {
       title: "Sign in"
     },
     Name: {
+      createSubmit: "Create",
+      createTitle: "Create meal",
+      editSubmit: "Rename",
+      editTitle: "Rename meal",
       label: "Name",
       meals: {
         breakfast: "Breakfast",
@@ -122,14 +126,12 @@ export const english: Translation = {
       or: "Or",
       selectHelper: "Select meal name:",
       selectReasons: {
-        empty: "Please select created meal name."
+        empty: "Please select meal name."
       },
-      submit: "Create",
-      textFieldHelper: "Enter created meal name:",
+      textFieldHelper: "Enter meal name:",
       textFieldReasons: {
-        empty: "Please enter created meal name."
-      },
-      title: "Create meal"
+        empty: "Please enter meal name."
+      }
     },
     Quantity: {
       g: "grams",

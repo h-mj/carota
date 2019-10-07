@@ -7,6 +7,7 @@ import { Component } from "../../base/Component";
 import { Scenes } from "../../base/Scene";
 import { Foodstuff } from "../../model/Foodstuff";
 import { Meal } from "../../model/Meal";
+import { RESET } from "../../styling/stylesheets";
 import { styled } from "../../styling/theme";
 import { Plus } from "../Plus";
 import { Consumables } from "./Consumables";
@@ -49,7 +50,7 @@ export class MealEntry extends Component<MealEntryProps> {
    */
   public render() {
     const { meal } = this.props;
-    const { consumables } = meal;
+    const { name, consumables } = meal;
 
     return (
       <Draggable draggableId={meal.id} index={this.props.index}>
@@ -60,7 +61,11 @@ export class MealEntry extends Component<MealEntryProps> {
             {...provided.draggableProps}
           >
             <TitleBar {...provided.dragHandleProps}>
-              <Texts>{meal.name}</Texts>
+              <Texts>
+                {name}
+                <Edit onClick={this.showNameEdit}>↺</Edit>
+              </Texts>
+
               {consumables.length > 0 && <NutrientQuantities model={meal} />}
             </TitleBar>
 
@@ -85,13 +90,33 @@ export class MealEntry extends Component<MealEntryProps> {
   };
 
   /**
-   * Callback function which is called when user selects foodstuff and its
+   * Callback function which is called when user selects a foodstuff and its
    * quantity.
    */
   @action
   private select = (foodstuff: Foodstuff, quantity: number) => {
     this.props.meal.consume(foodstuff, quantity);
     this.props.views!.pop(this.scene!);
+  };
+
+  /**
+   * Enables meal entry editing.
+   */
+  @action
+  private showNameEdit = () => {
+    this.scene = this.props.views!.push("center", "Name", {
+      name: this.props.meal.name,
+      onSelect: this.handleSelect
+    });
+  };
+
+  /**
+   * Callback function which is called when user selects ma eal name.
+   */
+  @action
+  private handleSelect = async (name: string) => {
+    this.props.views!.pop(this.scene!);
+    await this.props.meal.rename(name);
   };
 }
 
@@ -133,6 +158,17 @@ const TitleBar = styled.div`
   @media screen and (max-width: 50rem) {
     flex-direction: column;
   }
+`;
+
+/**
+ * Edit button that enables meal entry editing.
+ */
+const Edit = styled.button`
+  ${RESET};
+
+  margin-left: ${({ theme }) => theme.paddingSecondaryHalf};
+  color: ${({ theme }) => theme.colorSecondary};
+  cursor: pointer;
 `;
 
 /**

@@ -268,6 +268,22 @@ export class MealsStore {
   }
 
   /**
+   * Renames specified meal to specified name.
+   */
+  @action
+  public async rename(meal: Meal, name: string) {
+    meal.name = name;
+
+    const result = await Rpc.call("meal", "rename", { id: meal.id, name });
+
+    if (!result.ok) {
+      return result.value;
+    }
+
+    return;
+  }
+
+  /**
    * Unconsumed specified `consumable`.
    */
   @action

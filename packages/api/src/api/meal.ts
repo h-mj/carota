@@ -44,7 +44,7 @@ const withinMonth = (representation: string) => {
 const addMealDtoValidator = deviate().object().shape({
   name: deviate().string().trim().notEmpty(),
   date: deviate().string().append(validDate).append(withinMonth)
-})
+});
 
 /**
  * Add meal request data transfer object type.
@@ -92,7 +92,7 @@ const consumeDtoValidator = deviate().object().shape({
   mealId: deviate().string().guid(),
   foodstuffId: deviate().string().guid(),
   quantity: deviate().number().gt(0)
-})
+});
 
 /**
  * Consume request data transfer object type.
@@ -163,7 +163,7 @@ const get = async ({ date }: GetMealsDto, account: Account) => {
 const moveMealDtoValidator = deviate().object().shape({
   id: deviate().string().guid(),
   nextId: deviate().optional().string().guid()
-})
+});
 
 /**
  * Move meal request data transfer object type.
@@ -224,7 +224,7 @@ const reorderDtoValidator = deviate().object().shape({
   id: deviate().string().guid(),
   mealId: deviate().string().guid(),
   nextId: deviate().optional().string().guid()
-})
+});
 
 /**
  * Reorder consumable request data transfer object type.
@@ -300,7 +300,7 @@ export const reorder = async (
 // prettier-ignore
 const removeMealDtoValidator = deviate().object().shape({
   id: deviate().string().guid()
-})
+});
 
 /**
  * Remove meal request data transfer object type.
@@ -323,6 +323,35 @@ const remove = async ({ id }: RemoveMealDto, account: Account) => {
 
   await unlink(meal);
   await meal.remove();
+
+  return true as const;
+};
+
+// prettier-ignore
+const renameMealDtoValidator = deviate().object().shape({
+  id: deviate().string().guid(),
+  name: deviate().string().trim().notEmpty()
+});
+
+/**
+ * Rename meal data transfer object type.
+ */
+type RenameMealDto = Success<typeof renameMealDtoValidator>;
+
+/**
+ * Renames a meal with provided ID.
+ */
+const rename = async ({ id, name }: RenameMealDto, account: Account) => {
+  const meal = await Meal.findOne(id);
+
+  if (meal === undefined) {
+    throw createIdNotFoundError(id, Meal.name, ["id"]);
+  } else if (meal.accountId !== account.id) {
+    throw new ForbiddenError("You are not allowed to rename this meal.");
+  }
+
+  meal.name = name;
+  await meal.save();
 
   return true as const;
 };
@@ -368,6 +397,7 @@ export interface MealController {
   move: Query<MoveMealDto, true>;
   reorder: Query<ReorderDto, true>;
   remove: Query<RemoveMealDto, true>;
+  rename: Query<RenameMealDto, true>;
   unconsume: Query<UnconsumeDto, true>;
 }
 
@@ -383,4 +413,5 @@ define(mealRouter, "meal", "get", getMealsDtoValidator, get);
 define(mealRouter, "meal", "move", moveMealDtoValidator, move);
 define(mealRouter, "meal", "reorder", reorderDtoValidator, reorder);
 define(mealRouter, "meal", "remove", removeMealDtoValidator, remove);
+define(mealRouter, "meal", "rename", renameMealDtoValidator, rename);
 define(mealRouter, "meal", "unconsume", unconsumeDtoValidator, unconsume);

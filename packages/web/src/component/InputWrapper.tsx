@@ -109,7 +109,7 @@ export const InputWrapper: React.FunctionComponent<InputWrapperProps> = ({
         </LabelComponent>
       </Field>
       {errorMessage !== undefined && (
-        <ErrorMessage>{errorMessage}</ErrorMessage>
+        <ErrorMessage>⚠ {errorMessage}</ErrorMessage>
       )}
     </Wrapper>
   );

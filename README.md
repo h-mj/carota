@@ -1,8 +1,8 @@
-![Application](https://i.imgur.com/NoVv7Eq.gif)
+![Application](https://i.imgur.com/rtMlmIL.gif)
 
 # Carota
 
-Full stack calorie counting web application built with React and Node.js.
+Full stack calorie counting web application built with TypeScript.
 
 # Technologies
 

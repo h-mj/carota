@@ -6,7 +6,9 @@ import { ErrorResponder } from "./ErrorResponder";
 @Catch()
 export class UnknownExceptionFilter extends ErrorResponder
   implements ExceptionFilter<unknown> {
-  public catch(_: unknown, host: ArgumentsHost) {
+  public catch(exception: unknown, host: ArgumentsHost) {
+    console.error(exception);
+
     this.respond(new InternalServerErrorError(), host);
   }
 }

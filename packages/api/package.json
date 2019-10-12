@@ -11,7 +11,7 @@
     "typeorm": "node -r ts-node/register ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
-    "@koa/router": "^8.0.1",
+    "@koa/router": "^8.0.2",
     "@types/bcryptjs": "^2.4.2",
     "@types/jsonwebtoken": "^8.3.3",
     "@types/koa": "^2.0.50",
@@ -34,7 +34,7 @@
     "eslint-config-prettier": "^6.4.0",
     "eslint-plugin-prettier": "^3.1.1",
     "jsonwebtoken": "^8.5.1",
-    "koa": "^2.8.2",
+    "koa": "^2.10.0",
     "koa-bodyparser": "^4.2.1",
     "koa-compress": "^3.0.0",
     "koa-helmet": "^5.2.0",

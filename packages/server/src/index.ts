@@ -9,13 +9,15 @@ import { GlobalInterceptor } from "./GlobalInterceptor";
 async function bootstrap() {
   const application = await NestFactory.create(ApplicationModule);
 
-  application.useGlobalInterceptors(new GlobalInterceptor());
+  application.setGlobalPrefix("/api");
 
   application.useGlobalFilters(
     new UnknownExceptionFilter(),
     new HttpErrorFilter(),
     new NotFoundExceptionFilter()
   );
+
+  application.useGlobalInterceptors(new GlobalInterceptor());
 
   await application.listen(process.env.PORT || 3001);
 }

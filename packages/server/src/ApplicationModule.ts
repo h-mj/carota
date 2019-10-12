@@ -1,6 +1,7 @@
-import { Module } from "@nestjs/common";
+import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
+import { AuthenticationMiddleware } from "./AuthenticationMiddleware";
 import { AccountModule } from "./module/account/AccountModule";
 import { AuthenticationModule } from "./module/authentication/AuthenticationModule";
 import { InvitationModule } from "./module/invitation/InvitationModule";
@@ -13,4 +14,8 @@ import { InvitationModule } from "./module/invitation/InvitationModule";
     InvitationModule
   ]
 })
-export class ApplicationModule {}
+export class ApplicationModule implements NestModule {
+  public configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthenticationMiddleware).forRoutes("/*");
+  }
+}

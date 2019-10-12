@@ -16,7 +16,7 @@ export interface Location {
   path?: string[];
 }
 
-export abstract class HttpError {
+export class HttpError {
   public status: number;
   public reason: string;
   public message?: string;

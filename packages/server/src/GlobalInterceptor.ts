@@ -14,7 +14,8 @@ export interface DataResponse<T> {
 }
 
 @Injectable()
-export class DataInterceptor<T> implements NestInterceptor<T, DataResponse<T>> {
+export class GlobalInterceptor<T>
+  implements NestInterceptor<T, DataResponse<T>> {
   public intercept(
     context: ExecutionContext,
     next: CallHandler

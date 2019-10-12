@@ -1,7 +1,7 @@
 import { Body, Controller, Post, UsePipes } from "@nestjs/common";
 
 import { InvalidCredentialsError } from "../../error/InvalidCredentialsError";
-import { ValidationPipe } from "../../pipe/ValidationPipe";
+import { ValidationPipe } from "../../ValidationPipe";
 import { AuthenticationService } from "./AuthenticationService";
 import {
   GenerateAuthenticationTokenDto,

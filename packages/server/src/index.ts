@@ -1,15 +1,20 @@
 import { NestFactory } from "@nestjs/core";
 
 import { ApplicationModule } from "./ApplicationModule";
-import { DataInterceptor } from "./interceptor/DataInterceptor";
-import { ErrorInterceptor } from "./interceptor/ErrorInterceptor";
+import { HttpErrorFilter } from "./filter/HttpErrorFilter";
+import { NotFoundExceptionFilter } from "./filter/NotFoundExceptionFilter";
+import { UnknownExceptionFilter } from "./filter/UnknownExceptionFilter";
+import { GlobalInterceptor } from "./GlobalInterceptor";
 
 async function bootstrap() {
   const application = await NestFactory.create(ApplicationModule);
 
-  application.useGlobalInterceptors(
-    new ErrorInterceptor(),
-    new DataInterceptor()
+  application.useGlobalInterceptors(new GlobalInterceptor());
+
+  application.useGlobalFilters(
+    new UnknownExceptionFilter(),
+    new HttpErrorFilter(),
+    new NotFoundExceptionFilter()
   );
 
   await application.listen(process.env.PORT || 3001);

@@ -1,8 +1,10 @@
 import { Deviation } from "deviator";
 
-import { BadRequestException, PipeTransform } from "@nestjs/common";
+import { PipeTransform } from "@nestjs/common";
 
-type Validator<T> = Deviation<unknown, T, T, unknown>;
+import { ValidationError, ValidationErrorTree } from "./error/ValidationError";
+
+type Validator<T> = Deviation<unknown, T, T, ValidationErrorTree>;
 
 export class ValidationPipe<T> implements PipeTransform<unknown, T> {
   public constructor(private readonly validator: Validator<T>) {}
@@ -11,7 +13,7 @@ export class ValidationPipe<T> implements PipeTransform<unknown, T> {
     const result = this.validator(value);
 
     if (!result.ok) {
-      throw new BadRequestException();
+      throw new ValidationError(result.value);
     }
 
     return result.value;

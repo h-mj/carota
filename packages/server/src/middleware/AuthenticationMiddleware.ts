@@ -6,9 +6,9 @@ import {
   NestMiddleware
 } from "@nestjs/common";
 
-import { ForbiddenError } from "./error/ForbiddenError";
-import { UnauthorizedError } from "./error/UnauthorizedError";
-import { AuthenticationService } from "./module/authentication/AuthenticationService";
+import { ForbiddenError } from "../error/ForbiddenError";
+import { UnauthorizedError } from "../error/UnauthorizedError";
+import { AuthenticationService } from "../module/authentication/AuthenticationService";
 
 export const Principal = createParamDecorator((_, request) => {
   return request.account;

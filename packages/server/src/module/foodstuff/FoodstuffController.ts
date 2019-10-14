@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from "@nestjs/common";
 
-import { Principal } from "../../AuthenticationMiddleware";
-import { ValidationPipe } from "../../ValidationPipe";
+import { Principal } from "../../middleware/AuthenticationMiddleware";
+import { ValidationPipe } from "../../pipe/ValidationPipe";
 import { Account } from "../account/Account";
 import {
   DeleteFoodstuffDto,

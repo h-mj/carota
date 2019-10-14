@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from "@nestjs/common";
 
-import { ValidationPipe } from "../../ValidationPipe";
+import { ValidationPipe } from "../../pipe/ValidationPipe";
 import { AuthenticationService } from "../authentication/AuthenticationService";
 import { AccountService } from "./AccountService";
 import {

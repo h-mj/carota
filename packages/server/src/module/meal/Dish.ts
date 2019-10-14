@@ -31,9 +31,6 @@ export class Dish {
   @JoinColumn()
   public previous!: Promise<Dish | undefined>;
 
-  @Column()
-  public previousId!: string | null;
-
   @OneToOne(() => Dish, dish => dish.previous)
   @JoinColumn()
   public next!: Promise<Dish | undefined>;
@@ -44,9 +41,7 @@ export class Dish {
   public toDto = () => ({
     id: this.id,
     foodstuff: this.foodstuff.toDto(),
-    quantity: this.quantity,
-    previousId: this.previousId || undefined,
-    nextId: this.nextId || undefined
+    quantity: this.quantity
   });
 }
 

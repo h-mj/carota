@@ -1,23 +1,18 @@
 import { deviate, err, ok, Success } from "deviator";
 import { DateTime } from "luxon";
 
-const validDateWithinMonth = (input: string) => {
-  const date = DateTime.fromISO(input);
+import { validDate } from "../../../utility/validators";
 
-  if (!date.isValid) {
-    return err("invalidDate");
-  }
-
-  return Math.abs(date.diffNow("months").months) > 1
+const withinMonth = (input: string) =>
+  Math.abs(DateTime.fromISO(input).diffNow("months").months) > 1
     ? err("notWithinMonthDate")
-    : ok(date.toISODate());
-};
+    : ok(input);
 
 // prettier-ignore
 export const createMealDtoValidator = deviate().object().shape({
   accountId: deviate().string().guid(),
   name: deviate().string().trim().notEmpty(),
-  date: deviate().string().append(validDateWithinMonth)
+  date: deviate().string().append(validDate).append(withinMonth)
 });
 
 export type CreateMealDto = Success<typeof createMealDtoValidator>;

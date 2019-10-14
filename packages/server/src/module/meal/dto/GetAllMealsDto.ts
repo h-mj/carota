@@ -1,11 +1,6 @@
-import { deviate, err, ok, Success } from "deviator";
-import { DateTime } from "luxon";
+import { deviate, Success } from "deviator";
 
-const validDate = (input: string) => {
-  const date = DateTime.fromISO(input);
-
-  return date.isValid ? ok(date.toISODate()) : err("invalidDate");
-};
+import { validDate } from "../../../utility/validators";
 
 // prettier-ignore
 export const getAllMealsDtoValidator = deviate().object().shape({

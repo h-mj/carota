@@ -4,7 +4,7 @@ import { ApplicationModule } from "./ApplicationModule";
 import { HttpErrorFilter } from "./filter/HttpErrorFilter";
 import { NotFoundExceptionFilter } from "./filter/NotFoundExceptionFilter";
 import { UnknownExceptionFilter } from "./filter/UnknownExceptionFilter";
-import { GlobalInterceptor } from "./GlobalInterceptor";
+import { GlobalInterceptor } from "./interceptor/GlobalInterceptor";
 
 async function bootstrap() {
   const application = await NestFactory.create(ApplicationModule);

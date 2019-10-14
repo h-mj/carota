@@ -1,9 +1,10 @@
 import { Body, Controller, Post } from "@nestjs/common";
 
-import { ValidationPipe } from "../../ValidationPipe";
+import { ValidationPipe } from "../../pipe/ValidationPipe";
 import { CreateMealDto, createMealDtoValidator } from "./dto/CreateMealDto";
 import { DeleteMealDto, deleteMealDtoValidator } from "./dto/DeleteMealDto";
 import { GetAllMealsDto, getAllMealsDtoValidator } from "./dto/GetAllMealsDto";
+import { InsertMealDto, insertMealDtoValidator } from "./dto/InsertMealDto";
 import { MealService } from "./MealService";
 
 @Controller("meal")
@@ -35,5 +36,14 @@ export class MealController {
     const meals = await this.mealService.getAll(dto);
 
     return meals.map(meal => meal.toDto());
+  }
+
+  @Post("insert")
+  public async insert(
+    @Body(new ValidationPipe(insertMealDtoValidator)) dto: InsertMealDto
+  ) {
+    await this.mealService.insert(dto);
+
+    return true as const;
   }
 }

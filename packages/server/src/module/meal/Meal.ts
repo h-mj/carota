@@ -25,18 +25,14 @@ export class Meal {
   @Column()
   public name!: string;
 
-  @Column("date")
-  public date!: string;
+  @Column("date", { nullable: true })
+  public date!: string | null;
 
   @OneToMany(() => Dish, dish => dish.meal, { eager: true })
   public dishes!: Dish[];
 
   @OneToOne(() => Meal, meal => meal.next)
-  @JoinColumn()
   public previous!: Promise<Meal | undefined>;
-
-  @Column({ nullable: true })
-  public previousId!: string | null;
 
   @OneToOne(() => Meal, meal => meal.previous)
   @JoinColumn()
@@ -48,11 +44,9 @@ export class Meal {
   public toDto = () => ({
     id: this.id,
     name: this.name,
-    date: this.date,
+    date: this.date!,
     dishes:
-      this.dishes != undefined ? this.dishes.map(dish => dish.toDto()) : [],
-    previousId: this.previousId || undefined,
-    nextId: this.nextId || undefined
+      this.dishes != undefined ? this.dishes.map(dish => dish.toDto()) : []
   });
 }
 

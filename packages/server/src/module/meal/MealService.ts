@@ -2,10 +2,12 @@ import { Transaction, TransactionRepository } from "typeorm";
 
 import { Injectable } from "@nestjs/common";
 
+import { BadRequestError } from "../../error/BadRequestError";
 import { InvalidIdError } from "../../error/InvalidIdError";
 import { CreateMealDto } from "./dto/CreateMealDto";
 import { DeleteMealDto } from "./dto/DeleteMealDto";
 import { GetAllMealsDto } from "./dto/GetAllMealsDto";
+import { InsertMealDto } from "./dto/InsertMealDto";
 import { Meal } from "./Meal";
 import { MealRepository } from "./MealRepository";
 
@@ -28,19 +30,11 @@ export class MealService {
       date: dto.date
     });
 
-    const meal = await mealRepository!.save(template);
-
-    if (last === undefined) {
-      return meal;
-    }
-
-    meal.previousId = last.id;
-    await mealRepository!.save(meal);
-
-    last.nextId = meal.id;
-    await mealRepository!.save(last);
-
-    return meal;
+    return mealRepository!.link(
+      await mealRepository!.save(template),
+      dto.date,
+      last
+    );
   }
 
   @Transaction()
@@ -54,23 +48,7 @@ export class MealService {
       throw new InvalidIdError(Meal, ["id"]);
     }
 
-    const previous = await meal.previous;
-    const next = await meal.next;
-
-    meal.previousId = null;
-    meal.nextId = null;
-    await mealRepository!.save(meal, { reload: true });
-
-    if (previous !== undefined) {
-      previous.nextId = next === undefined ? null : next.id;
-      await mealRepository!.save(previous);
-    }
-
-    if (next !== undefined) {
-      next.previousId = previous === undefined ? null : previous.id;
-      await mealRepository!.save(next);
-    }
-
+    await mealRepository!.unlink(meal);
     await mealRepository!.remove(meal);
   }
 
@@ -79,6 +57,34 @@ export class MealService {
     dto: GetAllMealsDto,
     @TransactionRepository() mealRepository?: MealRepository
   ) {
-    return mealRepository!.find({ accountId: dto.accountId, date: dto.date });
+    return mealRepository!.ordered(dto.accountId, dto.date);
+  }
+
+  @Transaction()
+  public async insert(
+    dto: InsertMealDto,
+    @TransactionRepository() mealRepository?: MealRepository
+  ) {
+    const meal = await mealRepository!.findOne(dto.id);
+
+    if (meal === undefined) {
+      throw new InvalidIdError(Meal, ["id"]);
+    }
+
+    await mealRepository!.unlink(meal);
+
+    const order = await mealRepository!.ordered(meal.accountId, dto.date);
+
+    if (!(dto.index in order) && dto.index !== order.length) {
+      throw new BadRequestError("Provided insertion index is invalid.", {
+        location: { part: "body", path: ["index"] },
+        reason: "invalidIndex"
+      });
+    }
+
+    const previous = order[dto.index - 1];
+    const next = order[dto.index];
+
+    return mealRepository!.link(meal, dto.date, previous, next);
   }
 }

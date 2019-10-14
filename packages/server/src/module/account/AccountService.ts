@@ -4,6 +4,7 @@ import { Transaction, TransactionRepository } from "typeorm";
 import { Injectable } from "@nestjs/common";
 
 import { InvalidIdError } from "../../error/InvalidIdError";
+import { UniqueConstraintError } from "../../error/UniqueConstraintErrors";
 import { Invitation } from "../invitation/Invitation";
 import { InvitationRepository } from "../invitation/InvitationRepository";
 import { AccountRepository } from "./AccountRepository";
@@ -21,6 +22,12 @@ export class AccountService {
 
     if (invitation === undefined) {
       throw new InvalidIdError(Invitation, ["invitationId"]);
+    }
+
+    if (
+      (await accountRepository!.findOne({ email: dto.email })) !== undefined
+    ) {
+      throw new UniqueConstraintError(["email"]);
     }
 
     const template = accountRepository!.create({

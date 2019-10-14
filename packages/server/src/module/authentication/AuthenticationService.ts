@@ -28,7 +28,7 @@ export class AuthenticationService {
     return account;
   }
 
-  public async generateToken(account: Account) {
+  public generateToken(account: Account) {
     const payload: Payload = { accountId: account.id };
 
     return sign(payload, process.env.SECRET!);

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UsePipes } from "@nestjs/common";
+import { Body, Controller, Post } from "@nestjs/common";
 
 import { InvalidCredentialsError } from "../../error/InvalidCredentialsError";
 import { ValidationPipe } from "../../ValidationPipe";
@@ -15,8 +15,10 @@ export class AuthenticationController {
   ) {}
 
   @Post("generateToken")
-  @UsePipes(new ValidationPipe(generateAuthenticationTokenDtoValidator))
-  public async generateToken(@Body() dto: GenerateAuthenticationTokenDto) {
+  public async generateToken(
+    @Body(new ValidationPipe(generateAuthenticationTokenDtoValidator))
+    dto: GenerateAuthenticationTokenDto
+  ) {
     const account = await this.authenticationService.authenticate(
       dto.email,
       dto.password

@@ -7,6 +7,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { AuthenticationMiddleware } from "./AuthenticationMiddleware";
 import { AccountModule } from "./module/account/AccountModule";
 import { AuthenticationModule } from "./module/authentication/AuthenticationModule";
+import { FoodstuffModule } from "./module/foodstuff/FoodstuffModule";
 import { InvitationModule } from "./module/invitation/InvitationModule";
 
 @Module({
@@ -15,6 +16,7 @@ import { InvitationModule } from "./module/invitation/InvitationModule";
     TypeOrmModule.forRoot(),
     AccountModule,
     AuthenticationModule,
+    FoodstuffModule,
     InvitationModule
   ]
 })

@@ -1,10 +1,18 @@
 import { Request, Response } from "express";
 
-import { Injectable, NestMiddleware } from "@nestjs/common";
+import {
+  createParamDecorator,
+  Injectable,
+  NestMiddleware
+} from "@nestjs/common";
 
 import { ForbiddenError } from "./error/ForbiddenError";
 import { UnauthorizedError } from "./error/UnauthorizedError";
 import { AuthenticationService } from "./module/authentication/AuthenticationService";
+
+export const Principal = createParamDecorator((_, request) => {
+  return request.account;
+});
 
 @Injectable()
 export class AuthenticationMiddleware

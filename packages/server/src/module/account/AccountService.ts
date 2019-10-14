@@ -36,6 +36,8 @@ export class AccountService {
       inviter: invitation.inviter
     });
 
+    await invitationRepository!.remove(invitation);
+
     return accountRepository!.save(template);
   }
 }

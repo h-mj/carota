@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UsePipes } from "@nestjs/common";
+import { Body, Controller, Post } from "@nestjs/common";
 
 import { ValidationPipe } from "../../ValidationPipe";
 import { AuthenticationService } from "../authentication/AuthenticationService";
@@ -16,8 +16,9 @@ export class AccountController {
   ) {}
 
   @Post("create")
-  @UsePipes(new ValidationPipe(createAccountDtoValidator))
-  public async create(@Body() dto: CreateAccountDto) {
+  public async create(
+    @Body(new ValidationPipe(createAccountDtoValidator)) dto: CreateAccountDto
+  ) {
     const account = await this.accountService.create(dto);
 
     return {

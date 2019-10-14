@@ -9,6 +9,7 @@ import { AccountModule } from "./module/account/AccountModule";
 import { AuthenticationModule } from "./module/authentication/AuthenticationModule";
 import { FoodstuffModule } from "./module/foodstuff/FoodstuffModule";
 import { InvitationModule } from "./module/invitation/InvitationModule";
+import { MealModule } from "./module/meal/MealModule";
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { InvitationModule } from "./module/invitation/InvitationModule";
     AccountModule,
     AuthenticationModule,
     FoodstuffModule,
-    InvitationModule
+    InvitationModule,
+    MealModule
   ]
 })
 export class ApplicationModule implements NestModule {

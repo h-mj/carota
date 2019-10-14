@@ -1,20 +1,23 @@
 import { Transaction, TransactionRepository } from "typeorm";
 
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 
+import { InvalidIdError } from "../../error/InvalidIdError";
+import { GetInvitationDto } from "./dto/GetInvitationDto";
+import { Invitation } from "./Invitation";
 import { InvitationRepository } from "./InvitationRepository";
 
 @Injectable()
 export class InvitationService {
   @Transaction()
   public async get(
-    id: string,
+    dto: GetInvitationDto,
     @TransactionRepository() invitationRepository?: InvitationRepository
   ) {
-    const invitation = invitationRepository!.findOne(id);
+    const invitation = await invitationRepository!.findOne(dto.id);
 
     if (invitation === undefined) {
-      throw new BadRequestException();
+      throw new InvalidIdError(Invitation, ["id"]);
     }
 
     return invitation;

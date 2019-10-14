@@ -46,6 +46,8 @@ export class FoodstuffController {
     @Body(new ValidationPipe(searchFoodstuffDtoValidator))
     dto: SearchFoodstuffDto
   ) {
-    return this.foodstuffService.search(dto);
+    const foodstuffs = await this.foodstuffService.search(dto);
+
+    return foodstuffs.map(foodstuff => foodstuff.toDto());
   }
 }

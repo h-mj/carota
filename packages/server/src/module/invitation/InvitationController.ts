@@ -15,6 +15,8 @@ export class InvitationController {
   public async get(
     @Body(new ValidationPipe(getInvitationDtoValidator)) dto: GetInvitationDto
   ) {
-    return this.invitationService.get(dto.id);
+    const invitation = await this.invitationService.get(dto);
+
+    return invitation.toDto();
   }
 }

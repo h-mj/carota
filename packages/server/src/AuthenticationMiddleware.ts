@@ -23,7 +23,8 @@ export class AuthenticationMiddleware
 
   private static EXCLUDED_PATHS = [
     "/api/account/create",
-    "/api/authentication/generateToken"
+    "/api/authentication/generateToken",
+    "/api/invitation/get"
   ];
 
   public use(request: Request, _: Response, next: Function) {

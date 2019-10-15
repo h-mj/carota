@@ -5,6 +5,7 @@ import { CreateMealDto, createMealDtoValidator } from "./dto/CreateMealDto";
 import { DeleteMealDto, deleteMealDtoValidator } from "./dto/DeleteMealDto";
 import { GetAllMealsDto, getAllMealsDtoValidator } from "./dto/GetAllMealsDto";
 import { InsertMealDto, insertMealDtoValidator } from "./dto/InsertMealDto";
+import { RenameMealDto, renameMealDtoValidator } from "./dto/RenameMealDto";
 import { MealService } from "./MealService";
 
 @Controller("meal")
@@ -43,6 +44,15 @@ export class MealController {
     @Body(new ValidationPipe(insertMealDtoValidator)) dto: InsertMealDto
   ) {
     await this.mealService.insert(dto);
+
+    return true as const;
+  }
+
+  @Post("rename")
+  public async rename(
+    @Body(new ValidationPipe(renameMealDtoValidator)) dto: RenameMealDto
+  ) {
+    await this.mealService.rename(dto);
 
     return true as const;
   }

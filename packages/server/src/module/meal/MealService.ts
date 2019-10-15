@@ -8,6 +8,7 @@ import { CreateMealDto } from "./dto/CreateMealDto";
 import { DeleteMealDto } from "./dto/DeleteMealDto";
 import { GetAllMealsDto } from "./dto/GetAllMealsDto";
 import { InsertMealDto } from "./dto/InsertMealDto";
+import { RenameMealDto } from "./dto/RenameMealDto";
 import { Meal } from "./Meal";
 import { MealRepository } from "./MealRepository";
 
@@ -86,5 +87,22 @@ export class MealService {
     const next = order[dto.index];
 
     return mealRepository!.link(meal, dto.date, previous, next);
+  }
+
+  @Transaction()
+  public async rename(
+    dto: RenameMealDto,
+    @TransactionRepository() mealRepository?: MealRepository
+  ) {
+    const meal = await mealRepository!.findOne(dto.id);
+
+    if (meal === undefined) {
+      throw new InvalidIdError(Meal, ["id"]);
+    }
+
+    meal.name = dto.name;
+    await mealRepository!.save(meal);
+
+    return meal;
   }
 }

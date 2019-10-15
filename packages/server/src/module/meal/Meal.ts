@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 
 import { Account } from "../account/Account";
-import { Dish } from "./Dish";
+import { Dish } from "../dish/Dish";
 
 @Entity()
 export class Meal {

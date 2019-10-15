@@ -7,6 +7,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { AuthenticationMiddleware } from "./middleware/AuthenticationMiddleware";
 import { AccountModule } from "./module/account/AccountModule";
 import { AuthenticationModule } from "./module/authentication/AuthenticationModule";
+import { DishModule } from "./module/dish/DishModule";
 import { FoodstuffModule } from "./module/foodstuff/FoodstuffModule";
 import { InvitationModule } from "./module/invitation/InvitationModule";
 import { MealModule } from "./module/meal/MealModule";
@@ -17,6 +18,7 @@ import { MealModule } from "./module/meal/MealModule";
     TypeOrmModule.forRoot(),
     AccountModule,
     AuthenticationModule,
+    DishModule,
     FoodstuffModule,
     InvitationModule,
     MealModule

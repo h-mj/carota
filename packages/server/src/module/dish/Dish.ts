@@ -8,7 +8,7 @@ import {
 } from "typeorm";
 
 import { Foodstuff } from "../foodstuff/Foodstuff";
-import { Meal } from "./Meal";
+import { Meal } from "../meal/Meal";
 
 @Entity()
 export class Dish {

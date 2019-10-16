@@ -1,7 +1,6 @@
-import { MealDto } from "api";
-import { action, computed, observable } from "mobx";
+import { action, observable } from "mobx";
 
-import { Consumable } from "../model/Consumable";
+import { Dish } from "../model/Dish";
 import { Foodstuff } from "../model/Foodstuff";
 import { Meal } from "../model/Meal";
 import { Rpc } from "../utility/rpc";
@@ -25,54 +24,20 @@ export class MealsStore {
   /**
    * Stored meal models.
    */
-  @observable public models: Map<string, Meal> = new Map();
-
-  /**
-   * Returns an array of currently stored meal models in correct order.
-   */
-  @computed
-  public get meals() {
-    const links: Map<string | undefined, string> = new Map();
-
-    for (const meal of this.models.values()) {
-      links.set(meal.nextId, meal.id);
-    }
-
-    const meals: Meal[] = [];
-    let iterator: string | undefined = undefined;
-
-    while (links.has(iterator)) {
-      iterator = links.get(iterator);
-      meals.push(this.models.get(iterator!)!);
-    }
-
-    return meals.reverse();
-  }
-
-  /**
-   * Creates and stores meal model of specified `data transfer object`.
-   */
-  @action
-  private insert = (dto: MealDto) => {
-    const model = new Meal(dto, this);
-    this.models.set(model.id, model);
-  };
+  @observable public meals: Meal[] = [];
 
   /**
    * Returns meal model with specified ID.
    */
   public withId(id: string) {
-    return this.models.get(id);
+    return this.meals.find(meal => meal.id === id);
   }
 
   /**
    * Returns whether meal with specified name exists.
    */
   public hasWithName(name: string) {
-    return (
-      Array.from(this.models.values()).find(meal => meal.name === name) !==
-      undefined
-    );
+    return this.meals.find(meal => meal.name === name) !== undefined;
   }
 
   /**
@@ -80,15 +45,15 @@ export class MealsStore {
    */
   @action
   public clear() {
-    this.models.clear();
+    this.meals = [];
   }
 
   /**
-   * Adds a new meal with specified `name` and `date`.
+   * Creates a new meal with specified `name` and `date`.
    */
   @action
-  public async add(name: string, date: Date) {
-    const result = await Rpc.call("meal", "add", {
+  public async create(name: string, date: Date) {
+    const result = await Rpc.call("meal", "create", {
       name,
       date: toDateString(date)
     });
@@ -97,13 +62,7 @@ export class MealsStore {
       return result.value;
     }
 
-    // Append created meal to the linked list.
-    const meals = this.meals;
-    if (meals.length > 0) {
-      meals[meals.length - 1].nextId = result.value.id;
-    }
-
-    this.insert(result.value);
+    this.meals.push(new Meal(result.value, this));
 
     return undefined;
   }
@@ -113,7 +72,7 @@ export class MealsStore {
    */
   @action
   public async consume(meal: Meal, foodstuff: Foodstuff, quantity: number) {
-    const result = await Rpc.call("meal", "consume", {
+    const result = await Rpc.call("dish", "create", {
       mealId: meal.id,
       foodstuffId: foodstuff.id,
       quantity
@@ -123,13 +82,7 @@ export class MealsStore {
       return result.value;
     }
 
-    // Append returned consumable to the linked list if it didn't exist already.
-    const consumables = meal.consumables;
-    if (consumables.length > 0 && !meal.has(result.value.id)) {
-      consumables[consumables.length - 1].nextId = result.value.id;
-    }
-
-    meal.insert(result.value);
+    meal.dishes.push(new Dish(result.value, meal));
 
     return undefined;
   }
@@ -138,106 +91,35 @@ export class MealsStore {
    * Replaces currently stored meal models with meals with specified `date`.
    */
   @action
-  public async get(date: Date) {
-    this.models.clear();
+  public async getAll(date: Date) {
+    this.clear();
 
-    const result = await Rpc.call("meal", "get", { date: toDateString(date) });
-
-    if (!result.ok) {
-      return result.value;
-    }
-
-    result.value.forEach(this.insert);
-
-    return undefined;
-  }
-
-  /**
-   * Removes specified meal from storage and fixes the broken linked list.
-   */
-  @action
-  private unlinkMeal(meal: Meal) {
-    const meals = this.meals;
-
-    this.models.delete(meal.id);
-    meals.splice(meals.indexOf(meal), 1);
-
-    for (let i = 0; i < meals.length; ++i) {
-      meals[i].nextId =
-        meals[i + 1] === undefined ? undefined : meals[i + 1].id;
-    }
-  }
-
-  /**
-   * Moves specified `meal` within meal linked list to specified `index`.
-   */
-  @action
-  public async move(meal: Meal, index: number) {
-    this.unlinkMeal(meal);
-
-    const meals = this.meals;
-    const next: Meal | undefined = meals[index];
-    const nextId = next === undefined ? undefined : next.id;
-
-    this.models.set(meal.id, meal);
-    meals.splice(index, 0, meal);
-
-    for (let i = 0; i < meals.length; ++i) {
-      meals[i].nextId =
-        meals[i + 1] === undefined ? undefined : meals[i + 1].id;
-    }
-
-    const result = await Rpc.call("meal", "move", { id: meal.id, nextId });
+    const result = await Rpc.call("meal", "getAll", {
+      accountId: undefined,
+      date: toDateString(date)
+    });
 
     if (!result.ok) {
       return result.value;
     }
 
+    this.meals = result.value.map(dto => new Meal(dto, this));
+
     return undefined;
   }
 
   /**
-   * Deletes specified consumable from its meal and fixes the broken linked list.
+   * Moves specified `meal` to specified `index`.
    */
   @action
-  private unlinkConsumable(consumable: Consumable) {
-    const source = consumable.meal.consumables;
+  public async insert(meal: Meal, index: number) {
+    this.meals.splice(this.meals.indexOf(meal), 1);
+    this.meals.splice(index, 0, meal);
 
-    consumable.meal.delete(consumable);
-    source.splice(source.indexOf(consumable), 1);
-
-    for (let i = 0; i < source.length; ++i) {
-      source[i].nextId =
-        source[i + 1] === undefined ? undefined : source[i + 1].id;
-    }
-  }
-
-  /**
-   * Moves specified consumable to specified meal at specified index.
-   */
-  @action
-  public async reorder(consumable: Consumable, meal: Meal, index: number) {
-    this.unlinkConsumable(consumable);
-
-    // Add consumable to its target position and updates the linked list.
-    const target = meal.consumables;
-    const next: Consumable | undefined = target[index];
-    const nextId = next === undefined ? undefined : next.id;
-
-    meal.insert(consumable);
-    consumable.meal = meal;
-    target.splice(index, 0, consumable);
-
-    for (let i = 0; i < target.length; ++i) {
-      target[i].nextId =
-        target[i + 1] === undefined ? undefined : target[i + 1].id;
-    }
-
-    // Make the reorder consumable request so that order is updated on the server too.
-    const result = await Rpc.call("meal", "reorder", {
-      id: consumable.id,
-      mealId: meal.id,
-      nextId
+    const result = await Rpc.call("meal", "insert", {
+      id: meal.id,
+      date: meal.date,
+      index
     });
 
     if (!result.ok) {
@@ -248,17 +130,41 @@ export class MealsStore {
   }
 
   /**
-   * Removes specified `meal`.
+   * Moves specified dish to specified meal at specified index.
    */
   @action
-  public async remove(meal: Meal) {
-    if (meal.consumables.length > 0) {
+  public async reorder(dish: Dish, meal: Meal, index: number) {
+    dish.meal.dishes.splice(dish.meal.dishes.indexOf(dish), 1);
+
+    meal.dishes.splice(index, 0, dish);
+    dish.meal = meal;
+
+    // Make the reorder dish request so that order is updated on the server too.
+    const result = await Rpc.call("dish", "insert", {
+      id: dish.id,
+      mealId: meal.id,
+      index
+    });
+
+    if (!result.ok) {
+      return result.value;
+    }
+
+    return undefined;
+  }
+
+  /**
+   * Deletes specified `meal`.
+   */
+  @action
+  public async delete(meal: Meal) {
+    if (meal.dishes.length > 0) {
       throw new Error("Tried to remove non-empty meal");
     }
 
-    this.unlinkMeal(meal);
+    this.meals.splice(this.meals.indexOf(meal), 1);
 
-    const result = await Rpc.call("meal", "remove", { id: meal.id });
+    const result = await Rpc.call("meal", "delete", { id: meal.id });
 
     if (!result.ok) {
       return result.value;
@@ -284,13 +190,13 @@ export class MealsStore {
   }
 
   /**
-   * Unconsumed specified `consumable`.
+   * Unconsumed specified `dish`.
    */
   @action
-  public async unconsume(consumable: Consumable) {
-    this.unlinkConsumable(consumable);
+  public async unconsume(dish: Dish) {
+    dish.meal.dishes.splice(dish.meal.dishes.indexOf(dish), 1);
 
-    const result = await Rpc.call("meal", "unconsume", { id: consumable.id });
+    const result = await Rpc.call("dish", "delete", { id: dish.id });
 
     if (!result.ok) {
       return result.value;

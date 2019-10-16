@@ -1,4 +1,4 @@
-import { Body, Controllers, Endpoints, Response } from "api";
+import { Body, Controller, Endpoint, Response } from "server";
 
 import { rootStore } from "../store/RootStore";
 
@@ -32,8 +32,8 @@ export class Rpc {
    * response.
    */
   public static async call<
-    TController extends Controllers,
-    TEndpoint extends Endpoints<TController>
+    TController extends Controller,
+    TEndpoint extends Endpoint<TController>
   >(
     controller: TController,
     endpoint: TEndpoint,
@@ -58,6 +58,6 @@ export class Rpc {
 
     const json: Response<TController, TEndpoint> = await response.json();
 
-    return json.error !== undefined ? failure(json.error) : success(json.data);
+    return "error" in json ? failure(json.error) : success(json.data);
   }
 }

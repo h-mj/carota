@@ -1,8 +1,8 @@
-import { NutritionDeclarationDto, Units } from "api";
 import { deviate, ok } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
+import { NutritionDeclarationDto, Unit } from "server";
 
 import {
   DefaultSceneComponentProps,
@@ -158,7 +158,7 @@ interface EditValues {
   id?: string;
   name: string;
   barcode?: string;
-  unit?: Units;
+  unit?: Unit;
   quantity?: string;
   nutritionDeclaration: NutritionDeclarationValues;
   pieceQuantity?: string;
@@ -206,7 +206,7 @@ const toValues = deviate<Foodstuff>().shape({
   id: deviate<string>(),
   name: deviate<string>(),
   barcode: deviate<string | undefined>(),
-  unit: deviate<Units>(),
+  unit: deviate<Unit>(),
   quantity: deviate<number | undefined>().optional().append(number => ok(number.toString())),
   pieceQuantity: deviate<number | undefined>().optional().append(number => ok(number.toString())),
   nutritionDeclaration: deviate<NutritionDeclarationDto>().shape({
@@ -251,7 +251,7 @@ const toBody = deviate<EditValues>().shape({
   id: deviate<string | undefined>(),
   name: deviate<string>().notEmpty(),
   barcode: deviate<string | undefined>().optional().notEmpty(),
-  unit: deviate<Units | undefined>().defined(),
+  unit: deviate<Unit | undefined>().defined(),
   quantity: optionalParseFloat,
   pieceQuantity: optionalParseFloat.gt(0),
   nutritionDeclaration: deviate<NutritionDeclarationValues>().shape({
@@ -487,7 +487,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
 
     const { foodstuff, scene, views } = this.props;
 
-    if ((await views!.load(foodstuff!.remove())) === undefined) {
+    if ((await views!.load(foodstuff!.delete())) === undefined) {
       views!.pop(scene);
     }
   };

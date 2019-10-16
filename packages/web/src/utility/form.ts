@@ -1,4 +1,4 @@
-import { ErrorDto } from "api";
+import { ErrorDto } from "server";
 
 /**
  * Type of an object where `TValues` object properties are optional and their

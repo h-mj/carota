@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import * as React from "react";
 
 import { Component } from "../../base/Component";
-import { Consumable } from "../../model/Consumable";
+import { Dish } from "../../model/Dish";
 import { REQUIRED_NUTRIENTS, RequiredNutrient } from "../../model/Foodstuff";
 import { Meal } from "../../model/Meal";
 import { styled } from "../../styling/theme";
@@ -15,7 +15,7 @@ interface NutrientQuantitiesProps {
   /**
    * Model which nutrient quantities will be displayed.
    */
-  model: Consumable | Meal;
+  model: Dish | Meal;
 }
 
 /**
@@ -74,7 +74,7 @@ interface NutrientQuantityProps {
   /**
    * Model which nutrient quantity is being displayed.
    */
-  model: Consumable | Meal;
+  model: Dish | Meal;
 
   /**
    * Nutrient which quantity is being displayed.

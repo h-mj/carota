@@ -1,8 +1,8 @@
-import { Units } from "api";
 import { deviate } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
+import { Unit } from "server";
 
 import {
   DefaultSceneComponentProps,
@@ -98,7 +98,7 @@ interface FormValues {
   /**
    * Product quantity unit.
    */
-  unit?: Units | "pcs";
+  unit?: Unit | "pcs";
 }
 
 /**
@@ -107,7 +107,7 @@ interface FormValues {
 // prettier-ignore
 const validate = deviate<FormValues>().shape({
   quantity: deviate<string>().trim().notEmpty().replace(",", ".").toNumber().gt(0),
-  unit: deviate<Units | "pcs" | undefined>().defined()
+  unit: deviate<Unit | "pcs" | undefined>().defined()
 });
 
 /**

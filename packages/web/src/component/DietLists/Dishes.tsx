@@ -5,47 +5,43 @@ import { Droppable } from "react-beautiful-dnd";
 import { Component } from "../../base/Component";
 import { Meal } from "../../model/Meal";
 import { styled } from "../../styling/theme";
-import { ConsumableEntry } from "./ConsumableEntry";
+import { DishEntry } from "./DishEntry";
 
 /**
- * Consumables component props.
+ * Dishes component props.
  */
-interface ConsumablesProps {
+interface DishesProps {
   /**
    * Current draggable type.
    */
-  draggableType?: "meal" | "consumable";
+  draggableType?: "meal" | "dish";
 
   /**
-   * Meal which consumables will be rendered within this component.
+   * Meal which dishes will be rendered within this component.
    */
   meal: Meal;
 }
 
 /**
- * Component that displays all consumables of provided meal.
+ * Component that displays all dishes of provided meal.
  */
 @observer
-export class Consumables extends Component<ConsumablesProps> {
+export class Dishes extends Component<DishesProps> {
   /**
-   * Renders a list of consumables.
+   * Renders a list of dishes.
    */
   public render() {
-    const { consumables } = this.props.meal;
+    const { dishes } = this.props.meal;
 
     return (
       <Droppable
         droppableId={this.props.meal.id}
-        isDropDisabled={this.props.draggableType !== "consumable"}
+        isDropDisabled={this.props.draggableType !== "dish"}
       >
         {provided => (
           <Container ref={provided.innerRef} {...provided.droppableProps}>
-            {consumables.map((consumable, index) => (
-              <ConsumableEntry
-                key={consumable.id}
-                consumable={consumable}
-                index={index}
-              />
+            {dishes.map((dish, index) => (
+              <DishEntry key={dish.id} dish={dish} index={index} />
             ))}
             {provided.placeholder}
           </Container>
@@ -56,7 +52,7 @@ export class Consumables extends Component<ConsumablesProps> {
 }
 
 /**
- * Container component that wraps all `ConsumableEntry` components.
+ * Container component that wraps all `DishEntry` components.
  */
 // prettier-ignore
 const Container = styled.div`

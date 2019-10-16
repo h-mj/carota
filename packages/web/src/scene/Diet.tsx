@@ -38,7 +38,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
   /**
    * Current draggable type.
    */
-  @observable private draggableType?: "meal" | "consumable";
+  @observable private draggableType?: "meal" | "dish";
 
   /**
    * Current draggable ID.
@@ -58,8 +58,6 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
    * calendar component on the side, which is used to change the date.
    */
   public render() {
-    const { meals } = this.props.meals!;
-
     return (
       <>
         <Head title={this.translation.title} />
@@ -74,7 +72,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
         >
           <TrashCan isRemovable={this.isDraggableRemovable()} />
 
-          <Meals mealList={meals} draggableType={this.draggableType} />
+          <Meals draggableType={this.draggableType} />
         </DragDropContext>
 
         <Plus fixed={true} onClick={this.handleAddClick}>
@@ -92,13 +90,11 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
       return false;
     }
 
-    if (this.draggableType === "consumable") {
+    if (this.draggableType === "dish") {
       return true;
     }
 
-    return (
-      this.props.meals!.withId(this.draggableId!)!.consumables.length === 0
-    );
+    return this.props.meals!.withId(this.draggableId!)!.dishes.length === 0;
   };
 
   /**
@@ -107,7 +103,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
   @action
   private setDate = async (date: Date) => {
     this.date = date;
-    await this.props.meals!.get(date);
+    await this.props.meals!.getAll(date);
   };
 
   /**
@@ -116,7 +112,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
   @action
   private handleDragStart = (initial: DragStart) => {
     this.draggableType =
-      initial.source.droppableId === "meals" ? "meal" : "consumable";
+      initial.source.droppableId === "meals" ? "meal" : "dish";
     this.draggableId = initial.draggableId;
   };
 
@@ -145,9 +141,9 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
       const target = this.props.meals!.withId(draggableId)!;
 
       if (destination.droppableId === "trashCan") {
-        this.props.meals!.remove(target);
+        this.props.meals!.delete(target);
       } else {
-        this.props.meals!.move(target, destination.index);
+        this.props.meals!.insert(target, destination.index);
       }
     } else {
       const target = this.props
@@ -182,7 +178,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
    */
   @action
   private handleNameSelect = (name: string) => {
-    this.props.meals!.add(name, this.date);
+    this.props.meals!.create(name, this.date);
     this.props.views!.popUntil(this.props.scene);
   };
 }

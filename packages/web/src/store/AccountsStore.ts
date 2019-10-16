@@ -1,5 +1,5 @@
-import { Body } from "api";
 import { action, autorun, computed, observable } from "mobx";
+import { AccountDto, Body } from "server";
 
 import { Rpc } from "../utility/rpc";
 import { RootStore } from "./RootStore";
@@ -12,6 +12,7 @@ export class AccountsStore {
    * JSON Web Token.
    */
   @observable private token?: string;
+  @observable public account?: AccountDto;
 
   /**
    * RootStore instance.
@@ -75,6 +76,7 @@ export class AccountsStore {
     }
 
     this.token = response.value.token;
+    this.account = response.value.account;
 
     return undefined;
   }
@@ -95,6 +97,7 @@ export class AccountsStore {
     }
 
     this.token = response.value.token;
+    this.account = response.value.account;
 
     return undefined;
   }

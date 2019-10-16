@@ -1,5 +1,5 @@
-import { Languages } from "api";
 import { action, computed, observable } from "mobx";
+import { Language } from "server";
 
 import {
   GATEWAY_SCENE,
@@ -21,7 +21,7 @@ import { RootStore } from "./RootStore";
 /**
  * Object that stores each language's translation object.
  */
-const TRANSLATIONS: Readonly<Record<Languages, Translation>> = {
+const TRANSLATIONS: Readonly<Record<Language, Translation>> = {
   English: english,
   Estonian: estonian,
   Russian: russian
@@ -46,7 +46,7 @@ export class ViewsStore {
   /**
    * Current interface language.
    */
-  @observable private _language: Languages = "English";
+  @observable private _language: Language = "English";
 
   /**
    * Array of active scenes.
@@ -126,7 +126,7 @@ export class ViewsStore {
    *
    * @param language Language name.
    */
-  public set language(language: Languages) {
+  public set language(language: Language) {
     this._language = language;
   }
 

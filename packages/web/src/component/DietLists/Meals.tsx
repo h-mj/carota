@@ -1,8 +1,8 @@
+import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Droppable } from "react-beautiful-dnd";
 
 import { Component } from "../../base/Component";
-import { Meal } from "../../model/Meal";
 import { styled } from "../../styling/theme";
 import { MealEntry } from "./MealEntry";
 
@@ -13,41 +13,43 @@ interface MealsProps {
   /**
    * Current draggable type.
    */
-  draggableType?: "meal" | "consumable";
-
-  /**
-   * Array of meal models which information will be rendered.
-   */
-  mealList: Meal[];
+  draggableType?: "meal" | "dish";
 }
 
 /**
- * Component that displays information of each meal in the provided meal list.
+ * Component that displays information of each meal currently stored in the meal
+ * store.
  */
+@inject("meals")
+@observer
 export class Meals extends Component<MealsProps> {
   /**
    * Renders all provided meals.
    */
-  public render = () => (
-    <Droppable
-      droppableId="meals"
-      isDropDisabled={this.props.draggableType !== "meal"}
-    >
-      {provided => (
-        <Container ref={provided.innerRef} {...provided.droppableProps}>
-          {this.props.mealList.map((meal, index) => (
-            <MealEntry
-              key={meal.id}
-              meal={meal}
-              index={index}
-              draggableType={this.props.draggableType}
-            />
-          ))}
-          {provided.placeholder}
-        </Container>
-      )}
-    </Droppable>
-  );
+  public render() {
+    const { meals } = this.props.meals!;
+
+    return (
+      <Droppable
+        droppableId="meals"
+        isDropDisabled={this.props.draggableType !== "meal"}
+      >
+        {provided => (
+          <Container ref={provided.innerRef} {...provided.droppableProps}>
+            {meals.map((meal, index) => (
+              <MealEntry
+                key={meal.id}
+                meal={meal}
+                index={index}
+                draggableType={this.props.draggableType}
+              />
+            ))}
+            {provided.placeholder}
+          </Container>
+        )}
+      </Droppable>
+    );
+  }
 }
 
 /**

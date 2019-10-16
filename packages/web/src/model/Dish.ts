@@ -1,27 +1,24 @@
-import { ConsumableDto, FoodstuffDto } from "api";
-import { observable } from "mobx";
+import { DishDto, FoodstuffDto } from "server";
 
 import { RequiredNutrient } from "./Foodstuff";
 import { Meal } from "./Meal";
 
 /**
- * Consumable entity client-side representation.
+ * Dish entity client-side representation.
  */
-export class Consumable {
+export class Dish {
   public readonly id: string;
   public readonly foodstuff: FoodstuffDto;
-  @observable public quantity: number;
-  @observable public nextId?: string;
+  public readonly quantity: number;
   public meal: Meal;
 
   /**
-   * Creates an `Consumable` model based on its data transfer object.
+   * Creates a `Dish` model based on its data transfer object.
    */
-  public constructor(dto: ConsumableDto, meal: Meal) {
+  public constructor(dto: DishDto, meal: Meal) {
     this.id = dto.id;
     this.foodstuff = dto.foodstuff;
     this.quantity = dto.quantity;
-    this.nextId = dto.nextId;
     this.meal = meal;
   }
 

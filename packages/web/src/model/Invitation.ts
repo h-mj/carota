@@ -1,4 +1,4 @@
-import { AccountRights, AccountTypes, InvitationDto } from "api";
+import { InvitationDto, Rights, Type } from "server";
 
 /**
  * Invitation entity client-side representation.
@@ -12,12 +12,12 @@ export class Invitation {
   /**
    * Future created account rights.
    */
-  public readonly rights: AccountRights;
+  public readonly rights: Rights;
 
   /**
    * Future created account type.
    */
-  public readonly type: AccountTypes;
+  public readonly type: Type;
 
   /**
    * Creates an `Invitation` model based on its data transfer object.

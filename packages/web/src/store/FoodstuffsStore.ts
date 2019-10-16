@@ -1,5 +1,5 @@
-import { Body, FoodstuffDto } from "api";
 import { computed, observable } from "mobx";
+import { Body, FoodstuffDto } from "server";
 
 import { Foodstuff } from "../model/Foodstuff";
 import { Rpc } from "../utility/rpc";
@@ -37,10 +37,10 @@ export class FoodstuffsStore {
   }
 
   /**
-   * Removes foodstuff entity with specified ID.
+   * Deletes foodstuff entity with specified ID.
    */
-  public async remove(id: string) {
-    const result = await Rpc.call("foodstuff", "remove", { id });
+  public async delete(id: string) {
+    const result = await Rpc.call("foodstuff", "delete", { id });
 
     if (!result.ok) {
       return result.value;

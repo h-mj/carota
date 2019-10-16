@@ -10,7 +10,7 @@ import { Meal } from "../../model/Meal";
 import { RESET } from "../../styling/stylesheets";
 import { styled } from "../../styling/theme";
 import { Plus } from "../Plus";
-import { Consumables } from "./Consumables";
+import { Dishes } from "./Dishes";
 import { NutrientQuantities } from "./NutrientQuantities";
 import { Texts } from "./Texts";
 
@@ -21,7 +21,7 @@ interface MealEntryProps {
   /**
    * Current draggable type.
    */
-  draggableType?: "meal" | "consumable";
+  draggableType?: "meal" | "dish";
 
   /**
    * Meal index.
@@ -50,7 +50,7 @@ export class MealEntry extends Component<MealEntryProps> {
    */
   public render() {
     const { meal } = this.props;
-    const { name, consumables } = meal;
+    const { name, dishes } = meal;
 
     return (
       <Draggable draggableId={meal.id} index={this.props.index}>
@@ -66,10 +66,10 @@ export class MealEntry extends Component<MealEntryProps> {
                 <Edit onClick={this.showNameEdit}>↺</Edit>
               </Texts>
 
-              {consumables.length > 0 && <NutrientQuantities model={meal} />}
+              {dishes.length > 0 && <NutrientQuantities model={meal} />}
             </TitleBar>
 
-            <Consumables meal={meal} draggableType={this.props.draggableType} />
+            <Dishes meal={meal} draggableType={this.props.draggableType} />
 
             <PlusContainer>
               <Plus onClick={this.showSearch}>+</Plus>

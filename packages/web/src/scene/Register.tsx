@@ -1,8 +1,8 @@
-import { Languages } from "api";
 import { deviate } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
+import { Language } from "server";
 
 import {
   DefaultSceneComponentProps,
@@ -50,7 +50,7 @@ interface LanguageSelectTranslation extends TextFieldTranslation {
   /**
    * Translations of language options.
    */
-  options: Record<Languages, string>;
+  options: Record<Language, string>;
 }
 
 /**
@@ -83,7 +83,7 @@ const GUID_V4_REGEX = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}
  * Register form input values.
  */
 type RegisterValues = Record<TextFieldNames, string> &
-  Record<"language", Languages | undefined>;
+  Record<"language", Language | undefined>;
 
 /**
  * Transformation function that transforms `RegisterValues` into
@@ -91,7 +91,7 @@ type RegisterValues = Record<TextFieldNames, string> &
  */
 // prettier-ignore
 const toBody = deviate<RegisterValues>().shape({
-  language: deviate<Languages | undefined>().defined(),
+  language: deviate<Language | undefined>().defined(),
   name: deviate<string>().trim().notEmpty(),
   email: deviate<string>().trim().notEmpty().email(),
   password: deviate<string>().notEmpty().minLen(8)
@@ -214,7 +214,7 @@ export class Register extends SceneComponent<
   @action
   private handleLanguageChange = (
     name: "language",
-    value: Languages | undefined
+    value: Language | undefined
   ) => {
     this.values[name] = value;
     this.props.views!.language = value || "English";
@@ -235,6 +235,8 @@ export class Register extends SceneComponent<
       result.ok
         ? this.props.accounts!.register({
             ...result.value,
+            sex: "Male",
+            birthDate: "2000-01-01",
             invitationId: this.props.scene.parameters!.invitationId
           })
         : undefined

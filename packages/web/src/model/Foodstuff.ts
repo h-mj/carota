@@ -1,4 +1,4 @@
-import { FoodstuffDto, NutritionDeclarationDto, Units } from "api";
+import { FoodstuffDto, NutritionDeclarationDto, Unit } from "server";
 
 import { FoodstuffsStore } from "../store/FoodstuffsStore";
 
@@ -24,7 +24,7 @@ export class Foodstuff {
   public readonly id: string;
   public readonly name: string;
   public readonly barcode?: string;
-  public readonly unit: Units;
+  public readonly unit: Unit;
   public readonly quantity?: number;
   public readonly pieceQuantity?: number;
   public readonly nutritionDeclaration: NutritionDeclarationDto;
@@ -46,9 +46,9 @@ export class Foodstuff {
   }
 
   /**
-   * Removes corresponding foodstuff entity.
+   * Deletes corresponding foodstuff entity.
    */
-  public async remove() {
-    return this.store.remove(this.id);
+  public async delete() {
+    return this.store.delete(this.id);
   }
 }

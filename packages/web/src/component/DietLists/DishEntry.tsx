@@ -3,36 +3,36 @@ import * as React from "react";
 import { Draggable } from "react-beautiful-dnd";
 
 import { Component } from "../../base/Component";
-import { Consumable } from "../../model/Consumable";
+import { Dish } from "../../model/Dish";
 import { styled } from "../../styling/theme";
 import { NutrientQuantities } from "./NutrientQuantities";
 import { Texts } from "./Texts";
 
 /**
- * Consumable list entity component props.
+ * Dish list entity component props.
  */
-interface ConsumableEntryProps {
+interface DishEntryProps {
   /**
-   * Consumable model which information is being displayed.
+   * Dish model which information is being displayed.
    */
-  consumable: Consumable;
+  dish: Dish;
 
   /**
-   * Consumable entry index within the list.
+   * Dish entry index within the list.
    */
   index: number;
 }
 
 /**
- * Component that display information about specified consumable.
+ * Component that display information about specified dish.
  */
 @observer
-export class ConsumableEntry extends Component<ConsumableEntryProps> {
+export class DishEntry extends Component<DishEntryProps> {
   public render() {
-    const { consumable } = this.props;
+    const { dish } = this.props;
 
     return (
-      <Draggable draggableId={consumable.id} index={this.props.index}>
+      <Draggable draggableId={dish.id} index={this.props.index}>
         {(provided, snapshot) => (
           <Container
             ref={provided.innerRef}
@@ -42,14 +42,14 @@ export class ConsumableEntry extends Component<ConsumableEntryProps> {
           >
             <Texts>
               <Quantity>
-                {consumable.quantity}
-                {consumable.foodstuff.unit}
+                {dish.quantity}
+                {dish.foodstuff.unit}
               </Quantity>
 
-              <span>{consumable.foodstuff.name}</span>
+              <span>{dish.foodstuff.name}</span>
             </Texts>
 
-            <NutrientQuantities model={consumable} />
+            <NutrientQuantities model={dish} />
           </Container>
         )}
       </Draggable>
@@ -62,13 +62,13 @@ export class ConsumableEntry extends Component<ConsumableEntryProps> {
  */
 interface ContainerProps {
   /**
-   * Whether consumable is being dragged.
+   * Whether dish is being dragged.
    */
   isDragging: boolean;
 }
 
 /**
- * Consumable entry component container.
+ * Dish entry component container.
  */
 const Container = styled.div<ContainerProps>`
   width: 100%;
@@ -101,7 +101,7 @@ const Container = styled.div<ContainerProps>`
 `;
 
 /**
- * Component that displays consumable quantity.
+ * Component that displays dish quantity.
  */
 const Quantity = styled.span`
   width: ${({ theme }) => theme.height};

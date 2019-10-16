@@ -28,8 +28,8 @@ export class Meal {
   @Column("date", { nullable: true })
   public date!: string | null;
 
-  @OneToMany(() => Dish, dish => dish.meal, { eager: true })
-  public dishes!: Dish[];
+  @OneToMany(() => Dish, dish => dish.meal)
+  public dishes?: Dish[];
 
   @OneToOne(() => Meal, meal => meal.next)
   public previous!: Promise<Meal | undefined>;
@@ -50,7 +50,4 @@ export class Meal {
   });
 }
 
-/**
- * Meal entity data transfer object type.
- */
 export type MealDto = ReturnType<Meal["toDto"]>;

@@ -15,11 +15,11 @@ export class Dish {
   @PrimaryGeneratedColumn("uuid")
   public id!: string;
 
-  @ManyToOne(() => Meal, { nullable: false })
-  public meal!: Meal;
+  @ManyToOne(() => Meal)
+  public meal?: Meal;
 
-  @Column()
-  public mealId!: string;
+  @Column({ nullable: true })
+  public mealId!: string | null;
 
   @ManyToOne(() => Foodstuff, { nullable: false, eager: true })
   public foodstuff!: Foodstuff;
@@ -28,14 +28,13 @@ export class Dish {
   public quantity!: number;
 
   @OneToOne(() => Dish, dish => dish.next)
-  @JoinColumn()
   public previous!: Promise<Dish | undefined>;
 
   @OneToOne(() => Dish, dish => dish.previous)
   @JoinColumn()
   public next!: Promise<Dish | undefined>;
 
-  @Column()
+  @Column({ nullable: true })
   public nextId!: string | null;
 
   public toDto = () => ({

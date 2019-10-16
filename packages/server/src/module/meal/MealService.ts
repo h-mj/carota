@@ -4,6 +4,7 @@ import { Injectable } from "@nestjs/common";
 
 import { BadRequestError } from "../../error/BadRequestError";
 import { InvalidIdError } from "../../error/InvalidIdError";
+import { DishRepository } from "../dish/DishRepository";
 import { CreateMealDto } from "./dto/CreateMealDto";
 import { DeleteMealDto } from "./dto/DeleteMealDto";
 import { GetAllMealsDto } from "./dto/GetAllMealsDto";
@@ -56,9 +57,17 @@ export class MealService {
   @Transaction()
   public async getAll(
     dto: GetAllMealsDto,
+    @TransactionRepository() dishRepository?: DishRepository,
     @TransactionRepository() mealRepository?: MealRepository
   ) {
-    return mealRepository!.ordered(dto.accountId, dto.date);
+    const meals = await mealRepository!.ordered(dto.accountId, dto.date);
+
+    // TODO: fix n + 1
+    for (const meal of meals) {
+      meal.dishes = await dishRepository!.ordered(meal);
+    }
+
+    return meals;
   }
 
   @Transaction()
@@ -74,17 +83,17 @@ export class MealService {
 
     await mealRepository!.unlink(meal);
 
-    const order = await mealRepository!.ordered(meal.accountId, dto.date);
+    const meals = await mealRepository!.ordered(meal.accountId, dto.date);
 
-    if (!(dto.index in order) && dto.index !== order.length) {
+    if (!(dto.index in meals) && dto.index !== meals.length) {
       throw new BadRequestError("Provided insertion index is invalid.", {
         location: { part: "body", path: ["index"] },
         reason: "invalidIndex"
       });
     }
 
-    const previous = order[dto.index - 1];
-    const next = order[dto.index];
+    const previous = meals[dto.index - 1];
+    const next = meals[dto.index];
 
     return mealRepository!.link(meal, dto.date, previous, next);
   }

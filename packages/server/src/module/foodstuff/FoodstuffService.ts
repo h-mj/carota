@@ -17,10 +17,10 @@ export class FoodstuffService {
     dto: DeleteFoodstuffDto,
     @TransactionRepository() foodstuffRepository?: FoodstuffRepository
   ) {
-    const foodstuff = await foodstuffRepository!.findOne(dto.foodstuffId);
+    const foodstuff = await foodstuffRepository!.findOne(dto.id);
 
     if (foodstuff === undefined) {
-      throw new InvalidIdError(Foodstuff, ["foodstuffId"]);
+      throw new InvalidIdError(Foodstuff, ["id"]);
     }
 
     foodstuffRepository!.remove(foodstuff);

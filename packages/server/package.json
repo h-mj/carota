@@ -2,6 +2,7 @@
   "name": "server",
   "version": "0.0.0",
   "private": true,
+  "types": "src/exports.ts",
   "scripts": {
     "develop": "nodemon -x node -r ts-node/register -r dotenv/config src/index.ts"
   },

@@ -2,13 +2,21 @@ import { Response } from "express";
 
 import { ArgumentsHost } from "@nestjs/common";
 
-import { HttpError } from "../error/HttpError";
+import { ErrorDto, HttpError } from "../error/HttpError";
+
+export interface ErrorResponse {
+  error: ErrorDto;
+}
 
 export abstract class ErrorResponder {
   protected respond(error: HttpError, host: ArgumentsHost) {
     const context = host.switchToHttp();
     const response = context.getResponse<Response>();
 
-    response.status(200).json({ error: error.toDto() });
+    const errorResponse: ErrorResponse = {
+      error: error.toDto()
+    };
+
+    response.status(200).json({ error: errorResponse });
   }
 }

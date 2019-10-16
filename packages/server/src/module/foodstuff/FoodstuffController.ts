@@ -28,7 +28,7 @@ export class FoodstuffController {
   ) {
     await this.foodstuffService.delete(dto);
 
-    return undefined;
+    return true as const;
   }
 
   @Post("save")

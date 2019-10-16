@@ -4,7 +4,10 @@
   "private": true,
   "types": "src/exports.ts",
   "scripts": {
-    "develop": "nodemon -x node -r ts-node/register -r dotenv/config src/index.ts"
+    "build": "yarn run clean && tsc && cp -n .example.env .env && cp .env build/",
+    "clean": "rm -rf build",
+    "develop": "nodemon -x node -r ts-node/register -r dotenv/config src/index.ts",
+    "start": "cd build && node -r dotenv/config src/index.js"
   },
   "dependencies": {
     "@nestjs/common": "^6.8.3",

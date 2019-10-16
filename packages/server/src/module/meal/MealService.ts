@@ -4,6 +4,7 @@ import { Injectable } from "@nestjs/common";
 
 import { BadRequestError } from "../../error/BadRequestError";
 import { InvalidIdError } from "../../error/InvalidIdError";
+import { Account } from "../account/Account";
 import { DishRepository } from "../dish/DishRepository";
 import { CreateMealDto } from "./dto/CreateMealDto";
 import { DeleteMealDto } from "./dto/DeleteMealDto";
@@ -18,16 +19,17 @@ export class MealService {
   @Transaction()
   public async create(
     dto: CreateMealDto,
+    account: Account,
     @TransactionRepository() mealRepository?: MealRepository
   ) {
     const last = await mealRepository!.findOne({
-      accountId: dto.accountId,
+      account,
       date: dto.date,
       nextId: null
     });
 
     const template = mealRepository!.create({
-      accountId: dto.accountId,
+      account,
       name: dto.name,
       date: dto.date
     });
@@ -57,10 +59,14 @@ export class MealService {
   @Transaction()
   public async getAll(
     dto: GetAllMealsDto,
+    account: Account,
     @TransactionRepository() dishRepository?: DishRepository,
     @TransactionRepository() mealRepository?: MealRepository
   ) {
-    const meals = await mealRepository!.ordered(dto.accountId, dto.date);
+    const meals = await mealRepository!.ordered(
+      dto.accountId || account.id,
+      dto.date
+    );
 
     // TODO: fix n + 1
     for (const meal of meals) {

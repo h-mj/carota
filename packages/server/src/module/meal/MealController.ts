@@ -1,6 +1,8 @@
 import { Body, Controller, Post } from "@nestjs/common";
 
+import { Principal } from "../../middleware/AuthenticationMiddleware";
 import { ValidationPipe } from "../../pipe/ValidationPipe";
+import { Account } from "../account/Account";
 import { CreateMealDto, createMealDtoValidator } from "./dto/CreateMealDto";
 import { DeleteMealDto, deleteMealDtoValidator } from "./dto/DeleteMealDto";
 import { GetAllMealsDto, getAllMealsDtoValidator } from "./dto/GetAllMealsDto";
@@ -14,9 +16,10 @@ export class MealController {
 
   @Post("create")
   public async create(
-    @Body(new ValidationPipe(createMealDtoValidator)) dto: CreateMealDto
+    @Body(new ValidationPipe(createMealDtoValidator)) dto: CreateMealDto,
+    @Principal() account: Account
   ) {
-    const meal = await this.mealService.create(dto);
+    const meal = await this.mealService.create(dto, account);
 
     return meal.toDto();
   }
@@ -32,9 +35,10 @@ export class MealController {
 
   @Post("getAll")
   public async getAll(
-    @Body(new ValidationPipe(getAllMealsDtoValidator)) dto: GetAllMealsDto
+    @Body(new ValidationPipe(getAllMealsDtoValidator)) dto: GetAllMealsDto,
+    @Principal() account: Account
   ) {
-    const meals = await this.mealService.getAll(dto);
+    const meals = await this.mealService.getAll(dto, account);
 
     return meals.map(meal => meal.toDto());
   }

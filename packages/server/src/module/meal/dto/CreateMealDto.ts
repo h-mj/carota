@@ -10,7 +10,6 @@ const withinMonth = (input: string) =>
 
 // prettier-ignore
 export const createMealDtoValidator = deviate().object().shape({
-  accountId: deviate().string().guid(),
   name: deviate().string().trim().notEmpty(),
   date: deviate().string().append(validDate).append(withinMonth)
 });

@@ -31,7 +31,7 @@ export class Dishes extends Component<DishesProps> {
    * Renders a list of dishes.
    */
   public render() {
-    const { dishes } = this.props.meal;
+    const dishes = [...this.props.meal.dishes];
 
     return (
       <Droppable

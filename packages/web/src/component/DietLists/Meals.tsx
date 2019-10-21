@@ -27,7 +27,7 @@ export class Meals extends Component<MealsProps> {
    * Renders all provided meals.
    */
   public render() {
-    const { meals } = this.props.meals!;
+    const meals = [...this.props.meals!.meals];
 
     return (
       <Droppable

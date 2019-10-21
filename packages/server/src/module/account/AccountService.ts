@@ -7,8 +7,10 @@ import { InvalidIdError } from "../../error/InvalidIdError";
 import { UniqueConstraintError } from "../../error/UniqueConstraintErrors";
 import { Invitation } from "../invitation/Invitation";
 import { InvitationRepository } from "../invitation/InvitationRepository";
+import { Account } from "./Account";
 import { AccountRepository } from "./AccountRepository";
 import { CreateAccountDto } from "./dto/CreateAccountDto";
+import { GetAccountDto } from "./dto/GetAccountDto";
 
 @Injectable()
 export class AccountService {
@@ -46,5 +48,20 @@ export class AccountService {
     await invitationRepository!.remove(invitation);
 
     return accountRepository!.save(template);
+  }
+
+  @Transaction()
+  public async get(
+    dto: GetAccountDto,
+    principal: Account,
+    @TransactionRepository() accountRepository?: AccountRepository
+  ) {
+    const account = await accountRepository!.findOne(dto.id || principal.id);
+
+    if (account === undefined) {
+      throw new InvalidIdError(Account, ["id"]);
+    }
+
+    return account;
   }
 }

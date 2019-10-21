@@ -19,7 +19,7 @@ import { styled } from "../styling/theme";
  */
 const validate = deviate<string>()
   .trim()
-  .notEmpty();
+  .minLen(3);
 
 /**
  * Search scene component props.

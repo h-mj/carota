@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 
+import { allow } from "../../utility/authorization";
 import { Account } from "../account/Account";
 import { Dish } from "../dish/Dish";
 
@@ -51,3 +52,13 @@ export class Meal {
 }
 
 export type MealDto = ReturnType<Meal["toDto"]>;
+
+// prettier-ignore
+{
+  allow(Account, "delete", Meal, (account, meal) => account.id === meal.accountId);
+  allow(Account, "get all meals of", Account, (actor, target) => actor.id === target.id || actor.id === target.adviserId);
+  allow(Account, "insert", Meal, (account, meal) => account.id === meal.accountId);
+  allow(Account, "rename", Meal, (account, meal) => account.id === meal.accountId);
+  allow(Account, "add dish to", Meal, (account, meal) => meal.accountId === account.id);
+  allow(Account, "insert dish into", Meal, (account, meal) => account.id === meal.accountId);
+}

@@ -1,6 +1,8 @@
 import { Body, Controller, Post } from "@nestjs/common";
 
+import { Principal } from "../../middleware/AuthenticationMiddleware";
 import { ValidationPipe } from "../../pipe/ValidationPipe";
+import { Account } from "../account/Account";
 import { DishService } from "./DishService";
 import { CreateDishDto, createDishDtoValidator } from "./dto/CreateDishDto";
 import { DeleteDishDto, deleteDishDtoValidator } from "./dto/DeleteDishDto";
@@ -12,27 +14,30 @@ export class DishController {
 
   @Post("create")
   public async create(
-    @Body(new ValidationPipe(createDishDtoValidator)) dto: CreateDishDto
+    @Body(new ValidationPipe(createDishDtoValidator)) dto: CreateDishDto,
+    @Principal() principal: Account
   ) {
-    const dish = await this.dishService.create(dto);
+    const dish = await this.dishService.create(dto, principal);
 
     return dish.toDto();
   }
 
   @Post("delete")
   public async delete(
-    @Body(new ValidationPipe(deleteDishDtoValidator)) dto: DeleteDishDto
+    @Body(new ValidationPipe(deleteDishDtoValidator)) dto: DeleteDishDto,
+    @Principal() principal: Account
   ) {
-    await this.dishService.delete(dto);
+    await this.dishService.delete(dto, principal);
 
     return true as const;
   }
 
   @Post("insert")
   public async insert(
-    @Body(new ValidationPipe(insertDishDtoValidator)) dto: InsertDishDto
+    @Body(new ValidationPipe(insertDishDtoValidator)) dto: InsertDishDto,
+    @Principal() principal: Account
   ) {
-    await this.dishService.insert(dto);
+    await this.dishService.insert(dto, principal);
 
     return true as const;
   }

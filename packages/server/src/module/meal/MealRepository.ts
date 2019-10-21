@@ -1,11 +1,12 @@
 import { EntityRepository, Repository } from "typeorm";
 
+import { Account } from "../account/Account";
 import { Meal } from "./Meal";
 
 @EntityRepository(Meal)
 export class MealRepository extends Repository<Meal> {
-  public async ordered(accountId: string, date: string) {
-    const meals = await this.find({ accountId, date });
+  public async ordered(account: Account, date: string) {
+    const meals = await this.find({ account, date });
     const reversed = new Map(meals.map(meal => [meal.nextId, meal]));
 
     const order: Meal[] = [];

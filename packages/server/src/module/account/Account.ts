@@ -44,8 +44,14 @@ export class Account {
   @ManyToOne(() => Account)
   public adviser?: Account;
 
+  @Column({ nullable: true })
+  public adviserId!: string | null;
+
   @ManyToOne(() => Account)
   public inviter?: Account;
+
+  @Column({ nullable: true })
+  public inviterId!: string | null;
 
   public toDto = () => ({
     id: this.id,

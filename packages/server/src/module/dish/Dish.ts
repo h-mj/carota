@@ -7,6 +7,8 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 
+import { allow } from "../../utility/authorization";
+import { Account } from "../account/Account";
 import { Foodstuff } from "../foodstuff/Foodstuff";
 import { Meal } from "../meal/Meal";
 
@@ -45,3 +47,8 @@ export class Dish {
 }
 
 export type DishDto = ReturnType<Dish["toDto"]>;
+
+// prettier-ignore
+{
+  allow(Account, "delete", Dish, (account, dish) => dish.meal !== undefined && account.id === dish.meal.accountId);
+}

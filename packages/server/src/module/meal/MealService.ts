@@ -4,7 +4,9 @@ import { Injectable } from "@nestjs/common";
 
 import { BadRequestError } from "../../error/BadRequestError";
 import { InvalidIdError } from "../../error/InvalidIdError";
+import { authorize } from "../../utility/authorization";
 import { Account } from "../account/Account";
+import { AccountRepository } from "../account/AccountRepository";
 import { DishRepository } from "../dish/DishRepository";
 import { CreateMealDto } from "./dto/CreateMealDto";
 import { DeleteMealDto } from "./dto/DeleteMealDto";
@@ -44,6 +46,7 @@ export class MealService {
   @Transaction()
   public async delete(
     dto: DeleteMealDto,
+    principal: Account,
     @TransactionRepository() mealRepository?: MealRepository
   ) {
     const meal = await mealRepository!.findOne(dto.id);
@@ -52,6 +55,8 @@ export class MealService {
       throw new InvalidIdError(Meal, ["id"]);
     }
 
+    authorize(principal, "delete", meal);
+
     await mealRepository!.unlink(meal);
     await mealRepository!.remove(meal);
   }
@@ -59,14 +64,22 @@ export class MealService {
   @Transaction()
   public async getAll(
     dto: GetAllMealsDto,
-    account: Account,
+    principal: Account,
+    @TransactionRepository() accountRepository?: AccountRepository,
     @TransactionRepository() dishRepository?: DishRepository,
     @TransactionRepository() mealRepository?: MealRepository
   ) {
-    const meals = await mealRepository!.ordered(
-      dto.accountId || account.id,
-      dto.date
+    const account = await accountRepository!.findOne(
+      dto.accountId || principal.id
     );
+
+    if (account === undefined) {
+      throw new InvalidIdError(Account, ["accountId"]);
+    }
+
+    authorize(principal, "get all meals of", account);
+
+    const meals = await mealRepository!.ordered(account, dto.date);
 
     // TODO: fix n + 1
     for (const meal of meals) {
@@ -79,6 +92,7 @@ export class MealService {
   @Transaction()
   public async insert(
     dto: InsertMealDto,
+    principal: Account,
     @TransactionRepository() mealRepository?: MealRepository
   ) {
     const meal = await mealRepository!.findOne(dto.id);
@@ -87,9 +101,11 @@ export class MealService {
       throw new InvalidIdError(Meal, ["id"]);
     }
 
+    authorize(principal, "insert", meal);
+
     await mealRepository!.unlink(meal);
 
-    const meals = await mealRepository!.ordered(meal.accountId, dto.date);
+    const meals = await mealRepository!.ordered(principal, dto.date);
 
     if (!(dto.index in meals) && dto.index !== meals.length) {
       throw new BadRequestError("Provided insertion index is invalid.", {
@@ -107,6 +123,7 @@ export class MealService {
   @Transaction()
   public async rename(
     dto: RenameMealDto,
+    principal: Account,
     @TransactionRepository() mealRepository?: MealRepository
   ) {
     const meal = await mealRepository!.findOne(dto.id);
@@ -114,6 +131,8 @@ export class MealService {
     if (meal === undefined) {
       throw new InvalidIdError(Meal, ["id"]);
     }
+
+    authorize(principal, "rename", meal);
 
     meal.name = dto.name;
     await mealRepository!.save(meal);

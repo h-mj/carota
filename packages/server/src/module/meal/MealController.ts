@@ -17,18 +17,19 @@ export class MealController {
   @Post("create")
   public async create(
     @Body(new ValidationPipe(createMealDtoValidator)) dto: CreateMealDto,
-    @Principal() account: Account
+    @Principal() principal: Account
   ) {
-    const meal = await this.mealService.create(dto, account);
+    const meal = await this.mealService.create(dto, principal);
 
     return meal.toDto();
   }
 
   @Post("delete")
   public async delete(
-    @Body(new ValidationPipe(deleteMealDtoValidator)) dto: DeleteMealDto
+    @Body(new ValidationPipe(deleteMealDtoValidator)) dto: DeleteMealDto,
+    @Principal() principal: Account
   ) {
-    await this.mealService.delete(dto);
+    await this.mealService.delete(dto, principal);
 
     return true as const;
   }
@@ -36,27 +37,29 @@ export class MealController {
   @Post("getAll")
   public async getAll(
     @Body(new ValidationPipe(getAllMealsDtoValidator)) dto: GetAllMealsDto,
-    @Principal() account: Account
+    @Principal() principal: Account
   ) {
-    const meals = await this.mealService.getAll(dto, account);
+    const meals = await this.mealService.getAll(dto, principal);
 
     return meals.map(meal => meal.toDto());
   }
 
   @Post("insert")
   public async insert(
-    @Body(new ValidationPipe(insertMealDtoValidator)) dto: InsertMealDto
+    @Body(new ValidationPipe(insertMealDtoValidator)) dto: InsertMealDto,
+    @Principal() principal: Account
   ) {
-    await this.mealService.insert(dto);
+    await this.mealService.insert(dto, principal);
 
     return true as const;
   }
 
   @Post("rename")
   public async rename(
-    @Body(new ValidationPipe(renameMealDtoValidator)) dto: RenameMealDto
+    @Body(new ValidationPipe(renameMealDtoValidator)) dto: RenameMealDto,
+    @Principal() principal: Account
   ) {
-    await this.mealService.rename(dto);
+    await this.mealService.rename(dto, principal);
 
     return true as const;
   }

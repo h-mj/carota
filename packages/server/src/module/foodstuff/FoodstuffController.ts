@@ -24,9 +24,10 @@ export class FoodstuffController {
   @Post("delete")
   public async delete(
     @Body(new ValidationPipe(deleteFoodstuffDtoValidator))
-    dto: DeleteFoodstuffDto
+    dto: DeleteFoodstuffDto,
+    @Principal() principal: Account
   ) {
-    await this.foodstuffService.delete(dto);
+    await this.foodstuffService.delete(dto, principal);
 
     return true as const;
   }

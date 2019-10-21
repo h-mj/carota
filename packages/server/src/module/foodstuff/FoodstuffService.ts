@@ -3,6 +3,7 @@ import { Transaction, TransactionRepository } from "typeorm";
 import { Injectable } from "@nestjs/common";
 
 import { InvalidIdError } from "../../error/InvalidIdError";
+import { authorize } from "../../utility/authorization";
 import { Account } from "../account/Account";
 import { DeleteFoodstuffDto } from "./dto/DeleteFoodstuffDto";
 import { SaveFoodstuffDto } from "./dto/SaveFoodstuffDto";
@@ -15,6 +16,7 @@ export class FoodstuffService {
   @Transaction()
   public async delete(
     dto: DeleteFoodstuffDto,
+    principal: Account,
     @TransactionRepository() foodstuffRepository?: FoodstuffRepository
   ) {
     const foodstuff = await foodstuffRepository!.findOne(dto.id);
@@ -23,20 +25,25 @@ export class FoodstuffService {
       throw new InvalidIdError(Foodstuff, ["id"]);
     }
 
+    authorize(principal, "delete", foodstuff);
+
     foodstuffRepository!.remove(foodstuff);
   }
 
   @Transaction()
   public async save(
     dto: SaveFoodstuffDto,
-    editor: Account,
+    principal: Account,
     @TransactionRepository() foodstuffRepository?: FoodstuffRepository
   ) {
-    if (
-      dto.id !== undefined &&
-      (await foodstuffRepository!.findOne(dto.id)) === undefined
-    ) {
-      throw new InvalidIdError(Foodstuff, ["id"]);
+    if (dto.id !== undefined) {
+      const foodstuff = await foodstuffRepository!.findOne(dto.id);
+
+      if (foodstuff === undefined) {
+        throw new InvalidIdError(Foodstuff, ["id"]);
+      }
+
+      authorize(principal, "save", foodstuff);
     }
 
     const template = foodstuffRepository!.create({
@@ -47,7 +54,7 @@ export class FoodstuffService {
       pieceQuantity: dto.pieceQuantity,
       quantity: dto.quantity,
       nutritionDeclaration: dto.nutritionDeclaration,
-      editor: editor
+      editor: principal
     });
 
     return foodstuffRepository!.save(template);

@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
+import { allow } from "../../utility/authorization";
 import { Account } from "../account/Account";
 import { NutritionDeclaration } from "./NutritionDeclaration";
 
@@ -29,11 +30,11 @@ export class Foodstuff {
   @Column(() => NutritionDeclaration)
   public nutritionDeclaration!: NutritionDeclaration;
 
-  @Column()
-  public editorId!: string;
-
   @ManyToOne(() => Account, { nullable: false })
   public editor!: Account;
+
+  @Column()
+  public editorId!: string;
 
   public toDto = () => ({
     id: this.id,
@@ -47,3 +48,9 @@ export class Foodstuff {
 }
 
 export type FoodstuffDto = ReturnType<Foodstuff["toDto"]>;
+
+// prettier-ignore
+{
+  allow(Account, "delete", Foodstuff, (account, foodstuff) => account.id === foodstuff.editorId || account.rights === "All");
+  allow(Account, "save", Foodstuff, (account, foodstuff) => account.id === foodstuff.editorId || account.rights === "All");
+}

@@ -30,6 +30,11 @@ export class AccountController {
     };
   }
 
+  @Post("current")
+  public async current(_: unknown, @Principal() principal: Account) {
+    return principal.toDto();
+  }
+
   @Post("get")
   public async get(
     @Body(new ValidationPipe(getAccountDtoValidator)) dto: GetAccountDto,

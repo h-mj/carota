@@ -12,6 +12,10 @@ export class AccountsStore {
    * JSON Web Token.
    */
   @observable private token?: string;
+
+  /**
+   * Current account.
+   */
   @observable public account?: AccountDto;
 
   /**
@@ -103,6 +107,22 @@ export class AccountsStore {
   }
 
   /**
+   * Requests and assigns current account.
+   */
+  @action
+  public async load() {
+    const response = await Rpc.call("account", "current", undefined);
+
+    if (!response.ok) {
+      return response.value;
+    }
+
+    this.account = response.value;
+
+    return undefined;
+  }
+
+  /**
    * Logs the user out by clearing all stores including this one.
    */
   @action
@@ -116,5 +136,6 @@ export class AccountsStore {
   @action
   public clear() {
     this.token = undefined;
+    this.account = undefined;
   }
 }

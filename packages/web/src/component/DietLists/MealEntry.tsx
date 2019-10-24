@@ -50,7 +50,7 @@ export class MealEntry extends Component<MealEntryProps> {
    */
   public render() {
     const { meal } = this.props;
-    const { name, dishes } = meal;
+    const dishes = [...meal.dishes];
 
     return (
       <Draggable draggableId={meal.id} index={this.props.index}>
@@ -62,7 +62,7 @@ export class MealEntry extends Component<MealEntryProps> {
           >
             <TitleBar {...provided.dragHandleProps}>
               <Texts>
-                {name}
+                {meal.name}
                 <Edit onClick={this.showNameEdit}>↺</Edit>
               </Texts>
 

@@ -24,7 +24,7 @@ export const Texts = styled.div`
     margin-right: ${({theme}) => theme.paddingSecondary};
   }
 
-  @media screen and (max-width: 50rem) {
+  @media screen and (max-width: ${({theme}) => theme.widthCutoff}) {
     &:not(:only-child) {
       padding-top: calc(${({ theme }) => theme.heightHalf} / 2);
       padding-bottom: 0;

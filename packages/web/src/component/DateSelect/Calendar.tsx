@@ -199,7 +199,7 @@ const Container = styled.div`
   padding: ${({ theme }) => theme.padding} 0;
   margin: auto;
 
-  @media screen and (max-width: ${({ theme }) => theme.widthSmall}) {
+  @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
     padding: 0;
   }
 `;

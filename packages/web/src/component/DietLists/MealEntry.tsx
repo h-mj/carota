@@ -155,7 +155,7 @@ const TitleBar = styled.div`
   display: flex;
   box-shadow: 0 1px 0 0 ${({ theme }) => theme.borderColor};
 
-  @media screen and (max-width: 50rem) {
+  @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
     flex-direction: column;
   }
 `;

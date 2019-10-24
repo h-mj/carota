@@ -73,6 +73,7 @@ interface ContainerProps {
  */
 const Container = styled.div<ContainerProps>`
   position: absolute;
+  top: 0;
   z-index: 3;
 
   overflow: hidden;

@@ -268,7 +268,7 @@ const Tab = styled.button<TabProps>`
 const Abbreviation = styled.span`
   margin-left: ${({ theme }) => theme.paddingSecondaryHalf};
 
-  @media screen and (max-width: 40rem) {
+  @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
     display: block;
     font-size: 0.8rem;
   }

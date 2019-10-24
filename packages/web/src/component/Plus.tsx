@@ -16,8 +16,8 @@ interface PlusProps {
  */
 const fixedStyle = css`
   position: fixed;
-  right: ${({ theme }) => theme.padding};
-  bottom: ${({ theme }) => theme.padding};
+  right: ${({ theme }) => theme.heightHalf};
+  bottom: ${({ theme }) => theme.heightHalf};
 `;
 
 /**

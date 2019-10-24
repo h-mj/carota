@@ -39,6 +39,7 @@ export interface Theme {
   transitionSlow: string;
   widthSmall: string;
   widthMedium: string;
+  widthCutoff: string;
 }
 
 /**
@@ -65,8 +66,9 @@ export const LIGHT: Readonly<Theme> = {
   paddingHalf: "1.25rem",
   paddingSecondary: "0.825rem",
   paddingSecondaryHalf: "0.4125rem",
+  transition: "0.2s cubic-bezier(0.4, 0.0, 0.2, 1)",
+  transitionSlow: "0.4s cubic-bezier(0.4, 0.0, 0.2, 1)",
   widthSmall: "30rem",
   widthMedium: "60rem",
-  transition: "0.2s cubic-bezier(0.4, 0.0, 0.2, 1)",
-  transitionSlow: "0.4s cubic-bezier(0.4, 0.0, 0.2, 1)"
+  widthCutoff: "48rem"
 };

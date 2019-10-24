@@ -59,7 +59,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
    */
   public render() {
     return (
-      <>
+      <Container>
         <Head title={this.translation.title} />
 
         <Sticky>
@@ -78,7 +78,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
         <Plus fixed={true} onClick={this.handleAddClick}>
           +
         </Plus>
-      </>
+      </Container>
     );
   }
 
@@ -182,6 +182,13 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
     this.props.views!.popUntil(this.props.scene);
   };
 }
+
+/**
+ * Components that is used only to position the `TrashCan` component.
+ */
+const Container = styled.div`
+  position: relative;
+`;
 
 /**
  * Sticky wrapper component that wraps the `Calendar` component.

@@ -95,7 +95,7 @@ const Container = styled.div<ContainerProps>`
     border-radius ${({ theme }) => theme.transition},
     border-color ${({ theme }) => theme.transition};
 
-  @media screen and (max-width: 50rem) {
+  @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
     flex-direction: column;
   }
 `;

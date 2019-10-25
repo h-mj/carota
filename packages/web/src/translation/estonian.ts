@@ -36,37 +36,35 @@ export const estonian: Translation = {
         barcode: {
           label: "Triipkood",
           reasons: {
-            empty: "Palun sisestage toiduaine triipkood."
+            nonempty: "Palun sisestage toiduaine triipkood."
           }
         },
         name: {
           label: "Nimetus",
           reasons: {
-            empty: "Palun sisestage toiduaine nimetus."
+            nonempty: "Palun sisestage toiduaine nimetus."
           }
         },
         pieceQuantity: {
           label: "Ühe tüki kogus",
           reasons: {
-            empty: "Palun sisestage ühe tüki kogus.",
-            lessThanOrEquals:
-              "Palun sisestage ühe tüki kogus mis on suurem kui 0.",
-            NaN: "Palun sisestage korrektne ühe tüki kogus."
+            nonempty: "Palun sisestage ühe tüki kogus.",
+            greater: "Palun sisestage ühe tüki kogus mis on suurem kui 0.",
+            toNumber: "Palun sisestage korrektne ühe tüki kogus."
           }
         },
         quantity: {
           label: "Kogus",
           reasons: {
-            empty: "Palun sisestage toiduaine kogus.",
-            lessThanOrEquals:
-              "Palun sisestage toiduaine kogus mis on suurem kui 0.",
-            NaN: "Palun sisestage korrektne toiduaine kogus."
+            nonempty: "Palun sisestage toiduaine kogus.",
+            greater: "Palun sisestage toiduaine kogus mis on suurem kui 0.",
+            toNumber: "Palun sisestage korrektne toiduaine kogus."
           }
         },
         unit: {
           label: "Ühik",
           reasons: {
-            undefined: "Palun valige ühik."
+            string: "Palun valige ühik."
           }
         }
       },
@@ -99,13 +97,13 @@ export const estonian: Translation = {
         email: {
           label: "E-post",
           reasons: {
-            empty: "Palun sisestage e-posti aadress."
+            nonempty: "Palun sisestage e-posti aadress."
           }
         },
         password: {
           label: "Parool",
           reasons: {
-            empty: "Palun sisestage salasõna."
+            nonempty: "Palun sisestage salasõna."
           }
         }
       },
@@ -127,11 +125,11 @@ export const estonian: Translation = {
       or: "Või",
       selectHelper: "Valige toidukorra nimetus:",
       selectReasons: {
-        empty: "Palun valige toidukorra nimetus."
+        nonempty: "Palun valige toidukorra nimetus."
       },
       textFieldHelper: "Sisestage toidukorra nimetus:",
       textFieldReasons: {
-        empty: "Palun sisestage toidukorra nimetus."
+        nonempty: "Palun sisestage toidukorra nimetus."
       }
     },
     Quantity: {
@@ -141,9 +139,9 @@ export const estonian: Translation = {
         helper: "Sisestage toiduaine kogus:",
         label: "Kogus",
         reasons: {
-          empty: "Palun sisestage toiduaine kogus.",
-          lessThanOrEquals: "Palun sistestage kogus mis on suurem kui 0.",
-          NaN: "Palun sistestage korrektne kogus."
+          nonempty: "Palun sisestage toiduaine kogus.",
+          greater: "Palun sistestage kogus mis on suurem kui 0.",
+          toNumber: "Palun sistestage korrektne kogus."
         }
       },
       select: "Valige",
@@ -152,7 +150,7 @@ export const estonian: Translation = {
         helper: "Kas toiduaine kogus on {ühik} või tükkides?",
         label: "Ühik",
         reasons: {
-          undefined: "Palun valige toiduaine ühik."
+          string: "Palun valige toiduaine ühik."
         }
       }
     },
@@ -165,8 +163,8 @@ export const estonian: Translation = {
           label: "E-post",
           reasons: {
             conflict: "Sisestatud e-posti aadress on juba kasutuses.",
-            empty: "Palun sisestage e-posti aadress.",
-            notEmail: "Palun sisestage kehtiv e-posti aadress."
+            nonempty: "Palun sisestage e-posti aadress.",
+            email: "Palun sisestage kehtiv e-posti aadress."
           }
         },
         language: {
@@ -177,20 +175,20 @@ export const estonian: Translation = {
             Russian: "русский"
           },
           reasons: {
-            undefined: "Palun valige keel."
+            string: "Palun valige keel."
           }
         },
         name: {
           label: "Nimi",
           reasons: {
-            empty: "Palun sisestage nimi."
+            nonempty: "Palun sisestage nimi."
           }
         },
         password: {
           label: "Parool",
           reasons: {
-            empty: "Palun sisestage salasõna.",
-            lessThan: "Salasõna peab sisaldama vähemalt 8 tähemärki."
+            nonempty: "Palun sisestage salasõna.",
+            greater: "Salasõna peab sisaldama vähemalt 8 tähemärki."
           }
         },
         sex: {
@@ -200,7 +198,7 @@ export const estonian: Translation = {
             Male: "Mees"
           },
           reasons: {
-            undefined: "Palun valige sugu."
+            string: "Palun valige sugu."
           }
         }
       },

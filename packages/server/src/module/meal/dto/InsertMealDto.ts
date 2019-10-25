@@ -5,7 +5,7 @@ import { validDate } from "../../../utility/validators";
 // prettier-ignore
 export const insertMealDtoValidator = deviate().object().shape({
   id: deviate().string().guid(),
-  date: deviate().string().append(validDate),
+  date: deviate().string().then(validDate),
   index: deviate().number()
 });
 

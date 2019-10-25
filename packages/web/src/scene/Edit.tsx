@@ -185,9 +185,7 @@ const DEFAULT_EDIT_VALUES: Readonly<EditValues> = {
 /**
  * Converts a number to string.
  */
-const numberToString = deviate<number>().append(number =>
-  ok(number.toString())
-);
+const numberToString = deviate<number>().then(number => ok(number.toString()));
 
 /**
  * If value is `undefined`, returns `undefined` immediately, otherwise number is
@@ -195,7 +193,7 @@ const numberToString = deviate<number>().append(number =>
  */
 const optionalNumberToString = deviate<number | undefined>()
   .optional()
-  .append(numberToString);
+  .then(numberToString);
 
 /**
  * Function that transforms `Foodstuff` type object into `EditValues` type
@@ -207,8 +205,8 @@ const toValues = deviate<Foodstuff>().shape({
   name: deviate<string>(),
   barcode: deviate<string | undefined>(),
   unit: deviate<Unit>(),
-  quantity: deviate<number | undefined>().optional().append(number => ok(number.toString())),
-  pieceQuantity: deviate<number | undefined>().optional().append(number => ok(number.toString())),
+  quantity: optionalNumberToString,
+  pieceQuantity: optionalNumberToString,
   nutritionDeclaration: deviate<NutritionDeclarationDto>().shape({
     energy: numberToString,
     fat: numberToString,
@@ -230,17 +228,17 @@ const toValues = deviate<Foodstuff>().shape({
  */
 const parseFloat = deviate<string>()
   .trim()
-  .notEmpty()
+  .nonempty()
   .replace(",", ".")
   .toNumber()
-  .ge(0);
+  .min(0);
 
 /**
  * Allows value to be `undefined`, otherwise converts it to a float.
  */
 const optionalParseFloat = deviate<string | undefined>()
   .optional()
-  .append(parseFloat);
+  .then(parseFloat);
 
 /**
  * Function that transforms `EditValues` type object into `SaveFoodstuffDto`
@@ -249,11 +247,11 @@ const optionalParseFloat = deviate<string | undefined>()
 // prettier-ignore
 const toBody = deviate<EditValues>().shape({
   id: deviate<string | undefined>(),
-  name: deviate<string>().notEmpty(),
-  barcode: deviate<string | undefined>().optional().notEmpty(),
-  unit: deviate<Unit | undefined>().defined(),
+  name: deviate<string>().nonempty(),
+  barcode: deviate<string | undefined>().optional().nonempty(),
+  unit: deviate<Unit | undefined>().string(),
   quantity: optionalParseFloat,
-  pieceQuantity: optionalParseFloat.gt(0),
+  pieceQuantity: optionalParseFloat.greater(0),
   nutritionDeclaration: deviate<NutritionDeclarationValues>().shape({
     energy: parseFloat,
     fat: parseFloat,

@@ -25,7 +25,7 @@ const PREDEFINED_MEAL_NAMES = ["breakfast", "lunch", "dinner"] as const;
  */
 const nameValidator = deviate<string>()
   .trim()
-  .notEmpty();
+  .nonempty();
 
 /**
  * Name component props.
@@ -270,9 +270,9 @@ export class Name extends SceneComponent<"Name", NameProps, NameTranslation> {
       return this.props.onSelect(this.values.name);
     }
 
-    if (result.value === "empty") {
-      this.reasons.name = "empty";
-      this.reasons.selectedName = "empty";
+    if (result.value === "nonempty") {
+      this.reasons.name = "nonempty";
+      this.reasons.selectedName = "nonempty";
     } else {
       this.reasons.name = result.value;
     }

@@ -17,12 +17,12 @@ const dateBeforeNow = (input: string) => {
 
 // prettier-ignore
 export const createAccountDtoValidator = deviate().object().shape({
-  name: deviate().string().trim().notEmpty(),
-  sex: deviate().string().options(SEXES),
-  birthDate: deviate().string().append(dateBeforeNow),
-  language: deviate().string().options(LANGUAGES),
-  email: deviate().string().trim().notEmpty().lowercase().email(),
-  password: deviate().string().notEmpty().minLen(8),
+  name: deviate().string().trim().nonempty(),
+  sex: deviate().options(SEXES),
+  birthDate: deviate().string().then(dateBeforeNow),
+  language: deviate().options(LANGUAGES),
+  email: deviate().string().trim().nonempty().lowercase().email(),
+  password: deviate().string().nonempty().minLength(8),
   invitationId: deviate().string().guid()
 });
 

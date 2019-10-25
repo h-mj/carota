@@ -106,8 +106,8 @@ interface FormValues {
  */
 // prettier-ignore
 const validate = deviate<FormValues>().shape({
-  quantity: deviate<string>().trim().notEmpty().replace(",", ".").toNumber().gt(0),
-  unit: deviate<Unit | "pcs" | undefined>().defined()
+  quantity: deviate<string>().trim().nonempty().replace(",", ".").toNumber().greater(0),
+  unit: deviate<Unit | "pcs" | undefined>().string()
 });
 
 /**

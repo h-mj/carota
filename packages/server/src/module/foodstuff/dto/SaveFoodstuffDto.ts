@@ -1,22 +1,22 @@
-import { deviate, Success } from "deviator";
+import { deviate, ok, Success } from "deviator";
 
 import { UNITS } from "../Foodstuff";
 
 const quantity = deviate()
   .number()
-  .ge(0)
-  .round(2);
+  .min(0)
+  .then(input => ok(Math.round(100 * input) / 100));
 
 const optionalQuantity = deviate()
   .optional()
-  .append(quantity);
+  .then(quantity);
 
 // prettier-ignore
 export const saveFoodstuffDtoValidator = deviate().object().shape({
   id: deviate().optional().string().guid(),
-  name: deviate().string().trim().notEmpty(),
-  barcode: deviate().optional().string().trim().regex(/^\d{13}$/),
-  unit: deviate().string().options(UNITS),
+  name: deviate().string().trim().nonempty(),
+  barcode: deviate().optional().string().trim().regexp(/^\d{13}$/),
+  unit: deviate().options(UNITS),
   quantity: optionalQuantity,
   pieceQuantity: optionalQuantity,
   nutritionDeclaration: deviate().object().shape({

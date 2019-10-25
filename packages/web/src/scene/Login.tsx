@@ -78,8 +78,8 @@ type LoginValues = Record<InputNames, string>;
 const toBody = deviate<LoginValues>().shape({
   email: deviate<string>()
     .trim()
-    .notEmpty(),
-  password: deviate<string>().notEmpty()
+    .nonempty(),
+  password: deviate<string>().nonempty()
 });
 
 /**

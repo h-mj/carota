@@ -36,36 +36,35 @@ export const english: Translation = {
         barcode: {
           label: "Barcode",
           reasons: {
-            empty: "Please enter a barcode."
+            nonempty: "Please enter a barcode."
           }
         },
         name: {
           label: "Name",
           reasons: {
-            empty: "Please enter a name of this foodstuff."
+            nonempty: "Please enter a name of this foodstuff."
           }
         },
         pieceQuantity: {
           label: "Quantity of one piece",
           reasons: {
-            empty: "Please enter quantity of one piece.",
-            lessThanOrEquals:
-              "Please enter one piece quantity that is greater than 0.",
-            NaN: "Please enter correct one piece quantity."
+            nonempty: "Please enter quantity of one piece.",
+            greater: "Please enter one piece quantity that is greater than 0.",
+            toNumber: "Please enter correct one piece quantity."
           }
         },
         quantity: {
           label: "Quantity",
           reasons: {
-            empty: "Please enter foodstuff quantity.",
-            lessThanOrEquals: "Please enter quantity that is greater than 0.",
-            NaN: "Please enter correct quantity."
+            nonempty: "Please enter foodstuff quantity.",
+            greater: "Please enter quantity that is greater than 0.",
+            toNumber: "Please enter correct quantity."
           }
         },
         unit: {
           label: "Unit",
           reasons: {
-            undefined: "Please select a unit."
+            string: "Please select a unit."
           }
         }
       },
@@ -98,13 +97,13 @@ export const english: Translation = {
         email: {
           label: "Email",
           reasons: {
-            empty: "Please enter an email address."
+            nonempty: "Please enter an email address."
           }
         },
         password: {
           label: "Password",
           reasons: {
-            empty: "Please enter a password."
+            nonempty: "Please enter a password."
           }
         }
       },
@@ -126,11 +125,11 @@ export const english: Translation = {
       or: "Or",
       selectHelper: "Select meal name:",
       selectReasons: {
-        empty: "Please select meal name."
+        nonempty: "Please select meal name."
       },
       textFieldHelper: "Enter meal name:",
       textFieldReasons: {
-        empty: "Please enter meal name."
+        nonempty: "Please enter meal name."
       }
     },
     Quantity: {
@@ -140,9 +139,9 @@ export const english: Translation = {
         helper: "Enter foodstuff quantity:",
         label: "Quantity",
         reasons: {
-          empty: "Please enter foodstuff quantity.",
-          lessThanOrEquals: "Please enter quantity that is greater than 0.",
-          NaN: "Please enter correct quantity."
+          nonempty: "Please enter foodstuff quantity.",
+          greater: "Please enter quantity that is greater than 0.",
+          toNumber: "Please enter correct quantity."
         }
       },
       select: "Select",
@@ -151,7 +150,7 @@ export const english: Translation = {
         helper: "Is the quantity in {unit} or in pieces?",
         label: "Unit",
         reasons: {
-          undefined: "Please select a unit."
+          string: "Please select a unit."
         }
       }
     },
@@ -161,8 +160,8 @@ export const english: Translation = {
           label: "Email",
           reasons: {
             conflict: "Entered email address is already in use.",
-            empty: "Please enter an email address.",
-            notEmail: "Please enter a valid email address."
+            nonempty: "Please enter an email address.",
+            email: "Please enter a valid email address."
           }
         },
         language: {
@@ -173,20 +172,20 @@ export const english: Translation = {
             Russian: "русский"
           },
           reasons: {
-            undefined: "Please select a language."
+            string: "Please select a language."
           }
         },
         name: {
           label: "Name",
           reasons: {
-            empty: "Please enter a name."
+            nonempty: "Please enter a name."
           }
         },
         password: {
           label: "Password",
           reasons: {
-            empty: "Please enter a password.",
-            lessThan: "Password must be at least 8 characters long."
+            nonempty: "Please enter a password.",
+            minLength: "Password must be at least 8 characters long."
           }
         },
         sex: {
@@ -196,7 +195,7 @@ export const english: Translation = {
             Male: "Male"
           },
           reasons: {
-            undefined: "Please select your sex."
+            string: "Please select your sex."
           }
         }
       },

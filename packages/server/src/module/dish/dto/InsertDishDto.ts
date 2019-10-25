@@ -4,7 +4,7 @@ import { deviate, Success } from "deviator";
 export const insertDishDtoValidator = deviate().object().shape({
   id: deviate().string().guid(),
   mealId: deviate().string().guid(),
-  index: deviate().number()
+  index: deviate().number().integer()
 });
 
 export type InsertDishDto = Success<typeof insertDishDtoValidator>;

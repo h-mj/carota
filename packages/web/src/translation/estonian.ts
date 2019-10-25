@@ -192,6 +192,16 @@ export const estonian: Translation = {
             empty: "Palun sisestage salasõna.",
             lessThan: "Salasõna peab sisaldama vähemalt 8 tähemärki."
           }
+        },
+        sex: {
+          label: "Sugu",
+          options: {
+            Female: "Naine",
+            Male: "Mees"
+          },
+          reasons: {
+            undefined: "Palun valige sugu."
+          }
         }
       },
       submit: "Looge konto →",

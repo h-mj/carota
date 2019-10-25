@@ -2,7 +2,7 @@ import { deviate } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Language } from "server";
+import { Language, Sex } from "server";
 
 import {
   DefaultSceneComponentProps,
@@ -18,15 +18,18 @@ import { TextField } from "../component/TextField";
 import { any, append, ErrorsFor } from "../utility/form";
 
 /**
- * Array of text field names within registration form.
- */
-const TEXT_FIELDS = ["name", "email", "password"] as const;
-
-/**
  * Text field name type that is union of all text field names inside
  * `TEXT_FIELDS` array.
  */
-type TextFieldNames = typeof TEXT_FIELDS[number];
+type TextFieldNames = "name" | "email" | "password";
+
+/**
+ * Maps select input name to its options.
+ */
+const SELECT_OPTIONS = {
+  language: ["English", "Estonian", "Russian"],
+  sex: ["Female", "Male"]
+} as const;
 
 /**
  * Text field translation.
@@ -54,6 +57,16 @@ interface LanguageSelectTranslation extends TextFieldTranslation {
 }
 
 /**
+ * Sex selection field translation.
+ */
+interface SexSelectTranslation extends TextFieldTranslation {
+  /**
+   * Translations of sex options.
+   */
+  options: Record<Sex, string>;
+}
+
+/**
  * Register scene translation.
  */
 interface RegisterTranslation {
@@ -61,7 +74,8 @@ interface RegisterTranslation {
    * Registration form input translations.
    */
   inputs: Record<TextFieldNames, TextFieldTranslation> &
-    Record<"language", LanguageSelectTranslation>;
+    Record<"language", LanguageSelectTranslation> &
+    Record<"sex", SexSelectTranslation>;
 
   /**
    * Form submit button text.
@@ -83,7 +97,8 @@ const GUID_V4_REGEX = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}
  * Register form input values.
  */
 type RegisterValues = Record<TextFieldNames, string> &
-  Record<"language", Language | undefined>;
+  Record<"language", Language | undefined> &
+  Record<"sex", Sex | undefined>;
 
 /**
  * Transformation function that transforms `RegisterValues` into
@@ -93,6 +108,7 @@ type RegisterValues = Record<TextFieldNames, string> &
 const toBody = deviate<RegisterValues>().shape({
   language: deviate<Language | undefined>().defined(),
   name: deviate<string>().trim().notEmpty(),
+  sex: deviate<Sex | undefined>().defined(),
   email: deviate<string>().trim().notEmpty().email(),
   password: deviate<string>().notEmpty().minLen(8)
 });
@@ -118,6 +134,7 @@ export class Register extends SceneComponent<
   @observable private values: RegisterValues = {
     language: undefined,
     name: "",
+    sex: undefined,
     email: "",
     password: ""
   };
@@ -162,33 +179,33 @@ export class Register extends SceneComponent<
               label={this.translation.inputs.language.label}
               name="language"
               onChange={this.handleLanguageChange}
-              options={(["English", "Estonian", "Russian"] as const).map(
-                language => ({
-                  label: this.translation.inputs.language.options[language],
-                  value: language
-                })
-              )}
+              options={SELECT_OPTIONS.language.map(language => ({
+                label: this.translation.inputs.language.options[language],
+                value: language
+              }))}
               required={true}
-              value={this.values["language"]}
+              value={this.values.language}
             />
-
-            {TEXT_FIELDS.map(name => (
-              <TextField
-                key={name}
-                errorMessage={
-                  this.reasons[name] !== undefined
-                    ? this.translation.inputs[name].reasons[this.reasons[name]!]
-                    : undefined
-                }
-                invalid={this.reasons[name] !== undefined}
-                label={this.translation.inputs[name].label}
-                name={name}
-                onChange={this.handleTextFieldChange}
-                required={true}
-                type={name === "name" ? "text" : name}
-                value={this.values[name]}
-              />
-            ))}
+            {this.renderTextField("name")}
+            <Select
+              errorMessage={
+                this.reasons.sex !== undefined
+                  ? this.translation.inputs.sex.reasons[this.reasons.sex!]
+                  : undefined
+              }
+              invalid={this.reasons.sex !== undefined}
+              label={this.translation.inputs.sex.label}
+              name="sex"
+              onChange={this.handleSexChange}
+              options={SELECT_OPTIONS.sex.map(sex => ({
+                label: this.translation.inputs.sex.options[sex],
+                value: sex
+              }))}
+              required={true}
+              value={this.values.sex}
+            />
+            {this.renderTextField("email")}
+            {this.renderTextField("password")}
           </Group>
           <Controls>
             <Button invalid={any(this.reasons)}>
@@ -197,6 +214,29 @@ export class Register extends SceneComponent<
           </Controls>
         </Form>
       </Center>
+    );
+  }
+
+  /**
+   * Renders text field with specified name.
+   */
+  public renderTextField(name: TextFieldNames) {
+    return (
+      <TextField
+        key={name}
+        errorMessage={
+          this.reasons[name] !== undefined
+            ? this.translation.inputs[name].reasons[this.reasons[name]!]
+            : undefined
+        }
+        invalid={this.reasons[name] !== undefined}
+        label={this.translation.inputs[name].label}
+        name={name}
+        onChange={this.handleTextFieldChange}
+        required={true}
+        type={name === "name" ? "text" : name}
+        value={this.values[name]}
+      />
     );
   }
 
@@ -221,6 +261,14 @@ export class Register extends SceneComponent<
   };
 
   /**
+   * Updates `sex` field of `values` object on sex select option change.
+   */
+  @action
+  private handleSexChange = (name: "sex", value: Sex | undefined) => {
+    this.values[name] = value;
+  };
+
+  /**
    * Prevents default form submit event and executes custom registration logic
    * instead.
    */
@@ -231,11 +279,11 @@ export class Register extends SceneComponent<
     event.preventDefault();
 
     const result = toBody(this.values);
+
     const error = await this.props.views!.load(
       result.ok
         ? this.props.accounts!.register({
             ...result.value,
-            sex: "Male",
             birthDate: "2000-01-01",
             invitationId: this.props.scene.parameters!.invitationId
           })

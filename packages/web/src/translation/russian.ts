@@ -192,6 +192,16 @@ export const russian: Translation = {
             empty: "Пожалуйста, введите пароль.",
             lessThan: "Пароль должен содержать не менее 8 символов."
           }
+        },
+        sex: {
+          label: "Пол",
+          options: {
+            Female: "Женщина",
+            Male: "Мужчина"
+          },
+          reasons: {
+            undefined: "Пожалуйста, выберите свой пол."
+          }
         }
       },
       submit: "Создать аккаунт →",

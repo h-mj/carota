@@ -188,6 +188,16 @@ export const english: Translation = {
             empty: "Please enter a password.",
             lessThan: "Password must be at least 8 characters long."
           }
+        },
+        sex: {
+          label: "Sex",
+          options: {
+            Female: "Female",
+            Male: "Male"
+          },
+          reasons: {
+            undefined: "Please select your sex."
+          }
         }
       },
       submit: "Create account →",

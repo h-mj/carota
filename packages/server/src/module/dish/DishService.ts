@@ -15,6 +15,7 @@ import { Dish } from "./Dish";
 import { DishRepository } from "./DishRepository";
 import { CreateDishDto } from "./dto/CreateDishDto";
 import { DeleteDishDto } from "./dto/DeleteDishDto";
+import { EatDishDto } from "./dto/EatDishDto";
 import { InsertDishDto } from "./dto/InsertDishDto";
 
 @Injectable()
@@ -49,7 +50,8 @@ export class DishService {
     const template = dishRepository!.create({
       meal,
       foodstuff,
-      quantity: dto.quantity
+      quantity: dto.quantity,
+      eaten: dto.eaten
     });
 
     return dishRepository!.link(
@@ -75,6 +77,24 @@ export class DishService {
 
     await dishRepository!.unlink(dish);
     await dishRepository!.remove(dish);
+  }
+
+  @Transaction()
+  public async eat(
+    dto: EatDishDto,
+    principal: Account,
+    @TransactionRepository() dishRepository?: DishRepository
+  ) {
+    const dish = await dishRepository!.findOne(dto.id, { relations: ["meal"] });
+
+    if (dish === undefined) {
+      throw new InvalidIdError(Dish, ["id"]);
+    }
+
+    authorize(principal, "eat", dish);
+
+    dish.eaten = dto.eaten;
+    await dishRepository!.save(dish);
   }
 
   @Transaction()

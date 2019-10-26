@@ -1,10 +1,12 @@
-import { observer } from "mobx-react";
+import { action } from "mobx";
+import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Draggable } from "react-beautiful-dnd";
 
 import { Component } from "../../base/Component";
 import { Dish } from "../../model/Dish";
 import { styled } from "../../styling/theme";
+import { CheckBox } from "../CheckBox";
 import { NutrientQuantities } from "./NutrientQuantities";
 import { Texts } from "./Texts";
 
@@ -26,21 +28,39 @@ interface DishEntryProps {
 /**
  * Component that display information about specified dish.
  */
+@inject("meals")
 @observer
 export class DishEntry extends Component<DishEntryProps> {
+  /**
+   * Spam prevention timeout that sets final eaten status after some time.
+   */
+  private timeoutId = 0;
+
+  /**
+   * Renders the dish entry with all its information.
+   */
   public render() {
     const { dish } = this.props;
+    const { eaten } = dish;
 
     return (
       <Draggable draggableId={dish.id} index={this.props.index}>
         {(provided, snapshot) => (
           <Container
             ref={provided.innerRef}
+            eaten={eaten}
             isDragging={snapshot.isDragging}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
             <Texts>
+              <CheckBox
+                name="eaten"
+                value={eaten}
+                basic={true}
+                onChange={this.handleCheckBoxChange}
+              />
+
               <Quantity>
                 {dish.quantity}
                 {dish.foodstuff.unit}
@@ -55,12 +75,38 @@ export class DishEntry extends Component<DishEntryProps> {
       </Draggable>
     );
   }
+
+  /**
+   * Sets dish eaten value to opposite to current value.
+   */
+  @action
+  private handleCheckBoxChange = async () => {
+    window.clearTimeout(this.timeoutId);
+
+    this.props.dish.eaten = !this.props.dish.eaten;
+    this.timeoutId = window.setTimeout(this.updateEatenStatus, 1000);
+  };
+
+  /**
+   * Updates provided dish eaten status after some timeout.
+   */
+  private updateEatenStatus = async () => {
+    await this.props.meals!.setDishEaten(
+      this.props.dish,
+      this.props.dish.eaten
+    );
+  };
 }
 
 /**
  * Container component props.
  */
 interface ContainerProps {
+  /**
+   * Whether dish has been eaten.
+   */
+  eaten: boolean;
+
   /**
    * Whether dish is being dragged.
    */
@@ -89,7 +135,8 @@ const Container = styled.div<ContainerProps>`
     isDragging ? theme.borderRadius : "0"};
   box-sizing: border-box;
 
-  background-color: ${({ theme }) => theme.backgroundColor};
+  background-color: ${({ eaten, theme }) =>
+    eaten ? theme.backgroundColor : theme.backgroundColorDisabled};
 
   transition: box-shadow ${({ theme }) => theme.transition},
     border-radius ${({ theme }) => theme.transition},

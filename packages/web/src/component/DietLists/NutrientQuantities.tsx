@@ -95,14 +95,18 @@ class NutrientQuantity extends Component<NutrientQuantityProps> {
 
     const Icon = ICONS[nutrient];
 
-    const quantity = model.quantityOf(nutrient);
-    const whole = (model instanceof Meal ? model : model.meal).quantityOf(
-      nutrient
-    );
+    const percentage =
+      model instanceof Meal
+        ? model.quantityOf(nutrient) === 0
+          ? 0
+          : 1
+        : !model.eaten || model.meal.quantityOf(nutrient) === 0
+        ? 0
+        : model.quantityOf(nutrient) / model.meal.quantityOf(nutrient);
 
     return (
       <Nutrient>
-        <Bar percentage={(100 * quantity) / whole} />
+        <Bar percentage={100 * percentage} />
         <Icon />
         <Name>
           {Math.round(10 * this.props.model.quantityOf(this.props.nutrient)) /

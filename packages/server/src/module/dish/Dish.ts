@@ -29,6 +29,9 @@ export class Dish {
   @Column("float4")
   public quantity!: number;
 
+  @Column()
+  public eaten!: boolean;
+
   @OneToOne(() => Dish, dish => dish.next)
   public previous!: Promise<Dish | undefined>;
 
@@ -42,7 +45,8 @@ export class Dish {
   public toDto = () => ({
     id: this.id,
     foodstuff: this.foodstuff.toDto(),
-    quantity: this.quantity
+    quantity: this.quantity,
+    eaten: this.eaten
   });
 }
 
@@ -51,4 +55,5 @@ export type DishDto = ReturnType<Dish["toDto"]>;
 // prettier-ignore
 {
   allow(Account, "delete", Dish, (account, dish) => dish.meal !== undefined && account.id === dish.meal.accountId);
+  allow(Account, "eat", Dish, (account, dish) => dish.meal !== undefined && account.id === dish.meal.accountId);
 }

@@ -68,14 +68,20 @@ export class MealsStore {
   }
 
   /**
-   * Sets `quantity` of consumed `foodstuff` during specified `meal`.
+   * Creates a dish part of specified `meal` with given `quantity` of given `foodstuff`.
    */
   @action
-  public async consume(meal: Meal, foodstuff: Foodstuff, quantity: number) {
+  public async createDish(
+    meal: Meal,
+    foodstuff: Foodstuff,
+    quantity: number,
+    eaten: boolean
+  ) {
     const result = await Rpc.call("dish", "create", {
       mealId: meal.id,
       foodstuffId: foodstuff.id,
-      quantity
+      quantity,
+      eaten
     });
 
     if (!result.ok) {
@@ -133,7 +139,7 @@ export class MealsStore {
    * Moves specified dish to specified meal at specified index.
    */
   @action
-  public async reorder(dish: Dish, meal: Meal, index: number) {
+  public async insertDish(dish: Dish, meal: Meal, index: number) {
     dish.meal.dishes.splice(dish.meal.dishes.indexOf(dish), 1);
 
     meal.dishes.splice(index, 0, dish);
@@ -174,6 +180,22 @@ export class MealsStore {
   }
 
   /**
+   * Unconsumed specified `dish`.
+   */
+  @action
+  public async deleteDish(dish: Dish) {
+    dish.meal.dishes.splice(dish.meal.dishes.indexOf(dish), 1);
+
+    const result = await Rpc.call("dish", "delete", { id: dish.id });
+
+    if (!result.ok) {
+      return result.value;
+    }
+
+    return undefined;
+  }
+
+  /**
    * Renames specified meal to specified name.
    */
   @action
@@ -190,18 +212,18 @@ export class MealsStore {
   }
 
   /**
-   * Unconsumed specified `dish`.
+   * Sets whether specified `dish` is `eaten`.
    */
   @action
-  public async unconsume(dish: Dish) {
-    dish.meal.dishes.splice(dish.meal.dishes.indexOf(dish), 1);
+  public async setDishEaten(dish: Dish, eaten: boolean) {
+    dish.eaten = eaten;
 
-    const result = await Rpc.call("dish", "delete", { id: dish.id });
+    const result = await Rpc.call("dish", "eat", { id: dish.id, eaten });
 
     if (!result.ok) {
       return result.value;
     }
 
-    return undefined;
+    return;
   }
 }

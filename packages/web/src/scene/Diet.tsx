@@ -151,9 +151,9 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
         .withId(draggableId)!;
 
       if (destination.droppableId === "trashCan") {
-        this.props.meals!.unconsume(target);
+        this.props.meals!.deleteDish(target);
       } else {
-        this.props.meals!.reorder(
+        this.props.meals!.insertDish(
           target,
           this.props.meals!.withId(destination.droppableId)!,
           destination.index

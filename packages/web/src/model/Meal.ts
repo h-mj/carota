@@ -45,8 +45,8 @@ export class Meal {
    * Sets quantity of consumed foodstuff during this meal.
    */
   @action
-  public async consume(foodstuff: Foodstuff, quantity: number) {
-    return this.store.consume(this, foodstuff, quantity);
+  public async consume(foodstuff: Foodstuff, quantity: number, eaten: boolean) {
+    return this.store.createDish(this, foodstuff, quantity, eaten);
   }
 
   /**
@@ -70,7 +70,7 @@ export class Meal {
    */
   public quantityOf(nutrient: RequiredNutrient) {
     return this.dishes.reduce(
-      (sum, dish) => sum + dish.quantityOf(nutrient),
+      (sum, dish) => sum + (dish.eaten ? dish.quantityOf(nutrient) : 0),
       0
     );
   }

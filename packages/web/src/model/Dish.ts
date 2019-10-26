@@ -1,3 +1,4 @@
+import { observable } from "mobx";
 import { DishDto, FoodstuffDto } from "server";
 
 import { RequiredNutrient } from "./Foodstuff";
@@ -10,6 +11,7 @@ export class Dish {
   public readonly id: string;
   public readonly foodstuff: FoodstuffDto;
   public readonly quantity: number;
+  @observable public eaten: boolean;
   public meal: Meal;
 
   /**
@@ -19,6 +21,7 @@ export class Dish {
     this.id = dto.id;
     this.foodstuff = dto.foodstuff;
     this.quantity = dto.quantity;
+    this.eaten = dto.eaten;
     this.meal = meal;
   }
 

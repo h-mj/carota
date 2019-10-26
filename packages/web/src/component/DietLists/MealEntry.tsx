@@ -51,6 +51,7 @@ export class MealEntry extends Component<MealEntryProps> {
   public render() {
     const { meal } = this.props;
     const dishes = [...meal.dishes];
+    const showQuantities = dishes.some(dish => dish.eaten);
 
     return (
       <Draggable draggableId={meal.id} index={this.props.index}>
@@ -62,11 +63,13 @@ export class MealEntry extends Component<MealEntryProps> {
           >
             <TitleBar {...provided.dragHandleProps}>
               <Texts>
-                {meal.name}
-                <Edit onClick={this.showNameEdit}>↺</Edit>
+                <span>
+                  {meal.name}
+                  <Edit onClick={this.showNameEdit}>↺</Edit>
+                </span>
               </Texts>
 
-              {dishes.length > 0 && <NutrientQuantities model={meal} />}
+              {showQuantities && <NutrientQuantities model={meal} />}
             </TitleBar>
 
             <Dishes meal={meal} draggableType={this.props.draggableType} />
@@ -95,7 +98,12 @@ export class MealEntry extends Component<MealEntryProps> {
    */
   @action
   private select = (foodstuff: Foodstuff, quantity: number) => {
-    this.props.meal.consume(foodstuff, quantity);
+    this.props.meal.consume(
+      foodstuff,
+      quantity,
+      new Date(this.props.meal.date).getTime() <= new Date().getTime()
+    );
+
     this.props.views!.pop(this.scene!);
   };
 

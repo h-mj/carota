@@ -6,6 +6,7 @@ import { Account } from "../account/Account";
 import { DishService } from "./DishService";
 import { CreateDishDto, createDishDtoValidator } from "./dto/CreateDishDto";
 import { DeleteDishDto, deleteDishDtoValidator } from "./dto/DeleteDishDto";
+import { EatDishDto, eatDishDtoValidator } from "./dto/EatDishDto";
 import { InsertDishDto, insertDishDtoValidator } from "./dto/InsertDishDto";
 
 @Controller("dish")
@@ -28,6 +29,16 @@ export class DishController {
     @Principal() principal: Account
   ) {
     await this.dishService.delete(dto, principal);
+
+    return true as const;
+  }
+
+  @Post("eat")
+  public async eat(
+    @Body(new ValidationPipe(eatDishDtoValidator)) dto: EatDishDto,
+    @Principal() principal: Account
+  ) {
+    await this.dishService.eat(dto, principal);
 
     return true as const;
   }

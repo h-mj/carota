@@ -22,27 +22,31 @@ export class DishRepository extends Repository<Dish> {
 
   public async link(dish: Dish, meal: Meal, previous?: Dish, next?: Dish) {
     if (previous !== undefined) {
-      previous.nextId = dish.id;
-      await this.save(previous);
+      await this.createQueryBuilder()
+        .update(Dish)
+        .set({ nextId: dish.id })
+        .where({ id: previous.id })
+        .execute();
     }
 
-    dish.meal = meal;
-    dish.nextId = next !== undefined ? next.id : null;
-    return await this.save(dish);
+    await this.createQueryBuilder()
+      .update(Dish)
+      .set({ mealId: meal.id, nextId: next !== undefined ? next.id : null })
+      .where({ id: dish.id })
+      .execute();
   }
 
   public async unlink(dish: Dish) {
-    const previous = await dish.previous;
-    const nextId = dish.nextId;
+    await this.createQueryBuilder()
+      .update(Dish)
+      .set({ mealId: null, nextId: null })
+      .where({ id: dish.id })
+      .execute();
 
-    dish.mealId = null;
-    dish.nextId = null;
-    await this.save(dish);
-
-    if (previous !== undefined) {
-      previous.nextId = nextId;
-      dish.previous = Promise.resolve(undefined);
-      await this.save(previous);
-    }
+    await this.createQueryBuilder()
+      .update(Dish)
+      .set({ nextId: dish.nextId })
+      .where({ nextId: dish.id })
+      .execute();
   }
 }

@@ -54,11 +54,11 @@ export class DishService {
       eaten: dto.eaten
     });
 
-    return dishRepository!.link(
-      await dishRepository!.save(template),
-      meal,
-      last
-    );
+    const dish = await dishRepository!.save(template);
+
+    await dishRepository!.link(dish, meal, last);
+
+    return dish;
   }
 
   @Transaction()
@@ -136,6 +136,6 @@ export class DishService {
     const previous = dishes[dto.index - 1];
     const next = dishes[dto.index];
 
-    return dishRepository!.link(dish, meal, previous, next);
+    await dishRepository!.link(dish, meal, previous, next);
   }
 }

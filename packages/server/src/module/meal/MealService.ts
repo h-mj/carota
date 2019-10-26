@@ -36,11 +36,11 @@ export class MealService {
       date: dto.date
     });
 
-    return mealRepository!.link(
-      await mealRepository!.save(template),
-      dto.date,
-      last
-    );
+    const meal = await mealRepository!.save(template);
+
+    await mealRepository!.link(meal, dto.date, last);
+
+    return meal;
   }
 
   @Transaction()
@@ -117,7 +117,7 @@ export class MealService {
     const previous = meals[dto.index - 1];
     const next = meals[dto.index];
 
-    return mealRepository!.link(meal, dto.date, previous, next);
+    await mealRepository!.link(meal, dto.date, previous, next);
   }
 
   @Transaction()
@@ -136,7 +136,5 @@ export class MealService {
 
     meal.name = dto.name;
     await mealRepository!.save(meal);
-
-    return meal;
   }
 }

@@ -22,27 +22,31 @@ export class MealRepository extends Repository<Meal> {
 
   public async link(meal: Meal, date: string, previous?: Meal, next?: Meal) {
     if (previous !== undefined) {
-      previous.nextId = meal.id;
-      await this.save(previous);
+      await this.createQueryBuilder()
+        .update(Meal)
+        .set({ nextId: meal.id })
+        .where({ id: previous.id })
+        .execute();
     }
 
-    meal.date = date;
-    meal.nextId = next === undefined ? null : next.id;
-    return await this.save(meal);
+    await this.createQueryBuilder()
+      .update(Meal)
+      .set({ nextId: next !== undefined ? next.id : null, date })
+      .where({ id: meal.id })
+      .execute();
   }
 
   public async unlink(meal: Meal) {
-    const previous = await meal.previous;
-    const nextId = meal.nextId;
+    await this.createQueryBuilder()
+      .update(Meal)
+      .set({ date: null, nextId: null })
+      .where({ id: meal.id })
+      .execute();
 
-    meal.date = null;
-    meal.nextId = null;
-    await this.save(meal);
-
-    if (previous !== undefined) {
-      previous.nextId = nextId;
-      meal.previous = Promise.resolve(undefined);
-      await this.save(previous);
-    }
+    await this.createQueryBuilder()
+      .update(Meal)
+      .set({ nextId: meal.nextId })
+      .where({ nextId: meal.id })
+      .execute();
   }
 }

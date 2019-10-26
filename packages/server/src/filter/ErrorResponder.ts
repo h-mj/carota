@@ -17,6 +17,6 @@ export abstract class ErrorResponder {
       error: error.toDto()
     };
 
-    response.status(200).json({ error: errorResponse });
+    response.status(200).json(errorResponse);
   }
 }

@@ -6,7 +6,7 @@ import { validDate } from "../../../utility/validators";
 export const insertMealDtoValidator = deviate().object().shape({
   id: deviate().string().guid(),
   date: deviate().string().then(validDate),
-  index: deviate().number()
+  index: deviate().number().integer().min(0)
 });
 
 export type InsertMealDto = Success<typeof insertMealDtoValidator>;

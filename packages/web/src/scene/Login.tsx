@@ -75,10 +75,9 @@ type LoginValues = Record<InputNames, string>;
 /**
  * Function that transforms `LoginValues` into `AccountLoginBody`.
  */
+// prettier-ignore
 const toBody = deviate<LoginValues>().shape({
-  email: deviate<string>()
-    .trim()
-    .nonempty(),
+  email: deviate<string>().trim().nonempty(),
   password: deviate<string>().nonempty()
 });
 

@@ -49,7 +49,7 @@ export const english: Translation = {
           label: "Quantity of one piece",
           reasons: {
             nonempty: "Please enter quantity of one piece.",
-            greater: "Please enter one piece quantity that is greater than 0.",
+            positive: "Please enter one piece quantity that is greater than 0.",
             toNumber: "Please enter correct one piece quantity."
           }
         },
@@ -57,14 +57,14 @@ export const english: Translation = {
           label: "Quantity",
           reasons: {
             nonempty: "Please enter foodstuff quantity.",
-            greater: "Please enter quantity that is greater than 0.",
+            positive: "Please enter quantity that is greater than 0.",
             toNumber: "Please enter correct quantity."
           }
         },
         unit: {
           label: "Unit",
           reasons: {
-            string: "Please select a unit."
+            defined: "Please select a unit."
           }
         }
       },
@@ -119,8 +119,8 @@ export const english: Translation = {
       label: "Name",
       meals: {
         breakfast: "Breakfast",
-        lunch: "Lunch",
-        dinner: "Dinner"
+        dinner: "Dinner",
+        lunch: "Lunch"
       },
       or: "Or",
       selectHelper: "Select meal name:",
@@ -140,7 +140,7 @@ export const english: Translation = {
         label: "Quantity",
         reasons: {
           nonempty: "Please enter foodstuff quantity.",
-          greater: "Please enter quantity that is greater than 0.",
+          positive: "Please enter quantity that is greater than 0.",
           toNumber: "Please enter correct quantity."
         }
       },
@@ -150,7 +150,7 @@ export const english: Translation = {
         helper: "Is the quantity in {unit} or in pieces?",
         label: "Unit",
         reasons: {
-          string: "Please select a unit."
+          defined: "Please select a unit."
         }
       }
     },
@@ -160,8 +160,8 @@ export const english: Translation = {
           label: "Email",
           reasons: {
             conflict: "Entered email address is already in use.",
-            nonempty: "Please enter an email address.",
-            email: "Please enter a valid email address."
+            email: "Please enter a valid email address.",
+            nonempty: "Please enter an email address."
           }
         },
         language: {
@@ -172,7 +172,7 @@ export const english: Translation = {
             Russian: "русский"
           },
           reasons: {
-            string: "Please select a language."
+            defined: "Please select a language."
           }
         },
         name: {
@@ -184,8 +184,8 @@ export const english: Translation = {
         password: {
           label: "Password",
           reasons: {
-            nonempty: "Please enter a password.",
-            minLength: "Password must be at least 8 characters long."
+            minLength: "Password must be at least 8 characters long.",
+            nonempty: "Please enter a password."
           }
         },
         sex: {
@@ -195,7 +195,7 @@ export const english: Translation = {
             Male: "Male"
           },
           reasons: {
-            string: "Please select your sex."
+            defined: "Please select your sex."
           }
         }
       },

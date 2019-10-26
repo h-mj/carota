@@ -247,11 +247,11 @@ const optionalParseFloat = deviate<string | undefined>()
 // prettier-ignore
 const toBody = deviate<EditValues>().shape({
   id: deviate<string | undefined>(),
-  name: deviate<string>().nonempty(),
-  barcode: deviate<string | undefined>().optional().nonempty(),
-  unit: deviate<Unit | undefined>().string(),
-  quantity: optionalParseFloat,
-  pieceQuantity: optionalParseFloat.greater(0),
+  name: deviate<string>().trim().nonempty(),
+  barcode: deviate<string | undefined>().optional().replace(" ", "").nonempty().regexp(/^\d{13}$/),
+  unit: deviate<Unit | undefined>().defined(),
+  quantity: optionalParseFloat.positive(),
+  pieceQuantity: optionalParseFloat.positive(),
   nutritionDeclaration: deviate<NutritionDeclarationValues>().shape({
     energy: parseFloat,
     fat: parseFloat,

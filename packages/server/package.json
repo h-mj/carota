@@ -23,7 +23,7 @@
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",
     "bcryptjs": "^2.4.3",
-    "deviator": "^0.4.0",
+    "deviator": "^0.4.1",
     "dotenv": "^8.2.0",
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.4.0",

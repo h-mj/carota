@@ -49,7 +49,7 @@ export const estonian: Translation = {
           label: "Ühe tüki kogus",
           reasons: {
             nonempty: "Palun sisestage ühe tüki kogus.",
-            greater: "Palun sisestage ühe tüki kogus mis on suurem kui 0.",
+            positive: "Palun sisestage ühe tüki kogus mis on suurem kui 0.",
             toNumber: "Palun sisestage korrektne ühe tüki kogus."
           }
         },
@@ -57,14 +57,14 @@ export const estonian: Translation = {
           label: "Kogus",
           reasons: {
             nonempty: "Palun sisestage toiduaine kogus.",
-            greater: "Palun sisestage toiduaine kogus mis on suurem kui 0.",
+            positive: "Palun sisestage toiduaine kogus mis on suurem kui 0.",
             toNumber: "Palun sisestage korrektne toiduaine kogus."
           }
         },
         unit: {
           label: "Ühik",
           reasons: {
-            string: "Palun valige ühik."
+            defined: "Palun valige ühik."
           }
         }
       },
@@ -119,8 +119,8 @@ export const estonian: Translation = {
       label: "Nimetus",
       meals: {
         breakfast: "Hommikusöök",
-        lunch: "Lõunasöök",
-        dinner: "Õhtusöök"
+        dinner: "Õhtusöök",
+        lunch: "Lõunasöök"
       },
       or: "Või",
       selectHelper: "Valige toidukorra nimetus:",
@@ -140,7 +140,7 @@ export const estonian: Translation = {
         label: "Kogus",
         reasons: {
           nonempty: "Palun sisestage toiduaine kogus.",
-          greater: "Palun sistestage kogus mis on suurem kui 0.",
+          positive: "Palun sistestage kogus mis on suurem kui 0.",
           toNumber: "Palun sistestage korrektne kogus."
         }
       },
@@ -150,12 +150,9 @@ export const estonian: Translation = {
         helper: "Kas toiduaine kogus on {ühik} või tükkides?",
         label: "Ühik",
         reasons: {
-          string: "Palun valige toiduaine ühik."
+          defined: "Palun valige toiduaine ühik."
         }
       }
-    },
-    Search: {
-      title: "Otsing"
     },
     Register: {
       inputs: {
@@ -163,8 +160,8 @@ export const estonian: Translation = {
           label: "E-post",
           reasons: {
             conflict: "Sisestatud e-posti aadress on juba kasutuses.",
-            nonempty: "Palun sisestage e-posti aadress.",
-            email: "Palun sisestage kehtiv e-posti aadress."
+            email: "Palun sisestage kehtiv e-posti aadress.",
+            nonempty: "Palun sisestage e-posti aadress."
           }
         },
         language: {
@@ -175,7 +172,7 @@ export const estonian: Translation = {
             Russian: "русский"
           },
           reasons: {
-            string: "Palun valige keel."
+            defined: "Palun valige keel."
           }
         },
         name: {
@@ -187,8 +184,8 @@ export const estonian: Translation = {
         password: {
           label: "Parool",
           reasons: {
-            nonempty: "Palun sisestage salasõna.",
-            greater: "Salasõna peab sisaldama vähemalt 8 tähemärki."
+            minLength: "Salasõna peab sisaldama vähemalt 8 tähemärki.",
+            nonempty: "Palun sisestage salasõna."
           }
         },
         sex: {
@@ -198,12 +195,15 @@ export const estonian: Translation = {
             Male: "Mees"
           },
           reasons: {
-            string: "Palun valige sugu."
+            defined: "Palun valige sugu."
           }
         }
       },
       submit: "Looge konto →",
       title: "Looge konto"
+    },
+    Search: {
+      title: "Otsing"
     },
     Tabs: {
       abbreviations: [

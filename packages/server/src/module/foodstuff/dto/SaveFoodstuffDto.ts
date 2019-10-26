@@ -1,11 +1,11 @@
-import { deviate, ok, Success } from "deviator";
+import { deviate, Success } from "deviator";
 
 import { UNITS } from "../Foodstuff";
 
 const quantity = deviate()
   .number()
   .min(0)
-  .then(input => ok(Math.round(100 * input) / 100));
+  .round(2);
 
 const optionalQuantity = deviate()
   .optional()
@@ -17,8 +17,8 @@ export const saveFoodstuffDtoValidator = deviate().object().shape({
   name: deviate().string().trim().nonempty(),
   barcode: deviate().optional().string().trim().regexp(/^\d{13}$/),
   unit: deviate().options(UNITS),
-  quantity: optionalQuantity,
-  pieceQuantity: optionalQuantity,
+  quantity: optionalQuantity.positive(),
+  pieceQuantity: optionalQuantity.positive(),
   nutritionDeclaration: deviate().object().shape({
     energy: quantity,
     fat: quantity,

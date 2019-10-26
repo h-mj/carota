@@ -50,6 +50,7 @@ export class MealView extends Component<MealViewProps> {
    */
   public render() {
     const { meal } = this.props;
+    const { name } = meal;
     const dishes = [...meal.dishes];
     const showQuantities = dishes.some(dish => dish.eaten);
 
@@ -64,7 +65,7 @@ export class MealView extends Component<MealViewProps> {
             <TitleBar {...provided.dragHandleProps}>
               <ItemHeader>
                 <span>
-                  {meal.name}
+                  {name}
                   <Edit onClick={this.showNameEdit}>↺</Edit>
                 </span>
               </ItemHeader>

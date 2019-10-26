@@ -87,7 +87,7 @@ export const russian: Translation = {
       nutrientsLabelPer: " на 100{unit}:",
       submit: "Сохранить"
     },
-    FoodstuffInfo: {
+    FoodstuffView: {
       per: "На 100{unit}:"
     },
     Head: {

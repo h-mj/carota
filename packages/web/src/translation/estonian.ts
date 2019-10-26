@@ -86,7 +86,7 @@ export const estonian: Translation = {
       nutrientsLabelPer: " 100{unit} kohta",
       submit: "Salvesta"
     },
-    FoodstuffInfo: {
+    FoodstuffView: {
       per: "100{unit} kohta:"
     },
     Head: {

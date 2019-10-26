@@ -3,21 +3,21 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Draggable } from "react-beautiful-dnd";
 
-import { Component } from "../../base/Component";
-import { Scenes } from "../../base/Scene";
-import { Foodstuff } from "../../model/Foodstuff";
-import { Meal } from "../../model/Meal";
-import { RESET } from "../../styling/stylesheets";
-import { styled } from "../../styling/theme";
-import { Plus } from "../Plus";
-import { Dishes } from "./Dishes";
+import { Component } from "../base/Component";
+import { Scenes } from "../base/Scene";
+import { Foodstuff } from "../model/Foodstuff";
+import { Meal } from "../model/Meal";
+import { RESET } from "../styling/stylesheets";
+import { styled } from "../styling/theme";
+import { DishesView } from "./DishesView";
+import { ItemHeader } from "./ItemHeader";
 import { NutrientQuantities } from "./NutrientQuantities";
-import { Texts } from "./Texts";
+import { Plus } from "./Plus";
 
 /**
- * Meal list entry component props.
+ * Meal view component props.
  */
-interface MealEntryProps {
+interface MealViewProps {
   /**
    * Current draggable type.
    */
@@ -35,11 +35,11 @@ interface MealEntryProps {
 }
 
 /**
- * Component that displays the information of a meal model.
+ * Component that displays the information of provided meal model.
  */
 @inject("meals", "views")
 @observer
-export class MealEntry extends Component<MealEntryProps> {
+export class MealView extends Component<MealViewProps> {
   /**
    * Pushed search scene.
    */
@@ -62,17 +62,17 @@ export class MealEntry extends Component<MealEntryProps> {
             {...provided.draggableProps}
           >
             <TitleBar {...provided.dragHandleProps}>
-              <Texts>
+              <ItemHeader>
                 <span>
                   {meal.name}
                   <Edit onClick={this.showNameEdit}>↺</Edit>
                 </span>
-              </Texts>
+              </ItemHeader>
 
               {showQuantities && <NutrientQuantities model={meal} />}
             </TitleBar>
 
-            <Dishes meal={meal} draggableType={this.props.draggableType} />
+            <DishesView meal={meal} draggableType={this.props.draggableType} />
 
             <PlusContainer>
               <Plus onClick={this.showSearch}>+</Plus>

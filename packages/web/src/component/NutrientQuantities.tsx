@@ -1,12 +1,12 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 
-import { Component } from "../../base/Component";
-import { Dish } from "../../model/Dish";
-import { REQUIRED_NUTRIENTS, RequiredNutrient } from "../../model/Foodstuff";
-import { Meal } from "../../model/Meal";
-import { styled } from "../../styling/theme";
-import { Carbohydrate, Energy, Fat, Protein } from "../collection/icons";
+import { Component } from "../base/Component";
+import { Dish } from "../model/Dish";
+import { REQUIRED_NUTRIENTS, RequiredNutrient } from "../model/Foodstuff";
+import { Meal } from "../model/Meal";
+import { styled } from "../styling/theme";
+import { Carbohydrate, Energy, Fat, Protein } from "./collection/icons";
 
 /**
  * Nutrient quantities component props.

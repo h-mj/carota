@@ -33,9 +33,9 @@ const FORMAT_OPTIONS = {
 };
 
 /**
- * Foodstuff info component props.
+ * Foodstuff view component props.
  */
-interface FoodstuffInfoProps {
+interface FoodstuffViewProps {
   /**
    * Corresponding foodstuff model instance.
    */
@@ -48,9 +48,9 @@ interface FoodstuffInfoProps {
 }
 
 /**
- * Foodstuff info component translations.
+ * Foodstuff view component translations.
  */
-interface FoodstuffInfoTranslation {
+interface FoodstuffViewTranslation {
   /**
    * Quantities per 100 units text.
    */
@@ -62,16 +62,16 @@ interface FoodstuffInfoTranslation {
  */
 @inject("views")
 @observer
-export class FoodstuffInfo extends TranslatedComponent<
-  "FoodstuffInfo",
-  FoodstuffInfoProps,
-  FoodstuffInfoTranslation
+export class FoodstuffView extends TranslatedComponent<
+  "FoodstuffView",
+  FoodstuffViewProps,
+  FoodstuffViewTranslation
 > {
   /**
    * Sets the name of this component.
    */
-  public constructor(props: FoodstuffInfoProps) {
-    super("FoodstuffInfo", props);
+  public constructor(props: FoodstuffViewProps) {
+    super("FoodstuffView", props);
   }
 
   /**
@@ -154,8 +154,6 @@ export class FoodstuffInfo extends TranslatedComponent<
  * Component that contains information about a foodstuff.
  */
 const Container = styled.div`
-  min-height: 11.5rem;
-
   display: flex;
   flex-direction: column;
 

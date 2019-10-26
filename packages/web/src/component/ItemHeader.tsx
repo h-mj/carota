@@ -1,10 +1,10 @@
-import { styled } from "../../styling/theme";
+import { styled } from "../styling/theme";
 
 /**
- * Component that wraps all text components.
+ * Component that wraps either DishView or MealView header items.
  */
 // prettier-ignore
-export const Texts = styled.div`
+export const ItemHeader = styled.div`
   width: 100%;
 
   min-height: ${({ theme }) => theme.height};

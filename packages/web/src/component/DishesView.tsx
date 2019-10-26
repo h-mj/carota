@@ -2,15 +2,15 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { Droppable } from "react-beautiful-dnd";
 
-import { Component } from "../../base/Component";
-import { Meal } from "../../model/Meal";
-import { styled } from "../../styling/theme";
-import { DishEntry } from "./DishEntry";
+import { Component } from "../base/Component";
+import { Meal } from "../model/Meal";
+import { styled } from "../styling/theme";
+import { DishView } from "./DishView";
 
 /**
- * Dishes component props.
+ * Dishes view component props.
  */
-interface DishesProps {
+interface DishesViewProps {
   /**
    * Current draggable type.
    */
@@ -26,7 +26,7 @@ interface DishesProps {
  * Component that displays all dishes of provided meal.
  */
 @observer
-export class Dishes extends Component<DishesProps> {
+export class DishesView extends Component<DishesViewProps> {
   /**
    * Renders a list of dishes.
    */
@@ -41,7 +41,7 @@ export class Dishes extends Component<DishesProps> {
         {provided => (
           <Container ref={provided.innerRef} {...provided.droppableProps}>
             {dishes.map((dish, index) => (
-              <DishEntry key={dish.id} dish={dish} index={index} />
+              <DishView key={dish.id} dish={dish} index={index} />
             ))}
             {provided.placeholder}
           </Container>

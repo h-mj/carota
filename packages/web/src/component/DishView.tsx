@@ -3,17 +3,17 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Draggable } from "react-beautiful-dnd";
 
-import { Component } from "../../base/Component";
-import { Dish } from "../../model/Dish";
-import { styled } from "../../styling/theme";
-import { CheckBox } from "../CheckBox";
+import { Component } from "../base/Component";
+import { Dish } from "../model/Dish";
+import { styled } from "../styling/theme";
+import { CheckBox } from "./CheckBox";
+import { ItemHeader } from "./ItemHeader";
 import { NutrientQuantities } from "./NutrientQuantities";
-import { Texts } from "./Texts";
 
 /**
- * Dish list entity component props.
+ * Dish view component props.
  */
-interface DishEntryProps {
+interface DishViewProps {
   /**
    * Dish model which information is being displayed.
    */
@@ -30,7 +30,7 @@ interface DishEntryProps {
  */
 @inject("meals")
 @observer
-export class DishEntry extends Component<DishEntryProps> {
+export class DishView extends Component<DishViewProps> {
   /**
    * Spam prevention timeout that sets final eaten status after some time.
    */
@@ -53,7 +53,7 @@ export class DishEntry extends Component<DishEntryProps> {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <Texts>
+            <ItemHeader>
               <CheckBox
                 name="eaten"
                 value={eaten}
@@ -67,7 +67,7 @@ export class DishEntry extends Component<DishEntryProps> {
               </Quantity>
 
               <span>{dish.foodstuff.name}</span>
-            </Texts>
+            </ItemHeader>
 
             <NutrientQuantities model={dish} />
           </Container>

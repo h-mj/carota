@@ -2,14 +2,14 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Droppable } from "react-beautiful-dnd";
 
-import { Component } from "../../base/Component";
-import { styled } from "../../styling/theme";
-import { MealEntry } from "./MealEntry";
+import { Component } from "../base/Component";
+import { styled } from "../styling/theme";
+import { MealView } from "./MealView";
 
 /**
- * Meals component props.
+ * Meals view component props.
  */
-interface MealsProps {
+interface MealsViewProps {
   /**
    * Current draggable type.
    */
@@ -22,7 +22,7 @@ interface MealsProps {
  */
 @inject("meals")
 @observer
-export class Meals extends Component<MealsProps> {
+export class MealsView extends Component<MealsViewProps> {
   /**
    * Renders all provided meals.
    */
@@ -37,7 +37,7 @@ export class Meals extends Component<MealsProps> {
         {provided => (
           <Container ref={provided.innerRef} {...provided.droppableProps}>
             {meals.map((meal, index) => (
-              <MealEntry
+              <MealView
                 key={meal.id}
                 meal={meal}
                 index={index}

@@ -86,7 +86,7 @@ export const english: Translation = {
       nutrientsLabelPer: " per 100{unit}",
       submit: "Save"
     },
-    FoodstuffInfo: {
+    FoodstuffView: {
       per: "Per 100{unit}:"
     },
     Head: {

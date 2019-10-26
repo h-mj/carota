@@ -7,7 +7,7 @@ import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
-import { FoodstuffInfo } from "../component/FoodstuffInfo";
+import { FoodstuffView } from "../component/FoodstuffView";
 import { SceneTitle } from "../component/SceneTitle";
 import { TextField } from "../component/TextField";
 import { Foodstuff } from "../model/Foodstuff";
@@ -97,7 +97,7 @@ export class Search extends SceneComponent<
         {this.completed && (
           <Results>
             {this.props.foodstuffs!.foodstuffs.map(foodstuff => (
-              <FoodstuffInfo
+              <FoodstuffView
                 key={foodstuff.id}
                 foodstuff={foodstuff}
                 select={this.props.select}

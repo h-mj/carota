@@ -8,8 +8,8 @@ import {
   SceneComponent
 } from "../base/SceneComponent";
 import { DateSelect } from "../component/DateSelect/DateSelect";
-import { Meals } from "../component/DietLists/Meals";
 import { Head } from "../component/Head";
+import { MealsView } from "../component/MealsView";
 import { Plus } from "../component/Plus";
 import { TrashCan } from "../component/TrashCan";
 import { styled } from "../styling/theme";
@@ -72,7 +72,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
         >
           <TrashCan isRemovable={this.isDraggableRemovable()} />
 
-          <Meals draggableType={this.draggableType} />
+          <MealsView draggableType={this.draggableType} />
         </DragDropContext>
 
         <Plus fixed={true} onClick={this.handleAddClick}>

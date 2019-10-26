@@ -233,5 +233,6 @@ export const english: Translation = {
     kcal: "kcal",
     ml: "ml",
     pcs: "pcs"
-  }
+  },
+  unknownError: "An unknown error occurred."
 };

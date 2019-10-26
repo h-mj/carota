@@ -4,6 +4,7 @@ import { Dish } from "../model/Dish";
 import { Foodstuff } from "../model/Foodstuff";
 import { Meal } from "../model/Meal";
 import { Rpc } from "../utility/rpc";
+import { RootStore } from "./RootStore";
 
 /**
  * Converts specified date to `YYYY-MM-DD` formatted string that ignores current
@@ -25,6 +26,18 @@ export class MealsStore {
    * Stored meal models.
    */
   @observable public meals: Meal[] = [];
+
+  /**
+   * Root store instance.
+   */
+  private rootStore: RootStore;
+
+  /**
+   * Assigns the root store instance.
+   */
+  public constructor(rootStore: RootStore) {
+    this.rootStore = rootStore;
+  }
 
   /**
    * Returns meal model with specified ID.
@@ -59,12 +72,10 @@ export class MealsStore {
     });
 
     if (!result.ok) {
-      return result.value;
+      return this.rootStore.views.notifyUnknownError();
     }
 
     this.meals.push(new Meal(result.value, this));
-
-    return undefined;
   }
 
   /**
@@ -85,12 +96,10 @@ export class MealsStore {
     });
 
     if (!result.ok) {
-      return result.value;
+      return this.rootStore.views.notifyUnknownError();
     }
 
     meal.dishes.push(new Dish(result.value, meal));
-
-    return undefined;
   }
 
   /**
@@ -106,12 +115,10 @@ export class MealsStore {
     });
 
     if (!result.ok) {
-      return result.value;
+      return this.rootStore.views.notifyUnknownError();
     }
 
     this.meals = result.value.map(dto => new Meal(dto, this));
-
-    return undefined;
   }
 
   /**
@@ -129,10 +136,8 @@ export class MealsStore {
     });
 
     if (!result.ok) {
-      return result.value;
+      return this.rootStore.views.notifyUnknownError();
     }
-
-    return undefined;
   }
 
   /**
@@ -153,10 +158,8 @@ export class MealsStore {
     });
 
     if (!result.ok) {
-      return result.value;
+      return this.rootStore.views.notifyUnknownError();
     }
-
-    return undefined;
   }
 
   /**
@@ -173,10 +176,8 @@ export class MealsStore {
     const result = await Rpc.call("meal", "delete", { id: meal.id });
 
     if (!result.ok) {
-      return result.value;
+      return this.rootStore.views.notifyUnknownError();
     }
-
-    return undefined;
   }
 
   /**
@@ -189,10 +190,8 @@ export class MealsStore {
     const result = await Rpc.call("dish", "delete", { id: dish.id });
 
     if (!result.ok) {
-      return result.value;
+      return this.rootStore.views.notifyUnknownError();
     }
-
-    return undefined;
   }
 
   /**
@@ -205,10 +204,8 @@ export class MealsStore {
     const result = await Rpc.call("meal", "rename", { id: meal.id, name });
 
     if (!result.ok) {
-      return result.value;
+      return this.rootStore.views.notifyUnknownError();
     }
-
-    return;
   }
 
   /**
@@ -221,9 +218,7 @@ export class MealsStore {
     const result = await Rpc.call("dish", "eat", { id: dish.id, eaten });
 
     if (!result.ok) {
-      return result.value;
+      return this.rootStore.views.notifyUnknownError();
     }
-
-    return;
   }
 }

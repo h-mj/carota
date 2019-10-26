@@ -3,6 +3,7 @@ import { Body, FoodstuffDto } from "server";
 
 import { Foodstuff } from "../model/Foodstuff";
 import { Rpc } from "../utility/rpc";
+import { RootStore } from "./RootStore";
 
 /**
  * Store which manages `Foodstuff` models.
@@ -12,6 +13,18 @@ export class FoodstuffsStore {
    * Stored foodstuff models.
    */
   @observable public models: Map<string, Foodstuff> = new Map();
+
+  /**
+   * Root store instance.
+   */
+  private rootStore: RootStore;
+
+  /**
+   * Assigns the root store instance.
+   */
+  public constructor(rootStore: RootStore) {
+    this.rootStore = rootStore;
+  }
 
   /**
    * Returns an array of stored foodstuff models.
@@ -43,12 +56,10 @@ export class FoodstuffsStore {
     const result = await Rpc.call("foodstuff", "delete", { id });
 
     if (!result.ok) {
-      return result.value;
+      return this.rootStore.views.notifyUnknownError();
     }
 
     this.models.delete(id);
-
-    return undefined;
   }
 
   /**
@@ -76,11 +87,9 @@ export class FoodstuffsStore {
     const result = await Rpc.call("foodstuff", "search", { query });
 
     if (!result.ok) {
-      return result.value;
+      return this.rootStore.views.notifyUnknownError();
     }
 
     result.value.forEach(this.insert);
-
-    return undefined;
   }
 }

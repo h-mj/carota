@@ -19,9 +19,9 @@ export class RootStore {
    */
   public constructor() {
     this.accounts = new AccountsStore(this);
-    this.foodstuffs = new FoodstuffsStore();
+    this.foodstuffs = new FoodstuffsStore(this);
     this.invitations = new InvitationsStore();
-    this.meals = new MealsStore();
+    this.meals = new MealsStore(this);
     this.views = new ViewsStore(this);
   }
 

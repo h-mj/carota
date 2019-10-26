@@ -284,6 +284,14 @@ export class ViewsStore {
   };
 
   /**
+   * Notifies user that an unknown error occurred.
+   */
+  @action
+  public notifyUnknownError = () => {
+    this.notify(this.translation.unknownError, "error");
+  };
+
+  /**
    * Awaits a `promise` and returns its result after at least `timeout` seconds.
    *
    * @param promise Result promise.

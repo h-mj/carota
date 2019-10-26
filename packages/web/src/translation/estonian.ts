@@ -233,5 +233,6 @@ export const estonian: Translation = {
     kcal: "kcal",
     ml: "ml",
     pcs: "tk"
-  }
+  },
+  unknownError: "Ilmnes tundmatu tõrge."
 };

@@ -13,4 +13,9 @@ export interface Translation {
    * Unit translations.
    */
   units: Record<"g" | "kcal" | "ml" | "pcs", string>;
+
+  /**
+   * Notification message on unknown error.
+   */
+  unknownError: string;
 }

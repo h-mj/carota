@@ -235,5 +235,6 @@ export const russian: Translation = {
     kcal: "ккал",
     ml: "мл",
     pcs: "шт"
-  }
+  },
+  unknownError: "Произошла неизвестная ошибка."
 };

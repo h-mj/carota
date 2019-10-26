@@ -4773,10 +4773,10 @@ detect-port-alt@1.1.6:
     address "^1.0.1"
     debug "^2.6.0"
 
-deviator@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/deviator/-/deviator-0.4.1.tgz#9dc212de48d6bd3ec6942b1bd8178489b9c7e662"
-  integrity sha512-XbAw7stbn6tuYXMhUlaQhH2f9/82xgAc9nsKEbIR2RuY2C6pk7lauWJIDKLAZ4MC6Vp/lZV0vPHeED/J03Ep/Q==
+deviator@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/deviator/-/deviator-0.4.2.tgz#3315c6c3c186e9a89d66bf54594b9c1eb9c9984e"
+  integrity sha512-4f3dILp+H2C3DUqRnP6FNbgEWz7u3gmN0H2rnIhcOFHE7NMsL8RUrDrVaOqA90OQRIXp1A6ONeOi6bc5qo3VzA==
 
 dezalgo@^1.0.0:
   version "1.0.3"

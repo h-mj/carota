@@ -18,7 +18,6 @@ import { fadeIn } from "../styling/animations";
 import { keyframes, styled } from "../styling/theme";
 import { Overlay } from "./Overlay";
 import { TitleBar } from "./TitleBar";
-import { Navigation } from "./Navigation";
 
 /**
  * Object where scene component names are mapped to their classes.
@@ -100,7 +99,6 @@ export class SceneRenderer extends Component<SceneRendererProps> {
         ref={this.overlayRef}
         tabIndex={-1}
       >
-        {first && this.props.accounts!.authenticated && <Navigation />}
         <Container>
           {!first && <TitleBar onClose={this.pop} title={scene.title} />}
           {this.renderSceneComponent()}
@@ -208,10 +206,6 @@ const SceneOverlay = styled(Overlay)<SceneOverlayProps>`
   animation: ${fadeIn} ${({ theme }) => theme.transition};
 
   pointer-events: ${({ overlaid }) => (overlaid ? "none" : "initial")};
-
-  @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
-    flex-direction: column-reverse;
-  }
 `;
 
 /**

@@ -9,6 +9,7 @@ export const RESET = css`
   border: none;
   outline: none;
   box-shadow: none;
+  margin: 0;
   padding: 0;
   background: none;
   color: inherit;

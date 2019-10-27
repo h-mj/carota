@@ -203,6 +203,7 @@ interface CheckBoxStateProps extends InputStyleProps {
 /**
  * Container that contains both real and fake check boxes.
  */
+// prettier-ignore
 const Box = styled.div<CheckBoxStateProps>`
   position: relative;
 
@@ -211,16 +212,8 @@ const Box = styled.div<CheckBoxStateProps>`
 
   flex: 0 0 auto;
 
-  color: ${({ active, checked, invalid, theme }) =>
-    invalid
-      ? theme.colorRed
-      : active || checked
-      ? theme.colorOrange
-      : theme.borderColor};
   border-radius: ${({ theme }) => theme.borderRadius};
-  box-shadow: inset 0 0 0
-    ${({ active, checked, invalid, theme }) =>
-      checked ? theme.padding : active || invalid ? "2px" : "1px"};
+  box-shadow: inset 0 0 0 ${({ active, invalid }) => (active || invalid ? "2px" : "1px")} ${({ active, invalid, theme }) => invalid ? theme.colorRed : active ? theme.colorOrange : theme.borderColor};
 
   transition: ${({ theme }) => theme.transition};
 `;
@@ -231,6 +224,8 @@ const Box = styled.div<CheckBoxStateProps>`
  */
 const Input = styled.input`
   ${RESET};
+
+  position: absolute;
 
   width: 100%;
   height: 100%;
@@ -256,8 +251,7 @@ const Check = styled.div<CheckBoxStateProps>`
   border-bottom: calc(${({ theme }) => theme.padding} / 12) solid;
   border-right: calc(${({ theme }) => theme.padding} / 12) solid;
 
-  color: ${({ invalid, theme }) =>
-    invalid ? theme.backgroundColor : theme.colorPrimary};
+  color: ${({ theme }) => theme.colorPrimary};
 
   transition: ${({ theme }) => theme.transition};
 

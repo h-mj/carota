@@ -75,9 +75,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
           <MealsView draggableType={this.draggableType} />
         </DragDropContext>
 
-        <Plus fixed={true} onClick={this.handleAddClick}>
-          +
-        </Plus>
+        <Plus fixed={true} onClick={this.handleAddClick} />
       </Container>
     );
   }

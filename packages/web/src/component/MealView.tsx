@@ -76,7 +76,7 @@ export class MealView extends Component<MealViewProps> {
             <DishesView meal={meal} draggableType={this.props.draggableType} />
 
             <PlusContainer>
-              <Plus onClick={this.showSearch}>+</Plus>
+              <Plus onClick={this.showSearch} />
             </PlusContainer>
           </Container>
         )}

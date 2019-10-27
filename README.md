@@ -26,5 +26,6 @@ yarn
 yarn develop
 ```
 
-After starting the application a registration link will be printed in the
-console that can be used to register a new account.
+# Demo
+
+You can try out this application at [this link](https://morkovka2.herokuapp.com) by singing in using email `demo@example.com` and password `demodemo`.

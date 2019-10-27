@@ -17,7 +17,7 @@ export const saveFoodstuffDtoValidator = deviate().object().shape({
   name: deviate().string().trim().nonempty(),
   barcode: deviate().optional().string().trim().regexp(/^\d{13}$/),
   unit: deviate().options(UNITS),
-  quantity: optionalQuantity.positive(),
+  packageSize: optionalQuantity.positive(),
   pieceQuantity: optionalQuantity.positive(),
   nutritionDeclaration: deviate().object().shape({
     energy: quantity,

@@ -45,20 +45,20 @@ export const english: Translation = {
             nonempty: "Please enter a name of this foodstuff."
           }
         },
+        packageSize: {
+          label: "Package size",
+          reasons: {
+            nonempty: "Please enter foodstuff package size.",
+            positive: "Please enter a package size that is greater than 0.",
+            toNumber: "Please enter correct package size."
+          }
+        },
         pieceQuantity: {
-          label: "Quantity of one piece",
+          label: "Piece quantity",
           reasons: {
             nonempty: "Please enter quantity of one piece.",
             positive: "Please enter one piece quantity that is greater than 0.",
             toNumber: "Please enter correct one piece quantity."
-          }
-        },
-        quantity: {
-          label: "Quantity",
-          reasons: {
-            nonempty: "Please enter foodstuff quantity.",
-            positive: "Please enter quantity that is greater than 0.",
-            toNumber: "Please enter correct quantity."
           }
         },
         unit: {

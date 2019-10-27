@@ -22,7 +22,7 @@ export class Foodstuff {
   public unit!: Unit;
 
   @Column("float", { nullable: true })
-  public quantity!: number | null;
+  public packageSize!: number | null;
 
   @Column("float", { nullable: true })
   public pieceQuantity!: number | null;
@@ -40,7 +40,7 @@ export class Foodstuff {
     id: this.id,
     name: this.name,
     barcode: this.barcode || undefined,
-    quantity: this.quantity || undefined,
+    packageSize: this.packageSize || undefined,
     unit: this.unit,
     nutritionDeclaration: this.nutritionDeclaration.toDto(),
     pieceQuantity: this.pieceQuantity || undefined

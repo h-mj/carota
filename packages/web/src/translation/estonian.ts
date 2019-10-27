@@ -45,20 +45,20 @@ export const estonian: Translation = {
             nonempty: "Palun sisestage toiduaine nimetus."
           }
         },
+        packageSize: {
+          label: "Pakendi kogus",
+          reasons: {
+            nonempty: "Palun sisestage pakendi kogus.",
+            positive: "Palun sisestage pakendi kogus mis on suurem kui 0.",
+            toNumber: "Palun sisestage korrektne pakendi kogus."
+          }
+        },
         pieceQuantity: {
           label: "Ühe tüki kogus",
           reasons: {
             nonempty: "Palun sisestage ühe tüki kogus.",
             positive: "Palun sisestage ühe tüki kogus mis on suurem kui 0.",
             toNumber: "Palun sisestage korrektne ühe tüki kogus."
-          }
-        },
-        quantity: {
-          label: "Kogus",
-          reasons: {
-            nonempty: "Palun sisestage toiduaine kogus.",
-            positive: "Palun sisestage toiduaine kogus mis on suurem kui 0.",
-            toNumber: "Palun sisestage korrektne toiduaine kogus."
           }
         },
         unit: {

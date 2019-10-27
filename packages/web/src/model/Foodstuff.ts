@@ -25,7 +25,7 @@ export class Foodstuff {
   public readonly name: string;
   public readonly barcode?: string;
   public readonly unit: Unit;
-  public readonly quantity?: number;
+  public readonly packageSize?: number;
   public readonly pieceQuantity?: number;
   public readonly nutritionDeclaration: NutritionDeclarationDto;
 
@@ -39,7 +39,7 @@ export class Foodstuff {
     this.name = dto.name;
     this.barcode = dto.barcode;
     this.unit = dto.unit;
-    this.quantity = dto.quantity;
+    this.packageSize = dto.packageSize;
     this.pieceQuantity = dto.pieceQuantity;
     this.nutritionDeclaration = dto.nutritionDeclaration;
     this.store = store;

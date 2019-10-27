@@ -52,7 +52,7 @@ export class FoodstuffService {
       barcode: dto.barcode,
       unit: dto.unit,
       pieceQuantity: dto.pieceQuantity,
-      quantity: dto.quantity,
+      packageSize: dto.packageSize,
       nutritionDeclaration: dto.nutritionDeclaration,
       editor: principal
     });

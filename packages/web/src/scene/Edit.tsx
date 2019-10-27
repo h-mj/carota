@@ -20,7 +20,7 @@ import { any, append, ErrorsFor } from "../utility/form";
 /**
  * Union of text field input names.
  */
-type TextFieldNames = "name" | "barcode" | "quantity" | "pieceQuantity";
+type TextFieldNames = "name" | "barcode" | "packageSize" | "pieceQuantity";
 
 /**
  * Union of non nutrient input names.
@@ -159,7 +159,7 @@ interface EditValues {
   name: string;
   barcode?: string;
   unit?: Unit;
-  quantity?: string;
+  packageSize?: string;
   nutritionDeclaration: NutritionDeclarationValues;
   pieceQuantity?: string;
 }
@@ -167,7 +167,7 @@ interface EditValues {
 /**
  * Set of optional fields that will have a check box in front of them.
  */
-const OPTIONAL_FIELDS = new Set(["barcode", "quantity", "pieceQuantity"]);
+const OPTIONAL_FIELDS = new Set(["barcode", "packageSize", "pieceQuantity"]);
 
 /**
  * Initial form values when creating a new foodstuff.
@@ -205,7 +205,7 @@ const toValues = deviate<Foodstuff>().shape({
   name: deviate<string>(),
   barcode: deviate<string | undefined>(),
   unit: deviate<Unit>(),
-  quantity: optionalNumberToString,
+  packageSize: optionalNumberToString,
   pieceQuantity: optionalNumberToString,
   nutritionDeclaration: deviate<NutritionDeclarationDto>().shape({
     energy: numberToString,
@@ -250,7 +250,7 @@ const toBody = deviate<EditValues>().shape({
   name: deviate<string>().trim().nonempty(),
   barcode: deviate<string | undefined>().optional().replace(" ", "").nonempty().regexp(/^\d{13}$/),
   unit: deviate<Unit | undefined>().defined(),
-  quantity: optionalParseFloat.positive(),
+  packageSize: optionalParseFloat.positive(),
   pieceQuantity: optionalParseFloat.positive(),
   nutritionDeclaration: deviate<NutritionDeclarationValues>().shape({
     energy: parseFloat,
@@ -334,7 +334,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
             value={this.values.unit}
           />
 
-          {this.renderTextField("quantity")}
+          {this.renderTextField("packageSize")}
           {this.renderTextField("pieceQuantity")}
         </Group>
 
@@ -388,7 +388,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
       textAlign="right"
       type={name === "barcode" ? "tel" : name === "name" ? "text" : "number"}
       unit={
-        (name === "quantity" || name === "pieceQuantity") &&
+        (name === "packageSize" || name === "pieceQuantity") &&
         this.values.unit !== undefined
           ? this.props.views!.translation.units[this.values.unit!]
           : undefined

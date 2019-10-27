@@ -245,12 +245,15 @@ const Tab = styled.button<TabProps>`
   height: 100%;
   flex-shrink: 0;
 
-  box-shadow: ${({ current, selected, theme }) =>
+  border-bottom: ${({ current, selected, theme }) =>
     selected
-      ? `inset 0 -4px 0 0 ${theme.colorOrange}`
+      ? `solid 4px ${theme.colorOrange}`
       : current
-      ? `inset 0 -4px 0 0 ${theme.borderColor}`
-      : `inset 0 -1px 0 0 ${theme.borderColor}`};
+      ? `solid 4px ${theme.borderColor}`
+      : `solid 1px ${theme.borderColor}`};
+  border-top: ${({ current, selected }) =>
+    selected || current ? `solid 4px transparent` : `solid 1px transparent`};
+  box-sizing: border-box;
 
   color: ${({ current, selected, theme }) =>
     current || selected ? theme.colorPrimary : theme.colorSecondary};

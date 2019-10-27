@@ -66,7 +66,7 @@ export class ViewsStore {
   /**
    * RootStore instance.
    */
-  private _rootStore: RootStore;
+  public rootStore: RootStore;
 
   /**
    * Creates a new instance of `ScenesStore`, updates root scene based on
@@ -75,7 +75,7 @@ export class ViewsStore {
    */
   public constructor(rootStore: RootStore) {
     this._scenes = [];
-    this._rootStore = rootStore;
+    this.rootStore = rootStore;
 
     this.refresh();
     window.addEventListener("popstate", () => this.refresh(), false);
@@ -139,7 +139,7 @@ export class ViewsStore {
    */
   @action
   public redirect(scene: Scenes) {
-    const { authenticated } = this._rootStore.accounts;
+    const { authenticated } = this.rootStore.accounts;
 
     const url = scene.getUrl();
 
@@ -178,7 +178,7 @@ export class ViewsStore {
    */
   @action
   public refresh() {
-    const { authenticated } = this._rootStore.accounts;
+    const { authenticated } = this.rootStore.accounts;
     const scene = Scene.from(window.location.pathname);
 
     // If user is unauthenticated and tries to access the logout scene, redirect to home.

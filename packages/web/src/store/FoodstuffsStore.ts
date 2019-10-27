@@ -17,7 +17,7 @@ export class FoodstuffsStore {
   /**
    * Root store instance.
    */
-  private rootStore: RootStore;
+  public rootStore: RootStore;
 
   /**
    * Assigns the root store instance.

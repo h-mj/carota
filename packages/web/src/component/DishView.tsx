@@ -4,9 +4,12 @@ import * as React from "react";
 import { Draggable } from "react-beautiful-dnd";
 
 import { Component } from "../base/Component";
+import { Scenes } from "../base/Scene";
 import { Dish } from "../model/Dish";
+import { Foodstuff } from "../model/Foodstuff";
 import { styled } from "../styling/theme";
 import { CheckBox } from "./CheckBox";
+import { Edit } from "./Edit";
 import { ItemHeader } from "./ItemHeader";
 import { NutrientQuantities } from "./NutrientQuantities";
 
@@ -28,7 +31,7 @@ interface DishViewProps {
 /**
  * Component that display information about specified dish.
  */
-@inject("meals")
+@inject("meals", "views")
 @observer
 export class DishView extends Component<DishViewProps> {
   /**
@@ -37,11 +40,16 @@ export class DishView extends Component<DishViewProps> {
   private timeoutId = 0;
 
   /**
+   * Pushed quantity selection scene reference.
+   */
+  private scene?: Scenes;
+
+  /**
    * Renders the dish entry with all its information.
    */
   public render() {
     const { dish } = this.props;
-    const { eaten } = dish;
+    const { eaten, quantity } = dish;
 
     return (
       <Draggable draggableId={dish.id} index={this.props.index}>
@@ -62,8 +70,9 @@ export class DishView extends Component<DishViewProps> {
               />
 
               <Quantity>
-                {dish.quantity}
+                {quantity}
                 {dish.foodstuff.unit}
+                <Edit onClick={this.handleEditClick} />
               </Quantity>
 
               <span>{dish.foodstuff.name}</span>
@@ -90,11 +99,32 @@ export class DishView extends Component<DishViewProps> {
   /**
    * Updates provided dish eaten status after some timeout.
    */
+  @action
   private updateEatenStatus = async () => {
     await this.props.meals!.setDishEaten(
       this.props.dish,
       this.props.dish.eaten
     );
+  };
+
+  /**
+   * Shows quantity selection scene on edit button click.
+   */
+  @action
+  private handleEditClick = () => {
+    this.scene = this.props.views!.push("center", "Quantity", {
+      foodstuff: this.props.dish!.foodstuff,
+      quantity: this.props.dish!.quantity,
+      select: this.handleSelect
+    });
+  };
+
+  /**
+   * Updates provided dish' quantity on quantity selection.
+   */
+  private handleSelect = (_: Foodstuff, quantity: number) => {
+    this.props.views!.pop(this.scene!);
+    this.props.dish!.setQuantity(quantity);
   };
 }
 
@@ -151,10 +181,11 @@ const Container = styled.div<ContainerProps>`
  * Component that displays dish quantity.
  */
 const Quantity = styled.span`
-  width: ${({ theme }) => theme.height};
+  min-width: calc(1.25 * ${({ theme }) => theme.height});
 
+  display: flex;
   flex-shrink: 0;
-  justify-content: center;
+  justify-content: space-between;
 
   color: ${({ theme }) => theme.colorSecondary};
   text-align: center;

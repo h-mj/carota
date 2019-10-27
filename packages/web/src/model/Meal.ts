@@ -23,7 +23,7 @@ export class Meal {
     this.id = dto.id;
     this.name = dto.name;
     this.date = dto.date;
-    this.dishes = dto.dishes.map(dish => new Dish(dish, this));
+    this.dishes = dto.dishes.map(dish => new Dish(dish, this, store));
     this.store = store;
   }
 
@@ -45,7 +45,11 @@ export class Meal {
    * Sets quantity of consumed foodstuff during this meal.
    */
   @action
-  public async consume(foodstuff: Foodstuff, quantity: number, eaten: boolean) {
+  public async createDish(
+    foodstuff: Foodstuff,
+    quantity: number,
+    eaten: boolean
+  ) {
     return this.store.createDish(this, foodstuff, quantity, eaten);
   }
 
@@ -55,6 +59,14 @@ export class Meal {
   @action
   public async delete() {
     return this.store.delete(this);
+  }
+
+  /**
+   * Sets the index of this meal.
+   */
+  @action
+  public async insert(index: number) {
+    return this.store.insert(this, index);
   }
 
   /**

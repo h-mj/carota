@@ -15,8 +15,9 @@ import { Dish } from "./Dish";
 import { DishRepository } from "./DishRepository";
 import { CreateDishDto } from "./dto/CreateDishDto";
 import { DeleteDishDto } from "./dto/DeleteDishDto";
-import { EatDishDto } from "./dto/EatDishDto";
 import { InsertDishDto } from "./dto/InsertDishDto";
+import { SetDishEatenDto } from "./dto/SetDishEatenDto";
+import { SetDishQuantityDto } from "./dto/SetDishQuantityDto";
 
 @Injectable()
 export class DishService {
@@ -80,24 +81,6 @@ export class DishService {
   }
 
   @Transaction()
-  public async eat(
-    dto: EatDishDto,
-    principal: Account,
-    @TransactionRepository() dishRepository?: DishRepository
-  ) {
-    const dish = await dishRepository!.findOne(dto.id, { relations: ["meal"] });
-
-    if (dish === undefined) {
-      throw new InvalidIdError(Dish, ["id"]);
-    }
-
-    authorize(principal, "eat", dish);
-
-    dish.eaten = dto.eaten;
-    await dishRepository!.save(dish);
-  }
-
-  @Transaction()
   public async insert(
     dto: InsertDishDto,
     principal: Account,
@@ -137,5 +120,41 @@ export class DishService {
     const next = dishes[dto.index];
 
     await dishRepository!.link(dish, meal, previous, next);
+  }
+
+  @Transaction()
+  public async setEaten(
+    dto: SetDishEatenDto,
+    principal: Account,
+    @TransactionRepository() dishRepository?: DishRepository
+  ) {
+    const dish = await dishRepository!.findOne(dto.id, { relations: ["meal"] });
+
+    if (dish === undefined) {
+      throw new InvalidIdError(Dish, ["id"]);
+    }
+
+    authorize(principal, "eat", dish);
+
+    dish.eaten = dto.eaten;
+    await dishRepository!.save(dish);
+  }
+
+  @Transaction()
+  public async setQuantity(
+    dto: SetDishQuantityDto,
+    principal: Account,
+    @TransactionRepository() dishRepository?: DishRepository
+  ) {
+    const dish = await dishRepository!.findOne(dto.id, { relations: ["meal"] });
+
+    if (dish === undefined) {
+      throw new InvalidIdError(Dish, ["id"]);
+    }
+
+    authorize(principal, "set quantity of", dish);
+
+    dish.quantity = dto.quantity;
+    await dishRepository!.save(dish);
   }
 }

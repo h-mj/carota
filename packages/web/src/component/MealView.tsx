@@ -7,9 +7,9 @@ import { Component } from "../base/Component";
 import { Scenes } from "../base/Scene";
 import { Foodstuff } from "../model/Foodstuff";
 import { Meal } from "../model/Meal";
-import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
 import { DishesView } from "./DishesView";
+import { Edit } from "./Edit";
 import { ItemHeader } from "./ItemHeader";
 import { NutrientQuantities } from "./NutrientQuantities";
 import { Plus } from "./Plus";
@@ -99,7 +99,7 @@ export class MealView extends Component<MealViewProps> {
    */
   @action
   private select = (foodstuff: Foodstuff, quantity: number) => {
-    this.props.meal.consume(
+    this.props.meal.createDish(
       foodstuff,
       quantity,
       new Date(this.props.meal.date).getTime() <= new Date().getTime()
@@ -167,17 +167,6 @@ const TitleBar = styled.div`
   @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
     flex-direction: column;
   }
-`;
-
-/**
- * Edit button that enables meal entry editing.
- */
-const Edit = styled.button`
-  ${RESET};
-
-  margin-left: ${({ theme }) => theme.paddingSecondaryHalf};
-  color: ${({ theme }) => theme.colorSecondary};
-  cursor: pointer;
 `;
 
 /**

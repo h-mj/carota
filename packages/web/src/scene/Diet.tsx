@@ -137,29 +137,26 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
       return;
     }
 
-    if (type === "meal") {
-      const target = this.props.meals!.withId(draggableId)!;
+    if (destination.droppableId === "trashCan") {
+      const target =
+        type === "meal"
+          ? this.props.meals!.withId(draggableId)!
+          : this.props.meals!.withId(source.droppableId)!.withId(draggableId)!;
 
-      if (destination.droppableId === "trashCan") {
-        this.props.meals!.delete(target);
-      } else {
-        this.props.meals!.insert(target, destination.index);
-      }
-    } else {
-      const target = this.props
-        .meals!.withId(source.droppableId)!
-        .withId(draggableId)!;
-
-      if (destination.droppableId === "trashCan") {
-        this.props.meals!.deleteDish(target);
-      } else {
-        this.props.meals!.insertDish(
-          target,
-          this.props.meals!.withId(destination.droppableId)!,
-          destination.index
-        );
-      }
+      return target.delete();
     }
+
+    if (type === "meal") {
+      return this.props.meals!.withId(draggableId)!.insert(destination.index);
+    }
+
+    return this.props
+      .meals!.withId(source.droppableId)!
+      .withId(draggableId)!
+      .insert(
+        this.props.meals!.withId(destination.droppableId)!,
+        destination.index
+      );
   };
 
   /**

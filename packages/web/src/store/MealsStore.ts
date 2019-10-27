@@ -30,7 +30,7 @@ export class MealsStore {
   /**
    * Root store instance.
    */
-  private rootStore: RootStore;
+  public rootStore: RootStore;
 
   /**
    * Assigns the root store instance.
@@ -99,7 +99,7 @@ export class MealsStore {
       return this.rootStore.views.notifyUnknownError();
     }
 
-    meal.dishes.push(new Dish(result.value, meal));
+    meal.dishes.push(new Dish(result.value, meal, this));
   }
 
   /**
@@ -215,7 +215,24 @@ export class MealsStore {
   public async setDishEaten(dish: Dish, eaten: boolean) {
     dish.eaten = eaten;
 
-    const result = await Rpc.call("dish", "eat", { id: dish.id, eaten });
+    const result = await Rpc.call("dish", "setEaten", { id: dish.id, eaten });
+
+    if (!result.ok) {
+      return this.rootStore.views.notifyUnknownError();
+    }
+  }
+
+  /**
+   * Sets the quantity specified `dish` to specified `quantity`.
+   */
+  @action
+  public async setDishQuantity(dish: Dish, quantity: number) {
+    dish.quantity = quantity;
+
+    const result = await Rpc.call("dish", "setQuantity", {
+      id: dish.id,
+      quantity
+    });
 
     if (!result.ok) {
       return this.rootStore.views.notifyUnknownError();

@@ -26,6 +26,11 @@ interface QuantityProps {
   foodstuff: Foodstuff;
 
   /**
+   * Initial quantity value.
+   */
+  quantity?: number;
+
+  /**
    * Foodstuff selection callback.
    */
   select: (foodstuff: Foodstuff, quantity: number) => void;
@@ -124,7 +129,8 @@ export class Quantity extends SceneComponent<
    * Quantity selection form values.
    */
   @observable private values: FormValues = {
-    quantity: "",
+    quantity:
+      this.props.quantity !== undefined ? this.props.quantity.toString() : "",
     unit: this.props.foodstuff.unit
   };
 

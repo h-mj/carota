@@ -56,4 +56,5 @@ export type DishDto = ReturnType<Dish["toDto"]>;
 {
   allow(Account, "delete", Dish, (account, dish) => dish.meal !== undefined && account.id === dish.meal.accountId);
   allow(Account, "eat", Dish, (account, dish) => dish.meal !== undefined && account.id === dish.meal.accountId);
+  allow(Account, "set quantity of", Dish, (account, dish) => dish.meal !== undefined && account.id === dish.meal.accountId);
 }

@@ -18,14 +18,12 @@ export const ItemHeader = styled.div`
   color: ${({ theme }) => theme.colorPrimary};
   word-break: break-word;
 
-  & > *:not(span) {
-    margin-top: calc(${({theme}) => theme.heightHalf} / 2);
+  & > span {
+    padding: calc((${({ theme }) => theme.height} - ${({ theme }) => theme.lineHeight}) / 2) 0;
   }
 
-  & > span {
-    /** Padding and line-height add up to theme.height. */
-    line-height: ${({ theme }) => theme.lineHeight};
-    padding: calc((${({ theme }) => theme.height} - ${({ theme }) => theme.lineHeight}) / 2) 0;
+  & > *:not(span) {
+    margin-top: calc(${({theme}) => theme.heightHalf} / 2);
   }
 
   & > *:not(:last-child) {

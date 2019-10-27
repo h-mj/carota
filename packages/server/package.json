@@ -26,7 +26,7 @@
     "deviator": "^0.4.2",
     "dotenv": "^8.2.0",
     "eslint": "^6.6.0",
-    "eslint-config-prettier": "^6.4.0",
+    "eslint-config-prettier": "^6.5.0",
     "eslint-plugin-prettier": "^3.1.1",
     "jsonwebtoken": "^8.5.1",
     "luxon": "^1.19.3",

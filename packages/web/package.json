@@ -20,7 +20,7 @@
     "@types/styled-components": "^4.1.19",
     "deviator": "^0.4.2",
     "eslint": "^6.6.0",
-    "eslint-config-prettier": "^6.4.0",
+    "eslint-config-prettier": "^6.5.0",
     "mobx": "^5.14.2",
     "mobx-react": "^6.1.4",
     "react": "^16.11.0",

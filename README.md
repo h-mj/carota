@@ -28,4 +28,4 @@ yarn develop
 
 # Demo
 
-You can try out this application at [this link](https://morkovka2.herokuapp.com) by singing in using email `demo@example.com` and password `demodemo`.
+You can try out this application at [this link](https://morkovka2.herokuapp.com) by signing in using email `demo@example.com` and password `demodemo`.

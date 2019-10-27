@@ -245,8 +245,8 @@ const Check = styled.div<CheckBoxStateProps>`
   transform: translateX(-50%) translateY(-50%) rotateZ(45deg)
     scale(${({ checked }) => (checked ? 1 : 0)});
 
-  width: calc(${({ theme }) => theme.height} / 12);
-  height: calc(${({ theme }) => theme.height} / 6);
+  width: calc(${({ theme }) => theme.height} / 14);
+  height: calc(${({ theme }) => theme.height} / 7);
 
   border-bottom: calc(${({ theme }) => theme.padding} / 12) solid;
   border-right: calc(${({ theme }) => theme.padding} / 12) solid;

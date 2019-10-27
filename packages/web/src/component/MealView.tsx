@@ -10,7 +10,7 @@ import { Meal } from "../model/Meal";
 import { styled } from "../styling/theme";
 import { DishesView } from "./DishesView";
 import { Edit } from "./Edit";
-import { ItemHeader } from "./ItemHeader";
+import { ItemHeader, ItemHeaderText, ItemHeaderTexts } from "./ItemHeader";
 import { NutrientQuantities } from "./NutrientQuantities";
 import { Plus } from "./Plus";
 
@@ -62,16 +62,14 @@ export class MealView extends Component<MealViewProps> {
             isDragging={snapshot.isDragging}
             {...provided.draggableProps}
           >
-            <TitleBar {...provided.dragHandleProps}>
-              <ItemHeader>
-                <span>
-                  {name}
-                  <Edit onClick={this.showNameEdit}>↺</Edit>
-                </span>
-              </ItemHeader>
+            <ItemHeader {...provided.dragHandleProps}>
+              <ItemHeaderTexts>
+                <ItemHeaderText>{name}</ItemHeaderText>
+                <Edit onClick={this.showNameEdit} />
+              </ItemHeaderTexts>
 
               {showQuantities && <NutrientQuantities model={meal} />}
-            </TitleBar>
+            </ItemHeader>
 
             <DishesView meal={meal} draggableType={this.props.draggableType} />
 
@@ -154,19 +152,6 @@ const Container = styled.div<ContainerProps>`
 
   transition: box-shadow ${({ theme }) => theme.transition},
     border ${({ theme }) => theme.transition};
-`;
-
-/**
- * Meal title bar.
- */
-const TitleBar = styled.div`
-  width: 100%;
-  display: flex;
-  box-shadow: 0 1px 0 0 ${({ theme }) => theme.borderColor};
-
-  @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
-    flex-direction: column;
-  }
 `;
 
 /**

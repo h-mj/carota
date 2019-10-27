@@ -46,15 +46,11 @@ export class NutrientQuantities extends Component<NutrientQuantitiesProps> {
  */
 const Container = styled.div`
   width: 100%;
-  height: ${({ theme }) => theme.height};
+  height: ${({ theme }) => theme.heightHalf};
 
   display: grid;
   grid-gap: ${({ theme }) => theme.paddingSecondary};
   grid-template-columns: repeat(4, 1fr);
-
-  padding: calc(${({ theme }) => theme.heightHalf} / 2)
-    ${({ theme }) => theme.paddingSecondary};
-  box-sizing: border-box;
 `;
 
 /**

@@ -10,7 +10,7 @@ import { Foodstuff } from "../model/Foodstuff";
 import { styled } from "../styling/theme";
 import { CheckBox } from "./CheckBox";
 import { Edit } from "./Edit";
-import { ItemHeader } from "./ItemHeader";
+import { ItemHeader, ItemHeaderText, ItemHeaderTexts } from "./ItemHeader";
 import { NutrientQuantities } from "./NutrientQuantities";
 
 /**
@@ -61,7 +61,7 @@ export class DishView extends Component<DishViewProps> {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <ItemHeader>
+            <ItemHeaderTexts>
               <CheckBox
                 name="eaten"
                 value={eaten}
@@ -74,11 +74,10 @@ export class DishView extends Component<DishViewProps> {
                 {dish.foodstuff.unit}
               </Quantity>
 
-              <span>
-                {dish.foodstuff.name}
-                <Edit onClick={this.handleEditClick} />
-              </span>
-            </ItemHeader>
+              <ItemHeaderText>{dish.foodstuff.name}</ItemHeaderText>
+
+              <Edit onClick={this.handleEditClick} />
+            </ItemHeaderTexts>
 
             <NutrientQuantities model={dish} />
           </Container>
@@ -148,11 +147,7 @@ interface ContainerProps {
 /**
  * Dish entry component container.
  */
-const Container = styled.div<ContainerProps>`
-  width: 100%;
-
-  display: flex;
-
+const Container = styled(ItemHeader)<ContainerProps>`
   box-shadow: ${({ isDragging, theme }) =>
     isDragging
       ? `inset 0 0 0 2px ${theme.colorOrange}`
@@ -160,27 +155,22 @@ const Container = styled.div<ContainerProps>`
 
   border-radius: ${({ isDragging, theme }) =>
     isDragging ? theme.borderRadius : "0"};
-  box-sizing: border-box;
-
   background-color: ${({ eaten, theme }) =>
     eaten ? theme.backgroundColor : theme.backgroundColorDisabled};
 
   transition: box-shadow ${({ theme }) => theme.transition},
     border-radius ${({ theme }) => theme.transition},
     border-color ${({ theme }) => theme.transition};
-
-  @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
-    flex-direction: column;
-  }
 `;
 
 /**
  * Component that displays dish quantity.
  */
-const Quantity = styled.span`
+const Quantity = styled(ItemHeaderText)`
   min-width: ${({ theme }) => theme.height};
 
   display: flex;
+  flex-grow: 0;
   flex-shrink: 0;
   justify-content: center;
 

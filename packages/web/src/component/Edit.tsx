@@ -36,7 +36,17 @@ export class Edit extends React.Component<EditProps> {
 const EditButton = styled.button`
   ${RESET};
 
-  margin-left: ${({ theme }) => theme.paddingSecondaryHalf};
+  width: ${({ theme }) => theme.heightHalf};
+  height: ${({ theme }) => theme.heightHalf};
+
+  flex-shrink: 0;
+
+  border-radius: ${({ theme }) => theme.borderRadius};
+  box-shadow: inset 0 0 0 1px ${({ theme }) => theme.borderColor};
+
   color: ${({ theme }) => theme.colorSecondary};
+  line-height: 50%;
+  text-align: center;
+
   cursor: pointer;
 `;

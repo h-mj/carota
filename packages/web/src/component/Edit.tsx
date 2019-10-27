@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
+import { Pencil } from "./collection/icons";
 
 /**
  * Edit button component props.
@@ -21,7 +22,11 @@ export class Edit extends React.Component<EditProps> {
    * Renders the Edit button.
    */
   public render() {
-    return <EditButton onClick={this.props.onClick}>↺</EditButton>;
+    return (
+      <EditButton onClick={this.props.onClick}>
+        <Pencil />
+      </EditButton>
+    );
   }
 }
 

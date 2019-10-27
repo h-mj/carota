@@ -72,10 +72,12 @@ export class DishView extends Component<DishViewProps> {
               <Quantity>
                 {quantity}
                 {dish.foodstuff.unit}
-                <Edit onClick={this.handleEditClick} />
               </Quantity>
 
-              <span>{dish.foodstuff.name}</span>
+              <span>
+                {dish.foodstuff.name}
+                <Edit onClick={this.handleEditClick} />
+              </span>
             </ItemHeader>
 
             <NutrientQuantities model={dish} />
@@ -181,11 +183,11 @@ const Container = styled.div<ContainerProps>`
  * Component that displays dish quantity.
  */
 const Quantity = styled.span`
-  min-width: calc(1.25 * ${({ theme }) => theme.height});
+  min-width: ${({ theme }) => theme.height};
 
   display: flex;
   flex-shrink: 0;
-  justify-content: space-between;
+  justify-content: center;
 
   color: ${({ theme }) => theme.colorSecondary};
   text-align: center;

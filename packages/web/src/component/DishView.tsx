@@ -189,6 +189,6 @@ const Quantity = styled.span`
   flex-shrink: 0;
   justify-content: center;
 
-  color: ${({ theme }) => theme.colorSecondary};
+  color: ${({ theme }) => theme.colorPrimary};
   text-align: center;
 `;

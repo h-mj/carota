@@ -74,7 +74,7 @@ export const Carbohydrate: React.FunctionComponent = () => (
  */
 export const Pencil: React.FunctionComponent = () => (
   <Icon viewBox="0 0 42 68" xmlns="http://www.w3.org/2000/svg">
-    <path d="m32 13 10 10-5 5-10-10 5-5m-7 7 10 10-20 20-10-10 20-20m-12 32-10-10-3 13 13-3" fill="#666666" />
+    <path d="m32 13 10 10-5 5-10-10 5-5m-7 7 10 10-20 20-10-10 20-20m-12 32-10-10-3 13 13-3" fill="rgba(0, 0, 0, 0.88)" />
   </Icon>
 );
 

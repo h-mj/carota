@@ -95,16 +95,18 @@ export class Search extends SceneComponent<
           />
         </Controls>
         {this.completed && (
-          <Results>
-            {this.props.foodstuffs!.foodstuffs.map(foodstuff => (
-              <FoodstuffView
-                key={foodstuff.id}
-                foodstuff={foodstuff}
-                select={this.props.select}
-              />
-            ))}
-            <Add onClick={this.showEditor}>+</Add>
-          </Results>
+          <AutoOverflow>
+            <Results>
+              {this.props.foodstuffs!.foodstuffs.map(foodstuff => (
+                <FoodstuffView
+                  key={foodstuff.id}
+                  foodstuff={foodstuff}
+                  select={this.props.select}
+                />
+              ))}
+              <Add onClick={this.showEditor}>+</Add>
+            </Results>
+          </AutoOverflow>
         )}
       </>
     );
@@ -157,15 +159,18 @@ export class Search extends SceneComponent<
  */
 // prettier-ignore
 const Controls = styled.div`
-  position: sticky;
-  top: 0;
-
   padding: ${({ theme }) => theme.paddingSecondary} ${({ theme }) => theme.padding};
+  border-bottom: solid 1px ${({ theme }) => theme.borderColor};
   box-sizing: border-box;
 
-  border-bottom: solid 1px ${({ theme }) => theme.borderColor};
-
   background-color: ${({ theme }) => theme.backgroundColor};
+`;
+
+/**
+ * Component with overflow set to auto.
+ */
+const AutoOverflow = styled.div`
+  overflow: auto;
 `;
 
 /**

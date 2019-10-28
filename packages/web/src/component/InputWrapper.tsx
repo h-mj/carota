@@ -169,24 +169,15 @@ const Field = styled.div<InputStyleProps>`
   display: flex;
   align-items: center;
 
-  background-color: ${({ disabled, theme }) =>
-    disabled ? theme.backgroundColorDisabled : theme.backgroundColor};
-  box-sizing: border-box;
-
-  border: solid 1px
-    ${({ active, invalid, theme }) =>
-      invalid
-        ? theme.colorRed
-        : active
-        ? theme.colorOrange
-        : theme.borderColor};
   border-radius: ${({ theme }) => theme.borderRadius};
   box-shadow: ${({ active, invalid, theme }) =>
     invalid
-      ? `inset 0 0 0 1px ${theme.colorRed}`
+      ? `inset 0 0 0 2px ${theme.colorRed}`
       : active
-      ? `inset 0 0 0 1px ${theme.colorOrange}`
-      : "none"};
+      ? `inset 0 0 0 2px ${theme.colorOrange}`
+      : `inset 0 0 0 1px ${theme.borderColor}`};
+  background-color: ${({ disabled, theme }) =>
+    disabled ? theme.backgroundColorDisabled : theme.backgroundColor};
 
   transition: ${({ theme }) => theme.transition};
 

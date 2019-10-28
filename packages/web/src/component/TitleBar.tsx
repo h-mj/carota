@@ -59,6 +59,7 @@ const Bar = styled.div`
 
   background-color: ${({ theme }) => theme.backgroundColor};
   border-bottom: solid 1px ${({ theme }) => theme.borderColor};
+  box-sizing: border-box;
 `;
 
 /**

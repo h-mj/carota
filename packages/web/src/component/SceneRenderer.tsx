@@ -214,6 +214,7 @@ const SceneOverlay = styled(Overlay)<SceneOverlayProps>`
 const Main = styled.div`
   width: 100%;
   height: 100%;
+  max-height: 100%;
   overflow: auto;
 
   display: flex;
@@ -238,14 +239,6 @@ const slideRight = keyframes`
 `;
 
 /**
- * Container that is rendered on the left of the screen.
- */
-const Left = styled(Main)`
-  max-width: ${({ theme }) => theme.widthSmall};
-  animation: ${slideRight} ${({ theme }) => theme.transition};
-`;
-
-/**
  * Center component slide up animation.
  */
 const slideUp = keyframes`
@@ -261,17 +254,31 @@ const slideUp = keyframes`
 `;
 
 /**
+ * Container that is rendered on the left of the screen.
+ */
+const Left = styled(Main)`
+  max-width: ${({ theme }) => theme.widthSmall};
+  animation: ${slideRight} ${({ theme }) => theme.transition};
+
+  @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
+    max-width: initial;
+    animation: ${slideUp} ${({ theme }) => theme.transition};
+  }
+`;
+
+/**
  * Container that is rendered in the center of the screen.
  */
 const Center = styled(Main)`
   max-width: ${({ theme }) => theme.widthSmall};
   height: initial;
-  border-radius: ${({ theme }) => theme.borderRadius};
 
+  border-radius: ${({ theme }) => theme.borderRadius};
   animation: ${slideUp} ${({ theme }) => theme.transition};
 
   @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
     height: 100%;
+    max-width: initial;
     border-radius: 0;
   }
 `;

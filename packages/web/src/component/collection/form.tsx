@@ -37,6 +37,7 @@ export const Form = styled.form`
 
   @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
     flex-grow: 1;
+    max-width: initial;
   }
 `;
 

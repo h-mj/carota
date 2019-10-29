@@ -7,7 +7,8 @@ import {
   BarcodeFormat,
   BrowserBarcodeReader,
   DecodeContinuouslyCallback,
-  DecodeHintType
+  DecodeHintType,
+  Result
 } from "@zxing/library";
 
 import {
@@ -19,9 +20,16 @@ import { RESET } from "../styling/stylesheets";
 /**
  * Barcode decode hints.
  */
-const DECODE_HINTS = new Map([
-  [DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13]]
+const DECODE_HINTS = new Map<DecodeHintType, unknown>([
+  [DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13]],
+  [DecodeHintType.TRY_HARDER, true]
 ]);
+
+/**
+ * Required number of consecutive scans with the same result before the scan
+ * callback function is called.
+ */
+const REQUIRED_CONSECUTIVE_RESULT_COUNT = 3;
 
 /**
  * Maps `getUserMedia` function potential thrown error names to error reason
@@ -72,9 +80,20 @@ export class Scanner extends SceneComponent<
    * Barcode reader instance.
    */
   private reader: BrowserBarcodeReader = new BrowserBarcodeReader(
-    250,
+    100,
     DECODE_HINTS
   );
+
+  /**
+   * Previous scan result that used to improve accuracy by requiring multiple
+   * consecutive successful scans with same result.
+   */
+  private previousScanResult?: Result;
+
+  /**
+   * Number of consecutive identical results.
+   */
+  private consecutiveResultCount = 0;
 
   /**
    * Video element reference which will display the camera feed.
@@ -132,6 +151,13 @@ export class Scanner extends SceneComponent<
   }
 
   /**
+   * Stops the reader from decoding.
+   */
+  public componentWillUnmount() {
+    this.reader.stopContinuousDecode();
+  }
+
+  /**
    * Stream decoding callback function.
    */
   public decodeCallback: DecodeContinuouslyCallback = async result => {
@@ -139,8 +165,21 @@ export class Scanner extends SceneComponent<
       return;
     }
 
-    this.reader.stopContinuousDecode();
-    this.props.onScan(result.getText());
+    if (
+      this.previousScanResult !== undefined &&
+      this.previousScanResult.getText() === result.getText()
+    ) {
+      this.consecutiveResultCount += 1;
+    } else {
+      this.consecutiveResultCount = 0;
+    }
+
+    if (this.consecutiveResultCount === REQUIRED_CONSECUTIVE_RESULT_COUNT) {
+      this.reader.stopContinuousDecode();
+      this.props.onScan(result.getText());
+    }
+
+    this.previousScanResult = result;
   };
 }
 

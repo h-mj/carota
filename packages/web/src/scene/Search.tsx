@@ -204,7 +204,8 @@ export class Search extends SceneComponent<
     }
 
     const foodstuff = await this.props.views!.load(
-      this.props.foodstuffs!.findByBarcode(barcode)
+      this.props.foodstuffs!.findByBarcode(barcode),
+      1
     );
 
     if (foodstuff === undefined) {

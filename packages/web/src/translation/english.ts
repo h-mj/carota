@@ -36,7 +36,9 @@ export const english: Translation = {
         barcode: {
           label: "Barcode",
           reasons: {
-            nonempty: "Please enter a barcode."
+            conflict: "Foodstuff with this barcode already exists",
+            nonempty: "Please enter a barcode.",
+            regexp: "Please enter a valid barcode."
           }
         },
         name: {
@@ -201,6 +203,13 @@ export const english: Translation = {
       },
       submit: "Create account →",
       title: "Create account"
+    },
+    Scanner: {
+      reasons: {
+        notAllowed: "notAllowed",
+        notFound: "notFound",
+        unknown: "unknown"
+      }
     },
     Search: {
       title: "Search"

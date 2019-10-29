@@ -36,7 +36,9 @@ export const estonian: Translation = {
         barcode: {
           label: "Triipkood",
           reasons: {
-            nonempty: "Palun sisestage toiduaine triipkood."
+            conflict: "Sellise triipkoodiga touaine on juba listatud.",
+            nonempty: "Palun sisestage toiduaine triipkood.",
+            regexp: "Palun sisestage korrketne toiduaine triipkood."
           }
         },
         name: {
@@ -201,6 +203,13 @@ export const estonian: Translation = {
       },
       submit: "Looge konto →",
       title: "Looge konto"
+    },
+    Scanner: {
+      reasons: {
+        notAllowed: "notAllowed",
+        notFound: "notFound",
+        unknown: "unknown"
+      }
     },
     Search: {
       title: "Otsing"

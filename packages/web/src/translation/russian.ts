@@ -36,7 +36,9 @@ export const russian: Translation = {
         barcode: {
           label: "Штрих-код",
           reasons: {
-            nonempty: "Пожалуйста, введите штрих-код."
+            conflict: "Продукт с таким штрих-кодом уже существуют.",
+            nonempty: "Пожалуйста, введите штрих-код.",
+            regexp: "Пожалуйста, введите правильный штрих-код."
           }
         },
         name: {
@@ -204,6 +206,13 @@ export const russian: Translation = {
       },
       submit: "Создать аккаунт →",
       title: "Создать аккаунт"
+    },
+    Scanner: {
+      reasons: {
+        notAllowed: "notAllowed",
+        notFound: "notFound",
+        unknown: "unknown"
+      }
     },
     Search: {
       title: "Поиск"

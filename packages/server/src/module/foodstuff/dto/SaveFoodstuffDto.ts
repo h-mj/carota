@@ -1,5 +1,6 @@
 import { deviate, Success } from "deviator";
 
+import { isBarcode } from "../../../utility/validators";
 import { UNITS } from "../Foodstuff";
 
 const quantity = deviate()
@@ -15,7 +16,7 @@ const optionalQuantity = deviate()
 export const saveFoodstuffDtoValidator = deviate().object().shape({
   id: deviate().optional().string().guid(),
   name: deviate().string().trim().nonempty(),
-  barcode: deviate().optional().string().trim().regexp(/^\d{13}$/),
+  barcode: deviate().optional().then(isBarcode),
   unit: deviate().options(UNITS),
   packageSize: optionalQuantity.positive(),
   pieceQuantity: optionalQuantity.positive(),

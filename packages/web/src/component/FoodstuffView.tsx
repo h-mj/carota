@@ -44,7 +44,7 @@ interface FoodstuffViewProps {
   /**
    * Foodstuff selection callback.
    */
-  select: (foodstuff: Foodstuff, quantity: number) => void;
+  onSelect: (foodstuff: Foodstuff) => void;
 }
 
 /**
@@ -127,14 +127,11 @@ export class FoodstuffView extends TranslatedComponent<
   }
 
   /**
-   * Shows quantity selection when user clicks on this component.
+   * Selects provided foodstuff on component click.
    */
   @action
   private handleSelect = () => {
-    this.props.views!.push("center", "Quantity", {
-      foodstuff: this.props.foodstuff,
-      select: this.props.select
-    });
+    this.props.onSelect(this.props.foodstuff);
   };
 
   /**

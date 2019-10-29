@@ -63,6 +63,24 @@ export class FoodstuffsStore {
   }
 
   /**
+   * Retrieves foodstuff with specified barcode.
+   */
+  public async findByBarcode(barcode: string) {
+    const result = await Rpc.call("foodstuff", "findByBarcode", { barcode });
+
+    if (!result.ok) {
+      this.rootStore.views.notifyUnknownError();
+      return undefined;
+    }
+
+    if (result.value === undefined) {
+      return undefined;
+    }
+
+    return new Foodstuff(result.value, this);
+  }
+
+  /**
    * Saves specified foodstuff entity.
    */
   public async save(body: Body<"foodstuff", "save">) {

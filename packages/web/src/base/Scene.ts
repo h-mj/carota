@@ -14,6 +14,7 @@ export type SceneNames =
   | "Name"
   | "Quantity"
   | "Register"
+  | "Scanner"
   | "Search"
   | "Unknown";
 
@@ -29,6 +30,7 @@ const SCENE_TO_COMPONENT_NAME = {
   Name: "Name",
   Quantity: "Quantity",
   Register: "Register",
+  Scanner: "Scanner",
   Search: "Search",
   Unknown: "Unknown"
 } as const;
@@ -81,7 +83,8 @@ const to = <TName extends SceneNames, TParameterNames extends string>(
 const ROUTES = {
   "/": to("Diet"),
   "/logout": to("Logout"),
-  "/register/{invitationId}": to("Register", "invitationId")
+  "/register/{invitationId}": to("Register", "invitationId"),
+  "/scan": to("Scanner")
 } as const;
 
 /**

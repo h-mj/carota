@@ -3,11 +3,13 @@ import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 
+import { Scenes } from "../base/Scene";
 import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
 import { FoodstuffView } from "../component/FoodstuffView";
+import { Plus } from "../component/Plus";
 import { SceneTitle } from "../component/SceneTitle";
 import { TextField } from "../component/TextField";
 import { Foodstuff } from "../model/Foodstuff";
@@ -69,6 +71,11 @@ export class Search extends SceneComponent<
   @observable private completed = false;
 
   /**
+   * Pushed scanner scene reference.
+   */
+  private scanner?: Scenes;
+
+  /**
    * Sets the name of this scene.
    */
   public constructor(
@@ -94,6 +101,7 @@ export class Search extends SceneComponent<
             type="search"
           />
         </Controls>
+
         {this.completed && (
           <AutoOverflow>
             <Results>
@@ -101,13 +109,15 @@ export class Search extends SceneComponent<
                 <FoodstuffView
                   key={foodstuff.id}
                   foodstuff={foodstuff}
-                  select={this.props.select}
+                  onSelect={this.handleSelect}
                 />
               ))}
               <Add onClick={this.showEditor}>+</Add>
             </Results>
           </AutoOverflow>
         )}
+
+        <Plus fixed={true} onClick={this.showScanner} />
       </>
     );
   }
@@ -151,6 +161,50 @@ export class Search extends SceneComponent<
   @action
   private showEditor = () => {
     this.props.views!.push("left", "Edit", { name: this.query });
+  };
+
+  /**
+   * Shows the scanner on scan button press.
+   */
+  @action
+  private showScanner = () => {
+    this.scanner = this.props.views!.push("main", "Scanner", {
+      onScan: this.handleScan
+    });
+  };
+
+  /**
+   * Scanning callback function.
+   */
+  @action
+  private handleScan = async (barcode?: string) => {
+    this.props.views!.pop(this.scanner!);
+
+    if (barcode === undefined) {
+      return alert("Scanning failed");
+    }
+
+    const foodstuff = await this.props.views!.load(
+      this.props.foodstuffs!.findByBarcode(barcode)
+    );
+
+    if (foodstuff === undefined) {
+      return alert("Not found");
+    }
+
+    this.handleSelect(foodstuff);
+  };
+
+  /**
+   * Shows quantity selection when user either user clicks on one of the search
+   * results or successfully finds a product using its barcode.
+   */
+  @action
+  private handleSelect = (foodstuff: Foodstuff) => {
+    this.props.views!.push("center", "Quantity", {
+      foodstuff,
+      select: this.props.select
+    });
   };
 }
 

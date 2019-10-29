@@ -8,6 +8,10 @@ import {
   deleteFoodstuffDtoValidator
 } from "./dto/DeleteFoodstuffDto";
 import {
+  FindFoodstuffByBarcode,
+  findFoodstuffByBarcodeValidator
+} from "./dto/FindFoodstuffByBarcodeDto";
+import {
   SaveFoodstuffDto,
   saveFoodstuffDtoValidator
 } from "./dto/SaveFoodstuffDto";
@@ -30,6 +34,16 @@ export class FoodstuffController {
     await this.foodstuffService.delete(dto, principal);
 
     return true as const;
+  }
+
+  @Post("findByBarcode")
+  public async findByBarcode(
+    @Body(new ValidationPipe(findFoodstuffByBarcodeValidator))
+    dto: FindFoodstuffByBarcode
+  ) {
+    const foodstuff = await this.foodstuffService.findByBarcode(dto);
+
+    return foodstuff === undefined ? undefined : foodstuff.toDto();
   }
 
   @Post("save")

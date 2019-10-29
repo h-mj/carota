@@ -15,7 +15,7 @@ export class Foodstuff {
   @Column()
   public name!: string;
 
-  @Column("text", { nullable: true })
+  @Column("text", { nullable: true, unique: true })
   public barcode!: string | null;
 
   @Column("enum", { enum: UNITS })

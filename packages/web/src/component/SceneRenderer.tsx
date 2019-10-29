@@ -12,6 +12,7 @@ import { Logout } from "../scene/Logout";
 import { Name } from "../scene/Name";
 import { Quantity } from "../scene/Quantity";
 import { Register } from "../scene/Register";
+import { Scanner } from "../scene/Scanner";
 import { Search } from "../scene/Search";
 import { Unknown } from "../scene/Unknown";
 import { fadeIn } from "../styling/animations";
@@ -31,6 +32,7 @@ const SCENE_COMPONENTS = {
   Name: Name,
   Quantity: Quantity,
   Register: Register,
+  Scanner: Scanner,
   Search: Search,
   Unknown: Unknown
 } as const;

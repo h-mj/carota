@@ -3,9 +3,11 @@ import { Transaction, TransactionRepository } from "typeorm";
 import { Injectable } from "@nestjs/common";
 
 import { InvalidIdError } from "../../error/InvalidIdError";
+import { UniqueConstraintError } from "../../error/UniqueConstraintErrors";
 import { authorize } from "../../utility/authorization";
 import { Account } from "../account/Account";
 import { DeleteFoodstuffDto } from "./dto/DeleteFoodstuffDto";
+import { FindFoodstuffByBarcode } from "./dto/FindFoodstuffByBarcodeDto";
 import { SaveFoodstuffDto } from "./dto/SaveFoodstuffDto";
 import { SearchFoodstuffDto } from "./dto/SearchFoodstuffDto";
 import { Foodstuff } from "./Foodstuff";
@@ -31,19 +33,37 @@ export class FoodstuffService {
   }
 
   @Transaction()
+  public async findByBarcode(
+    dto: FindFoodstuffByBarcode,
+    @TransactionRepository() foodstuffRepository?: FoodstuffRepository
+  ) {
+    return foodstuffRepository!.findOne({ barcode: dto.barcode });
+  }
+
+  @Transaction()
   public async save(
     dto: SaveFoodstuffDto,
     principal: Account,
     @TransactionRepository() foodstuffRepository?: FoodstuffRepository
   ) {
-    if (dto.id !== undefined) {
-      const foodstuff = await foodstuffRepository!.findOne(dto.id);
+    let previous: Foodstuff | undefined;
 
-      if (foodstuff === undefined) {
+    if (dto.id !== undefined) {
+      previous = await foodstuffRepository!.findOne(dto.id);
+
+      if (previous === undefined) {
         throw new InvalidIdError(Foodstuff, ["id"]);
       }
 
-      authorize(principal, "save", foodstuff);
+      authorize(principal, "save", previous);
+    }
+
+    if (
+      dto.barcode !== undefined &&
+      (previous === undefined || previous.barcode !== dto.barcode) &&
+      (await foodstuffRepository!.findOne({ barcode: dto.barcode }))
+    ) {
+      throw new UniqueConstraintError(["barcode"]);
     }
 
     const template = foodstuffRepository!.create({
@@ -73,6 +93,7 @@ export class FoodstuffService {
           .split(/ +/)
           .map(string => `%${string}%`)
       })
+      .orWhere("barcode = :barcode", { barcode: dto.query })
       .limit(32)
       .getMany();
   }

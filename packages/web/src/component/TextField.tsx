@@ -13,6 +13,12 @@ import { InputStyleProps, InputWrapper } from "./InputWrapper";
  */
 interface TextFieldProps<TName extends string, TOptional extends boolean> {
   /**
+   * Custom element that will be rendered after the text field and after
+   * optional unit component.
+   */
+  append?: JSX.Element;
+
+  /**
    * Whether or not text field should have autocomplete enabled.
    */
   autoComplete?: boolean;
@@ -163,6 +169,7 @@ export class TextField<
    */
   private renderInput() {
     const {
+      append,
       autoComplete,
       autoFocus,
       disabled,
@@ -202,6 +209,7 @@ export class TextField<
             {unit}
           </Unit>
         )}
+        {append}
       </>
     );
   }

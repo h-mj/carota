@@ -4,18 +4,23 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { NutritionDeclarationDto, Unit } from "server";
 
+import { Scenes } from "../base/Scene";
 import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
 import { Button } from "../component/Button";
 import { Controls, Form, Label } from "../component/collection/form";
+import { Barcode } from "../component/collection/icons";
 import { Group } from "../component/Group";
 import { SceneTitle } from "../component/SceneTitle";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
 import { Foodstuff } from "../model/Foodstuff";
+import { RESET } from "../styling/stylesheets";
+import { styled } from "../styling/theme";
 import { any, append, ErrorsFor } from "../utility/form";
+import { hasVideoInputDevice } from "../utility/scanner";
 
 /**
  * Union of text field input names.
@@ -285,6 +290,16 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   @observable private reasons: ErrorsFor<EditValues> = {};
 
   /**
+   * Whether scan button should be rendered next to the barcode input..
+   */
+  @observable private showScanButton = false;
+
+  /**
+   * Pushed scanner scene reference.
+   */
+  private scanner?: Scenes;
+
+  /**
    * Sets the name of this scene.
    */
   public constructor(props: EditProps & DefaultSceneComponentProps<"Edit">) {
@@ -296,6 +311,8 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
     if (this.props.foodstuff === undefined && this.props.name !== undefined) {
       this.values.name = this.props.name;
     }
+
+    this.checkVideoInputDevices();
   }
 
   /**
@@ -376,6 +393,11 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
    */
   private renderTextField = (name: TextFieldNames) => (
     <TextField
+      append={
+        name === "barcode" && this.showScanButton
+          ? this.renderScanButton()
+          : undefined
+      }
       autoFocus={
         this.props.foodstuff === undefined && name === "name" ? true : undefined
       }
@@ -423,6 +445,19 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   );
 
   /**
+   * Renders the scan button.
+   */
+  public renderScanButton = () => (
+    <ScanButton
+      disabled={this.values.barcode === undefined}
+      type="button"
+      onClick={this.handleScanClick}
+    >
+      <Barcode />
+    </ScanButton>
+  );
+
+  /**
    * Updates input value on value change.
    */
   @action
@@ -439,6 +474,33 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   @action
   private handleNutrientChange = (nutrient: Nutrients, amount: string) => {
     this.values.nutritionDeclaration[nutrient] = amount;
+  };
+
+  /**
+   * Checks whether there are any video input and devices.
+   */
+  @action
+  private checkVideoInputDevices = async () => {
+    this.showScanButton = await hasVideoInputDevice();
+  };
+
+  /**
+   * Shows scanner scene on scan button click.
+   */
+  @action
+  private handleScanClick = () => {
+    this.scanner = this.props.views!.push("main", "Scanner", {
+      onScan: this.handleScan
+    });
+  };
+
+  /**
+   * Sets barcode value after scan completion.
+   */
+  @action
+  private handleScan = (barcode?: string) => {
+    this.props.views!.pop(this.scanner!);
+    this.values.barcode = barcode;
   };
 
   /**
@@ -522,3 +584,28 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
     return result.value;
   }
 }
+
+/**
+ * Scan button which is rendered after the barcode text field.
+ */
+const ScanButton = styled.button`
+  ${RESET};
+
+  width: ${({ theme }) => theme.heightHalf};
+  height: ${({ theme }) => theme.heightHalf};
+
+  border-radius: ${({ theme }) => theme.borderRadius};
+  border: solid 1px ${({ theme }) => theme.borderColor};
+  box-sizing: border-box;
+
+  line-height: 50%;
+  text-align: center;
+
+  & > svg {
+    height: 0.75rem;
+  }
+
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+`;

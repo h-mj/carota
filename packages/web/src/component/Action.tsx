@@ -4,20 +4,25 @@ import { RESET } from "../styling/stylesheets";
 import { css, styled } from "../styling/theme";
 
 /**
- * Plus component props
+ * Action component props
  */
-interface PlusProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ActionProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
-   * Whether plus button should be positioned at the bottom right.
+   * Whether the button should be fixed and positioned at the bottom right.
    */
   fixed?: boolean;
+
+  /**
+   * Component that will be rendered inside the action button.
+   */
+  icon?: JSX.Element;
 }
 
 /**
- * Button component that is used to add some item to somewhere.
+ * Button component that is used to initiate some kind of action.
  */
-export const Plus: React.FunctionComponent<PlusProps> = props => (
-  <PlusButton {...props}>+</PlusButton>
+export const Action: React.FunctionComponent<ActionProps> = props => (
+  <ActionButton {...props}>{props.icon || "+"}</ActionButton>
 );
 
 /**
@@ -30,9 +35,9 @@ const fixedStyle = css`
 `;
 
 /**
- * Circular button with `+` label.
+ * Circular button component.
  */
-export const PlusButton = styled.button<PlusProps>`
+export const ActionButton = styled.button<ActionProps>`
   ${RESET};
 
   z-index: 1;
@@ -46,9 +51,15 @@ export const PlusButton = styled.button<PlusProps>`
   color: ${({ theme }) => theme.colorPrimary};
   font-feature-settings: "case";
   font-size: 2rem;
+  line-height: 50%;
   text-align: center;
 
   cursor: pointer;
+
+  & > svg {
+    display: block;
+    width: 100%;
+  }
 
   ${({ fixed }) => fixed && fixedStyle};
 `;

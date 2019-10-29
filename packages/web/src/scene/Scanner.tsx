@@ -29,7 +29,8 @@ const DECODE_HINTS = new Map([
  */
 const ERROR_REASONS = new Map([
   ["NotAllowedError", "notAllowed" as const],
-  ["NotFoundError", "notFound" as const]
+  ["NotFoundError", "notFound" as const],
+  ["SecurityError", "insecure" as const]
 ]);
 
 /**
@@ -111,6 +112,11 @@ export class Scanner extends SceneComponent<
    */
   public async componentDidMount() {
     try {
+      if (navigator.mediaDevices === undefined) {
+        this.reason = "insecure";
+        return;
+      }
+
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: { exact: "environment" } }
       });

@@ -206,6 +206,7 @@ export const estonian: Translation = {
     },
     Scanner: {
       reasons: {
+        insecure: "insecure",
         notAllowed: "notAllowed",
         notFound: "notFound",
         unknown: "unknown"

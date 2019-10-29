@@ -209,6 +209,7 @@ export const russian: Translation = {
     },
     Scanner: {
       reasons: {
+        insecure: "insecure",
         notAllowed: "notAllowed",
         notFound: "notFound",
         unknown: "unknown"

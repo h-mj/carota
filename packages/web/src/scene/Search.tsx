@@ -8,13 +8,15 @@ import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
+import { Action } from "../component/Action";
+import { Barcode } from "../component/collection/icons";
 import { FoodstuffView } from "../component/FoodstuffView";
-import { Plus } from "../component/Plus";
 import { SceneTitle } from "../component/SceneTitle";
 import { TextField } from "../component/TextField";
 import { Foodstuff } from "../model/Foodstuff";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
+import { hasVideoInputDevice } from "../utility/scanner";
 
 /**
  * Query string validator.
@@ -71,6 +73,11 @@ export class Search extends SceneComponent<
   @observable private completed = false;
 
   /**
+   * Whether the scan button should be shown.
+   */
+  @observable private showScanButton = false;
+
+  /**
    * Pushed scanner scene reference.
    */
   private scanner?: Scenes;
@@ -82,6 +89,8 @@ export class Search extends SceneComponent<
     props: SearchProps & DefaultSceneComponentProps<"Search">
   ) {
     super("Search", props);
+
+    this.checkVideoInputDevices();
   }
 
   /**
@@ -117,10 +126,20 @@ export class Search extends SceneComponent<
           </AutoOverflow>
         )}
 
-        <Plus fixed={true} onClick={this.showScanner} />
+        {this.showScanButton && (
+          <Action fixed={true} icon={<Barcode />} onClick={this.showScanner} />
+        )}
       </>
     );
   }
+
+  /**
+   * Checks whether there are any video input devices.
+   */
+  @action
+  private checkVideoInputDevices = async () => {
+    this.showScanButton = await hasVideoInputDevice();
+  };
 
   /**
    * Updates query value and sets or overrides a timeout after which search

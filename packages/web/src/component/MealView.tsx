@@ -8,11 +8,11 @@ import { Scenes } from "../base/Scene";
 import { Foodstuff } from "../model/Foodstuff";
 import { Meal } from "../model/Meal";
 import { styled } from "../styling/theme";
+import { Action } from "./Action";
 import { DishesView } from "./DishesView";
 import { Edit } from "./Edit";
 import { ItemHeader, ItemHeaderText, ItemHeaderTexts } from "./ItemHeader";
 import { NutrientQuantities } from "./NutrientQuantities";
-import { Plus } from "./Plus";
 
 /**
  * Meal view component props.
@@ -74,7 +74,7 @@ export class MealView extends Component<MealViewProps> {
             <DishesView meal={meal} draggableType={this.props.draggableType} />
 
             <PlusContainer>
-              <Plus onClick={this.showSearch} />
+              <Action onClick={this.showSearch} />
             </PlusContainer>
           </Container>
         )}

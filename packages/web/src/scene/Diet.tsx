@@ -7,10 +7,10 @@ import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
+import { Action } from "../component/Action";
 import { DateSelect } from "../component/DateSelect/DateSelect";
 import { Head } from "../component/Head";
 import { MealsView } from "../component/MealsView";
-import { Plus } from "../component/Plus";
 import { TrashCan } from "../component/TrashCan";
 import { styled } from "../styling/theme";
 
@@ -75,7 +75,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
           <MealsView draggableType={this.draggableType} />
         </DragDropContext>
 
-        <Plus fixed={true} onClick={this.handleAddClick} />
+        <Action fixed={true} onClick={this.handleAddClick} />
       </Container>
     );
   }

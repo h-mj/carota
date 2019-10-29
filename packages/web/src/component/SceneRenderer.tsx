@@ -16,7 +16,7 @@ import { Scanner } from "../scene/Scanner";
 import { Search } from "../scene/Search";
 import { Unknown } from "../scene/Unknown";
 import { fadeIn } from "../styling/animations";
-import { keyframes, styled } from "../styling/theme";
+import { css, keyframes, styled } from "../styling/theme";
 import { Overlay } from "./Overlay";
 import { TitleBar } from "./TitleBar";
 
@@ -96,12 +96,13 @@ export class SceneRenderer extends Component<SceneRendererProps> {
       <SceneOverlay
         aria-hidden={overlaid ? true : undefined}
         onClick={this.handleClick}
+        first={first}
         overlaid={overlaid}
         position={position}
         ref={this.overlayRef}
         tabIndex={-1}
       >
-        <Container>
+        <Container first={first} overlaid={overlaid} position={position}>
           {!first && <TitleBar onClose={this.pop} title={scene.title} />}
           {this.renderSceneComponent()}
         </Container>
@@ -179,11 +180,16 @@ const FOCUSABLE_ELEMENT_SELECTOR =
   'a[href], area[href], button:not([disabled]), embed, iframe, input:not([disabled]), object, select:not([disabled]), textarea:not([disabled]), *[tabindex]:not([tabindex^="-"]), *[contenteditable]';
 
 /**
- * Scene overlay props.
+ * Scene information props.
  */
-interface SceneOverlayProps {
+interface SceneInfoProps {
   /**
-   * Whether there's another overlay above this one.
+   * Whether rendered scene is the first.
+   */
+  first: boolean;
+
+  /**
+   * Whether there's another scene above the rendered scene.
    */
   overlaid: boolean;
 
@@ -196,7 +202,7 @@ interface SceneOverlayProps {
 /**
  * Extended overlay component that contains a scene component.
  */
-const SceneOverlay = styled(Overlay)<SceneOverlayProps>`
+const SceneOverlay = styled(Overlay)<SceneInfoProps>`
   display: flex;
   flex-direction: "row";
   align-items: center;
@@ -205,7 +211,8 @@ const SceneOverlay = styled(Overlay)<SceneOverlayProps>`
 
   background-color: ${({ theme }) => theme.backgroundColorTranslucent};
 
-  animation: ${fadeIn} ${({ theme }) => theme.transition};
+  animation: ${({ first, theme }) =>
+    first ? "none" : css`${fadeIn} ${theme.transition}`};
 
   pointer-events: ${({ overlaid }) => (overlaid ? "none" : "initial")};
 `;
@@ -239,7 +246,7 @@ const slideUp = keyframes`
 /**
  * Container that is rendered on the whole screen.
  */
-const Main = styled.div`
+const Main = styled.div<SceneInfoProps>`
   width: 100%;
   height: 100%;
   max-height: 100%;
@@ -253,7 +260,8 @@ const Main = styled.div`
   animation: none;
 
   @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
-    animation: ${slideUp} ${({ theme }) => theme.transition};
+    animation: ${({ first, theme }) =>
+      first ? "none" : css`${slideUp} ${theme.transition}`};
   }
 `;
 

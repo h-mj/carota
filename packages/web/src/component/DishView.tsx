@@ -9,7 +9,7 @@ import { Dish } from "../model/Dish";
 import { Foodstuff } from "../model/Foodstuff";
 import { styled } from "../styling/theme";
 import { CheckBox } from "./CheckBox";
-import { Edit } from "./Edit";
+import { EditButton } from "./EditButton";
 import { ItemHeader, ItemHeaderText, ItemHeaderTexts } from "./ItemHeader";
 import { NutrientQuantities } from "./NutrientQuantities";
 
@@ -76,7 +76,7 @@ export class DishView extends Component<DishViewProps> {
 
               <ItemHeaderText>{dish.foodstuff.name}</ItemHeaderText>
 
-              <Edit onClick={this.handleEditClick} />
+              <EditButton onClick={this.handleEditClick} />
             </ItemHeaderTexts>
 
             <NutrientQuantities model={dish} />

@@ -10,7 +10,7 @@ import { Meal } from "../model/Meal";
 import { styled } from "../styling/theme";
 import { Action } from "./Action";
 import { DishesView } from "./DishesView";
-import { Edit } from "./Edit";
+import { EditButton } from "./EditButton";
 import { ItemHeader, ItemHeaderText, ItemHeaderTexts } from "./ItemHeader";
 import { NutrientQuantities } from "./NutrientQuantities";
 
@@ -65,7 +65,7 @@ export class MealView extends Component<MealViewProps> {
             <ItemHeader {...provided.dragHandleProps}>
               <ItemHeaderTexts>
                 <ItemHeaderText>{name}</ItemHeaderText>
-                <Edit onClick={this.showNameEdit} />
+                <EditButton onClick={this.showNameEdit} />
               </ItemHeaderTexts>
 
               {showQuantities && <NutrientQuantities model={meal} />}

@@ -17,15 +17,15 @@ interface EditProps {
 /**
  * Edit button component.
  */
-export class Edit extends React.Component<EditProps> {
+export class EditButton extends React.Component<EditProps> {
   /**
    * Renders the Edit button.
    */
   public render() {
     return (
-      <EditButton onClick={this.props.onClick}>
+      <Button onClick={this.props.onClick}>
         <Pencil />
-      </EditButton>
+      </Button>
     );
   }
 }
@@ -33,16 +33,13 @@ export class Edit extends React.Component<EditProps> {
 /**
  * Edit button that enables meal entry editing.
  */
-const EditButton = styled.button`
+const Button = styled.button`
   ${RESET};
 
   width: ${({ theme }) => theme.heightHalf};
   height: ${({ theme }) => theme.heightHalf};
 
   flex-shrink: 0;
-
-  border-radius: ${({ theme }) => theme.borderRadius};
-  box-shadow: inset 0 0 0 1px ${({ theme }) => theme.borderColor};
 
   color: ${({ theme }) => theme.colorSecondary};
   line-height: 50%;

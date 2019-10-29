@@ -594,14 +594,9 @@ const ScanButton = styled.button`
   width: ${({ theme }) => theme.heightHalf};
   height: ${({ theme }) => theme.heightHalf};
 
-  border-radius: ${({ theme }) => theme.borderRadius};
-  border: solid 1px ${({ theme }) => theme.borderColor};
-  box-sizing: border-box;
-
-  line-height: 50%;
-  text-align: center;
-
   & > svg {
+    display: block;
+    width: 100%;
     height: 0.75rem;
   }
 

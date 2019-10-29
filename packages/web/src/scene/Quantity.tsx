@@ -9,12 +9,11 @@ import {
   SceneComponent
 } from "../base/SceneComponent";
 import { Button } from "../component/Button";
-import { Controls, Form } from "../component/collection/form";
+import { Controls, Form, Title } from "../component/collection/form";
 import { SceneTitle } from "../component/SceneTitle";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
 import { Foodstuff } from "../model/Foodstuff";
-import { styled } from "../styling/theme";
 import { any, ErrorsFor } from "../utility/form";
 
 /**
@@ -157,7 +156,7 @@ export class Quantity extends SceneComponent<
       <Form noValidate={true} onSubmit={this.handleSubmit}>
         <SceneTitle scene={this.props.scene} title={this.translation.title} />
 
-        <Name>{this.props.foodstuff.name}</Name>
+        <Title>{this.props.foodstuff.name}</Title>
 
         {this.renderUnitInput()}
         {this.renderQuantityInput()}
@@ -266,10 +265,3 @@ export class Quantity extends SceneComponent<
     }
   };
 }
-
-/**
- * Foodstuff name wrapper component.
- */
-const Name = styled.div`
-  color: ${({ theme }) => theme.colorPrimary};
-`;

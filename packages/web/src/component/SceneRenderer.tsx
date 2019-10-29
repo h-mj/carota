@@ -211,6 +211,32 @@ const SceneOverlay = styled(Overlay)<SceneOverlayProps>`
 `;
 
 /**
+ * Left component slide right animation.
+ */
+const slideRight = keyframes`
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+`;
+
+/**
+ * Center component slide up animation.
+ */
+const slideUp = keyframes`
+  from {
+    transform: translateY(50%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+`;
+
+/**
  * Container that is rendered on the whole screen.
  */
 const Main = styled.div`
@@ -223,35 +249,11 @@ const Main = styled.div`
   flex-direction: column;
 
   background-color: ${({ theme }) => theme.backgroundColor};
-`;
 
-/**
- * Left component slide right animation.
- */
-const slideRight = keyframes`
-  from {
-    opacity: 0;
-    transform: translateX(-100%);
-  }
+  animation: none;
 
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-`;
-
-/**
- * Center component slide up animation.
- */
-const slideUp = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(50%);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
+    animation: ${slideUp} ${({ theme }) => theme.transition};
   }
 `;
 

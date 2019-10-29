@@ -21,8 +21,7 @@ import { RESET } from "../styling/stylesheets";
  * Barcode decode hints.
  */
 const DECODE_HINTS = new Map<DecodeHintType, unknown>([
-  [DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13]],
-  [DecodeHintType.TRY_HARDER, true]
+  [DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13]]
 ]);
 
 /**
@@ -119,10 +118,10 @@ export class Scanner extends SceneComponent<
    */
   public render() {
     return (
-      <>
+      <Container>
         {this.reason !== undefined && this.translation.reasons[this.reason]}
         <Video ref={this.videoRef} />
-      </>
+      </Container>
     );
   }
 
@@ -175,7 +174,6 @@ export class Scanner extends SceneComponent<
     }
 
     if (this.consecutiveResultCount === REQUIRED_CONSECUTIVE_RESULT_COUNT) {
-      this.reader.stopContinuousDecode();
       this.props.onScan(result.getText());
     }
 
@@ -184,11 +182,23 @@ export class Scanner extends SceneComponent<
 }
 
 /**
- * Camera feed vide component.
+ * Container that wraps `Video` component so that it does not overflow.
+ */
+const Container = styled.div`
+  flex-grow: 1;
+  overflow: hidden;
+`;
+
+/**
+ * Camera feed video component.
  */
 const Video = styled.video`
   ${RESET};
 
+  display: block;
+
   width: 100%;
   height: 100%;
+
+  object-fit: cover;
 `;

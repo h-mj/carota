@@ -7,7 +7,7 @@ import {
 } from "../base/SceneComponent";
 import { Button } from "../component/Button";
 import { Controls, Form } from "../component/collection/form";
-import { SceneTitle } from "../component/SceneTitle";
+import { TitleBar } from "../component/TitleBar";
 import { styled } from "../styling/theme";
 
 /**
@@ -70,18 +70,20 @@ export class Confirmation extends SceneComponent<
    */
   public render() {
     return (
-      <Form as="div">
-        <SceneTitle scene={this.props.scene} title={this.translation.title} />
+      <>
+        <TitleBar close={this.props.scene} title={this.translation.title} />
 
-        <Message>{this.props.message}</Message>
+        <Form as="div">
+          <Message>{this.props.message}</Message>
 
-        <Controls>
-          <Button onClick={this.cancel} secondary={true}>
-            {this.translation.cancel}
-          </Button>
-          <Button onClick={this.confirm}>{this.translation.confirm}</Button>
-        </Controls>
-      </Form>
+          <Controls>
+            <Button onClick={this.cancel} secondary={true}>
+              {this.translation.cancel}
+            </Button>
+            <Button onClick={this.confirm}>{this.translation.confirm}</Button>
+          </Controls>
+        </Form>
+      </>
     );
   }
 

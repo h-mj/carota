@@ -11,8 +11,8 @@ import {
 import { Action } from "../component/Action";
 import { Barcode } from "../component/collection/icons";
 import { FoodstuffView } from "../component/FoodstuffView";
-import { SceneTitle } from "../component/SceneTitle";
 import { TextField } from "../component/TextField";
+import { TitleBar } from "../component/TitleBar";
 import { Foodstuff } from "../model/Foodstuff";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
@@ -114,7 +114,7 @@ export class Search extends SceneComponent<
   public render() {
     return (
       <>
-        <SceneTitle scene={this.props.scene} title={this.translation.title} />
+        <TitleBar close={this.props.scene} title={this.translation.title} />
 
         <Controls>
           <TextField

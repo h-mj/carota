@@ -13,7 +13,7 @@ import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
-import { SceneTitle } from "../component/SceneTitle";
+import { TitleBar } from "../component/TitleBar";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
 import { getEnvironmentCameraMediaStream } from "../utility/scanner";
@@ -105,7 +105,7 @@ export class Scanner extends SceneComponent<
   public render() {
     return (
       <Container>
-        <SceneTitle scene={this.props.scene} title={this.translation.title} />
+        <TitleBar close={this.props.scene} title={this.translation.title} />
         <Video ref={this.videoRef} />
         <Mask />
       </Container>

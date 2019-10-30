@@ -10,9 +10,9 @@ import {
 } from "../base/SceneComponent";
 import { Button } from "../component/Button";
 import { Controls, Form, Title } from "../component/collection/form";
-import { SceneTitle } from "../component/SceneTitle";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
+import { TitleBar } from "../component/TitleBar";
 import { Foodstuff } from "../model/Foodstuff";
 import { any, ErrorsFor } from "../utility/form";
 
@@ -153,18 +153,22 @@ export class Quantity extends SceneComponent<
    */
   public render() {
     return (
-      <Form noValidate={true} onSubmit={this.handleSubmit}>
-        <SceneTitle scene={this.props.scene} title={this.translation.title} />
+      <>
+        <TitleBar close={this.props.scene} title={this.translation.title} />
 
-        <Title>{this.props.foodstuff.name}</Title>
+        <Form noValidate={true} onSubmit={this.handleSubmit}>
+          <Title>{this.props.foodstuff.name}</Title>
 
-        {this.renderUnitInput()}
-        {this.renderQuantityInput()}
+          {this.renderUnitInput()}
+          {this.renderQuantityInput()}
 
-        <Controls>
-          <Button invalid={any(this.reasons)}>{this.translation.select}</Button>
-        </Controls>
-      </Form>
+          <Controls>
+            <Button invalid={any(this.reasons)}>
+              {this.translation.select}
+            </Button>
+          </Controls>
+        </Form>
+      </>
     );
   }
 

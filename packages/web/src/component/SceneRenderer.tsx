@@ -18,7 +18,6 @@ import { Unknown } from "../scene/Unknown";
 import { fadeIn } from "../styling/animations";
 import { css, keyframes, styled } from "../styling/theme";
 import { Overlay } from "./Overlay";
-import { TitleBar } from "./TitleBar";
 
 /**
  * Object where scene component names are mapped to their classes.
@@ -103,7 +102,6 @@ export class SceneRenderer extends Component<SceneRendererProps> {
         tabIndex={-1}
       >
         <Container first={first} overlaid={overlaid} position={position}>
-          {!first && <TitleBar onClose={this.pop} title={scene.title} />}
           {this.renderSceneComponent()}
         </Container>
       </SceneOverlay>

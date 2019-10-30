@@ -13,9 +13,9 @@ import { Button } from "../component/Button";
 import { Controls, Form, Label } from "../component/collection/form";
 import { Barcode } from "../component/collection/icons";
 import { Group } from "../component/Group";
-import { SceneTitle } from "../component/SceneTitle";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
+import { TitleBar } from "../component/TitleBar";
 import { Foodstuff } from "../model/Foodstuff";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
@@ -322,9 +322,9 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
     const { foodstuff, scene, views } = this.props;
 
     return (
-      <Form noValidate={true} onSubmit={this.handleSubmit}>
-        <SceneTitle
-          scene={scene}
+      <>
+        <TitleBar
+          close={scene}
           title={
             foodstuff === undefined
               ? this.translation.addTitle
@@ -332,57 +332,61 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
           }
         />
 
-        <Group>
-          {this.renderTextField("name")}
-          {this.renderTextField("barcode")}
-        </Group>
+        <Form noValidate={true} onSubmit={this.handleSubmit}>
+          <Group>
+            {this.renderTextField("name")}
+            {this.renderTextField("barcode")}
+          </Group>
 
-        <Group>
-          <Select
-            errorMessage={this.messageFor("unit")}
-            invalid={this.reasons.unit !== undefined}
-            label={this.translation.inputs.unit.label}
-            name="unit"
-            onChange={this.handleChange}
-            options={[
-              { label: views!.translation.units.g, value: "g" },
-              { label: views!.translation.units.ml, value: "ml" }
-            ]}
-            value={this.values.unit}
-          />
+          <Group>
+            <Select
+              errorMessage={this.messageFor("unit")}
+              invalid={this.reasons.unit !== undefined}
+              label={this.translation.inputs.unit.label}
+              name="unit"
+              onChange={this.handleChange}
+              options={[
+                { label: views!.translation.units.g, value: "g" },
+                { label: views!.translation.units.ml, value: "ml" }
+              ]}
+              value={this.values.unit}
+            />
 
-          {this.renderTextField("packageSize")}
-          {this.renderTextField("pieceQuantity")}
-        </Group>
+            {this.renderTextField("packageSize")}
+            {this.renderTextField("pieceQuantity")}
+          </Group>
 
-        <Group>
-          <Label>
-            {this.translation.nutrientsLabel}
-            {this.values.unit !== undefined &&
-              this.translation.nutrientsLabelPer.replace(
-                "{unit}",
-                this.props.views!.translation.units[this.values.unit]
-              )}
-            :
-          </Label>
+          <Group>
+            <Label>
+              {this.translation.nutrientsLabel}
+              {this.values.unit !== undefined &&
+                this.translation.nutrientsLabelPer.replace(
+                  "{unit}",
+                  this.props.views!.translation.units[this.values.unit]
+                )}
+              :
+            </Label>
 
-          {NUTRIENTS.map(this.renderNutrientTextField)}
-        </Group>
+            {NUTRIENTS.map(this.renderNutrientTextField)}
+          </Group>
 
-        <Controls>
-          {foodstuff !== undefined && (
-            <Button
-              invalid={any(this.reasons)}
-              secondary={true}
-              type="button"
-              onClick={this.showConfirmation}
-            >
-              {this.translation.delete}
+          <Controls>
+            {foodstuff !== undefined && (
+              <Button
+                invalid={any(this.reasons)}
+                secondary={true}
+                type="button"
+                onClick={this.showConfirmation}
+              >
+                {this.translation.delete}
+              </Button>
+            )}
+            <Button invalid={any(this.reasons)}>
+              {this.translation.submit}
             </Button>
-          )}
-          <Button invalid={any(this.reasons)}>{this.translation.submit}</Button>
-        </Controls>
-      </Form>
+          </Controls>
+        </Form>
+      </>
     );
   }
 

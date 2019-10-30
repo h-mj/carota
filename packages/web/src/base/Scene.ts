@@ -1,5 +1,3 @@
-import { observable } from "mobx";
-
 import { SceneComponentNames, SceneComponentProps } from "./SceneComponent";
 
 /**
@@ -143,12 +141,6 @@ export class Scene<TName extends SceneNames> {
    * Scene rendering position.
    */
   public readonly position: RenderPosition;
-
-  /**
-   * Scene title which if set is used by `TitleBar` component to display
-   * currently active scene title.
-   */
-  @observable public title?: string;
 
   /**
    * Creates a new instance of `Scene`.

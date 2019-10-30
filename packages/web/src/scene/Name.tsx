@@ -9,9 +9,9 @@ import {
 } from "../base/SceneComponent";
 import { Button } from "../component/Button";
 import { Controls, Form } from "../component/collection/form";
-import { SceneTitle } from "../component/SceneTitle";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
+import { TitleBar } from "../component/TitleBar";
 import { styled } from "../styling/theme";
 import { any, ErrorsFor } from "../utility/form";
 
@@ -160,9 +160,9 @@ export class Name extends SceneComponent<"Name", NameProps, NameTranslation> {
     }));
 
     return (
-      <Form noValidate={true} onSubmit={this.handleSubmit}>
-        <SceneTitle
-          scene={this.props.scene}
+      <>
+        <TitleBar
+          close={this.props.scene}
           title={
             this.props.name !== undefined
               ? this.translation.editTitle
@@ -170,51 +170,53 @@ export class Name extends SceneComponent<"Name", NameProps, NameTranslation> {
           }
         />
 
-        {options.length > 0 && (
-          <>
-            <Select
-              errorMessage={
-                this.reasons.selectedName !== undefined
-                  ? this.translation.selectReasons[this.reasons.selectedName]
-                  : undefined
-              }
-              helperMessage={this.translation.selectHelper}
-              invalid={this.reasons.selectedName !== undefined}
-              name="meal"
-              options={options}
-              onChange={this.handleNameSelect}
-              value={this.values.selectedName}
-            />
+        <Form noValidate={true} onSubmit={this.handleSubmit}>
+          {options.length > 0 && (
+            <>
+              <Select
+                errorMessage={
+                  this.reasons.selectedName !== undefined
+                    ? this.translation.selectReasons[this.reasons.selectedName]
+                    : undefined
+                }
+                helperMessage={this.translation.selectHelper}
+                invalid={this.reasons.selectedName !== undefined}
+                name="meal"
+                options={options}
+                onChange={this.handleNameSelect}
+                value={this.values.selectedName}
+              />
 
-            <Or>
-              <span>{this.translation.or}</span>
-            </Or>
-          </>
-        )}
+              <Or>
+                <span>{this.translation.or}</span>
+              </Or>
+            </>
+          )}
 
-        <TextField
-          autoFocus={options.length === 0}
-          errorMessage={
-            this.reasons.name !== undefined
-              ? this.translation.textFieldReasons[this.reasons.name]
-              : undefined
-          }
-          helperMessage={this.translation.textFieldHelper}
-          invalid={this.reasons.name !== undefined}
-          label={this.translation.label}
-          name="name"
-          onChange={this.handleNameChange}
-          value={this.values.name}
-        />
+          <TextField
+            autoFocus={options.length === 0}
+            errorMessage={
+              this.reasons.name !== undefined
+                ? this.translation.textFieldReasons[this.reasons.name]
+                : undefined
+            }
+            helperMessage={this.translation.textFieldHelper}
+            invalid={this.reasons.name !== undefined}
+            label={this.translation.label}
+            name="name"
+            onChange={this.handleNameChange}
+            value={this.values.name}
+          />
 
-        <Controls>
-          <Button invalid={any(this.reasons)}>
-            {this.props.name !== undefined
-              ? this.translation.editSubmit
-              : this.translation.createSubmit}
-          </Button>
-        </Controls>
-      </Form>
+          <Controls>
+            <Button invalid={any(this.reasons)}>
+              {this.props.name !== undefined
+                ? this.translation.editSubmit
+                : this.translation.createSubmit}
+            </Button>
+          </Controls>
+        </Form>
+      </>
     );
   }
 

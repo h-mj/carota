@@ -1,6 +1,8 @@
+import { inject } from "mobx-react";
 import * as React from "react";
 
 import { Component } from "../base/Component";
+import { Scene, Scenes } from "../base/Scene";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
 
@@ -9,19 +11,21 @@ import { styled } from "../styling/theme";
  */
 interface TitleBarProps {
   /**
-   * Close button click callback function.
+   * Either scene that will be popped from the scene stack or close callback
+   * function that will be called on close button click.
    */
-  onClose: () => void;
+  close: Scenes | (() => void);
 
   /**
    * Title bar title text.
    */
-  title?: string;
+  title: string;
 }
 
 /**
  * Title bar component that is used to close underlying scene.
  */
+@inject("views")
 export class TitleBar extends Component<TitleBarProps> {
   /**
    * Renders the title bar alongside close button.
@@ -29,7 +33,7 @@ export class TitleBar extends Component<TitleBarProps> {
   public render() {
     return (
       <Bar>
-        {this.props.title !== undefined && <Title>{this.props.title}</Title>}
+        <Title>{this.props.title}</Title>
         <Close onClick={this.handleClick}>✗</Close>
       </Bar>
     );
@@ -39,7 +43,11 @@ export class TitleBar extends Component<TitleBarProps> {
    * Calls `onClose` prop callback function on close button click.
    */
   private handleClick: React.MouseEventHandler<HTMLButtonElement> = () => {
-    this.props.onClose();
+    if (this.props.close instanceof Scene) {
+      this.props.views!.pop(this.props.close);
+    } else {
+      this.props.close();
+    }
   };
 }
 

@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { RESET } from "../styling/stylesheets";
 import { css, styled } from "../styling/theme";
+import { Plus } from "./collection/icons";
 
 /**
  * Action component props
@@ -22,7 +23,7 @@ interface ActionProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
  * Button component that is used to initiate some kind of action.
  */
 export const Action: React.FunctionComponent<ActionProps> = props => (
-  <ActionButton {...props}>{props.icon || "+"}</ActionButton>
+  <ActionButton {...props}>{props.icon || <Plus />}</ActionButton>
 );
 
 /**
@@ -47,12 +48,6 @@ export const ActionButton = styled.button<ActionProps>`
 
   border-radius: 50%;
   background-color: ${({ theme }) => theme.colorActive};
-
-  color: ${({ theme }) => theme.colorPrimary};
-  font-feature-settings: "case";
-  font-size: 2rem;
-  line-height: 50%;
-  text-align: center;
 
   cursor: pointer;
 

@@ -104,15 +104,19 @@ export class Scanner extends SceneComponent<
    */
   public render() {
     return (
-      <Container>
+      <RelativeFlex>
         <TitleBar
           onClose={this.handleClose}
           title={this.translation.title}
           scanner={true}
         />
+
         <Video ref={this.videoRef} />
-        <Mask />
-      </Container>
+
+        <RelativeFlex>
+          <Mask />
+        </RelativeFlex>
+      </RelativeFlex>
     );
   }
 
@@ -177,13 +181,15 @@ export class Scanner extends SceneComponent<
 }
 
 /**
- * Container that wraps `Video` component so that it does not overflow.
+ * Relatively positioned flex component.
  */
-const Container = styled.div`
+const RelativeFlex = styled.div`
   position: relative;
 
+  display: flex;
+  flex-direction: column;
+
   flex-grow: 1;
-  overflow: hidden;
 `;
 
 /**

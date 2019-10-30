@@ -190,7 +190,7 @@ export class Register extends SceneComponent<
             <Select
               errorMessage={
                 this.reasons.sex !== undefined
-                  ? this.translation.inputs.sex.reasons[this.reasons.sex!]
+                  ? this.translation.inputs.sex.reasons[this.reasons.sex]
                   : undefined
               }
               invalid={this.reasons.sex !== undefined}

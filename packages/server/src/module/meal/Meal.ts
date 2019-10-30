@@ -45,7 +45,7 @@ export class Meal {
   public toDto = () => ({
     id: this.id,
     name: this.name,
-    date: this.date!,
+    date: this.date!, // can be `null` only if meal has been unlinked from the list and not yet relinked,
     dishes:
       this.dishes != undefined ? this.dishes.map(dish => dish.toDto()) : []
   });

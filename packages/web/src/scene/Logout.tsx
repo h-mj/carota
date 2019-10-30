@@ -30,11 +30,9 @@ export class Logout extends SceneComponent<"Logout"> {
    * Function that logs user out and redirects to home page after some timeout.
    */
   private async logout() {
-    const { accounts, views } = this.props;
+    await this.props.views!.load(undefined);
 
-    await views!.load(undefined);
-
-    accounts!.logout();
-    views!.index();
+    this.props.accounts!.logout();
+    this.props.views!.index();
   }
 }

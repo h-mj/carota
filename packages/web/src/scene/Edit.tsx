@@ -361,7 +361,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
             {this.values.unit !== undefined &&
               this.translation.nutrientsLabelPer.replace(
                 "{unit}",
-                this.props.views!.translation.units[this.values.unit!]
+                this.props.views!.translation.units[this.values.unit]
               )}
             :
           </Label>
@@ -412,7 +412,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
       unit={
         (name === "packageSize" || name === "pieceQuantity") &&
         this.values.unit !== undefined
-          ? this.props.views!.translation.units[this.values.unit!]
+          ? this.props.views!.translation.units[this.values.unit]
           : undefined
       }
       value={this.values[name]}

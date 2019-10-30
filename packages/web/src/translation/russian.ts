@@ -213,7 +213,8 @@ export const russian: Translation = {
         notAllowed: "notAllowed",
         notFound: "notFound",
         unknown: "unknown"
-      }
+      },
+      title: "Сканер"
     },
     Search: {
       title: "Поиск"

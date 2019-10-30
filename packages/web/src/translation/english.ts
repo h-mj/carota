@@ -210,7 +210,8 @@ export const english: Translation = {
         notAllowed: "notAllowed",
         notFound: "notFound",
         unknown: "unknown"
-      }
+      },
+      title: "Scanner"
     },
     Search: {
       title: "Search"

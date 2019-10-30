@@ -49,7 +49,7 @@ export const LIGHT: Readonly<Theme> = {
   backgroundColor: "rgb(255, 255, 255)",
   backgroundColorDarker: "rgb(235, 235, 235)",
   backgroundColorDisabled: "rgb(245, 245, 245)",
-  backgroundColorTranslucent: "rgba(0, 0, 0, 0.25)",
+  backgroundColorTranslucent: "rgba(0, 0, 0, 0.4)",
   borderColor: "rgb(222, 222, 222)",
   borderRadius: "0.4375rem",
   colorBlue: "rgb(107, 156, 222)",

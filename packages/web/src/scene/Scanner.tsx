@@ -1,7 +1,6 @@
 import { observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import styled from "styled-components";
 
 import {
   BarcodeFormat,
@@ -15,7 +14,9 @@ import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
+import { SceneTitle } from "../component/SceneTitle";
 import { RESET } from "../styling/stylesheets";
+import { styled } from "../styling/theme";
 
 /**
  * Barcode decode hints.
@@ -63,6 +64,11 @@ interface ScannerTranslation {
    * Occurred error message translations.
    */
   reasons: Record<Reason, string>;
+
+  /**
+   * Title bar text.
+   */
+  title: string;
 }
 
 /**
@@ -119,8 +125,11 @@ export class Scanner extends SceneComponent<
   public render() {
     return (
       <Container>
+        <SceneTitle scene={this.props.scene} title={this.translation.title} />
+
         {this.reason !== undefined && this.translation.reasons[this.reason]}
         <Video ref={this.videoRef} />
+        <Mask />
       </Container>
     );
   }
@@ -185,6 +194,8 @@ export class Scanner extends SceneComponent<
  * Container that wraps `Video` component so that it does not overflow.
  */
 const Container = styled.div`
+  position: relative;
+
   flex-grow: 1;
   overflow: hidden;
 `;
@@ -201,4 +212,22 @@ const Video = styled.video`
   height: 100%;
 
   object-fit: cover;
+`;
+
+/**
+ * Mask that guides user to scan the barcode in specific position and rotation.
+ */
+const Mask = styled.div`
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translateX(-50%) translateY(-50%);
+
+  width: 80vmin;
+  height: 60vmin;
+
+  border-radius: ${({ theme }) => theme.borderRadius};
+  box-shadow: 0 0 0 100vmax ${({ theme }) => theme.backgroundColorTranslucent};
 `;

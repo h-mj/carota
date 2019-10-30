@@ -210,7 +210,8 @@ export const estonian: Translation = {
         notAllowed: "notAllowed",
         notFound: "notFound",
         unknown: "unknown"
-      }
+      },
+      title: "Skanner"
     },
     Search: {
       title: "Otsing"

@@ -30,5 +30,13 @@ export const hasEnvironmentCamera = async () => {
     return false;
   }
 
-  return (await getEnvironmentCameraMediaStream()) !== undefined;
+  const stream = await getEnvironmentCameraMediaStream();
+
+  if (stream === undefined) {
+    return false;
+  }
+
+  stream.getTracks().forEach(track => track.stop());
+
+  return true;
 };

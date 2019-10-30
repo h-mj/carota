@@ -86,6 +86,11 @@ export class Scanner extends SceneComponent<
   private videoRef = React.createRef<HTMLVideoElement>();
 
   /**
+   * Created user media stream.
+   */
+  private stream?: MediaStream;
+
+  /**
    * Sets the name of this component.
    */
   public constructor(
@@ -111,14 +116,14 @@ export class Scanner extends SceneComponent<
    * Creates environment camera media stream and decodes it using `BrowserBarcodeReader` instance.
    */
   public async componentDidMount() {
-    const stream = await getEnvironmentCameraMediaStream();
+    this.stream = await getEnvironmentCameraMediaStream();
 
-    if (stream === undefined) {
+    if (this.stream === undefined) {
       return;
     }
 
     this.reader.decodeFromStream(
-      stream,
+      this.stream,
       this.videoRef.current!,
       this.decodeCallback
     );
@@ -129,6 +134,10 @@ export class Scanner extends SceneComponent<
    */
   public componentWillUnmount() {
     this.reader.stopContinuousDecode();
+
+    if (this.stream !== undefined) {
+      this.stream.getTracks().forEach(track => track.stop());
+    }
   }
 
   /**

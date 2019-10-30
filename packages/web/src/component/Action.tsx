@@ -51,7 +51,7 @@ export const ActionButton = styled.button<ActionProps>`
 
   cursor: pointer;
 
-  & > svg {
+  & > * {
     display: block;
     width: 100%;
   }

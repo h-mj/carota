@@ -211,6 +211,11 @@ export const russian: Translation = {
       title: "Сканер"
     },
     Search: {
+      reasons: {
+        minLength: "Запрос должен содержать не менее 3 символов.",
+        notFound:
+          "Продукт найден. Пожалуйста, попробуйте найти его по названию."
+      },
       title: "Поиск"
     },
     Tabs: {

@@ -208,6 +208,10 @@ export const english: Translation = {
       title: "Scanner"
     },
     Search: {
+      reasons: {
+        minLength: "Search query must be at least 3 characters long.",
+        notFound: "Foodstuff was not found. Please try to find it by name."
+      },
       title: "Search"
     },
     Tabs: {

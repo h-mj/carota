@@ -1,4 +1,4 @@
-import { deviate } from "deviator";
+import { deviate, Failure } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -26,6 +26,11 @@ const validate = deviate<string>()
   .minLength(3);
 
 /**
+ * Potential occurred error reason string.
+ */
+type Reason = Failure<typeof validate> | "notFound";
+
+/**
  * Search scene component props.
  */
 interface SearchProps {
@@ -39,6 +44,11 @@ interface SearchProps {
  * Search scene component translation.
  */
 interface SearchTranslation {
+  /**
+   * Error translations.
+   */
+  reasons: Record<Reason, string>;
+
   /**
    * Search scene title translation.
    */
@@ -62,10 +72,15 @@ export class Search extends SceneComponent<
   @observable private query = "";
 
   /**
+   * Occurred error reason.
+   */
+  @observable private reason?: Reason;
+
+  /**
    * ID of a timeout after which search request is made. Used to limit search
    * requests when user is still typing.
    */
-  private timeoutId: number | undefined;
+  private timeoutId = 0;
 
   /**
    * Whether or not search is successfully completed.
@@ -104,6 +119,12 @@ export class Search extends SceneComponent<
         <Controls>
           <TextField
             autoFocus={true}
+            errorMessage={
+              this.reason !== undefined
+                ? this.translation.reasons[this.reason]
+                : undefined
+            }
+            invalid={this.reason !== undefined}
             name="query"
             value={this.query}
             onChange={this.handleChange}
@@ -146,13 +167,11 @@ export class Search extends SceneComponent<
    * request is made.
    */
   @action
-  private handleChange = (name: "query", value: string) => {
-    this[name] = value;
+  private handleChange = (_: "query", value: string) => {
+    this.query = value;
+    this.reason = undefined;
 
-    if (this.timeoutId !== undefined) {
-      window.clearTimeout(this.timeoutId);
-    }
-
+    window.clearTimeout(this.timeoutId);
     this.timeoutId = window.setTimeout(this.search, 500);
     this.completed = false;
   };
@@ -168,10 +187,10 @@ export class Search extends SceneComponent<
       await this.props.foodstuffs!.search(result.value);
     } else {
       this.props.foodstuffs!.clear();
+      this.reason = this.query.length > 0 ? result.value : undefined;
     }
 
     this.completed = result.ok;
-    this.timeoutId = undefined;
   };
 
   /**
@@ -205,7 +224,8 @@ export class Search extends SceneComponent<
     );
 
     if (foodstuff === undefined) {
-      return alert("Not found");
+      this.reason = "notFound";
+      return;
     }
 
     this.handleSelect(foodstuff);

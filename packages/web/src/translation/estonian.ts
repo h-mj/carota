@@ -208,6 +208,11 @@ export const estonian: Translation = {
       title: "Skanner"
     },
     Search: {
+      reasons: {
+        minLength: "Päring peab sisaldama vähemalt 3 tähemärki.",
+        notFound:
+          "Toiduainet ei leitud. Palun proovige leida see nimetuse järgi."
+      },
       title: "Otsing"
     },
     Tabs: {

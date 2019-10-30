@@ -107,7 +107,9 @@ const ButtonElement = styled.button<ButtonElementProps>`
     secondary &&
     `border: solid 1px ${invalid ? theme.colorInvalid : theme.borderColor}`};
   ${({ invalid, secondary, theme }) =>
-    secondary && invalid && `box-shadow: inset 0 0 0 1px ${theme.colorInvalid}`};
+    secondary &&
+    invalid &&
+    `box-shadow: inset 0 0 0 1px ${theme.colorInvalid}`};
   ${({ invalid, secondary, theme }) =>
     !secondary &&
     `background-color: ${invalid ? theme.colorInvalid : theme.colorActive}`};

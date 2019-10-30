@@ -108,6 +108,19 @@ export const Barcode: React.FunctionComponent = () => (
 );
 
 /**
+ * Burger SVG icon.
+ */
+export const Burger: React.FunctionComponent = () => (
+  <Icon
+    viewBox="0 0 14 10"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="colorPrimary"
+  >
+    <path d="m1 0h12a1 1 0 0 1 0 2h-12a1 1 0 0 1 0-2m0 4h12a1 1 0 0 1 0 2h-12a1 1 0 0 1 0-2m0 4h12a1 1 0 0 1 0 2h-12a1 1 0 0 1 0-2"/>
+  </Icon>
+);
+
+/**
  * Loading animation component.
  */
 // prettier-ignore

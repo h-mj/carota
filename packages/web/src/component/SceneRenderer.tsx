@@ -16,6 +16,7 @@ import { Search } from "../scene/Search";
 import { Unknown } from "../scene/Unknown";
 import { fadeIn } from "../styling/animations";
 import { css, keyframes, styled } from "../styling/theme";
+import { Menu } from "./Menu";
 import { Overlay } from "./Overlay";
 
 /**
@@ -102,6 +103,8 @@ export class SceneRenderer extends Component<SceneRendererProps> {
         <Container first={first} overlaid={overlaid} position={position}>
           {this.renderSceneComponent()}
         </Container>
+
+        {first && this.props.accounts!.authenticated && <Menu />}
       </SceneOverlay>
     );
   }

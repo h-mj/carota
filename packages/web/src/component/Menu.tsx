@@ -43,8 +43,8 @@ export class Menu extends TranslatedComponent<"Menu"> {
           <MenuOverlay onClick={this.handleOverlayClick}>
             <MenuContainer>
               <Navigation>
-                <Item scene={new Scene("Diet", {}, {})}>Daily intake</Item>
-                <Item scene={new Scene("Logout", {}, {})}>Sign out</Item>
+                <Item onClick={this.handleRedirect} scene={new Scene("Diet", {}, {})}>Daily intake</Item>
+                <Item onClick={this.handleRedirect} scene={new Scene("Logout", {}, {})}>Sign out</Item>
               </Navigation>
             </MenuContainer>
           </MenuOverlay>
@@ -61,6 +61,17 @@ export class Menu extends TranslatedComponent<"Menu"> {
     this.visible = true;
   };
 
+  /**
+   * Hides the navigation menu on redirect.
+   */
+  @action
+  private handleRedirect = () => {
+    this.visible = false;
+  };
+
+  /**
+   * Hides the menu if user clicks on overlay.
+   */
   @action
   private handleOverlayClick: React.MouseEventHandler<
     HTMLDivElement

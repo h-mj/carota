@@ -14,6 +14,12 @@ interface AnchorProps {
   className?: string;
 
   /**
+   * Callback function that is called before redirecting. If return value is
+   * `false`, redirection is cancelled.
+   */
+  onClick?: () => void | false;
+
+  /**
    * Scene to which this anchor will redirect to.
    */
   scene: Scenes;
@@ -44,6 +50,11 @@ export class Anchor extends Component<AnchorProps> {
    */
   private handleClick: React.MouseEventHandler<HTMLAnchorElement> = event => {
     event.preventDefault();
+
+    if (this.props.onClick !== undefined && this.props.onClick() === false) {
+      return;
+    }
+
     this.props.views!.redirect(this.props.scene);
   };
 }

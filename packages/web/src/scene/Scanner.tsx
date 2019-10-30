@@ -38,7 +38,7 @@ interface ScannerProps {
   /**
    * Scan callback function.
    */
-  onScan: (barcode: string) => void;
+  onScan: (barcode?: string) => void;
 }
 
 /**
@@ -105,7 +105,7 @@ export class Scanner extends SceneComponent<
   public render() {
     return (
       <Container>
-        <TitleBar close={this.props.scene} title={this.translation.title} />
+        <TitleBar onClose={this.handleClose} title={this.translation.title} />
         <Video ref={this.videoRef} />
         <Mask />
       </Container>
@@ -162,6 +162,13 @@ export class Scanner extends SceneComponent<
     }
 
     this.previousScanResult = result;
+  };
+
+  /**
+   * Calls scan callback with `undefined` value.
+   */
+  public handleClose = () => {
+    this.props.onScan(undefined);
   };
 }
 

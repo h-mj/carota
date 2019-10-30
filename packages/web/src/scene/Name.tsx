@@ -39,7 +39,7 @@ interface NameProps {
   /**
    * Name selection callback function.
    */
-  onSelect: (name: string) => void;
+  onSelect: (name?: string) => void;
 }
 
 /**
@@ -162,7 +162,7 @@ export class Name extends SceneComponent<"Name", NameProps, NameTranslation> {
     return (
       <>
         <TitleBar
-          close={this.props.scene}
+          onClose={this.handleClose}
           title={
             this.props.name !== undefined
               ? this.translation.editTitle
@@ -236,6 +236,13 @@ export class Name extends SceneComponent<"Name", NameProps, NameTranslation> {
 
     return names;
   }
+
+  /**
+   * Cancels the name selection.
+   */
+  private handleClose = () => {
+    this.props.onSelect();
+  };
 
   /**
    * Updates name field when select value changes.

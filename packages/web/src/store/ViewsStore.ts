@@ -227,20 +227,6 @@ export class ViewsStore {
   }
 
   /**
-   * Hides all scenes that are before specified `scene` in active scene stack.
-   */
-  @action
-  public popUntil(scene: Scenes) {
-    if (!this._scenes.includes(scene)) {
-      return;
-    }
-
-    while (this._scenes[this._scenes.length - 1] !== scene) {
-      this._scenes.pop();
-    }
-  }
-
-  /**
    * Creates a notification with given text and type and adds it to an array of
    * active notifications. If timeout is not zero, timeout is created which
    * removes the notification after `timeout` seconds.

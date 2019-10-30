@@ -71,7 +71,7 @@ export class Confirmation extends SceneComponent<
   public render() {
     return (
       <>
-        <TitleBar close={this.props.scene} title={this.translation.title} />
+        <TitleBar onClose={this.cancel} title={this.translation.title} />
 
         <Form as="div">
           <Message>{this.props.message}</Message>

@@ -37,7 +37,7 @@ interface SearchProps {
   /**
    * Foodstuff select callback function.
    */
-  select: (foodstuff: Foodstuff, quantity: number) => void;
+  onSelect: (foodstuff?: Foodstuff, quantity?: number) => void;
 }
 
 /**
@@ -93,9 +93,14 @@ export class Search extends SceneComponent<
   @observable private showScanButton = false;
 
   /**
-   * Pushed scanner scene reference.
+   * Pushed scene reference, either `Edit` or `Scanner` scene.
    */
-  private scanner?: Scenes;
+  private scene?: Scenes;
+
+  /**
+   * Currently selected foodstuff.
+   */
+  private foodstuff?: Foodstuff;
 
   /**
    * Sets the name of this scene.
@@ -114,7 +119,7 @@ export class Search extends SceneComponent<
   public render() {
     return (
       <>
-        <TitleBar close={this.props.scene} title={this.translation.title} />
+        <TitleBar onClose={this.handleClose} title={this.translation.title} />
 
         <Controls>
           <TextField
@@ -139,7 +144,7 @@ export class Search extends SceneComponent<
                 <FoodstuffView
                   key={foodstuff.id}
                   foodstuff={foodstuff}
-                  onSelect={this.handleSelect}
+                  onSelect={this.handleFoodstuffSelect}
                 />
               ))}
               <Add onClick={this.showEditor}>+</Add>
@@ -198,7 +203,18 @@ export class Search extends SceneComponent<
    */
   @action
   private showEditor = () => {
-    this.props.views!.push("left", "Edit", { name: this.query });
+    this.scene = this.props.views!.push("left", "Edit", {
+      name: this.query,
+      onSave: this.hideEditor
+    });
+  };
+
+  /**
+   * Hides food editor, called by `Edit` scene itself.
+   */
+  @action
+  private hideEditor = () => {
+    this.props.views!.pop(this.scene!);
   };
 
   /**
@@ -206,7 +222,7 @@ export class Search extends SceneComponent<
    */
   @action
   private showScanner = () => {
-    this.scanner = this.props.views!.push("main", "Scanner", {
+    this.scene = this.props.views!.push("main", "Scanner", {
       onScan: this.handleScan
     });
   };
@@ -215,8 +231,12 @@ export class Search extends SceneComponent<
    * Scanning callback function.
    */
   @action
-  private handleScan = async (barcode: string) => {
-    this.props.views!.pop(this.scanner!);
+  private handleScan = async (barcode?: string) => {
+    this.props.views!.pop(this.scene!);
+
+    if (barcode === undefined) {
+      return;
+    }
 
     const foodstuff = await this.props.views!.load(
       this.props.foodstuffs!.findByBarcode(barcode),
@@ -228,7 +248,7 @@ export class Search extends SceneComponent<
       return;
     }
 
-    this.handleSelect(foodstuff);
+    this.handleFoodstuffSelect(foodstuff);
   };
 
   /**
@@ -236,11 +256,34 @@ export class Search extends SceneComponent<
    * results or successfully finds a product using its barcode.
    */
   @action
-  private handleSelect = (foodstuff: Foodstuff) => {
-    this.props.views!.push("center", "Quantity", {
+  private handleFoodstuffSelect = (foodstuff: Foodstuff) => {
+    this.foodstuff = foodstuff;
+
+    this.scene = this.props.views!.push("center", "Quantity", {
       foodstuff,
-      select: this.props.select
+      onSelect: this.handleQuantitySelect
     });
+  };
+
+  /**
+   * Selects current foodstuff of specified quantity if defined.
+   */
+  @action
+  private handleQuantitySelect = (quantity?: number) => {
+    this.props.views!.pop(this.scene!);
+
+    if (quantity === undefined) {
+      return;
+    }
+
+    this.props.onSelect(this.foodstuff, quantity);
+  };
+
+  /**
+   * Select nothing on close.
+   */
+  public handleClose = () => {
+    this.props.onSelect();
   };
 }
 

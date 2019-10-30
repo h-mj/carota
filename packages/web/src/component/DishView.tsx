@@ -6,7 +6,6 @@ import { Draggable } from "react-beautiful-dnd";
 import { Component } from "../base/Component";
 import { Scenes } from "../base/Scene";
 import { Dish } from "../model/Dish";
-import { Foodstuff } from "../model/Foodstuff";
 import { styled } from "../styling/theme";
 import { CheckBox } from "./CheckBox";
 import { EditButton } from "./EditButton";
@@ -116,15 +115,20 @@ export class DishView extends Component<DishViewProps> {
     this.scene = this.props.views!.push("center", "Quantity", {
       foodstuff: this.props.dish!.foodstuff,
       quantity: this.props.dish!.quantity,
-      select: this.handleSelect
+      onSelect: this.handleSelect
     });
   };
 
   /**
    * Updates provided dish' quantity on quantity selection.
    */
-  private handleSelect = (_: Foodstuff, quantity: number) => {
+  private handleSelect = (quantity?: number) => {
     this.props.views!.pop(this.scene!);
+
+    if (quantity === undefined) {
+      return;
+    }
+
     this.props.dish!.setQuantity(quantity);
   };
 }

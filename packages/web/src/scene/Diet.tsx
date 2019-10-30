@@ -3,6 +3,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { DragDropContext, DragStart, DropResult } from "react-beautiful-dnd";
 
+import { Scenes } from "../base/Scene";
 import {
   DefaultSceneComponentProps,
   SceneComponent
@@ -44,6 +45,11 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
    * Current draggable ID.
    */
   private draggableId?: string;
+
+  /**
+   * Pushed `Name` scene reference.
+   */
+  private scene?: Scenes;
 
   /**
    * Sets the name of this scene.
@@ -162,19 +168,24 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
    */
   @action
   private handleAddClick = () => {
-    this.props.views!.push("center", "Name", {
+    this.scene = this.props.views!.push("center", "Name", {
       onSelect: this.handleNameSelect
     });
   };
 
   /**
-   * Creates a new meal with specified name. Used as a callback function for
-   * `Name` scene, that is used to select meal name.
+   * If `name` is defined, creates a new meal with specified name. Used as a
+   * callback function for `Name` scene, that is used to select meal name.
    */
   @action
-  private handleNameSelect = (name: string) => {
+  private handleNameSelect = (name?: string) => {
+    this.props.views!.pop(this.scene!);
+
+    if (name === undefined) {
+      return;
+    }
+
     this.props.meals!.create(name, this.date);
-    this.props.views!.popUntil(this.props.scene);
   };
 }
 

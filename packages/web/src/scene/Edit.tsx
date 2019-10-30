@@ -80,6 +80,11 @@ interface EditProps {
   foodstuff?: Foodstuff;
 
   /**
+   * Function that is called after save.
+   */
+  onSave: () => void;
+
+  /**
    * Initial created foodstuff name.
    */
   name?: string;
@@ -295,9 +300,9 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   @observable private showScanButton = false;
 
   /**
-   * Pushed scanner scene reference.
+   * Pushed scene reference, either `Scanner` or `Confirmation`.
    */
-  private scanner?: Scenes;
+  private scene?: Scenes;
 
   /**
    * Sets the name of this scene.
@@ -319,12 +324,12 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
    * Renders foodstuff creation and editing form.
    */
   public render() {
-    const { foodstuff, scene, views } = this.props;
+    const { foodstuff, onSave, views } = this.props;
 
     return (
       <>
         <TitleBar
-          close={scene}
+          onClose={onSave}
           title={
             foodstuff === undefined
               ? this.translation.addTitle
@@ -493,7 +498,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
    */
   @action
   private handleScanClick = () => {
-    this.scanner = this.props.views!.push("main", "Scanner", {
+    this.scene = this.props.views!.push("main", "Scanner", {
       onScan: this.handleScan
     });
   };
@@ -502,8 +507,13 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
    * Sets barcode value after scan completion.
    */
   @action
-  private handleScan = (barcode: string) => {
-    this.props.views!.pop(this.scanner!);
+  private handleScan = (barcode?: string) => {
+    this.props.views!.pop(this.scene!);
+
+    if (barcode === undefined) {
+      return;
+    }
+
     this.values.barcode = barcode;
   };
 
@@ -524,7 +534,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
     );
 
     if (result.ok && error === undefined) {
-      this.props.views!.pop(this.props.scene);
+      this.props.onSave();
     }
 
     this.reasons = append(result.ok ? {} : result.value, error);
@@ -534,7 +544,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
    * Shows confirmation screen when user clicks on delete button.
    */
   private showConfirmation = () => {
-    this.props.views!.push("center", "Confirmation", {
+    this.scene = this.props.views!.push("center", "Confirmation", {
       confirm: this.handleConfirmation,
       message: this.translation.confirm
     });
@@ -545,6 +555,8 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
    */
   @action
   private handleConfirmation = async (confirmed: boolean) => {
+    this.props.views!.pop(this.scene!);
+
     if (!confirmed) {
       return;
     }

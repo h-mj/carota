@@ -33,7 +33,7 @@ interface QuantityProps {
   /**
    * Foodstuff selection callback.
    */
-  select: (foodstuff: Foodstuff, quantity: number) => void;
+  onSelect: (quantity?: number) => void;
 }
 
 /**
@@ -154,7 +154,7 @@ export class Quantity extends SceneComponent<
   public render() {
     return (
       <>
-        <TitleBar close={this.props.scene} title={this.translation.title} />
+        <TitleBar onClose={this.handleClose} title={this.translation.title} />
 
         <Form noValidate={true} onSubmit={this.handleSubmit}>
           <Title>{this.props.foodstuff.name}</Title>
@@ -258,14 +258,20 @@ export class Quantity extends SceneComponent<
     const result = validate(this.values);
 
     if (result.ok) {
-      const quantity =
+      this.props.onSelect(
         result.value.unit === "pcs"
           ? result.value.quantity * this.props.foodstuff.pieceQuantity!
-          : result.value.quantity;
-
-      this.props.select(this.props.foodstuff, quantity);
+          : result.value.quantity
+      );
     } else {
       this.reasons = result.value;
     }
+  };
+
+  /**
+   * Calls quantity selection callback with `undefined` quantity.
+   */
+  private handleClose = () => {
+    this.props.onSelect();
   };
 }

@@ -41,7 +41,7 @@ interface MealViewProps {
 @observer
 export class MealView extends Component<MealViewProps> {
   /**
-   * Pushed search scene.
+   * Pushed scene reference, either `Search` or `Name` scene.
    */
   private scene?: Scenes;
 
@@ -87,7 +87,7 @@ export class MealView extends Component<MealViewProps> {
    */
   public showSearch = () => {
     this.scene = this.props.views!.push("main", "Search", {
-      select: this.select
+      onSelect: this.handleDishSelect
     });
   };
 
@@ -96,7 +96,13 @@ export class MealView extends Component<MealViewProps> {
    * quantity.
    */
   @action
-  private select = (foodstuff: Foodstuff, quantity: number) => {
+  private handleDishSelect = (foodstuff?: Foodstuff, quantity?: number) => {
+    this.props.views!.pop(this.scene!);
+
+    if (foodstuff === undefined || quantity === undefined) {
+      return;
+    }
+
     this.props.meal.createDish(
       foodstuff,
       quantity,
@@ -113,16 +119,21 @@ export class MealView extends Component<MealViewProps> {
   private showNameEdit = () => {
     this.scene = this.props.views!.push("center", "Name", {
       name: this.props.meal.name,
-      onSelect: this.handleSelect
+      onSelect: this.handleNameSelect
     });
   };
 
   /**
-   * Callback function which is called when user selects ma eal name.
+   * Callback function which is called when user selects a meal name.
    */
   @action
-  private handleSelect = async (name: string) => {
+  private handleNameSelect = async (name?: string) => {
     this.props.views!.pop(this.scene!);
+
+    if (name === undefined) {
+      return;
+    }
+
     await this.props.meal.rename(name);
   };
 }

@@ -2,6 +2,7 @@ import { action } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 
+import { Scenes } from "../base/Scene";
 import { TranslatedComponent } from "../base/TranslatedComponent";
 import { Foodstuff } from "../model/Foodstuff";
 import { RESET } from "../styling/stylesheets";
@@ -67,6 +68,11 @@ export class FoodstuffView extends TranslatedComponent<
   FoodstuffViewProps,
   FoodstuffViewTranslation
 > {
+  /**
+   * Pushed `Edit` scene reference.
+   */
+  private scene?: Scenes;
+
   /**
    * Sets the name of this component.
    */
@@ -141,9 +147,18 @@ export class FoodstuffView extends TranslatedComponent<
   private handleEdit: React.MouseEventHandler<HTMLButtonElement> = event => {
     event.stopPropagation();
 
-    this.props.views!.push("left", "Edit", {
+    this.scene = this.props.views!.push("left", "Edit", {
+      onSave: this.handleSave,
       foodstuff: this.props.foodstuff
     });
+  };
+
+  /**
+   * Hides the edit save after saving.
+   */
+  @action
+  private handleSave = () => {
+    this.props.views!.pop(this.scene!);
   };
 }
 

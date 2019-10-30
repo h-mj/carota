@@ -15,14 +15,14 @@ interface TitleBarProps {
   onClose: () => void;
 
   /**
+   * Whether the title bar is used by the scanner.
+   */
+  scanner?: boolean;
+
+  /**
    * Title bar title text.
    */
   title: string;
-
-  /**
-   * Whether title bar's background should be transparent.
-   */
-  transparent?: boolean;
 }
 
 /**
@@ -35,7 +35,7 @@ export class TitleBar extends Component<TitleBarProps> {
    */
   public render() {
     return (
-      <Bar transparent={this.props.transparent === true}>
+      <Bar scanner={this.props.scanner === true}>
         <Title>{this.props.title}</Title>
         <Close onClick={this.props.onClose}>✗</Close>
       </Bar>
@@ -48,9 +48,9 @@ export class TitleBar extends Component<TitleBarProps> {
  */
 interface BarProps {
   /**
-   * Whether the background should be transparent.
+   * Whether the title bar is used by scanner.
    */
-  transparent: boolean;
+  scanner: boolean;
 }
 
 /**
@@ -67,10 +67,13 @@ const Bar = styled.div<BarProps>`
   z-index: 1;
   top: 0;
 
-  background-color: ${({ theme, transparent }) =>
-    transparent ? "transparent" : theme.backgroundColor};
-  border-bottom: solid 1px ${({ theme }) => theme.borderColor};
+  background-color: ${({ theme, scanner }) =>
+    scanner ? "transparent" : theme.backgroundColor};
+  border-bottom: solid 1px
+    ${({ theme, scanner }) => (scanner ? "white" : theme.borderColor)};
   box-sizing: border-box;
+
+  color: ${({ theme, scanner }) => (scanner ? "white" : theme.colorSecondary)};
 `;
 
 /**
@@ -82,8 +85,6 @@ const Title = styled.div`
   display: flex;
   flex-grow: 1;
   align-items: center;
-
-  color: ${({ theme }) => theme.colorSecondary};
 `;
 
 /**
@@ -97,7 +98,6 @@ const Close = styled.button`
   margin-left: auto;
   padding: 0 ${({ theme }) => theme.padding};
 
-  color: ${({ theme }) => theme.colorSecondary};
   font-size: 1.5rem;
   text-align: center;
 

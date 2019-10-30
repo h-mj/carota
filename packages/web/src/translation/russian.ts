@@ -208,12 +208,6 @@ export const russian: Translation = {
       title: "Создать аккаунт"
     },
     Scanner: {
-      reasons: {
-        insecure: "insecure",
-        notAllowed: "notAllowed",
-        notFound: "notFound",
-        unknown: "unknown"
-      },
       title: "Сканер"
     },
     Search: {

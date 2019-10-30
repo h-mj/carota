@@ -205,12 +205,6 @@ export const estonian: Translation = {
       title: "Looge konto"
     },
     Scanner: {
-      reasons: {
-        insecure: "insecure",
-        notAllowed: "notAllowed",
-        notFound: "notFound",
-        unknown: "unknown"
-      },
       title: "Skanner"
     },
     Search: {

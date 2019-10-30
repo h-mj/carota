@@ -498,7 +498,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
    * Sets barcode value after scan completion.
    */
   @action
-  private handleScan = (barcode?: string) => {
+  private handleScan = (barcode: string) => {
     this.props.views!.pop(this.scanner!);
     this.values.barcode = barcode;
   };

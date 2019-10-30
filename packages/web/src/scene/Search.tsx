@@ -196,12 +196,8 @@ export class Search extends SceneComponent<
    * Scanning callback function.
    */
   @action
-  private handleScan = async (barcode?: string) => {
+  private handleScan = async (barcode: string) => {
     this.props.views!.pop(this.scanner!);
-
-    if (barcode === undefined) {
-      return alert("Scanning failed");
-    }
 
     const foodstuff = await this.props.views!.load(
       this.props.foodstuffs!.findByBarcode(barcode),

@@ -1,4 +1,3 @@
-import { observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 
@@ -33,39 +32,19 @@ const DECODE_HINTS = new Map<DecodeHintType, unknown>([
 const REQUIRED_CONSECUTIVE_RESULT_COUNT = 3;
 
 /**
- * Maps `getUserMedia` function potential thrown error names to error reason
- * strings that are used to provide translated error messages.
- */
-const ERROR_REASONS = new Map([
-  ["NotAllowedError", "notAllowed" as const],
-  ["NotFoundError", "notFound" as const],
-  ["SecurityError", "insecure" as const]
-]);
-
-/**
- * Union of potential `getUserMedia` reasons.
- */
-type Reason = NonNullable<ReturnType<typeof ERROR_REASONS["get"]> | "unknown">;
-
-/**
  * Scanner scene component props.
  */
 interface ScannerProps {
   /**
    * Scan callback function.
    */
-  onScan: (barcode?: string) => void;
+  onScan: (barcode: string) => void;
 }
 
 /**
  * Scanner scene component translation.
  */
 interface ScannerTranslation {
-  /**
-   * Occurred error message translations.
-   */
-  reasons: Record<Reason, string>;
-
   /**
    * Title bar text.
    */
@@ -107,11 +86,6 @@ export class Scanner extends SceneComponent<
   private videoRef = React.createRef<HTMLVideoElement>();
 
   /**
-   * Occurred error reason.
-   */
-  @observable private reason?: Reason;
-
-  /**
    * Sets the name of this component.
    */
   public constructor(
@@ -127,8 +101,6 @@ export class Scanner extends SceneComponent<
     return (
       <Container>
         <SceneTitle scene={this.props.scene} title={this.translation.title} />
-
-        {this.reason !== undefined && this.translation.reasons[this.reason]}
         <Video ref={this.videoRef} />
         <Mask />
       </Container>
@@ -139,22 +111,17 @@ export class Scanner extends SceneComponent<
    * Creates environment camera media stream and decodes it using `BrowserBarcodeReader` instance.
    */
   public async componentDidMount() {
-    try {
-      const stream = await getEnvironmentCameraMediaStream();
+    const stream = await getEnvironmentCameraMediaStream();
 
-      if (stream === undefined) {
-        this.reason = "insecure";
-        return;
-      }
-
-      this.reader.decodeFromStream(
-        stream,
-        this.videoRef.current!,
-        this.decodeCallback
-      );
-    } catch (error) {
-      this.reason = ERROR_REASONS.get(error.name) || "unknown";
+    if (stream === undefined) {
+      return;
     }
+
+    this.reader.decodeFromStream(
+      stream,
+      this.videoRef.current!,
+      this.decodeCallback
+    );
   }
 
   /**

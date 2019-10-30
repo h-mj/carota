@@ -205,12 +205,6 @@ export const english: Translation = {
       title: "Create account"
     },
     Scanner: {
-      reasons: {
-        insecure: "insecure",
-        notAllowed: "notAllowed",
-        notFound: "notFound",
-        unknown: "unknown"
-      },
       title: "Scanner"
     },
     Search: {

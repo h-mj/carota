@@ -200,8 +200,24 @@ interface SceneInfoProps {
 }
 
 /**
+ * `SceneOverlay` component open animation.
+ */
+const overlaySlide = keyframes`
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+`;
+
+/**
  * Extended overlay component that contains a scene component.
  */
+// prettier-ignore
 const SceneOverlay = styled(Overlay)<SceneInfoProps>`
   display: flex;
   flex-direction: "row";
@@ -210,17 +226,20 @@ const SceneOverlay = styled(Overlay)<SceneInfoProps>`
     position === "main" ? "center" : position};
 
   background-color: ${({ theme }) => theme.backgroundColorTranslucent};
-
-  animation: ${({ first, theme }) =>
-    first ? "none" : css`${fadeIn} ${theme.transition}`};
+  animation: ${({ first, theme }) => first ? "initial" : css` ${fadeIn} ${theme.transition}`};
 
   pointer-events: ${({ overlaid }) => (overlaid ? "none" : "initial")};
+
+  @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
+    background-color: initial;
+    animation: ${({ first, theme }) => first ? "initial" : css` ${overlaySlide} ${theme.transition}`};;
+  }
 `;
 
 /**
- * Left component slide right animation.
+ * `Left` component open animation.
  */
-const slideRight = keyframes`
+const leftSlide = keyframes`
   from {
     transform: translateX(-100%);
   }
@@ -231,9 +250,9 @@ const slideRight = keyframes`
 `;
 
 /**
- * Center component slide up animation.
+ * `Center` component open animation.
  */
-const slideUp = keyframes`
+const centerSlide = keyframes`
   from {
     transform: translateY(50%);
   }
@@ -246,6 +265,7 @@ const slideUp = keyframes`
 /**
  * Container that is rendered on the whole screen.
  */
+// prettier-ignore
 const Main = styled.div<SceneInfoProps>`
   width: 100%;
   height: 100%;
@@ -257,11 +277,10 @@ const Main = styled.div<SceneInfoProps>`
 
   background-color: ${({ theme }) => theme.backgroundColor};
 
-  animation: none;
+  animation: initial;
 
   @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
-    animation: ${({ first, theme }) =>
-      first ? "none" : css`${slideUp} ${theme.transition}`};
+    animation: ${({ first, theme }) => first ? "initial" : css` ${overlaySlide} ${theme.transition}`};
   }
 `;
 
@@ -270,11 +289,11 @@ const Main = styled.div<SceneInfoProps>`
  */
 const Left = styled(Main)`
   max-width: ${({ theme }) => theme.widthSmall};
-  animation: ${slideRight} ${({ theme }) => theme.transition};
+  animation: ${leftSlide} ${({ theme }) => theme.transition};
 
   @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
     max-width: initial;
-    animation: ${slideUp} ${({ theme }) => theme.transition};
+    animation: initial;
   }
 `;
 
@@ -286,12 +305,14 @@ const Center = styled(Main)`
   height: initial;
 
   border-radius: ${({ theme }) => theme.borderRadius};
-  animation: ${slideUp} ${({ theme }) => theme.transition};
+  animation: ${centerSlide} ${({ theme }) => theme.transition};
 
   @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
-    height: 100%;
     max-width: initial;
+    height: 100%;
+
     border-radius: 0;
+    animation: initial;
   }
 `;
 

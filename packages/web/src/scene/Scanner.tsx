@@ -178,6 +178,8 @@ const Video = styled.video`
   height: 100%;
 
   object-fit: cover;
+
+  background-color: black;
 `;
 
 /**

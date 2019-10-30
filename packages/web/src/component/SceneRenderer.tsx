@@ -1,4 +1,3 @@
-import { action } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 
@@ -94,7 +93,6 @@ export class SceneRenderer extends Component<SceneRendererProps> {
     return (
       <SceneOverlay
         aria-hidden={overlaid ? true : undefined}
-        onClick={this.handleClick}
         first={first}
         overlaid={overlaid}
         position={position}
@@ -118,26 +116,6 @@ export class SceneRenderer extends Component<SceneRendererProps> {
 
     return <SceneComponent scene={scene} {...scene.props} />;
   }
-
-  /**
-   * Pops rendered scene when user clicks on the overlay.
-   */
-  @action
-  private handleClick: React.MouseEventHandler<HTMLDivElement> = event => {
-    if (event.target !== event.currentTarget) {
-      return;
-    }
-
-    this.pop();
-  };
-
-  /**
-   * Pops rendered scene from active scenes.
-   */
-  @action
-  private pop = () => {
-    this.props.views!.pop(this.props.scene);
-  };
 
   /**
    * Focuses on the first focusable overlay element if currently active element is outside this overlay.

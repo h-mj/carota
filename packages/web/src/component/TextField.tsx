@@ -359,9 +359,12 @@ const Input = styled.input<InputProps>`
     opacity: initial;
   }
 
-  /* Hide numeric input spinners on webkit and firefox based browsers. */
   &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
+  &::-webkit-inner-spin-button,
+  &::-webkit-search-decoration,
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-results-button,
+  &::-webkit-search-results-decoration {
     display: none;
   }
 

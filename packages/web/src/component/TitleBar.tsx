@@ -18,6 +18,11 @@ interface TitleBarProps {
    * Title bar title text.
    */
   title: string;
+
+  /**
+   * Whether title bar's background should be transparent.
+   */
+  transparent?: boolean;
 }
 
 /**
@@ -30,7 +35,7 @@ export class TitleBar extends Component<TitleBarProps> {
    */
   public render() {
     return (
-      <Bar>
+      <Bar transparent={this.props.transparent === true}>
         <Title>{this.props.title}</Title>
         <Close onClick={this.props.onClose}>✗</Close>
       </Bar>
@@ -39,9 +44,19 @@ export class TitleBar extends Component<TitleBarProps> {
 }
 
 /**
+ * Bar component props.
+ */
+interface BarProps {
+  /**
+   * Whether the background should be transparent.
+   */
+  transparent: boolean;
+}
+
+/**
  * Title bar component.
  */
-const Bar = styled.div`
+const Bar = styled.div<BarProps>`
   width: 100%;
   height: ${({ theme }) => theme.height};
 
@@ -52,7 +67,8 @@ const Bar = styled.div`
   z-index: 1;
   top: 0;
 
-  background-color: ${({ theme }) => theme.backgroundColor};
+  background-color: ${({ theme, transparent }) =>
+    transparent ? "transparent" : theme.backgroundColor};
   border-bottom: solid 1px ${({ theme }) => theme.borderColor};
   box-sizing: border-box;
 `;

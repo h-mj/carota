@@ -1,5 +1,6 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
+import { ThemeProvider } from "styled-components";
 
 import {
   BarcodeFormat,
@@ -15,7 +16,7 @@ import {
 } from "../base/SceneComponent";
 import { TitleBar } from "../component/TitleBar";
 import { RESET } from "../styling/stylesheets";
-import { styled } from "../styling/theme";
+import { DARK, styled } from "../styling/theme";
 import { getEnvironmentCameraMediaStream } from "../utility/scanner";
 
 /**
@@ -104,11 +105,17 @@ export class Scanner extends SceneComponent<
    */
   public render() {
     return (
-      <Container>
-        <TitleBar onClose={this.handleClose} title={this.translation.title} />
-        <Video ref={this.videoRef} />
-        <Mask />
-      </Container>
+      <ThemeProvider theme={DARK}>
+        <Container>
+          <TitleBar
+            onClose={this.handleClose}
+            title={this.translation.title}
+            transparent={true}
+          />
+          <Video ref={this.videoRef} />
+          <Mask />
+        </Container>
+      </ThemeProvider>
     );
   }
 
@@ -187,6 +194,11 @@ const Container = styled.div`
  */
 const Video = styled.video`
   ${RESET};
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
 
   display: block;
 

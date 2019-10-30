@@ -261,7 +261,7 @@ const DayComponent = styled.div<DayComponentProps>`
   justify-content: center;
 
   color: ${({ theme, isSunday }) =>
-    isSunday ? theme.colorOrange : theme.colorSecondary};
+    isSunday ? theme.colorActive : theme.colorSecondary};
 `;
 
 /**
@@ -323,7 +323,7 @@ const DateComponent = styled.div<DateComponentProps>`
     current || selected
       ? theme.colorPrimary
       : isSunday
-      ? theme.colorOrange
+      ? theme.colorActive
       : theme.colorSecondary};
   font-feature-settings: "tnum" 1;
 
@@ -333,11 +333,11 @@ const DateComponent = styled.div<DateComponentProps>`
   border: solid 1px
     ${({ current, selected, theme }) =>
       selected
-        ? theme.colorOrange
+        ? theme.colorActive
         : current
         ? theme.borderColor
         : "transparent"};
   border-radius: ${({ theme }) => theme.borderRadius};
   box-shadow: ${({ selected, theme }) =>
-    selected ? `inset 0 0 0 1px ${theme.colorOrange}` : "none"};
+    selected ? `inset 0 0 0 1px ${theme.colorActive}` : "none"};
 `;

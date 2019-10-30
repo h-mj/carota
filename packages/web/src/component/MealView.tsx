@@ -155,9 +155,9 @@ const Container = styled.div<ContainerProps>`
   border-radius: ${({ theme }) => theme.borderRadius};
   border: solid 1px
     ${({ isDragging, theme }) =>
-      isDragging ? theme.colorOrange : theme.borderColor};
+      isDragging ? theme.colorActive : theme.borderColor};
   box-shadow: ${({ isDragging, theme }) =>
-    isDragging ? `0 0 0 1px ${theme.colorOrange}` : "none"};
+    isDragging ? `0 0 0 1px ${theme.colorActive}` : "none"};
 
   background-color: ${({ theme }) => theme.backgroundColor};
 

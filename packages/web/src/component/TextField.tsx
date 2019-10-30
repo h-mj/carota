@@ -351,7 +351,7 @@ const Input = styled.input<InputProps>`
 
   color: ${({ theme }) => theme.colorPrimary};
   caret-color: ${({ invalid, theme }) =>
-    invalid ? theme.colorRed : theme.colorOrange};
+    invalid ? theme.colorInvalid : theme.colorActive};
   text-align: ${({ textAlign }) => textAlign || "left"};
 
   &::placeholder {
@@ -385,9 +385,9 @@ const Unit = styled.span<InputStyleProps>`
 
   color: ${({ active, invalid, theme }) =>
     invalid
-      ? theme.colorRed
+      ? theme.colorInvalid
       : active
-      ? theme.colorOrange
+      ? theme.colorActive
       : theme.colorSecondary};
   white-space: nowrap;
 

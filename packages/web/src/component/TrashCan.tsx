@@ -81,7 +81,7 @@ const Container = styled.div<ContainerProps>`
   width: 100%;
   max-height: ${({ isRemovable }) => (isRemovable ? "100%" : "0")};
 
-  box-shadow: inset 0 -2px 0 0 ${({ theme }) => theme.colorRed};
+  box-shadow: inset 0 -2px 0 0 ${({ theme }) => theme.colorInvalid};
   box-sizing: border-box;
 
   background-color: ${({ theme }) => theme.backgroundColor};
@@ -114,5 +114,5 @@ const Delete = styled.div`
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
 
-  color: ${({ theme }) => theme.colorRed};
+  color: ${({ theme }) => theme.colorInvalid};
 `;

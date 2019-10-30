@@ -247,7 +247,7 @@ const Tab = styled.button<TabProps>`
 
   border-bottom: ${({ current, selected, theme }) =>
     selected
-      ? `solid 4px ${theme.colorOrange}`
+      ? `solid 4px ${theme.colorActive}`
       : current
       ? `solid 4px ${theme.borderColor}`
       : `solid 1px ${theme.borderColor}`};

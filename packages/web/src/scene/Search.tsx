@@ -338,7 +338,7 @@ const Add = styled.button`
   align-items: center;
   justify-content: center;
 
-  color: ${({ theme }) => theme.colorOrange};
+  color: ${({ theme }) => theme.colorActive};
   font-size: 3.5rem;
 
   cursor: pointer;

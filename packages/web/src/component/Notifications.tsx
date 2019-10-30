@@ -169,11 +169,11 @@ const NotificationContainer = styled.button<NotificationContainerProps>`
 
   border: solid 1px
     ${({ notificationType, theme }) =>
-      notificationType === "error" ? theme.colorRed : theme.colorGreen};
+      notificationType === "error" ? theme.colorInvalid : theme.borderColor};
   box-shadow: ${({ notificationType, theme }) =>
     notificationType === "error"
-      ? `inset 0 0 0 1px ${theme.colorRed}`
-      : `inset 0 0 0 1px ${theme.colorOrange}`};
+      ? `inset 0 0 0 1px ${theme.colorInvalid}`
+      : `inset 0 0 0 1px ${theme.colorActive}`};
 
   border-radius: ${({ theme }) => theme.borderRadius};
   background-color: ${({ theme }) => theme.backgroundColor};

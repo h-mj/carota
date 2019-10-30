@@ -21,12 +21,10 @@ export interface Theme {
   backgroundColorTranslucent: string;
   borderColor: string;
   borderRadius: string;
-  colorBlue: string;
-  colorGreen: string;
-  colorOrange: string;
-  colorRed: string;
   colorPrimary: string;
   colorSecondary: string;
+  colorActive: string;
+  colorInvalid: string;
   height: string;
   heightHalf: string;
   iconHeight: string;
@@ -52,12 +50,10 @@ export const LIGHT: Readonly<Theme> = {
   backgroundColorTranslucent: "rgba(0, 0, 0, 0.4)",
   borderColor: "rgb(222, 222, 222)",
   borderRadius: "0.4375rem",
-  colorBlue: "rgb(107, 156, 222)",
-  colorGreen: "rgb(67, 176, 42)",
-  colorOrange: "rgb(255, 130, 0)",
-  colorRed: "rgb(222, 0, 0)",
   colorPrimary: "rgba(0, 0, 0, 0.88)",
   colorSecondary: "rgba(0, 0, 0, 0.44)",
+  colorActive: "rgb(255, 130, 0)",
+  colorInvalid: "rgb(222, 0, 0)",
   height: "3.5rem",
   heightHalf: "1.75rem",
   iconHeight: "1rem",
@@ -83,12 +79,10 @@ export const DARK: Readonly<Theme> = {
   backgroundColorTranslucent: "rgba(255, 255, 255, 0.1)",
   borderColor: "rgb(50, 50, 50)",
   borderRadius: "0.4375rem",
-  colorBlue: "rgb(107, 156, 222)",
-  colorGreen: "rgb(67, 176, 42)",
-  colorOrange: "rgb(255, 130, 0)",
-  colorRed: "rgb(222, 0, 0)",
   colorPrimary: "rgb(255, 255, 255)",
   colorSecondary: "rgb(150, 150, 150)",
+  colorActive: "rgb(191, 78, 0)",
+  colorInvalid: "rgb(156, 0, 0)",
   height: "3.5rem",
   heightHalf: "1.75rem",
   iconHeight: "1rem",

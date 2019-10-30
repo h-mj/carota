@@ -46,7 +46,7 @@ export const ActionButton = styled.button<ActionProps>`
   height: ${({ theme }) => theme.height};
 
   border-radius: 50%;
-  background-color: ${({ theme }) => theme.colorOrange};
+  background-color: ${({ theme }) => theme.colorActive};
 
   color: ${({ theme }) => theme.colorPrimary};
   font-feature-settings: "case";

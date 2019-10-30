@@ -154,7 +154,7 @@ interface ContainerProps {
 const Container = styled(ItemHeader)<ContainerProps>`
   box-shadow: ${({ isDragging, theme }) =>
     isDragging
-      ? `inset 0 0 0 2px ${theme.colorOrange}`
+      ? `inset 0 0 0 2px ${theme.colorActive}`
       : `inset 0 1px 0 0 ${theme.borderColor}, 0 1px 0 0 ${theme.borderColor}`};
 
   border-radius: ${({ isDragging, theme }) =>

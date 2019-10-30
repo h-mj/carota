@@ -150,9 +150,9 @@ const HelperMessage = styled.div<InputStyleProps>`
 
   color: ${({ active, invalid, theme }) =>
     invalid
-      ? theme.colorRed
+      ? theme.colorInvalid
       : active
-      ? theme.colorOrange
+      ? theme.colorActive
       : theme.colorSecondary};
 
   transition: ${({ theme }) => theme.transition};
@@ -172,9 +172,9 @@ const Field = styled.div<InputStyleProps>`
   border-radius: ${({ theme }) => theme.borderRadius};
   box-shadow: ${({ active, invalid, theme }) =>
     invalid
-      ? `inset 0 0 0 2px ${theme.colorRed}`
+      ? `inset 0 0 0 2px ${theme.colorInvalid}`
       : active
-      ? `inset 0 0 0 2px ${theme.colorOrange}`
+      ? `inset 0 0 0 2px ${theme.colorActive}`
       : `inset 0 0 0 1px ${theme.borderColor}`};
   background-color: ${({ disabled, theme }) =>
     disabled ? theme.backgroundColorDisabled : theme.backgroundColor};
@@ -215,9 +215,9 @@ const Caption = styled.span<InputStyleProps>`
 
   color: ${({ active, invalid, theme }) =>
     invalid
-      ? theme.colorRed
+      ? theme.colorInvalid
       : active
-      ? theme.colorOrange
+      ? theme.colorActive
       : theme.colorSecondary};
   white-space: nowrap;
   overflow: hidden;
@@ -234,7 +234,7 @@ const Caption = styled.span<InputStyleProps>`
 const ErrorMessage = styled.div`
   margin-top: ${({ theme }) => theme.paddingSecondaryHalf};
 
-  color: ${({ theme }) => theme.colorRed};
+  color: ${({ theme }) => theme.colorInvalid};
   font-size: 0.7rem;
   letter-spacing: 0;
 `;

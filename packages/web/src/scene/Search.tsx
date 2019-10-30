@@ -16,7 +16,7 @@ import { TextField } from "../component/TextField";
 import { Foodstuff } from "../model/Foodstuff";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
-import { hasVideoInputDevice } from "../utility/scanner";
+import { hasEnvironmentCamera } from "../utility/scanner";
 
 /**
  * Query string validator.
@@ -90,7 +90,7 @@ export class Search extends SceneComponent<
   ) {
     super("Search", props);
 
-    this.checkVideoInputDevices();
+    this.checkEnvironmentCamera();
   }
 
   /**
@@ -134,11 +134,11 @@ export class Search extends SceneComponent<
   }
 
   /**
-   * Checks whether there are any video input devices.
+   * Checks whether there's an environment camera
    */
   @action
-  private checkVideoInputDevices = async () => {
-    this.showScanButton = await hasVideoInputDevice();
+  private checkEnvironmentCamera = async () => {
+    this.showScanButton = await hasEnvironmentCamera();
   };
 
   /**

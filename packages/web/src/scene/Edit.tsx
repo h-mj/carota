@@ -20,7 +20,7 @@ import { Foodstuff } from "../model/Foodstuff";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
 import { any, append, ErrorsFor } from "../utility/form";
-import { hasVideoInputDevice } from "../utility/scanner";
+import { hasEnvironmentCamera } from "../utility/scanner";
 
 /**
  * Union of text field input names.
@@ -312,7 +312,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
       this.values.name = this.props.name;
     }
 
-    this.checkVideoInputDevices();
+    this.checkEnvironmentCamera();
   }
 
   /**
@@ -477,11 +477,11 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   };
 
   /**
-   * Checks whether there are any video input and devices.
+   * Checks whether there's an environment camera.
    */
   @action
-  private checkVideoInputDevices = async () => {
-    this.showScanButton = await hasVideoInputDevice();
+  private checkEnvironmentCamera = async () => {
+    this.showScanButton = await hasEnvironmentCamera();
   };
 
   /**

@@ -1,13 +1,34 @@
 /**
- * Returns whether there's an video input device present.
+ * Returns environment camera media stream object.
  */
-export const hasVideoInputDevice = async () => {
+export const getEnvironmentCameraMediaStream = async () => {
+  if (navigator.mediaDevices === undefined) {
+    return undefined;
+  }
+
+  return await navigator.mediaDevices.getUserMedia({
+    video: { facingMode: { exact: "environment" } }
+  });
+};
+
+/**
+ * Returns whether there's an environment camera present.
+ */
+export const hasEnvironmentCamera = async () => {
   if (navigator.mediaDevices === undefined) {
     // Either insecure connection or API is not supported.
     return false;
   }
 
-  return (await navigator.mediaDevices.enumerateDevices()).some(
-    deviceInfo => deviceInfo.kind === "videoinput"
-  );
+  const deviceInfos = await navigator.mediaDevices.enumerateDevices();
+
+  if (!deviceInfos.some(deviceInfo => deviceInfo.kind === "videoinput")) {
+    return false;
+  }
+
+  try {
+    return (await getEnvironmentCameraMediaStream()) !== undefined;
+  } catch (error) {
+    return false;
+  }
 };

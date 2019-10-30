@@ -17,6 +17,7 @@ import {
 import { SceneTitle } from "../component/SceneTitle";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
+import { getEnvironmentCameraMediaStream } from "../utility/scanner";
 
 /**
  * Barcode decode hints.
@@ -139,14 +140,12 @@ export class Scanner extends SceneComponent<
    */
   public async componentDidMount() {
     try {
-      if (navigator.mediaDevices === undefined) {
+      const stream = await getEnvironmentCameraMediaStream();
+
+      if (stream === undefined) {
         this.reason = "insecure";
         return;
       }
-
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { exact: "environment" } }
-      });
 
       this.reader.decodeFromStream(
         stream,

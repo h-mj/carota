@@ -153,7 +153,7 @@ const Bar = styled.div<BarProps>`
   height: 100%;
 
   border-radius: ${({ theme }) => theme.borderRadius};
-  background-color: ${({ theme }) => theme.backgroundColorDarker};
+  background-color: ${({ theme }) => theme.backgroundColorSecondary};
 
   transition: ${({ theme }) => theme.transition};
 `;

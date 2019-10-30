@@ -41,7 +41,6 @@ const Button = styled.button`
 
   flex-shrink: 0;
 
-  color: ${({ theme }) => theme.colorSecondary};
   line-height: 50%;
   text-align: center;
 

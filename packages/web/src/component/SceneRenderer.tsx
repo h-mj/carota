@@ -98,7 +98,6 @@ export class SceneRenderer extends Component<SceneRendererProps> {
         overlaid={overlaid}
         position={position}
         ref={this.overlayRef}
-        tabIndex={-1}
       >
         <Container first={first} overlaid={overlaid} position={position}>
           {this.renderSceneComponent()}

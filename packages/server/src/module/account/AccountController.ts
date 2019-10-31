@@ -10,6 +10,10 @@ import {
   createAccountDtoValidator
 } from "./dto/CreateAccountDto";
 import { GetAccountDto, getAccountDtoValidator } from "./dto/GetAccountDto";
+import {
+  SetAccountLanguageDto,
+  setAccountLanguageDtoValidator
+} from "./dto/SetAccountLanguageDto";
 
 @Controller("account")
 export class AccountController {
@@ -30,11 +34,6 @@ export class AccountController {
     };
   }
 
-  @Post("current")
-  public async current(_: unknown, @Principal() principal: Account) {
-    return principal.toDto();
-  }
-
   @Post("get")
   public async get(
     @Body(new ValidationPipe(getAccountDtoValidator)) dto: GetAccountDto,
@@ -43,5 +42,21 @@ export class AccountController {
     const account = await this.accountService.get(dto, principal);
 
     return account.toDto();
+  }
+
+  @Post("getCurrent")
+  public async getCurrent(_: unknown, @Principal() principal: Account) {
+    return principal.toDto();
+  }
+
+  @Post("setLanguage")
+  public async setLanguage(
+    @Body(new ValidationPipe(setAccountLanguageDtoValidator))
+    dto: SetAccountLanguageDto,
+    @Principal() principal: Account
+  ) {
+    await this.accountService.setLanguage(dto, principal);
+
+    return true as const;
   }
 }

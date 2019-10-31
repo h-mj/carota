@@ -220,6 +220,15 @@ export const estonian: Translation = {
       },
       title: "Otsing"
     },
+    Settings: {
+      language: "Keel",
+      languages: {
+        English: "English",
+        Estonian: "eesti",
+        Russian: "русский"
+      },
+      useDarkTheme: "Kasutage tumedat teemat"
+    },
     Tabs: {
       abbreviations: [
         "jaan",

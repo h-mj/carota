@@ -223,6 +223,15 @@ export const russian: Translation = {
       },
       title: "Поиск"
     },
+    Settings: {
+      language: "Язык",
+      languages: {
+        English: "English",
+        Estonian: "eesti",
+        Russian: "русский"
+      },
+      useDarkTheme: "Использовать темную тему"
+    },
     Tabs: {
       abbreviations: [
         "янв.",

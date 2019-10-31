@@ -1,5 +1,5 @@
 import { action, autorun, computed, observable } from "mobx";
-import { AccountDto, Body } from "server";
+import { AccountDto, Body, Language } from "server";
 
 import { Rpc } from "../utility/rpc";
 import { RootStore } from "./RootStore";
@@ -16,7 +16,7 @@ export class AccountsStore {
   /**
    * Current account.
    */
-  @observable public account?: AccountDto;
+  @observable private _account?: AccountDto;
 
   /**
    * RootStore instance.
@@ -65,6 +65,22 @@ export class AccountsStore {
   }
 
   /**
+   * Sets currently authenticated account.
+   */
+  public get account() {
+    return this._account;
+  }
+
+  /**
+   * Sets authenticated account.
+   */
+  public set account(account: AccountDto | undefined) {
+    this._account = account;
+    this.rootStore.views.language =
+      account !== undefined ? account.language : "English";
+  }
+
+  /**
    * Makes a `POST` request with given `body` to API signing in route and on
    * success assigns returned token to field `token` and returns `undefined` or
    * returns an `Error` object.
@@ -107,22 +123,6 @@ export class AccountsStore {
   }
 
   /**
-   * Requests and assigns current account.
-   */
-  @action
-  public async load() {
-    const response = await Rpc.call("account", "current", undefined);
-
-    if (!response.ok) {
-      return response.value;
-    }
-
-    this.account = response.value;
-
-    return undefined;
-  }
-
-  /**
    * Logs the user out by clearing all stores including this one.
    */
   @action
@@ -131,11 +131,44 @@ export class AccountsStore {
   }
 
   /**
+   * Sets the language of currently authenticated account.
+   */
+  @action
+  public async setLanguage(language: Language) {
+    this.rootStore.views.language = language;
+
+    const response = await Rpc.call("account", "setLanguage", { language });
+
+    if (!response.ok) {
+      this.rootStore.views.notifyUnknownError();
+    }
+  }
+
+  /**
+   * Requests all necessary information that is required the application to function.
+   */
+  @action
+  public async load() {
+    if (this.token === undefined) {
+      return;
+    }
+
+    const response = await Rpc.call("account", "getCurrent", {});
+
+    if (!response.ok) {
+      this.rootStore.views.notifyUnknownError();
+      return;
+    }
+
+    this.account = response.value;
+  }
+
+  /**
    * Clears all the data this store holds.
    */
   @action
   public clear() {
     this.token = undefined;
-    this.account = undefined;
+    this._account = undefined;
   }
 }

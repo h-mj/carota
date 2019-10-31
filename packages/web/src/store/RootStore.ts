@@ -26,6 +26,13 @@ export class RootStore {
   }
 
   /**
+   * Loads all stores.
+   */
+  public async load() {
+    await Promise.all([this.accounts.load()]);
+  }
+
+  /**
    * Clears all stores.
    */
   public clear() {

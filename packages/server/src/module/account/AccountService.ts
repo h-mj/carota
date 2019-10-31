@@ -11,6 +11,7 @@ import { Account } from "./Account";
 import { AccountRepository } from "./AccountRepository";
 import { CreateAccountDto } from "./dto/CreateAccountDto";
 import { GetAccountDto } from "./dto/GetAccountDto";
+import { SetAccountLanguageDto } from "./dto/SetAccountLanguageDto";
 
 @Injectable()
 export class AccountService {
@@ -63,5 +64,16 @@ export class AccountService {
     }
 
     return account;
+  }
+
+  @Transaction()
+  public async setLanguage(
+    dto: SetAccountLanguageDto,
+    principal: Account,
+    @TransactionRepository() accountRepository?: AccountRepository
+  ) {
+    principal.language = dto.language;
+
+    await accountRepository!.save(principal);
   }
 }

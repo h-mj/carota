@@ -46,7 +46,7 @@ export class ViewsStore {
   /**
    * Current interface language.
    */
-  @observable private _language: Language = "English";
+  @observable public language: Language = "English";
 
   /**
    * Array of active scenes.
@@ -100,7 +100,7 @@ export class ViewsStore {
    */
   @computed
   public get translation() {
-    return TRANSLATIONS[this._language];
+    return TRANSLATIONS[this.language];
   }
 
   /**
@@ -133,15 +133,6 @@ export class ViewsStore {
   @computed
   public get loading() {
     return this._loadingCount > 0;
-  }
-
-  /**
-   * Sets interface language.
-   *
-   * @param language Language name.
-   */
-  public set language(language: Language) {
-    this._language = language;
   }
 
   /**

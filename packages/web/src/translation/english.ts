@@ -219,6 +219,15 @@ export const english: Translation = {
       },
       title: "Search"
     },
+    Settings: {
+      language: "Language",
+      languages: {
+        English: "English",
+        Estonian: "eesti",
+        Russian: "русский"
+      },
+      useDarkTheme: "Use dark theme"
+    },
     Tabs: {
       abbreviations: [
         "Jan.",

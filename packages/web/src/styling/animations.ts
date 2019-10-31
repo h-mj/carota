@@ -20,19 +20,3 @@ export const fadeOut = keyframes`
   from { opacity: 1; }
   to { opacity: 0; }
 `;
-
-/**
- * Animation that scales a component in.
- */
-export const scaleIn = keyframes`
-  from { transform: scale(0); }
-  to { transform: scale(1); }
-`;
-
-/**
- * Animation that scales a component out.
- */
-export const scaleOut = keyframes`
-  from { transform: scale(1); }
-  to { transform: scale(0); }
-`;

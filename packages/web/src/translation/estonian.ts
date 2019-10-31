@@ -113,6 +113,11 @@ export const estonian: Translation = {
       submit: "Sisenege →",
       title: "Sisenege"
     },
+    Menu: {
+      Diet: "Päevane tarbimine",
+      Logout: "Logi välja",
+      Settings: "Seaded"
+    },
     Name: {
       createSubmit: "Looge",
       createTitle: "Toidukorra loomine",

@@ -113,6 +113,11 @@ export const english: Translation = {
       submit: "Sign in →",
       title: "Sign in"
     },
+    Menu: {
+      Diet: "Daily intake",
+      Logout: "Sign out",
+      Settings: "Settings"
+    },
     Name: {
       createSubmit: "Create",
       createTitle: "Create meal",

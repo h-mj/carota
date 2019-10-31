@@ -13,6 +13,7 @@ import { Quantity } from "../scene/Quantity";
 import { Register } from "../scene/Register";
 import { Scanner } from "../scene/Scanner";
 import { Search } from "../scene/Search";
+import { Settings } from "../scene/Settings";
 import { Unknown } from "../scene/Unknown";
 import { fadeIn } from "../styling/animations";
 import { css, keyframes, styled } from "../styling/theme";
@@ -33,6 +34,7 @@ const SCENE_COMPONENTS = {
   Register: Register,
   Scanner: Scanner,
   Search: Search,
+  Settings: Settings,
   Unknown: Unknown
 } as const;
 

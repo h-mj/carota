@@ -115,6 +115,11 @@ export const russian: Translation = {
       submit: "Вход →",
       title: "Вход"
     },
+    Menu: {
+      Diet: "Суточная потребления",
+      Logout: "Выйти",
+      Settings: "Настройки"
+    },
     Name: {
       createSubmit: "Создать",
       createTitle: "Создать прием пищи",

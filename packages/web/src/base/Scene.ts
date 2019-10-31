@@ -14,6 +14,7 @@ export type SceneNames =
   | "Register"
   | "Scanner"
   | "Search"
+  | "Settings"
   | "Unknown";
 
 /**
@@ -30,6 +31,7 @@ const SCENE_TO_COMPONENT_NAME = {
   Register: "Register",
   Scanner: "Scanner",
   Search: "Search",
+  Settings: "Settings",
   Unknown: "Unknown"
 } as const;
 
@@ -82,7 +84,7 @@ const ROUTES = {
   "/": to("Diet"),
   "/logout": to("Logout"),
   "/register/{invitationId}": to("Register", "invitationId"),
-  "/scan": to("Scanner")
+  "/settings": to("Settings")
 } as const;
 
 /**
@@ -104,9 +106,9 @@ export type RouteParameters<TSceneNames extends SceneNames> =
 /**
  * Scene named `TName` scene component props type.
  */
-export type SceneSceneComponentProps<
-  TName extends SceneNames
-> = SceneComponentProps<SceneSceneComponentName<TName>>;
+export type SceneSceneComponentProps<TName extends SceneNames> = {
+  [Name in TName]: SceneComponentProps<SceneSceneComponentName<Name>>;
+}[TName];
 
 /**
  * Union of scene positions.

@@ -2,7 +2,7 @@ import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 
-import { Scene } from "../base/Scene";
+import { Scene, Scenes } from "../base/Scene";
 import { TranslatedComponent } from "../base/TranslatedComponent";
 import { fadeIn } from "../styling/animations";
 import { RESET } from "../styling/stylesheets";
@@ -12,11 +12,21 @@ import { Burger } from "./collection/icons";
 import { Overlay } from "./Overlay";
 
 /**
+ * Scene names in order to which user can navigate using the navigation menu.
+ */
+const NAVIGABLE_SCENES = ["Diet", "Settings", "Logout"] as const;
+
+/**
+ * Menu item translations.
+ */
+type MenuTranslation = Record<typeof NAVIGABLE_SCENES[number], string>;
+
+/**
  * Navigation menu component.
  */
 @inject("views")
 @observer
-export class Menu extends TranslatedComponent<"Menu"> {
+export class Menu extends TranslatedComponent<"Menu", {}, MenuTranslation> {
   /**
    * Whether navigation menu is visible.
    */
@@ -43,8 +53,15 @@ export class Menu extends TranslatedComponent<"Menu"> {
           <MenuOverlay onClick={this.handleOverlayClick}>
             <MenuContainer>
               <Navigation>
-                <Item onClick={this.handleRedirect} scene={new Scene("Diet", {}, {})}>Daily intake</Item>
-                <Item onClick={this.handleRedirect} scene={new Scene("Logout", {}, {})}>Sign out</Item>
+                {NAVIGABLE_SCENES.map(name => (
+                  <Item
+                    key={name}
+                    onClick={this.handleRedirect}
+                    scene={new Scene(name, {}, {}) as Scenes}
+                  >
+                    {this.translation[name]}
+                  </Item>
+                ))}
               </Navigation>
             </MenuContainer>
           </MenuOverlay>

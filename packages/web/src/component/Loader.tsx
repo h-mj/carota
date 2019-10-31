@@ -14,7 +14,7 @@ import { Overlay } from "./Overlay";
  */
 @inject("views")
 @observer
-export class LoadingOverlay extends Component {
+export class Loader extends Component {
   /**
    * Whether or not loading overlay is visible.
    */
@@ -23,7 +23,7 @@ export class LoadingOverlay extends Component {
   /**
    * ID of a timeout that sets visibility to `false`.
    */
-  private timeoutId?: number;
+  private timeoutId = 0;
 
   /**
    * Creates a new instance of `Loader`, sets its name and updates loading
@@ -31,6 +31,7 @@ export class LoadingOverlay extends Component {
    */
   public constructor(props: {}) {
     super(props);
+
     this.update();
   }
 
@@ -43,7 +44,8 @@ export class LoadingOverlay extends Component {
   }
 
   /**
-   * Sets fade out timeout if needed and updates `previousIsLoading` value.
+   * Sets fade out timeout if loader was visible but application is no longer
+   * loading anything.
    */
   @action
   private update() {
@@ -52,10 +54,8 @@ export class LoadingOverlay extends Component {
     if (loading) {
       this.visible = true;
     } else if (this.visible) {
-      // If component was visible and loading stopped, set timeout that will set
-      // visible to `false`.
       window.clearTimeout(this.timeoutId);
-      this.timeoutId = window.setTimeout(this.hide, 1000 * DURATION);
+      this.timeoutId = window.setTimeout(this.hide, 5000 * DURATION);
     }
   }
 
@@ -77,7 +77,7 @@ export class LoadingOverlay extends Component {
   }
 
   /**
-   * Resets `timeoutId` back to `undefined`.
+   * Hides loader component.
    */
   @action
   private hide = () => {

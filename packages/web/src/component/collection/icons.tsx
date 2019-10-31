@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Keyframes } from "styled-components";
 
-import { scaleIn, scaleOut } from "../../styling/animations";
 import { keyframes, styled, Theme } from "../../styling/theme";
 
 /**
@@ -139,10 +138,10 @@ export const Burger: React.FunctionComponent = () => (
 // prettier-ignore
 export const Loading: React.FunctionComponent = () => (
   <Circles width={24} height={10}>
-    <Circle offset={0} radius={5} color="#43b02a" keyframes={scaleIn} />
-    <Circle offset={0} radius={5} color="#43b02a" keyframes={move(5, "#ff8200")} />
-    <Circle offset={10} radius={4} color="#ff8200" keyframes={move(4, "#ff8200")} />
-    <Circle offset={18} radius={3} color="#ff8200" keyframes={scaleOut} />
+    <Circle keyframes={scale(0, 5, 5, "#43b02a")} />
+    <Circle keyframes={move(5, 4, 5, "#43b02a", "#ff8200")} />
+    <Circle keyframes={move(4, 3, 14, "#ff8200", "#ff8200")} />
+    <Circle keyframes={scale(3, 0, 21, "#ff8200")} />
   </Circles>
 );
 
@@ -150,6 +149,11 @@ export const Loading: React.FunctionComponent = () => (
  * Circle size unit value.
  */
 const UNIT = "0.1rem";
+
+/**
+ * Radius multiplier to increase circle quality.
+ */
+const RADIUS_SCALE = 100;
 
 /**
  * Circles component props.
@@ -180,58 +184,75 @@ const Circles = styled.div<CirclesProps>`
  */
 interface CircleProps {
   /**
-   * Circle color.
-   */
-  color: string;
-
-  /**
    * Animation keyframes.
    */
   keyframes: Keyframes;
-
-  /**
-   * Offset in x-axis in units.
-   */
-  offset: number;
-
-  /**
-   * Circle radius.
-   */
-  radius: number;
 }
-
-/**
- * Returns keyframes that change circle radius to `radius - 1` and background to `to`.
- *
- * @param radius Initial circle radius.
- * @param to Final circle background color.
- */
-const move = (radius: number, to: string) => keyframes`
-  33% {
-    background-color: ${to};
-  }
-
-  to {
-    transform: translate(calc(${2 * radius} * ${UNIT}), ${UNIT});
-    width: calc(${2 * (radius - 1)} * ${UNIT});
-    height: calc(${2 * (radius - 1)} * ${UNIT});
-    background-color: ${to};
-  }
-`;
 
 /**
  * Circle component that either scales in or out or moves to the right.
  */
 const Circle = styled.div<CircleProps>`
   position: absolute;
-  top: calc(${({ radius }) => 5 - radius} * ${UNIT});
-  left: calc(${({ offset }) => offset} * ${UNIT});
+  top: 50%;
+  left: 0;
 
-  width: calc(${({ radius }) => 2 * radius} * ${UNIT});
-  height: calc(${({ radius }) => 2 * radius} * ${UNIT});
+  width: calc(2 * ${RADIUS_SCALE} * ${UNIT});
+  height: calc(2 * ${RADIUS_SCALE} * ${UNIT});
 
   background-color: ${({ color }) => color};
   border-radius: 50%;
 
   animation: ${({ keyframes }) => keyframes} 0.5s infinite forwards;
+`;
+
+/**
+ * Circle scale animation.
+ */
+export const scale = (
+  radiusFrom: number,
+  radiusTo: number,
+  offset: number,
+  color: string
+) => keyframes`
+  from {
+    transform: translateX(calc(${offset} * ${UNIT})) translate(-50%, -50%) scale(${radiusFrom /
+  RADIUS_SCALE});
+    background-color: ${color};
+  }
+
+  to {
+    transform: translateX(calc(${offset} * ${UNIT})) translate(-50%, -50%) scale(${radiusTo /
+  RADIUS_SCALE});
+    background-color: ${color};
+  }
+`;
+
+/**
+ * Circle move animation.
+ */
+export const move = (
+  radiusFrom: number,
+  radiusTo: number,
+  offset: number,
+  colorFrom: string,
+  colorTo: string
+) => keyframes`
+  from {
+    transform: translateX(calc(${offset} * ${UNIT})) translate(-50%, -50%) scale(${radiusFrom /
+  RADIUS_SCALE});
+    background-color: ${colorFrom};
+  }
+
+  33% {
+    background-color: ${colorTo};
+  }
+
+  to {
+    transform: translateX(calc(${offset +
+      radiusFrom +
+      radiusTo} * ${UNIT})) translate(-50%, -50%) scale(${radiusTo /
+  RADIUS_SCALE});
+    background-color: ${colorTo};
+  }
 `;

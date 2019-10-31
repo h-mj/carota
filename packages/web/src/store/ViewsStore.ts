@@ -1,4 +1,4 @@
-import { action, computed, observable } from "mobx";
+import { action, autorun, computed, observable } from "mobx";
 import { Language } from "server";
 
 import {
@@ -64,6 +64,11 @@ export class ViewsStore {
   @observable private _loadingCount = 0;
 
   /**
+   * Whether or not dark theme is used.
+   */
+  @observable public dark: boolean;
+
+  /**
    * RootStore instance.
    */
   public rootStore: RootStore;
@@ -75,7 +80,16 @@ export class ViewsStore {
    */
   public constructor(rootStore: RootStore) {
     this._scenes = [];
+    this.dark = localStorage.getItem("dark") !== null;
     this.rootStore = rootStore;
+
+    autorun(() => {
+      if (this.dark) {
+        localStorage.setItem("dark", "true");
+      } else {
+        localStorage.removeItem("dark");
+      }
+    });
 
     this.refresh();
     window.addEventListener("popstate", () => this.refresh(), false);

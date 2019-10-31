@@ -31,7 +31,9 @@ export const Icon = styled.svg<IconProps>`
   height: ${({ theme }) => theme.iconHeight};
   flex-shrink: 0;
 
-  ${({ fill, theme }) => fill && `fill: ${theme[fill]}`}
+  ${({ fill, theme }) => fill && `fill: ${theme[fill]};`}
+
+  transition: ${({theme}) => theme.transition};
 `;
 
 /**

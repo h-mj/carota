@@ -201,6 +201,7 @@ const Label = styled.label`
 
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
   & > *:not(:last-child) {
     margin-right: ${({ theme }) => theme.paddingSecondary};

@@ -119,6 +119,8 @@ const Button = styled.button`
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.backgroundColor};
 
+  transition: ${({theme}) => theme.transition};
+
   & > svg {
     display: block;
     width: 100%;

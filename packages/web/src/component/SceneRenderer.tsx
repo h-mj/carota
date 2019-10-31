@@ -258,6 +258,7 @@ const Main = styled.div<SceneInfoProps>`
   background-color: ${({ theme }) => theme.backgroundColor};
 
   animation: initial;
+  transition: ${({theme}) => theme.transition};
 
   @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
     animation: ${({ first, theme }) => first ? "initial" : css` ${overlaySlide} ${theme.transition}`};

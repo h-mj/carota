@@ -5,6 +5,7 @@ import { Component } from "../base/Component";
 import {
   createGlobalStyle,
   DARK,
+  LIGHT,
   THEME_CONSTANTS,
   ThemeProvider
 } from "../styling/theme";
@@ -22,7 +23,13 @@ export class Theme extends Component {
    */
   public render() {
     return (
-      <ThemeProvider theme={Object.assign({}, THEME_CONSTANTS, DARK)}>
+      <ThemeProvider
+        theme={Object.assign(
+          {},
+          THEME_CONSTANTS,
+          this.props.views!.dark ? DARK : LIGHT
+        )}
+      >
         <>
           <GlobalStyle />
           {this.props.children}

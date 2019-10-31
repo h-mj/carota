@@ -1,11 +1,6 @@
 import { keyframes } from "styled-components";
 
 /**
- * Default animation/transition duration in seconds.
- */
-export const DURATION = 0.125;
-
-/**
  * Animation that fades a component in.
  */
 export const fadeIn = keyframes`

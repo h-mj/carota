@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Keyframes } from "styled-components";
 
-import { keyframes, styled, Theme } from "../../styling/theme";
+import { ColorTheme, keyframes, styled } from "../../styling/theme";
 
 /**
  * Project logo SVG image.
@@ -21,7 +21,7 @@ interface IconProps {
   /**
    * Dynamic icon color.
    */
-  fill?: keyof Theme;
+  fill?: keyof ColorTheme;
 }
 
 /**

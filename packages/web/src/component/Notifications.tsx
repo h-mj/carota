@@ -3,9 +3,9 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 
 import { Component } from "../base/Component";
-import { DURATION, fadeIn, fadeOut } from "../styling/animations";
+import { fadeIn, fadeOut } from "../styling/animations";
 import { RESET } from "../styling/stylesheets";
-import { keyframes, styled } from "../styling/theme";
+import { keyframes, styled, THEME_CONSTANTS } from "../styling/theme";
 
 /**
  * Union of notification types.
@@ -98,7 +98,7 @@ export class Notifications extends Component {
    * Removes a notification from visible notifications after a timeout.
    */
   private async fadeNotification(notification: Notification) {
-    await this.props.views!.wait(DURATION);
+    await this.props.views!.wait(THEME_CONSTANTS.duration);
 
     const index = this.visibleNotifications.indexOf(notification);
 
@@ -181,8 +181,10 @@ const NotificationContainer = styled.button<NotificationContainerProps>`
   color: ${({ theme }) => theme.colorPrimary};
   line-height: ${({ theme }) => theme.lineHeight};
 
-  animation: ${({ active }) => (active ? fadeIn : fadeOut)} ${DURATION}s,
-    ${({ active }) => (active ? moveIn : moveOut)} ${DURATION}s;
+  animation: ${({ active }) => (active ? fadeIn : fadeOut)}
+      ${({ theme }) => theme.transition},
+    ${({ active }) => (active ? moveIn : moveOut)}
+      ${({ theme }) => theme.transition};
 
   cursor: pointer;
 `;

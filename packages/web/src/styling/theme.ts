@@ -12,9 +12,30 @@ export const {
 } = styledComponents as styledComponents.ThemedStyledComponentsModule<Theme>;
 
 /**
- * Theme definition.
+ * Theme constants.
  */
-export interface Theme {
+export const THEME_CONSTANTS = {
+  duration: 0.2,
+  height: "3.5rem",
+  heightHalf: "1.75rem",
+  iconHeight: "1rem",
+  lineHeight: "1.25rem",
+  padding: "2.5rem",
+  paddingHalf: "1.25rem",
+  paddingSecondary: "0.825rem",
+  paddingSecondaryHalf: "0.4125rem",
+  transition: "0.2s cubic-bezier(0.4, 0.0, 0.2, 1)",
+  transitionSlow: "0.4s cubic-bezier(0.4, 0.0, 0.2, 1)",
+  transitionLinear: "0.2s",
+  widthSmall: "30rem",
+  widthMedium: "60rem",
+  widthCutoff: "48rem"
+};
+
+/**
+ * Color theme definition.
+ */
+export interface ColorTheme {
   backgroundColor: string;
   backgroundColorSecondary: string;
   backgroundColorDisabled: string;
@@ -25,25 +46,17 @@ export interface Theme {
   colorSecondary: string;
   colorActive: string;
   colorInvalid: string;
-  height: string;
-  heightHalf: string;
-  iconHeight: string;
-  lineHeight: string;
-  padding: string;
-  paddingHalf: string;
-  paddingSecondary: string;
-  paddingSecondaryHalf: string;
-  transition: string;
-  transitionSlow: string;
-  widthSmall: string;
-  widthMedium: string;
-  widthCutoff: string;
 }
+
+/**
+ * Full theme type.
+ */
+type Theme = ColorTheme & typeof THEME_CONSTANTS;
 
 /**
  * Light theme definition.
  */
-export const LIGHT: Readonly<Theme> = {
+export const LIGHT: Readonly<ColorTheme> = {
   backgroundColor: "rgb(255, 255, 255)",
   backgroundColorSecondary: "rgb(235, 235, 235)",
   backgroundColorDisabled: "rgb(245, 245, 245)",
@@ -53,26 +66,13 @@ export const LIGHT: Readonly<Theme> = {
   colorPrimary: "rgba(0, 0, 0, 0.88)",
   colorSecondary: "rgba(0, 0, 0, 0.44)",
   colorActive: "rgb(255, 130, 0)",
-  colorInvalid: "rgb(222, 0, 0)",
-  height: "3.5rem",
-  heightHalf: "1.75rem",
-  iconHeight: "1rem",
-  lineHeight: "1.25rem",
-  padding: "2.5rem",
-  paddingHalf: "1.25rem",
-  paddingSecondary: "0.825rem",
-  paddingSecondaryHalf: "0.4125rem",
-  transition: "0.2s cubic-bezier(0.4, 0.0, 0.2, 1)",
-  transitionSlow: "0.4s cubic-bezier(0.4, 0.0, 0.2, 1)",
-  widthSmall: "30rem",
-  widthMedium: "60rem",
-  widthCutoff: "48rem"
+  colorInvalid: "rgb(222, 0, 0)"
 };
 
 /**
  * Light theme definition.
  */
-export const DARK: Readonly<Theme> = {
+export const DARK: Readonly<ColorTheme> = {
   backgroundColor: "rgb(0, 0, 0)",
   backgroundColorSecondary: "rgb(40, 40, 40)",
   backgroundColorDisabled: "rgb(20, 20, 20)",
@@ -82,18 +82,5 @@ export const DARK: Readonly<Theme> = {
   colorPrimary: "rgb(255, 255, 255)",
   colorSecondary: "rgb(150, 150, 150)",
   colorActive: "rgb(191, 78, 0)",
-  colorInvalid: "rgb(156, 0, 0)",
-  height: "3.5rem",
-  heightHalf: "1.75rem",
-  iconHeight: "1rem",
-  lineHeight: "1.25rem",
-  padding: "2.5rem",
-  paddingHalf: "1.25rem",
-  paddingSecondary: "0.825rem",
-  paddingSecondaryHalf: "0.4125rem",
-  transition: "0.2s cubic-bezier(0.4, 0.0, 0.2, 1)",
-  transitionSlow: "0.4s cubic-bezier(0.4, 0.0, 0.2, 1)",
-  widthSmall: "30rem",
-  widthMedium: "60rem",
-  widthCutoff: "48rem"
+  colorInvalid: "rgb(156, 0, 0)"
 };

@@ -3,8 +3,8 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 
 import { Component } from "../base/Component";
-import { DURATION, fadeIn, fadeOut } from "../styling/animations";
-import { styled } from "../styling/theme";
+import { fadeIn, fadeOut } from "../styling/animations";
+import { styled, THEME_CONSTANTS } from "../styling/theme";
 import { Loading } from "./collection/icons";
 import { Overlay } from "./Overlay";
 
@@ -55,7 +55,10 @@ export class Loader extends Component {
       this.visible = true;
     } else if (this.visible) {
       window.clearTimeout(this.timeoutId);
-      this.timeoutId = window.setTimeout(this.hide, 1000 * DURATION);
+      this.timeoutId = window.setTimeout(
+        this.hide,
+        1000 * THEME_CONSTANTS.duration
+      );
     }
   }
 
@@ -106,8 +109,8 @@ const Container = styled(Overlay)<Container>`
 
   background-color: ${({ theme }) => theme.backgroundColor};
 
-  animation: ${({ active }) => (active ? fadeIn : fadeOut)} ${DURATION}s
-    forwards;
+  animation: ${({ active }) => (active ? fadeIn : fadeOut)}
+    ${({ theme }) => theme.transition} forwards;
 
   /* Don't let users select components below the overlay */
   user-select: ${({ active }) => (active ? "auto" : "none")};

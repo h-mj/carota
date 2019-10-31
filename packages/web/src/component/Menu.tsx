@@ -115,10 +115,6 @@ const Button = styled.button`
  */
 const MenuOverlay = styled(Overlay)`
   z-index: 4;
-
-  background-color: ${({ theme }) => theme.backgroundColorTranslucent};
-
-  animation: ${fadeIn} ${({ theme }) => theme.transition};
 `;
 
 /**
@@ -161,5 +157,6 @@ const Item = styled(Anchor)`
  */
 const Navigation = styled.nav`
   border-radius: ${({ theme }) => theme.borderRadius};
-  background-color: ${({ theme }) => theme.backgroundColor};
+  background-color: ${({ theme }) => theme.backgroundColorSecondary};
+  animation: ${fadeIn} ${({ theme }) => theme.transition};
 `;

@@ -80,7 +80,6 @@ export class ViewsStore {
    */
   public constructor(rootStore: RootStore) {
     this._scenes = [];
-
     this.dark =
       localStorage.getItem("dark") !== null
         ? localStorage.getItem("dark") === "true"

@@ -55,7 +55,7 @@ export class Loader extends Component {
       this.visible = true;
     } else if (this.visible) {
       window.clearTimeout(this.timeoutId);
-      this.timeoutId = window.setTimeout(this.hide, DURATION);
+      this.timeoutId = window.setTimeout(this.hide, 1000 * DURATION);
     }
   }
 
@@ -106,9 +106,10 @@ const Container = styled(Overlay)<Container>`
 
   background-color: ${({ theme }) => theme.backgroundColor};
 
-  animation: ${props => (props.active ? fadeIn : fadeOut)} ${DURATION}s forwards;
+  animation: ${({ active }) => (active ? fadeIn : fadeOut)} ${DURATION}s
+    forwards;
 
   /* Don't let users select components below the overlay */
-  user-select: ${props => (props.active ? "auto" : "none")};
-  pointer-events: ${props => (props.active ? "initial" : "none")};
+  user-select: ${({ active }) => (active ? "auto" : "none")};
+  pointer-events: ${({ active }) => (active ? "initial" : "none")};
 `;

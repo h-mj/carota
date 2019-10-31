@@ -55,7 +55,7 @@ export class Loader extends Component {
       this.visible = true;
     } else if (this.visible) {
       window.clearTimeout(this.timeoutId);
-      this.timeoutId = window.setTimeout(this.hide, 5000 * DURATION);
+      this.timeoutId = window.setTimeout(this.hide, DURATION);
     }
   }
 

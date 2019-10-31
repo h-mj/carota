@@ -22,8 +22,8 @@ class Application extends React.Component {
   /**
    * Loads all stores on construction.
    */
-  public constructor() {
-    super({});
+  public constructor(props: {}) {
+    super(props);
 
     this.load();
   }

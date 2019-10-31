@@ -80,15 +80,16 @@ export class ViewsStore {
    */
   public constructor(rootStore: RootStore) {
     this._scenes = [];
-    this.dark = localStorage.getItem("dark") !== null;
+
+    this.dark =
+      localStorage.getItem("dark") !== null
+        ? localStorage.getItem("dark") === "true"
+        : window.matchMedia !== undefined &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
     this.rootStore = rootStore;
 
     autorun(() => {
-      if (this.dark) {
-        localStorage.setItem("dark", "true");
-      } else {
-        localStorage.removeItem("dark");
-      }
+      localStorage.setItem("dark", this.dark.toString());
     });
 
     this.refresh();

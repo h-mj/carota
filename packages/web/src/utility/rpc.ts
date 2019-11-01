@@ -56,6 +56,11 @@ export class Rpc {
       method: "POST"
     });
 
+    if (response.status === 401) {
+      rootStore.accounts.logout();
+      rootStore.views.refresh();
+    }
+
     const json: Response<TController, TEndpoint> = await response.json();
 
     return "error" in json ? failure(json.error) : success(json.data);

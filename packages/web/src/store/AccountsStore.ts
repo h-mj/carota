@@ -169,6 +169,6 @@ export class AccountsStore {
   @action
   public clear() {
     this.token = undefined;
-    this._account = undefined;
+    this.account = undefined;
   }
 }

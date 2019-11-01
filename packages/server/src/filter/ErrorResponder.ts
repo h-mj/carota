@@ -9,7 +9,7 @@ export interface ErrorResponse {
 }
 
 export abstract class ErrorResponder {
-  protected respond(error: HttpError, host: ArgumentsHost) {
+  protected respond(error: HttpError, host: ArgumentsHost, status = 200) {
     const context = host.switchToHttp();
     const response = context.getResponse<Response>();
 
@@ -17,6 +17,6 @@ export abstract class ErrorResponder {
       error: error.toDto()
     };
 
-    response.status(200).json(errorResponse);
+    response.status(status).json(errorResponse);
   }
 }

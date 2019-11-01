@@ -6,7 +6,6 @@ import {
   NestMiddleware
 } from "@nestjs/common";
 
-import { ForbiddenError } from "../error/ForbiddenError";
 import { UnauthorizedError } from "../error/UnauthorizedError";
 import { AuthenticationService } from "../module/authentication/AuthenticationService";
 
@@ -27,7 +26,7 @@ export class AuthenticationMiddleware
     "/api/invitation/get"
   ];
 
-  public use(request: Request, _: Response, next: Function) {
+  public async use(request: Request, _: Response, next: Function) {
     if (AuthenticationMiddleware.EXCLUDED_PATHS.includes(request.baseUrl)) {
       return next();
     }
@@ -56,10 +55,10 @@ export class AuthenticationMiddleware
       );
     }
 
-    const account = this.authenticationService.verifyToken(parts[1]);
+    const account = await this.authenticationService.verifyToken(parts[1]);
 
     if (account === undefined) {
-      throw new ForbiddenError(
+      throw new UnauthorizedError(
         'Token provided in header field "Authorization" is invalid.',
         {
           location: { part: "headers", path: ["Authorization"] },

@@ -236,6 +236,7 @@ export const russian: Translation = {
         Estonian: "eesti",
         Russian: "русский"
       },
+      title: "Настройки",
       useDarkTheme: "Использовать темную тему"
     },
     Tabs: {

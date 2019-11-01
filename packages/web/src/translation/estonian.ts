@@ -233,6 +233,7 @@ export const estonian: Translation = {
         Estonian: "eesti",
         Russian: "русский"
       },
+      title: "Seaded",
       useDarkTheme: "Kasutage tumedat teemat"
     },
     Tabs: {

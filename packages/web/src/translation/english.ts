@@ -232,6 +232,7 @@ export const english: Translation = {
         Estonian: "eesti",
         Russian: "русский"
       },
+      title: "Settings",
       useDarkTheme: "Use dark theme"
     },
     Tabs: {

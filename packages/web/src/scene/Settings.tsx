@@ -10,6 +10,7 @@ import {
 import { CheckBox } from "../component/CheckBox";
 import { Form } from "../component/collection/form";
 import { Group } from "../component/Group";
+import { Head } from "../component/Head";
 import { Select } from "../component/Select";
 import { styled } from "../styling/theme";
 
@@ -31,6 +32,11 @@ interface SettingsTranslation {
    * Language name translations.
    */
   languages: Record<typeof LANGUAGES[number], string>;
+
+  /**
+   * Settings page title.
+   */
+  title: string;
 
   /**
    * Dark theme toggle checkbox label translation.
@@ -62,6 +68,8 @@ export class Settings extends SceneComponent<
   public render() {
     return (
       <MediumForm>
+        <Head title={this.translation.title} />
+
         <Group>
           <CheckBox
             name="theme"

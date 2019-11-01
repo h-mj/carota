@@ -39,11 +39,12 @@ export class FoodstuffController {
   @Post("findByBarcode")
   public async findByBarcode(
     @Body(new ValidationPipe(findFoodstuffByBarcodeValidator))
-    dto: FindFoodstuffByBarcode
+    dto: FindFoodstuffByBarcode,
+    @Principal() principal: Account
   ) {
     const foodstuff = await this.foodstuffService.findByBarcode(dto);
 
-    return foodstuff === undefined ? undefined : foodstuff.toDto();
+    return foodstuff === undefined ? undefined : foodstuff.toDto(principal);
   }
 
   @Post("save")
@@ -53,16 +54,17 @@ export class FoodstuffController {
   ) {
     const foodstuff = await this.foodstuffService.save(dto, principal);
 
-    return foodstuff.toDto();
+    return foodstuff.toDto(principal);
   }
 
   @Post("search")
   public async search(
     @Body(new ValidationPipe(searchFoodstuffDtoValidator))
-    dto: SearchFoodstuffDto
+    dto: SearchFoodstuffDto,
+    @Principal() principal: Account
   ) {
     const foodstuffs = await this.foodstuffService.search(dto);
 
-    return foodstuffs.map(foodstuff => foodstuff.toDto());
+    return foodstuffs.map(foodstuff => foodstuff.toDto(principal));
   }
 }

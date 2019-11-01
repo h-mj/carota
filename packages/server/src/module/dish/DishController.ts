@@ -27,7 +27,7 @@ export class DishController {
   ) {
     const dish = await this.dishService.create(dto, principal);
 
-    return dish.toDto();
+    return dish.toDto(principal);
   }
 
   @Post("delete")

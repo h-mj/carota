@@ -21,7 +21,7 @@ export class MealController {
   ) {
     const meal = await this.mealService.create(dto, principal);
 
-    return meal.toDto();
+    return meal.toDto(principal);
   }
 
   @Post("delete")
@@ -41,7 +41,7 @@ export class MealController {
   ) {
     const meals = await this.mealService.getAll(dto, principal);
 
-    return meals.map(meal => meal.toDto());
+    return meals.map(meal => meal.toDto(principal));
   }
 
   @Post("insert")

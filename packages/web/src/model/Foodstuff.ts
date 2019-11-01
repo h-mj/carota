@@ -28,6 +28,8 @@ export class Foodstuff {
   public readonly packageSize?: number;
   public readonly pieceQuantity?: number;
   public readonly nutritionDeclaration: NutritionDeclarationDto;
+  public readonly deletable: boolean;
+  public readonly editable: boolean;
 
   private readonly store: FoodstuffsStore;
 
@@ -42,6 +44,8 @@ export class Foodstuff {
     this.packageSize = dto.packageSize;
     this.pieceQuantity = dto.pieceQuantity;
     this.nutritionDeclaration = dto.nutritionDeclaration;
+    this.deletable = dto.deletable;
+    this.editable = dto.editable;
     this.store = store;
   }
 

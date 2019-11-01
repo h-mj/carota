@@ -5,10 +5,10 @@ import * as React from "react";
 import { Scenes } from "../base/Scene";
 import { TranslatedComponent } from "../base/TranslatedComponent";
 import { Foodstuff } from "../model/Foodstuff";
-import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
 import { Carbohydrate, Energy, Fat, Protein } from "./collection/icons";
-import { Diagram } from "./Diagram";
+import { EditButton } from "./EditButton";
+import { ItemHeader, ItemHeaderText, ItemHeaderTexts } from "./ItemHeader";
 
 /**
  * Object that maps nutrient names to its icon components. Foodstuff nutrient
@@ -84,21 +84,16 @@ export class FoodstuffView extends TranslatedComponent<
    * Renders specified foodstuff information.
    */
   public render() {
-    const { name, nutritionDeclaration, unit } = this.props.foodstuff;
+    const { editable, name, nutritionDeclaration, unit } = this.props.foodstuff;
 
     return (
       <Container onClick={this.handleSelect}>
-        <Title>
-          <Name>{name}</Name>
-
-          <Edit onClick={this.handleEdit}>
-            <Diagram
-              carbohydrates={nutritionDeclaration.carbohydrate}
-              fat={nutritionDeclaration.fat}
-              protein={nutritionDeclaration.protein}
-            />
-          </Edit>
-        </Title>
+        <Header>
+          <ItemHeaderTexts>
+            <ItemHeaderText>{name}</ItemHeaderText>
+            {editable && <EditButton onClick={this.handleEdit} />}
+          </ItemHeaderTexts>
+        </Header>
 
         <Stats>
           <div>
@@ -177,53 +172,11 @@ const Container = styled.div`
 `;
 
 /**
- * Food item title wrapper which contains foodstuff name and nutrient diagram
- * components.
+ * Foodstuff header component.
  */
-const Title = styled.div`
-  width: 100%;
-
-  display: flex;
+const Header = styled(ItemHeader)`
   flex-grow: 1;
-`;
-
-/**
- * Clickable foodstuff name component.
- */
-const Name = styled.button`
-  ${RESET};
-
-  min-height: ${({ theme }) => theme.lineHeight};
-  height: min-content;
-
-  flex-grow: 1;
-
-  padding: ${({ theme }) => theme.paddingSecondary};
-  box-sizing: content-box;
-
-  color: ${({ theme }) => theme.colorPrimary};
-  line-height: ${({ theme }) => theme.lineHeight};
-  word-break: break-word;
-
-  cursor: pointer;
-`;
-
-/**
- * Foodstuff edit button.
- */
-const Edit = styled.button`
-  ${RESET};
-
-  height: ${({ theme }) => theme.lineHeight};
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-
-  padding: ${({ theme }) => theme.paddingSecondary};
-  box-sizing: content-box;
-
-  cursor: pointer;
+  box-shadow: none;
 `;
 
 /**

@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
-import { allow } from "../../utility/authorization";
+import { allow, can } from "../../utility/authorization";
 import { Account } from "../account/Account";
 import { NutritionDeclaration } from "./NutritionDeclaration";
 
@@ -36,14 +36,16 @@ export class Foodstuff {
   @Column()
   public editorId!: string;
 
-  public toDto = () => ({
+  public toDto = (principal: Account) => ({
     id: this.id,
     name: this.name,
     barcode: this.barcode || undefined,
     packageSize: this.packageSize || undefined,
     unit: this.unit,
     nutritionDeclaration: this.nutritionDeclaration.toDto(),
-    pieceQuantity: this.pieceQuantity || undefined
+    pieceQuantity: this.pieceQuantity || undefined,
+    deletable: can(principal, "delete", this),
+    editable: can(principal, "save", this)
   });
 }
 

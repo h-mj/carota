@@ -42,9 +42,9 @@ export class Dish {
   @Column({ nullable: true })
   public nextId!: string | null;
 
-  public toDto = () => ({
+  public toDto = (principal: Account) => ({
     id: this.id,
-    foodstuff: this.foodstuff.toDto(),
+    foodstuff: this.foodstuff.toDto(principal),
     quantity: this.quantity,
     eaten: this.eaten
   });

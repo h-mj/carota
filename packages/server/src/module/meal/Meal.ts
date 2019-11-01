@@ -42,12 +42,12 @@ export class Meal {
   @Column({ nullable: true })
   public nextId!: string | null;
 
-  public toDto = () => ({
+  public toDto = (principal: Account) => ({
     id: this.id,
     name: this.name,
     date: this.date!, // can be `null` only if meal has been unlinked from the list and not yet relinked,
     dishes:
-      this.dishes != undefined ? this.dishes.map(dish => dish.toDto()) : []
+      this.dishes != undefined ? this.dishes.map(dish => dish.toDto(principal)) : []
   });
 }
 

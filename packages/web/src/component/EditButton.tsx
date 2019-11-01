@@ -11,7 +11,7 @@ interface EditProps {
   /**
    * On click callback function.
    */
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 /**

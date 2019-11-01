@@ -37,7 +37,7 @@ class Authorization {
     this.rights.push({ actorClass, action, targetClass, condition });
   };
 
-  public authorize = <
+  public can = <
     TActor extends object,
     TAction extends string,
     TTarget extends object
@@ -66,17 +66,28 @@ class Authorization {
       }
 
       if (typeof condition === "function" && condition(actor, target)) {
-        return;
+        return true;
       }
     }
 
-    throw new ForbiddenError(
-      `This ${actor.constructor.name.toLowerCase()} can not ${action} this ${target.constructor.name.toLowerCase()}.`
-    );
+    return false;
+  };
+
+  public authorize = <
+    TActor extends object,
+    TAction extends string,
+    TTarget extends object
+  >(
+    actor: TActor,
+    action: TAction,
+    target: TTarget
+  ) => {
+    if (!this.can(actor, action, target)) {
+      throw new ForbiddenError(
+        `This ${actor.constructor.name.toLowerCase()} can not ${action} this ${target.constructor.name.toLowerCase()}.`
+      );
+    }
   };
 }
 
-const authorization = new Authorization();
-
-export const allow = authorization.allow;
-export const authorize = authorization.authorize;
+export const { allow, can, authorize } = new Authorization();

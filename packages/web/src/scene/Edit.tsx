@@ -376,7 +376,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
           </Group>
 
           <Controls>
-            {foodstuff !== undefined && (
+            {foodstuff !== undefined && foodstuff.deletable && (
               <Button
                 invalid={any(this.reasons)}
                 secondary={true}

@@ -48,7 +48,7 @@ class Application extends React.Component {
    */
   @action
   public async load() {
-    rootStore.load();
+    await rootStore.load();
     this.loaded = true;
   }
 }

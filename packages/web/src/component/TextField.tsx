@@ -104,7 +104,7 @@ interface TextFieldProps<TName extends string, TOptional extends boolean> {
   /**
    * Text field input value type.
    */
-  type?: "email" | "number" | "password" | "search" | "tel" | "text";
+  type?: "date" | "email" | "number" | "password" | "search" | "tel" | "text";
 
   /**
    * Text field input value unit that will be rendered after the input.
@@ -366,6 +366,10 @@ const Input = styled.input<InputProps>`
   &::-webkit-search-results-button,
   &::-webkit-search-results-decoration {
     display: none;
+  }
+
+  &[type="date"]:invalid {
+    color: ${({ theme }) => theme.colorSecondary};
   }
 
   &[type="number"] {

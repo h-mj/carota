@@ -163,6 +163,12 @@ export const english: Translation = {
     },
     Register: {
       inputs: {
+        birthDate: {
+          label: "Birth date",
+          reasons: {
+            nonempty: "Please enter your birth date."
+          }
+        },
         email: {
           label: "Email",
           reasons: {

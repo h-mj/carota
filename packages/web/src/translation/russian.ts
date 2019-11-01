@@ -165,6 +165,12 @@ export const russian: Translation = {
     },
     Register: {
       inputs: {
+        birthDate: {
+          label: "Дата рождения",
+          reasons: {
+            nonempty: "Пожалуйста, введите вашу дату рождения."
+          }
+        },
         email: {
           label: "Эл. почта",
           reasons: {

@@ -163,6 +163,12 @@ export const estonian: Translation = {
     },
     Register: {
       inputs: {
+        birthDate: {
+          label: "Sünnikuupäev",
+          reasons: {
+            nonempty: "Palun sisestage oma sünnikuupäev."
+          }
+        },
         email: {
           label: "E-post",
           reasons: {

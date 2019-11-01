@@ -21,7 +21,7 @@ import { any, append, ErrorsFor } from "../utility/form";
  * Text field name type that is union of all text field names inside
  * `TEXT_FIELDS` array.
  */
-type TextFieldNames = "name" | "email" | "password";
+type TextFieldNames = "name" | "birthDate" | "email" | "password";
 
 /**
  * Maps select input name to its options.
@@ -109,6 +109,7 @@ const toBody = deviate<RegisterValues>().shape({
   language: deviate<Language | undefined>().defined(),
   name: deviate<string>().trim().nonempty(),
   sex: deviate<Sex | undefined>().defined(),
+  birthDate: deviate<string>().nonempty(),
   email: deviate<string>().trim().nonempty().email(),
   password: deviate<string>().nonempty().minLength(8)
 });
@@ -135,6 +136,7 @@ export class Register extends SceneComponent<
     language: undefined,
     name: "",
     sex: undefined,
+    birthDate: "",
     email: "",
     password: ""
   };
@@ -204,6 +206,7 @@ export class Register extends SceneComponent<
               required={true}
               value={this.values.sex}
             />
+            {this.renderTextField("birthDate")}
             {this.renderTextField("email")}
             {this.renderTextField("password")}
           </Group>
@@ -234,7 +237,7 @@ export class Register extends SceneComponent<
         name={name}
         onChange={this.handleTextFieldChange}
         required={true}
-        type={name === "name" ? "text" : name}
+        type={name === "name" ? "text" : name === "birthDate" ? "date" : name}
         value={this.values[name]}
       />
     );
@@ -284,7 +287,6 @@ export class Register extends SceneComponent<
       result.ok
         ? this.props.accounts!.register({
             ...result.value,
-            birthDate: "2000-01-01",
             invitationId: this.props.scene.parameters!.invitationId
           })
         : undefined

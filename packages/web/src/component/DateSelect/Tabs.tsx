@@ -173,8 +173,9 @@ export class Tabs extends TranslatedComponent<
  * Container component that wraps all other components.
  */
 const Container = styled.div`
-  width: 100%;
+  min-width: 0;
   height: 100%;
+  flex-grow: 1;
 `;
 
 /**

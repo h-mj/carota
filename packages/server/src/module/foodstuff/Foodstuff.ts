@@ -53,6 +53,6 @@ export type FoodstuffDto = ReturnType<Foodstuff["toDto"]>;
 
 // prettier-ignore
 {
-  allow(Account, "delete", Foodstuff, (account, foodstuff) => account.id === foodstuff.editorId || account.rights === "All");
+  allow(Account, "delete", Foodstuff, account => account.rights === "All");
   allow(Account, "save", Foodstuff, (account, foodstuff) => account.id === foodstuff.editorId || account.rights === "All");
 }

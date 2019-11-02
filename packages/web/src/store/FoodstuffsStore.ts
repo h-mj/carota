@@ -80,6 +80,18 @@ export class FoodstuffsStore {
     return new Foodstuff(result.value, this);
   }
 
+  public async getLatestFrequent(name: string) {
+    this.models.clear();
+
+    const result = await Rpc.call("foodstuff", "getLatestFrequent", { name });
+
+    if (!result.ok) {
+      return this.rootStore.views.notifyUnknownError();
+    }
+
+    result.value.forEach(this.insert);
+  }
+
   /**
    * Saves specified foodstuff entity.
    */

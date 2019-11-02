@@ -12,6 +12,10 @@ import {
   findFoodstuffByBarcodeValidator
 } from "./dto/FindFoodstuffByBarcodeDto";
 import {
+  GetLatestFrequentFoodstuffDto,
+  getLatestFrequentFoodstuffDtoValidator
+} from "./dto/GetLatestFrequentFoodstuffDto";
+import {
   SaveFoodstuffDto,
   saveFoodstuffDtoValidator
 } from "./dto/SaveFoodstuffDto";
@@ -45,6 +49,17 @@ export class FoodstuffController {
     const foodstuff = await this.foodstuffService.findByBarcode(dto);
 
     return foodstuff === undefined ? undefined : foodstuff.toDto(principal);
+  }
+
+  @Post("getLatestFrequent")
+  public async getLatestFrequent(
+    @Body(new ValidationPipe(getLatestFrequentFoodstuffDtoValidator))
+    dto: GetLatestFrequentFoodstuffDto,
+    @Principal() principal: Account
+  ) {
+    const foodstuffs = await this.foodstuffService.getLatestFrequent(dto, principal);
+
+    return foodstuffs.map(foodstuff => foodstuff.toDto(principal));
   }
 
   @Post("save")

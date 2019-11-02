@@ -87,6 +87,7 @@ export class MealView extends Component<MealViewProps> {
    */
   public showSearch = () => {
     this.scene = this.props.views!.push("main", "Search", {
+      name: this.props.meal.name,
       onSelect: this.handleDishSelect
     });
   };

@@ -35,6 +35,11 @@ type Reason = Failure<typeof validate> | "notFound";
  */
 interface SearchProps {
   /**
+   * Name of the meal to which foodstuff is being added.
+   */
+  name: string;
+
+  /**
    * Foodstuff select callback function.
    */
   onSelect: (foodstuff?: Foodstuff, quantity?: number) => void;
@@ -83,7 +88,7 @@ export class Search extends SceneComponent<
   private timeoutId = 0;
 
   /**
-   * Whether or not search is successfully completed.
+   * Whether or not full search is successfully completed.
    */
   @observable private completed = false;
 
@@ -111,6 +116,7 @@ export class Search extends SceneComponent<
     super("Search", props);
 
     this.checkEnvironmentCamera();
+    this.props.foodstuffs!.getLatestFrequent(this.props.name);
   }
 
   /**
@@ -137,20 +143,18 @@ export class Search extends SceneComponent<
           />
         </Controls>
 
-        {this.completed && (
-          <AutoOverflow>
-            <Results>
-              {this.props.foodstuffs!.foodstuffs.map(foodstuff => (
-                <FoodstuffView
-                  key={foodstuff.id}
-                  foodstuff={foodstuff}
-                  onSelect={this.handleFoodstuffSelect}
-                />
-              ))}
-              <Add onClick={this.showEditor}>+</Add>
-            </Results>
-          </AutoOverflow>
-        )}
+        <AutoOverflow>
+          <Results>
+            {this.props.foodstuffs!.foodstuffs.map(foodstuff => (
+              <FoodstuffView
+                key={foodstuff.id}
+                foodstuff={foodstuff}
+                onSelect={this.handleFoodstuffSelect}
+              />
+            ))}
+            {this.completed && <Add onClick={this.showEditor}>+</Add>}
+          </Results>
+        </AutoOverflow>
 
         {this.showScanButton && (
           <Action fixed={true} icon={<Barcode />} onClick={this.showScanner} />

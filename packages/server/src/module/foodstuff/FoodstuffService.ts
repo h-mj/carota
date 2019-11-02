@@ -6,8 +6,11 @@ import { InvalidIdError } from "../../error/InvalidIdError";
 import { UniqueConstraintError } from "../../error/UniqueConstraintErrors";
 import { authorize } from "../../utility/authorization";
 import { Account } from "../account/Account";
+import { Dish } from "../dish/Dish";
+import { Meal } from "../meal/Meal";
 import { DeleteFoodstuffDto } from "./dto/DeleteFoodstuffDto";
 import { FindFoodstuffByBarcode } from "./dto/FindFoodstuffByBarcodeDto";
+import { GetLatestFrequentFoodstuffDto } from "./dto/GetLatestFrequentFoodstuffDto";
 import { SaveFoodstuffDto } from "./dto/SaveFoodstuffDto";
 import { SearchFoodstuffDto } from "./dto/SearchFoodstuffDto";
 import { Foodstuff } from "./Foodstuff";
@@ -38,6 +41,28 @@ export class FoodstuffService {
     @TransactionRepository() foodstuffRepository?: FoodstuffRepository
   ) {
     return foodstuffRepository!.findOne({ barcode: dto.barcode });
+  }
+
+  @Transaction()
+  public async getLatestFrequent(
+    dto: GetLatestFrequentFoodstuffDto,
+    principal: Account,
+    @TransactionRepository() foodstuffRepository?: FoodstuffRepository
+  ) {
+    return foodstuffRepository!
+      .createQueryBuilder()
+      .innerJoin(Dish, "Dish", '"Foodstuff"."id" = "Dish"."foodstuffId"')
+      .innerJoin(
+        Meal,
+        "Meal",
+        '"Dish"."mealId" = "Meal"."id" and "Meal"."accountId" = :id and "Meal"."name" = :name and "Meal"."date" >= current_date - \'28 days\'::interval',
+        { id: principal.id, name: dto.name }
+      )
+      .groupBy('"Foodstuff"."id"')
+      .having("count(*) >= 3")
+      .orderBy("count(*)", "DESC")
+      .limit(32)
+      .getMany();
   }
 
   @Transaction()

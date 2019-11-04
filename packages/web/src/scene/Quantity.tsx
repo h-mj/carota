@@ -1,4 +1,4 @@
-import { deviate } from "deviator";
+import { deviate, ok } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -107,13 +107,28 @@ interface FormValues {
 }
 
 /**
+ * Transforms and validates quantity text field value.
+ */
+const toValidQuantity = deviate<string>()
+  .trim()
+  .nonempty()
+  .replace(",", ".")
+  .toNumber()
+  .positive();
+
+/**
  * Validates form values.
  */
 // prettier-ignore
 const validate = deviate<FormValues>().shape({
-  quantity: deviate<string>().trim().nonempty().replace(",", ".").toNumber().positive(),
+  quantity: toValidQuantity,
   unit: deviate<Unit | "pcs" | undefined>().defined()
 });
+
+// Transforms quantity number to string.
+const toQuantityString = deviate<number>()
+  .round(2)
+  .then(number => ok(number.toString()));
 
 /**
  * Scene component that is used to select a quantity of some foodstuff.
@@ -202,7 +217,7 @@ export class Quantity extends SceneComponent<
         name="unit"
         options={options}
         value={this.values.unit}
-        onChange={this.handleChange}
+        onChange={this.handleUnitChange}
       />
     );
   }
@@ -223,7 +238,7 @@ export class Quantity extends SceneComponent<
         invalid={this.reasons.quantity !== undefined}
         label={this.translation.quantity.label}
         name="quantity"
-        onChange={this.handleChange}
+        onChange={this.handleQuantityChange}
         textAlign="right"
         type="number"
         unit={
@@ -237,14 +252,41 @@ export class Quantity extends SceneComponent<
   }
 
   /**
+   * Updates selected quantity on change.
+   */
+  @action
+  private handleQuantityChange = (name: "quantity", value: string) => {
+    this.values[name] = value;
+  };
+
+  /**
    * Updates input value on value change.
    */
   @action
-  private handleChange = <T extends keyof FormValues>(
-    name: T,
-    value: FormValues[T]
-  ) => {
-    this.values[name] = value;
+  private handleUnitChange = (name: "unit", unit?: Unit | "pcs") => {
+    if (unit === undefined) {
+      return;
+    }
+
+    const previousUnit = this.values.unit;
+
+    this.values[name] = unit;
+
+    if (previousUnit === undefined) {
+      return;
+    }
+
+    const result = toValidQuantity(this.values.quantity);
+
+    if (!result.ok) {
+      return;
+    }
+
+    this.values.quantity = toQuantityString(
+      unit === "pcs"
+        ? result.value / this.props.foodstuff.pieceQuantity!
+        : result.value * this.props.foodstuff.pieceQuantity!
+    ).value;
   };
 
   /**

@@ -92,7 +92,7 @@ export const estonian: Translation = {
       per: "100{unit} kohta:"
     },
     Head: {
-      title: "Morkovka"
+      title: "Carota"
     },
     Login: {
       inputs: {

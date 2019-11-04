@@ -92,7 +92,7 @@ export const english: Translation = {
       per: "Per 100{unit}:"
     },
     Head: {
-      title: "Morkovka"
+      title: "Carota"
     },
     Login: {
       inputs: {

@@ -5,13 +5,12 @@ import { Injectable } from "@nestjs/common";
 import { BadRequestError } from "../../error/BadRequestError";
 import { ForbiddenError } from "../../error/ForbiddenError";
 import { InvalidIdError } from "../../error/InvalidIdError";
-import { authorize } from "../../utility/authorization";
 import { Account } from "../account/Account";
 import { Foodstuff } from "../foodstuff/Foodstuff";
 import { FoodstuffRepository } from "../foodstuff/FoodstuffRepository";
-import { Meal } from "../meal/Meal";
+import { authorize as authorizeMeal, Meal } from "../meal/Meal";
 import { MealRepository } from "../meal/MealRepository";
-import { Dish } from "./Dish";
+import { authorize, Dish } from "./Dish";
 import { DishRepository } from "./DishRepository";
 import { CreateDishDto } from "./dto/CreateDishDto";
 import { DeleteDishDto } from "./dto/DeleteDishDto";
@@ -35,7 +34,7 @@ export class DishService {
       throw new InvalidIdError(Meal, ["mealId"]);
     }
 
-    authorize(principal, "add dish to", meal);
+    await authorizeMeal(principal, "add dish to", meal);
 
     const foodstuff = await foodstuffRepository!.findOne(dto.foodstuffId);
 
@@ -74,7 +73,7 @@ export class DishService {
       throw new InvalidIdError(Dish, ["id"]);
     }
 
-    authorize(principal, "delete", dish);
+    await authorize(principal, "delete", dish);
 
     await dishRepository!.unlink(dish);
     await dishRepository!.remove(dish);
@@ -103,7 +102,7 @@ export class DishService {
       );
     }
 
-    authorize(principal, "insert dish into", meal);
+    await authorizeMeal(principal, "insert dish into", meal);
 
     await dishRepository!.unlink(dish);
 
@@ -134,7 +133,7 @@ export class DishService {
       throw new InvalidIdError(Dish, ["id"]);
     }
 
-    authorize(principal, "eat", dish);
+    await authorize(principal, "eat", dish);
 
     dish.eaten = dto.eaten;
     await dishRepository!.save(dish);
@@ -152,7 +151,7 @@ export class DishService {
       throw new InvalidIdError(Dish, ["id"]);
     }
 
-    authorize(principal, "set quantity of", dish);
+    await authorize(principal, "set quantity of", dish);
 
     dish.quantity = dto.quantity;
     await dishRepository!.save(dish);

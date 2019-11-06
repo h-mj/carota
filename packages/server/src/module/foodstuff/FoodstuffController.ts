@@ -57,9 +57,12 @@ export class FoodstuffController {
     dto: GetLatestFrequentFoodstuffDto,
     @Principal() principal: Account
   ) {
-    const foodstuffs = await this.foodstuffService.getLatestFrequent(dto, principal);
+    const foodstuffs = await this.foodstuffService.getLatestFrequent(
+      dto,
+      principal
+    );
 
-    return foodstuffs.map(foodstuff => foodstuff.toDto(principal));
+    return Promise.all(foodstuffs.map(foodstuff => foodstuff.toDto(principal)));
   }
 
   @Post("save")
@@ -80,6 +83,6 @@ export class FoodstuffController {
   ) {
     const foodstuffs = await this.foodstuffService.search(dto);
 
-    return foodstuffs.map(foodstuff => foodstuff.toDto(principal));
+    return Promise.all(foodstuffs.map(foodstuff => foodstuff.toDto(principal)));
   }
 }

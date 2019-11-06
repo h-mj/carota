@@ -1,5 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
+import { DtoOf } from "../../utility/types";
+
 export const SEXES = ["Female", "Male"] as const;
 export type Sex = typeof SEXES[number];
 
@@ -53,7 +55,7 @@ export class Account {
   @Column({ nullable: true })
   public inviterId!: string | null;
 
-  public toDto = () => ({
+  public toDto = async () => ({
     id: this.id,
     name: this.name,
     sex: this.sex,
@@ -65,4 +67,4 @@ export class Account {
   });
 }
 
-export type AccountDto = ReturnType<Account["toDto"]>;
+export type AccountDto = DtoOf<Account>;

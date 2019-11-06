@@ -4,7 +4,6 @@ import { Injectable } from "@nestjs/common";
 
 import { InvalidIdError } from "../../error/InvalidIdError";
 import { UniqueConstraintError } from "../../error/UniqueConstraintErrors";
-import { authorize } from "../../utility/authorization";
 import { Account } from "../account/Account";
 import { Dish } from "../dish/Dish";
 import { Meal } from "../meal/Meal";
@@ -13,7 +12,7 @@ import { FindFoodstuffByBarcode } from "./dto/FindFoodstuffByBarcodeDto";
 import { GetLatestFrequentFoodstuffDto } from "./dto/GetLatestFrequentFoodstuffDto";
 import { SaveFoodstuffDto } from "./dto/SaveFoodstuffDto";
 import { SearchFoodstuffDto } from "./dto/SearchFoodstuffDto";
-import { Foodstuff } from "./Foodstuff";
+import { authorize, Foodstuff } from "./Foodstuff";
 import { FoodstuffRepository } from "./FoodstuffRepository";
 
 @Injectable()
@@ -30,7 +29,7 @@ export class FoodstuffService {
       throw new InvalidIdError(Foodstuff, ["id"]);
     }
 
-    authorize(principal, "delete", foodstuff);
+    await authorize(principal, "delete", foodstuff);
 
     foodstuffRepository!.remove(foodstuff);
   }
@@ -80,7 +79,7 @@ export class FoodstuffService {
         throw new InvalidIdError(Foodstuff, ["id"]);
       }
 
-      authorize(principal, "save", previous);
+      await authorize(principal, "save", previous);
     }
 
     if (

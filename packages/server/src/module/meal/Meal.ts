@@ -1,3 +1,4 @@
+import { Canallo } from "canallo";
 import {
   Column,
   Entity,
@@ -8,7 +9,7 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 
-import { allow } from "../../utility/authorization";
+import { DtoOf } from "../../utility/types";
 import { Account } from "../account/Account";
 import { Dish } from "../dish/Dish";
 
@@ -42,23 +43,27 @@ export class Meal {
   @Column({ nullable: true })
   public nextId!: string | null;
 
-  public toDto = (principal: Account) => ({
+  public toDto = async (principal: Account) => ({
     id: this.id,
     name: this.name,
     date: this.date!, // can be `null` only if meal has been unlinked from the list and not yet relinked,
     dishes:
-      this.dishes != undefined ? this.dishes.map(dish => dish.toDto(principal)) : []
+      this.dishes != undefined
+        ? await Promise.all(this.dishes.map(dish => dish.toDto(principal)))
+        : []
   });
 }
 
-export type MealDto = ReturnType<Meal["toDto"]>;
+export type MealDto = DtoOf<Meal>;
+
+export const isAccountMealOwner = (account: Account, meal: Meal) =>
+  account.id === meal.accountId;
 
 // prettier-ignore
-{
-  allow(Account, "delete", Meal, (account, meal) => account.id === meal.accountId);
-  allow(Account, "get all meals of", Account, (actor, target) => actor.id === target.id || actor.id === target.adviserId);
-  allow(Account, "insert", Meal, (account, meal) => account.id === meal.accountId);
-  allow(Account, "rename", Meal, (account, meal) => account.id === meal.accountId);
-  allow(Account, "add dish to", Meal, (account, meal) => meal.accountId === account.id);
-  allow(Account, "insert dish into", Meal, (account, meal) => account.id === meal.accountId);
-}
+export const { authorize } = new Canallo()
+  .allow(Account, "delete", Meal, isAccountMealOwner)
+  .allow(Account, "get all meals of", Account, (actor, target) => actor.id === target.id || actor.id === target.adviserId)
+  .allow(Account, "insert", Meal, isAccountMealOwner)
+  .allow(Account, "rename", Meal, isAccountMealOwner)
+  .allow(Account, "add dish to", Meal, isAccountMealOwner)
+  .allow(Account, "insert dish into", Meal, isAccountMealOwner);

@@ -1,3 +1,4 @@
+import { Canallo } from "canallo";
 import {
   Column,
   Entity,
@@ -7,10 +8,10 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 
-import { allow } from "../../utility/authorization";
+import { DtoOf } from "../../utility/types";
 import { Account } from "../account/Account";
 import { Foodstuff } from "../foodstuff/Foodstuff";
-import { Meal } from "../meal/Meal";
+import { isAccountMealOwner, Meal } from "../meal/Meal";
 
 @Entity()
 export class Dish {
@@ -42,19 +43,20 @@ export class Dish {
   @Column({ nullable: true })
   public nextId!: string | null;
 
-  public toDto = (principal: Account) => ({
+  public toDto = async (principal: Account) => ({
     id: this.id,
-    foodstuff: this.foodstuff.toDto(principal),
+    foodstuff: await this.foodstuff.toDto(principal),
     quantity: this.quantity,
     eaten: this.eaten
   });
 }
 
-export type DishDto = ReturnType<Dish["toDto"]>;
+export type DishDto = DtoOf<Dish>;
 
-// prettier-ignore
-{
-  allow(Account, "delete", Dish, (account, dish) => dish.meal !== undefined && account.id === dish.meal.accountId);
-  allow(Account, "eat", Dish, (account, dish) => dish.meal !== undefined && account.id === dish.meal.accountId);
-  allow(Account, "set quantity of", Dish, (account, dish) => dish.meal !== undefined && account.id === dish.meal.accountId);
-}
+const isAccountDishOwner = (account: Account, dish: Dish) =>
+  dish.meal !== undefined && isAccountMealOwner(account, dish.meal);
+
+export const { authorize } = new Canallo()
+  .allow(Account, "delete", Dish, isAccountDishOwner)
+  .allow(Account, "eat", Dish, isAccountDishOwner)
+  .allow(Account, "set quantity of", Dish, isAccountDishOwner);

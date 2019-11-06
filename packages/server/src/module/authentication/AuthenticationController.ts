@@ -29,7 +29,7 @@ export class AuthenticationController {
     }
 
     return {
-      account: account.toDto(),
+      account: await account.toDto(),
       token: this.authenticationService.generateToken(account)
     };
   }

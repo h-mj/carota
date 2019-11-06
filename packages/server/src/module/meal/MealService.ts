@@ -4,7 +4,6 @@ import { Injectable } from "@nestjs/common";
 
 import { BadRequestError } from "../../error/BadRequestError";
 import { InvalidIdError } from "../../error/InvalidIdError";
-import { authorize } from "../../utility/authorization";
 import { Account } from "../account/Account";
 import { AccountRepository } from "../account/AccountRepository";
 import { DishRepository } from "../dish/DishRepository";
@@ -13,7 +12,7 @@ import { DeleteMealDto } from "./dto/DeleteMealDto";
 import { GetAllMealsDto } from "./dto/GetAllMealsDto";
 import { InsertMealDto } from "./dto/InsertMealDto";
 import { RenameMealDto } from "./dto/RenameMealDto";
-import { Meal } from "./Meal";
+import { authorize, Meal } from "./Meal";
 import { MealRepository } from "./MealRepository";
 
 @Injectable()
@@ -55,7 +54,7 @@ export class MealService {
       throw new InvalidIdError(Meal, ["id"]);
     }
 
-    authorize(principal, "delete", meal);
+    await authorize(principal, "delete", meal);
 
     await mealRepository!.unlink(meal);
     await mealRepository!.remove(meal);
@@ -77,7 +76,7 @@ export class MealService {
       throw new InvalidIdError(Account, ["accountId"]);
     }
 
-    authorize(principal, "get all meals of", account);
+    await authorize(principal, "get all meals of", account);
 
     const meals = await mealRepository!.ordered(account, dto.date);
 
@@ -101,7 +100,7 @@ export class MealService {
       throw new InvalidIdError(Meal, ["id"]);
     }
 
-    authorize(principal, "insert", meal);
+    await authorize(principal, "insert", meal);
 
     await mealRepository!.unlink(meal);
 
@@ -132,7 +131,7 @@ export class MealService {
       throw new InvalidIdError(Meal, ["id"]);
     }
 
-    authorize(principal, "rename", meal);
+    await authorize(principal, "rename", meal);
 
     meal.name = dto.name;
     await mealRepository!.save(meal);

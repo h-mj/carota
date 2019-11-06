@@ -1,5 +1,7 @@
 import { Column } from "typeorm";
 
+import { DtoOf } from "../../utility/types";
+
 export class NutritionDeclaration {
   @Column("float4")
   public energy!: number;
@@ -37,7 +39,7 @@ export class NutritionDeclaration {
   @Column("float4", { nullable: true })
   public salt!: number | null;
 
-  public toDto = () => ({
+  public toDto = async () => ({
     energy: this.energy,
     fat: this.fat,
     saturates: this.saturates || undefined,
@@ -53,4 +55,4 @@ export class NutritionDeclaration {
   });
 }
 
-export type NutritionDeclarationDto = ReturnType<NutritionDeclaration["toDto"]>;
+export type NutritionDeclarationDto = DtoOf<NutritionDeclaration>;

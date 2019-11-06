@@ -29,7 +29,7 @@ export class AccountController {
     const account = await this.accountService.create(dto);
 
     return {
-      account: account.toDto(),
+      account: await account.toDto(),
       token: this.authenticationService.generateToken(account)
     };
   }

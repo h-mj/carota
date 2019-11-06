@@ -1,6 +1,7 @@
 import { Canallo } from "canallo";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
+import { onUnauthorized } from "../../utility/authorization";
 import { DtoOf } from "../../utility/types";
 import { Account } from "../account/Account";
 import { NutritionDeclaration } from "./NutritionDeclaration";
@@ -53,6 +54,6 @@ export class Foodstuff {
 export type FoodstuffDto = DtoOf<Foodstuff>;
 
 // prettier-ignore
-export const { authorize, can } = new Canallo()
+export const { authorize, can } = new Canallo(onUnauthorized)
   .allow(Account, "delete", Foodstuff, account => account.rights === "All")
   .allow(Account, "save", Foodstuff, (account, foodstuff) => account.id === foodstuff.editorId || account.rights === "All");

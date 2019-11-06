@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 
+import { onUnauthorized } from "../../utility/authorization";
 import { DtoOf } from "../../utility/types";
 import { Account } from "../account/Account";
 import { Foodstuff } from "../foodstuff/Foodstuff";
@@ -56,7 +57,7 @@ export type DishDto = DtoOf<Dish>;
 const isAccountDishOwner = (account: Account, dish: Dish) =>
   dish.meal !== undefined && isAccountMealOwner(account, dish.meal);
 
-export const { authorize } = new Canallo()
+export const { authorize } = new Canallo(onUnauthorized)
   .allow(Account, "delete", Dish, isAccountDishOwner)
   .allow(Account, "eat", Dish, isAccountDishOwner)
   .allow(Account, "set quantity of", Dish, isAccountDishOwner);

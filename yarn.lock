@@ -3587,10 +3587,10 @@ camelize@^1.0.0:
   resolved "https://registry.yarnpkg.com/camelize/-/camelize-1.0.0.tgz#164a5483e630fa4321e5af07020e531831b2609b"
   integrity sha1-FkpUg+Yw+kMh5a8HAg5TGDGyYJs=
 
-canallo@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/canallo/-/canallo-0.0.2.tgz#c54c723d70d63d8a331e07a280514e3ee9387159"
-  integrity sha512-gjHcdH7+A8oPDmKKALOwIJGDs5+tqdL5zGDPXH5QAh7JwfHKdju+HtvJLZhlkrxF4SegB6Zs3mkVujk3oIenbg==
+canallo@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/canallo/-/canallo-0.0.3.tgz#b800cef1c6c1b0471ad1b0627b535ab247467a21"
+  integrity sha512-gIpPSiUZ5u3mbcqX1SQto5jqGo5iMVUdTlqLMq4ZkuD42HC/lXb3SRtbyNu4ehspGYOH/ZDVfNBVtgDEAXIgLQ==
 
 caniuse-api@^3.0.0:
   version "3.0.0"

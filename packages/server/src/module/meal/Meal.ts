@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 
+import { onUnauthorized } from "../../utility/authorization";
 import { DtoOf } from "../../utility/types";
 import { Account } from "../account/Account";
 import { Dish } from "../dish/Dish";
@@ -60,7 +61,7 @@ export const isAccountMealOwner = (account: Account, meal: Meal) =>
   account.id === meal.accountId;
 
 // prettier-ignore
-export const { authorize } = new Canallo()
+export const { authorize } = new Canallo(onUnauthorized)
   .allow(Account, "delete", Meal, isAccountMealOwner)
   .allow(Account, "get all meals of", Account, (actor, target) => actor.id === target.id || actor.id === target.adviserId)
   .allow(Account, "insert", Meal, isAccountMealOwner)

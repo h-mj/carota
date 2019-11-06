@@ -1,6 +1,6 @@
 import { UnauthorizedHandler } from "canallo";
 
-import { ForbiddenError } from "../error/ForbiddenError";
+import { ForbiddenError } from "../base/error/ForbiddenError";
 
 // prettier-ignore
 export const onUnauthorized: UnauthorizedHandler = (actor, action, target) => {

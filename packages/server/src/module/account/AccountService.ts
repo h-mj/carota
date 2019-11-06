@@ -3,8 +3,8 @@ import { Transaction, TransactionRepository } from "typeorm";
 
 import { Injectable } from "@nestjs/common";
 
-import { InvalidIdError } from "../../error/InvalidIdError";
-import { UniqueConstraintError } from "../../error/UniqueConstraintErrors";
+import { InvalidIdError } from "../../base/error/InvalidIdError";
+import { UniqueConstraintError } from "../../base/error/UniqueConstraintErrors";
 import { Invitation } from "../invitation/Invitation";
 import { InvitationRepository } from "../invitation/InvitationRepository";
 import { Account } from "./Account";

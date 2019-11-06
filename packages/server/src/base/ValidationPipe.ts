@@ -2,7 +2,7 @@ import { Deviation } from "deviator";
 
 import { PipeTransform } from "@nestjs/common";
 
-import { ValidationError, ValidationErrorTree } from "../error/ValidationError";
+import { ValidationError, ValidationErrorTree } from "./error/ValidationError";
 
 type Validator<T> = Deviation<unknown, T, T, ValidationErrorTree>;
 

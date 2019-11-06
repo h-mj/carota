@@ -2,7 +2,7 @@ import { Transaction, TransactionRepository } from "typeorm";
 
 import { Injectable } from "@nestjs/common";
 
-import { InvalidIdError } from "../../error/InvalidIdError";
+import { InvalidIdError } from "../../base/error/InvalidIdError";
 import { GetInvitationDto } from "./dto/GetInvitationDto";
 import { Invitation } from "./Invitation";
 import { InvitationRepository } from "./InvitationRepository";

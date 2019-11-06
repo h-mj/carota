@@ -2,9 +2,9 @@ import { Transaction, TransactionRepository } from "typeorm";
 
 import { Injectable } from "@nestjs/common";
 
-import { BadRequestError } from "../../error/BadRequestError";
-import { ForbiddenError } from "../../error/ForbiddenError";
-import { InvalidIdError } from "../../error/InvalidIdError";
+import { BadRequestError } from "../../base/error/BadRequestError";
+import { ForbiddenError } from "../../base/error/ForbiddenError";
+import { InvalidIdError } from "../../base/error/InvalidIdError";
 import { Account } from "../account/Account";
 import { Foodstuff } from "../foodstuff/Foodstuff";
 import { FoodstuffRepository } from "../foodstuff/FoodstuffRepository";

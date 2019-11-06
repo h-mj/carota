@@ -1,5 +1,5 @@
-import { ErrorResponse } from "./filter/ErrorResponder";
-import { DataResponse } from "./interceptor/GlobalInterceptor";
+import { ErrorResponse } from "./base/filter/ErrorResponder";
+import { DataResponse } from "./base/GlobalInterceptor";
 import { AccountController } from "./module/account/AccountController";
 import { AuthenticationController } from "./module/authentication/AuthenticationController";
 import { DishController } from "./module/dish/DishController";
@@ -55,7 +55,7 @@ export type Response<
   TEndpoint extends Endpoint<TController>
 > = DataResponse<Data<TController, TEndpoint>> | ErrorResponse;
 
-export { ErrorDto } from "./error/HttpError";
+export { ErrorDto } from "./base/error/HttpError";
 export {
   AccountDto,
   Language,

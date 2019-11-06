@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from "@nestjs/common";
 
-import { ValidationPipe } from "../../pipe/ValidationPipe";
+import { ValidationPipe } from "../../base/ValidationPipe";
 import {
   GetInvitationDto,
   getInvitationDtoValidator

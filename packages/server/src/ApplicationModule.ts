@@ -4,7 +4,7 @@ import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
-import { AuthenticationMiddleware } from "./middleware/AuthenticationMiddleware";
+import { AuthenticationMiddleware } from "./base/AuthenticationMiddleware";
 import { AccountModule } from "./module/account/AccountModule";
 import { AuthenticationModule } from "./module/authentication/AuthenticationModule";
 import { DishModule } from "./module/dish/DishModule";

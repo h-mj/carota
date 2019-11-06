@@ -2,8 +2,8 @@ import { Transaction, TransactionRepository } from "typeorm";
 
 import { Injectable } from "@nestjs/common";
 
-import { BadRequestError } from "../../error/BadRequestError";
-import { InvalidIdError } from "../../error/InvalidIdError";
+import { BadRequestError } from "../../base/error/BadRequestError";
+import { InvalidIdError } from "../../base/error/InvalidIdError";
 import { Account } from "../account/Account";
 import { AccountRepository } from "../account/AccountRepository";
 import { DishRepository } from "../dish/DishRepository";

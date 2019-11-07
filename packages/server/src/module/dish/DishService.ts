@@ -43,13 +43,13 @@ export class DishService {
     }
 
     const last = await dishRepository!.findOne({
-      meal,
+      mealId: meal.id,
       nextId: null
     });
 
     const template = dishRepository!.create({
-      meal,
-      foodstuff,
+      mealId: meal.id,
+      foodstuffId: foodstuff.id,
       quantity: dto.quantity,
       eaten: dto.eaten
     });
@@ -96,7 +96,7 @@ export class DishService {
 
     if (meal === undefined) {
       throw new InvalidIdError(Meal, ["mealId"]);
-    } else if (dish.meal!.accountId !== meal.accountId) {
+    } else if ((await dish.meal)!.accountId !== meal.accountId) {
       throw new ForbiddenError(
         "Meal can only be inserted into a meal with the same owner."
       );

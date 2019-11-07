@@ -6,7 +6,7 @@ import { Dish } from "./Dish";
 @EntityRepository(Dish)
 export class DishRepository extends Repository<Dish> {
   public async ordered(meal: Meal) {
-    const dishes = await this.find({ meal });
+    const dishes = await this.find({ mealId: meal.id });
     const reversed = new Map(dishes.map(dish => [dish.nextId, dish]));
 
     const order: Dish[] = [];

@@ -98,7 +98,7 @@ export class FoodstuffService {
       pieceQuantity: dto.pieceQuantity,
       packageSize: dto.packageSize,
       nutritionDeclaration: dto.nutritionDeclaration,
-      editor: principal
+      editorId: principal.id
     });
 
     return foodstuffRepository!.save(template);

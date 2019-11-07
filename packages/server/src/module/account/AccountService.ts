@@ -42,8 +42,8 @@ export class AccountService {
       hash: await hash(dto.password, 12),
       type: invitation.type,
       rights: invitation.rights,
-      adviser: invitation.adviser,
-      inviter: invitation.inviter
+      adviserId: invitation.adviserId,
+      inviterId: invitation.inviterId
     });
 
     await invitationRepository!.remove(invitation);

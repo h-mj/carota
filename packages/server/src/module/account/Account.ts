@@ -44,13 +44,13 @@ export class Account {
   public rights!: Rights;
 
   @ManyToOne(() => Account)
-  public adviser?: Account;
+  public adviser!: Promise<Account | undefined>;
 
   @Column({ nullable: true })
   public adviserId!: string | null;
 
   @ManyToOne(() => Account)
-  public inviter?: Account;
+  public inviter!: Promise<Account | undefined>;
 
   @Column({ nullable: true })
   public inviterId!: string | null;

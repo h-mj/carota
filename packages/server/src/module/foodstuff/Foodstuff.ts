@@ -33,7 +33,7 @@ export class Foodstuff {
   public nutritionDeclaration!: NutritionDeclaration;
 
   @ManyToOne(() => Account, { nullable: false })
-  public editor!: Account;
+  public editor!: Promise<Account>;
 
   @Column()
   public editorId!: string;

@@ -20,13 +20,16 @@ export class Dish {
   public id!: string;
 
   @ManyToOne(() => Meal)
-  public meal?: Meal;
+  public meal!: Promise<Meal | undefined>;
 
   @Column({ nullable: true })
   public mealId!: string | null;
 
-  @ManyToOne(() => Foodstuff, { nullable: false, eager: true })
-  public foodstuff!: Foodstuff;
+  @ManyToOne(() => Foodstuff, { nullable: false })
+  public foodstuff!: Promise<Foodstuff>;
+
+  @Column()
+  public foodstuffId!: string | null;
 
   @Column("float4")
   public quantity!: number;
@@ -46,7 +49,7 @@ export class Dish {
 
   public toDto = async (principal: Account) => ({
     id: this.id,
-    foodstuff: await this.foodstuff.toDto(principal),
+    foodstuff: await (await this.foodstuff).toDto(principal),
     quantity: this.quantity,
     eaten: this.eaten
   });
@@ -54,8 +57,8 @@ export class Dish {
 
 export type DishDto = DtoOf<Dish>;
 
-const isAccountDishOwner = (account: Account, dish: Dish) =>
-  dish.meal !== undefined && isAccountMealOwner(account, dish.meal);
+const isAccountDishOwner = async (account: Account, dish: Dish) =>
+  isAccountMealOwner(account, (await dish.meal)!);
 
 export const { authorize } = new Canallo(onUnauthorized)
   .allow(Account, "delete", Dish, isAccountDishOwner)

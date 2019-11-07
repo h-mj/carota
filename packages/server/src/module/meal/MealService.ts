@@ -82,7 +82,7 @@ export class MealService {
 
     // TODO: fix n + 1
     for (const meal of meals) {
-      meal.dishes = await dishRepository!.ordered(meal);
+      meal.dishes = dishRepository!.ordered(meal);
     }
 
     return meals;

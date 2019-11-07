@@ -32,7 +32,7 @@ export class Meal {
   public date!: string | null;
 
   @OneToMany(() => Dish, dish => dish.meal)
-  public dishes?: Dish[];
+  public dishes!: Promise<Dish[]>;
 
   @OneToOne(() => Meal, meal => meal.next)
   public previous!: Promise<Meal | undefined>;
@@ -48,10 +48,9 @@ export class Meal {
     id: this.id,
     name: this.name,
     date: this.date!, // can be `null` only if meal has been unlinked from the list and not yet relinked,
-    dishes:
-      this.dishes != undefined
-        ? await Promise.all(this.dishes.map(dish => dish.toDto(principal)))
-        : []
+    dishes: await Promise.all(
+      (await this.dishes).map(dish => dish.toDto(principal))
+    )
   });
 }
 

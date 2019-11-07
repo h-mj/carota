@@ -302,7 +302,7 @@ export class ViewsStore {
    * Returns a promise that will be resolved after `timeout` seconds.
    */
   @action
-  public async wait(timeout: number) {
+  public async wait(timeout: number): Promise<void> {
     return new Promise(resolve => window.setTimeout(resolve, 1000 * timeout));
   }
 }

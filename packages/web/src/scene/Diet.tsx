@@ -56,6 +56,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
    */
   public constructor(props: DefaultSceneComponentProps<"Diet">) {
     super("Diet", props);
+
     this.setDate(new Date());
   }
 
@@ -78,7 +79,10 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
         >
           <TrashCan isRemovable={this.isDraggableRemovable()} />
 
-          <MealsView draggableType={this.draggableType} />
+          <MealsView
+            draggableType={this.draggableType}
+            mealList={this.props.meals!.mealsOf(this.date)}
+          />
         </DragDropContext>
 
         <Action fixed={true} onClick={this.handleAddClick} />
@@ -107,7 +111,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
   @action
   private setDate = async (date: Date) => {
     this.date = date;
-    await this.props.meals!.getAll(date);
+    this.props.meals!.getAll(date);
   };
 
   /**

@@ -3,6 +3,7 @@ import * as React from "react";
 import { Droppable } from "react-beautiful-dnd";
 
 import { Component } from "../base/Component";
+import { Meal } from "../model/Meal";
 import { styled } from "../styling/theme";
 import { MealView } from "./MealView";
 
@@ -14,6 +15,11 @@ interface MealsViewProps {
    * Current draggable type.
    */
   draggableType?: "meal" | "dish";
+
+  /**
+   * Current list of meals.
+   */
+  mealList: Meal[];
 }
 
 /**
@@ -27,7 +33,7 @@ export class MealsView extends Component<MealsViewProps> {
    * Renders all provided meals.
    */
   public render() {
-    const meals = [...this.props.meals!.meals];
+    const meals = [...this.props.mealList];
 
     return (
       <Droppable

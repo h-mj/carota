@@ -23,9 +23,9 @@ const toDateString = (date: Date) => {
  */
 export class MealsStore {
   /**
-   * Stored meal models.
+   * Cached meal models of specific dates.
    */
-  @observable public meals: Meal[] = [];
+  @observable private cache: Map<string, Meal[]> = new Map();
 
   /**
    * Root store instance.
@@ -43,14 +43,21 @@ export class MealsStore {
    * Returns meal model with specified ID.
    */
   public withId(id: string) {
-    return this.meals.find(meal => meal.id === id);
+    return [...this.cache.values()].flat().find(meal => meal.id === id);
   }
 
   /**
    * Returns whether meal with specified name exists.
    */
   public hasWithName(name: string) {
-    return this.meals.find(meal => meal.name === name) !== undefined;
+    return [...this.cache.values()].flat().some(meal => meal.name === name);
+  }
+
+  /**
+   * Returns currently stored meals at specified date.
+   */
+  public mealsOf(date: Date) {
+    return this.cache.get(toDateString(date)) || [];
   }
 
   /**
@@ -58,7 +65,7 @@ export class MealsStore {
    */
   @action
   public clear() {
-    this.meals = [];
+    this.cache.clear();
   }
 
   /**
@@ -66,16 +73,18 @@ export class MealsStore {
    */
   @action
   public async create(name: string, date: Date) {
+    const dateString = toDateString(date);
+
     const result = await Rpc.call("meal", "create", {
       name,
-      date: toDateString(date)
+      date: dateString
     });
 
     if (!result.ok) {
       return this.rootStore.views.notifyUnknownError();
     }
 
-    this.meals.push(new Meal(result.value, this));
+    (await this.getAll(date)).push(new Meal(result.value, this));
   }
 
   /**
@@ -107,18 +116,25 @@ export class MealsStore {
    */
   @action
   public async getAll(date: Date) {
-    this.clear();
+    const dateString = toDateString(date);
 
-    const result = await Rpc.call("meal", "getAll", {
-      accountId: undefined,
-      date: toDateString(date)
-    });
+    if (!this.cache.has(dateString)) {
+      const result = await Rpc.call("meal", "getAll", {
+        accountId: undefined,
+        date: dateString
+      });
 
-    if (!result.ok) {
-      return this.rootStore.views.notifyUnknownError();
+      if (!result.ok) {
+        this.rootStore.views.notifyUnknownError();
+      }
+
+      this.cache.set(
+        dateString,
+        !result.ok ? [] : result.value.map(dto => new Meal(dto, this))
+      );
     }
 
-    this.meals = result.value.map(dto => new Meal(dto, this));
+    return this.cache.get(dateString)!;
   }
 
   /**
@@ -126,8 +142,10 @@ export class MealsStore {
    */
   @action
   public async insert(meal: Meal, index: number) {
-    this.meals.splice(this.meals.indexOf(meal), 1);
-    this.meals.splice(index, 0, meal);
+    const meals = await this.getAll(new Date(meal.date));
+
+    meals.splice(meals.indexOf(meal), 1);
+    meals.splice(index, 0, meal);
 
     const result = await Rpc.call("meal", "insert", {
       id: meal.id,
@@ -171,7 +189,8 @@ export class MealsStore {
       throw new Error("Tried to remove non-empty meal");
     }
 
-    this.meals.splice(this.meals.indexOf(meal), 1);
+    const meals = await this.getAll(new Date(meal.date));
+    meals.splice(meals.indexOf(meal), 1);
 
     const result = await Rpc.call("meal", "delete", { id: meal.id });
 

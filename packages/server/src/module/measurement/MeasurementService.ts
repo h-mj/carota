@@ -6,7 +6,7 @@ import { InvalidIdError } from "../../base/error/InvalidIdError";
 import { Account } from "../account/Account";
 import { AccountRepository } from "../account/AccountRepository";
 import { DeleteMeasurementDto } from "./dto/DeleteMeasurementDto";
-import { GetSizeMeasurementsDto } from "./dto/GetSizeMeasurementsDto";
+import { GetQuantityMeasurementsDto } from "./dto/GetSizeMeasurementsDto";
 import { SaveMeasurementDto } from "./dto/SaveMeasurementDto";
 import { authorize, Measurement } from "./Measurement";
 import { MeasurementRepository } from "./MeasurementRepository";
@@ -31,8 +31,8 @@ export class MeasurementService {
   }
 
   @Transaction()
-  public async getWithSize(
-    dto: GetSizeMeasurementsDto,
+  public async getOfQuantity(
+    dto: GetQuantityMeasurementsDto,
     principal: Account,
     @TransactionRepository() accountRepository?: AccountRepository,
     @TransactionRepository() measurementRepository?: MeasurementRepository
@@ -49,7 +49,7 @@ export class MeasurementService {
 
     return measurementRepository!.find({
       accountId: account.id,
-      size: dto.size
+      quantity: dto.quantity
     });
   }
 
@@ -61,14 +61,14 @@ export class MeasurementService {
   ) {
     let measurement = await measurementRepository!.findOne({
       accountId: principal.id,
-      size: dto.size,
+      quantity: dto.quantity,
       date: dto.date
     });
 
     if (measurement === undefined) {
       measurement = measurementRepository!.create({
         accountId: principal.id,
-        size: dto.size,
+        quantity: dto.quantity,
         date: dto.date
       });
     }

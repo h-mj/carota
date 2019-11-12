@@ -8,8 +8,8 @@ import {
   DeleteMeasurementDto
 } from "./dto/DeleteMeasurementDto";
 import {
-  getSizeMeasurementsDtoValidator,
-  GetSizeMeasurementsDto
+  getQuantityMeasurementsDtoValidator,
+  GetQuantityMeasurementsDto
 } from "./dto/GetSizeMeasurementsDto";
 import {
   saveMeasurementDtoValidator,
@@ -32,15 +32,18 @@ export class MeasurementController {
     return true as const;
   }
 
-  @Post("getWithSize")
-  public async getWithSize(
-    @Body(new ValidationPipe(getSizeMeasurementsDtoValidator))
-    dto: GetSizeMeasurementsDto,
+  @Post("getOfQuantity")
+  public async getOfQuantity(
+    @Body(new ValidationPipe(getQuantityMeasurementsDtoValidator))
+    dto: GetQuantityMeasurementsDto,
     @Principal() principal: Account
   ) {
-    await this.measurementService.getWithSize(dto, principal);
+    const measurements = await this.measurementService.getOfQuantity(
+      dto,
+      principal
+    );
 
-    return true as const;
+    return Promise.all(measurements.map(measurement => measurement.toDto()));
   }
 
   @Post("save")

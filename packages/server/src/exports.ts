@@ -70,3 +70,4 @@ export { FoodstuffDto, Unit } from "./module/foodstuff/Foodstuff";
 export { NutritionDeclarationDto } from "./module/foodstuff/NutritionDeclaration";
 export { InvitationDto } from "./module/invitation/Invitation";
 export { MealDto } from "./module/meal/Meal";
+export { MeasurementDto, Quantity } from "./module/measurement/Measurement";

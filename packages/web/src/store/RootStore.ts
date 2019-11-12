@@ -2,6 +2,7 @@ import { AccountsStore } from "./AccountsStore";
 import { FoodstuffsStore } from "./FoodstuffsStore";
 import { InvitationsStore } from "./InvitationsStore";
 import { MealsStore } from "./MealsStore";
+import { MeasurementsStore } from "./MeasurementsStore";
 import { ViewsStore } from "./ViewsStore";
 
 /**
@@ -12,6 +13,7 @@ export class RootStore {
   public foodstuffs: FoodstuffsStore;
   public invitations: InvitationsStore;
   public meals: MealsStore;
+  public measurements: MeasurementsStore;
   public views: ViewsStore;
 
   /**
@@ -22,6 +24,7 @@ export class RootStore {
     this.foodstuffs = new FoodstuffsStore(this);
     this.invitations = new InvitationsStore();
     this.meals = new MealsStore(this);
+    this.measurements = new MeasurementsStore(this);
     this.views = new ViewsStore(this);
   }
 
@@ -39,6 +42,7 @@ export class RootStore {
     this.accounts.clear();
     this.foodstuffs.clear();
     this.meals.clear();
+    this.measurements.clear();
   }
 }
 

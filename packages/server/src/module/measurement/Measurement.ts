@@ -11,7 +11,7 @@ import { onUnauthorized } from "../../utility/authorization";
 import { DtoOf } from "../../utility/types";
 import { isAccountOrAccountAdviser, Account } from "../account/Account";
 
-export const SIZES = [
+export const QUANTITIES = [
   "Biceps",
   "Calf",
   "Chest",
@@ -25,10 +25,10 @@ export const SIZES = [
   "Wrist"
 ] as const;
 
-export type Size = typeof SIZES[number];
+export type Quantity = typeof QUANTITIES[number];
 
 @Entity()
-@Unique(["account", "size", "date"])
+@Unique(["account", "quantity", "date"])
 export class Measurement {
   @PrimaryGeneratedColumn("uuid")
   public id!: string;
@@ -39,8 +39,8 @@ export class Measurement {
   @Column()
   public accountId!: string;
 
-  @Column("enum", { enum: SIZES })
-  public size!: Size;
+  @Column("enum", { enum: QUANTITIES })
+  public quantity!: Quantity;
 
   @Column("float4")
   public value!: number;
@@ -50,7 +50,7 @@ export class Measurement {
 
   public toDto = async () => ({
     id: this.id,
-    size: this.size,
+    quantity: this.quantity,
     value: this.value,
     date: this.date
   });

@@ -1,11 +1,11 @@
 import { deviate, Success } from "deviator";
 
 import { isValidDate } from "../../../utility/validators";
-import { SIZES } from "../Measurement";
+import { QUANTITIES } from "../Measurement";
 
 // prettier-ignore
 export const saveMeasurementDtoValidator = deviate().object().shape({
-  size: deviate().options(SIZES),
+  quantity: deviate().options(QUANTITIES),
   date: deviate().string().then(isValidDate),
   value: deviate().number().positive().round(2)
 });

@@ -1,13 +1,13 @@
 import { deviate, Success } from "deviator";
 
-import { SIZES } from "../Measurement";
+import { QUANTITIES } from "../Measurement";
 
 // prettier-ignore
-export const getSizeMeasurementsDtoValidator = deviate().object().shape({
+export const getQuantityMeasurementsDtoValidator = deviate().object().shape({
   accountId: deviate().optional().string().guid(),
-  size: deviate().options(SIZES)
+  quantity: deviate().options(QUANTITIES)
 });
 
-export type GetSizeMeasurementsDto = Success<
-  typeof getSizeMeasurementsDtoValidator
+export type GetQuantityMeasurementsDto = Success<
+  typeof getQuantityMeasurementsDtoValidator
 >;

@@ -116,6 +116,7 @@ export const english: Translation = {
     Menu: {
       Diet: "Daily intake",
       Logout: "Sign out",
+      Measurements: "Measurements",
       Settings: "Settings"
     },
     Name: {

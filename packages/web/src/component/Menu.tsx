@@ -14,7 +14,12 @@ import { Overlay } from "./Overlay";
 /**
  * Scene names in order to which user can navigate using the navigation menu.
  */
-const NAVIGABLE_SCENES = ["Diet", "Settings", "Logout"] as const;
+const NAVIGABLE_SCENES = [
+  "Diet",
+  "Measurements",
+  "Settings",
+  "Logout"
+] as const;
 
 /**
  * Menu item translations.
@@ -119,7 +124,7 @@ const Button = styled.button`
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.backgroundColor};
 
-  transition: ${({theme}) => theme.transition};
+  transition: ${({ theme }) => theme.transition};
 
   & > svg {
     display: block;

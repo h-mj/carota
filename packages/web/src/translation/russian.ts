@@ -118,6 +118,7 @@ export const russian: Translation = {
     Menu: {
       Diet: "Суточная потребления",
       Logout: "Выйти",
+      Measurements: "Замеры",
       Settings: "Настройки"
     },
     Name: {

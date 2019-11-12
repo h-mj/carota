@@ -116,6 +116,7 @@ export const estonian: Translation = {
     Menu: {
       Diet: "Päevane tarbimine",
       Logout: "Logi välja",
+      Measurements: "Mõõtmed",
       Settings: "Seaded"
     },
     Name: {

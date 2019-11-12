@@ -11,6 +11,7 @@ import { DishModule } from "./module/dish/DishModule";
 import { FoodstuffModule } from "./module/foodstuff/FoodstuffModule";
 import { InvitationModule } from "./module/invitation/InvitationModule";
 import { MealModule } from "./module/meal/MealModule";
+import { MeasurementModule } from "./module/measurement/MeasurementModule";
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { MealModule } from "./module/meal/MealModule";
     DishModule,
     FoodstuffModule,
     InvitationModule,
-    MealModule
+    MealModule,
+    MeasurementModule
   ]
 })
 export class ApplicationModule implements NestModule {

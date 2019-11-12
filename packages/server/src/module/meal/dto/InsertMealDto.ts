@@ -1,11 +1,11 @@
 import { deviate, Success } from "deviator";
 
-import { validDate } from "../../../utility/validators";
+import { isValidDate } from "../../../utility/validators";
 
 // prettier-ignore
 export const insertMealDtoValidator = deviate().object().shape({
   id: deviate().string().guid(),
-  date: deviate().string().then(validDate),
+  date: deviate().string().then(isValidDate),
   index: deviate().number().integer().min(0)
 });
 

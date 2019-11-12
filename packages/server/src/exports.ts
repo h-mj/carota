@@ -6,6 +6,7 @@ import { DishController } from "./module/dish/DishController";
 import { FoodstuffController } from "./module/foodstuff/FoodstuffController";
 import { InvitationController } from "./module/invitation/InvitationController";
 import { MealController } from "./module/meal/MealController";
+import { MeasurementController } from "./module/measurement/MeasurementController";
 
 interface Controllers {
   account: AccountController;
@@ -14,6 +15,7 @@ interface Controllers {
   foodstuff: FoodstuffController;
   invitation: InvitationController;
   meal: MealController;
+  measurement: MeasurementController;
 }
 
 interface Transaction<TBody, TData> {
@@ -23,10 +25,10 @@ interface Transaction<TBody, TData> {
 
 type Rpc = {
   [Controller in keyof Controllers]: {
-    [Endpoint in keyof Controllers[Controller]]: Controllers[Controller][Endpoint] extends ((
+    [Endpoint in keyof Controllers[Controller]]: Controllers[Controller][Endpoint] extends (
       dto: infer IInput,
       ...other: any
-    ) => Promise<infer IOutput>)
+    ) => Promise<infer IOutput>
       ? Transaction<IInput, IOutput>
       : never;
   };
@@ -65,8 +67,6 @@ export {
 } from "./module/account/Account";
 export { DishDto } from "./module/dish/Dish";
 export { FoodstuffDto, Unit } from "./module/foodstuff/Foodstuff";
-export {
-  NutritionDeclarationDto
-} from "./module/foodstuff/NutritionDeclaration";
+export { NutritionDeclarationDto } from "./module/foodstuff/NutritionDeclaration";
 export { InvitationDto } from "./module/invitation/Invitation";
 export { MealDto } from "./module/meal/Meal";

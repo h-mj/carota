@@ -1,7 +1,7 @@
 import { deviate, err, ok, Success } from "deviator";
 import { DateTime } from "luxon";
 
-import { validDate } from "../../../utility/validators";
+import { isValidDate } from "../../../utility/validators";
 
 const withinMonth = (input: string) =>
   Math.abs(DateTime.fromISO(input).diffNow("months").months) > 1
@@ -11,7 +11,7 @@ const withinMonth = (input: string) =>
 // prettier-ignore
 export const createMealDtoValidator = deviate().object().shape({
   name: deviate().string().trim().nonempty(),
-  date: deviate().string().then(validDate).then(withinMonth)
+  date: deviate().string().then(isValidDate).then(withinMonth)
 });
 
 export type CreateMealDto = Success<typeof createMealDtoValidator>;

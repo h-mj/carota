@@ -68,3 +68,6 @@ export class Account {
 }
 
 export type AccountDto = DtoOf<Account>;
+
+export const isAccountOrAccountAdviser = (adviser: Account, account: Account) =>
+  adviser.id === account.id || adviser.id === account.adviserId;

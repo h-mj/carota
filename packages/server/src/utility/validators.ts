@@ -4,7 +4,7 @@ import { DateTime } from "luxon";
 /**
  * Valid ISO date validator.
  */
-export const validDate = (input: string) => {
+export const isValidDate = (input: string) => {
   const date = DateTime.fromISO(input);
 
   return date.isValid ? ok(date.toISODate()) : err("invalidDate");

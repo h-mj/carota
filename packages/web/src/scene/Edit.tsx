@@ -82,7 +82,7 @@ interface EditProps {
   /**
    * Function that is called after save.
    */
-  onSave: () => void;
+  onSave: (updated: boolean) => void;
 
   /**
    * Initial created foodstuff name.
@@ -324,12 +324,12 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
    * Renders foodstuff creation and editing form.
    */
   public render() {
-    const { foodstuff, onSave, views } = this.props;
+    const { foodstuff, views } = this.props;
 
     return (
       <>
         <TitleBar
-          onClose={onSave}
+          onClose={this.handleClose}
           title={
             foodstuff === undefined
               ? this.translation.addTitle
@@ -454,6 +454,13 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   );
 
   /**
+   * Calls `onSave` callback function when title bar close button is clicked.
+   */
+  public handleClose = () => {
+    this.props.onSave(false);
+  };
+
+  /**
    * Renders the scan button.
    */
   public renderScanButton = () => (
@@ -496,7 +503,6 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   /**
    * Shows scanner scene on scan button click.
    */
-  @action
   private handleScanClick = () => {
     this.scene = this.props.views!.push("main", "Scanner", {
       onScan: this.handleScan
@@ -534,7 +540,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
     );
 
     if (result.ok && error === undefined) {
-      this.props.onSave();
+      this.props.onSave(true);
     }
 
     this.reasons = append(result.ok ? {} : result.value, error);
@@ -553,7 +559,6 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   /**
    * Deletes the foodstuff after user has confirmed the deletion.
    */
-  @action
   private handleConfirmation = async (confirmed: boolean) => {
     this.props.views!.pop(this.scene!);
 
@@ -561,11 +566,8 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
       return;
     }
 
-    const { foodstuff, scene, views } = this.props;
-
-    if ((await views!.load(foodstuff!.delete())) === undefined) {
-      views!.pop(scene);
-    }
+    await this.props.views!.load(this.props.foodstuff!.delete());
+    this.props.onSave(true);
   };
 
   /**

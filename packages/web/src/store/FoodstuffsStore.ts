@@ -1,69 +1,61 @@
-import { computed, observable } from "mobx";
-import { Body, FoodstuffDto } from "server";
+import { action, observable } from "mobx";
+import { Body } from "server";
 
 import { Foodstuff } from "../model/Foodstuff";
 import { Rpc } from "../utility/rpc";
 import { RootStore } from "./RootStore";
 
 /**
- * Store which manages `Foodstuff` models.
+ * Foodstuff managing store.
  */
 export class FoodstuffsStore {
   /**
-   * Stored foodstuff models.
+   * Maps meal names to their frequent foodstuffs.
    */
-  @observable public models: Map<string, Foodstuff> = new Map();
+  @observable private frequentFoodstuffs: Map<string, Foodstuff[]> = new Map();
 
   /**
-   * Root store instance.
+   * Maps search query strings to returned array of foodstuffs.
    */
-  public rootStore: RootStore;
+  @observable private searchResults: Map<string, Foodstuff[]> = new Map();
 
   /**
-   * Assigns the root store instance.
+   * Root store reference.
+   */
+  private rootStore: RootStore;
+
+  /**
+   * Creates a new instance of `RootStore`.
    */
   public constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
   }
 
   /**
-   * Returns an array of stored foodstuff models.
+   * Clears all data stored in this store.
    */
-  @computed
-  public get foodstuffs() {
-    return Array.from(this.models.values());
-  }
-
-  /**
-   * Creates and stores invitation model of specified data transfer object.
-   */
-  private insert = (dto: FoodstuffDto) => {
-    const model = new Foodstuff(dto, this);
-    this.models.set(model.id, model);
-  };
-
-  /**
-   * Clears all stored data.
-   */
+  @action
   public clear() {
-    this.models.clear();
+    this.frequentFoodstuffs.clear();
+    this.searchResults.clear();
   }
 
   /**
-   * Deletes foodstuff entity with specified ID.
+   * Deletes specified foodstuff.
    */
-  public async delete(id: string) {
-    const result = await Rpc.call("foodstuff", "delete", { id });
+  public async delete(foodstuff: Foodstuff) {
+    const result = await Rpc.call("foodstuff", "delete", { id: foodstuff.id });
 
     if (!result.ok) {
-      return this.rootStore.views.notifyUnknownError();
+      this.rootStore.views.notifyUnknownError();
     }
 
-    this.models.delete(id);
+    this.clear();
   }
 
   /**
-   * Retrieves foodstuff with specified barcode.
+   * Retrieves a foodstuff with specified barcode or `undefined`, if foodstuff
+   * with this barcode does not exist.
    */
   public async findByBarcode(barcode: string) {
     const result = await Rpc.call("foodstuff", "findByBarcode", { barcode });
@@ -80,20 +72,39 @@ export class FoodstuffsStore {
     return new Foodstuff(result.value, this);
   }
 
+  /**
+   * Retrieves frequent foodstuffs for a meal with specified name.
+   */
   public async getLatestFrequent(name: string) {
-    this.models.clear();
+    let foodstuffs = this.frequentFoodstuffs.get(name);
+
+    if (foodstuffs !== undefined) {
+      return foodstuffs;
+    }
 
     const result = await Rpc.call("foodstuff", "getLatestFrequent", { name });
 
     if (!result.ok) {
-      return this.rootStore.views.notifyUnknownError();
+      this.rootStore.views.notifyUnknownError();
+      return [];
     }
 
-    result.value.forEach(this.insert);
+    foodstuffs = result.value.map(dto => new Foodstuff(dto, this));
+
+    this.frequentFoodstuffs.set(name, foodstuffs);
+
+    return foodstuffs;
   }
 
   /**
-   * Saves specified foodstuff entity.
+   * Returns cached results for frequent foodstuffs for a meal with specified name.
+   */
+  public frequentOf(name: string) {
+    return this.frequentFoodstuffs.get(name) || [];
+  }
+
+  /**
+   * Creates or changes a foodstuff entity with specified information.
    */
   public async save(body: Body<"foodstuff", "save">) {
     const result = await Rpc.call("foodstuff", "save", body);
@@ -102,24 +113,39 @@ export class FoodstuffsStore {
       return result.value;
     }
 
-    this.insert(result.value);
+    this.clear();
 
     return undefined;
   }
 
   /**
-   * Replaces currently stored foodstuffs with retrieved foodstuffs that match
-   * specified search query.
+   * Retrieves foodstuffs that match specified search query.
    */
   public async search(query: string) {
-    this.models.clear();
+    let foodstuffs = this.searchResults.get(query);
+
+    if (foodstuffs !== undefined) {
+      return foodstuffs;
+    }
 
     const result = await Rpc.call("foodstuff", "search", { query });
 
     if (!result.ok) {
-      return this.rootStore.views.notifyUnknownError();
+      this.rootStore.views.notifyUnknownError();
+      return [];
     }
 
-    result.value.forEach(this.insert);
+    foodstuffs = result.value.map(dto => new Foodstuff(dto, this));
+
+    this.searchResults.set(query, foodstuffs);
+
+    return foodstuffs;
+  }
+
+  /**
+   * Returns cached search results of specified query.
+   */
+  public resultsOf(query: string) {
+    return this.searchResults.get(query) || [];
   }
 }

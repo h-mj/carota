@@ -41,7 +41,7 @@ export class AuthenticationStore {
   /**
    * Clears all data stored in this store.
    */
-
+  @action
   public clear() {
     this.token = undefined;
   }

@@ -145,14 +145,20 @@ export class Search extends SceneComponent<
 
         <AutoOverflow>
           <Results>
-            {this.props.foodstuffs!.foodstuffs.map(foodstuff => (
+            {(this.query === ""
+              ? this.props.foodstuffs!.frequentOf(this.props.name)
+              : this.completed
+              ? this.props.foodstuffs!.resultsOf(this.query)
+              : []
+            ).map(foodstuff => (
               <FoodstuffView
                 key={foodstuff.id}
                 foodstuff={foodstuff}
                 onSelect={this.handleFoodstuffSelect}
+                showEditor={this.showEditor}
               />
             ))}
-            {this.completed && <Add onClick={this.showEditor}>+</Add>}
+            {this.completed && <Add onClick={() => this.showEditor()}>+</Add>}
           </Results>
         </AutoOverflow>
 
@@ -195,7 +201,6 @@ export class Search extends SceneComponent<
     if (result.ok) {
       await this.props.foodstuffs!.search(result.value);
     } else {
-      this.props.foodstuffs!.clear();
       this.reason = this.query.length > 0 ? result.value : undefined;
     }
 
@@ -206,8 +211,9 @@ export class Search extends SceneComponent<
    * Shows food editor when user clicks on add result.
    */
   @action
-  private showEditor = () => {
+  private showEditor = (foodstuff?: Foodstuff) => {
     this.scene = this.props.views!.push("left", "Edit", {
+      foodstuff,
       name: this.query,
       onSave: this.hideEditor
     });
@@ -217,8 +223,13 @@ export class Search extends SceneComponent<
    * Hides food editor, called by `Edit` scene itself.
    */
   @action
-  private hideEditor = () => {
+  private hideEditor = (updated: boolean) => {
     this.props.views!.pop(this.scene!);
+
+    if (updated) {
+      this.completed = false;
+      this.search();
+    }
   };
 
   /**

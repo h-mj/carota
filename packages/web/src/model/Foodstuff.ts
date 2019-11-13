@@ -18,23 +18,61 @@ export const REQUIRED_NUTRIENTS = [
 export type RequiredNutrient = typeof REQUIRED_NUTRIENTS[number];
 
 /**
- * Foodstuff entity client-side representation.
+ * Client side representation of **Foodstuff** entity.
  */
 export class Foodstuff {
+  /**
+   * Foodstuff ID.
+   */
   public readonly id: string;
+
+  /**
+   * Foodstuff name.
+   */
   public readonly name: string;
+
+  /**
+   * Foodstuff barcode.
+   */
   public readonly barcode?: string;
+
+  /**
+   * Unit in which the foodstuff quantity is measured.
+   */
   public readonly unit: Unit;
+
+  /**
+   * Package size in units in which the foodstuff is sold.
+   */
   public readonly packageSize?: number;
+
+  /**
+   * Quantity in units of one piece of this foodstuff.
+   */
   public readonly pieceQuantity?: number;
+
+  /**
+   * Foodstuff nutritional information.
+   */
   public readonly nutritionDeclaration: NutritionDeclarationDto;
+
+  /**
+   * Whether this foodstuff can be deleted by currently authenticated user.
+   */
   public readonly deletable: boolean;
+
+  /**
+   * Whether this foodstuff can be edited by currently authenticated user.
+   */
   public readonly editable: boolean;
 
+  /**
+   * Foodstuff store reference.
+   */
   private readonly store: FoodstuffsStore;
 
   /**
-   * Creates an `Foodstuff` model based on its data transfer object.
+   * Creates a new instance `Foodstuff` model based on the data transfer object.
    */
   public constructor(dto: FoodstuffDto, store: FoodstuffsStore) {
     this.id = dto.id;
@@ -50,9 +88,9 @@ export class Foodstuff {
   }
 
   /**
-   * Deletes corresponding foodstuff entity.
+   * Deletes this foodstuff.
    */
-  public async delete() {
-    return this.store.delete(this.id);
+  public delete() {
+    return this.store.delete(this);
   }
 }

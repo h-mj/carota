@@ -44,7 +44,7 @@ export class Rpc {
 
     headers.append("Content-Type", "application/json");
 
-    const { authorization } = rootStore.accounts;
+    const { authorization } = rootStore.authentication;
 
     if (authorization) {
       headers.append("Authorization", authorization);
@@ -57,7 +57,7 @@ export class Rpc {
     });
 
     if (response.status === 401) {
-      rootStore.accounts.logout();
+      rootStore.authentication.logout();
       rootStore.views.refresh();
     }
 

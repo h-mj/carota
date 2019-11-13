@@ -6,8 +6,8 @@ import {
   INDEX_SCENE,
   RenderPosition,
   Scene,
-  SceneNames,
   Scenes,
+  SceneNames,
   SceneSceneComponentProps,
   UNKNOWN_SCENE
 } from "../base/Scene";
@@ -96,6 +96,14 @@ export class ViewsStore {
   }
 
   /**
+   * Clears all data stored in this store.
+   */
+  @action
+  public clear() {
+    this.language = "English";
+  }
+
+  /**
    * Returns translation object based on current interface language.
    */
   @computed
@@ -144,7 +152,7 @@ export class ViewsStore {
    */
   @action
   public redirect(scene: Scenes) {
-    const { authenticated } = this.rootStore.accounts;
+    const { authenticated } = this.rootStore.authentication;
 
     const url = scene.getUrl();
 
@@ -183,7 +191,7 @@ export class ViewsStore {
    */
   @action
   public refresh() {
-    const { authenticated } = this.rootStore.accounts;
+    const { authenticated } = this.rootStore.authentication;
     const scene = Scene.from(window.location.pathname);
 
     // If user is unauthenticated and tries to access the logout scene, redirect to home.

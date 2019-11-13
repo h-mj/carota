@@ -65,7 +65,7 @@ interface SceneRendererProps {
 /**
  * Component which is responsible for rendering a given scene.
  */
-@inject("accounts", "views")
+@inject("authentication", "views")
 @observer
 export class SceneRenderer extends Component<SceneRendererProps> {
   /**
@@ -109,7 +109,7 @@ export class SceneRenderer extends Component<SceneRendererProps> {
           {this.renderSceneComponent()}
         </Container>
 
-        {first && this.props.accounts!.authenticated && <Menu />}
+        {first && this.props.authentication!.authenticated && <Menu />}
       </SceneOverlay>
     );
   }

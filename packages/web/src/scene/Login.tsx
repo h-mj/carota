@@ -85,7 +85,7 @@ const toBody = deviate<LoginValues>().shape({
  * Scene that authenticates user using their email and password and on success
  * redirects to home page.
  */
-@inject("accounts", "views")
+@inject("authentication", "views")
 @observer
 export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
   /**
@@ -175,7 +175,12 @@ export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
 
     const result = toBody(this.values);
     const error = await this.props.views!.load(
-      result.ok ? this.props.accounts!.login(result.value) : undefined
+      result.ok
+        ? this.props.authentication!.login(
+            result.value.email,
+            result.value.password
+          )
+        : undefined
     );
 
     if (result.ok && error === undefined) {

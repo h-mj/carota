@@ -6,7 +6,7 @@ import { InvalidIdError } from "../../base/error/InvalidIdError";
 import { Account } from "../account/Account";
 import { AccountRepository } from "../account/AccountRepository";
 import { DeleteMeasurementDto } from "./dto/DeleteMeasurementDto";
-import { GetQuantityMeasurementsDto } from "./dto/GetSizeMeasurementsDto";
+import { GetQuantityMeasurementsDto } from "./dto/GetQuantityMeasurementsDto";
 import { SaveMeasurementDto } from "./dto/SaveMeasurementDto";
 import { authorize, Measurement } from "./Measurement";
 import { MeasurementRepository } from "./MeasurementRepository";
@@ -45,7 +45,7 @@ export class MeasurementService {
       throw new InvalidIdError(Account, ["accountId"]);
     }
 
-    await authorize(principal, "get size measurements of", account);
+    await authorize(principal, "get quantity measurements of", account);
 
     return measurementRepository!.find({
       accountId: account.id,

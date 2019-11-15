@@ -12,14 +12,13 @@ import { DtoOf } from "../../utility/types";
 import { isAccountOrAccountAdviser, Account } from "../account/Account";
 
 export const QUANTITIES = [
-  "Biceps",
+  "Bicep",
   "Calf",
   "Chest",
   "Height",
   "Hip",
   "Shin",
   "Thigh",
-  "Thighs",
   "Waist",
   "Weight",
   "Wrist"
@@ -65,5 +64,5 @@ const isAccountMeasurementOwner = (
 
 // prettier-ignore
 export const { authorize } = new Canallo(onUnauthorized)
-  .allow(Account, "get size measurements of", Account, isAccountOrAccountAdviser)
+  .allow(Account, "get quantity measurements of", Account, isAccountOrAccountAdviser)
   .allow(Account, "delete", Measurement, isAccountMeasurementOwner);

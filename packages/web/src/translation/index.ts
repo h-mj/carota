@@ -12,7 +12,7 @@ export interface Translation {
   /**
    * Unit translations.
    */
-  units: Record<"g" | "kcal" | "ml" | "pcs", string>;
+  units: Record<"cm" | "g" | "kcal" | "kg" | "ml" | "pcs", string>;
 
   /**
    * Notification message on unknown error.

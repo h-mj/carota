@@ -113,10 +113,32 @@ export const estonian: Translation = {
       submit: "Sisenege →",
       title: "Sisenege"
     },
+    Measure: {
+      helper: {
+        Bicep: "Palun sisestage oma biitsepi ümbermõõt:",
+        Calf: "Palun sisestage oma sääremarja ümbermõõt:",
+        Chest: "Palun sisestage oma rindkere ümbermõõt:",
+        Height: "Palun sisestage oma pikkus:",
+        Hip: "Palun sisestage oma puusa ümbermõõt:",
+        Shin: "Palun sisestage oma sääre ümbermõõt:",
+        Thigh: "Palun sisestage oma reie ümbermõõt:",
+        Waist: "Palun sisestage oma talje ümbermõõt:",
+        Weight: "Palun sisestage oma kaal:",
+        Wrist: "Palun sisestage oma randme ümbermõõt:"
+      },
+      label: "Mõõt",
+      reasons: {
+        nonempty: "Palun sisestage mõõdetud väärtus.",
+        positive: "Palun sisestage väärtus mis on suurem kui 0.",
+        toNumber: "Palun sisestage korrektne mõõdetud väärtus."
+      },
+      title: "Uuenda mõõtu",
+      update: "Uuenda"
+    },
     Menu: {
+      Body: "Mõõtmed",
       Diet: "Päevane tarbimine",
       Logout: "Logi välja",
-      Measurements: "Mõõtmed",
       Settings: "Seaded"
     },
     Name: {
@@ -261,8 +283,10 @@ export const estonian: Translation = {
     }
   },
   units: {
+    cm: "cm",
     g: "g",
     kcal: "kcal",
+    kg: "kg",
     ml: "ml",
     pcs: "tk"
   },

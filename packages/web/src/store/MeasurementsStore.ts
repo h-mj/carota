@@ -27,11 +27,11 @@ export class MeasurementsStore {
   }
 
   /**
-   * Retrieves all measurements of specified account of currently authenticated
+   * Retrieves all measurements of specified quantity of currently authenticated
    * account if not already cached, otherwise returns previously retrieved
    * measurements.
    */
-  public async getWithSize(quantity: Quantity) {
+  public async getOfQuantity(quantity: Quantity) {
     const cached = this.cache.get(quantity);
 
     if (cached !== undefined) {
@@ -55,6 +55,13 @@ export class MeasurementsStore {
     );
 
     return result.value;
+  }
+
+  /**
+   * Returns an array of cached measurements of specified quantity.
+   */
+  public measurementsOf(quantity: Quantity) {
+    return this.cache.get(quantity) || [];
   }
 
   /**
@@ -88,7 +95,13 @@ export class MeasurementsStore {
       return this.rootStore.views.notifyUnknownError();
     }
 
-    this.cache.get(quantity)!.push(new Measurement(result.value));
+    const measurements = this.cache.get(quantity);
+
+    if (measurements === undefined) {
+      return;
+    }
+
+    measurements.push(new Measurement(result.value));
   }
 
   /**

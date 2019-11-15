@@ -115,10 +115,32 @@ export const russian: Translation = {
       submit: "Вход →",
       title: "Вход"
     },
+    Measure: {
+      helper: {
+        Bicep: "Bicep",
+        Calf: "Calf",
+        Chest: "Chest",
+        Height: "Height",
+        Hip: "Hip",
+        Shin: "Shin",
+        Thigh: "Thigh",
+        Waist: "Waist",
+        Weight: "Weight",
+        Wrist: "Wrist"
+      },
+      label: "Measurement",
+      reasons: {
+        nonempty: "Please enter the measured value.",
+        positive: "Please enter a value that is greater than 0.",
+        toNumber: "Please enter a valid measurement value."
+      },
+      title: "Update measurement",
+      update: "Update"
+    },
     Menu: {
+      Body: "Замеры",
       Diet: "Суточная потребления",
       Logout: "Выйти",
-      Measurements: "Замеры",
       Settings: "Настройки"
     },
     Name: {
@@ -264,8 +286,10 @@ export const russian: Translation = {
     }
   },
   units: {
+    cm: "см",
     g: "г",
     kcal: "ккал",
+    kg: "кг",
     ml: "мл",
     pcs: "шт"
   },

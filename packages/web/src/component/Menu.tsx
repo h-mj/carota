@@ -16,7 +16,7 @@ import { Overlay } from "./Overlay";
  */
 const NAVIGABLE_SCENES = [
   "Diet",
-  "Measurements",
+  "Body",
   "Settings",
   "Logout"
 ] as const;

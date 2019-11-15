@@ -12,6 +12,7 @@ import {
   UNKNOWN_SCENE
 } from "../base/Scene";
 import { Notification, NotificationType } from "../component/Notifications";
+import { DARK, LIGHT, THEME_CONSTANTS } from "../styling/theme";
 import { Translation } from "../translation";
 import { english } from "../translation/english";
 import { estonian } from "../translation/estonian";
@@ -312,5 +313,13 @@ export class ViewsStore {
   @action
   public async wait(timeout: number): Promise<void> {
     return new Promise(resolve => window.setTimeout(resolve, 1000 * timeout));
+  }
+
+  /**
+   * Returns current theme definition object.
+   */
+  @computed
+  public get theme() {
+    return Object.assign({}, THEME_CONSTANTS, this.dark ? DARK : LIGHT);
   }
 }

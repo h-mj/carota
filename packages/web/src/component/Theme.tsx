@@ -2,13 +2,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 
 import { Component } from "../base/Component";
-import {
-  createGlobalStyle,
-  DARK,
-  LIGHT,
-  THEME_CONSTANTS,
-  ThemeProvider
-} from "../styling/theme";
+import { createGlobalStyle, ThemeProvider } from "../styling/theme";
 
 /**
  * Renders `GlobalStyle` component and renders it's children wrapped in
@@ -23,13 +17,7 @@ export class Theme extends Component {
    */
   public render() {
     return (
-      <ThemeProvider
-        theme={Object.assign(
-          {},
-          THEME_CONSTANTS,
-          this.props.views!.dark ? DARK : LIGHT
-        )}
-      >
+      <ThemeProvider theme={this.props.views!.theme}>
         <>
           <GlobalStyle />
           {this.props.children}

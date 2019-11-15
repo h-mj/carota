@@ -10,7 +10,7 @@ import {
 import {
   getQuantityMeasurementsDtoValidator,
   GetQuantityMeasurementsDto
-} from "./dto/GetSizeMeasurementsDto";
+} from "./dto/GetQuantityMeasurementsDto";
 import {
   saveMeasurementDtoValidator,
   SaveMeasurementDto

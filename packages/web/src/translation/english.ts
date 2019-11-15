@@ -113,10 +113,32 @@ export const english: Translation = {
       submit: "Sign in →",
       title: "Sign in"
     },
+    Measure: {
+      helper: {
+        Bicep: "Please enter your bicep circumference:",
+        Calf: "Please enter your calf circumference:",
+        Chest: "Please enter your chest circumference:",
+        Height: "Please enter your height:",
+        Hip: "Please enter your hip circumference:",
+        Shin: "Please enter your shin circumference:",
+        Thigh: "Please enter your thigh circumference:",
+        Waist: "Please enter your waist circumference:",
+        Weight: "Please enter your weight:",
+        Wrist: "Please enter your wrist circumference:"
+      },
+      label: "Value",
+      reasons: {
+        nonempty: "Please enter the measured value.",
+        positive: "Please enter a value that is greater than 0.",
+        toNumber: "Please enter a valid measured value."
+      },
+      title: "Update measurement",
+      update: "Update"
+    },
     Menu: {
+      Body: "Measurements",
       Diet: "Daily intake",
       Logout: "Sign out",
-      Measurements: "Measurements",
       Settings: "Settings"
     },
     Name: {
@@ -260,8 +282,10 @@ export const english: Translation = {
     }
   },
   units: {
+    cm: "cm",
     g: "g",
     kcal: "kcal",
+    kg: "kg",
     ml: "ml",
     pcs: "pcs"
   },

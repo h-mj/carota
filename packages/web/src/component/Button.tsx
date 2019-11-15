@@ -102,6 +102,8 @@ const ButtonElement = styled.button<ButtonElementProps>`
   height: ${({ theme }) => theme.padding};
   padding: 0 ${({ theme }) => theme.padding};
 
+  flex-shrink: 0;
+
   border-radius: ${({ theme }) => theme.borderRadius};
   ${({ invalid, secondary, theme }) =>
     secondary &&
@@ -116,6 +118,7 @@ const ButtonElement = styled.button<ButtonElementProps>`
 
   color: ${({ invalid, secondary, theme }) =>
     secondary && invalid ? theme.colorInvalid : theme.colorPrimary};
+  text-align: center;
 
   cursor: pointer;
 

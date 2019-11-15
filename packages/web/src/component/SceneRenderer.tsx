@@ -3,6 +3,7 @@ import * as React from "react";
 
 import { Component } from "../base/Component";
 import { RenderPosition, Scenes } from "../base/Scene";
+import { Body } from "../scene/Body";
 import { Confirmation } from "../scene/Confirmation";
 import { Diet } from "../scene/Diet";
 import { Edit } from "../scene/Edit";
@@ -26,6 +27,7 @@ import { Overlay } from "./Overlay";
  * Object where scene component names are mapped to their classes.
  */
 const SCENE_COMPONENTS = {
+  Body: Body,
   Confirmation: Confirmation,
   Diet: Diet,
   Edit: Edit,

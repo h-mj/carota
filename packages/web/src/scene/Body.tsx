@@ -7,25 +7,8 @@ import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
-import { Button } from "../component/Button";
-import { Collection } from "../component/Collection";
-import { EditButton } from "../component/EditButton";
-
-/**
- * Array of all measurable body quantities.
- */
-const QUANTITIES: Quantity[] = [
-  "Bicep",
-  "Calf",
-  "Chest",
-  "Height",
-  "Hip",
-  "Shin",
-  "Thigh",
-  "Waist",
-  "Weight",
-  "Wrist"
-];
+import { Silhouette } from "../component/Silhouette";
+import { styled } from "../styling/theme";
 
 /**
  * Displays body silhouette with body measurements.
@@ -43,8 +26,6 @@ export class Body extends SceneComponent<"Body"> {
    */
   public constructor(props: DefaultSceneComponentProps<"Body">) {
     super("Body", props);
-
-    console.log(this.scene);
   }
 
   /**
@@ -52,32 +33,39 @@ export class Body extends SceneComponent<"Body"> {
    */
   public render() {
     return (
-      <Collection>
-        {QUANTITIES.map(quantity => (
-          <React.Fragment key={quantity}>
-            <Button onClick={this.showMeasure}>{quantity}</Button>
-            <EditButton onClick={this.showMeasurements} />
-          </React.Fragment>
-        ))}
-      </Collection>
+      <Container>
+        <Silhouette
+          onAddClick={this.showMeasure}
+          onMeasurementsClick={this.showMeasure}
+        />
+      </Container>
     );
   }
 
-  private showMeasure = () => {
+  /**
+   * Shows `Measure` scene when user clicks on any measurement line on the
+   * silhouette.
+   */
+  private showMeasure = (quantity: Quantity) => {
     this.scene = this.props.views!.push("center", "Measure", {
       close: this.close,
-      quantity: "Bicep"
+      quantity
     });
   };
 
-  private showMeasurements = () => {
-    this.scene = this.props.views!.push("left", "Measurements", {
-      close: this.close,
-      quantity: "Bicep"
-    });
-  };
-
+  /**
+   * Closes pushed scene.
+   */
   private close = () => {
     this.props.views!.pop(this.scene!);
   };
 }
+
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

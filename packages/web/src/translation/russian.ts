@@ -117,25 +117,25 @@ export const russian: Translation = {
     },
     Measure: {
       helper: {
-        Bicep: "Bicep",
-        Calf: "Calf",
-        Chest: "Chest",
-        Height: "Height",
-        Hip: "Hip",
-        Shin: "Shin",
-        Thigh: "Thigh",
-        Waist: "Waist",
-        Weight: "Weight",
-        Wrist: "Wrist"
+        Bicep: "Пожалуйста, введите объем бицепса:",
+        Calf: "Пожалуйста, введите объем икры ноги:",
+        Chest: "Пожалуйста, введите объем груди:",
+        Height: "Пожалуйста, введите ваш рост:",
+        Hip: "Пожалуйста, введите объем бедер:",
+        Shin: "Пожалуйста, введите объем голени:",
+        Thigh: "Пожалуйста, введите объем бедра:",
+        Waist: "Пожалуйста, введите объем талии:",
+        Weight: "Пожалуйста, введите ваш вес:",
+        Wrist: "Пожалуйста, введите объем запястья:"
       },
-      label: "Measurement",
+      label: "Значение",
       reasons: {
-        nonempty: "Please enter the measured value.",
-        positive: "Please enter a value that is greater than 0.",
-        toNumber: "Please enter a valid measurement value."
+        nonempty: "Пожалуйста, введите измеренное значение.",
+        positive: "Пожалуйста, введите значение больше 0.",
+        toNumber: "Пожалуйста, введите правильное значение измерения."
       },
-      title: "Update measurement",
-      update: "Update"
+      title: "Обновить замер",
+      update: "Обновить"
     },
     Menu: {
       Body: "Замеры",

@@ -118,6 +118,7 @@ export class FoodstuffService {
           .map(string => `%${string}%`)
       })
       .orWhere("barcode = :barcode", { barcode: dto.query })
+      .orderBy('length("Foodstuff"."name")', "ASC")
       .limit(32)
       .getMany();
   }

@@ -10,9 +10,9 @@
     "start": "cd build && node -r dotenv/config src/index.js"
   },
   "dependencies": {
-    "@nestjs/common": "^6.9.0",
-    "@nestjs/core": "^6.9.0",
-    "@nestjs/platform-express": "^6.9.0",
+    "@nestjs/common": "^6.10.0",
+    "@nestjs/core": "^6.10.0",
+    "@nestjs/platform-express": "^6.10.0",
     "@nestjs/serve-static": "^1.0.1",
     "@nestjs/typeorm": "^6.2.0",
     "@types/bcryptjs": "^2.4.2",
@@ -36,7 +36,7 @@
     "prettier": "^1.19.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.3",
-    "ts-node": "^8.5.0",
+    "ts-node": "^8.5.2",
     "typeorm": "^0.2.20",
     "typescript": "^3.7.2"
   }

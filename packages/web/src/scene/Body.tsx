@@ -34,10 +34,7 @@ export class Body extends SceneComponent<"Body"> {
   public render() {
     return (
       <Container>
-        <Silhouette
-          onAddClick={this.showMeasure}
-          onMeasurementsClick={this.showMeasure}
-        />
+        <Silhouette onClick={this.showMeasure} />
       </Container>
     );
   }

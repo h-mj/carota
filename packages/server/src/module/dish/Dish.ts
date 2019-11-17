@@ -19,13 +19,13 @@ export class Dish {
   @PrimaryGeneratedColumn("uuid")
   public id!: string;
 
-  @ManyToOne(() => Meal)
+  @ManyToOne(() => Meal, { onDelete: "CASCADE" })
   public meal!: Promise<Meal | undefined>;
 
   @Column({ nullable: true })
   public mealId!: string | null;
 
-  @ManyToOne(() => Foodstuff, { nullable: false })
+  @ManyToOne(() => Foodstuff, { nullable: false, onDelete: "CASCADE" })
   public foodstuff!: Promise<Foodstuff>;
 
   @Column()
@@ -37,10 +37,16 @@ export class Dish {
   @Column()
   public eaten!: boolean;
 
-  @OneToOne(() => Dish, dish => dish.next)
+  @OneToOne(
+    () => Dish,
+    dish => dish.next
+  )
   public previous!: Promise<Dish | undefined>;
 
-  @OneToOne(() => Dish, dish => dish.previous)
+  @OneToOne(
+    () => Dish,
+    dish => dish.previous
+  )
   @JoinColumn()
   public next!: Promise<Dish | undefined>;
 

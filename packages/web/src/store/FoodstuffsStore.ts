@@ -41,16 +41,40 @@ export class FoodstuffsStore {
   }
 
   /**
+   * Removes all references to specified foodstuff from all cached foodstuff arrays.
+   */
+  private removeFromCache(foodstuff: Foodstuff) {
+    const sources = [
+      this.searchResults.values(),
+      this.frequentFoodstuffs.values()
+    ];
+
+    for (const source of sources) {
+      for (const foodstuffs of source) {
+        const index = foodstuffs.findIndex(
+          cached => cached.id === foodstuff.id
+        );
+
+        if (index === -1) {
+          continue;
+        }
+
+        foodstuffs.splice(index, 1);
+      }
+    }
+  }
+
+  /**
    * Deletes specified foodstuff.
    */
   public async delete(foodstuff: Foodstuff) {
+    this.removeFromCache(foodstuff);
+
     const result = await Rpc.call("foodstuff", "delete", { id: foodstuff.id });
 
     if (!result.ok) {
       this.rootStore.views.notifyUnknownError();
     }
-
-    this.clear();
   }
 
   /**

@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
-import { DtoOf } from "../../utility/types";
+import { DtoOf } from "../../utility/entities";
 
 export const SEXES = ["Female", "Male"] as const;
 export type Sex = typeof SEXES[number];

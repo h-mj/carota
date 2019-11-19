@@ -2,7 +2,7 @@ import { Canallo } from "canallo";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 import { onUnauthorized } from "../../utility/authorization";
-import { DtoOf } from "../../utility/types";
+import { DtoOf } from "../../utility/entities";
 import { Account } from "../account/Account";
 import { NutritionDeclaration } from "./NutritionDeclaration";
 

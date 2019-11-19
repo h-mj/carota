@@ -6,7 +6,6 @@ import { BadRequestError } from "../../base/error/BadRequestError";
 import { InvalidIdError } from "../../base/error/InvalidIdError";
 import { Account } from "../account/Account";
 import { AccountRepository } from "../account/AccountRepository";
-import { DishRepository } from "../dish/DishRepository";
 import { CreateMealDto } from "./dto/CreateMealDto";
 import { DeleteMealDto } from "./dto/DeleteMealDto";
 import { GetAllMealsDto } from "./dto/GetAllMealsDto";
@@ -65,12 +64,12 @@ export class MealService {
     dto: GetAllMealsDto,
     principal: Account,
     @TransactionRepository() accountRepository?: AccountRepository,
-    @TransactionRepository() dishRepository?: DishRepository,
     @TransactionRepository() mealRepository?: MealRepository
   ) {
-    const account = await accountRepository!.findOne(
-      dto.accountId || principal.id
-    );
+    const account =
+      dto.accountId !== undefined
+        ? await accountRepository!.findOne(dto.accountId)
+        : principal;
 
     if (account === undefined) {
       throw new InvalidIdError(Account, ["accountId"]);
@@ -78,14 +77,7 @@ export class MealService {
 
     await authorize(principal, "get all meals of", account);
 
-    const meals = await mealRepository!.ordered(account, dto.date);
-
-    // TODO: fix n + 1
-    for (const meal of meals) {
-      meal.dishes = dishRepository!.ordered(meal);
-    }
-
-    return meals;
+    return await mealRepository!.ordered(account, dto.date);
   }
 
   @Transaction()

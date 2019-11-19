@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 
 import { onUnauthorized } from "../../utility/authorization";
-import { DtoOf } from "../../utility/types";
+import { DtoOf } from "../../utility/entities";
 import { Account } from "../account/Account";
 import { Foodstuff } from "../foodstuff/Foodstuff";
 import { isAccountMealOwner, Meal } from "../meal/Meal";

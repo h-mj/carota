@@ -1,6 +1,6 @@
 import { Column } from "typeorm";
 
-import { DtoOf } from "../../utility/types";
+import { DtoOf } from "../../utility/entities";
 
 export class NutritionDeclaration {
   @Column("float4")

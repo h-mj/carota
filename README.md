@@ -14,7 +14,10 @@ Technologies that make Carota work:
 
 # Configuration
 
-Make a copy of `packages/server/.example.env` and rename it to `.env`. Replace `{placeholder}` values with your own.
+1. Make a copy of `packages/server/.example.env` and rename it to `.env`. Replace `{placeholder}` values with your appropriate values.
+2. Enable `uuid-ossp` extension on your database if not already enabled.
+3. Create registration invitation manually by inserting `(default, 'Adviser', 'All', null, null)` values into `invitation` table.
+4. Go to `/register/{invitationId}` where `{invitationId}` is created invitation ID to create an administrator account.
 
 # Quick start
 

@@ -2,6 +2,9 @@ import { Translation } from "./";
 
 export const russian: Translation = {
   components: {
+    Body: {
+      title: "Замеры"
+    },
     Calendar: {
       days: ["П", "В", "С", "Ч", "П", "С", "В"],
       months: [
@@ -130,6 +133,7 @@ export const russian: Translation = {
         Wrist: "Пожалуйста, введите объем запястья:"
       },
       label: "Значение",
+      measurements: "Замеры",
       reasons: {
         nonempty: "Пожалуйста, введите измеренное значение.",
         positive: "Пожалуйста, введите значение больше 0.",

@@ -66,6 +66,11 @@ interface MeasureTranslation {
   label: string;
 
   /**
+   * Measurements table separator text translation.
+   */
+  measurements: string;
+
+  /**
    * Validation error reason message translations.
    */
   reasons: Record<Failure<typeof validator>, string>;
@@ -160,7 +165,7 @@ export class Measure extends SceneComponent<
           {measurements.length > 0 && (
             <>
               <Separator>
-                <span>Measurements</span>
+                <span>{this.translation.measurements}</span>
               </Separator>
 
               {measurements.map(measurement => (

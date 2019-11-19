@@ -2,6 +2,9 @@ import { Translation } from "./";
 
 export const estonian: Translation = {
   components: {
+    Body: {
+      title: "Mõõdud"
+    },
     Calendar: {
       days: ["E", "T", "K", "N", "R", "L", "P"],
       months: [
@@ -128,6 +131,7 @@ export const estonian: Translation = {
         Wrist: "Palun sisestage oma randme ümbermõõt:"
       },
       label: "Mõõt",
+      measurements: "Mõõdud",
       reasons: {
         nonempty: "Palun sisestage mõõdetud väärtus.",
         positive: "Palun sisestage väärtus mis on suurem kui 0.",

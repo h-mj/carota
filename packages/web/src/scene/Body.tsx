@@ -7,15 +7,26 @@ import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
+import { Head } from "../component/Head";
 import { Silhouette } from "../component/Silhouette";
 import { styled } from "../styling/theme";
+
+/**
+ * Body scene component translation.
+ */
+interface BodyTranslation {
+  /**
+   * Page title translation.
+   */
+  title: string;
+}
 
 /**
  * Displays body silhouette with body measurements.
  */
 @inject("views")
 @observer
-export class Body extends SceneComponent<"Body"> {
+export class Body extends SceneComponent<"Body", {}, BodyTranslation> {
   /**
    * Pushed `Measure` or `Measurements` scene reference.
    */
@@ -34,6 +45,7 @@ export class Body extends SceneComponent<"Body"> {
   public render() {
     return (
       <Container>
+        <Head title={this.translation.title} />
         <Silhouette onClick={this.showMeasure} />
       </Container>
     );

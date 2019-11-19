@@ -2,6 +2,9 @@ import { Translation } from "./";
 
 export const english: Translation = {
   components: {
+    Body: {
+      title: "Measurements"
+    },
     Calendar: {
       days: ["M", "T", "W", "T", "F", "S", "S"],
       months: [
@@ -128,6 +131,7 @@ export const english: Translation = {
         Wrist: "Please enter your wrist circumference:"
       },
       label: "Value",
+      measurements: "Measurements",
       reasons: {
         nonempty: "Please enter the measured value.",
         positive: "Please enter a value that is greater than 0.",

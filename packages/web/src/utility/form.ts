@@ -88,3 +88,22 @@ export const append = <T extends ErrorTree>(tree: T, error?: ErrorDto): T => {
 
   return tree;
 };
+
+/**
+ * Converts specified date to `YYYY-MM-DD` formatted string that ignores current
+ * timezone.
+ */
+export const toIsoDateString = (date: Date) => {
+  const year = date.getFullYear().toString();
+  const month = (date.getMonth() + 1).toString();
+  const day = date.getDate().toString();
+
+  return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+};
+
+/**
+ * Converts specified date to `DD.MM.YYYY` formatted string that ignores current
+ * timezone.
+ */
+export const toDateString = (date: Date) =>
+  `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;

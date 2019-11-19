@@ -2,6 +2,7 @@ import { observable } from "mobx";
 import { Quantity } from "server";
 
 import { Measurement } from "../model/Measurement";
+import { toIsoDateString } from "../utility/form";
 import { Rpc } from "../utility/rpc";
 import { RootStore } from "./RootStore";
 
@@ -31,7 +32,7 @@ export class MeasurementsStore {
    * account if not already cached, otherwise returns previously retrieved
    * measurements.
    */
-  public async getOfQuantity(quantity: Quantity) {
+  private async loadQuantityMeasurements(quantity: Quantity) {
     const cached = this.cache.get(quantity);
 
     if (cached !== undefined) {
@@ -44,24 +45,26 @@ export class MeasurementsStore {
     });
 
     if (!result.ok) {
-      this.rootStore.views.notifyUnknownError();
-
-      return [];
+      return this.rootStore.views.notifyUnknownError();
     }
 
     this.cache.set(
       quantity,
-      result.value.map(dto => new Measurement(dto))
+      result.value.map(dto => new Measurement(dto, this))
     );
-
-    return result.value;
   }
 
   /**
    * Returns an array of cached measurements of specified quantity.
    */
   public measurementsOf(quantity: Quantity) {
-    return this.cache.get(quantity) || [];
+    const measurements = this.cache.get(quantity);
+
+    if (measurements === undefined) {
+      this.loadQuantityMeasurements(quantity);
+    }
+
+    return measurements || [];
   }
 
   /**
@@ -84,10 +87,12 @@ export class MeasurementsStore {
    * Saves (creates or changes) measurement of specified `quantity` at given
    * `date` with given `value.
    */
-  public async save(quantity: Quantity, date: string, value: number) {
+  public async save(quantity: Quantity, date: Date, value: number) {
+    const dateString = toIsoDateString(date);
+
     const result = await Rpc.call("measurement", "save", {
       quantity,
-      date,
+      date: dateString,
       value
     });
 
@@ -101,7 +106,15 @@ export class MeasurementsStore {
       return;
     }
 
-    measurements.push(new Measurement(result.value));
+    const measurement = measurements.find(
+      measurement => measurement.date === dateString
+    );
+
+    if (measurement !== undefined) {
+      measurement.value = value;
+    } else {
+      measurements.push(new Measurement(result.value, this));
+    }
   }
 
   /**

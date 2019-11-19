@@ -14,7 +14,9 @@ export const Controls = styled.div`
   }
 
   @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
-    flex-grow: 1;
+    &:last-child {
+      flex-grow: 1;
+    }
   }
 `;
 

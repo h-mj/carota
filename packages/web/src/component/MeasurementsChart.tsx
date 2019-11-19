@@ -11,6 +11,7 @@ import {
 import { Quantity } from "server";
 
 import { Component } from "../base/Component";
+import { toDateString } from "../utility/form";
 
 const measurements = [
   { date: "2019-09-10", value: 19 },
@@ -29,11 +30,7 @@ const measurements = [
 /**
  * Formats chart's ticks.
  */
-const formatTicks = (value: number) => {
-  const date = new Date(value);
-
-  return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
-};
+const formatTicks = (value: number) => toDateString(new Date(value));
 
 /**
  * Measurements chart component props.

@@ -10,7 +10,6 @@ import { Edit } from "../scene/Edit";
 import { Login } from "../scene/Login";
 import { Logout } from "../scene/Logout";
 import { Measure } from "../scene/Measure";
-import { Measurements } from "../scene/Measurements";
 import { Name } from "../scene/Name";
 import { Quantity } from "../scene/Quantity";
 import { Register } from "../scene/Register";
@@ -34,7 +33,6 @@ const SCENE_COMPONENTS = {
   Login: Login,
   Logout: Logout,
   Measure: Measure,
-  Measurements: Measurements,
   Name: Name,
   Quantity: Quantity,
   Register: Register,
@@ -289,6 +287,7 @@ const Left = styled(Main)`
  */
 const Center = styled(Main)`
   max-width: ${({ theme }) => theme.widthSmall};
+  max-height: 80%;
   height: initial;
 
   border-radius: ${({ theme }) => theme.borderRadius};
@@ -296,6 +295,7 @@ const Center = styled(Main)`
 
   @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
     max-width: initial;
+    max-height: initial;
     height: 100%;
 
     border-radius: 0;

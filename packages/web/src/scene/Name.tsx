@@ -10,9 +10,9 @@ import {
 import { Button } from "../component/Button";
 import { Controls, Form } from "../component/collection/form";
 import { Select } from "../component/Select";
+import { Separator } from "../component/Separator";
 import { TextField } from "../component/TextField";
 import { TitleBar } from "../component/TitleBar";
-import { styled } from "../styling/theme";
 import { any, ErrorsFor } from "../utility/form";
 
 /**
@@ -187,9 +187,9 @@ export class Name extends SceneComponent<"Name", NameProps, NameTranslation> {
                 value={this.values.selectedName}
               />
 
-              <Or>
+              <Separator>
                 <span>{this.translation.or}</span>
-              </Or>
+              </Separator>
             </>
           )}
 
@@ -287,23 +287,3 @@ export class Name extends SceneComponent<"Name", NameProps, NameTranslation> {
     }
   };
 }
-
-/**
- * Component that separates the meal name select and text field components.
- */
-const Or = styled.div`
-  width: 100%;
-  height: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-bottom: solid 1px ${({ theme }) => theme.borderColor};
-
-  & > span {
-    padding: 0 ${({ theme }) => theme.paddingSecondary};
-    background-color: ${({ theme }) => theme.backgroundColor};
-    color: ${({ theme }) => theme.colorSecondary};
-  }
-`;

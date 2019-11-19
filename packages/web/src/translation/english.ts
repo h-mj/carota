@@ -114,6 +114,7 @@ export const english: Translation = {
       title: "Sign in"
     },
     Measure: {
+      confirmation: "Are you sure you want to delete this measurement?",
       helper: {
         Bicep: "Please enter your bicep circumference:",
         Calf: "Please enter your calf circumference:",

@@ -116,6 +116,7 @@ export const russian: Translation = {
       title: "Вход"
     },
     Measure: {
+      confirmation: "Вы уверены, что хотите удалить этот замер?",
       helper: {
         Bicep: "Пожалуйста, введите объем бицепса:",
         Calf: "Пожалуйста, введите объем икры ноги:",

@@ -3,20 +3,9 @@ import { action, observable } from "mobx";
 import { Dish } from "../model/Dish";
 import { Foodstuff } from "../model/Foodstuff";
 import { Meal } from "../model/Meal";
+import { toIsoDateString } from "../utility/form";
 import { Rpc } from "../utility/rpc";
 import { RootStore } from "./RootStore";
-
-/**
- * Converts specified date to `YYYY-MM-DD` formatted string that ignores current
- * timezone.
- */
-const toDateString = (date: Date) => {
-  const year = date.getFullYear().toString();
-  const month = (date.getMonth() + 1).toString();
-  const day = date.getDate().toString();
-
-  return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-};
 
 /**
  * Store which manages `Meal` models.
@@ -57,7 +46,7 @@ export class MealsStore {
    * Returns currently stored meals at specified date.
    */
   public mealsOf(date: Date) {
-    return this.cache.get(toDateString(date)) || [];
+    return this.cache.get(toIsoDateString(date)) || [];
   }
 
   /**
@@ -73,7 +62,7 @@ export class MealsStore {
    */
   @action
   public async create(name: string, date: Date) {
-    const dateString = toDateString(date);
+    const dateString = toIsoDateString(date);
 
     const result = await Rpc.call("meal", "create", {
       name,
@@ -116,7 +105,7 @@ export class MealsStore {
    */
   @action
   public async getAll(date: Date) {
-    const dateString = toDateString(date);
+    const dateString = toIsoDateString(date);
 
     if (!this.cache.has(dateString)) {
       const result = await Rpc.call("meal", "getAll", {

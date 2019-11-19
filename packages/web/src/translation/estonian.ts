@@ -114,6 +114,7 @@ export const estonian: Translation = {
       title: "Sisenege"
     },
     Measure: {
+      confirmation: "Kas soovite kindlasti selle mõõdu kustutada?",
       helper: {
         Bicep: "Palun sisestage oma biitsepi ümbermõõt:",
         Calf: "Palun sisestage oma sääremarja ümbermõõt:",

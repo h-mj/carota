@@ -7,7 +7,7 @@ import { Pencil } from "./collection/icons";
 /**
  * Edit button component props.
  */
-interface EditProps {
+interface EditButtonProps {
   /**
    * On click callback function.
    */
@@ -17,9 +17,9 @@ interface EditProps {
 /**
  * Edit button component.
  */
-export class EditButton extends React.Component<EditProps> {
+export class EditButton extends React.Component<EditButtonProps> {
   /**
-   * Renders the Edit button.
+   * Renders the edit button.
    */
   public render() {
     return (

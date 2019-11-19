@@ -2,8 +2,8 @@ import { inject } from "mobx-react";
 import * as React from "react";
 
 import { Component } from "../base/Component";
-import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
+import { DeleteButton } from "./DeleteButton";
 
 /**
  * Title bar component props.
@@ -90,16 +90,10 @@ const Title = styled.div`
 /**
  * Close button component.
  */
-const Close = styled.button`
-  ${RESET};
+const Close = styled(DeleteButton)`
+  margin-left: auto;
 
   height: ${({ theme }) => theme.height};
-
-  margin-left: auto;
   padding: 0 ${({ theme }) => theme.padding};
-
-  font-size: 1.5rem;
-  text-align: center;
-
-  cursor: pointer;
+  box-sizing: content-box;
 `;

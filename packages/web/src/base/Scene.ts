@@ -11,7 +11,6 @@ export type SceneNames =
   | "Login"
   | "Logout"
   | "Measure"
-  | "Measurements"
   | "Name"
   | "Quantity"
   | "Register"
@@ -31,7 +30,6 @@ const SCENE_TO_COMPONENT_NAME = {
   Login: "Login",
   Logout: "Logout",
   Measure: "Measure",
-  Measurements: "Measurements",
   Name: "Name",
   Quantity: "Quantity",
   Register: "Register",

@@ -5,7 +5,6 @@ import { Edit } from "../scene/Edit";
 import { Login } from "../scene/Login";
 import { Logout } from "../scene/Logout";
 import { Measure } from "../scene/Measure";
-import { Measurements } from "../scene/Measurements";
 import { Name } from "../scene/Name";
 import { Quantity } from "../scene/Quantity";
 import { Register } from "../scene/Register";
@@ -27,7 +26,6 @@ export interface SceneComponentMap {
   Login: Login;
   Logout: Logout;
   Measure: Measure;
-  Measurements: Measurements;
   Name: Name;
   Quantity: Quantity;
   Register: Register;

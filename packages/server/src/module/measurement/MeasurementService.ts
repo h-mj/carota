@@ -37,9 +37,10 @@ export class MeasurementService {
     @TransactionRepository() accountRepository?: AccountRepository,
     @TransactionRepository() measurementRepository?: MeasurementRepository
   ) {
-    const account = await accountRepository!.findOne(
-      dto.accountId || principal.id
-    );
+    const account =
+      dto.accountId !== undefined
+        ? await accountRepository!.findOne(dto.accountId)
+        : principal;
 
     if (account === undefined) {
       throw new InvalidIdError(Account, ["accountId"]);

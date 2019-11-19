@@ -114,7 +114,7 @@ const G = styled.g`
  */
 const Line = styled.path`
   fill: none;
-  stroke: ${({ theme }) => theme.colorActive};
+  stroke: ${({ theme }) => theme.borderColor};
   stroke-width: 10px;
 `;
 

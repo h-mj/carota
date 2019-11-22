@@ -17,7 +17,6 @@
     "@types/react-beautiful-dnd": "^11.0.3",
     "@types/react-dom": "^16.9.4",
     "@types/react-helmet": "^5.0.14",
-    "@types/recharts": "^1.8.3",
     "@types/styled-components": "^4.4.0",
     "@zxing/library": "^0.15.2",
     "deviator": "^0.4.3",
@@ -30,7 +29,6 @@
     "react-dom": "^16.12.0",
     "react-helmet": "^5.2.1",
     "react-scripts": "^3.2.0",
-    "recharts": "^1.8.5",
     "server": "0.0.0",
     "styled-components": "^4.4.1",
     "typescript": "^3.7.2"

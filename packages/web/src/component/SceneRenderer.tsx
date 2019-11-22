@@ -16,6 +16,7 @@ import { Register } from "../scene/Register";
 import { Scanner } from "../scene/Scanner";
 import { Search } from "../scene/Search";
 import { Settings } from "../scene/Settings";
+import { Statistics } from "../scene/Statistics";
 import { Unknown } from "../scene/Unknown";
 import { fadeIn } from "../styling/animations";
 import { css, keyframes, styled } from "../styling/theme";
@@ -39,6 +40,7 @@ const SCENE_COMPONENTS = {
   Scanner: Scanner,
   Search: Search,
   Settings: Settings,
+  Statistics: Statistics,
   Unknown: Unknown
 } as const;
 

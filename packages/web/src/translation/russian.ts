@@ -146,7 +146,8 @@ export const russian: Translation = {
       Body: "Замеры",
       Diet: "Суточная потребления",
       Logout: "Выйти",
-      Settings: "Настройки"
+      Settings: "Настройки",
+      Statistics: "Статистика"
     },
     Name: {
       createSubmit: "Создать",

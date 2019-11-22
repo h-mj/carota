@@ -144,7 +144,8 @@ export const english: Translation = {
       Body: "Measurements",
       Diet: "Daily intake",
       Logout: "Sign out",
-      Settings: "Settings"
+      Settings: "Settings",
+      Statistics: "Statistics"
     },
     Name: {
       createSubmit: "Create",

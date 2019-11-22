@@ -144,7 +144,8 @@ export const estonian: Translation = {
       Body: "Mõõtmed",
       Diet: "Päevane tarbimine",
       Logout: "Logi välja",
-      Settings: "Seaded"
+      Settings: "Seaded",
+      Statistics: "Statistika"
     },
     Name: {
       createSubmit: "Looge",

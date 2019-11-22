@@ -17,6 +17,7 @@ export type SceneNames =
   | "Scanner"
   | "Search"
   | "Settings"
+  | "Statistics"
   | "Unknown";
 
 /**
@@ -36,6 +37,7 @@ const SCENE_TO_COMPONENT_NAME = {
   Scanner: "Scanner",
   Search: "Search",
   Settings: "Settings",
+  Statistics: "Statistics",
   Unknown: "Unknown"
 } as const;
 
@@ -89,7 +91,8 @@ const ROUTES = {
   "/logout": to("Logout"),
   "/measurements": to("Body"),
   "/register/{invitationId}": to("Register", "invitationId"),
-  "/settings": to("Settings")
+  "/settings": to("Settings"),
+  "/statistics": to("Statistics")
 } as const;
 
 /**

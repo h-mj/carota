@@ -11,6 +11,7 @@ import { Register } from "../scene/Register";
 import { Scanner } from "../scene/Scanner";
 import { Search } from "../scene/Search";
 import { Settings } from "../scene/Settings";
+import { Statistics } from "../scene/Statistics";
 import { Unknown } from "../scene/Unknown";
 import { Scene, SceneComponentSceneNames } from "./Scene";
 import { TranslatedComponent } from "./TranslatedComponent";
@@ -32,6 +33,7 @@ export interface SceneComponentMap {
   Scanner: Scanner;
   Search: Search;
   Settings: Settings;
+  Statistics: Statistics;
   Unknown: Unknown;
 }
 

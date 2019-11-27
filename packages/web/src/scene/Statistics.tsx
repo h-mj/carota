@@ -268,6 +268,6 @@ const Canvas = styled.div`
   }
 
   & svg .label {
-    color: ${({ theme }) => theme.colorPrimary};
+    fill: ${({ theme }) => theme.colorPrimary};
   }
 `;

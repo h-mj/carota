@@ -5,7 +5,7 @@ import * as React from "react";
 import { TranslatedComponent } from "../../base/TranslatedComponent";
 import { RESET } from "../../styling/stylesheets";
 import { styled } from "../../styling/theme";
-import { DateArray, equals, toDateArray } from "./DateSelect";
+import { equals, toDateArray, DateArray } from "./DateSelect";
 
 /**
  * Number of tabs on both sides of selected date..
@@ -274,6 +274,7 @@ const Abbreviation = styled.span`
 
   @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
     display: block;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    letter-spacing: 0;
   }
 `;

@@ -15,11 +15,42 @@ import { styled } from "../styling/theme";
 const TICK_WIDTH = 180;
 
 /**
+ * Chart title height.
+ */
+const CHART_TITLE_HEIGHT = 56;
+
+/**
  * Height of a single chart.
  */
-const CHART_HEIGHT = 200;
+const CHART_HEIGHT = 256;
 
-export const measurements = [
+/**
+ * Line chart dot radius.
+ */
+const DOT_RADIUS = 4;
+
+/**
+ * Specifies the distance within which dot labels will not be rendered if there
+ * are any other nearby labels.
+ */
+const DOT_LABEL_MIN_DISTANCE = 56;
+
+/**
+ * Data dot label offset.
+ */
+const LABEL_OFFSET = 8;
+
+/**
+ * Chart margin sizes.
+ */
+const MARGIN = {
+  top: 0,
+  bottom: 64,
+  left: 8,
+  right: 8
+};
+
+const measurements = [
   { date: "2019-09-10", value: 19 },
   { date: "2019-09-12", value: 20 },
   { date: "2019-09-13", value: 19.9 },
@@ -32,6 +63,8 @@ export const measurements = [
   { date: "2019-11-01", value: 48 },
   { date: "2019-11-10", value: 150 }
 ];
+
+const quantities: typeof measurements[] = Array(10).fill(measurements);
 
 /**
  * Scene component that displays statistics about consumed nutrition and body
@@ -68,55 +101,120 @@ export class Statistics extends SceneComponent<"Statistics"> {
    * Renders the charts SVG.
    */
   private renderCharts = () => {
-    const canvas = d3.select<HTMLDivElement, unknown>("#canvas");
-
+    const canvas = d3.select<HTMLDivElement, never>("#canvas");
     canvas.selectAll("*").remove();
 
-    const svg = canvas.append("svg");
-    const width = svg.node()!.scrollWidth;
+    const svg = canvas
+      .append("svg")
+      .attr(
+        "height",
+        MARGIN.top + 10 * (CHART_TITLE_HEIGHT + CHART_HEIGHT) + MARGIN.bottom
+      );
 
-    const xScale = d3
+    const chartWidth = svg.node()!.scrollWidth - MARGIN.left - MARGIN.right;
+
+    const charts = svg
+      .selectAll("g")
+      .data(quantities)
+      .enter()
+      .append("g")
+      .attr(
+        "transform",
+        (_, index) =>
+          `translate(${MARGIN.left}, ${MARGIN.top +
+            CHART_TITLE_HEIGHT +
+            index * (CHART_TITLE_HEIGHT + CHART_HEIGHT)})`
+      );
+
+    const timeScale = d3
       .scaleTime()
-      .domain([new Date("2019-09-10"), new Date()])
-      .range([0, width]);
+      .range([0, chartWidth])
+      .domain([new Date("2019-09-10"), new Date()]);
 
-    const yScale = d3
-      .scaleLinear()
-      .domain([150, 0])
-      .range([0, CHART_HEIGHT]);
+    const timeAxis = d3.axisBottom(timeScale).ticks(chartWidth / TICK_WIDTH);
 
-    svg
+    charts
       .append("g")
       .attr("class", "axis")
       .attr("transform", `translate(0, ${CHART_HEIGHT})`)
-      .call(
-        d3
-          .axisBottom(xScale)
-          .ticks(width / TICK_WIDTH)
-          .tickFormat(d3.timeFormat("%d-%m-%Y") as any)
-      );
+      .call(timeAxis);
 
-    svg
-      .append("g")
-      .attr("class", "axis")
-      .call(d3.axisLeft(yScale));
+    const area = (scale: d3.ScaleLinear<number, number>) =>
+      d3
+        .area<typeof measurements[number]>()
+        .x(d => timeScale(new Date(d.date)))
+        .y1(d => CHART_HEIGHT - scale(d.value))
+        .y0(CHART_HEIGHT)
+        .curve(d3.curveMonotoneX);
 
-    const line = d3
-      .line<typeof measurements[number]>()
-      .x(d => xScale(new Date(d.date)))
-      .y(d => yScale(d.value))
-      .curve(d3.curveMonotoneX);
+    const line = (scale: d3.ScaleLinear<number, number>) =>
+      d3
+        .line<typeof measurements[number]>()
+        .x(d => timeScale(new Date(d.date)))
+        .y(d => CHART_HEIGHT - scale(d.value))
+        .curve(d3.curveMonotoneX);
 
-    svg
-      .append("path")
-      .datum(measurements)
-      .attr("class", ".line")
-      .attr("fill", "none")
-      .attr("stroke", "#ff5000")
-      .attr("stroke-linejoin", "round")
-      .attr("stroke-linecap", "round")
-      .attr("stroke-width", 1.5)
-      .attr("d", line);
+    charts.each(function(data) {
+      const chart = d3.select(this);
+
+      const scale = d3
+        .scaleLinear()
+        .domain([0, 200])
+        .range([0, CHART_HEIGHT]);
+
+      chart
+        .append("path")
+        .attr("class", "area")
+        .attr("d", area(scale)(data)!);
+
+      chart
+        .append("path")
+        .attr("class", "line")
+        .attr("d", line(scale)(data)!);
+
+      chart
+        .selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("class", "circle")
+        .attr("cx", d => timeScale(new Date(d.date)))
+        .attr("cy", d => CHART_HEIGHT - scale(d.value))
+        .attr("r", DOT_RADIUS);
+
+      const labelPoints = data.reduce((accumulator, currentPoint, index) => {
+        const previousPoint =
+          index === 0
+            ? { date: "1970-01-01", value: 0 }
+            : accumulator[accumulator.length - 1];
+
+        const previousX = timeScale(new Date(previousPoint.date));
+        const previousY = scale(previousPoint.value);
+
+        const currentX = timeScale(new Date(currentPoint.date));
+        const currentY = scale(currentPoint.value);
+
+        if (
+          (currentX - previousX) ** 2 + (currentY - previousY) ** 2 >=
+          DOT_LABEL_MIN_DISTANCE ** 2
+        ) {
+          accumulator.push(currentPoint);
+        }
+
+        return accumulator;
+      }, [] as typeof measurements);
+
+      chart
+        .selectAll()
+        .data(labelPoints)
+        .enter()
+        .append("text")
+        .text(d => d.value)
+        .attr("class", "label")
+        .attr("x", d => timeScale(new Date(d.date)))
+        .attr("y", d => CHART_HEIGHT - scale(d.value) - LABEL_OFFSET)
+        .attr("text-anchor", "middle");
+    });
   };
 
   /**
@@ -135,10 +233,9 @@ const Canvas = styled.div`
 
   & svg {
     width: 100%;
-    overflow: visible;
   }
 
-  & svg .axis {
+  & svg g {
     font: inherit;
   }
 
@@ -149,9 +246,28 @@ const Canvas = styled.div`
 
   & svg .axis text {
     color: ${({ theme }) => theme.colorSecondary};
+    font-size: 0.75rem;
+    letter-spacing: 0;
   }
 
   & svg .line {
-    color: ${({ theme }) => theme.colorActive};
+    fill: none;
+    stroke: ${({ theme }) => theme.colorActive};
+    stroke-width: 2;
+  }
+
+  & svg .area {
+    fill: ${({ theme }) => theme.colorActive};
+    opacity: 0.25;
+  }
+
+  & svg .circle {
+    fill: ${({ theme }) => theme.backgroundColor};
+    stroke: ${({ theme }) => theme.colorActive};
+    stroke-width: 2;
+  }
+
+  & svg .label {
+    color: ${({ theme }) => theme.colorPrimary};
   }
 `;

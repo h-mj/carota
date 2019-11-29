@@ -17,12 +17,12 @@ const TICK_WIDTH = 180;
 /**
  * Chart title height.
  */
-const CHART_TITLE_HEIGHT = 56;
+const CHART_TITLE_HEIGHT = 128;
 
 /**
  * Height of a single chart.
  */
-const CHART_HEIGHT = 256;
+const CHART_HEIGHT = 196;
 
 /**
  * Line chart dot radius.
@@ -38,7 +38,7 @@ const DOT_LABEL_MIN_DISTANCE = 56;
 /**
  * Data dot label offset.
  */
-const LABEL_OFFSET = 8;
+const LABEL_OFFSET = 10;
 
 /**
  * Chart margin sizes.
@@ -49,6 +49,49 @@ const MARGIN = {
   left: 8,
   right: 8
 };
+
+/**
+ * Area path generator function.
+ */
+const area = (
+  x: d3.ScaleTime<number, number>,
+  y: d3.ScaleLinear<number, number>
+) =>
+  d3
+    .area<typeof measurements[number]>()
+    .x(d => x(new Date(d.date)))
+    .y1(d => CHART_HEIGHT - y(d.value))
+    .y0(CHART_HEIGHT)
+    .curve(d3.curveMonotoneX);
+
+/**
+ * Line path generator function.
+ */
+const line = (
+  x: d3.ScaleTime<number, number>,
+  y: d3.ScaleLinear<number, number>
+) =>
+  d3
+    .line<typeof measurements[number]>()
+    .x(d => x(new Date(d.date)))
+    .y(d => CHART_HEIGHT - y(d.value))
+    .curve(d3.curveMonotoneX);
+
+const amounts = [
+  { date: "2019-09-10", value: 60, limit: 67 },
+  { date: "2019-09-12", value: 69, limit: 67 },
+  { date: "2019-09-13", value: 65, limit: 67 },
+  { date: "2019-09-15", value: 70, limit: 67 },
+  { date: "2019-09-20", value: 75, limit: 67 },
+  { date: "2019-09-30", value: 77, limit: 87 },
+  { date: "2019-10-04", value: 90, limit: 87 },
+  { date: "2019-10-10", value: 120, limit: 87 },
+  { date: "2019-10-28", value: 70, limit: 87 },
+  { date: "2019-11-01", value: 100, limit: 87 },
+  { date: "2019-11-10", value: 90, limit: 87 }
+];
+
+export const nutrients: typeof amounts[] = Array(3).fill(amounts);
 
 const measurements = [
   { date: "2019-09-10", value: 19 },
@@ -98,6 +141,163 @@ export class Statistics extends SceneComponent<"Statistics"> {
   }
 
   /**
+   * Appends a new chart svg group to the end of the svg.
+   */
+  private appendChartGroup(
+    svg: d3.Selection<SVGSVGElement, never, HTMLElement, any>
+  ) {
+    const index = svg.node()!.childElementCount;
+
+    return svg
+      .append("g")
+      .attr(
+        "transform",
+        `translate(${MARGIN.left}, ${MARGIN.top +
+          CHART_TITLE_HEIGHT +
+          index * (CHART_TITLE_HEIGHT + CHART_HEIGHT)})`
+      );
+  }
+
+  /**
+   * Renders a bar chart of nutrient amounts and limits
+   */
+  private renderNutrientChart(
+    svg: d3.Selection<SVGSVGElement, never, HTMLElement, any>,
+    data: typeof amounts,
+    x: d3.ScaleTime<number, number>
+  ) {
+    const chart = this.appendChartGroup(svg);
+
+    const min = d3.min(data, amount => Math.min(amount.limit, amount.value))!;
+    const max = d3.max(data, amount => Math.max(amount.limit, amount.value))!;
+
+    const y = d3
+      .scaleLinear()
+      .domain([
+        min - Math.max(10, (max - min) * 0.1),
+        max + Math.max(10, (max - min) * 0.1)
+      ])
+      .range([0, CHART_HEIGHT]);
+
+    chart
+      .selectAll()
+      .data(data)
+      .enter()
+      .append("rect")
+      .attr("class", "bar")
+      .attr("x", d => x(new Date(d.date)))
+      .attr("y", d => CHART_HEIGHT - y(d.value))
+      .attr(
+        "width",
+        d => x(d3.timeDay.offset(new Date(d.date), 1)) - x(new Date(d.date))
+      )
+      .attr("height", d => y(d.value));
+
+    chart
+      .selectAll()
+      .data(data)
+      .enter()
+      .append("line")
+      .attr("class", "bar-limit")
+      .attr("x1", d => x(new Date(d.date)))
+      .attr("y1", d => CHART_HEIGHT - y(d.limit))
+      .attr("x2", (d, i) =>
+        x(
+          i < data.length - 1
+            ? new Date(data[i + 1].date)
+            : d3.timeDay.offset(new Date(d.date), 1)
+        )
+      )
+      .attr("y2", d => CHART_HEIGHT - y(d.limit));
+
+    chart
+      .selectAll()
+      .data(data)
+      .enter()
+      .append("line")
+      .attr("class", "bar-top")
+      .attr("x1", d => x(new Date(d.date)))
+      .attr("y1", d => CHART_HEIGHT - y(d.value))
+      .attr("x2", d => x(d3.timeDay.offset(new Date(d.date), 1)))
+      .attr("y2", d => CHART_HEIGHT - y(d.value));
+  }
+
+  /**
+   * Renders chart inside specified SVG with given measurements.
+   */
+  private renderQuantityChart(
+    svg: d3.Selection<SVGSVGElement, never, HTMLElement, any>,
+    data: typeof measurements,
+    x: d3.ScaleTime<number, number>
+  ) {
+    const chart = this.appendChartGroup(svg);
+
+    const min = d3.min(data, measurement => measurement.value)!;
+    const max = d3.max(data, measurement => measurement.value)!;
+
+    const y = d3
+      .scaleLinear()
+      .domain([
+        min - Math.max(10, (max - min) * 0.1),
+        max + Math.max(10, (max - min) * 0.1)
+      ])
+      .range([0, CHART_HEIGHT]);
+
+    chart
+      .append("path")
+      .attr("class", "area")
+      .attr("d", area(x, y)(data)!);
+
+    chart
+      .append("path")
+      .attr("class", "line")
+      .attr("d", line(x, y)(data)!);
+
+    chart
+      .selectAll()
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("class", "circle")
+      .attr("cx", d => x(new Date(d.date)))
+      .attr("cy", d => CHART_HEIGHT - y(d.value))
+      .attr("r", DOT_RADIUS);
+
+    const labelPoints = data.reduce((accumulator, currentPoint, index) => {
+      const previousPoint =
+        index === 0
+          ? { date: "1970-01-01", value: 0 }
+          : accumulator[accumulator.length - 1];
+
+      const previousX = x(new Date(previousPoint.date));
+      const previousY = y(previousPoint.value);
+
+      const currentX = x(new Date(currentPoint.date));
+      const currentY = y(currentPoint.value);
+
+      if (
+        (currentX - previousX) ** 2 + (currentY - previousY) ** 2 >=
+        DOT_LABEL_MIN_DISTANCE ** 2
+      ) {
+        accumulator.push(currentPoint);
+      }
+
+      return accumulator;
+    }, [] as typeof measurements);
+
+    chart
+      .selectAll()
+      .data(labelPoints)
+      .enter()
+      .append("text")
+      .text(d => d.value)
+      .attr("class", "label")
+      .attr("x", d => x(new Date(d.date)))
+      .attr("y", d => CHART_HEIGHT - y(d.value) - LABEL_OFFSET)
+      .attr("text-anchor", "middle");
+  }
+
+  /**
    * Renders the charts SVG.
    */
   private renderCharts = () => {
@@ -108,113 +308,35 @@ export class Statistics extends SceneComponent<"Statistics"> {
       .append("svg")
       .attr(
         "height",
-        MARGIN.top + 10 * (CHART_TITLE_HEIGHT + CHART_HEIGHT) + MARGIN.bottom
+        MARGIN.top +
+          (nutrients.length + quantities.length) *
+            (CHART_TITLE_HEIGHT + CHART_HEIGHT) +
+          MARGIN.bottom
       );
 
     const chartWidth = svg.node()!.scrollWidth - MARGIN.left - MARGIN.right;
 
-    const charts = svg
-      .selectAll("g")
-      .data(quantities)
-      .enter()
-      .append("g")
-      .attr(
-        "transform",
-        (_, index) =>
-          `translate(${MARGIN.left}, ${MARGIN.top +
-            CHART_TITLE_HEIGHT +
-            index * (CHART_TITLE_HEIGHT + CHART_HEIGHT)})`
-      );
-
-    const timeScale = d3
+    const x = d3
       .scaleTime()
       .range([0, chartWidth])
       .domain([new Date("2019-09-10"), new Date()]);
 
-    const timeAxis = d3.axisBottom(timeScale).ticks(chartWidth / TICK_WIDTH);
+    const xAxis = d3.axisBottom(x).ticks(chartWidth / TICK_WIDTH);
 
-    charts
+    for (const amounts of nutrients) {
+      this.renderNutrientChart(svg, amounts, x);
+    }
+
+    for (const measurements of quantities) {
+      this.renderQuantityChart(svg, measurements, x);
+    }
+
+    svg
+      .selectAll("g")
       .append("g")
       .attr("class", "axis")
       .attr("transform", `translate(0, ${CHART_HEIGHT})`)
-      .call(timeAxis);
-
-    const area = (scale: d3.ScaleLinear<number, number>) =>
-      d3
-        .area<typeof measurements[number]>()
-        .x(d => timeScale(new Date(d.date)))
-        .y1(d => CHART_HEIGHT - scale(d.value))
-        .y0(CHART_HEIGHT)
-        .curve(d3.curveMonotoneX);
-
-    const line = (scale: d3.ScaleLinear<number, number>) =>
-      d3
-        .line<typeof measurements[number]>()
-        .x(d => timeScale(new Date(d.date)))
-        .y(d => CHART_HEIGHT - scale(d.value))
-        .curve(d3.curveMonotoneX);
-
-    charts.each(function(data) {
-      const chart = d3.select(this);
-
-      const scale = d3
-        .scaleLinear()
-        .domain([0, 200])
-        .range([0, CHART_HEIGHT]);
-
-      chart
-        .append("path")
-        .attr("class", "area")
-        .attr("d", area(scale)(data)!);
-
-      chart
-        .append("path")
-        .attr("class", "line")
-        .attr("d", line(scale)(data)!);
-
-      chart
-        .selectAll("circle")
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("class", "circle")
-        .attr("cx", d => timeScale(new Date(d.date)))
-        .attr("cy", d => CHART_HEIGHT - scale(d.value))
-        .attr("r", DOT_RADIUS);
-
-      const labelPoints = data.reduce((accumulator, currentPoint, index) => {
-        const previousPoint =
-          index === 0
-            ? { date: "1970-01-01", value: 0 }
-            : accumulator[accumulator.length - 1];
-
-        const previousX = timeScale(new Date(previousPoint.date));
-        const previousY = scale(previousPoint.value);
-
-        const currentX = timeScale(new Date(currentPoint.date));
-        const currentY = scale(currentPoint.value);
-
-        if (
-          (currentX - previousX) ** 2 + (currentY - previousY) ** 2 >=
-          DOT_LABEL_MIN_DISTANCE ** 2
-        ) {
-          accumulator.push(currentPoint);
-        }
-
-        return accumulator;
-      }, [] as typeof measurements);
-
-      chart
-        .selectAll()
-        .data(labelPoints)
-        .enter()
-        .append("text")
-        .text(d => d.value)
-        .attr("class", "label")
-        .attr("x", d => timeScale(new Date(d.date)))
-        .attr("y", d => CHART_HEIGHT - scale(d.value) - LABEL_OFFSET)
-        .attr("text-anchor", "middle");
-    });
+      .call(xAxis);
   };
 
   /**
@@ -248,6 +370,21 @@ const Canvas = styled.div`
     color: ${({ theme }) => theme.colorSecondary};
     font-size: 0.75rem;
     letter-spacing: 0;
+  }
+
+  & svg .bar {
+    fill: ${({ theme }) => theme.colorActive};
+    opacity: 0.25;
+  }
+
+  & svg .bar-top {
+    stroke: ${({ theme }) => theme.colorActive};
+    stroke-width: 2;
+  }
+
+  & svg .bar-limit {
+    stroke: ${({ theme }) => theme.colorSecondary};
+    stroke-width: 2;
   }
 
   & svg .line {

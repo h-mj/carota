@@ -229,6 +229,7 @@ const Abbreviation = styled.span`
 
   @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
     display: block;
+    margin-left: 0;
     font-size: 0.75rem;
     letter-spacing: 0;
   }

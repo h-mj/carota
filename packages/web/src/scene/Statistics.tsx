@@ -70,10 +70,10 @@ const LABEL_OFFSET = 10;
  * Chart margin sizes.
  */
 const MARGIN = {
-  top: 0,
-  bottom: 64,
-  left: 32,
-  right: 32
+  top: -40,
+  bottom: 128,
+  left: 40,
+  right: 40
 };
 
 /**
@@ -531,8 +531,6 @@ export class Statistics extends SceneComponent<
  * Canvas div element that wraps created SVG element.
  */
 const Canvas = styled.div`
-  padding: ${({ theme }) => theme.padding};
-
   & svg {
     width: 100%;
   }

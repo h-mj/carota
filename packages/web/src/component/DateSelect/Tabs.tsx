@@ -3,8 +3,8 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 
 import { TranslatedComponent } from "../../base/TranslatedComponent";
-import { RESET } from "../../styling/stylesheets";
 import { styled } from "../../styling/theme";
+import { Tab } from "../Tab";
 import { equals, toDateArray, DateArray } from "./DateSelect";
 
 /**
@@ -139,7 +139,7 @@ export class Tabs extends TranslatedComponent<
             {dates.map(date => (
               <Tab
                 key={date.toString()}
-                current={equals(date, currentDate)}
+                highlighted={equals(date, currentDate)}
                 onClick={this.handleClick}
                 selected={equals(date, selectedDate)}
                 value={date.toString()}
@@ -219,51 +219,6 @@ const Positioner = styled.div<PositionerProps>`
   display: flex;
 
   transition: transform ${({ theme }) => theme.transitionSlow};
-`;
-
-/**
- * Tab date component props.
- */
-interface TabProps {
-  /**
-   * Whether this date is current date.
-   */
-  current: boolean;
-
-  /**
-   * Whether this date is selected.
-   */
-  selected: boolean;
-}
-
-/**
- * Tab component.
- */
-const Tab = styled.button<TabProps>`
-  ${RESET};
-
-  width: 100%;
-  height: 100%;
-  flex-shrink: 0;
-
-  border-bottom: ${({ current, selected, theme }) =>
-    selected
-      ? `solid 4px ${theme.colorActive}`
-      : current
-      ? `solid 4px ${theme.borderColor}`
-      : `solid 1px ${theme.borderColor}`};
-  border-top: ${({ current, selected }) =>
-    selected || current ? `solid 4px transparent` : `solid 1px transparent`};
-  box-sizing: border-box;
-
-  color: ${({ current, selected, theme }) =>
-    current || selected ? theme.colorPrimary : theme.colorSecondary};
-  font-feature-settings: "tnum" 1;
-  text-align: center;
-
-  cursor: pointer;
-
-  transition: ${({ theme }) => theme.transition};
 `;
 
 /**

@@ -265,6 +265,16 @@ export const estonian: Translation = {
       title: "Seaded",
       useDarkTheme: "Kasutage tumedat teemat"
     },
+    Statistics: {
+      timeFrames: {
+        all: "Kõik",
+        month: "Kuu",
+        quarter: "Kvartal",
+        week: "Nädal",
+        year: "Aasta"
+      },
+      title: "Statistika"
+    },
     Tabs: {
       abbreviations: [
         "jaan",

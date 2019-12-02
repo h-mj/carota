@@ -264,6 +264,16 @@ export const english: Translation = {
       title: "Settings",
       useDarkTheme: "Use dark theme"
     },
+    Statistics: {
+      timeFrames: {
+        all: "All",
+        month: "Month",
+        quarter: "Quarter",
+        week: "Week",
+        year: "Year"
+      },
+      title: "Statistics"
+    },
     Tabs: {
       abbreviations: [
         "Jan.",

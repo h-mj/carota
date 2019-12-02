@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import { observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 
@@ -6,7 +7,19 @@ import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
+import { Head } from "../component/Head";
+import { Tab } from "../component/Tab";
 import { styled } from "../styling/theme";
+
+/**
+ * Array of available time frames.
+ */
+const TIME_FRAMES = ["week", "month", "quarter", "year", "all"] as const;
+
+/**
+ * Union of available time frames.
+ */
+type TimeFrame = typeof TIME_FRAMES[number];
 
 /**
  * Width of a tick on a x-axis. Used to calculate the number of ticks based on
@@ -91,7 +104,7 @@ const amounts = [
   { date: "2019-11-10", value: 90, limit: 87 }
 ];
 
-export const nutrients: typeof amounts[] = Array(3).fill(amounts);
+const nutrients: typeof amounts[] = Array(4).fill(amounts);
 
 const measurements = [
   { date: "2019-09-10", value: 19 },
@@ -110,12 +123,36 @@ const measurements = [
 const quantities: typeof measurements[] = Array(10).fill(measurements);
 
 /**
+ * Statistics scene component translation.
+ */
+interface StatisticsTranslation {
+  /**
+   * Time frame translations.
+   */
+  timeFrames: Record<TimeFrame, string>;
+
+  /**
+   * Scene title translation.
+   */
+  title: string;
+}
+
+/**
  * Scene component that displays statistics about consumed nutrition and body
  * measurements.
  */
 @inject("views")
 @observer
-export class Statistics extends SceneComponent<"Statistics"> {
+export class Statistics extends SceneComponent<
+  "Statistics",
+  {},
+  StatisticsTranslation
+> {
+  /**
+   * Currently selected time frame.
+   */
+  @observable selectedTimeFrame: TimeFrame = "week";
+
   /**
    * Sets the name of this component.
    */
@@ -343,8 +380,36 @@ export class Statistics extends SceneComponent<"Statistics"> {
    * Renders the canvas element inside which the SVG of charts is rendered.
    */
   public render() {
-    return <Canvas id="canvas" />;
+    return (
+      <>
+        <Head title={this.translation.title} />
+
+        <Tabs>
+          {TIME_FRAMES.map(timeFrame => (
+            <Tab
+              id={timeFrame}
+              onClick={this.selectTimeFrame}
+              selected={timeFrame === this.selectedTimeFrame}
+              value={timeFrame}
+            >
+              {this.translation.timeFrames[timeFrame]}
+            </Tab>
+          ))}
+        </Tabs>
+
+        <Canvas id="canvas" />
+      </>
+    );
   }
+
+  /**
+   * Sets appropriate time frame on tab click.
+   */
+  private selectTimeFrame: React.MouseEventHandler<
+    HTMLButtonElement
+  > = event => {
+    this.selectedTimeFrame = event.currentTarget.value as TimeFrame;
+  };
 }
 
 /**
@@ -407,4 +472,24 @@ const Canvas = styled.div`
   & svg .label {
     fill: ${({ theme }) => theme.colorPrimary};
   }
+`;
+
+/**
+ * Top tab bar component.
+ */
+const Tabs = styled.div`
+  position: sticky;
+  top: 0;
+
+  width: 100%;
+  height: ${({ theme }) => theme.height};
+  flex-shrink: 0;
+
+  display: flex;
+
+  & > ${Tab} {
+    flex-shrink: 1;
+  }
+
+  background-color: ${({ theme }) => theme.backgroundColor};
 `;

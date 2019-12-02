@@ -268,6 +268,16 @@ export const russian: Translation = {
       title: "Настройки",
       useDarkTheme: "Использовать темную тему"
     },
+    Statistics: {
+      timeFrames: {
+        all: "Все",
+        month: "Месяц",
+        quarter: "Квартал",
+        week: "Неделя",
+        year: "Год"
+      },
+      title: "Статистика"
+    },
     Tabs: {
       abbreviations: [
         "янв.",

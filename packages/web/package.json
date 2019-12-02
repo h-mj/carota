@@ -22,7 +22,7 @@
     "@zxing/library": "^0.15.2",
     "d3": "^5.14.2",
     "deviator": "^0.4.3",
-    "eslint": "^6.7.1",
+    "eslint": "^6.7.2",
     "eslint-config-prettier": "^6.7.0",
     "mobx": "^5.15.0",
     "mobx-react": "^6.1.4",

@@ -266,6 +266,22 @@ export const estonian: Translation = {
       useDarkTheme: "Kasutage tumedat teemat"
     },
     Statistics: {
+      charts: {
+        Bicep: "Biitsepi ümbermõõt",
+        Calf: "Sääremarja ümbermõõt",
+        Chest: "Rindkere ümbermõõt",
+        Height: "Pikkus",
+        Hip: "Puusa ümbermõõt",
+        Shin: "Sääre ümbermõõt",
+        Thigh: "Reie ümbermõõt",
+        Waist: "Talje ümbermõõt",
+        Weight: "Kaal",
+        Wrist: "Randme ümbermõõt",
+        energy: "Energiasisaldus",
+        protein: "Valgud",
+        fat: "Rasvad",
+        carbohydrate: "Süsivesikud"
+      },
       timeFrames: {
         all: "Kõik",
         month: "Kuu",

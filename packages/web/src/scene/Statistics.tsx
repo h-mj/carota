@@ -2,6 +2,7 @@ import * as d3 from "d3";
 import { observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
+import { Quantity } from "server";
 
 import {
   DefaultSceneComponentProps,
@@ -9,6 +10,7 @@ import {
 } from "../base/SceneComponent";
 import { Head } from "../component/Head";
 import { Tab } from "../component/Tab";
+import { RequiredNutrient } from "../model/Foodstuff";
 import { styled } from "../styling/theme";
 
 /**
@@ -22,6 +24,17 @@ const TIME_FRAMES = ["week", "month", "quarter", "year", "all"] as const;
 type TimeFrame = typeof TIME_FRAMES[number];
 
 /**
+ * Maps time frames to functions that calculate the beginning of the time frame
+ * depending on current date.
+ */
+const TIME_FRAME_OFFSET_FUNCTIONS = {
+  week: (now: Date) => d3.timeWeek.offset(now, -1),
+  month: (now: Date) => d3.timeMonth.offset(now, -1),
+  quarter: (now: Date) => d3.timeMonth.offset(now, -3),
+  year: (now: Date) => d3.timeYear.offset(now, -1)
+};
+
+/**
  * Width of a tick on a x-axis. Used to calculate the number of ticks based on
  * current screen width.
  */
@@ -30,7 +43,7 @@ const TICK_WIDTH = 180;
 /**
  * Chart title height.
  */
-const CHART_TITLE_HEIGHT = 128;
+const CHART_TITLE_HEIGHT = 196;
 
 /**
  * Height of a single chart.
@@ -59,8 +72,8 @@ const LABEL_OFFSET = 10;
 const MARGIN = {
   top: 0,
   bottom: 64,
-  left: 8,
-  right: 8
+  left: 32,
+  right: 32
 };
 
 /**
@@ -104,8 +117,6 @@ const amounts = [
   { date: "2019-11-10", value: 90, limit: 87 }
 ];
 
-const nutrients: typeof amounts[] = Array(4).fill(amounts);
-
 const measurements = [
   { date: "2019-09-10", value: 19 },
   { date: "2019-09-12", value: 20 },
@@ -120,12 +131,44 @@ const measurements = [
   { date: "2019-11-10", value: 150 }
 ];
 
-const quantities: typeof measurements[] = Array(10).fill(measurements);
+type NutrientData = {
+  type: "nutrient";
+  name: RequiredNutrient;
+  data: typeof amounts;
+};
+
+type QuantityData = {
+  type: "quantity";
+  name: Quantity;
+  data: typeof measurements;
+};
+
+const data: (NutrientData | QuantityData)[] = [
+  { type: "nutrient", name: "energy", data: amounts },
+  { type: "nutrient", name: "protein", data: amounts },
+  { type: "nutrient", name: "fat", data: amounts },
+  { type: "nutrient", name: "carbohydrate", data: amounts },
+  { type: "quantity", name: "Bicep", data: measurements },
+  { type: "quantity", name: "Calf", data: measurements },
+  { type: "quantity", name: "Chest", data: measurements },
+  { type: "quantity", name: "Height", data: measurements },
+  { type: "quantity", name: "Hip", data: measurements },
+  { type: "quantity", name: "Shin", data: measurements },
+  { type: "quantity", name: "Thigh", data: measurements },
+  { type: "quantity", name: "Waist", data: measurements },
+  { type: "quantity", name: "Weight", data: measurements },
+  { type: "quantity", name: "Wrist", data: measurements }
+];
 
 /**
  * Statistics scene component translation.
  */
 interface StatisticsTranslation {
+  /**
+   * Chart title translations.
+   */
+  charts: Record<RequiredNutrient | Quantity, string>;
+
   /**
    * Time frame translations.
    */
@@ -178,33 +221,21 @@ export class Statistics extends SceneComponent<
   }
 
   /**
-   * Appends a new chart svg group to the end of the svg.
+   * Redraw the chart after component was updated.
    */
-  private appendChartGroup(
-    svg: d3.Selection<SVGSVGElement, never, HTMLElement, any>
-  ) {
-    const index = svg.node()!.childElementCount;
-
-    return svg
-      .append("g")
-      .attr(
-        "transform",
-        `translate(${MARGIN.left}, ${MARGIN.top +
-          CHART_TITLE_HEIGHT +
-          index * (CHART_TITLE_HEIGHT + CHART_HEIGHT)})`
-      );
+  public componentDidUpdate() {
+    this.renderCharts();
   }
 
   /**
-   * Renders a bar chart of nutrient amounts and limits
+   * Renders a bar chart of nutrient amounts and limits inside specified SVG
+   * group selection.
    */
-  private renderNutrientChart(
-    svg: d3.Selection<SVGSVGElement, never, HTMLElement, any>,
+  private renderNutrientChart = (
+    chart: d3.Selection<SVGGElement, unknown, null, undefined>,
     data: typeof amounts,
     x: d3.ScaleTime<number, number>
-  ) {
-    const chart = this.appendChartGroup(svg);
-
+  ) => {
     const min = d3.min(data, amount => Math.min(amount.limit, amount.value))!;
     const max = d3.max(data, amount => Math.max(amount.limit, amount.value))!;
 
@@ -216,12 +247,13 @@ export class Statistics extends SceneComponent<
       ])
       .range([0, CHART_HEIGHT]);
 
-    chart
-      .selectAll()
-      .data(data)
+    const bars = chart.selectAll<SVGRectElement, never>("rect").data(data);
+
+    bars
       .enter()
       .append("rect")
       .attr("class", "bar")
+      .merge(bars)
       .attr("x", d => x(new Date(d.date)))
       .attr("y", d => CHART_HEIGHT - y(d.value))
       .attr(
@@ -230,12 +262,15 @@ export class Statistics extends SceneComponent<
       )
       .attr("height", d => y(d.value));
 
-    chart
-      .selectAll()
-      .data(data)
+    const limits = chart
+      .selectAll<SVGLineElement, never>("line.bar-limit")
+      .data(data);
+
+    limits
       .enter()
       .append("line")
       .attr("class", "bar-limit")
+      .merge(limits)
       .attr("x1", d => x(new Date(d.date)))
       .attr("y1", d => CHART_HEIGHT - y(d.limit))
       .attr("x2", (d, i) =>
@@ -247,28 +282,30 @@ export class Statistics extends SceneComponent<
       )
       .attr("y2", d => CHART_HEIGHT - y(d.limit));
 
-    chart
-      .selectAll()
-      .data(data)
+    const highlights = chart
+      .selectAll<SVGLineElement, never>("line.bar-top")
+      .data(data);
+
+    highlights
       .enter()
       .append("line")
       .attr("class", "bar-top")
+      .merge(highlights)
       .attr("x1", d => x(new Date(d.date)))
       .attr("y1", d => CHART_HEIGHT - y(d.value))
       .attr("x2", d => x(d3.timeDay.offset(new Date(d.date), 1)))
       .attr("y2", d => CHART_HEIGHT - y(d.value));
-  }
+  };
 
   /**
-   * Renders chart inside specified SVG with given measurements.
+   * Renders chart inside specified SVG with given measurements inside specified
+   * SVG group selection.
    */
-  private renderQuantityChart(
-    svg: d3.Selection<SVGSVGElement, never, HTMLElement, any>,
+  private renderQuantityChart = function(
+    chart: d3.Selection<SVGGElement, unknown, null, undefined>,
     data: typeof measurements,
     x: d3.ScaleTime<number, number>
   ) {
-    const chart = this.appendChartGroup(svg);
-
     const min = d3.min(data, measurement => measurement.value)!;
     const max = d3.max(data, measurement => measurement.value)!;
 
@@ -280,29 +317,44 @@ export class Statistics extends SceneComponent<
       ])
       .range([0, CHART_HEIGHT]);
 
-    chart
+    const areaPath = chart
+      .selectAll<SVGPathElement, never>("path.area")
+      .data([0]);
+
+    areaPath
+      .enter()
       .append("path")
       .attr("class", "area")
+      .merge(areaPath)
       .attr("d", area(x, y)(data)!);
 
-    chart
+    const linePath = chart
+      .selectAll<SVGPathElement, never>("path.line")
+      .data([0]);
+
+    linePath
+      .enter()
       .append("path")
       .attr("class", "line")
+      .merge(linePath)
       .attr("d", line(x, y)(data)!);
 
-    chart
-      .selectAll()
-      .data(data)
+    const dots = chart
+      .selectAll<SVGCircleElement, never>("circle.dot")
+      .data(data);
+
+    dots
       .enter()
       .append("circle")
-      .attr("class", "circle")
+      .attr("class", "dot")
+      .merge(dots)
       .attr("cx", d => x(new Date(d.date)))
       .attr("cy", d => CHART_HEIGHT - y(d.value))
       .attr("r", DOT_RADIUS);
 
-    const labelPoints = data.reduce((accumulator, currentPoint, index) => {
+    const labelPoints = data.reduce((accumulator, currentPoint) => {
       const previousPoint =
-        index === 0
+        accumulator.length === 0
           ? { date: "1970-01-01", value: 0 }
           : accumulator[accumulator.length - 1];
 
@@ -313,8 +365,9 @@ export class Statistics extends SceneComponent<
       const currentY = y(currentPoint.value);
 
       if (
+        currentX >= 0 &&
         (currentX - previousX) ** 2 + (currentY - previousY) ** 2 >=
-        DOT_LABEL_MIN_DISTANCE ** 2
+          DOT_LABEL_MIN_DISTANCE ** 2
       ) {
         accumulator.push(currentPoint);
       }
@@ -322,16 +375,34 @@ export class Statistics extends SceneComponent<
       return accumulator;
     }, [] as typeof measurements);
 
-    chart
-      .selectAll()
-      .data(labelPoints)
+    const labels = chart
+      .selectAll<SVGTextElement, never>("text.label")
+      .data(labelPoints);
+
+    labels.exit().remove();
+
+    labels
       .enter()
       .append("text")
-      .text(d => d.value)
       .attr("class", "label")
+      .merge(labels)
+      .text(d => d.value)
       .attr("x", d => x(new Date(d.date)))
       .attr("y", d => CHART_HEIGHT - y(d.value) - LABEL_OFFSET)
       .attr("text-anchor", "middle");
+  };
+
+  /**
+   * Returns chart time axis domain depending on currently selected time frame.
+   */
+  private getTimeDomain() {
+    const now = new Date();
+
+    if (this.selectedTimeFrame === "all") {
+      return [new Date("2019-01-01"), now];
+    }
+
+    return [TIME_FRAME_OFFSET_FUNCTIONS[this.selectedTimeFrame](now), now];
   }
 
   /**
@@ -339,40 +410,84 @@ export class Statistics extends SceneComponent<
    */
   private renderCharts = () => {
     const canvas = d3.select<HTMLDivElement, never>("#canvas");
-    canvas.selectAll("*").remove();
 
-    const svg = canvas
+    let svg = canvas.selectAll<SVGSVGElement, never>("svg").data([0]);
+    svg = svg
+      .enter()
       .append("svg")
+      .merge(svg)
       .attr(
         "height",
         MARGIN.top +
-          (nutrients.length + quantities.length) *
-            (CHART_TITLE_HEIGHT + CHART_HEIGHT) +
+          data.length * (CHART_TITLE_HEIGHT + CHART_HEIGHT) +
           MARGIN.bottom
       );
 
-    const chartWidth = svg.node()!.scrollWidth - MARGIN.left - MARGIN.right;
+    const chartWidth = svg.node()!.clientWidth - MARGIN.left - MARGIN.right;
 
     const x = d3
       .scaleTime()
       .range([0, chartWidth])
-      .domain([new Date("2019-09-10"), new Date()]);
+      .domain(this.getTimeDomain())
+      .nice();
 
     const xAxis = d3.axisBottom(x).ticks(chartWidth / TICK_WIDTH);
 
-    for (const amounts of nutrients) {
-      this.renderNutrientChart(svg, amounts, x);
-    }
+    let charts = svg.selectAll<SVGGElement, never>("g.chart").data(data);
 
-    for (const measurements of quantities) {
-      this.renderQuantityChart(svg, measurements, x);
-    }
+    charts = charts
+      .enter()
+      .append("g")
+      .attr("class", "chart")
+      .merge(charts);
 
-    svg
-      .selectAll("g")
+    const renderNutrientChart = this.renderNutrientChart;
+    const renderQuantityChart = this.renderQuantityChart;
+    const chartsTranslation = this.translation.charts;
+
+    charts
+      .attr(
+        "transform",
+        (_, index) =>
+          `translate(${MARGIN.left}, ${MARGIN.top +
+            CHART_TITLE_HEIGHT +
+            index * (CHART_TITLE_HEIGHT + CHART_HEIGHT)})`
+      )
+      .each(function(data) {
+        const chart = d3.select(this);
+
+        const title = chart
+          .selectAll<SVGTextElement, never>("text.title")
+          .data([0]);
+
+        title
+          .enter()
+          .append("text")
+          .attr("class", "title")
+          .merge(title)
+          .text(chartsTranslation[data.name])
+          .attr("x", "0")
+          .attr("y", -CHART_TITLE_HEIGHT / 2)
+          .attr("alignment-baseline", "middle");
+
+        if (data.type === "nutrient") {
+          renderNutrientChart(d3.select(this), data.data, x);
+        } else {
+          renderQuantityChart(d3.select(this), data.data, x);
+        }
+      });
+
+    const axes = svg
+      .selectAll("g.chart")
+      .selectAll<SVGGElement, never>("g.axis")
+      .data([0]);
+
+    axes
+      .enter()
       .append("g")
       .attr("class", "axis")
       .attr("transform", `translate(0, ${CHART_HEIGHT})`)
+      .merge(axes)
       .call(xAxis);
   };
 
@@ -387,7 +502,7 @@ export class Statistics extends SceneComponent<
         <Tabs>
           {TIME_FRAMES.map(timeFrame => (
             <Tab
-              id={timeFrame}
+              key={timeFrame}
               onClick={this.selectTimeFrame}
               selected={timeFrame === this.selectedTimeFrame}
               value={timeFrame}
@@ -432,9 +547,13 @@ const Canvas = styled.div`
   }
 
   & svg .axis text {
-    color: ${({ theme }) => theme.colorSecondary};
+    fill: ${({ theme }) => theme.colorSecondary};
     font-size: 0.75rem;
     letter-spacing: 0;
+  }
+
+  & svg .title {
+    fill: ${({ theme }) => theme.colorPrimary};
   }
 
   & svg .bar {
@@ -463,7 +582,7 @@ const Canvas = styled.div`
     opacity: 0.25;
   }
 
-  & svg .circle {
+  & svg .dot {
     fill: ${({ theme }) => theme.backgroundColor};
     stroke: ${({ theme }) => theme.colorActive};
     stroke-width: 2;

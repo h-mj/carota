@@ -16,7 +16,11 @@ import { Group } from "../component/Group";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
 import { TitleBar } from "../component/TitleBar";
-import { Foodstuff } from "../model/Foodstuff";
+import {
+  Foodstuff,
+  RequiredNutrient,
+  REQUIRED_NUTRIENTS
+} from "../model/Foodstuff";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
 import { any, append, ErrorsFor } from "../utility/form";
@@ -54,21 +58,6 @@ const NUTRIENTS = [
  * Union of all nutrient names.
  */
 type Nutrients = typeof NUTRIENTS[number];
-
-/**
- * Array of required nutrients, other nutrient text fields will be optional.
- */
-const REQUIRED_NUTRIENTS = [
-  "energy",
-  "fat",
-  "carbohydrate",
-  "protein"
-] as const;
-
-/**
- * Union of all required nutrients.
- */
-type RequiredNutrients = typeof REQUIRED_NUTRIENTS[number];
 
 /**
  * Edit scene props.
@@ -158,8 +147,8 @@ interface EditTranslation {
 /**
  * Nutrient amount values.
  */
-type NutritionDeclarationValues = Record<RequiredNutrients, string> &
-  Partial<Record<Exclude<Nutrients, RequiredNutrients>, string>>;
+type NutritionDeclarationValues = Record<RequiredNutrient, string> &
+  Partial<Record<Exclude<Nutrients, RequiredNutrient>, string>>;
 
 /**
  * Foodstuff editing form values object type.

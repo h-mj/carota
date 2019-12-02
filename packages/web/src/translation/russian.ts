@@ -269,6 +269,22 @@ export const russian: Translation = {
       useDarkTheme: "Использовать темную тему"
     },
     Statistics: {
+      charts: {
+        Bicep: "Объем бицепса",
+        Calf: "Объем икры ноги",
+        Chest: "Объем груди",
+        Height: "Рост",
+        Hip: "Объем бедер",
+        Shin: "Объем голени",
+        Thigh: "Объем бедра",
+        Waist: "Объем талии",
+        Weight: "Вес",
+        Wrist: "Объем запястья",
+        energy: "Энергетическая ценность",
+        protein: "Белки",
+        fat: "Жиры",
+        carbohydrate: "Углеводы"
+      },
       timeFrames: {
         all: "Все",
         month: "Месяц",

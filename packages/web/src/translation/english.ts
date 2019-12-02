@@ -265,6 +265,22 @@ export const english: Translation = {
       useDarkTheme: "Use dark theme"
     },
     Statistics: {
+      charts: {
+        Bicep: "Bicep circumference",
+        Calf: "Calf circumference",
+        Chest: "Chest circumference",
+        Height: "Height",
+        Hip: "Hip circumference",
+        Shin: "Shin circumference",
+        Thigh: "Thigh circumference",
+        Waist: "Waist circumference",
+        Weight: "Weight",
+        Wrist: "Wrist circumference",
+        energy: "Energy",
+        protein: "Protein",
+        fat: "Fat",
+        carbohydrate: "Carbohydrate"
+      },
       timeFrames: {
         all: "All",
         month: "Month",

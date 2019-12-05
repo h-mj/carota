@@ -168,9 +168,15 @@ export class Measure extends SceneComponent<
                 <span>{this.translation.measurements}</span>
               </Separator>
 
-              {measurements.map(measurement => (
-                <Entry measurement={measurement} onDelete={this.handleDelete} />
-              ))}
+              <div>
+                {measurements.map(measurement => (
+                  <Entry
+                    key={measurement.id}
+                    measurement={measurement}
+                    onDelete={this.handleDelete}
+                  />
+                ))}
+              </div>
             </>
           )}
         </Form>
@@ -260,7 +266,7 @@ class Entry extends Component<EntryProps> {
    */
   public render() {
     return (
-      <Row key={this.props.measurement.id}>
+      <Row>
         <Column>{toDateString(new Date(this.props.measurement.date))}</Column>
         <Column>{this.props.measurement.value}</Column>
         <DeleteButton onClick={this.handleClick} />

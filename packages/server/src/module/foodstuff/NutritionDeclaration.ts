@@ -55,4 +55,13 @@ export class NutritionDeclaration {
   });
 }
 
+export const REQUIRED_NUTRIENTS = [
+  "energy",
+  "fat",
+  "carbohydrate",
+  "protein"
+] as const;
+
+export type RequiredNutrient = typeof REQUIRED_NUTRIENTS[number];
+
 export type NutritionDeclarationDto = DtoOf<NutritionDeclaration>;

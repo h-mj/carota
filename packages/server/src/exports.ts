@@ -7,6 +7,7 @@ import { FoodstuffController } from "./module/foodstuff/FoodstuffController";
 import { InvitationController } from "./module/invitation/InvitationController";
 import { MealController } from "./module/meal/MealController";
 import { MeasurementController } from "./module/measurement/MeasurementController";
+import { StatisticsController } from "./module/statistics/StatisticsController";
 
 interface Controllers {
   account: AccountController;
@@ -16,6 +17,7 @@ interface Controllers {
   invitation: InvitationController;
   meal: MealController;
   measurement: MeasurementController;
+  statistics: StatisticsController;
 }
 
 interface Transaction<TBody, TData> {
@@ -67,7 +69,10 @@ export {
 } from "./module/account/Account";
 export { DishDto } from "./module/dish/Dish";
 export { FoodstuffDto, Unit } from "./module/foodstuff/Foodstuff";
-export { NutritionDeclarationDto } from "./module/foodstuff/NutritionDeclaration";
+export {
+  NutritionDeclarationDto,
+  RequiredNutrient
+} from "./module/foodstuff/NutritionDeclaration";
 export { InvitationDto } from "./module/invitation/Invitation";
 export { MealDto } from "./module/meal/Meal";
 export { MeasurementDto, Quantity } from "./module/measurement/Measurement";

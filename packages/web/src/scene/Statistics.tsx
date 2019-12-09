@@ -1,8 +1,8 @@
 import * as d3 from "d3";
-import { observable } from "mobx";
+import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Quantity } from "server";
+import { Data, MeasurementDto, Quantity } from "server";
 
 import {
   DefaultSceneComponentProps,
@@ -84,7 +84,7 @@ const area = (
   y: d3.ScaleLinear<number, number>
 ) =>
   d3
-    .area<typeof measurements[number]>()
+    .area<MeasurementDto>()
     .x(d => x(new Date(d.date)))
     .y1(d => CHART_HEIGHT - y(d.value))
     .y0(CHART_HEIGHT)
@@ -98,67 +98,10 @@ const line = (
   y: d3.ScaleLinear<number, number>
 ) =>
   d3
-    .line<typeof measurements[number]>()
+    .line<MeasurementDto>()
     .x(d => x(new Date(d.date)))
     .y(d => CHART_HEIGHT - y(d.value))
     .curve(d3.curveMonotoneX);
-
-const amounts = [
-  { date: "2019-09-10", value: 60, limit: 67 },
-  { date: "2019-09-12", value: 69, limit: 67 },
-  { date: "2019-09-13", value: 65, limit: 67 },
-  { date: "2019-09-15", value: 70, limit: 67 },
-  { date: "2019-09-20", value: 75, limit: 67 },
-  { date: "2019-09-30", value: 77, limit: 87 },
-  { date: "2019-10-04", value: 90, limit: 87 },
-  { date: "2019-10-10", value: 120, limit: 87 },
-  { date: "2019-10-28", value: 70, limit: 87 },
-  { date: "2019-11-01", value: 100, limit: 87 },
-  { date: "2019-11-10", value: 90, limit: 87 }
-];
-
-const measurements = [
-  { date: "2019-09-10", value: 19 },
-  { date: "2019-09-12", value: 20 },
-  { date: "2019-09-13", value: 19.9 },
-  { date: "2019-09-15", value: 22 },
-  { date: "2019-09-20", value: 25 },
-  { date: "2019-09-30", value: 30 },
-  { date: "2019-10-04", value: 34 },
-  { date: "2019-10-10", value: 36 },
-  { date: "2019-10-28", value: 46 },
-  { date: "2019-11-01", value: 48 },
-  { date: "2019-11-10", value: 150 }
-];
-
-type NutrientData = {
-  type: "nutrient";
-  name: RequiredNutrient;
-  data: typeof amounts;
-};
-
-type QuantityData = {
-  type: "quantity";
-  name: Quantity;
-  data: typeof measurements;
-};
-
-const data: (NutrientData | QuantityData)[] = [
-  { type: "nutrient", name: "energy", data: amounts },
-  { type: "nutrient", name: "protein", data: amounts },
-  { type: "nutrient", name: "fat", data: amounts },
-  { type: "nutrient", name: "carbohydrate", data: amounts },
-  { type: "quantity", name: "Bicep", data: measurements },
-  { type: "quantity", name: "Calf", data: measurements },
-  { type: "quantity", name: "Chest", data: measurements },
-  { type: "quantity", name: "Height", data: measurements },
-  { type: "quantity", name: "Hip", data: measurements },
-  { type: "quantity", name: "Shin", data: measurements },
-  { type: "quantity", name: "Thigh", data: measurements },
-  { type: "quantity", name: "Waist", data: measurements },
-  { type: "quantity", name: "Weight", data: measurements },
-  { type: "quantity", name: "Wrist", data: measurements }
-];
 
 /**
  * Statistics scene component translation.
@@ -184,13 +127,18 @@ interface StatisticsTranslation {
  * Scene component that displays statistics about consumed nutrition and body
  * measurements.
  */
-@inject("views")
+@inject("views", "statistics")
 @observer
 export class Statistics extends SceneComponent<
   "Statistics",
   {},
   StatisticsTranslation
 > {
+  /**
+   * Retrieved statistics data.
+   */
+  @observable data?: Data<"statistics", "getAll">;
+
   /**
    * Currently selected time frame.
    */
@@ -208,7 +156,7 @@ export class Statistics extends SceneComponent<
    * which chart is redrawn.
    */
   public componentDidMount() {
-    this.renderCharts();
+    this.loadData();
 
     window.addEventListener("resize", this.renderCharts, true);
   }
@@ -233,7 +181,7 @@ export class Statistics extends SceneComponent<
    */
   private renderNutrientChart = (
     chart: d3.Selection<SVGGElement, unknown, null, undefined>,
-    data: typeof amounts,
+    data: Array<{ date: string; value: number; limit: number }>,
     x: d3.ScaleTime<number, number>
   ) => {
     const min = d3.min(data, amount => Math.min(amount.limit, amount.value))!;
@@ -303,7 +251,7 @@ export class Statistics extends SceneComponent<
    */
   private renderQuantityChart = function(
     chart: d3.Selection<SVGGElement, unknown, null, undefined>,
-    data: typeof measurements,
+    data: MeasurementDto[],
     x: d3.ScaleTime<number, number>
   ) {
     const min = d3.min(data, measurement => measurement.value)!;
@@ -373,7 +321,7 @@ export class Statistics extends SceneComponent<
       }
 
       return accumulator;
-    }, [] as typeof measurements);
+    }, [] as MeasurementDto[]);
 
     const labels = chart
       .selectAll<SVGTextElement, never>("text.label")
@@ -411,6 +359,11 @@ export class Statistics extends SceneComponent<
   private renderCharts = () => {
     const canvas = d3.select<HTMLDivElement, never>("#canvas");
 
+    if (this.data === undefined) {
+      canvas.selectAll("*").remove();
+      return;
+    }
+
     let svg = canvas.selectAll<SVGSVGElement, never>("svg").data([0]);
     svg = svg
       .enter()
@@ -419,21 +372,21 @@ export class Statistics extends SceneComponent<
       .attr(
         "height",
         MARGIN.top +
-          data.length * (CHART_TITLE_HEIGHT + CHART_HEIGHT) +
+          this.data.length * (CHART_TITLE_HEIGHT + CHART_HEIGHT) +
           MARGIN.bottom
       );
 
     const chartWidth = svg.node()!.clientWidth - MARGIN.left - MARGIN.right;
 
     const x = d3
-      .scaleTime()
+      .scaleUtc()
       .range([0, chartWidth])
       .domain(this.getTimeDomain())
       .nice();
 
     const xAxis = d3.axisBottom(x).ticks(chartWidth / TICK_WIDTH);
 
-    let charts = svg.selectAll<SVGGElement, never>("g.chart").data(data);
+    let charts = svg.selectAll<SVGGElement, never>("g.chart").data(this.data);
 
     charts = charts
       .enter()
@@ -470,7 +423,7 @@ export class Statistics extends SceneComponent<
           .attr("y", -CHART_TITLE_HEIGHT / 2)
           .attr("alignment-baseline", "middle");
 
-        if (data.type === "nutrient") {
+        if (data.type === "nutrition") {
           renderNutrientChart(d3.select(this), data.data, x);
         } else {
           renderQuantityChart(d3.select(this), data.data, x);
@@ -525,6 +478,15 @@ export class Statistics extends SceneComponent<
   > = event => {
     this.selectedTimeFrame = event.currentTarget.value as TimeFrame;
   };
+
+  /**
+   * Requests statistics data from the server.
+   */
+  @action
+  private async loadData() {
+    this.data = await this.props.statistics!.getAll();
+    this.renderCharts();
+  }
 }
 
 /**

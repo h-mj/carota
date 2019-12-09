@@ -4,6 +4,7 @@ import { FoodstuffsStore } from "./FoodstuffsStore";
 import { InvitationsStore } from "./InvitationsStore";
 import { MealsStore } from "./MealsStore";
 import { MeasurementsStore } from "./MeasurementsStore";
+import { StatisticsStore } from "./StatisticsStore";
 import { ViewsStore } from "./ViewsStore";
 
 /**
@@ -17,6 +18,7 @@ export class RootStore {
   public meals: MealsStore;
   public measurements: MeasurementsStore;
   public views: ViewsStore;
+  public statistics: StatisticsStore;
 
   /**
    * Creates the root store and initializes all other stores.
@@ -29,6 +31,7 @@ export class RootStore {
     this.meals = new MealsStore(this);
     this.measurements = new MeasurementsStore(this);
     this.views = new ViewsStore(this);
+    this.statistics = new StatisticsStore(this);
   }
 
   /**

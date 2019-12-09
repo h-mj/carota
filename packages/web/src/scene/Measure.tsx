@@ -292,10 +292,6 @@ const Row = styled.div`
 
   display: flex;
   align-items: center;
-
-  &:not(:last-child) {
-    border-bottom: solid 1px ${({ theme }) => theme.borderColor};
-  }
 `;
 
 /**

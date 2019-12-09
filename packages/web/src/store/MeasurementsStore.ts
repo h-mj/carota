@@ -113,7 +113,7 @@ export class MeasurementsStore {
     if (measurement !== undefined) {
       measurement.value = value;
     } else {
-      measurements.push(new Measurement(result.value, this));
+      measurements.unshift(new Measurement(result.value, this));
     }
   }
 

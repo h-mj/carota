@@ -49,8 +49,11 @@ export class MeasurementService {
     await authorize(principal, "get quantity measurements of", account);
 
     return measurementRepository!.find({
-      accountId: account.id,
-      quantity: dto.quantity
+      where: {
+        accountId: account.id,
+        quantity: dto.quantity
+      },
+      order: { date: "DESC" }
     });
   }
 

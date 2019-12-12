@@ -2,7 +2,7 @@ import * as d3 from "d3";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { Data, MeasurementDto, Quantity } from "server";
+import { Data, Quantity } from "server";
 
 import {
   DefaultSceneComponentProps,
@@ -77,6 +77,11 @@ const MARGIN = {
 };
 
 /**
+ * Function that offsets specified date `now` by half a day.
+ */
+const offsetHalfDay = (now: Date) => d3.timeHour.offset(now, 12);
+
+/**
  * Area path generator function.
  */
 const area = (
@@ -84,8 +89,8 @@ const area = (
   y: d3.ScaleLinear<number, number>
 ) =>
   d3
-    .area<MeasurementDto>()
-    .x(d => x(new Date(d.date)))
+    .area<{ date: string; value: number }>()
+    .x(d => x(offsetHalfDay(new Date(d.date))))
     .y1(d => CHART_HEIGHT - y(d.value))
     .y0(CHART_HEIGHT)
     .curve(d3.curveMonotoneX);
@@ -98,8 +103,8 @@ const line = (
   y: d3.ScaleLinear<number, number>
 ) =>
   d3
-    .line<MeasurementDto>()
-    .x(d => x(new Date(d.date)))
+    .line<{ date: string; value: number }>()
+    .x(d => x(offsetHalfDay(new Date(d.date))))
     .y(d => CHART_HEIGHT - y(d.value))
     .curve(d3.curveMonotoneX);
 
@@ -251,7 +256,7 @@ export class Statistics extends SceneComponent<
    */
   private renderQuantityChart = function(
     chart: d3.Selection<SVGGElement, unknown, null, undefined>,
-    data: MeasurementDto[],
+    data: Array<{ date: string; value: number }>,
     x: d3.ScaleTime<number, number>
   ) {
     const min = d3.min(data, measurement => measurement.value)!;
@@ -296,7 +301,7 @@ export class Statistics extends SceneComponent<
       .append("circle")
       .attr("class", "dot")
       .merge(dots)
-      .attr("cx", d => x(new Date(d.date)))
+      .attr("cx", d => x(offsetHalfDay(new Date(d.date))))
       .attr("cy", d => CHART_HEIGHT - y(d.value))
       .attr("r", DOT_RADIUS);
 
@@ -321,7 +326,7 @@ export class Statistics extends SceneComponent<
       }
 
       return accumulator;
-    }, [] as MeasurementDto[]);
+    }, [] as typeof data);
 
     const labels = chart
       .selectAll<SVGTextElement, never>("text.label")
@@ -335,7 +340,7 @@ export class Statistics extends SceneComponent<
       .attr("class", "label")
       .merge(labels)
       .text(d => d.value)
-      .attr("x", d => x(new Date(d.date)))
+      .attr("x", d => x(offsetHalfDay(new Date(d.date))))
       .attr("y", d => CHART_HEIGHT - y(d.value) - LABEL_OFFSET)
       .attr("text-anchor", "middle");
   };

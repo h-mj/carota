@@ -348,11 +348,19 @@ export class Statistics extends SceneComponent<
   /**
    * Returns chart time axis domain depending on currently selected time frame.
    */
-  private getTimeDomain() {
+  private getTimeDomain(data: Data<"statistics", "getAll">) {
     const now = new Date();
 
     if (this.selectedTimeFrame === "all") {
-      return [new Date("2019-01-01"), now];
+      const milliseconds = data
+        .map(data => data.data)
+        .flat()
+        .map(point => new Date(point.date).valueOf());
+
+      // Force minimum to be at least 1 year from now.
+      milliseconds.push(TIME_FRAME_OFFSET_FUNCTIONS.year(now).valueOf());
+
+      return [new Date(d3.min(milliseconds)!), now];
     }
 
     return [TIME_FRAME_OFFSET_FUNCTIONS[this.selectedTimeFrame](now), now];
@@ -386,7 +394,7 @@ export class Statistics extends SceneComponent<
     const x = d3
       .scaleUtc()
       .range([0, chartWidth])
-      .domain(this.getTimeDomain())
+      .domain(this.getTimeDomain(this.data))
       .nice();
 
     const xAxis = d3.axisBottom(x).ticks(chartWidth / TICK_WIDTH);

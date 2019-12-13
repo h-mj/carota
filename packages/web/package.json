@@ -11,6 +11,9 @@
     "test": "react-scripts test"
   },
   "dependencies": {
+    "@nestjs/common": "^6.10.11",
+    "@nestjs/core": "^6.10.11",
+    "@nestjs/platform-express": "^6.10.11",
     "@types/d3": "^5.7.2",
     "@types/jest": "^24.0.23",
     "@types/node": "^12.12.17",

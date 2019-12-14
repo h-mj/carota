@@ -291,28 +291,57 @@ export const estonian: Translation = {
       },
       title: "Statistika"
     },
-    Tabs: {
-      abbreviations: [
-        "jaan",
-        "veebr",
-        "märts",
-        "apr",
-        "mai",
-        "juuni",
-        "juuli",
-        "aug",
-        "sept",
-        "okt",
-        "nov",
-        "dets"
-      ]
-    },
     TrashCan: {
       delete: "Kustutage"
     },
     Unknown: {
       message: "Teie otsitavat lehte ei leitud."
     }
+  },
+  locale: "et-EE",
+  timeLocale: {
+    dateTime: "%A, %e %B %Y a. %X",
+    date: "%d.%m.%Y",
+    time: "%H:%M:%S",
+    periods: ["AM", "PM"],
+    days: [
+      "pühapäev",
+      "esmaspäev",
+      "teisipäev",
+      "kolmapäev",
+      "neljapäev",
+      "reede",
+      "laupäev"
+    ],
+    shortDays: ["P", "E", "T", "K", "N", "R", "L"],
+    months: [
+      "jaanuar",
+      "veebruar",
+      "märts",
+      "aprill",
+      "mai",
+      "juuni",
+      "juuli",
+      "august",
+      "september",
+      "oktoober",
+      "november",
+      "detsember"
+    ],
+    shortMonths: [
+      "jaan",
+      "veebr",
+      "märts",
+      "apr",
+      "mai",
+      "juuni",
+      "juuli",
+      "aug",
+      "sept",
+      "okt",
+      "nov",
+      "dets"
+    ]
   },
   units: {
     cm: "cm",

@@ -82,7 +82,9 @@ export class StatisticsService {
       for (const dto of mealDtos) {
         const nutrientAmount = dto.dishes.reduce(
           (sum, dish) =>
-            sum + dish.quantity * dish.foodstuff.nutritionDeclaration[nutrient],
+            sum +
+            (dish.quantity / 100) *
+              dish.foodstuff.nutritionDeclaration[nutrient],
           0
         );
 

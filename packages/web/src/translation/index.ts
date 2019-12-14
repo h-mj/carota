@@ -10,6 +10,16 @@ export interface Translation {
   components: ComponentsTranslation;
 
   /**
+   * Language locale string.
+   */
+  locale: string;
+
+  /**
+   * Time locale definition.
+   */
+  timeLocale: d3.TimeLocaleDefinition;
+
+  /**
    * Unit translations.
    */
   units: Record<"cm" | "g" | "kcal" | "kg" | "ml" | "pcs", string>;

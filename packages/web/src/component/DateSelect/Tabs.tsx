@@ -2,10 +2,10 @@ import { action } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 
-import { TranslatedComponent } from "../../base/TranslatedComponent";
+import { Component } from "../../base/Component";
 import { styled } from "../../styling/theme";
 import { Tab } from "../Tab";
-import { equals, toDateArray, DateArray } from "./DateSelect";
+import { DateArray, equals, toDateArray } from "./DateSelect";
 
 /**
  * Number of tabs on both sides of selected date..
@@ -72,26 +72,12 @@ interface TabsProps {
 }
 
 /**
- * Tabs component translations.
- */
-interface TabsTranslations {
-  /**
-   * Translated month name abbreviations.
-   */
-  abbreviations: string[];
-}
-
-/**
  * Component that renders `VISIBLE_TAB_COUNT` tabs around specified current
  * date.
  */
 @inject("views")
 @observer
-export class Tabs extends TranslatedComponent<
-  "Tabs",
-  TabsProps,
-  TabsTranslations
-> {
+export class Tabs extends Component<TabsProps> {
   /**
    * Previously selected date.
    */
@@ -106,7 +92,7 @@ export class Tabs extends TranslatedComponent<
    * Sets the name of this component.
    */
   public constructor(props: TabsProps) {
-    super("Tabs", props);
+    super(props);
 
     this.previousDate = toDateArray(props.date);
     this.offset = 0;
@@ -146,7 +132,11 @@ export class Tabs extends TranslatedComponent<
               >
                 {date[2]}
                 <Abbreviation>
-                  {this.translation.abbreviations[date[1]]}
+                  {
+                    this.props.views!.translation.timeLocale.shortMonths[
+                      date[1]
+                    ]
+                  }
                 </Abbreviation>
               </Tab>
             ))}

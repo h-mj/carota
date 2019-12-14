@@ -108,7 +108,14 @@ const MARGIN = {
  * Minimum width of remaining space to the edge of the screen needed to not
  * mirror the tooltip position.
  */
-const TOOLTIP_FLIP_WIDTH = 200;
+const TOOLTIP_FLIP_WIDTH = 128;
+
+/**
+ * Offset that will be subtracted from tooltip position (relative to top left
+ * point of the tooltip space) and added to arrow offset if tooltip was
+ * mirrored. Used to not let the tooltip overflow the screen area.
+ */
+const FLIP_OFFSET_X = 96;
 
 /**
  * Function that offsets specified date `now` by half a day.
@@ -182,15 +189,20 @@ export class Statistics extends SceneComponent<
    * Currently selected or hovered over data point value which information is
    * shown in the tooltip.
    */
-  @observable private selectedPoint?: NutritionDataPoint | QuantityDataPoint;
+  @observable private selectedPoint: NutritionDataPoint | QuantityDataPoint = {
+    date: "1970-01-01",
+    value: 0
+  };
 
   /**
    * Current tooltip position.
    */
-  @observable private tooltipPosition: TooltipPosition = {
+  @observable private tooltipProps: TooltipProps = {
     x: 0,
     y: 0,
-    mirrored: false
+    arrowOffsetX: 0,
+    mirrored: false,
+    visible: false
   };
 
   /**
@@ -237,7 +249,7 @@ export class Statistics extends SceneComponent<
     data: NutritionDataPoint[],
     x: d3.ScaleTime<number, number>,
     setSelectedPoint: (point: NutritionDataPoint) => void,
-    unsetSelectedPoint: () => void
+    hideTooltip: () => void
   ) => {
     const min = d3.min(data, amount => Math.min(amount.limit, amount.value))!;
     const max = d3.max(data, amount => Math.max(amount.limit, amount.value))!;
@@ -266,7 +278,7 @@ export class Statistics extends SceneComponent<
       .attr("data-offsetX", d => x(offsetHalfDay(new Date(d.date))) - x(new Date(d.date)))
       .attr("data-offsetY", 0)
       .on("mouseover", setSelectedPoint)
-      .on("mouseleave", unsetSelectedPoint);
+      .on("mouseleave", hideTooltip);
 
     // Render the top border line of each bar
     const highlights = chart
@@ -309,7 +321,7 @@ export class Statistics extends SceneComponent<
     data: QuantityDataPoint[],
     x: d3.ScaleTime<number, number>,
     setSelectedPoint: (point: QuantityDataPoint) => void,
-    unsetSelectedPoint: () => void
+    hideTooltip: () => void
   ) {
     const min = d3.min(data, measurement => measurement.value)!;
     const max = d3.max(data, measurement => measurement.value)!;
@@ -395,7 +407,7 @@ export class Statistics extends SceneComponent<
       .attr("data-offsetY", d => CHART_HEIGHT - y(d.value))
       .attr("fill", "transparent")
       .on("mouseover", setSelectedPoint)
-      .on("mouseleave", unsetSelectedPoint);
+      .on("mouseleave", hideTooltip);
 
     // Filter out label positions so that there wouldn't be any overlap.
     const labelPoints = data.reduce((accumulator, currentPoint) => {
@@ -508,7 +520,7 @@ export class Statistics extends SceneComponent<
     const renderQuantityChart = this.renderQuantityChart;
     const chartsTranslation = this.translation.charts;
     const setSelectedPoint = this.setSelectedPoint;
-    const unsetSelectedPoint = this.unsetSelectedPoint;
+    const hideTooltip = this.hideTooltip;
 
     // prettier-ignore
     charts
@@ -532,9 +544,9 @@ export class Statistics extends SceneComponent<
 
         // prettier-ignore
         if (data.type === "nutrition") {
-          renderNutrientChart(d3.select(this), data.data, x, setSelectedPoint, unsetSelectedPoint);
+          renderNutrientChart(d3.select(this), data.data, x, setSelectedPoint, hideTooltip);
         } else {
-          renderQuantityChart(d3.select(this), data.data, x, setSelectedPoint, unsetSelectedPoint);
+          renderQuantityChart(d3.select(this), data.data, x, setSelectedPoint, hideTooltip);
         }
       });
 
@@ -575,14 +587,19 @@ export class Statistics extends SceneComponent<
 
         <Canvas id="canvas" />
 
-        {this.selectedPoint !== undefined && (
-          <Tooltip {...this.tooltipPosition}>
+        <Tooltip {...this.tooltipProps}>
+          <Line>
             {new Date(this.selectedPoint.date).toLocaleDateString(
               this.props.views!.translation.locale
             )}
-            : {this.selectedPoint.value}
-          </Tooltip>
-        )}
+          </Line>
+
+          <Line>{this.selectedPoint.value}</Line>
+
+          <Aligner>
+            <Arrow offsetX={this.tooltipProps.arrowOffsetX} />
+          </Aligner>
+        </Tooltip>
       </RelativeContainer>
     );
   }
@@ -609,16 +626,19 @@ export class Statistics extends SceneComponent<
     const target = d3.event.target as HTMLElement;
     const boundingRectangle = target.getBoundingClientRect();
 
-    this.tooltipPosition.x =
+    this.tooltipProps.x =
       boundingRectangle.x +
       Number.parseFloat(target.getAttribute("data-offsetX")!);
-    this.tooltipPosition.mirrored = false;
+    this.tooltipProps.arrowOffsetX = 0;
+    this.tooltipProps.mirrored = false;
 
     // Mirror the coordinate system so that tooltip wouldn't be wrapped if its
     // too close to the right edge.
-    if (this.svgWidth - this.tooltipPosition.x < TOOLTIP_FLIP_WIDTH) {
-      this.tooltipPosition.x = this.svgWidth - this.tooltipPosition.x;
-      this.tooltipPosition.mirrored = true;
+    if (this.svgWidth - this.tooltipProps.x < TOOLTIP_FLIP_WIDTH) {
+      this.tooltipProps.x = this.svgWidth - this.tooltipProps.x;
+      this.tooltipProps.x += FLIP_OFFSET_X;
+      this.tooltipProps.arrowOffsetX += FLIP_OFFSET_X;
+      this.tooltipProps.mirrored = true;
     }
 
     // Find the absolute y coordinate for the tooltip.
@@ -630,19 +650,21 @@ export class Statistics extends SceneComponent<
       element = element.parentElement;
     }
 
-    this.tooltipPosition.y =
+    this.tooltipProps.y =
       scrollTopSum +
       boundingRectangle.y +
       Number.parseFloat(target.getAttribute("data-offsetY")!) -
       TOOLTIP_OFFSET;
+
+    this.tooltipProps.visible = true;
   };
 
   /**
-   * Unsets the selected point and hides the tooltip.
+   * Hides the tooltip.
    */
   @action
-  private unsetSelectedPoint = () => {
-    this.selectedPoint = undefined;
+  private hideTooltip = () => {
+    this.tooltipProps.visible = false;
   };
 
   /**
@@ -756,9 +778,24 @@ const Tabs = styled.div`
 `;
 
 /**
- * Object type that defines the position of the tooltip.
+ * Tooltip component props.
  */
-interface TooltipPosition {
+interface TooltipProps {
+  /**
+   * Tooltip arrow offset.
+   */
+  arrowOffsetX: number;
+
+  /**
+   * Whether right positioning system should be used.
+   */
+  mirrored: boolean;
+
+  /**
+   * Whether tooltip is visible.
+   */
+  visible: boolean;
+
   /**
    * Absolute x coordinate.
    */
@@ -768,29 +805,76 @@ interface TooltipPosition {
    * Absolute y coordinate.
    */
   y: number;
-
-  /**
-   * Whether right positioning system should be used.
-   */
-  mirrored: boolean;
 }
+
+/**
+ * Tooltip information line component.
+ */
+const Line = styled.div`
+  padding: ${({ theme }) => theme.paddingSecondary};
+`;
 
 /**
  * Tooltip component.
  */
-const Tooltip = styled.div<TooltipPosition>`
+const Tooltip = styled.div<TooltipProps>`
+  width: calc(4 * ${({ theme }) => theme.height});
+
   position: absolute;
   top: ${({ y }) => y}px;
   ${({ mirrored, x }) => (mirrored ? `right: ${x}px` : `left: ${x}px`)};
   transform: translate(${({ mirrored }) => (mirrored ? "50%" : "-50%")}, -100%);
 
-  padding: ${({ theme }) => theme.paddingSecondary};
-
   border: solid 1px ${({ theme }) => theme.borderColor};
   border-radius: ${({ theme }) => theme.borderRadius};
   background-color: ${({ theme }) => theme.backgroundColor};
+  opacity: ${({ visible }) => (visible ? 1 : 0)};
 
   color: ${({ theme }) => theme.colorPrimary};
 
+  transition: opacity ${({ theme }) => theme.transition};
+
   pointer-events: none;
+
+  & > ${Line}:not(:nth-last-child(2)) {
+    padding-bottom: 0;
+  }
+`;
+
+/**
+ * Component that aligns the tooltip arrow.
+ */
+const Aligner = styled.div`
+  width: 100%;
+  height: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+/**
+ * Arrow component props.
+ */
+interface ArrowProps {
+  /**
+   * Arrow x offset from the center of the tooltip.
+   */
+  offsetX: number;
+}
+
+/**
+ * Tooltip bottom arrow component.
+ */
+const Arrow = styled.div<ArrowProps>`
+  width: ${({ theme }) => theme.paddingSecondary};
+  height: ${({ theme }) => theme.paddingSecondary};
+
+  background-color: ${({ theme }) => theme.backgroundColor};
+  border-style: solid;
+  border-color: ${({ theme }) => theme.borderColor};
+  border-width: 0 1px 1px 0;
+  box-sizing: border-box;
+
+  transform: translate(${({ offsetX }) => offsetX}px, 1px) rotateZ(45deg);
 `;

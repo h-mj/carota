@@ -152,8 +152,8 @@ export const russian: Translation = {
     Name: {
       createSubmit: "Создать",
       createTitle: "Создать прием пищи",
-      editSubmit: "Переименование приема пищи",
-      editTitle: "Переименовать",
+      editSubmit: "Переименовать",
+      editTitle: "Переименование приема пищи",
       label: "Название",
       meals: {
         breakfast: "Завтрак",

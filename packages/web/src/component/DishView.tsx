@@ -70,7 +70,7 @@ export class DishView extends Component<DishViewProps> {
 
               <Quantity>
                 {quantity}
-                {dish.foodstuff.unit}
+                {this.props.views!.translation.units[dish.foodstuff.unit]}
               </Quantity>
 
               <ItemHeaderText>{dish.foodstuff.name}</ItemHeaderText>

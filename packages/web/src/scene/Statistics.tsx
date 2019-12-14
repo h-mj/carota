@@ -115,7 +115,7 @@ const TOOLTIP_FLIP_WIDTH = 128;
  * point of the tooltip space) and added to arrow offset if tooltip was
  * mirrored. Used to not let the tooltip overflow the screen area.
  */
-const FLIP_OFFSET_X = 96;
+const FLIP_OFFSET_X = 80;
 
 /**
  * Function that offsets specified date `now` by half a day.

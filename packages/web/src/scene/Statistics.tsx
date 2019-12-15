@@ -632,8 +632,17 @@ export class Statistics extends SceneComponent<
     this.tooltipProps.arrowOffsetX = 0;
     this.tooltipProps.mirrored = false;
 
-    // Mirror the coordinate system so that tooltip wouldn't be wrapped if its
-    // too close to the right edge.
+    // If tooltip is too close to the left edge, offset tooltip by
+    // `FLIP_OFFSET_X` and arrow back by the same amount.
+    if (this.tooltipProps.x < TOOLTIP_FLIP_WIDTH) {
+      this.tooltipProps.x += FLIP_OFFSET_X;
+      this.tooltipProps.arrowOffsetX -= FLIP_OFFSET_X;
+    }
+
+    // If tooltip is too close to the right edge, flip the coordinate system
+    // from left to right so that tooltip will not be automatically wrapped
+    // because of the edge and offset the tooltip to the left by
+    // `FLIP_OFFSET_X`.
     if (this.svgWidth - this.tooltipProps.x < TOOLTIP_FLIP_WIDTH) {
       this.tooltipProps.x = this.svgWidth - this.tooltipProps.x;
       this.tooltipProps.x += FLIP_OFFSET_X;

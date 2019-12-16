@@ -17,6 +17,11 @@ export class MealsStore {
   @observable private cache: Map<string, Meal[]> = new Map();
 
   /**
+   * Latest loaded meals.
+   */
+  private loadedMeals: Meal[] = [];
+
+  /**
    * Root store instance.
    */
   public rootStore: RootStore;
@@ -39,14 +44,14 @@ export class MealsStore {
    * Returns whether meal with specified name exists.
    */
   public hasWithName(name: string) {
-    return [...this.cache.values()].flat().some(meal => meal.name === name);
+    return this.loadedMeals.some(meal => meal.name === name);
   }
 
   /**
    * Returns currently stored meals at specified date.
    */
   public mealsOf(date: Date) {
-    return this.cache.get(toIsoDateString(date)) || [];
+    return (this.loadedMeals = this.cache.get(toIsoDateString(date)) || []);
   }
 
   /**

@@ -48,6 +48,7 @@ const Button = styled.button.attrs({ type: "button" })`
 
   color: ${({ theme }) => theme.colorSecondary};
   font-size: 1.5rem;
+  letter-spacing: -0.019em;
   line-height: 50%;
   text-align: center;
 

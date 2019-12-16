@@ -49,6 +49,7 @@ export const Form = styled.form`
 export const Title = styled.div`
   color: ${({ theme }) => theme.colorPrimary};
   font-size: 1.5rem;
+  letter-spacing: -0.019em;
   line-height: 1.5rem;
   text-align: center;
 `;

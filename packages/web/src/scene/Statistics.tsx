@@ -150,6 +150,13 @@ const line = (
     .curve(d3.curveMonotoneX);
 
 /**
+ * Tooltip value format options.
+ */
+const FORMAT_OPTIONS = {
+  maximumFractionDigits: 0
+};
+
+/**
  * Statistics scene component translation.
  */
 interface StatisticsTranslation {
@@ -588,13 +595,30 @@ export class Statistics extends SceneComponent<
         <Canvas id="canvas" />
 
         <Tooltip {...this.tooltipProps}>
-          <Line>
+          <Title>
             {new Date(this.selectedPoint.date).toLocaleDateString(
               this.props.views!.translation.locale
             )}
-          </Line>
+          </Title>
 
-          <Line>{this.selectedPoint.value}</Line>
+          <Value>
+            {this.selectedPoint.value.toLocaleString(
+              this.props.views!.translation.locale,
+              FORMAT_OPTIONS
+            )}
+
+            {""}
+
+            {"limit" in this.selectedPoint && (
+              <Secondary>
+                {"\u00a0/\u00a0" /* Forward slash between two spaces */}
+                {this.selectedPoint.limit.toLocaleString(
+                  this.props.views!.translation.locale,
+                  FORMAT_OPTIONS
+                )}
+              </Secondary>
+            )}
+          </Value>
 
           <Aligner>
             <Arrow offsetX={this.tooltipProps.arrowOffsetX} />
@@ -817,13 +841,6 @@ interface TooltipProps {
 }
 
 /**
- * Tooltip information line component.
- */
-const Line = styled.div`
-  padding: ${({ theme }) => theme.paddingSecondary};
-`;
-
-/**
  * Tooltip component.
  */
 const Tooltip = styled.div<TooltipProps>`
@@ -844,10 +861,42 @@ const Tooltip = styled.div<TooltipProps>`
   transition: opacity ${({ theme }) => theme.transition};
 
   pointer-events: none;
+`;
 
-  & > ${Line}:not(:nth-last-child(2)) {
-    padding-bottom: 0;
-  }
+/**
+ * Tooltip title component.
+ */
+const Title = styled.div`
+  height: ${({ theme }) => theme.padding};
+  border-bottom: solid 1px ${({ theme }) => theme.borderColor};
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: ${({ theme }) => theme.colorSecondary};
+`;
+
+/**
+ * Tooltip point value component.
+ */
+const Value = styled.div`
+  padding: ${({ theme }) => theme.paddingSecondary};
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: ${({ theme }) => theme.colorPrimary};
+  font-size: 1.5rem;
+  letter-spacing: -0.019em;
+`;
+
+/**
+ * Secondary colored span element.
+ */
+const Secondary = styled.span`
+  color: ${({ theme }) => theme.colorSecondary};
 `;
 
 /**

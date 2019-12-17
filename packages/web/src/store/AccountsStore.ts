@@ -1,4 +1,4 @@
-import { action, computed, observable } from "mobx";
+import { action, observable } from "mobx";
 import { AccountDto, Body, Language } from "server";
 
 import { Account } from "../model/Account";
@@ -12,7 +12,7 @@ export class AccountsStore {
   /**
    * Currently authenticated account.
    */
-  @observable private _current?: Account;
+  @observable public current?: Account;
 
   /**
    * RootStore instance.
@@ -30,15 +30,7 @@ export class AccountsStore {
    * Clears all the data this store holds.
    */
   public clear() {
-    this._current = undefined;
-  }
-
-  /**
-   * Gets currently authenticated account.
-   */
-  @computed
-  public get current() {
-    return this._current;
+    this.current = undefined;
   }
 
   /**
@@ -46,7 +38,7 @@ export class AccountsStore {
    */
   @action
   public initialize(dto: AccountDto) {
-    this._current = new Account(dto, this);
+    this.current = new Account(dto, this);
     this.rootStore.views.language = dto.language;
   }
 

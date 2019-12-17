@@ -35,7 +35,7 @@ interface NameProps {
   /**
    * Currently loaded meals.
    */
-  currentMeals?: Meal[];
+  currentMeals: Meal[];
 
   /**
    * Existing meal initial name.
@@ -236,9 +236,8 @@ export class Name extends SceneComponent<"Name", NameProps, NameTranslation> {
       const label = this.translation.meals[name];
 
       if (
-        (this.props.currentMeals !== undefined &&
-          this.props.currentMeals.find(meal => meal.name === name) ===
-            undefined) ||
+        this.props.currentMeals.find(meal => meal.name === label) ===
+          undefined ||
         label === this.props.name
       ) {
         names.push(label);

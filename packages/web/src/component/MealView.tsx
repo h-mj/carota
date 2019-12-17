@@ -37,7 +37,7 @@ interface MealViewProps {
 /**
  * Component that displays the information of provided meal model.
  */
-@inject("dishes", "views")
+@inject("dishes", "meals", "views")
 @observer
 export class MealView extends Component<MealViewProps> {
   /**

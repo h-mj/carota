@@ -38,7 +38,7 @@ export class AccountsStore {
    */
   @action
   public initialize(dto: AccountDto) {
-    this.current = new Account(dto, this);
+    this.current = new Account(dto);
     this.rootStore.views.language = dto.language;
   }
 

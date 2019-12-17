@@ -1,11 +1,11 @@
 import { AccountDto, Language, Rights, Sex, Type } from "server";
 
 /**
- * Client-side representation of **Account** entity.
+ * Client-side representation of `Account` entity.
  */
 export class Account {
   /**
-   * Account ID.
+   * Account identifier.
    */
   public readonly id: string;
 

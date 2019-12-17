@@ -100,11 +100,8 @@ export class DishView extends Component<DishViewProps> {
    * Updates provided dish eaten status after some timeout.
    */
   @action
-  private updateEatenStatus = async () => {
-    await this.props.meals!.setDishEaten(
-      this.props.dish,
-      this.props.dish.eaten
-    );
+  private updateEatenStatus = () => {
+    this.props.dish.setEaten(this.props.dish.eaten);
   };
 
   /**

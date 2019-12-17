@@ -1,26 +1,48 @@
 import { action, observable } from "mobx";
 import { DishDto } from "server";
 
-import { MealsStore } from "../store/MealsStore";
+import { DishesStore } from "../store/DishesStore";
 import { Foodstuff, RequiredNutrient } from "./Foodstuff";
 import { Meal } from "./Meal";
 
 /**
- * Dish entity client-side representation.
+ * Client-side representation of `Dish` entity.
  */
 export class Dish {
+  /**
+   * Dish identifier.
+   */
   public readonly id: string;
+
+  /**
+   * Dish foodstuff model.
+   */
   public readonly foodstuff: Foodstuff;
+
+  /**
+   * Quantity of the foodstuff that was consumed.
+   */
   @observable public quantity: number;
+
+  /**
+   * Whether dish was consumed.
+   */
   @observable public eaten: boolean;
+
+  /**
+   * Meal that this dish is part of.
+   */
   public meal: Meal;
 
-  private readonly store: MealsStore;
+  /**
+   * `DishesStore` reference.
+   */
+  private readonly store: DishesStore;
 
   /**
    * Creates a `Dish` model based on its data transfer object.
    */
-  public constructor(dto: DishDto, meal: Meal, store: MealsStore) {
+  public constructor(dto: DishDto, meal: Meal, store: DishesStore) {
     this.id = dto.id;
     this.foodstuff = new Foodstuff(dto.foodstuff, store.rootStore.foodstuffs);
     this.quantity = dto.quantity;
@@ -34,7 +56,7 @@ export class Dish {
    */
   public quantityOf(nutrient: RequiredNutrient) {
     return (
-      (this.quantity / 100) * this.foodstuff.nutritionDeclaration[nutrient]
+      this.quantity * (this.foodstuff.nutritionDeclaration[nutrient] / 100)
     );
   }
 
@@ -43,7 +65,7 @@ export class Dish {
    */
   @action
   public delete() {
-    return this.store.deleteDish(this);
+    return this.store.delete(this);
   }
 
   /**
@@ -51,7 +73,15 @@ export class Dish {
    */
   @action
   public insert(meal: Meal, index: number) {
-    return this.store.insertDish(this, meal, index);
+    return this.store.insert(this, meal, index);
+  }
+
+  /**
+   * Sets whether this dish is eaten.
+   */
+  @action
+  public setEaten(eaten: boolean) {
+    return this.store.setEaten(this, eaten);
   }
 
   /**
@@ -59,6 +89,6 @@ export class Dish {
    */
   @action
   public setQuantity(quantity: number) {
-    return this.store.setDishQuantity(this, quantity);
+    return this.store.setQuantity(this, quantity);
   }
 }

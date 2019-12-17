@@ -13,7 +13,8 @@ import { Select } from "../component/Select";
 import { Separator } from "../component/Separator";
 import { TextField } from "../component/TextField";
 import { TitleBar } from "../component/TitleBar";
-import { any, ErrorsFor } from "../utility/form";
+import { Meal } from "../model/Meal";
+import { ErrorsFor, any } from "../utility/form";
 
 /**
  * Array of predefined meals that can be selected.
@@ -31,6 +32,11 @@ const nameValidator = deviate<string>()
  * Name component props.
  */
 interface NameProps {
+  /**
+   * Currently loaded meals.
+   */
+  currentMeals?: Meal[];
+
   /**
    * Existing meal initial name.
    */
@@ -107,20 +113,20 @@ interface NameTranslation {
  */
 interface NameValues {
   /**
-   * Selected meal name.
-   */
-  selectedName?: string;
-
-  /**
    * Entered name field.
    */
   name: string;
+
+  /**
+   * Selected meal name.
+   */
+  selectedName?: string;
 }
 
 /**
  * Scene which is used to select created meal name.
  */
-@inject("meals", "views")
+@inject("views")
 @observer
 export class Name extends SceneComponent<"Name", NameProps, NameTranslation> {
   /**
@@ -229,7 +235,12 @@ export class Name extends SceneComponent<"Name", NameProps, NameTranslation> {
     for (const name of PREDEFINED_MEAL_NAMES) {
       const label = this.translation.meals[name];
 
-      if (!this.props.meals!.hasWithName(label) || label === this.props.name) {
+      if (
+        (this.props.currentMeals !== undefined &&
+          this.props.currentMeals.find(meal => meal.name === name) ===
+            undefined) ||
+        label === this.props.name
+      ) {
         names.push(label);
       }
     }

@@ -1,5 +1,6 @@
 import { AccountsStore } from "./AccountsStore";
 import { AuthenticationStore } from "./AuthenticationStore";
+import { DishesStore } from "./DishesStore";
 import { FoodstuffsStore } from "./FoodstuffsStore";
 import { InvitationsStore } from "./InvitationsStore";
 import { MealsStore } from "./MealsStore";
@@ -13,6 +14,7 @@ import { ViewsStore } from "./ViewsStore";
 export class RootStore {
   public accounts: AccountsStore;
   public authentication: AuthenticationStore;
+  public dishes: DishesStore;
   public foodstuffs: FoodstuffsStore;
   public invitations: InvitationsStore;
   public meals: MealsStore;
@@ -26,6 +28,7 @@ export class RootStore {
   public constructor() {
     this.accounts = new AccountsStore(this);
     this.authentication = new AuthenticationStore(this);
+    this.dishes = new DishesStore(this);
     this.foodstuffs = new FoodstuffsStore(this);
     this.invitations = new InvitationsStore();
     this.meals = new MealsStore(this);

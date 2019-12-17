@@ -5,7 +5,7 @@ import * as React from "react";
 import { TranslatedComponent } from "../../base/TranslatedComponent";
 import { RESET } from "../../styling/stylesheets";
 import { styled } from "../../styling/theme";
-import { DateArray, equals, toDateArray } from "./DateSelect";
+import { toIsoDateString } from "../../utility/form";
 
 /**
  * Calendar component props.
@@ -14,12 +14,12 @@ interface CalendarProps {
   /**
    * Currently selected date.
    */
-  date: Date;
+  date: string;
 
   /**
    * Date select callback function.
    */
-  select: (date: Date) => void;
+  select: (date: string) => void;
 }
 
 /**
@@ -64,16 +64,16 @@ export class Calendar extends TranslatedComponent<
   public constructor(props: CalendarProps) {
     super("Calendar", props);
 
-    this.year = props.date.getFullYear();
-    this.month = props.date.getMonth();
+    this.year = new Date(props.date).getFullYear();
+    this.month = new Date(props.date).getMonth();
   }
 
   /**
    * Updates currently visible year and month when receiving props.
    */
   public componentWillReceiveProps(props: CalendarProps) {
-    this.year = props.date.getFullYear();
-    this.month = props.date.getMonth();
+    this.year = new Date(props.date).getFullYear();
+    this.month = new Date(props.date).getMonth();
   }
 
   /**
@@ -121,19 +121,18 @@ export class Calendar extends TranslatedComponent<
         {offset !== 0 && <Offset size={offset} />}
 
         {Array.from({ length: daysInMonth }, (_, i) =>
-          this.renderDate([this.year, this.month, i + 1])
+          this.renderDate(
+            toIsoDateString(new Date(this.year, this.month, i + 1))
+          )
         )}
       </Grid>
     );
   }
 
   /**
-   * Renders date button for specified date array with optional abbreviation.
+   * Renders date button for specified date with optional abbreviation.
    */
-  private renderDate(date: DateArray) {
-    const currentDate = toDateArray(new Date());
-    const selectedDate = toDateArray(this.props.date);
-
+  private renderDate(date: string) {
     return (
       <Button
         key={date.toString()}
@@ -141,11 +140,11 @@ export class Calendar extends TranslatedComponent<
         value={date.toString()}
       >
         <DateComponent
-          current={equals(date, currentDate)}
-          isSunday={new Date(...date).getDay() === 0}
-          selected={equals(date, selectedDate)}
+          current={date === toIsoDateString(new Date())}
+          isSunday={new Date(date).getDay() === 0}
+          selected={date === this.props.date}
         >
-          <div>{date[2]}</div>
+          <div>{new Date(date).getDate()}</div>
         </DateComponent>
       </Button>
     );
@@ -181,11 +180,7 @@ export class Calendar extends TranslatedComponent<
    * Calls select callback function when user clicks on one of the dates.
    */
   private handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const [year, month, date] = event.currentTarget.value
-      .split(",")
-      .map(value => Number.parseInt(value, 10));
-
-    this.props.select(new Date(year, month, date));
+    this.props.select(event.currentTarget.value);
   };
 }
 

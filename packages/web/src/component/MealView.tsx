@@ -37,7 +37,7 @@ interface MealViewProps {
 /**
  * Component that displays the information of provided meal model.
  */
-@inject("meals", "views")
+@inject("dishes", "views")
 @observer
 export class MealView extends Component<MealViewProps> {
   /**
@@ -104,7 +104,8 @@ export class MealView extends Component<MealViewProps> {
       return;
     }
 
-    this.props.meal.createDish(
+    this.props.dishes!.create(
+      this.props.meal,
       foodstuff,
       quantity,
       new Date(this.props.meal.date).getTime() <= new Date().getTime()
@@ -119,6 +120,7 @@ export class MealView extends Component<MealViewProps> {
   @action
   private showNameEdit = () => {
     this.scene = this.props.views!.push("center", "Name", {
+      currentMeals: this.props.meals!.mealsOf(this.props.meal.date),
       name: this.props.meal.name,
       onSelect: this.handleNameSelect
     });

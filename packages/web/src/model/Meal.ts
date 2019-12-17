@@ -3,17 +3,35 @@ import { MealDto } from "server";
 
 import { MealsStore } from "../store/MealsStore";
 import { Dish } from "./Dish";
-import { Foodstuff, RequiredNutrient } from "./Foodstuff";
+import { RequiredNutrient } from "./Foodstuff";
 
 /**
- * Meal entity client-side representation.
+ * Client-side representation of `Meal` entity.
  */
 export class Meal {
+  /**
+   * Meal identifier.
+   */
   public readonly id: string;
+
+  /**
+   * Name of the meal.
+   */
   @observable public name: string;
+
+  /**
+   * Date when this meal was added.
+   */
   public readonly date: string;
+
+  /**
+   * Ordered list of dishes within this meal.
+   */
   @observable public dishes: Dish[] = [];
 
+  /**
+   * MealsStore reference.
+   */
   private readonly store: MealsStore;
 
   /**
@@ -23,7 +41,9 @@ export class Meal {
     this.id = dto.id;
     this.name = dto.name;
     this.date = dto.date;
-    this.dishes = dto.dishes.map(dish => new Dish(dish, this, store));
+    this.dishes = dto.dishes.map(
+      dish => new Dish(dish, this, store.rootStore.dishes)
+    );
     this.store = store;
   }
 
@@ -39,18 +59,6 @@ export class Meal {
    */
   public has(id: string) {
     return this.withId(id) !== undefined;
-  }
-
-  /**
-   * Sets quantity of consumed foodstuff during this meal.
-   */
-  @action
-  public async createDish(
-    foodstuff: Foodstuff,
-    quantity: number,
-    eaten: boolean
-  ) {
-    return this.store.createDish(this, foodstuff, quantity, eaten);
   }
 
   /**

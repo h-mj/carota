@@ -4,8 +4,8 @@ import * as React from "react";
 
 import { Component } from "../../base/Component";
 import { styled } from "../../styling/theme";
+import { toIsoDateString } from "../../utility/form";
 import { Tab } from "../Tab";
-import { DateArray, equals, toDateArray } from "./DateSelect";
 
 /**
  * Number of tabs on both sides of selected date..
@@ -13,46 +13,36 @@ import { DateArray, equals, toDateArray } from "./DateSelect";
 export const TAB_RADIUS = 3;
 
 /**
- * Compares two array dates and returns 0 if they are equal, positive number if
- * `first` is before `second`, otherwise negative number.
+ * Compares two ISO date strings.
  */
-const compare = (first: DateArray, second: DateArray) => {
-  for (let i = 0; i < first.length; ++i) {
-    if (first[i] === second[i]) {
-      continue;
-    }
-
-    return first[i] - second[i];
-  }
-
-  return 0;
-};
+const compare = (first: string, second: string) =>
+  new Date(first).valueOf() - new Date(second).valueOf();
 
 /**
- * Returns an array of ordered date arrays that are around specified `center`
- * and which distance in days is at most `radius`.
+ * Returns an array of ordered dates that are around specified `center`
+ * date and which distance in days is at most `radius`.
  */
-const around = (center: DateArray, radius: number): DateArray[] => {
-  const dateIterator = new Date(...center);
+const around = (center: string, radius: number): string[] => {
+  const dateIterator = new Date(center);
   dateIterator.setDate(dateIterator.getDate() - radius);
 
   return Array.from({ length: 2 * radius + 1 }, () => {
-    const date = toDateArray(dateIterator);
+    const date = toIsoDateString(dateIterator);
     dateIterator.setDate(dateIterator.getDate() + 1);
     return date;
   });
 };
 
 /**
- * Merges two date array arrays into one. Returned array is ordered and does not
- * have duplicate date arrays.
+ * Merges two date string arrays into one. Returned array is ordered and does
+ * not have duplicate date strings.
  */
-const merge = (first: DateArray[], second: DateArray[]) => {
+const merge = (first: string[], second: string[]) => {
   return first
     .concat(second)
     .sort(compare)
     .filter((value, index, array) =>
-      index === 0 ? true : !equals(value, array[index - 1])
+      index === 0 ? true : value !== array[index - 1]
     );
 };
 
@@ -63,12 +53,12 @@ interface TabsProps {
   /**
    * Currently selected date.
    */
-  date: Date;
+  date: string;
 
   /**
    * Select date callback function.
    */
-  select: (date: Date) => void;
+  select: (date: string) => void;
 }
 
 /**
@@ -81,7 +71,7 @@ export class Tabs extends Component<TabsProps> {
   /**
    * Previously selected date.
    */
-  private previousDate: DateArray;
+  private previousDate: string;
 
   /**
    * Selected tab offset.
@@ -94,7 +84,7 @@ export class Tabs extends Component<TabsProps> {
   public constructor(props: TabsProps) {
     super(props);
 
-    this.previousDate = toDateArray(props.date);
+    this.previousDate = props.date;
     this.offset = 0;
   }
 
@@ -102,21 +92,18 @@ export class Tabs extends Component<TabsProps> {
    * Aligns and renders all tab components.
    */
   public render() {
-    const selectedDate = toDateArray(this.props.date);
-    const currentDate = toDateArray(new Date());
-
     const dates = merge(
       around(this.previousDate, TAB_RADIUS),
-      around(selectedDate, TAB_RADIUS)
+      around(this.props.date, TAB_RADIUS)
     );
 
-    const index = dates.findIndex(date => equals(date, selectedDate));
+    const index = dates.findIndex(date => date === this.props.date);
 
     this.offset +=
-      dates.findIndex(date => equals(date, selectedDate)) -
-      dates.findIndex(date => equals(date, this.previousDate));
+      dates.findIndex(date => date === this.props.date) -
+      dates.findIndex(date => date === this.previousDate);
 
-    this.previousDate = selectedDate;
+    this.previousDate = this.props.date;
 
     return (
       <Container>
@@ -125,16 +112,16 @@ export class Tabs extends Component<TabsProps> {
             {dates.map(date => (
               <Tab
                 key={date.toString()}
-                highlighted={equals(date, currentDate)}
+                highlighted={date === toIsoDateString(new Date())}
                 onClick={this.handleClick}
-                selected={equals(date, selectedDate)}
+                selected={date === this.props.date}
                 value={date.toString()}
               >
-                {date[2]}
+                {new Date(date).getDate()}
                 <Abbreviation>
                   {
                     this.props.views!.translation.timeLocale.shortMonths[
-                      date[1]
+                      new Date(date).getMonth()
                     ]
                   }
                 </Abbreviation>
@@ -151,11 +138,7 @@ export class Tabs extends Component<TabsProps> {
    */
   @action
   private handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const [year, month, date] = event.currentTarget.value
-      .split(",")
-      .map(value => Number.parseInt(value, 10));
-
-    this.props.select(new Date(year, month, date));
+    this.props.select(event.currentTarget.value);
   };
 }
 

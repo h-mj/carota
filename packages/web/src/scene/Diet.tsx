@@ -14,6 +14,7 @@ import { Head } from "../component/Head";
 import { MealsView } from "../component/MealsView";
 import { TrashCan } from "../component/TrashCan";
 import { styled } from "../styling/theme";
+import { toIsoDateString } from "../utility/form";
 
 /**
  * Diet scene component translation.
@@ -34,7 +35,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
   /**
    * Current date which meals are currently shown.
    */
-  @observable private date!: Date; // Initialized by calling `this.setDate` in constructor.
+  @observable private date!: string; // Initialized by calling `this.setDate` in constructor.
 
   /**
    * Current draggable type.
@@ -57,7 +58,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
   public constructor(props: DefaultSceneComponentProps<"Diet">) {
     super("Diet", props);
 
-    this.setDate(new Date());
+    this.setDate(toIsoDateString(new Date()));
   }
 
   /**
@@ -109,7 +110,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
    * Sets currently active date to specified date.
    */
   @action
-  private setDate = async (date: Date) => {
+  private setDate = async (date: string) => {
     this.date = date;
     this.props.meals!.getAll(date);
   };
@@ -173,6 +174,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
   @action
   private handleAddClick = () => {
     this.scene = this.props.views!.push("center", "Name", {
+      currentMeals: this.props.meals!.mealsOf(this.date),
       onSelect: this.handleNameSelect
     });
   };

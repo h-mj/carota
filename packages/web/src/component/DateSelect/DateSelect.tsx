@@ -15,33 +15,13 @@ interface CalendarProps {
   /**
    * Function that will be called when selected data value changes.
    */
-  onChange?: (value: Date) => void;
+  onChange?: (value: string) => void;
 
   /**
    * Currently selected date.
    */
-  date: Date;
+  date: string;
 }
-
-/**
- * Date array type.
- */
-export type DateArray = readonly [number, number, number];
-
-/**
- * Converts a specified date to an array of form `[year, month, date]`.
- */
-export const toDateArray = (date: Date): DateArray =>
-  [date.getFullYear(), date.getMonth(), date.getDate()] as const;
-
-/**
- * Returns whether specified array date equals another specified array date.
- */
-export const equals = (date1: DateArray, date2: DateArray) => {
-  return (
-    date1[0] === date2[0] && date1[1] === date2[1] && date1[2] === date2[2]
-  );
-};
 
 /**
  * Calendar component that is used to select a date.
@@ -105,7 +85,7 @@ export class DateSelect extends Component<CalendarProps> {
    * Calls `onChange` event handler when new date is selected.
    */
   @action
-  private handleSelect = (date: Date) => {
+  private handleSelect = (date: string) => {
     const { onChange } = this.props;
 
     if (onChange === undefined) {

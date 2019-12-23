@@ -265,8 +265,30 @@ export const english: Translation = {
       useDarkTheme: "Use dark theme"
     },
     Statistics: {
-      charts: {
+      ranges: {
+        verySeverelyUnderweight: "Very severely underweight",
+        severelyUnderweight: "Severely underweight",
+        underweight: "Underweight",
+        normal: "Normal",
+        overweight: "Overweight",
+        obeseClass1: "Obese Class I",
+        obeseClass2: "Obese Class II",
+        obeseClass3: "Obese Class III",
+        obeseClass4: "Obese Class IV",
+        obeseClass5: "Obese Class V",
+        obeseClass6: "Obese Class VI"
+      },
+      timeFrames: {
+        all: "All",
+        month: "Month",
+        quarter: "Quarter",
+        week: "Week",
+        year: "Year"
+      },
+      title: "Statistics",
+      titles: {
         Bicep: "Bicep circumference",
+        bodyMassIndex: "Body mass index",
         Calf: "Calf circumference",
         Chest: "Chest circumference",
         Height: "Height",
@@ -280,15 +302,7 @@ export const english: Translation = {
         protein: "Protein",
         fat: "Fat",
         carbohydrate: "Carbohydrate"
-      },
-      timeFrames: {
-        all: "All",
-        month: "Month",
-        quarter: "Quarter",
-        week: "Week",
-        year: "Year"
-      },
-      title: "Statistics"
+      }
     },
     TrashCan: {
       delete: "Delete"

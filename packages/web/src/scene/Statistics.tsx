@@ -24,6 +24,36 @@ const TIME_FRAMES = ["week", "month", "quarter", "year", "all"] as const;
 type TimeFrame = typeof TIME_FRAMES[number];
 
 /**
+ * Body mass index chart data point type.
+ */
+interface BodyMassIndexDataPoint {
+  date: string;
+  value: number;
+}
+
+/**
+ * Array of body mass index range names and range starting index values.
+ */
+const BODY_MASS_INDEX_RANGES = [
+  { name: "verySeverelyUnderweight" as const, min: -Infinity, lt: 15 },
+  { name: "severelyUnderweight" as const, min: 15, lt: 16 },
+  { name: "underweight" as const, min: 16, lt: 18.5 },
+  { name: "normal" as const, min: 18.5, lt: 25 },
+  { name: "overweight" as const, min: 25, lt: 30 },
+  { name: "obeseClass1" as const, min: 30, lt: 35 },
+  { name: "obeseClass2" as const, min: 35, lt: 40 },
+  { name: "obeseClass3" as const, min: 40, lt: 45 },
+  { name: "obeseClass4" as const, min: 45, lt: 50 },
+  { name: "obeseClass5" as const, min: 50, lt: 60 },
+  { name: "obeseClass6" as const, min: 60, lt: Infinity }
+];
+
+/**
+ * Union of body mass index range names.
+ */
+type BodyMassIndexRangeName = typeof BODY_MASS_INDEX_RANGES[number]["name"];
+
+/**
  * Nutrition bar chart data point.
  */
 interface NutritionDataPoint {
@@ -52,20 +82,50 @@ const TIME_FRAME_OFFSET_FUNCTIONS = {
 };
 
 /**
- * Width of a tick on a x-axis. Used to calculate the number of ticks based on
- * current screen width.
+ * SVG padding sizes.
  */
-const TICK_WIDTH = 180;
+const PADDING = {
+  top: 24,
+  bottom: 128,
+  left: 40,
+  right: 40
+};
+
+/**
+ * Gap between two subsequent charts.
+ */
+const CHART_GAP = 56;
 
 /**
  * Chart title height.
  */
-const CHART_TITLE_HEIGHT = 196;
+const CHART_TITLE_HEIGHT = 56;
+
+/**
+ * Body mass index chart height.
+ */
+const BMI_CHART_HEIGHT = 32;
+
+/**
+ * Body mass index chart current index flag rectangle width.
+ */
+const BMI_CHART_FLAG_WIDTH = 8;
+
+/**
+ * Body mass index chart current index flag rectangle height.
+ */
+const BMI_CHART_FLAG_HEIGHT = 32;
 
 /**
  * Height of a single chart.
  */
-const CHART_HEIGHT = 196;
+const CHART_HEIGHT = 256;
+
+/**
+ * Width of a tick on a x-axis. Used to calculate the number of ticks based on
+ * current screen width.
+ */
+const TICK_WIDTH = 180;
 
 /**
  * Line chart dot radius.
@@ -95,16 +155,6 @@ const TOOLTIP_OFFSET = 8;
 const HOVER_AREA_MAX_RADIUS = 50;
 
 /**
- * Chart margin sizes.
- */
-const MARGIN = {
-  top: -40,
-  bottom: 128,
-  left: 40,
-  right: 40
-};
-
-/**
  * Minimum width of remaining space to the edge of the screen needed to not
  * mirror the tooltip position.
  */
@@ -132,8 +182,8 @@ const area = (
   d3
     .area<QuantityDataPoint>()
     .x(d => x(offsetHalfDay(new Date(d.date))))
-    .y1(d => CHART_HEIGHT - y(d.value))
     .y0(CHART_HEIGHT)
+    .y1(d => CHART_HEIGHT - y(d.value))
     .curve(d3.curveMonotoneX);
 
 /**
@@ -153,7 +203,7 @@ const line = (
  * Tooltip value format options.
  */
 const FORMAT_OPTIONS = {
-  maximumFractionDigits: 0
+  maximumFractionDigits: 1
 };
 
 /**
@@ -161,9 +211,9 @@ const FORMAT_OPTIONS = {
  */
 interface StatisticsTranslation {
   /**
-   * Chart title translations.
+   * Body mass index range name translations.
    */
-  charts: Record<RequiredNutrient | Quantity, string>;
+  ranges: Record<BodyMassIndexRangeName, string>;
 
   /**
    * Time frame translations.
@@ -174,6 +224,11 @@ interface StatisticsTranslation {
    * Scene title translation.
    */
   title: string;
+
+  /**
+   * Chart title translations.
+   */
+  titles: Record<"bodyMassIndex" | RequiredNutrient | Quantity, string>;
 }
 
 /**
@@ -196,7 +251,10 @@ export class Statistics extends SceneComponent<
    * Currently selected or hovered over data point value which information is
    * shown in the tooltip.
    */
-  @observable private selectedPoint: NutritionDataPoint | QuantityDataPoint = {
+  @observable private selectedPoint:
+    | BodyMassIndexDataPoint
+    | NutritionDataPoint
+    | QuantityDataPoint = {
     date: "1970-01-01",
     value: 0
   };
@@ -223,6 +281,11 @@ export class Statistics extends SceneComponent<
   private svgWidth = 0;
 
   /**
+   * Most recent width of a single chart.
+   */
+  private chartWidth = 0;
+
+  /**
    * Sets the name of this component.
    */
   public constructor(props: DefaultSceneComponentProps<"Statistics">) {
@@ -246,6 +309,197 @@ export class Statistics extends SceneComponent<
   public componentWillUnmount() {
     window.removeEventListener("resize", this.renderCharts, true);
   }
+
+  /**
+   * Renders a translated title text element inside specified chart g element
+   * for chart with specified name.
+   */
+  private renderChartTitle = (
+    chart: d3.Selection<SVGGElement, any, any, any>,
+    name: "bodyMassIndex" | Quantity | RequiredNutrient
+  ) => {
+    const title = chart
+      .selectAll<SVGTextElement, never>("text.title")
+      .data([0]);
+
+    title
+      .enter()
+      .append("text")
+      .attr("class", "title")
+      .merge(title)
+      .text(this.translation.titles[name])
+      .attr("x", "0")
+      .attr("y", -CHART_TITLE_HEIGHT / 2)
+      .attr("alignment-baseline", "middle");
+  };
+
+  /**
+   * Renders body mass index chart inside specified svg element.
+   */
+  private renderBodyMassIndexChart = (
+    svg: d3.Selection<SVGSVGElement, number, HTMLDivElement, never>,
+    domain: [Date, Date]
+  ) => {
+    let chart = svg.selectAll<SVGGElement, never>("g.bmi-chart").data([0]);
+
+    chart = chart
+      .enter()
+      .append("g")
+      .attr("class", "bmi-chart")
+      .merge(chart)
+      .attr(
+        "transform",
+        `translate(${PADDING.left}, ${PADDING.top + CHART_TITLE_HEIGHT})`
+      );
+
+    this.renderChartTitle(chart, "bodyMassIndex");
+
+    let x = d3.scaleLinear().range([0, this.chartWidth]);
+    let xAxis = d3.axisBottom(x);
+
+    const data = this.getBodyMassIndices(this.data!, domain);
+
+    if (data.length > 0) {
+      const currentPoint = data[data.length - 1];
+      const current = currentPoint.value;
+
+      const { min, lt } = BODY_MASS_INDEX_RANGES.find(
+        range => range.min <= current && current < range.lt
+      )!;
+
+      let domain: number[] = [];
+      let ticks: number[] = [];
+
+      if (Number.isFinite(min) && Number.isFinite(lt)) {
+        ticks = [min, lt];
+        domain = [min - (lt - min) / 2, lt + (lt - min) / 2];
+      } else if (Number.isFinite(min)) {
+        ticks = [min];
+        domain = [min - (current - min), min + 2 * (current - min)];
+      } else {
+        ticks = [lt];
+        domain = [lt - 2 * (lt - current), lt + (lt - current)];
+      }
+
+      x = x.domain(domain);
+      xAxis = xAxis.tickValues(ticks);
+
+      // Render range name labels.
+
+      const rangeLabelData: Array<{
+        x: number;
+        name: BodyMassIndexRangeName;
+      }> = [];
+
+      // prettier-ignore
+      if (domain.length === 1) {
+        const [split] = ticks;
+        const splitX = x(split);
+
+        const leftRange = BODY_MASS_INDEX_RANGES.find(range => range.lt === split)!;
+        const rightRange = BODY_MASS_INDEX_RANGES.find(range => range.min === split)!;
+
+        rangeLabelData.push({ name: leftRange.name, x: splitX / 2 });
+        rangeLabelData.push({ name: rightRange.name, x: (this.chartWidth + splitX) / 2 });
+      } else {
+        const [leftSplit, rightSplit] = ticks;
+        const leftSplitX = x(leftSplit);
+        const rightSplitX = x(rightSplit);
+
+        const leftRange = BODY_MASS_INDEX_RANGES.find(range => range.lt === leftSplit)!
+        const middleRange = BODY_MASS_INDEX_RANGES.find(range => range.lt === rightSplit)!
+        const rightRange = BODY_MASS_INDEX_RANGES.find(range => range.min === rightSplit)!
+
+        rangeLabelData.push({ name: leftRange.name, x: leftSplitX / 2 });
+        rangeLabelData.push({ name: middleRange.name, x: this.chartWidth / 2 });
+        rangeLabelData.push({ name: rightRange.name, x: (this.chartWidth + rightSplitX) / 2  });
+      }
+
+      const rangeLabels = chart
+        .selectAll<SVGTextElement, never>("text.range")
+        .data(rangeLabelData);
+
+      rangeLabels.exit().remove();
+
+      rangeLabels
+        .enter()
+        .append("text")
+        .attr("class", "range")
+        .merge(rangeLabels)
+        .text(d => this.translation.ranges[d.name])
+        .attr("x", d => d.x)
+        .attr("y", BMI_CHART_HEIGHT / 2)
+        .attr("alignment-baseline", "middle")
+        .attr("text-anchor", "middle");
+
+      if (data.length > 1) {
+        const initialFlag = chart
+          .selectAll<SVGRectElement, never>("rect.flag.initial")
+          .data([data[0]]);
+
+        initialFlag
+          .enter()
+          .append("rect")
+          .attr("class", "flag initial")
+          .merge(initialFlag)
+          .attr("x", d => x(d.value) - BMI_CHART_FLAG_WIDTH / 2)
+          .attr("y", BMI_CHART_HEIGHT - BMI_CHART_FLAG_HEIGHT)
+          .attr("width", BMI_CHART_FLAG_WIDTH)
+          .attr("height", BMI_CHART_FLAG_HEIGHT)
+          .attr("data-offsetX", BMI_CHART_FLAG_WIDTH / 2)
+          .attr("data-offsetY", 0)
+          .on("mouseover", this.setSelectedPoint)
+          .on("mouseleave", this.hideTooltip);
+      }
+
+      const currentFlag = chart
+        .selectAll<SVGRectElement, never>("rect.flag.current")
+        .data([currentPoint]);
+
+      currentFlag
+        .enter()
+        .append("rect")
+        .attr("class", "flag current")
+        .merge(currentFlag)
+        .attr("x", d => x(d.value) - BMI_CHART_FLAG_WIDTH / 2)
+        .attr("y", BMI_CHART_HEIGHT - BMI_CHART_FLAG_HEIGHT)
+        .attr("width", BMI_CHART_FLAG_WIDTH)
+        .attr("height", BMI_CHART_FLAG_HEIGHT)
+        .attr("data-offsetX", BMI_CHART_FLAG_WIDTH / 2)
+        .attr("data-offsetY", 0)
+        .on("mouseover", this.setSelectedPoint)
+        .on("mouseleave", this.hideTooltip);
+
+      const label = chart
+        .selectAll<SVGTextElement, never>("text.label")
+        .data([currentPoint]);
+
+      label
+        .enter()
+        .append("text")
+        .attr("class", "label")
+        .merge(label)
+        .text(d =>
+          d.value.toLocaleString(
+            this.props.views!.translation.locale,
+            FORMAT_OPTIONS
+          )
+        )
+        .attr("x", d => x(d.value))
+        .attr("y", BMI_CHART_HEIGHT - BMI_CHART_FLAG_HEIGHT - LABEL_OFFSET)
+        .attr("text-anchor", "middle");
+    }
+
+    const axis = chart.selectAll<SVGGElement, never>("g.axis").data([0]);
+
+    axis
+      .enter()
+      .append("g")
+      .attr("class", "axis")
+      .attr("transform", `translate(0, ${BMI_CHART_HEIGHT})`)
+      .merge(axis)
+      .call(xAxis);
+  };
 
   /**
    * Renders a bar chart of nutrient amounts and limits inside specified SVG
@@ -328,7 +582,8 @@ export class Statistics extends SceneComponent<
     data: QuantityDataPoint[],
     x: d3.ScaleTime<number, number>,
     setSelectedPoint: (point: QuantityDataPoint) => void,
-    hideTooltip: () => void
+    hideTooltip: () => void,
+    locale: string
   ) {
     const min = d3.min(data, measurement => measurement.value)!;
     const max = d3.max(data, measurement => measurement.value)!;
@@ -452,7 +707,7 @@ export class Statistics extends SceneComponent<
       .append("text")
       .attr("class", "label")
       .merge(labels)
-      .text(d => d.value)
+      .text(d => d.value.toLocaleString(locale, FORMAT_OPTIONS))
       .attr("x", d => x(offsetHalfDay(new Date(d.date))))
       .attr("y", d => CHART_HEIGHT - y(d.value) - LABEL_OFFSET)
       .attr("text-anchor", "middle");
@@ -461,7 +716,7 @@ export class Statistics extends SceneComponent<
   /**
    * Returns chart time axis domain depending on currently selected time frame.
    */
-  private getTimeDomain(data: Data<"statistics", "getAll">) {
+  private getTimeDomain(data: Data<"statistics", "getAll">): [Date, Date] {
     const now = new Date();
     now.setHours(23, 59, 999);
 
@@ -491,29 +746,33 @@ export class Statistics extends SceneComponent<
       return;
     }
 
+    const totalHeight =
+      PADDING.top + // Top padding
+      (CHART_TITLE_HEIGHT + BMI_CHART_HEIGHT) + // BMI chart size
+      this.data.length * (CHART_GAP + CHART_TITLE_HEIGHT + CHART_HEIGHT) + // All other chart sizes
+      PADDING.bottom; // Bottom padding
+
     let svg = canvas.selectAll<SVGSVGElement, never>("svg").data([0]);
     svg = svg
       .enter()
       .append("svg")
       .merge(svg)
-      .attr(
-        "height",
-        MARGIN.top +
-          this.data.length * (CHART_TITLE_HEIGHT + CHART_HEIGHT) +
-          MARGIN.bottom
-      );
+      .attr("height", totalHeight);
 
     this.svgWidth = svg.node()!.clientWidth;
+    this.chartWidth = this.svgWidth - PADDING.left - PADDING.right;
 
-    const chartWidth = this.svgWidth - MARGIN.left - MARGIN.right;
+    const domain = this.getTimeDomain(this.data);
+
+    this.renderBodyMassIndexChart(svg, domain);
 
     const x = d3
       .scaleUtc()
-      .range([0, chartWidth])
-      .domain(this.getTimeDomain(this.data))
+      .range([0, this.chartWidth])
+      .domain(domain)
       .nice();
 
-    const xAxis = d3.axisBottom(x).ticks(chartWidth / TICK_WIDTH);
+    const xAxis = d3.axisBottom(x).ticks(this.chartWidth / TICK_WIDTH);
 
     let charts = svg.selectAll<SVGGElement, never>("g.chart").data(this.data);
 
@@ -523,37 +782,26 @@ export class Statistics extends SceneComponent<
       .attr("class", "chart")
       .merge(charts);
 
+    // Make instance fields local since `this` will be the SVG G element inside `each` function.
+    const renderChartTitle = this.renderChartTitle;
     const renderNutrientChart = this.renderNutrientChart;
     const renderQuantityChart = this.renderQuantityChart;
-    const chartsTranslation = this.translation.charts;
     const setSelectedPoint = this.setSelectedPoint;
     const hideTooltip = this.hideTooltip;
+    const locale = this.props.views!.translation.locale;
 
     // prettier-ignore
     charts
-      .attr("transform", (_, index) => `translate(${MARGIN.left}, ${MARGIN.top + CHART_TITLE_HEIGHT + index * (CHART_TITLE_HEIGHT + CHART_HEIGHT)})`)
+      .attr("transform", (_, index) => `translate(${PADDING.left}, ${PADDING.top + (CHART_TITLE_HEIGHT + BMI_CHART_HEIGHT) + CHART_GAP + CHART_TITLE_HEIGHT + index * (CHART_GAP + CHART_TITLE_HEIGHT + CHART_HEIGHT)})`)
       .each(function(data) {
         const chart = d3.select(this);
 
-        const title = chart
-          .selectAll<SVGTextElement, never>("text.title")
-          .data([0]);
+        renderChartTitle(chart, data.name);
 
-        title
-          .enter()
-          .append("text")
-          .attr("class", "title")
-          .merge(title)
-          .text(chartsTranslation[data.name])
-          .attr("x", "0")
-          .attr("y", -CHART_TITLE_HEIGHT / 2)
-          .attr("alignment-baseline", "middle");
-
-        // prettier-ignore
         if (data.type === "nutrition") {
-          renderNutrientChart(d3.select(this), data.data, x, setSelectedPoint, hideTooltip);
+          renderNutrientChart(chart, data.data, x, setSelectedPoint, hideTooltip);
         } else {
-          renderQuantityChart(d3.select(this), data.data, x, setSelectedPoint, hideTooltip);
+          renderQuantityChart(chart, data.data, x, setSelectedPoint, hideTooltip, locale);
         }
       });
 
@@ -607,8 +855,6 @@ export class Statistics extends SceneComponent<
               FORMAT_OPTIONS
             )}
 
-            {""}
-
             {"limit" in this.selectedPoint && (
               <Secondary>
                 {"\u00a0/\u00a0" /* Forward slash between two spaces */}
@@ -643,7 +889,7 @@ export class Statistics extends SceneComponent<
    */
   @action
   private setSelectedPoint = (
-    point: NutritionDataPoint | QuantityDataPoint
+    point: BodyMassIndexDataPoint | NutritionDataPoint | QuantityDataPoint
   ) => {
     this.selectedPoint = point;
 
@@ -691,6 +937,84 @@ export class Statistics extends SceneComponent<
 
     this.tooltipProps.visible = true;
   };
+
+  /**
+   * Returns a body mass index value data set based on heights and weights data specified by given `data`.
+   */
+  private getBodyMassIndices(
+    data: Data<"statistics", "getAll">,
+    domain: [Date, Date]
+  ): BodyMassIndexDataPoint[] {
+    const nameProperties = [
+      ["Height", "height"],
+      ["Weight", "weight"]
+    ] as const;
+
+    interface PartialValues {
+      weight?: number;
+      height?: number;
+    }
+
+    // Maps dates to their optional weight and height values.
+    const dateValues = new Map<string, PartialValues>();
+
+    for (const [name, property] of nameProperties) {
+      for (const point of data.find(set => set.name === name)?.data || []) {
+        const values = dateValues.get(point.date);
+
+        if (values === undefined) {
+          dateValues.set(point.date, { [property]: point.value });
+        } else {
+          values[property] = point.value;
+        }
+      }
+    }
+
+    return Array.from(dateValues.entries())
+      .map(([date, values]) => ({ date, values }))
+      .sort((a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf())
+      .reduce((accumulator, { date, values }, index, entries) => {
+        if (values.height !== undefined && values.weight !== undefined) {
+          accumulator.push({
+            date,
+            height: values.height,
+            weight: values.weight
+          });
+        } else {
+          const existingProperty =
+            values.height !== undefined ? "height" : "weight";
+          const additionalProperty =
+            values.height === undefined ? "height" : "weight";
+
+          for (let i = index - 1; i >= 0; --i) {
+            const additionalValues = entries[i].values;
+
+            if (additionalValues[additionalProperty] !== undefined) {
+              accumulator.push(({
+                date,
+                [existingProperty]: values[existingProperty],
+                [additionalProperty]: additionalValues[additionalProperty]
+              } as unknown) as { date: string; height: number; weight: number });
+
+              break;
+            }
+          }
+        }
+
+        return accumulator;
+      }, [] as Array<{ date: string; height: number; weight: number }>)
+      .map(({ date, height, weight }) => ({
+        date,
+        value: weight / (height / 100) ** 2
+      }))
+      .filter(point => {
+        const dateValue = new Date(point.date).valueOf();
+
+        return (
+          domain[0].valueOf() <= dateValue && dateValue <= domain[1].valueOf()
+        );
+      });
+  }
 
   /**
    * Hides the tooltip.
@@ -743,6 +1067,18 @@ const Canvas = styled.div`
 
   & svg .title {
     fill: ${({ theme }) => theme.colorPrimary};
+  }
+
+  & svg .range {
+    fill: ${({ theme }) => theme.colorSecondary};
+  }
+
+  & svg .flag.initial {
+    fill: ${({ theme }) => theme.borderColor};
+  }
+
+  & svg .flag.current {
+    fill: ${({ theme }) => theme.colorActive};
   }
 
   & svg .bar {
@@ -844,12 +1180,13 @@ interface TooltipProps {
  * Tooltip component.
  */
 const Tooltip = styled.div<TooltipProps>`
-  width: calc(4 * ${({ theme }) => theme.height});
-
   position: absolute;
   top: ${({ y }) => y}px;
   ${({ mirrored, x }) => (mirrored ? `right: ${x}px` : `left: ${x}px`)};
   transform: translate(${({ mirrored }) => (mirrored ? "50%" : "-50%")}, -100%);
+  z-index: 2;
+
+  width: calc(4 * ${({ theme }) => theme.height});
 
   border: solid 1px ${({ theme }) => theme.borderColor};
   border-radius: ${({ theme }) => theme.borderRadius};

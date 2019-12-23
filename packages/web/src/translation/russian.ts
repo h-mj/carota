@@ -269,8 +269,30 @@ export const russian: Translation = {
       useDarkTheme: "Использовать темную тему"
     },
     Statistics: {
-      charts: {
+      ranges: {
+        verySeverelyUnderweight: "Очень выраженный дефицит массы",
+        severelyUnderweight: "Выраженный дефицит массы",
+        underweight: "Недостаточная масса тела",
+        normal: "Норма",
+        overweight: "Предожирение",
+        obeseClass1: "Ожирение I степени",
+        obeseClass2: "Ожирение II степени",
+        obeseClass3: "Ожирение III степени",
+        obeseClass4: "Ожирение IV степени",
+        obeseClass5: "Ожирение V степени",
+        obeseClass6: "Ожирение VI степени"
+      },
+      timeFrames: {
+        all: "Все",
+        month: "Месяц",
+        quarter: "Квартал",
+        week: "Неделя",
+        year: "Год"
+      },
+      title: "Статистика",
+      titles: {
         Bicep: "Объем бицепса",
+        bodyMassIndex: "Индекс массы тела",
         Calf: "Объем икры ноги",
         Chest: "Объем груди",
         Height: "Рост",
@@ -284,15 +306,7 @@ export const russian: Translation = {
         protein: "Белки",
         fat: "Жиры",
         carbohydrate: "Углеводы"
-      },
-      timeFrames: {
-        all: "Все",
-        month: "Месяц",
-        quarter: "Квартал",
-        week: "Неделя",
-        year: "Год"
-      },
-      title: "Статистика"
+      }
     },
     TrashCan: {
       delete: "Удалить"

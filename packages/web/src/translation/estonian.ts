@@ -266,8 +266,30 @@ export const estonian: Translation = {
       useDarkTheme: "Kasutage tumedat teemat"
     },
     Statistics: {
-      charts: {
+      ranges: {
+        verySeverelyUnderweight: "Väga tõsine alakaal",
+        severelyUnderweight: "Tõsine alakaal",
+        underweight: "Alakaal",
+        normal: "Normaalkaal",
+        overweight: "Ülekaal",
+        obeseClass1: "Rasvumise I aste",
+        obeseClass2: "Rasvumise II aste",
+        obeseClass3: "Rasvumise III aste",
+        obeseClass4: "Rasvumise IV aste",
+        obeseClass5: "Rasvumise V aste",
+        obeseClass6: "Rasvumise VI aste"
+      },
+      timeFrames: {
+        all: "Kõik",
+        month: "Kuu",
+        quarter: "Kvartal",
+        week: "Nädal",
+        year: "Aasta"
+      },
+      title: "Statistika",
+      titles: {
         Bicep: "Biitsepi ümbermõõt",
+        bodyMassIndex: "Kehamassiindeks",
         Calf: "Sääremarja ümbermõõt",
         Chest: "Rindkere ümbermõõt",
         Height: "Pikkus",
@@ -281,15 +303,7 @@ export const estonian: Translation = {
         protein: "Valgud",
         fat: "Rasvad",
         carbohydrate: "Süsivesikud"
-      },
-      timeFrames: {
-        all: "Kõik",
-        month: "Kuu",
-        quarter: "Kvartal",
-        week: "Nädal",
-        year: "Aasta"
-      },
-      title: "Statistika"
+      }
     },
     TrashCan: {
       delete: "Kustutage"

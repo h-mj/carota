@@ -32,7 +32,7 @@
     "jsonwebtoken": "^8.5.1",
     "luxon": "^1.21.3",
     "nodemon": "^2.0.2",
-    "pg": "^7.16.0",
+    "pg": "^7.17.0",
     "prettier": "^1.19.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.4",

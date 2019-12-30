@@ -11,6 +11,6 @@
     "start": "./scripts/start.sh"
   },
   "dependencies": {
-    "lerna": "^3.20.0"
+    "lerna": "^3.20.1"
   }
 }

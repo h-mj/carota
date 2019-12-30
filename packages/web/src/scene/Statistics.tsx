@@ -352,12 +352,16 @@ export class Statistics extends SceneComponent<
         `translate(${PADDING.left}, ${PADDING.top + CHART_TITLE_HEIGHT})`
       );
 
-    this.renderChartTitle(chart, "bodyMassIndex");
+    const data = this.getBodyMassIndices(this.data!, domain);
+
+    if (data.length === 0) {
+      chart.selectAll("*").remove();
+    }
 
     let x = d3.scaleLinear().range([0, this.chartWidth]);
-    let xAxis = d3.axisBottom(x);
+    let xAxis = d3.axisBottom(x).tickValues([]);
 
-    const data = this.getBodyMassIndices(this.data!, domain);
+    this.renderChartTitle(chart, "bodyMassIndex");
 
     if (data.length > 0) {
       const currentPoint = data[data.length - 1];
@@ -385,9 +389,9 @@ export class Statistics extends SceneComponent<
       xAxis = xAxis.tickValues(ticks);
 
       // Render range name labels.
-
       const rangeLabelData: Array<{
         x: number;
+        width: number;
         name: BodyMassIndexRangeName;
       }> = [];
 
@@ -399,8 +403,8 @@ export class Statistics extends SceneComponent<
         const leftRange = BODY_MASS_INDEX_RANGES.find(range => range.lt === split)!;
         const rightRange = BODY_MASS_INDEX_RANGES.find(range => range.min === split)!;
 
-        rangeLabelData.push({ name: leftRange.name, x: splitX / 2 });
-        rangeLabelData.push({ name: rightRange.name, x: (this.chartWidth + splitX) / 2 });
+        rangeLabelData.push({ name: leftRange.name, x: 0, width: splitX });
+        rangeLabelData.push({ name: rightRange.name, x: splitX, width: this.chartWidth - splitX });
       } else {
         const [leftSplit, rightSplit] = ticks;
         const leftSplitX = x(leftSplit);
@@ -410,47 +414,54 @@ export class Statistics extends SceneComponent<
         const middleRange = BODY_MASS_INDEX_RANGES.find(range => range.lt === rightSplit)!
         const rightRange = BODY_MASS_INDEX_RANGES.find(range => range.min === rightSplit)!
 
-        rangeLabelData.push({ name: leftRange.name, x: leftSplitX / 2 });
-        rangeLabelData.push({ name: middleRange.name, x: this.chartWidth / 2 });
-        rangeLabelData.push({ name: rightRange.name, x: (this.chartWidth + rightSplitX) / 2  });
+        rangeLabelData.push({ name: leftRange.name, x: 0, width: leftSplitX });
+        rangeLabelData.push({ name: middleRange.name, x: leftSplitX, width: rightSplitX - leftSplitX });
+        rangeLabelData.push({ name: rightRange.name, x: rightSplitX, width: this.chartWidth - rightSplitX  });
       }
 
-      const rangeLabels = chart
-        .selectAll<SVGTextElement, never>("text.range")
+      let rangeLabelContainers = chart
+        .selectAll<SVGForeignObjectElement, never>("foreignObject.range")
         .data(rangeLabelData);
 
-      rangeLabels.exit().remove();
+      rangeLabelContainers.exit().remove();
 
-      rangeLabels
+      rangeLabelContainers = rangeLabelContainers
         .enter()
-        .append("text")
+        .append("foreignObject")
         .attr("class", "range")
-        .merge(rangeLabels)
-        .text(d => this.translation.ranges[d.name])
+        .merge(rangeLabelContainers)
         .attr("x", d => d.x)
-        .attr("y", BMI_CHART_HEIGHT / 2)
+        .attr("y", 0)
+        .attr("width", d => d.width)
+        .attr("height", BMI_CHART_HEIGHT)
         .attr("alignment-baseline", "middle")
         .attr("text-anchor", "middle");
 
-      if (data.length > 1) {
-        const initialFlag = chart
-          .selectAll<SVGRectElement, never>("rect.flag.initial")
-          .data([data[0]]);
+      rangeLabelContainers.selectAll("*").remove();
 
-        initialFlag
-          .enter()
-          .append("rect")
-          .attr("class", "flag initial")
-          .merge(initialFlag)
-          .attr("x", d => x(d.value) - BMI_CHART_FLAG_WIDTH / 2)
-          .attr("y", BMI_CHART_HEIGHT - BMI_CHART_FLAG_HEIGHT)
-          .attr("width", BMI_CHART_FLAG_WIDTH)
-          .attr("height", BMI_CHART_FLAG_HEIGHT)
-          .attr("data-offsetX", BMI_CHART_FLAG_WIDTH / 2)
-          .attr("data-offsetY", 0)
-          .on("mouseover", this.setSelectedPoint)
-          .on("mouseleave", this.hideTooltip);
-      }
+      rangeLabelContainers
+        .append("xhtml:div")
+        .text(d => this.translation.ranges[d.name]);
+
+      const initialFlag = chart
+        .selectAll<SVGRectElement, never>("rect.flag.initial")
+        .data(data.length > 1 ? [data[0]] : []);
+
+      initialFlag.exit().remove();
+
+      initialFlag
+        .enter()
+        .append("rect")
+        .attr("class", "flag initial")
+        .merge(initialFlag)
+        .attr("x", d => x(d.value) - BMI_CHART_FLAG_WIDTH / 2)
+        .attr("y", BMI_CHART_HEIGHT - BMI_CHART_FLAG_HEIGHT)
+        .attr("width", BMI_CHART_FLAG_WIDTH)
+        .attr("height", BMI_CHART_FLAG_HEIGHT)
+        .attr("data-offsetX", BMI_CHART_FLAG_WIDTH / 2)
+        .attr("data-offsetY", 0)
+        .on("mouseover", this.setSelectedPoint)
+        .on("mouseleave", this.hideTooltip);
 
       const currentFlag = chart
         .selectAll<SVGRectElement, never>("rect.flag.current")
@@ -473,6 +484,8 @@ export class Statistics extends SceneComponent<
       const label = chart
         .selectAll<SVGTextElement, never>("text.label")
         .data([currentPoint]);
+
+      label.exit().remove();
 
       label
         .enter()
@@ -1070,7 +1083,21 @@ const Canvas = styled.div`
   }
 
   & svg .range {
-    fill: ${({ theme }) => theme.colorSecondary};
+    overflow: visible;
+  }
+
+  & svg .range div {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: ${({ theme }) => theme.colorSecondary};
+    font-size: 0.75rem;
+    letter-spacing: 0;
+    text-align: center;
   }
 
   & svg .flag.initial {

@@ -774,11 +774,6 @@ export class Statistics extends SceneComponent<
   private renderCharts = () => {
     const canvas = d3.select<HTMLDivElement, never>("#canvas");
 
-    if (this.data === undefined) {
-      canvas.selectAll("*").remove();
-      return;
-    }
-
     const totalHeight =
       PADDING.top + // Top padding
       (CHART_TITLE_HEIGHT + BMI_CHART_HEIGHT) + // BMI chart size

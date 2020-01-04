@@ -15,6 +15,7 @@ export const {
  * Theme constants.
  */
 export const THEME_CONSTANTS = {
+  borderRadius: "0.4375rem",
   duration: 0.2,
   height: "3.5rem",
   heightHalf: "1.75rem",
@@ -41,7 +42,6 @@ export interface ColorTheme {
   backgroundColorDisabled: string;
   backgroundColorTranslucent: string;
   borderColor: string;
-  borderRadius: string;
   colorPrimary: string;
   colorSecondary: string;
   colorActive: string;
@@ -62,7 +62,6 @@ export const LIGHT: Readonly<ColorTheme> = {
   backgroundColorDisabled: "rgb(245, 245, 245)",
   backgroundColorTranslucent: "rgba(0, 0, 0, 0.4)",
   borderColor: "rgb(222, 222, 222)",
-  borderRadius: "0.4375rem",
   colorPrimary: "rgba(0, 0, 0, 0.88)",
   colorSecondary: "rgba(0, 0, 0, 0.44)",
   colorActive: "rgb(255, 130, 0)",
@@ -70,7 +69,7 @@ export const LIGHT: Readonly<ColorTheme> = {
 };
 
 /**
- * Light theme definition.
+ * Dark theme definition.
  */
 export const DARK: Readonly<ColorTheme> = {
   backgroundColor: "rgb(0, 0, 0)",
@@ -78,7 +77,6 @@ export const DARK: Readonly<ColorTheme> = {
   backgroundColorDisabled: "rgb(20, 20, 20)",
   backgroundColorTranslucent: "rgba(255, 255, 255, 0.1)",
   borderColor: "rgb(50, 50, 50)",
-  borderRadius: "0.4375rem",
   colorPrimary: "rgb(255, 255, 255)",
   colorSecondary: "rgb(150, 150, 150)",
   colorActive: "rgb(191, 78, 0)",

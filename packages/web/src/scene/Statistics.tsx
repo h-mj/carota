@@ -318,6 +318,7 @@ export class Statistics extends SceneComponent<
    */
   public componentDidMount() {
     this.loadData();
+    this.renderCharts();
 
     d3.timeFormatDefaultLocale(this.props.views!.translation.timeLocale);
     window.addEventListener("resize", this.renderCharts, true);
@@ -1058,7 +1059,6 @@ export class Statistics extends SceneComponent<
   @action
   private async loadData() {
     this.data = await this.props.statistics!.getAll() ?? EMPTY_DATA;
-    this.renderCharts();
   }
 }
 

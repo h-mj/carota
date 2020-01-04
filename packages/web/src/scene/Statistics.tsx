@@ -71,6 +71,26 @@ interface QuantityDataPoint {
 }
 
 /**
+ * Initial statistics data before actual data has been requested and received.
+ */
+const EMPTY_DATA: Data<"statistics", "getAll"> = [
+  { type: "nutrition", name: "energy", data: [] },
+  { type: "nutrition", name: "protein", data: [] },
+  { type: "nutrition", name: "fat", data: [] },
+  { type: "nutrition", name: "carbohydrate", data: [] },
+  { type: "quantity", name: "Bicep", data: [] },
+  { type: "quantity", name: "Calf", data: [] },
+  { type: "quantity", name: "Chest", data: [] },
+  { type: "quantity", name: "Height", data: [] },
+  { type: "quantity", name: "Hip", data: [] },
+  { type: "quantity", name: "Shin", data: [] },
+  { type: "quantity", name: "Thigh", data: [] },
+  { type: "quantity", name: "Waist", data: [] },
+  { type: "quantity", name: "Weight", data: [] },
+  { type: "quantity", name: "Wrist", data: [] }
+];
+
+/**
  * Maps time frames to functions that calculate the beginning of the time frame
  * depending on current date.
  */
@@ -243,9 +263,9 @@ export class Statistics extends SceneComponent<
   StatisticsTranslation
 > {
   /**
-   * Retrieved statistics data.
+   * Current statistics data.
    */
-  @observable private data?: Data<"statistics", "getAll">;
+  @observable private data = EMPTY_DATA;
 
   /**
    * Currently selected or hovered over data point value which information is
@@ -1042,7 +1062,7 @@ export class Statistics extends SceneComponent<
    */
   @action
   private async loadData() {
-    this.data = await this.props.statistics!.getAll();
+    this.data = await this.props.statistics!.getAll() ?? EMPTY_DATA;
     this.renderCharts();
   }
 }

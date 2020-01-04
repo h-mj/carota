@@ -1,3 +1,4 @@
+import { Advisees } from "../scene/Advisees";
 import { Body } from "../scene/Body";
 import { Confirmation } from "../scene/Confirmation";
 import { Diet } from "../scene/Diet";
@@ -20,6 +21,7 @@ import { TranslatedComponent } from "./TranslatedComponent";
  * Maps scene component names to their classes.
  */
 export interface SceneComponentMap {
+  Advisees: Advisees;
   Body: Body;
   Confirmation: Confirmation;
   Diet: Diet;

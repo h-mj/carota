@@ -143,6 +143,7 @@ export const russian: Translation = {
       update: "Обновить"
     },
     Menu: {
+      Advisees: "Клиенты",
       Body: "Замеры",
       Diet: "Суточная потребления",
       Logout: "Выйти",

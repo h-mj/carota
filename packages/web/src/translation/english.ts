@@ -141,6 +141,7 @@ export const english: Translation = {
       update: "Update"
     },
     Menu: {
+      Advisees: "Advisees",
       Body: "Measurements",
       Diet: "Daily intake",
       Logout: "Sign out",

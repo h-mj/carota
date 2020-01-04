@@ -4,6 +4,7 @@ import { SceneComponentNames, SceneComponentProps } from "./SceneComponent";
  * Union of scene names.
  */
 export type SceneNames =
+  | "Advisees"
   | "Body"
   | "Confirmation"
   | "Diet"
@@ -24,6 +25,7 @@ export type SceneNames =
  * Object that maps scene name to its scene component name.
  */
 const SCENE_TO_COMPONENT_NAME = {
+  Advisees: "Advisees",
   Body: "Body",
   Confirmation: "Confirmation",
   Diet: "Diet",
@@ -88,6 +90,7 @@ const to = <TName extends SceneNames, TParameterNames extends string>(
  */
 const ROUTES = {
   "/": to("Diet"),
+  "/advisees": to("Advisees"),
   "/logout": to("Logout"),
   "/measurements": to("Body"),
   "/register/{invitationId}": to("Register", "invitationId"),

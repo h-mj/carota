@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { Scene, Scenes } from "../base/Scene";
 import { TranslatedComponent } from "../base/TranslatedComponent";
+import { Account } from "../model/Account";
 import { fadeIn } from "../styling/animations";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
@@ -12,25 +13,35 @@ import { Burger } from "./collection/icons";
 import { Overlay } from "./Overlay";
 
 /**
- * Scene names in order to which user can navigate using the navigation menu.
+ * Function that always returns true.
  */
-const NAVIGABLE_SCENES = [
-  "Diet",
-  "Body",
-  "Statistics",
-  "Settings",
-  "Logout"
+const ALWAYS = () => true;
+
+/**
+ * Array of scene name and requirement functions pairs which specify which items
+ * will appear in the navigation menu and on what condition.
+ */
+const NAVIGABLE_SCENE_REQUIREMENTS = [
+  ["Diet", ALWAYS],
+  ["Body", ALWAYS],
+  ["Statistics", ALWAYS],
+  ["Advisees", (account: Account) => account.type === "Adviser"],
+  ["Settings", ALWAYS],
+  ["Logout", ALWAYS]
 ] as const;
 
 /**
  * Menu item translations.
  */
-type MenuTranslation = Record<typeof NAVIGABLE_SCENES[number], string>;
+type MenuTranslation = Record<
+  typeof NAVIGABLE_SCENE_REQUIREMENTS[number][0],
+  string
+>;
 
 /**
  * Navigation menu component.
  */
-@inject("views")
+@inject("accounts", "views")
 @observer
 export class Menu extends TranslatedComponent<"Menu", {}, MenuTranslation> {
   /**
@@ -59,15 +70,18 @@ export class Menu extends TranslatedComponent<"Menu", {}, MenuTranslation> {
           <MenuOverlay onClick={this.handleOverlayClick}>
             <MenuContainer>
               <Navigation>
-                {NAVIGABLE_SCENES.map(name => (
-                  <Item
-                    key={name}
-                    onClick={this.handleRedirect}
-                    scene={new Scene(name, {}, {}) as Scenes}
-                  >
-                    {this.translation[name]}
-                  </Item>
-                ))}
+                {NAVIGABLE_SCENE_REQUIREMENTS.map(
+                  ([name, requirement]) =>
+                    requirement(this.props.accounts!.current!) && (
+                      <Item
+                        key={name}
+                        onClick={this.handleRedirect}
+                        scene={new Scene(name, {}, {}) as Scenes}
+                      >
+                        {this.translation[name]}
+                      </Item>
+                    )
+                )}
               </Navigation>
             </MenuContainer>
           </MenuOverlay>

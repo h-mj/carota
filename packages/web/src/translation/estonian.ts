@@ -141,6 +141,7 @@ export const estonian: Translation = {
       update: "Uuenda"
     },
     Menu: {
+      Advisees: "Nõustatavad",
       Body: "Mõõtmed",
       Diet: "Päevane tarbimine",
       Logout: "Logi välja",

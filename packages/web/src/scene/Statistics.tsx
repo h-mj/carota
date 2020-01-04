@@ -1059,6 +1059,7 @@ export class Statistics extends SceneComponent<
   @action
   private async loadData() {
     this.data = await this.props.statistics!.getAll() ?? EMPTY_DATA;
+    this.renderCharts();
   }
 }
 

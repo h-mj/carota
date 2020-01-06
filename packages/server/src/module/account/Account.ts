@@ -1,5 +1,7 @@
+import { Canallo } from "canallo";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
+import { onUnauthorized } from "../../utility/authorization";
 import { DtoOf } from "../../utility/entities";
 
 export const SEXES = ["Female", "Male"] as const;
@@ -71,3 +73,10 @@ export type AccountDto = DtoOf<Account>;
 
 export const isAccountOrAccountAdviser = (adviser: Account, account: Account) =>
   adviser.id === account.id || adviser.id === account.adviserId;
+
+export const isAccountOrAdministrator = (requester: Account, target: Account) =>
+  requester.id === target.id || requester.rights === "All";
+
+// prettier-ignore
+export const { authorize } = new Canallo(onUnauthorized)
+  .allow(Account, "get advisees of", Account, isAccountOrAdministrator);

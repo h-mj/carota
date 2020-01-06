@@ -1,4 +1,4 @@
-import { deviate, Failure } from "deviator";
+import { Failure, deviate } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";

@@ -3,12 +3,12 @@ import { Body } from "server";
 
 import { Foodstuff } from "../model/Foodstuff";
 import { Rpc } from "../utility/rpc";
-import { RootStore } from "./RootStore";
+import { Store } from "./Store";
 
 /**
  * Foodstuff managing store.
  */
-export class FoodstuffsStore {
+export class FoodstuffsStore extends Store {
   /**
    * Maps meal names to their frequent foodstuffs.
    */
@@ -18,18 +18,6 @@ export class FoodstuffsStore {
    * Maps search query strings to returned array of foodstuffs.
    */
   @observable private searchResults: Map<string, Foodstuff[]> = new Map();
-
-  /**
-   * Root store reference.
-   */
-  private rootStore: RootStore;
-
-  /**
-   * Creates a new instance of `RootStore`.
-   */
-  public constructor(rootStore: RootStore) {
-    this.rootStore = rootStore;
-  }
 
   /**
    * Clears all data stored in this store.

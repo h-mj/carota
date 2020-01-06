@@ -9,10 +9,6 @@ import {
   CreateAccountDto,
   createAccountDtoValidator
 } from "./dto/CreateAccountDto";
-import {
-  GetAccountAdviseesDto,
-  getAccountAdviseesDtoValidator
-} from "./dto/GetAccountAdviseesDto";
 import { GetAccountDto, getAccountDtoValidator } from "./dto/GetAccountDto";
 import {
   SetAccountLanguageDto,
@@ -46,17 +42,6 @@ export class AccountController {
     const account = await this.accountService.get(dto, principal);
 
     return account.toDto();
-  }
-
-  @Post("getAdvisees")
-  public async getAdvisees(
-    @Body(new ValidationPipe(getAccountAdviseesDtoValidator))
-    dto: GetAccountAdviseesDto,
-    @Principal() principal: Account
-  ) {
-    const advisees = await this.accountService.getAdvisees(dto, principal);
-
-    return Promise.all(advisees.map(account => account.toDto()));
   }
 
   @Post("getCurrent")

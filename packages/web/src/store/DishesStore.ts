@@ -2,24 +2,12 @@ import { Dish } from "../model/Dish";
 import { Foodstuff } from "../model/Foodstuff";
 import { Meal } from "../model/Meal";
 import { Rpc } from "../utility/rpc";
-import { RootStore } from "./RootStore";
+import { Store } from "./Store";
 
 /**
  * Dish managing store.
  */
-export class DishesStore {
-  /**
-   * RootStore instance.
-   */
-  public readonly rootStore: RootStore;
-
-  /**
-   * Creates a new instance of `DishesStore`.
-   */
-  public constructor(rootStore: RootStore) {
-    this.rootStore = rootStore;
-  }
-
+export class DishesStore extends Store {
   /**
    * Creates a new `Dish` within specified `meal`. Created dish will specify
    * that user consumed specified `quantity` of specified `foodstuff`.

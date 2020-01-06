@@ -9,6 +9,7 @@ import { AccountModule } from "./module/account/AccountModule";
 import { AuthenticationModule } from "./module/authentication/AuthenticationModule";
 import { DishModule } from "./module/dish/DishModule";
 import { FoodstuffModule } from "./module/foodstuff/FoodstuffModule";
+import { GroupModule } from "./module/group/GroupModule";
 import { InvitationModule } from "./module/invitation/InvitationModule";
 import { MealModule } from "./module/meal/MealModule";
 import { MeasurementModule } from "./module/measurement/MeasurementModule";
@@ -22,6 +23,7 @@ import { StatisticsModule } from "./module/statistics/StatisticsModule";
     AuthenticationModule,
     DishModule,
     FoodstuffModule,
+    GroupModule,
     InvitationModule,
     MealModule,
     MeasurementModule,

@@ -3,15 +3,13 @@ import { Transaction, TransactionRepository } from "typeorm";
 
 import { Injectable } from "@nestjs/common";
 
-import { ForbiddenError } from "../../base/error/ForbiddenError";
 import { InvalidIdError } from "../../base/error/InvalidIdError";
 import { UniqueConstraintError } from "../../base/error/UniqueConstraintErrors";
 import { Invitation } from "../invitation/Invitation";
 import { InvitationRepository } from "../invitation/InvitationRepository";
-import { Account, authorize } from "./Account";
+import { Account } from "./Account";
 import { AccountRepository } from "./AccountRepository";
 import { CreateAccountDto } from "./dto/CreateAccountDto";
-import { GetAccountAdviseesDto } from "./dto/GetAccountAdviseesDto";
 import { GetAccountDto } from "./dto/GetAccountDto";
 import { SetAccountLanguageDto } from "./dto/SetAccountLanguageDto";
 
@@ -45,6 +43,7 @@ export class AccountService {
       type: invitation.type,
       rights: invitation.rights,
       adviserId: invitation.adviserId,
+      linked: false,
       inviterId: invitation.inviterId
     });
 
@@ -66,27 +65,6 @@ export class AccountService {
     }
 
     return account;
-  }
-
-  @Transaction()
-  public async getAdvisees(
-    dto: GetAccountAdviseesDto,
-    principal: Account,
-    @TransactionRepository() accountRepository?: AccountRepository
-  ) {
-    const account = await accountRepository!.findOne(dto.id);
-
-    if (account === undefined) {
-      throw new InvalidIdError(Account, ["id"]);
-    }
-
-    if (account.type !== "Adviser") {
-      throw new ForbiddenError("This account is not an adviser.");
-    }
-
-    await authorize(principal, "get advisees of", account);
-
-    return accountRepository!.find({ adviserId: account.id });
   }
 
   @Transaction()

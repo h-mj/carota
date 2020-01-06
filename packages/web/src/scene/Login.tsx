@@ -15,7 +15,7 @@ import { Group } from "../component/Group";
 import { Head } from "../component/Head";
 import { TextField } from "../component/TextField";
 import { styled } from "../styling/theme";
-import { any, append, ErrorsFor } from "../utility/form";
+import { ErrorsFor, any, append } from "../utility/form";
 
 /**
  * Array of input names within login form.

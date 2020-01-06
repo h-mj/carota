@@ -1,5 +1,7 @@
 import { AccountDto, Language, Rights, Sex, Type } from "server";
 
+import { AccountsStore } from "../store/AccountsStore";
+
 /**
  * Client-side representation of `Account` entity.
  */
@@ -45,9 +47,15 @@ export class Account {
   public readonly rights: Rights;
 
   /**
+   * Accounts store instance.
+   */
+  // @ts-ignore
+  private readonly store: AccountsStore;
+
+  /**
    * Creates a new `Account` model based on the data transfer object.
    */
-  public constructor(dto: AccountDto) {
+  public constructor(dto: AccountDto, store: AccountsStore) {
     this.id = dto.id;
     this.name = dto.name;
     this.sex = dto.sex;
@@ -56,5 +64,6 @@ export class Account {
     this.email = dto.email;
     this.type = dto.type;
     this.rights = dto.rights;
+    this.store = store;
   }
 }

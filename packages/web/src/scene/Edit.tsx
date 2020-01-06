@@ -18,12 +18,12 @@ import { TextField } from "../component/TextField";
 import { TitleBar } from "../component/TitleBar";
 import {
   Foodstuff,
-  RequiredNutrient,
-  REQUIRED_NUTRIENTS
+  REQUIRED_NUTRIENTS,
+  RequiredNutrient
 } from "../model/Foodstuff";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
-import { any, append, ErrorsFor } from "../utility/form";
+import { ErrorsFor, any, append } from "../utility/form";
 import { hasEnvironmentCamera } from "../utility/scanner";
 
 /**

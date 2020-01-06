@@ -2,28 +2,16 @@ import { action, observable } from "mobx";
 
 import { Meal } from "../model/Meal";
 import { Rpc } from "../utility/rpc";
-import { RootStore } from "./RootStore";
+import { Store } from "./Store";
 
 /**
- * Store which manages `Meal` models.
+ * Meal managing store.
  */
-export class MealsStore {
+export class MealsStore extends Store {
   /**
    * Cached meal models of specific dates.
    */
   @observable private cache: Map<string, Meal[]> = new Map();
-
-  /**
-   * Root store instance.
-   */
-  public rootStore: RootStore;
-
-  /**
-   * Assigns the root store instance.
-   */
-  public constructor(rootStore: RootStore) {
-    this.rootStore = rootStore;
-  }
 
   /**
    * Returns meal model with specified ID.

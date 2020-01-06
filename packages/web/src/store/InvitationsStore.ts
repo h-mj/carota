@@ -1,10 +1,11 @@
 import { Invitation } from "../model/Invitation";
 import { Rpc, success } from "../utility/rpc";
+import { Store } from "./Store";
 
 /**
- * Store which manages `Invitation` models.
+ * Invitation managing store.
  */
-export class InvitationsStore {
+export class InvitationsStore extends Store {
   /**
    * Creates and returns invitation model from received invitation data transfer
    * object of invitation with specified ID.

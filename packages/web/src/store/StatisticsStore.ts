@@ -1,22 +1,10 @@
 import { Rpc } from "../utility/rpc";
-import { RootStore } from "./RootStore";
+import { Store } from "./Store";
 
 /**
- * Store responsible for requesting statistical data.
+ * Statistics managing store.
  */
-export class StatisticsStore {
-  /**
-   * Root store reference.
-   */
-  private readonly rootStore: RootStore;
-
-  /**
-   * Creates a new instance of `StatisticsStore`.
-   */
-  public constructor(rootStore: RootStore) {
-    this.rootStore = rootStore;
-  }
-
+export class StatisticsStore extends Store {
   /**
    * Returns statistics data for the whole period.
    */

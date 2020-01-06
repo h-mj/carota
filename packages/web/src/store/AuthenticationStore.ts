@@ -2,6 +2,7 @@ import { action, autorun, computed, flow, observable } from "mobx";
 
 import { Rpc } from "../utility/rpc";
 import { RootStore } from "./RootStore";
+import { Store } from "./Store";
 
 /**
  * Local storage key where authentication token is stored.
@@ -11,23 +12,19 @@ const AUTHENTICATION_TOKEN_KEY = "token";
 /**
  * Authentication credentials store.
  */
-export class AuthenticationStore {
+export class AuthenticationStore extends Store {
   /**
    * Authentication token.
    */
   @observable private token?: string;
 
   /**
-   * Root store reference.
-   */
-  private readonly rootStore: RootStore;
-
-  /**
    * Creates a new instance of `AuthenticationStore`.
    */
   public constructor(rootStore: RootStore) {
+    super(rootStore);
+
     this.token = localStorage.getItem(AUTHENTICATION_TOKEN_KEY) || undefined;
-    this.rootStore = rootStore;
 
     autorun(() => {
       if (this.token === undefined) {
@@ -58,7 +55,7 @@ export class AuthenticationStore {
    * Sets authentication token to specified value.
    */
   @action
-  public initialize(token: string) {
+  public setCurrentAccount(token: string) {
     this.token = token;
   }
 
@@ -94,7 +91,7 @@ export class AuthenticationStore {
     }
 
     this.token = result.value.token;
-    this.rootStore.accounts.initialize(result.value.account);
+    this.rootStore.accounts.setCurrentAccount(result.value.account);
 
     return undefined;
   });

@@ -11,7 +11,7 @@ import {
 
 import { onUnauthorized } from "../../utility/authorization";
 import { DtoOf } from "../../utility/entities";
-import { isAccountOrAccountAdviser, Account } from "../account/Account";
+import { Account } from "../account/Account";
 import { Dish } from "../dish/Dish";
 
 @Entity()
@@ -70,7 +70,6 @@ export const isAccountMealOwner = (account: Account, meal: Meal) =>
 
 export const { authorize } = new Canallo(onUnauthorized)
   .allow(Account, "delete", Meal, isAccountMealOwner)
-  .allow(Account, "get all meals of", Account, isAccountOrAccountAdviser)
   .allow(Account, "insert", Meal, isAccountMealOwner)
   .allow(Account, "rename", Meal, isAccountMealOwner)
   .allow(Account, "add dish to", Meal, isAccountMealOwner)

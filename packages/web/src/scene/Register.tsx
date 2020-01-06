@@ -15,7 +15,7 @@ import { Group } from "../component/Group";
 import { Head } from "../component/Head";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
-import { any, append, ErrorsFor } from "../utility/form";
+import { ErrorsFor, any, append } from "../utility/form";
 
 /**
  * Text field name type that is union of all text field names inside

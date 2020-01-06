@@ -6,9 +6,9 @@ import {
   INDEX_SCENE,
   RenderPosition,
   Scene,
-  Scenes,
   SceneNames,
   SceneSceneComponentProps,
+  Scenes,
   UNKNOWN_SCENE
 } from "../base/Scene";
 import { Notification, NotificationType } from "../component/Notifications";
@@ -18,6 +18,7 @@ import { english } from "../translation/english";
 import { estonian } from "../translation/estonian";
 import { russian } from "../translation/russian";
 import { RootStore } from "./RootStore";
+import { Store } from "./Store";
 
 /**
  * Object that stores each language's translation object.
@@ -43,7 +44,7 @@ const NO_AUTHENTICATION_SCENE_NAMES: readonly SceneNames[] = [
  * It is also responsible for retrieving correct scene name and parameters based
  * on current URL and updating current URL on redirection.
  */
-export class ViewsStore {
+export class ViewsStore extends Store {
   /**
    * Current interface language.
    */
@@ -70,23 +71,19 @@ export class ViewsStore {
   @observable public dark: boolean;
 
   /**
-   * RootStore instance.
-   */
-  public rootStore: RootStore;
-
-  /**
    * Creates a new instance of `ScenesStore`, updates root scene based on
    * current URL and adds a history state pop listener that also updates root
    * scene based on changed pathname.
    */
   public constructor(rootStore: RootStore) {
+    super(rootStore);
+
     this._scenes = [];
     this.dark =
       localStorage.getItem("dark") !== null
         ? localStorage.getItem("dark") === "true"
         : window.matchMedia !== undefined &&
           window.matchMedia("(prefers-color-scheme: dark)").matches;
-    this.rootStore = rootStore;
 
     autorun(() => {
       localStorage.setItem("dark", this.dark.toString());

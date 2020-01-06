@@ -4,6 +4,7 @@ import { AccountController } from "./module/account/AccountController";
 import { AuthenticationController } from "./module/authentication/AuthenticationController";
 import { DishController } from "./module/dish/DishController";
 import { FoodstuffController } from "./module/foodstuff/FoodstuffController";
+import { GroupController } from "./module/group/GroupController";
 import { InvitationController } from "./module/invitation/InvitationController";
 import { MealController } from "./module/meal/MealController";
 import { MeasurementController } from "./module/measurement/MeasurementController";
@@ -14,6 +15,7 @@ interface Controllers {
   authentication: AuthenticationController;
   dish: DishController;
   foodstuff: FoodstuffController;
+  group: GroupController;
   invitation: InvitationController;
   meal: MealController;
   measurement: MeasurementController;
@@ -69,6 +71,7 @@ export {
 } from "./module/account/Account";
 export { DishDto } from "./module/dish/Dish";
 export { FoodstuffDto, Unit } from "./module/foodstuff/Foodstuff";
+export { GroupDto } from "./module/group/Group";
 export {
   NutritionDeclarationDto,
   RequiredNutrient

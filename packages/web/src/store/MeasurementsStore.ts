@@ -4,28 +4,16 @@ import { Quantity } from "server";
 import { Measurement } from "../model/Measurement";
 import { toIsoDateString } from "../utility/form";
 import { Rpc } from "../utility/rpc";
-import { RootStore } from "./RootStore";
+import { Store } from "./Store";
 
 /**
  * Measurement managing store.
  */
-export class MeasurementsStore {
+export class MeasurementsStore extends Store {
   /**
    * Retrieved measurement cache for each body quantity.
    */
   @observable private cache: Map<Quantity, Measurement[]> = new Map();
-
-  /**
-   * Root store reference.
-   */
-  private readonly rootStore: RootStore;
-
-  /**
-   * Creates a new instance of `MeasurementStore`.
-   */
-  public constructor(rootStore: RootStore) {
-    this.rootStore = rootStore;
-  }
 
   /**
    * Retrieves all measurements of specified quantity of currently authenticated

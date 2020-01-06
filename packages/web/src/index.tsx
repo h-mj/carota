@@ -1,5 +1,5 @@
 import { action, observable } from "mobx";
-import { observer, Provider } from "mobx-react";
+import { Provider, observer } from "mobx-react";
 import * as React from "react";
 import { render } from "react-dom";
 
@@ -15,9 +15,9 @@ import { rootStore } from "./store/RootStore";
 @observer
 class Application extends React.Component {
   /**
-   * Whether all stores have been loaded.
+   * Whether all stores have been initialized.
    */
-  @observable private loaded = false;
+  @observable private initialized = false;
 
   /**
    * Loads all stores on construction.
@@ -25,7 +25,7 @@ class Application extends React.Component {
   public constructor(props: {}) {
     super(props);
 
-    this.load();
+    this.initialize();
   }
 
   /**
@@ -35,7 +35,7 @@ class Application extends React.Component {
     return (
       <Provider {...rootStore}>
         <Theme>
-          {this.loaded && <Stage />}
+          {this.initialized && <Stage />}
           <Loader />
           <Notifications />
         </Theme>
@@ -47,9 +47,9 @@ class Application extends React.Component {
    * Loads the application.
    */
   @action
-  public async load() {
-    await rootStore.load();
-    this.loaded = true;
+  public async initialize() {
+    await rootStore.initialize();
+    this.initialized = true;
   }
 }
 

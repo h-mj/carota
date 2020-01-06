@@ -3,27 +3,33 @@ import { AccountDto, Body, Language } from "server";
 
 import { Account } from "../model/Account";
 import { Rpc } from "../utility/rpc";
-import { RootStore } from "./RootStore";
+import { Store } from "./Store";
 
 /**
  * Account managing store.
  */
-export class AccountsStore {
+export class AccountsStore extends Store {
   /**
    * Currently authenticated account.
    */
   @observable public current?: Account;
 
   /**
-   * RootStore instance.
+   * Loads currently authenticated account.
    */
-  private rootStore: RootStore;
+  public async initialize() {
+    if (!this.rootStore.authentication.authenticated) {
+      return;
+    }
 
-  /**
-   * Creates a new instance of `AccountStore`.
-   */
-  public constructor(rootStore: RootStore) {
-    this.rootStore = rootStore;
+    const result = await Rpc.call("account", "getCurrent", {});
+
+    if (!result.ok) {
+      this.rootStore.views.notifyUnknownError();
+      return;
+    }
+
+    this.setCurrentAccount(result.value);
   }
 
   /**
@@ -34,29 +40,12 @@ export class AccountsStore {
   }
 
   /**
-   * Initializes current account using specified data transfer object.
+   * Sets current account to an account based on specified data transfer object.
    */
   @action
-  public initialize(dto: AccountDto) {
-    this.current = new Account(dto);
+  public setCurrentAccount(dto: AccountDto) {
+    this.current = new Account(dto, this);
     this.rootStore.views.language = dto.language;
-  }
-
-  /**
-   * Creates a new account with specified information and automatically logs
-   * newly created account in.
-   */
-  public async register(body: Body<"account", "create">) {
-    const response = await Rpc.call("account", "create", body);
-
-    if (!response.ok) {
-      return response.value;
-    }
-
-    this.rootStore.authentication.initialize(response.value.token);
-    this.initialize(response.value.account);
-
-    return undefined;
   }
 
   /**
@@ -66,28 +55,27 @@ export class AccountsStore {
   public async setLanguage(language: Language) {
     this.rootStore.views.language = language;
 
-    const response = await Rpc.call("account", "setLanguage", { language });
+    const result = await Rpc.call("account", "setLanguage", { language });
 
-    if (!response.ok) {
+    if (!result.ok) {
       this.rootStore.views.notifyUnknownError();
     }
   }
 
   /**
-   * Loads currently authenticated account.
+   * Creates a new account with specified information and automatically logs
+   * newly created account in.
    */
-  public async load() {
-    if (!this.rootStore.authentication.authenticated) {
-      return;
+  public async register(body: Body<"account", "create">) {
+    const result = await Rpc.call("account", "create", body);
+
+    if (!result.ok) {
+      return result.value;
     }
 
-    const response = await Rpc.call("account", "getCurrent", {});
+    this.rootStore.authentication.setCurrentAccount(result.value.token);
+    this.setCurrentAccount(result.value.account);
 
-    if (!response.ok) {
-      this.rootStore.views.notifyUnknownError();
-      return;
-    }
-
-    this.initialize(response.value);
+    return undefined;
   }
 }

@@ -4,14 +4,14 @@ import { Injectable } from "@nestjs/common";
 
 import { BadRequestError } from "../../base/error/BadRequestError";
 import { InvalidIdError } from "../../base/error/InvalidIdError";
-import { Account } from "../account/Account";
+import { Account, authorize as authorizeAccount } from "../account/Account";
 import { AccountRepository } from "../account/AccountRepository";
 import { CreateMealDto } from "./dto/CreateMealDto";
 import { DeleteMealDto } from "./dto/DeleteMealDto";
 import { GetAllMealsDto } from "./dto/GetAllMealsDto";
 import { InsertMealDto } from "./dto/InsertMealDto";
 import { RenameMealDto } from "./dto/RenameMealDto";
-import { authorize, Meal } from "./Meal";
+import { Meal, authorize } from "./Meal";
 import { MealRepository } from "./MealRepository";
 
 @Injectable()
@@ -75,9 +75,9 @@ export class MealService {
       throw new InvalidIdError(Account, ["accountId"]);
     }
 
-    await authorize(principal, "get all meals of", account);
+    await authorizeAccount(principal, "get meals of", account);
 
-    return await mealRepository!.ordered(account, dto.date);
+    return await mealRepository!.findOrderedOf(account, dto.date);
   }
 
   @Transaction()
@@ -96,7 +96,7 @@ export class MealService {
 
     await mealRepository!.unlink(meal);
 
-    const meals = await mealRepository!.ordered(principal, dto.date);
+    const meals = await mealRepository!.findOrderedOf(principal, dto.date);
 
     if (!(dto.index in meals) && dto.index !== meals.length) {
       throw new BadRequestError("Provided insertion index is invalid.", {

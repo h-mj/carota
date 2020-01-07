@@ -1,3 +1,4 @@
+import { Canallo } from "canallo";
 import {
   Column,
   Entity,
@@ -8,6 +9,7 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 
+import { onUnauthorized } from "../../utility/authorization";
 import { DtoOf } from "../../utility/entities";
 import { Account } from "../account/Account";
 
@@ -101,3 +103,10 @@ export class Group {
  * Group data transfer object type.
  */
 export type GroupDto = DtoOf<Group>;
+
+/*
+ * Account related authorization definitions.
+ */
+// prettier-ignore
+export const { authorize } = new Canallo(onUnauthorized)
+  .allow(Account, "be inserted into", Group, (account, group) => account.adviserId === group.accountId);

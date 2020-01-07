@@ -3,18 +3,28 @@ import { Transaction, TransactionRepository } from "typeorm";
 
 import { Injectable } from "@nestjs/common";
 
+import { BadRequestError } from "../../base/error/BadRequestError";
 import { InvalidIdError } from "../../base/error/InvalidIdError";
 import { UniqueConstraintError } from "../../base/error/UniqueConstraintErrors";
+import { Group, authorize as authorizeGroup } from "../group/Group";
+import { GroupRepository } from "../group/GroupRepository";
 import { Invitation } from "../invitation/Invitation";
 import { InvitationRepository } from "../invitation/InvitationRepository";
-import { Account } from "./Account";
+import { Account, authorize as authorizeAccount } from "./Account";
 import { AccountRepository } from "./AccountRepository";
 import { CreateAccountDto } from "./dto/CreateAccountDto";
 import { GetAccountDto } from "./dto/GetAccountDto";
+import { InsertAccountDto } from "./dto/InsertAccountDto";
 import { SetAccountLanguageDto } from "./dto/SetAccountLanguageDto";
 
+/**
+ * Account entity management service.
+ */
 @Injectable()
 export class AccountService {
+  /**
+   * Creates a new account with specified fields.
+   */
   @Transaction()
   public async create(
     dto: CreateAccountDto,
@@ -52,21 +62,72 @@ export class AccountService {
     return accountRepository!.save(template);
   }
 
+  /**
+   * Returns an account with specified identifier.
+   */
   @Transaction()
   public async get(
     dto: GetAccountDto,
     principal: Account,
     @TransactionRepository() accountRepository?: AccountRepository
   ) {
-    const account = await accountRepository!.findOne(dto.id || principal.id);
+    const account = await accountRepository!.findOne(dto.id);
 
     if (account === undefined) {
       throw new InvalidIdError(Account, ["id"]);
     }
 
+    await authorizeAccount(principal, "get", account);
+
     return account;
   }
 
+  /**
+   * Inserts a specified account into a specified group at given index.
+   */
+  @Transaction()
+  public async insert(
+    dto: InsertAccountDto,
+    principal: Account,
+    @TransactionRepository() accountRepository?: AccountRepository,
+    @TransactionRepository() groupRepository?: GroupRepository
+  ) {
+    const account = await accountRepository!.findOne(dto.id);
+
+    if (account === undefined) {
+      throw new InvalidIdError(Account, ["id"]);
+    }
+
+    await authorizeAccount(principal, "insert into group", account);
+
+    const group = await groupRepository!.findOne(dto.groupId);
+
+    if (group === undefined) {
+      throw new InvalidIdError(Group, ["groupId"]);
+    }
+
+    await authorizeGroup(account, "be inserted into", group);
+
+    await accountRepository!.unlink(account);
+
+    const accounts = await accountRepository!.findOfGroup(group);
+
+    if (!(dto.index in accounts) && dto.index !== accounts.length) {
+      throw new BadRequestError("Provided insertion index is out of bounds.", {
+        location: { part: "body", path: ["index"] },
+        reason: "invalidIndex"
+      });
+    }
+
+    const previous = accounts[dto.index - 1];
+    const next = accounts[dto.index];
+
+    await accountRepository!.link(account, group, previous, next);
+  }
+
+  /**
+   * Sets display language of current account to specified language.
+   */
   @Transaction()
   public async setLanguage(
     dto: SetAccountLanguageDto,

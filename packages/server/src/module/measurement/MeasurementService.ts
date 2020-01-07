@@ -3,12 +3,12 @@ import { Transaction, TransactionRepository } from "typeorm";
 import { Injectable } from "@nestjs/common";
 
 import { InvalidIdError } from "../../base/error/InvalidIdError";
-import { Account } from "../account/Account";
+import { Account, authorize as authorizeAccount } from "../account/Account";
 import { AccountRepository } from "../account/AccountRepository";
 import { DeleteMeasurementDto } from "./dto/DeleteMeasurementDto";
 import { GetQuantityMeasurementsDto } from "./dto/GetQuantityMeasurementsDto";
 import { SaveMeasurementDto } from "./dto/SaveMeasurementDto";
-import { authorize, Measurement } from "./Measurement";
+import { Measurement, authorize as authorizeMeal } from "./Measurement";
 import { MeasurementRepository } from "./MeasurementRepository";
 
 @Injectable()
@@ -25,7 +25,7 @@ export class MeasurementService {
       throw new InvalidIdError(Measurement, ["id"]);
     }
 
-    await authorize(principal, "delete", measurement);
+    await authorizeMeal(principal, "delete", measurement);
 
     measurementRepository!.remove(measurement);
   }
@@ -46,7 +46,7 @@ export class MeasurementService {
       throw new InvalidIdError(Account, ["accountId"]);
     }
 
-    await authorize(principal, "get quantity measurements of", account);
+    await authorizeAccount(principal, "get measurements of", account);
 
     return measurementRepository!.find({
       where: {

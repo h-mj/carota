@@ -99,7 +99,7 @@ export class MealService {
     const meals = await mealRepository!.findOrderedOf(principal, dto.date);
 
     if (!(dto.index in meals) && dto.index !== meals.length) {
-      throw new BadRequestError("Provided insertion index is invalid.", {
+      throw new BadRequestError("Provided insertion index is out of bounds.", {
         location: { part: "body", path: ["index"] },
         reason: "invalidIndex"
       });

@@ -2,6 +2,12 @@ import { Translation } from "./";
 
 export const english: Translation = {
   components: {
+    AdviseeView: {
+      abbreviations: {
+        Female: "F",
+        Male: "M"
+      }
+    },
     Body: {
       title: "Measurements"
     },
@@ -93,6 +99,9 @@ export const english: Translation = {
     },
     FoodstuffView: {
       per: "Per 100{unit}:"
+    },
+    GroupView: {
+      ungrouped: "Ungrouped"
     },
     Head: {
       title: "Carota"

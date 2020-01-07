@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 
-import { onUnauthorized } from "../../utility/authorization";
+import { onUnauthorized, or } from "../../utility/authorization";
 import { DtoOf } from "../../utility/entities";
 import { Group } from "../group/Group";
 
@@ -232,24 +232,30 @@ export class Account {
 export type AccountDto = DtoOf<Account>;
 
 /**
- * Checks whether `requester` account is the same account as `target` account or
- * is the adviser of `target` account.
+ * Returns whether `requester` account is the same account as `target` account.
  */
-export const isAccountOrAccountAdviser = (
-  requester: Account,
-  target: Account
-) => requester.id === target.id || requester.id === target.adviserId;
+export const isAccount = (requester: Account, target: Account) =>
+  requester.id === target.id;
 
 /**
- * Checks whether `requester` account is the same account as `target` account or
- * `requester` account is an administrator.
+ * Returns whether `requester` account is the adviser of `target` account.
  */
-export const isAccountOrAdministrator = (requester: Account, target: Account) =>
-  requester.id === target.id || requester.rights === "All";
+export const isAdviser = (requester: Account, target: Account) =>
+  requester.id === target.adviserId;
+
+/**
+ * Returns whether `requester` account is an administrator.
+ */
+export const isAdministrator = (requester: Account) =>
+  requester.rights === "All";
 
 /**
  * Account related authorization definitions.
  */
+// prettier-ignore
 export const { authorize } = new Canallo(onUnauthorized)
-  .allow(Account, "get meals of", Account, isAccountOrAccountAdviser)
-  .allow(Account, "get groups of", Account, isAccountOrAdministrator);
+  .allow(Account, "get", Account, or(isAccount, isAdviser, isAdministrator))
+  .allow(Account, "get groups of", Account, or(isAccount, isAdministrator))
+  .allow(Account, "get meals of", Account, or(isAccount, isAdviser, isAdministrator))
+  .allow(Account, "get measurements of", Account, or(isAccount, isAdviser, isAdministrator))
+  .allow(Account, "insert into group", Account, isAdviser);

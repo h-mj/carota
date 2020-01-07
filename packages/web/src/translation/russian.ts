@@ -2,6 +2,12 @@ import { Translation } from "./";
 
 export const russian: Translation = {
   components: {
+    AdviseeView: {
+      abbreviations: {
+        Female: "Ж",
+        Male: "М"
+      }
+    },
     Body: {
       title: "Замеры"
     },
@@ -95,6 +101,9 @@ export const russian: Translation = {
     },
     FoodstuffView: {
       per: "На 100{unit}:"
+    },
+    GroupView: {
+      ungrouped: "Негруппированные"
     },
     Head: {
       title: "Морковка"

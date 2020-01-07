@@ -160,8 +160,7 @@ const Container = styled(ItemHeader)<ContainerProps>`
     eaten ? theme.backgroundColor : theme.backgroundColorDisabled};
 
   transition: box-shadow ${({ theme }) => theme.transition},
-    border-radius ${({ theme }) => theme.transition},
-    border-color ${({ theme }) => theme.transition};
+    border-radius ${({ theme }) => theme.transition};
 `;
 
 /**

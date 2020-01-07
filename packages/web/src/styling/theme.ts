@@ -30,7 +30,7 @@ export const THEME_CONSTANTS = {
   transitionLinear: "0.2s",
   widthSmall: "30rem",
   widthMedium: "60rem",
-  widthCutoff: "48rem"
+  widthCutoff: "60rem"
 };
 
 /**

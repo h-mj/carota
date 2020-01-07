@@ -2,6 +2,12 @@ import { Translation } from "./";
 
 export const estonian: Translation = {
   components: {
+    AdviseeView: {
+      abbreviations: {
+        Female: "N",
+        Male: "M"
+      }
+    },
     Body: {
       title: "Mõõdud"
     },
@@ -93,6 +99,9 @@ export const estonian: Translation = {
     },
     FoodstuffView: {
       per: "100{unit} kohta:"
+    },
+    GroupView: {
+      ungrouped: "Rühmitamata"
     },
     Head: {
       title: "Carota"

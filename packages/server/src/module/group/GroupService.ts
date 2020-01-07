@@ -62,7 +62,7 @@ export class GroupService {
 
     return {
       ungrouped: await accountRepository!.find({
-        where: { adviser: account.id, groupId: null }
+        where: { adviserId: account.id, groupId: null }
       }),
       groups: await groupRepository!.findOrderedOf(account)
     };

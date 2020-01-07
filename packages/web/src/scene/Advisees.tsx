@@ -1,11 +1,18 @@
 import { observable } from "mobx";
 import { inject, observer } from "mobx-react";
+import * as React from "react";
+import { DragDropContext } from "react-beautiful-dnd";
 
 import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
+import { Action } from "../component/Action";
+import { GroupList } from "../component/GroupList";
+import { Sidebar } from "../component/Sidebar";
 import { Account } from "../model/Account";
+import { Group } from "../model/Group";
+import { styled } from "../styling/theme";
 
 /**
  * Scene that is used by advisers to track and advise their advisees.
@@ -14,9 +21,14 @@ import { Account } from "../model/Account";
 @observer
 export class Advisees extends SceneComponent<"Advisees"> {
   /**
-   * Array of loaded advisee accounts of current account.
+   * Array of ungrouped accounts.
    */
-  @observable private advisees: Account[] = [];
+  @observable private ungrouped: Account[] = [];
+
+  /**
+   * Array of advisee account groups.
+   */
+  @observable private groupList: Group[] = [];
 
   /**
    * Creates a new instance of `Advisees` and sets the name of this component.
@@ -29,27 +41,63 @@ export class Advisees extends SceneComponent<"Advisees"> {
       return;
     }
 
-    this.loadAdvisees();
+    this.load();
   }
 
   /**
    * Renders the list of advisees and statistics of currently selected advisee.
    */
   public render() {
-    return this.advisees.map(account => account.name);
+    return (
+      <Container>
+        <Sidebar>
+          <DragDropContext onDragEnd={this.handleDragEnd}>
+            <GroupList ungrouped={this.ungrouped} groupList={this.groupList} />
+          </DragDropContext>
+
+          <Action fixed={true} />
+        </Sidebar>
+
+        <Main>Statistics</Main>
+      </Container>
+    );
   }
 
   /**
-   * Loads advisees of current account.
+   * Loads advisee groups of current account.
    */
-  private async loadAdvisees() {
+  private async load() {
     const { ungrouped, groups } = await this.props.groups!.get(
       this.props.accounts!.current!
     );
 
-    return ([] as Account[]).concat(
-      ungrouped,
-      groups.map(group => group.accounts).flat()
-    );
+    this.ungrouped = ungrouped;
+    this.groupList = groups;
   }
+
+  /**
+   * Handles drag end result.
+   */
+  private handleDragEnd = () => {
+    return;
+  };
 }
+
+/**
+ * Advisees scene container component.
+ */
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  overflow: hidden;
+`;
+
+/**
+ * Scene main content container component.
+ */
+const Main = styled.div`
+  width: 100%;
+  overflow-y: auto;
+`;

@@ -3,15 +3,11 @@ import { Transaction, TransactionRepository } from "typeorm";
 import { Injectable } from "@nestjs/common";
 
 import { InvalidIdError } from "../../base/error/InvalidIdError";
-import { Account, authorize as authorizeAccount } from "../account/Account";
+import { Account, authorize } from "../account/Account";
 import { AccountRepository } from "../account/AccountRepository";
 import { RequiredNutrient } from "../foodstuff/NutritionDeclaration";
 import { MealRepository } from "../meal/MealRepository";
-import {
-  QUANTITIES,
-  Quantity,
-  authorize as authorizeMeasurement
-} from "../measurement/Measurement";
+import { QUANTITIES, Quantity } from "../measurement/Measurement";
 import { MeasurementRepository } from "../measurement/MeasurementRepository";
 import { GetAllStatisticsDto } from "./dto/GetAllStatisticsDto";
 
@@ -58,8 +54,8 @@ export class StatisticsService {
     }
 
     // prettier-ignore
-    await authorizeMeasurement(principal, "get quantity measurements of", account);
-    await authorizeAccount(principal, "get meals of", account);
+    await authorize(principal, "get measurements of", account);
+    await authorize(principal, "get meals of", account);
 
     const meals = await mealRepository!.find({
       where: { accountId: account.id },

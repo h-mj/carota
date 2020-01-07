@@ -53,17 +53,17 @@ export class GroupRepository extends Repository<Group> {
   /**
    * Unlinks specified group from the group linked list.
    */
-  public async unlink(meal: Group) {
+  public async unlink(group: Group) {
     await this.createQueryBuilder()
       .update(Group)
       .set({ nextId: null, linked: false })
-      .where({ id: meal.id })
+      .where({ id: group.id })
       .execute();
 
     await this.createQueryBuilder()
       .update(Group)
-      .set({ nextId: meal.nextId })
-      .where({ nextId: meal.id })
+      .set({ nextId: group.nextId })
+      .where({ nextId: group.id })
       .execute();
   }
 }

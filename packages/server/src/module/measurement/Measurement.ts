@@ -9,7 +9,7 @@ import {
 
 import { onUnauthorized } from "../../utility/authorization";
 import { DtoOf } from "../../utility/entities";
-import { isAccountOrAccountAdviser, Account } from "../account/Account";
+import { Account } from "../account/Account";
 
 export const QUANTITIES = [
   "Bicep",
@@ -64,5 +64,4 @@ const isAccountMeasurementOwner = (
 
 // prettier-ignore
 export const { authorize } = new Canallo(onUnauthorized)
-  .allow(Account, "get quantity measurements of", Account, isAccountOrAccountAdviser)
   .allow(Account, "delete", Measurement, isAccountMeasurementOwner);

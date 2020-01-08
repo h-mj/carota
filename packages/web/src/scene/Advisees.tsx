@@ -1,7 +1,7 @@
 import { observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 
 import {
   DefaultSceneComponentProps,
@@ -78,8 +78,32 @@ export class Advisees extends SceneComponent<"Advisees"> {
   /**
    * Handles drag end result.
    */
-  private handleDragEnd = () => {
-    return;
+  private handleDragEnd = (result: DropResult) => {
+    const { source, destination, draggableId } = result;
+
+    if (!destination) {
+      return;
+    }
+
+    if (
+      source.droppableId === destination.droppableId &&
+      source.index === destination.index
+    ) {
+      return;
+    }
+
+    const account = this.props.accounts!.withId(draggableId);
+    const group = this.props.groups!.withId(destination.droppableId);
+
+    if (account === undefined || group === undefined) {
+      return;
+    }
+
+    account.insert(group, destination.index);
+
+    if (this.ungrouped.includes(account)) {
+      this.ungrouped.splice(this.ungrouped.indexOf(account), 1);
+    }
   };
 }
 

@@ -1,3 +1,4 @@
+import { observer } from "mobx-react";
 import * as React from "react";
 
 import { Component } from "../base/Component";
@@ -23,6 +24,7 @@ interface GroupListProps {
 /**
  * Component that displays a list of groups.
  */
+@observer
 export class GroupList extends Component<GroupListProps> {
   /**
    * Renders all provided ungrouped advisee accounts alongside all advisee

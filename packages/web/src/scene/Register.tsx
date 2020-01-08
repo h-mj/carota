@@ -285,7 +285,7 @@ export class Register extends SceneComponent<
 
     const error = await this.props.views!.load(
       result.ok
-        ? this.props.accounts!.register({
+        ? this.props.accounts!.create({
             ...result.value,
             invitationId: this.props.scene.parameters!.invitationId
           })

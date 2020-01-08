@@ -1,6 +1,7 @@
 import { AccountDto, Language, Rights, Sex, Type } from "server";
 
 import { AccountsStore } from "../store/AccountsStore";
+import { Group } from "./Group";
 
 /**
  * Client-side representation of `Account` entity.
@@ -47,15 +48,23 @@ export class Account {
   public readonly rights: Rights;
 
   /**
+   * Group that this account is part of.
+   */
+  public group?: Group;
+
+  /**
    * Accounts store instance.
    */
-  // @ts-ignore
   private readonly store: AccountsStore;
 
   /**
    * Creates a new `Account` model based on the data transfer object.
    */
-  public constructor(dto: AccountDto, store: AccountsStore) {
+  public constructor(
+    dto: AccountDto,
+    group: Group | undefined,
+    store: AccountsStore
+  ) {
     this.id = dto.id;
     this.name = dto.name;
     this.sex = dto.sex;
@@ -64,6 +73,16 @@ export class Account {
     this.email = dto.email;
     this.type = dto.type;
     this.rights = dto.rights;
+    this.group = group;
     this.store = store;
+
+    this.store.register(this);
+  }
+
+  /**
+   * Inserts this account into specified `group` at given `index`.
+   */
+  public async insert(group: Group, index: number) {
+    this.store.insert(this, group, index);
   }
 }

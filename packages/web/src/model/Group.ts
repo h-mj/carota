@@ -1,3 +1,4 @@
+import { observable } from "mobx";
 import { GroupDto } from "server";
 
 import { GroupsStore } from "../store/GroupsStore";
@@ -20,12 +21,11 @@ export class Group {
   /**
    * Array of account models within this group.
    */
-  public readonly accounts: Account[];
+  @observable public readonly accounts: Account[];
 
   /**
    * Groups store instance.
    */
-  // @ts-ignore
   private readonly store: GroupsStore;
 
   /**
@@ -35,8 +35,10 @@ export class Group {
     this.id = dto.id;
     this.name = dto.name;
     this.accounts = dto.accounts.map(
-      dto => new Account(dto, store.rootStore.accounts)
+      dto => new Account(dto, this, store.rootStore.accounts)
     );
     this.store = store;
+
+    this.store.register(this);
   }
 }

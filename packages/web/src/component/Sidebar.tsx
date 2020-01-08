@@ -11,8 +11,6 @@ export const Sidebar = styled.div`
   background-color: ${({ theme }) => theme.backgroundColor};
   border-right: solid 1px ${({ theme }) => theme.borderColor};
 
-  overflow: auto;
-
   @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
     width: 100%;
     border-right: none;

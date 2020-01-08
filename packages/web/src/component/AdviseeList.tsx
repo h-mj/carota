@@ -1,3 +1,4 @@
+import { observer } from "mobx-react";
 import * as React from "react";
 import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
@@ -20,6 +21,7 @@ interface AdviseeListProps {
 /**
  * Component that displays a list of advisees.
  */
+@observer
 export class AdviseeList extends Component<AdviseeListProps> {
   /**
    * Renders a list of `AdviseeView` components for each provided advisee.
@@ -43,6 +45,7 @@ export class AdviseeList extends Component<AdviseeListProps> {
             {advisees.map((advisee, index) => (
               <AdviseeView key={advisee.id} advisee={advisee} index={index} />
             ))}
+
             {provided.placeholder}
           </Container>
         )}

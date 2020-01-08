@@ -6,11 +6,11 @@ import { Injectable } from "@nestjs/common";
 import { BadRequestError } from "../../base/error/BadRequestError";
 import { InvalidIdError } from "../../base/error/InvalidIdError";
 import { UniqueConstraintError } from "../../base/error/UniqueConstraintErrors";
-import { Group, authorize as authorizeGroup } from "../group/Group";
+import { Group } from "../group/Group";
 import { GroupRepository } from "../group/GroupRepository";
 import { Invitation } from "../invitation/Invitation";
 import { InvitationRepository } from "../invitation/InvitationRepository";
-import { Account, authorize as authorizeAccount } from "./Account";
+import { Account, authorize } from "./Account";
 import { AccountRepository } from "./AccountRepository";
 import { CreateAccountDto } from "./dto/CreateAccountDto";
 import { GetAccountDto } from "./dto/GetAccountDto";
@@ -77,7 +77,7 @@ export class AccountService {
       throw new InvalidIdError(Account, ["id"]);
     }
 
-    await authorizeAccount(principal, "get", account);
+    await authorize(principal, "get", account);
 
     return account;
   }
@@ -98,7 +98,7 @@ export class AccountService {
       throw new InvalidIdError(Account, ["id"]);
     }
 
-    await authorizeAccount(principal, "insert into group", account);
+    await authorize(principal, "insert into group", account);
 
     const group = await groupRepository!.findOne(dto.groupId);
 
@@ -106,7 +106,11 @@ export class AccountService {
       throw new InvalidIdError(Group, ["groupId"]);
     }
 
-    await authorizeGroup(account, "be inserted into", group);
+    if (account.adviserId !== group.accountId) {
+      throw new BadRequestError(
+        "Account can only be inserted into a group owned by account adviser."
+      );
+    }
 
     await accountRepository!.unlink(account);
 

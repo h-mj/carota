@@ -2,6 +2,7 @@ import { action, observable } from "mobx";
 import { AccountDto, Body, Language } from "server";
 
 import { Account } from "../model/Account";
+import { Group } from "../model/Group";
 import { Rpc } from "../utility/rpc";
 import { Store } from "./Store";
 
@@ -13,6 +14,11 @@ export class AccountsStore extends Store {
    * Currently authenticated account.
    */
   @observable public current?: Account;
+
+  /**
+   * Account cache that maps account identifiers to `Account` model instances.
+   */
+  @observable private cache: Map<string, Account> = new Map();
 
   /**
    * Loads currently authenticated account.
@@ -44,8 +50,45 @@ export class AccountsStore extends Store {
    */
   @action
   public setCurrentAccount(dto: AccountDto) {
-    this.current = new Account(dto, this);
+    this.current = new Account(dto, undefined, this);
     this.rootStore.views.language = dto.language;
+  }
+
+  /**
+   * Caches specified account.
+   */
+  public register(account: Account) {
+    this.cache.set(account.id, account);
+  }
+
+  /**
+   * Returns cached account with specified `id`.
+   */
+  public withId(id: string) {
+    return this.cache.get(id);
+  }
+
+  /**
+   * Inserts specified `account` into specified `group` at given `index`.
+   */
+  public async insert(account: Account, group: Group, index: number) {
+    if (account.group !== undefined) {
+      const { accounts } = account.group;
+      accounts.splice(accounts.indexOf(account), 1);
+    }
+
+    group.accounts.splice(index, 0, account);
+    account.group = group;
+
+    const result = await Rpc.call("account", "insert", {
+      id: account.id,
+      groupId: group.id,
+      index
+    });
+
+    if (!result.ok) {
+      this.rootStore.views.notifyUnknownError();
+    }
   }
 
   /**
@@ -66,7 +109,7 @@ export class AccountsStore extends Store {
    * Creates a new account with specified information and automatically logs
    * newly created account in.
    */
-  public async register(body: Body<"account", "create">) {
+  public async create(body: Body<"account", "create">) {
     const result = await Rpc.call("account", "create", body);
 
     if (!result.ok) {

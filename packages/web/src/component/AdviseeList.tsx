@@ -13,6 +13,11 @@ import { AdviseeView } from "./AdviseeView";
  */
 interface AdviseeListProps {
   /**
+   * Current draggable type.
+   */
+  draggableType?: "account" | "group";
+
+  /**
    * Advisee group of list of advisees.
    */
   group: Group | Account[];
@@ -38,7 +43,10 @@ export class AdviseeList extends Component<AdviseeListProps> {
     return (
       <Droppable
         droppableId={id}
-        isDropDisabled={Array.isArray(this.props.group)}
+        isDropDisabled={
+          Array.isArray(this.props.group) ||
+          this.props.draggableType !== "account"
+        }
       >
         {provided => (
           <Container ref={provided.innerRef} {...provided.droppableProps}>

@@ -3,11 +3,12 @@ import { GroupDto } from "server";
 
 import { GroupsStore } from "../store/GroupsStore";
 import { Account } from "./Account";
+import { Model } from "./Model";
 
 /**
  * Client-side representation of `Group` entity.
  */
-export class Group {
+export class Group implements Model {
   /**
    * Group identifier.
    */
@@ -40,5 +41,12 @@ export class Group {
     this.store = store;
 
     this.store.register(this);
+  }
+
+  /**
+   * Inserts this group at specified `index` inside account advisee group list.
+   */
+  public insert(index: number) {
+    return this.store.insert(this, index);
   }
 }

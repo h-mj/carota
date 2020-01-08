@@ -2,11 +2,12 @@ import { AccountDto, Language, Rights, Sex, Type } from "server";
 
 import { AccountsStore } from "../store/AccountsStore";
 import { Group } from "./Group";
+import { Model } from "./Model";
 
 /**
  * Client-side representation of `Account` entity.
  */
-export class Account {
+export class Account implements Model {
   /**
    * Account identifier.
    */

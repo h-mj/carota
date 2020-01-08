@@ -2,11 +2,14 @@ import { Transaction, TransactionRepository } from "typeorm";
 
 import { Injectable } from "@nestjs/common";
 
+import { BadRequestError } from "../../base/error/BadRequestError";
 import { InvalidIdError } from "../../base/error/InvalidIdError";
 import { Account, authorize as authorizeAccount } from "../account/Account";
 import { AccountRepository } from "../account/AccountRepository";
 import { CreateGroupDto } from "./dto/CreateGroupDto";
 import { GetGroupsDto } from "./dto/GetGroupsDto";
+import { InsertGroupDto } from "./dto/InsertGroupDto";
+import { Group, authorize as authorizeGroup } from "./Group";
 import { GroupRepository } from "./GroupRepository";
 
 /**
@@ -66,5 +69,41 @@ export class GroupService {
       }),
       groups: await groupRepository!.findOrderedOf(account)
     };
+  }
+
+  /**
+   * Inserts specified group at specified index within adviser advisee group
+   * list.
+   */
+  @Transaction()
+  public async insert(
+    dto: InsertGroupDto,
+    principal: Account,
+    @TransactionRepository() groupRepository?: GroupRepository
+  ) {
+    const group = await groupRepository!.findOne(dto.id);
+
+    if (group === undefined) {
+      throw new InvalidIdError(Group, ["id"]);
+    }
+
+    await authorizeGroup(principal, "insert", group);
+
+    await groupRepository!.unlink(group);
+
+    const groups = await groupRepository!.findOrderedOf(principal);
+
+    if (!(dto.index in groups) && dto.index !== groups.length) {
+      throw new BadRequestError("Provided insertion index is out of bounds.", {
+        location: { part: "body", path: ["index"] },
+        reason: "invalidIndex"
+      });
+    }
+
+    await groupRepository!.link(
+      group,
+      groups[dto.index - 1],
+      groups[dto.index]
+    );
   }
 }

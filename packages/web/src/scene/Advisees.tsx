@@ -1,17 +1,15 @@
 import { observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, DragStart, DropResult } from "react-beautiful-dnd";
 
 import {
   DefaultSceneComponentProps,
   SceneComponent
 } from "../base/SceneComponent";
 import { Action } from "../component/Action";
+import { AdviseeList } from "../component/AdviseeList";
 import { GroupList } from "../component/GroupList";
-import { Sidebar } from "../component/Sidebar";
-import { Account } from "../model/Account";
-import { Group } from "../model/Group";
 import { styled } from "../styling/theme";
 
 /**
@@ -21,14 +19,9 @@ import { styled } from "../styling/theme";
 @observer
 export class Advisees extends SceneComponent<"Advisees"> {
   /**
-   * Array of ungrouped accounts.
+   * Current draggable type.
    */
-  @observable private ungrouped: Account[] = [];
-
-  /**
-   * Array of advisee account groups.
-   */
-  @observable private groupList: Group[] = [];
+  @observable private draggableType?: "account" | "group";
 
   /**
    * Creates a new instance of `Advisees` and sets the name of this component.
@@ -40,8 +33,6 @@ export class Advisees extends SceneComponent<"Advisees"> {
       this.props.views!.unknown(); // Show 404 if account is not an adviser.
       return;
     }
-
-    this.load();
   }
 
   /**
@@ -51,8 +42,18 @@ export class Advisees extends SceneComponent<"Advisees"> {
     return (
       <Container>
         <Sidebar>
-          <DragDropContext onDragEnd={this.handleDragEnd}>
-            <GroupList ungrouped={this.ungrouped} groupList={this.groupList} />
+          <DragDropContext
+            onDragStart={this.handleDragStart}
+            onDragEnd={this.handleDragEnd}
+          >
+            {this.props.groups!.ungrouped.length > 0 && (
+              <AdviseeList group={this.props.groups!.ungrouped} />
+            )}
+
+            <GroupList
+              draggableType={this.draggableType}
+              groupList={this.props.groups!.groups}
+            />
           </DragDropContext>
 
           <Action fixed={true} />
@@ -64,16 +65,12 @@ export class Advisees extends SceneComponent<"Advisees"> {
   }
 
   /**
-   * Loads advisee groups of current account.
+   * Updates current draggable type on drag start.
    */
-  private async load() {
-    const { ungrouped, groups } = await this.props.groups!.get(
-      this.props.accounts!.current!
-    );
-
-    this.ungrouped = ungrouped;
-    this.groupList = groups;
-  }
+  private handleDragStart = (initial: DragStart) => {
+    this.draggableType =
+      initial.source.droppableId === "groups" ? "group" : "account";
+  };
 
   /**
    * Handles drag end result.
@@ -92,6 +89,18 @@ export class Advisees extends SceneComponent<"Advisees"> {
       return;
     }
 
+    if (this.draggableType === "group") {
+      const group = this.props.groups!.withId(draggableId);
+
+      if (group === undefined) {
+        return;
+      }
+
+      group.insert(destination.index);
+
+      return;
+    }
+
     const account = this.props.accounts!.withId(draggableId);
     const group = this.props.groups!.withId(destination.droppableId);
 
@@ -101,8 +110,10 @@ export class Advisees extends SceneComponent<"Advisees"> {
 
     account.insert(group, destination.index);
 
-    if (this.ungrouped.includes(account)) {
-      this.ungrouped.splice(this.ungrouped.indexOf(account), 1);
+    const { ungrouped } = this.props.groups!;
+
+    if (ungrouped.includes(account)) {
+      ungrouped.splice(ungrouped.indexOf(account), 1);
     }
   };
 }
@@ -116,6 +127,30 @@ const Container = styled.div`
 
   display: flex;
   overflow: hidden;
+`;
+
+/**
+ * Sidebar container.
+ */
+const Sidebar = styled.div`
+  width: ${({ theme }) => theme.widthSmall};
+  height: 100%;
+  flex-shrink: 0;
+
+  background-color: ${({ theme }) => theme.backgroundColor};
+  border-right: solid 1px ${({ theme }) => theme.borderColor};
+
+  padding: ${({ theme }) => theme.padding};
+  box-sizing: border-box;
+
+  @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
+    width: 100%;
+    border-right: none;
+  }
+
+  & > *:not(:last-child) {
+    margin-bottom: ${({ theme }) => theme.padding};
+  }
 `;
 
 /**

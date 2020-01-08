@@ -98,15 +98,14 @@ const Container = styled.div<ContainerProps>`
   align-items: center;
 
   background-color: ${({ theme }) => theme.backgroundColor};
-  box-shadow: ${({ isDragging, theme }) =>
-    isDragging
-      ? `inset 0 0 0 2px ${theme.colorActive}`
-      : `0 1px 0 0 ${theme.borderColor}, inset 0 1px 0 0 ${theme.borderColor}`};
   border-radius: ${({ isDragging, theme }) =>
     isDragging ? theme.borderRadius : 0};
 
   transition: box-shadow ${({ theme }) => theme.transition},
     border-radius ${({ theme }) => theme.transition};
+
+  ${({ isDragging, theme }) =>
+    isDragging && `box-shadow: inset 0 0 0 2px ${theme.colorActive}`};
 `;
 
 /**

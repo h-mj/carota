@@ -4,21 +4,16 @@ import { AccountDto, Body, Language } from "server";
 import { Account } from "../model/Account";
 import { Group } from "../model/Group";
 import { Rpc } from "../utility/rpc";
-import { Store } from "./Store";
+import { CachedStore } from "./CachedStore";
 
 /**
  * Account managing store.
  */
-export class AccountsStore extends Store {
+export class AccountsStore extends CachedStore<Account> {
   /**
    * Currently authenticated account.
    */
   @observable public current?: Account;
-
-  /**
-   * Account cache that maps account identifiers to `Account` model instances.
-   */
-  @observable private cache: Map<string, Account> = new Map();
 
   /**
    * Loads currently authenticated account.
@@ -52,20 +47,6 @@ export class AccountsStore extends Store {
   public setCurrentAccount(dto: AccountDto) {
     this.current = new Account(dto, undefined, this);
     this.rootStore.views.language = dto.language;
-  }
-
-  /**
-   * Caches specified account.
-   */
-  public register(account: Account) {
-    this.cache.set(account.id, account);
-  }
-
-  /**
-   * Returns cached account with specified `id`.
-   */
-  public withId(id: string) {
-    return this.cache.get(id);
   }
 
   /**

@@ -1,8 +1,8 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
+import { Draggable } from "react-beautiful-dnd";
 
 import { TranslatedComponent } from "../base/TranslatedComponent";
-import { Account } from "../model/Account";
 import { Group } from "../model/Group";
 import { styled } from "../styling/theme";
 import { AdviseeList } from "./AdviseeList";
@@ -12,9 +12,19 @@ import { AdviseeList } from "./AdviseeList";
  */
 interface GroupViewProps {
   /**
-   * Advisee group model or a list of ungrouped accounts.
+   * Current draggable type.
    */
-  group: Group | Account[];
+  draggableType?: "account" | "group";
+
+  /**
+   * Advisee group which will be rendered.
+   */
+  group: Group;
+
+  /**
+   * Group index within the advisee group list.
+   */
+  index: number;
 }
 
 /**
@@ -48,28 +58,50 @@ export class GroupView extends TranslatedComponent<
    * Renders the group view component alongside a list of advisees component.
    */
   public render() {
-    const name = Array.isArray(this.props.group)
-      ? this.translation.ungrouped
-      : this.props.group.name;
-
     return (
-      <Container>
-        <Header>{name}</Header>
-        <AdviseeList group={this.props.group} />
-      </Container>
+      <Draggable draggableId={this.props.group.id} index={this.props.index}>
+        {(provided, snapshot) => (
+          <Container
+            ref={provided.innerRef}
+            isDragging={snapshot.isDragging}
+            {...provided.draggableProps}
+          >
+            <Header {...provided.dragHandleProps}>
+              {this.props.group.name}
+            </Header>
+
+            <AdviseeList
+              draggableType={this.props.draggableType}
+              group={this.props.group}
+            />
+          </Container>
+        )}
+      </Draggable>
     );
   }
 }
 
 /**
+ * Container component props.
+ */
+interface ContainerProps {
+  /**
+   * Whether the container is being dragged.
+   */
+  isDragging: boolean;
+}
+
+/**
  * Group information container component.
  */
-const Container = styled.div`
-  margin: ${({ theme }) => theme.padding};
-
+const Container = styled.div<ContainerProps>`
   border-radius: ${({ theme }) => theme.borderRadius};
-  box-shadow: 0 0 0 1px ${({ theme }) => theme.borderColor};
-
+  box-shadow: ${({ isDragging, theme }) =>
+    isDragging
+      ? `0 0 0 2px ${theme.colorActive}`
+      : `0 0 0 1px ${theme.borderColor}`};
+  background-color: ${({ theme }) => theme.backgroundColor};
+  transition: box-shadow ${({ theme }) => theme.transition};
   overflow: hidden;
 `;
 
@@ -83,7 +115,7 @@ const Header = styled.div`
   padding: 0 ${({ theme }) => theme.paddingSecondary};
   box-sizing: border-box;
 
-  box-shadow: 0 1px 0 0 ${({ theme }) => theme.borderColor};
+  box-shadow: inset 0 -1px 0 0 ${({ theme }) => theme.borderColor};
 
   display: flex;
   align-items: center;

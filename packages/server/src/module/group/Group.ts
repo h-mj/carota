@@ -104,9 +104,15 @@ export class Group {
  */
 export type GroupDto = DtoOf<Group>;
 
+/**
+ * Returns whether account `requester` is the owner of group `target`.
+ */
+const isGroupOwner = (requester: Account, target: Group) =>
+  requester.id === target.accountId;
+
 /*
  * Account related authorization definitions.
  */
 // prettier-ignore
 export const { authorize } = new Canallo(onUnauthorized)
-  .allow(Account, "be inserted into", Group, (account, group) => account.adviserId === group.accountId);
+  .allow(Account, "insert", Group, isGroupOwner)

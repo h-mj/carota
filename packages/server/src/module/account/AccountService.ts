@@ -123,10 +123,12 @@ export class AccountService {
       });
     }
 
-    const previous = accounts[dto.index - 1];
-    const next = accounts[dto.index];
-
-    await accountRepository!.link(account, group, previous, next);
+    await accountRepository!.link(
+      account,
+      group,
+      accounts[dto.index - 1],
+      accounts[dto.index]
+    );
   }
 
   /**

@@ -1,9 +1,10 @@
 import { observer } from "mobx-react";
 import * as React from "react";
+import { Droppable } from "react-beautiful-dnd";
 
 import { Component } from "../base/Component";
-import { Account } from "../model/Account";
 import { Group } from "../model/Group";
+import { styled } from "../styling/theme";
 import { GroupView } from "./GroupView";
 
 /**
@@ -11,14 +12,14 @@ import { GroupView } from "./GroupView";
  */
 interface GroupListProps {
   /**
+   * Current draggable type.
+   */
+  draggableType?: "account" | "group";
+
+  /**
    * List of advisee groups.
    */
   groupList: Group[];
-
-  /**
-   * List of ungrouped advisee accounts.
-   */
-  ungrouped: Account[];
 }
 
 /**
@@ -32,15 +33,34 @@ export class GroupList extends Component<GroupListProps> {
    */
   public render() {
     return (
-      <>
-        {this.props.ungrouped.length > 0 && (
-          <GroupView group={this.props.ungrouped} />
-        )}
+      <Droppable
+        droppableId="groups"
+        isDropDisabled={this.props.draggableType !== "group"}
+      >
+        {provided => (
+          <Container ref={provided.innerRef} {...provided.droppableProps}>
+            {this.props.groupList.map((group, index) => (
+              <GroupView
+                key={group.id}
+                draggableType={this.props.draggableType}
+                index={index}
+                group={group}
+              />
+            ))}
 
-        {this.props.groupList.map(group => (
-          <GroupView key={group.id} group={group} />
-        ))}
-      </>
+            {provided.placeholder}
+          </Container>
+        )}
+      </Droppable>
     );
   }
 }
+
+/**
+ * Container component that contains all `GroupView` components.
+ */
+const Container = styled.div`
+  & > * {
+    margin-bottom: ${({ theme }) => theme.padding};
+  }
+`;

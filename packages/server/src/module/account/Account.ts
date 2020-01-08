@@ -130,17 +130,14 @@ export class Account {
    * Promise of created advisee account groups of this account. Returned groups
    * may not be in correct order.
    */
-  @OneToMany(
-    () => Group,
-    group => group.account
-  )
+  @OneToMany("Group", (group: Group) => group.account)
   public groups!: Promise<Group[]>;
 
   /**
    * Promise of group this account is part of. If this account is not part of
    * any group, promise resolves to `undefined`.
    */
-  @ManyToOne(() => Group)
+  @ManyToOne("Group")
   public group!: Promise<Group | undefined>;
 
   /**

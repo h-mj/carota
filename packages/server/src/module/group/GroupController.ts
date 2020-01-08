@@ -5,6 +5,7 @@ import { ValidationPipe } from "../../base/ValidationPipe";
 import { Account } from "../account/Account";
 import { CreateGroupDto, createGroupDtoValidator } from "./dto/CreateGroupDto";
 import { GetGroupsDto, getGroupsDtoValidator } from "./dto/GetGroupsDto";
+import { InsertGroupDto, insertGroupDtoValidator } from "./dto/InsertGroupDto";
 import { GroupService } from "./GroupService";
 
 /**
@@ -45,5 +46,16 @@ export class GroupController {
       ungrouped: await Promise.all(ungrouped.map(account => account.toDto())),
       groups: await Promise.all(groups.map(group => group.toDto()))
     };
+  }
+
+  /**
+   * Group insertion endpoint.
+   */
+  @Post("insert")
+  public async insert(
+    @Body(new ValidationPipe(insertGroupDtoValidator)) dto: InsertGroupDto,
+    @Principal() principal: Account
+  ) {
+    await this.groupService.insert(dto, principal);
   }
 }

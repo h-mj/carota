@@ -156,7 +156,7 @@ export class Account {
   /**
    * Promise of previous account in the group's accounts linked list.
    *
-   * Promise resolves to `undefined` if at least one of the following is true:
+   * Promise resolves to `undefined` if one of the following is true:
    * - account is not part of any group;
    * - account is currently unlinked;
    * - account is the first account in the list.
@@ -170,7 +170,7 @@ export class Account {
   /**
    * Promise of next account in the group's accounts linked list.
    *
-   * Promise resolves to `undefined` if at least one of the following is true:
+   * Promise resolves to `undefined` if one of the following is true:
    * - account is not part of any group;
    * - account is currently unlinked;
    * - account is the last account in the list.
@@ -185,7 +185,7 @@ export class Account {
   /**
    * Identifier of next account in the group's accounts linked list.
    *
-   * This value is `null` if at least one of the following is true:
+   * This value is `null` if one of the following is true:
    * - account is not part of any group;
    * - account is currently unlinked;
    * - account is the last account in the list.

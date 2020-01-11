@@ -313,7 +313,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
    * Renders foodstuff creation and editing form.
    */
   public render() {
-    const { foodstuff, viewStore: views } = this.props;
+    const { foodstuff } = this.props;
 
     return (
       <>
@@ -340,8 +340,14 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
               name="unit"
               onChange={this.handleChange}
               options={[
-                { label: views!.translation.units.g, value: "g" },
-                { label: views!.translation.units.ml, value: "ml" }
+                {
+                  label: this.props.viewStore!.translation.units.g,
+                  value: "g"
+                },
+                {
+                  label: this.props.viewStore!.translation.units.ml,
+                  value: "ml"
+                }
               ]}
               value={this.values.unit}
             />

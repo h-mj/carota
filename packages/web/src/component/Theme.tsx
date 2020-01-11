@@ -2,13 +2,13 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 
 import { Component } from "../base/Component";
-import { createGlobalStyle, ThemeProvider } from "../styling/theme";
+import { ThemeProvider, createGlobalStyle } from "../styling/theme";
 
 /**
  * Renders `GlobalStyle` component and renders it's children wrapped in
  * `ThemeProvider` which will provide the theme definition to its children.
  */
-@inject("views")
+@inject("viewStore")
 @observer
 export class Theme extends Component {
   /**
@@ -17,7 +17,7 @@ export class Theme extends Component {
    */
   public render() {
     return (
-      <ThemeProvider theme={this.props.views!.theme}>
+      <ThemeProvider theme={this.props.viewStore!.theme}>
         <>
           <GlobalStyle />
           {this.props.children}

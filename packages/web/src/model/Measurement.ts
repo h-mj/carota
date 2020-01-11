@@ -1,7 +1,7 @@
 import { observable } from "mobx";
 import { MeasurementDto, Quantity } from "server";
 
-import { MeasurementsStore } from "../store/MeasurementsStore";
+import { MeasurementStore } from "../store/MeasurementStore";
 
 /**
  * Client-side representation of **Measurement** entity.
@@ -28,15 +28,15 @@ export class Measurement {
   @observable public value: number;
 
   /**
-   * Measurements store reference.
+   * Measurement store reference.
    */
-  private readonly store: MeasurementsStore;
+  private readonly store: MeasurementStore;
 
   /**
    * Creates an instance of `Measurement` model based on the data transfer
    * object.
    */
-  public constructor(dto: MeasurementDto, store: MeasurementsStore) {
+  public constructor(dto: MeasurementDto, store: MeasurementStore) {
     this.id = dto.id;
     this.quantity = dto.quantity;
     this.date = dto.date;

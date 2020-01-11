@@ -9,7 +9,7 @@ import { Store } from "./Store";
 /**
  * Measurement managing store.
  */
-export class MeasurementsStore extends Store {
+export class MeasurementStore extends Store {
   /**
    * Retrieved measurement cache for each body quantity.
    */
@@ -33,7 +33,7 @@ export class MeasurementsStore extends Store {
     });
 
     if (!result.ok) {
-      return this.rootStore.views.notifyUnknownError();
+      return this.rootStore.viewStore.notifyUnknownError();
     }
 
     this.cache.set(
@@ -67,7 +67,7 @@ export class MeasurementsStore extends Store {
     });
 
     if (!result.ok) {
-      this.rootStore.views.notifyUnknownError();
+      this.rootStore.viewStore.notifyUnknownError();
     }
   }
 
@@ -85,7 +85,7 @@ export class MeasurementsStore extends Store {
     });
 
     if (!result.ok) {
-      return this.rootStore.views.notifyUnknownError();
+      return this.rootStore.viewStore.notifyUnknownError();
     }
 
     const measurements = this.cache.get(quantity);

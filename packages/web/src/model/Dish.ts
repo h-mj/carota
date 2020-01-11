@@ -1,7 +1,7 @@
 import { action, observable } from "mobx";
 import { DishDto } from "server";
 
-import { DishesStore } from "../store/DishesStore";
+import { DishStore } from "../store/DishStore";
 import { Foodstuff, RequiredNutrient } from "./Foodstuff";
 import { Meal } from "./Meal";
 
@@ -35,16 +35,19 @@ export class Dish {
   public meal: Meal;
 
   /**
-   * `DishesStore` reference.
+   * Dish store instance.
    */
-  private readonly store: DishesStore;
+  private readonly store: DishStore;
 
   /**
    * Creates a `Dish` model based on its data transfer object.
    */
-  public constructor(dto: DishDto, meal: Meal, store: DishesStore) {
+  public constructor(dto: DishDto, meal: Meal, store: DishStore) {
     this.id = dto.id;
-    this.foodstuff = new Foodstuff(dto.foodstuff, store.rootStore.foodstuffs);
+    this.foodstuff = new Foodstuff(
+      dto.foodstuff,
+      store.rootStore.foodstuffStore
+    );
     this.quantity = dto.quantity;
     this.eaten = dto.eaten;
     this.meal = meal;

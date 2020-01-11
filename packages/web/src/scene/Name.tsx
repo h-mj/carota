@@ -126,7 +126,7 @@ interface NameValues {
 /**
  * Scene which is used to select created meal name.
  */
-@inject("views")
+@inject("viewStore")
 @observer
 export class Name extends SceneComponent<"Name", NameProps, NameTranslation> {
   /**

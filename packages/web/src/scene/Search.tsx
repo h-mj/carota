@@ -64,7 +64,7 @@ interface SearchTranslation {
  * Scene which is used for selecting a foodstuff by searching for it by its
  * name.
  */
-@inject("foodstuffs", "views")
+@inject("foodstuffStore", "viewStore")
 @observer
 export class Search extends SceneComponent<
   "Search",
@@ -116,7 +116,7 @@ export class Search extends SceneComponent<
     super("Search", props);
 
     this.checkEnvironmentCamera();
-    this.props.foodstuffs!.getLatestFrequent(this.props.name);
+    this.props.foodstuffStore!.getLatestFrequent(this.props.name);
   }
 
   /**
@@ -146,9 +146,9 @@ export class Search extends SceneComponent<
         <AutoOverflow>
           <Results>
             {(this.query === ""
-              ? this.props.foodstuffs!.frequentOf(this.props.name)
+              ? this.props.foodstuffStore!.frequentOf(this.props.name)
               : this.completed
-              ? this.props.foodstuffs!.resultsOf(this.query)
+              ? this.props.foodstuffStore!.resultsOf(this.query)
               : []
             ).map(foodstuff => (
               <FoodstuffView
@@ -199,7 +199,7 @@ export class Search extends SceneComponent<
     const result = validate(this.query);
 
     if (result.ok) {
-      await this.props.foodstuffs!.search(result.value);
+      await this.props.foodstuffStore!.search(result.value);
     } else {
       this.reason = this.query.length > 0 ? result.value : undefined;
     }
@@ -212,7 +212,7 @@ export class Search extends SceneComponent<
    */
   @action
   private showEditor = (foodstuff?: Foodstuff) => {
-    this.scene = this.props.views!.push("left", "Edit", {
+    this.scene = this.props.viewStore!.push("left", "Edit", {
       foodstuff,
       name: this.query,
       onSave: this.hideEditor
@@ -224,7 +224,7 @@ export class Search extends SceneComponent<
    */
   @action
   private hideEditor = (updated: boolean) => {
-    this.props.views!.pop(this.scene!);
+    this.props.viewStore!.pop(this.scene!);
 
     if (updated) {
       this.completed = false;
@@ -237,7 +237,7 @@ export class Search extends SceneComponent<
    */
   @action
   private showScanner = () => {
-    this.scene = this.props.views!.push("main", "Scanner", {
+    this.scene = this.props.viewStore!.push("main", "Scanner", {
       onScan: this.handleScan
     });
   };
@@ -247,14 +247,14 @@ export class Search extends SceneComponent<
    */
   @action
   private handleScan = async (barcode?: string) => {
-    this.props.views!.pop(this.scene!);
+    this.props.viewStore!.pop(this.scene!);
 
     if (barcode === undefined) {
       return;
     }
 
-    const foodstuff = await this.props.views!.load(
-      this.props.foodstuffs!.findByBarcode(barcode),
+    const foodstuff = await this.props.viewStore!.load(
+      this.props.foodstuffStore!.findByBarcode(barcode),
       1
     );
 
@@ -274,7 +274,7 @@ export class Search extends SceneComponent<
   private handleFoodstuffSelect = (foodstuff: Foodstuff) => {
     this.foodstuff = foodstuff;
 
-    this.scene = this.props.views!.push("center", "Quantity", {
+    this.scene = this.props.viewStore!.push("center", "Quantity", {
       foodstuff,
       onSelect: this.handleQuantitySelect
     });
@@ -285,7 +285,7 @@ export class Search extends SceneComponent<
    */
   @action
   private handleQuantitySelect = (quantity?: number) => {
-    this.props.views!.pop(this.scene!);
+    this.props.viewStore!.pop(this.scene!);
 
     if (quantity === undefined) {
       return;

@@ -48,7 +48,7 @@ interface SettingsTranslation {
  * Setting scene component that is used to manage account and application
  * settings.
  */
-@inject("accounts", "views")
+@inject("accountStore", "viewStore")
 @observer
 export class Settings extends SceneComponent<
   "Settings",
@@ -73,7 +73,7 @@ export class Settings extends SceneComponent<
         <Group>
           <CheckBox
             name="theme"
-            value={this.props.views!.dark}
+            value={this.props.viewStore!.dark}
             label={this.translation.useDarkTheme}
             onChange={this.toggleDarkTheme}
           />
@@ -86,7 +86,7 @@ export class Settings extends SceneComponent<
               label: this.translation.languages[language],
               value: language
             }))}
-            value={this.props.views!.language}
+            value={this.props.viewStore!.language}
           />
         </Group>
       </MediumForm>
@@ -98,7 +98,7 @@ export class Settings extends SceneComponent<
    */
   @action
   public toggleDarkTheme = () => {
-    this.props.views!.dark = !this.props.views!.dark;
+    this.props.viewStore!.dark = !this.props.viewStore!.dark;
   };
 
   /**
@@ -110,7 +110,7 @@ export class Settings extends SceneComponent<
       return;
     }
 
-    this.props.accounts!.setLanguage(language);
+    this.props.accountStore!.setLanguage(language);
   };
 }
 

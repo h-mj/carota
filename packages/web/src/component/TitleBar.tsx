@@ -28,7 +28,7 @@ interface TitleBarProps {
 /**
  * Title bar component that is used to close underlying scene.
  */
-@inject("views")
+@inject("viewStore")
 export class TitleBar extends Component<TitleBarProps> {
   /**
    * Renders the title bar alongside close button.

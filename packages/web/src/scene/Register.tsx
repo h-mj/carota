@@ -117,7 +117,7 @@ const toBody = deviate<RegisterValues>().shape({
 /**
  * Scene that used to create a new account by filling in registration form.
  */
-@inject("accounts", "invitations", "views")
+@inject("accountStore", "invitationStore", "viewStore")
 @observer
 export class Register extends SceneComponent<
   "Register",
@@ -260,7 +260,7 @@ export class Register extends SceneComponent<
     value: Language | undefined
   ) => {
     this.values[name] = value;
-    this.props.views!.language = value || "English";
+    this.props.viewStore!.language = value || "English";
   };
 
   /**
@@ -283,9 +283,9 @@ export class Register extends SceneComponent<
 
     const result = toBody(this.values);
 
-    const error = await this.props.views!.load(
+    const error = await this.props.viewStore!.load(
       result.ok
-        ? this.props.accounts!.create({
+        ? this.props.accountStore!.create({
             ...result.value,
             invitationId: this.props.scene.parameters!.invitationId
           })
@@ -293,7 +293,7 @@ export class Register extends SceneComponent<
     );
 
     if (result.ok && error === undefined) {
-      this.props.views!.index();
+      this.props.viewStore!.index();
     }
 
     this.reasons = append(result.ok ? {} : result.value, error);
@@ -310,15 +310,15 @@ export class Register extends SceneComponent<
       parameters === undefined ||
       !GUID_V4_REGEX.test(parameters.invitationId)
     ) {
-      return this.props.views!.unknown();
+      return this.props.viewStore!.unknown();
     }
 
-    const result = await this.props.views!.load(
-      this.props.invitations!.get(parameters.invitationId)
+    const result = await this.props.viewStore!.load(
+      this.props.invitationStore!.get(parameters.invitationId)
     );
 
     if (!result.ok) {
-      return this.props.views!.unknown();
+      return this.props.viewStore!.unknown();
     }
 
     this.loaded = true;

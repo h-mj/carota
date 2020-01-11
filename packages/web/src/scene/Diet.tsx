@@ -29,7 +29,7 @@ interface DietTranslation {
 /**
  * Diet scene that is used to add, edit and delete the consumed meals at given date.
  */
-@inject("meals", "views")
+@inject("mealStore", "viewStore")
 @observer
 export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
   /**
@@ -82,7 +82,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
 
           <MealsView
             draggableType={this.draggableType}
-            mealList={this.props.meals!.mealsOf(this.date)}
+            mealList={this.props.mealStore!.mealsOf(this.date)}
           />
         </DragDropContext>
 
@@ -103,7 +103,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
       return true;
     }
 
-    return this.props.meals!.withId(this.draggableId!)!.dishes.length === 0;
+    return this.props.mealStore!.withId(this.draggableId!)!.dishes.length === 0;
   };
 
   /**
@@ -112,7 +112,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
   @action
   private setDate = async (date: string) => {
     this.date = date;
-    this.props.meals!.getAll(date);
+    this.props.mealStore!.getAll(date);
   };
 
   /**
@@ -149,21 +149,25 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
     if (destination.droppableId === "trashCan") {
       const target =
         type === "meal"
-          ? this.props.meals!.withId(draggableId)!
-          : this.props.meals!.withId(source.droppableId)!.withId(draggableId)!;
+          ? this.props.mealStore!.withId(draggableId)!
+          : this.props
+              .mealStore!.withId(source.droppableId)!
+              .withId(draggableId)!;
 
       return target.delete();
     }
 
     if (type === "meal") {
-      return this.props.meals!.withId(draggableId)!.insert(destination.index);
+      return this.props
+        .mealStore!.withId(draggableId)!
+        .insert(destination.index);
     }
 
     return this.props
-      .meals!.withId(source.droppableId)!
+      .mealStore!.withId(source.droppableId)!
       .withId(draggableId)!
       .insert(
-        this.props.meals!.withId(destination.droppableId)!,
+        this.props.mealStore!.withId(destination.droppableId)!,
         destination.index
       );
   };
@@ -173,8 +177,8 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
    */
   @action
   private handleAddClick = () => {
-    this.scene = this.props.views!.push("center", "Name", {
-      currentMeals: this.props.meals!.mealsOf(this.date),
+    this.scene = this.props.viewStore!.push("center", "Name", {
+      currentMeals: this.props.mealStore!.mealsOf(this.date),
       onSelect: this.handleNameSelect
     });
   };
@@ -185,13 +189,13 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
    */
   @action
   private handleNameSelect = (name?: string) => {
-    this.props.views!.pop(this.scene!);
+    this.props.viewStore!.pop(this.scene!);
 
     if (name === undefined) {
       return;
     }
 
-    this.props.meals!.create(name, this.date);
+    this.props.mealStore!.create(name, this.date);
   };
 }
 

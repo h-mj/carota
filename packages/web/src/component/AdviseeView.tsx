@@ -35,7 +35,7 @@ interface AdviseeViewTranslation {
 /**
  * Component that displays the information of a single advisee account.
  */
-@inject("views")
+@inject("viewStore")
 @observer
 export class AdviseeView extends TranslatedComponent<
   "AdviseeView",

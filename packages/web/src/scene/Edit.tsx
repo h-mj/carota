@@ -270,7 +270,7 @@ const toBody = deviate<EditValues>().shape({
 /**
  * Scene that allows user to either create new or edit existing foodstuffs.
  */
-@inject("foodstuffs", "views")
+@inject("foodstuffStore", "viewStore")
 @observer
 export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   /**
@@ -313,7 +313,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
    * Renders foodstuff creation and editing form.
    */
   public render() {
-    const { foodstuff, views } = this.props;
+    const { foodstuff, viewStore: views } = this.props;
 
     return (
       <>
@@ -356,7 +356,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
               {this.values.unit !== undefined &&
                 this.translation.nutrientsLabelPer.replace(
                   "{unit}",
-                  this.props.views!.translation.units[this.values.unit]
+                  this.props.viewStore!.translation.units[this.values.unit]
                 )}
               :
             </Label>
@@ -410,7 +410,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
       unit={
         (name === "packageSize" || name === "pieceQuantity") &&
         this.values.unit !== undefined
-          ? this.props.views!.translation.units[this.values.unit]
+          ? this.props.viewStore!.translation.units[this.values.unit]
           : undefined
       }
       value={this.values[name]}
@@ -434,7 +434,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
       textAlign="right"
       type="number"
       unit={
-        this.props.views!.translation.units[
+        this.props.viewStore!.translation.units[
           nutrient === "energy" ? "kcal" : "g"
         ]
       }
@@ -493,7 +493,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
    * Shows scanner scene on scan button click.
    */
   private handleScanClick = () => {
-    this.scene = this.props.views!.push("main", "Scanner", {
+    this.scene = this.props.viewStore!.push("main", "Scanner", {
       onScan: this.handleScan
     });
   };
@@ -503,7 +503,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
    */
   @action
   private handleScan = (barcode?: string) => {
-    this.props.views!.pop(this.scene!);
+    this.props.viewStore!.pop(this.scene!);
 
     if (barcode === undefined) {
       return;
@@ -524,8 +524,8 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
 
     const result = toBody(this.values);
 
-    const error = await this.props.views!.load(
-      result.ok ? this.props.foodstuffs!.save(result.value) : undefined
+    const error = await this.props.viewStore!.load(
+      result.ok ? this.props.foodstuffStore!.save(result.value) : undefined
     );
 
     if (result.ok && error === undefined) {
@@ -539,7 +539,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
    * Shows confirmation screen when user clicks on delete button.
    */
   private showConfirmation = () => {
-    this.scene = this.props.views!.push("center", "Confirmation", {
+    this.scene = this.props.viewStore!.push("center", "Confirmation", {
       confirm: this.handleConfirmation,
       message: this.translation.confirm
     });
@@ -549,13 +549,13 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
    * Deletes the foodstuff after user has confirmed the deletion.
    */
   private handleConfirmation = async (confirmed: boolean) => {
-    this.props.views!.pop(this.scene!);
+    this.props.viewStore!.pop(this.scene!);
 
     if (!confirmed) {
       return;
     }
 
-    await this.props.views!.load(this.props.foodstuff!.delete());
+    await this.props.viewStore!.load(this.props.foodstuff!.delete());
     this.props.onSave(true);
   };
 

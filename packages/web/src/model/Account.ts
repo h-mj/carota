@@ -1,6 +1,6 @@
 import { AccountDto, Language, Rights, Sex, Type } from "server";
 
-import { AccountsStore } from "../store/AccountsStore";
+import { AccountStore } from "../store/AccountStore";
 import { Group } from "./Group";
 import { Model } from "./Model";
 
@@ -54,9 +54,9 @@ export class Account implements Model {
   public group?: Group;
 
   /**
-   * Accounts store instance.
+   * Account store instance.
    */
-  private readonly store: AccountsStore;
+  private readonly store: AccountStore;
 
   /**
    * Creates a new `Account` model based on the data transfer object.
@@ -64,7 +64,7 @@ export class Account implements Model {
   public constructor(
     dto: AccountDto,
     group: Group | undefined,
-    store: AccountsStore
+    store: AccountStore
   ) {
     this.id = dto.id;
     this.name = dto.name;

@@ -103,14 +103,14 @@ interface SilhouetteProps {
 /**
  * Female silhouette SVG.
  */
-@inject("accounts", "views")
+@inject("accountStore", "viewStore")
 @observer
 export class Silhouette extends Component<SilhouetteProps> {
   /**
    * Renders person silhouette with measurement lines and addition buttons.
    */
   public render() {
-    const definition = SILHOUETTES[this.props.accounts!.current!.sex];
+    const definition = SILHOUETTES[this.props.accountStore!.current!.sex];
 
     return (
       <Svg viewBox={definition.viewBox} preserveAspectRatio="xMidYMid meet">

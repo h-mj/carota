@@ -14,7 +14,7 @@ import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
 import { TitleBar } from "../component/TitleBar";
 import { Foodstuff } from "../model/Foodstuff";
-import { any, ErrorsFor } from "../utility/form";
+import { ErrorsFor, any } from "../utility/form";
 
 /**
  * Quantity scene component props.
@@ -133,7 +133,7 @@ const toQuantityString = deviate<number>()
 /**
  * Scene component that is used to select a quantity of some foodstuff.
  */
-@inject("views")
+@inject("viewStore")
 @observer
 export class Quantity extends SceneComponent<
   "Quantity",
@@ -197,7 +197,7 @@ export class Quantity extends SceneComponent<
     }
 
     const options = ([this.props.foodstuff.unit, "pcs"] as const).map(unit => ({
-      label: this.props.views!.translation.units[unit],
+      label: this.props.viewStore!.translation.units[unit],
       value: unit
     }));
 
@@ -243,7 +243,7 @@ export class Quantity extends SceneComponent<
         type="number"
         unit={
           this.values.unit !== undefined
-            ? this.props.views!.translation.units[this.values.unit]
+            ? this.props.viewStore!.translation.units[this.values.unit]
             : undefined
         }
         value={this.values.quantity}

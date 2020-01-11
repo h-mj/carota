@@ -40,7 +40,7 @@ interface CalendarTranslation {
 /**
  * Calendar component that renders a single month calendar.
  */
-@inject("views")
+@inject("viewStore")
 @observer
 export class Calendar extends TranslatedComponent<
   "Calendar",

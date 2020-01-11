@@ -85,7 +85,7 @@ const toBody = deviate<LoginValues>().shape({
  * Scene that authenticates user using their email and password and on success
  * redirects to home page.
  */
-@inject("authentication", "views")
+@inject("authenticationStore", "viewStore")
 @observer
 export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
   /**
@@ -174,9 +174,9 @@ export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
     event.preventDefault();
 
     const result = toBody(this.values);
-    const error = await this.props.views!.load(
+    const error = await this.props.viewStore!.load(
       result.ok
-        ? this.props.authentication!.login(
+        ? this.props.authenticationStore!.login(
             result.value.email,
             result.value.password
           )
@@ -186,11 +186,14 @@ export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
     if (result.ok && error === undefined) {
       // Update current scene so it matches the URL, since login scene overrides
       // it.
-      this.props.views!.refresh();
+      this.props.viewStore!.refresh();
     }
 
     if (error !== undefined && error.status === 401 /* Unauthorized */) {
-      this.props.views!.notify(this.translation.invalidCredentials, "error");
+      this.props.viewStore!.notify(
+        this.translation.invalidCredentials,
+        "error"
+      );
     }
 
     this.reasons = append(result.ok ? {} : result.value, error);

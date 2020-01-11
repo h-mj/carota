@@ -255,7 +255,7 @@ interface StatisticsTranslation {
  * Scene component that displays statistics about consumed nutrition and body
  * measurements.
  */
-@inject("views", "statistics")
+@inject("viewStore", "statisticsStore")
 @observer
 export class Statistics extends SceneComponent<
   "Statistics",
@@ -320,7 +320,7 @@ export class Statistics extends SceneComponent<
     this.loadData();
     this.renderCharts();
 
-    d3.timeFormatDefaultLocale(this.props.views!.translation.timeLocale);
+    d3.timeFormatDefaultLocale(this.props.viewStore!.translation.timeLocale);
     window.addEventListener("resize", this.renderCharts, true);
   }
 
@@ -515,7 +515,7 @@ export class Statistics extends SceneComponent<
         .merge(label)
         .text(d =>
           d.value.toLocaleString(
-            this.props.views!.translation.locale,
+            this.props.viewStore!.translation.locale,
             FORMAT_OPTIONS
           )
         )
@@ -817,7 +817,7 @@ export class Statistics extends SceneComponent<
     const renderQuantityChart = this.renderQuantityChart;
     const setSelectedPoint = this.setSelectedPoint;
     const hideTooltip = this.hideTooltip;
-    const locale = this.props.views!.translation.locale;
+    const locale = this.props.viewStore!.translation.locale;
 
     // prettier-ignore
     charts
@@ -874,13 +874,13 @@ export class Statistics extends SceneComponent<
         <Tooltip {...this.tooltipProps}>
           <Title>
             {new Date(this.selectedPoint.date).toLocaleDateString(
-              this.props.views!.translation.locale
+              this.props.viewStore!.translation.locale
             )}
           </Title>
 
           <Value>
             {this.selectedPoint.value.toLocaleString(
-              this.props.views!.translation.locale,
+              this.props.viewStore!.translation.locale,
               FORMAT_OPTIONS
             )}
 
@@ -888,7 +888,7 @@ export class Statistics extends SceneComponent<
               <Secondary>
                 {"\u00a0/\u00a0" /* Forward slash between two spaces */}
                 {this.selectedPoint.limit.toLocaleString(
-                  this.props.views!.translation.locale,
+                  this.props.viewStore!.translation.locale,
                   FORMAT_OPTIONS
                 )}
               </Secondary>
@@ -1058,7 +1058,7 @@ export class Statistics extends SceneComponent<
    */
   @action
   private async loadData() {
-    this.data = await this.props.statistics!.getAll() ?? EMPTY_DATA;
+    this.data = (await this.props.statisticsStore!.getAll()) ?? EMPTY_DATA;
     this.renderCharts();
   }
 }

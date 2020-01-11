@@ -91,7 +91,7 @@ export class AuthenticationStore extends Store {
     }
 
     this.token = result.value.token;
-    this.rootStore.accounts.setCurrentAccount(result.value.account);
+    this.rootStore.accountStore.setCurrentAccount(result.value.account);
 
     return undefined;
   });

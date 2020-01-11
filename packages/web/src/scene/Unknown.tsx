@@ -21,7 +21,7 @@ interface UnknownTranslation {
 /**
  * Scene component that is rendered if no other scenes match current URL.
  */
-@inject("views")
+@inject("viewStore")
 export class Unknown extends SceneComponent<"Unknown", {}, UnknownTranslation> {
   /**
    * Sets the name of this scene.

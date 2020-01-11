@@ -44,7 +44,7 @@ export class Rpc {
 
     headers.append("Content-Type", "application/json");
 
-    const { authorization } = rootStore.authentication;
+    const { authorization } = rootStore.authenticationStore;
 
     if (authorization) {
       headers.append("Authorization", authorization);
@@ -57,8 +57,8 @@ export class Rpc {
     });
 
     if (response.status === 401) {
-      rootStore.authentication.logout();
-      rootStore.views.refresh();
+      rootStore.authenticationStore.logout();
+      rootStore.viewStore.refresh();
     }
 
     const json: Response<TController, TEndpoint> = await response.json();

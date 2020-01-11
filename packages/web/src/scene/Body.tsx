@@ -24,7 +24,7 @@ interface BodyTranslation {
 /**
  * Displays body silhouette with body measurements.
  */
-@inject("views")
+@inject("viewStore")
 @observer
 export class Body extends SceneComponent<"Body", {}, BodyTranslation> {
   /**
@@ -56,7 +56,7 @@ export class Body extends SceneComponent<"Body", {}, BodyTranslation> {
    * silhouette.
    */
   private showMeasure = (quantity: Quantity) => {
-    this.scene = this.props.views!.push("center", "Measure", {
+    this.scene = this.props.viewStore!.push("center", "Measure", {
       close: this.close,
       quantity
     });
@@ -66,7 +66,7 @@ export class Body extends SceneComponent<"Body", {}, BodyTranslation> {
    * Closes pushed scene.
    */
   private close = () => {
-    this.props.views!.pop(this.scene!);
+    this.props.viewStore!.pop(this.scene!);
   };
 }
 

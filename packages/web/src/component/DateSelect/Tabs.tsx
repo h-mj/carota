@@ -65,7 +65,7 @@ interface TabsProps {
  * Component that renders `VISIBLE_TAB_COUNT` tabs around specified current
  * date.
  */
-@inject("views")
+@inject("viewStore")
 @observer
 export class Tabs extends Component<TabsProps> {
   /**
@@ -120,7 +120,7 @@ export class Tabs extends Component<TabsProps> {
                 {new Date(date).getDate()}
                 <Abbreviation>
                   {
-                    this.props.views!.translation.timeLocale.shortMonths[
+                    this.props.viewStore!.translation.timeLocale.shortMonths[
                       new Date(date).getMonth()
                     ]
                   }

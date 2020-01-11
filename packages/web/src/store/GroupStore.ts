@@ -8,7 +8,7 @@ import { CachedStore } from "./CachedStore";
 /**
  * Group managing store.
  */
-export class GroupsStore extends CachedStore<Group> {
+export class GroupStore extends CachedStore<Group> {
   /**
    * Loaded advisee groups.
    */
@@ -60,11 +60,11 @@ export class GroupsStore extends CachedStore<Group> {
     this.loading = true;
 
     const result = await Rpc.call("group", "get", {
-      accountId: this.rootStore.accounts.current!.id
+      accountId: this.rootStore.accountStore.current!.id
     });
 
     if (!result.ok) {
-      this.rootStore.views.notifyUnknownError();
+      this.rootStore.viewStore.notifyUnknownError();
 
       return {
         ungrouped: [],
@@ -74,9 +74,9 @@ export class GroupsStore extends CachedStore<Group> {
 
     const { ungrouped, groups } = result.value;
 
-    this._groups = groups.map(dto => new Group(dto, this.rootStore.groups));
+    this._groups = groups.map(dto => new Group(dto, this.rootStore.groupStore));
     this._ungrouped = ungrouped.map(
-      dto => new Account(dto, undefined, this.rootStore.accounts)
+      dto => new Account(dto, undefined, this.rootStore.accountStore)
     );
 
     this.loading = false;
@@ -99,7 +99,7 @@ export class GroupsStore extends CachedStore<Group> {
     const result = await Rpc.call("group", "insert", { id: group.id, index });
 
     if (!result.ok) {
-      this.rootStore.views.notifyUnknownError();
+      this.rootStore.viewStore.notifyUnknownError();
     }
   }
 }

@@ -65,7 +65,7 @@ interface FoodstuffViewTranslation {
 /**
  * Component that displays information about specified foodstuff.
  */
-@inject("views")
+@inject("viewStore")
 @observer
 export class FoodstuffView extends TranslatedComponent<
   "FoodstuffView",
@@ -98,7 +98,7 @@ export class FoodstuffView extends TranslatedComponent<
           <div>
             {this.translation.per.replace(
               "{unit}",
-              this.props.views!.translation.units[unit]
+              this.props.viewStore!.translation.units[unit]
             )}
           </div>
 
@@ -107,7 +107,7 @@ export class FoodstuffView extends TranslatedComponent<
               nutrient as Nutrient
             ].toLocaleString("et-EE", FORMAT_OPTIONS);
 
-            const unit = this.props.views!.translation.units[
+            const unit = this.props.viewStore!.translation.units[
               nutrient === "energy" ? "kcal" : "g"
             ];
 

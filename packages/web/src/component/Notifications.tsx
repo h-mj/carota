@@ -5,7 +5,7 @@ import * as React from "react";
 import { Component } from "../base/Component";
 import { fadeIn, fadeOut } from "../styling/animations";
 import { RESET } from "../styling/stylesheets";
-import { keyframes, styled, THEME_CONSTANTS } from "../styling/theme";
+import { THEME_CONSTANTS, keyframes, styled } from "../styling/theme";
 
 /**
  * Union of notification types.
@@ -35,7 +35,7 @@ export interface Notification {
 /**
  * Component that renders active notifications.
  */
-@inject("views")
+@inject("viewStore")
 @observer
 export class Notifications extends Component {
   /**
@@ -49,7 +49,7 @@ export class Notifications extends Component {
    * notifications that are no longer active.
    */
   public componentDidUpdate() {
-    const { notifications } = this.props.views!;
+    const { notifications } = this.props.viewStore!;
 
     // Add new active notifications to visible notifications.
     for (const notification of notifications) {
@@ -71,7 +71,7 @@ export class Notifications extends Component {
    */
   public render() {
     if (
-      this.props.views!.notifications.length === 0 &&
+      this.props.viewStore!.notifications.length === 0 &&
       this.visibleNotifications.length === 0
     ) {
       return null;
@@ -81,10 +81,10 @@ export class Notifications extends Component {
       <Container>
         {this.visibleNotifications.map(notification => (
           <NotificationContainer
-            active={this.props.views!.notifications.includes(notification)}
+            active={this.props.viewStore!.notifications.includes(notification)}
             key={notification.id}
             notificationType={notification.type}
-            onClick={() => this.props.views!.conceal(notification)}
+            onClick={() => this.props.viewStore!.conceal(notification)}
             value={notification.id}
           >
             {notification.text}
@@ -98,7 +98,7 @@ export class Notifications extends Component {
    * Removes a notification from visible notifications after a timeout.
    */
   private async fadeNotification(notification: Notification) {
-    await this.props.views!.wait(THEME_CONSTANTS.duration);
+    await this.props.viewStore!.wait(THEME_CONSTANTS.duration);
 
     const index = this.visibleNotifications.indexOf(notification);
 

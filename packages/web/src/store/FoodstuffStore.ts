@@ -8,7 +8,7 @@ import { Store } from "./Store";
 /**
  * Foodstuff managing store.
  */
-export class FoodstuffsStore extends Store {
+export class FoodstuffStore extends Store {
   /**
    * Maps meal names to their frequent foodstuffs.
    */
@@ -61,7 +61,7 @@ export class FoodstuffsStore extends Store {
     const result = await Rpc.call("foodstuff", "delete", { id: foodstuff.id });
 
     if (!result.ok) {
-      this.rootStore.views.notifyUnknownError();
+      this.rootStore.viewStore.notifyUnknownError();
     }
   }
 
@@ -73,7 +73,7 @@ export class FoodstuffsStore extends Store {
     const result = await Rpc.call("foodstuff", "findByBarcode", { barcode });
 
     if (!result.ok) {
-      this.rootStore.views.notifyUnknownError();
+      this.rootStore.viewStore.notifyUnknownError();
       return undefined;
     }
 
@@ -97,7 +97,7 @@ export class FoodstuffsStore extends Store {
     const result = await Rpc.call("foodstuff", "getLatestFrequent", { name });
 
     if (!result.ok) {
-      this.rootStore.views.notifyUnknownError();
+      this.rootStore.viewStore.notifyUnknownError();
       return [];
     }
 
@@ -143,7 +143,7 @@ export class FoodstuffsStore extends Store {
     const result = await Rpc.call("foodstuff", "search", { query });
 
     if (!result.ok) {
-      this.rootStore.views.notifyUnknownError();
+      this.rootStore.viewStore.notifyUnknownError();
       return [];
     }
 

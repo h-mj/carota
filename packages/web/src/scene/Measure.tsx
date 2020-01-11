@@ -1,4 +1,4 @@
-import { deviate, Failure } from "deviator";
+import { Failure, deviate } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -89,7 +89,7 @@ interface MeasureTranslation {
 /**
  * Measurement addition scene.
  */
-@inject("measurements", "views")
+@inject("measurementStore", "viewStore")
 @observer
 export class Measure extends SceneComponent<
   "Measure",
@@ -125,7 +125,7 @@ export class Measure extends SceneComponent<
    * Renders measurement addition scene component.
    */
   public render() {
-    const measurements = this.props.measurements!.measurementsOf(
+    const measurements = this.props.measurementStore!.measurementsOf(
       this.props.quantity
     );
 
@@ -149,7 +149,7 @@ export class Measure extends SceneComponent<
             textAlign="right"
             type="number"
             unit={
-              this.props.views!.translation.units[
+              this.props.viewStore!.translation.units[
                 this.props.quantity === "Weight" ? "kg" : "cm"
               ]
             }
@@ -209,7 +209,7 @@ export class Measure extends SceneComponent<
       return;
     }
 
-    this.props.measurements!.save(
+    this.props.measurementStore!.save(
       this.props.quantity,
       new Date(),
       result.value
@@ -222,7 +222,7 @@ export class Measure extends SceneComponent<
    * Shows confirmation scene on measurement deletion.
    */
   private handleDelete = (measurement: Measurement) => {
-    this.scene = this.props.views!.push("center", "Confirmation", {
+    this.scene = this.props.viewStore!.push("center", "Confirmation", {
       message: this.translation.confirmation,
       confirm: this.confirm(measurement)
     });
@@ -233,7 +233,7 @@ export class Measure extends SceneComponent<
    * confirmed the deletion.
    */
   private confirm = (measurement: Measurement) => (confirmation: boolean) => {
-    this.props.views!.pop(this.scene!);
+    this.props.viewStore!.pop(this.scene!);
 
     if (confirmation) {
       measurement.delete();

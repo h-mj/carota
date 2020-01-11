@@ -30,7 +30,7 @@ interface DishViewProps {
 /**
  * Component that display information about specified dish.
  */
-@inject("meals", "views")
+@inject("mealStore", "viewStore")
 @observer
 export class DishView extends Component<DishViewProps> {
   /**
@@ -70,7 +70,7 @@ export class DishView extends Component<DishViewProps> {
 
               <Quantity>
                 {quantity}
-                {this.props.views!.translation.units[dish.foodstuff.unit]}
+                {this.props.viewStore!.translation.units[dish.foodstuff.unit]}
               </Quantity>
 
               <ItemHeaderText>{dish.foodstuff.name}</ItemHeaderText>
@@ -109,7 +109,7 @@ export class DishView extends Component<DishViewProps> {
    */
   @action
   private handleEditClick = () => {
-    this.scene = this.props.views!.push("center", "Quantity", {
+    this.scene = this.props.viewStore!.push("center", "Quantity", {
       foodstuff: this.props.dish!.foodstuff,
       quantity: this.props.dish!.quantity,
       onSelect: this.handleSelect
@@ -120,7 +120,7 @@ export class DishView extends Component<DishViewProps> {
    * Updates provided dish' quantity on quantity selection.
    */
   private handleSelect = (quantity?: number) => {
-    this.props.views!.pop(this.scene!);
+    this.props.viewStore!.pop(this.scene!);
 
     if (quantity === undefined) {
       return;

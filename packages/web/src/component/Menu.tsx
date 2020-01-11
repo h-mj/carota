@@ -41,7 +41,7 @@ type MenuTranslation = Record<
 /**
  * Navigation menu component.
  */
-@inject("accounts", "views")
+@inject("accountStore", "viewStore")
 @observer
 export class Menu extends TranslatedComponent<"Menu", {}, MenuTranslation> {
   /**
@@ -72,7 +72,7 @@ export class Menu extends TranslatedComponent<"Menu", {}, MenuTranslation> {
               <Navigation>
                 {NAVIGABLE_SCENE_REQUIREMENTS.map(
                   ([name, requirement]) =>
-                    requirement(this.props.accounts!.current!) && (
+                    requirement(this.props.accountStore!.current!) && (
                       <Item
                         key={name}
                         onClick={this.handleRedirect}

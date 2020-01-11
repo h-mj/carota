@@ -37,7 +37,7 @@ interface MealViewProps {
 /**
  * Component that displays the information of provided meal model.
  */
-@inject("dishes", "meals", "views")
+@inject("dishStore", "mealStore", "viewStore")
 @observer
 export class MealView extends Component<MealViewProps> {
   /**
@@ -86,7 +86,7 @@ export class MealView extends Component<MealViewProps> {
    * Shows search scene when user clicks on `Plus` button component.
    */
   public showSearch = () => {
-    this.scene = this.props.views!.push("main", "Search", {
+    this.scene = this.props.viewStore!.push("main", "Search", {
       name: this.props.meal.name,
       onSelect: this.handleDishSelect
     });
@@ -98,20 +98,20 @@ export class MealView extends Component<MealViewProps> {
    */
   @action
   private handleDishSelect = (foodstuff?: Foodstuff, quantity?: number) => {
-    this.props.views!.pop(this.scene!);
+    this.props.viewStore!.pop(this.scene!);
 
     if (foodstuff === undefined || quantity === undefined) {
       return;
     }
 
-    this.props.dishes!.create(
+    this.props.dishStore!.create(
       this.props.meal,
       foodstuff,
       quantity,
       new Date(this.props.meal.date).getTime() <= new Date().getTime()
     );
 
-    this.props.views!.pop(this.scene!);
+    this.props.viewStore!.pop(this.scene!);
   };
 
   /**
@@ -119,8 +119,8 @@ export class MealView extends Component<MealViewProps> {
    */
   @action
   private showNameEdit = () => {
-    this.scene = this.props.views!.push("center", "Name", {
-      currentMeals: this.props.meals!.mealsOf(this.props.meal.date),
+    this.scene = this.props.viewStore!.push("center", "Name", {
+      currentMeals: this.props.mealStore!.mealsOf(this.props.meal.date),
       name: this.props.meal.name,
       onSelect: this.handleNameSelect
     });
@@ -131,7 +131,7 @@ export class MealView extends Component<MealViewProps> {
    */
   @action
   private handleNameSelect = async (name?: string) => {
-    this.props.views!.pop(this.scene!);
+    this.props.viewStore!.pop(this.scene!);
 
     if (name === undefined) {
       return;

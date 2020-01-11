@@ -40,7 +40,7 @@ interface GroupViewTranslation {
 /**
  * Component that displays specified group.
  */
-@inject("views")
+@inject("viewStore")
 @observer
 export class GroupView extends TranslatedComponent<
   "GroupView",

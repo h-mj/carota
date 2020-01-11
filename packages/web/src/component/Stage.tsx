@@ -7,14 +7,14 @@ import { SceneRenderer } from "./SceneRenderer";
 /**
  * Component responsible for rendering all scenes.
  */
-@inject("views")
+@inject("viewStore")
 @observer
 export class Stage extends Component {
   /**
    * Renders all active scenes.
    */
   public render() {
-    const { scenes } = this.props.views!;
+    const { scenes } = this.props.viewStore!;
 
     return scenes.map((scene, index) => (
       <SceneRenderer

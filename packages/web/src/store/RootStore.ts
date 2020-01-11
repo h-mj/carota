@@ -1,82 +1,82 @@
-import { AccountsStore } from "./AccountsStore";
+import { AccountStore } from "./AccountStore";
 import { AuthenticationStore } from "./AuthenticationStore";
-import { DishesStore } from "./DishesStore";
-import { FoodstuffsStore } from "./FoodstuffsStore";
-import { GroupsStore } from "./GroupsStore";
-import { InvitationsStore } from "./InvitationsStore";
-import { MealsStore } from "./MealsStore";
-import { MeasurementsStore } from "./MeasurementsStore";
+import { DishStore } from "./DishStore";
+import { FoodstuffStore } from "./FoodstuffStore";
+import { GroupStore } from "./GroupStore";
+import { InvitationStore } from "./InvitationStore";
+import { MealStore } from "./MealStore";
+import { MeasurementStore } from "./MeasurementStore";
 import { StatisticsStore } from "./StatisticsStore";
-import { ViewsStore } from "./ViewsStore";
+import { ViewStore } from "./ViewStore";
 
 /**
  * Store that stores all other stores.
  */
 export class RootStore {
   /**
-   * Accounts store instance.
+   * Account store instance.
    */
-  public readonly accounts: AccountsStore;
+  public readonly accountStore: AccountStore;
 
   /**
    * Authentication store instance.
    */
-  public readonly authentication: AuthenticationStore;
+  public readonly authenticationStore: AuthenticationStore;
 
   /**
-   * Dishes store instance.
+   * Dish store instance.
    */
-  public readonly dishes: DishesStore;
+  public readonly dishStore: DishStore;
 
   /**
-   * Foodstuffs store instance.
+   * Foodstuff store instance.
    */
-  public readonly foodstuffs: FoodstuffsStore;
+  public readonly foodstuffStore: FoodstuffStore;
 
   /**
-   * Groups store instance.
+   * Group store instance.
    */
-  public readonly groups: GroupsStore;
+  public readonly groupStore: GroupStore;
 
   /**
-   * Invitations store instance.
+   * Invitation store instance.
    */
-  public readonly invitations: InvitationsStore;
+  public readonly invitationStore: InvitationStore;
 
   /**
-   * Meals store instance.
+   * Meal store instance.
    */
-  public readonly meals: MealsStore;
+  public readonly mealStore: MealStore;
 
   /**
-   * Measurements store instance.
+   * Measurement store instance.
    */
-  public readonly measurements: MeasurementsStore;
+  public readonly measurementStore: MeasurementStore;
 
   /**
-   * Views store instance.
+   * View store instance.
    */
-  public readonly views: ViewsStore;
+  public readonly viewStore: ViewStore;
 
   /**
    * Statistics store instance.
    */
-  public readonly statistics: StatisticsStore;
+  public readonly statisticsStore: StatisticsStore;
 
   /**
    * Creates the root store and initializes all other stores.
    */
   public constructor() {
-    this.accounts = new AccountsStore(this);
-    this.authentication = new AuthenticationStore(this);
-    this.dishes = new DishesStore(this);
-    this.foodstuffs = new FoodstuffsStore(this);
-    this.groups = new GroupsStore(this);
-    this.invitations = new InvitationsStore(this);
-    this.meals = new MealsStore(this);
-    this.measurements = new MeasurementsStore(this);
-    this.views = new ViewsStore(this);
-    this.statistics = new StatisticsStore(this);
+    this.accountStore = new AccountStore(this);
+    this.authenticationStore = new AuthenticationStore(this);
+    this.dishStore = new DishStore(this);
+    this.foodstuffStore = new FoodstuffStore(this);
+    this.groupStore = new GroupStore(this);
+    this.invitationStore = new InvitationStore(this);
+    this.mealStore = new MealStore(this);
+    this.measurementStore = new MeasurementStore(this);
+    this.viewStore = new ViewStore(this);
+    this.statisticsStore = new StatisticsStore(this);
   }
 
   /**
@@ -84,16 +84,16 @@ export class RootStore {
    */
   public async initialize() {
     await Promise.all([
-      this.accounts.initialize(),
-      this.authentication.initialize(),
-      this.dishes.initialize(),
-      this.foodstuffs.initialize(),
-      this.groups.initialize(),
-      this.invitations.initialize(),
-      this.meals.initialize(),
-      this.measurements.initialize(),
-      this.views.initialize(),
-      this.statistics.clear()
+      this.accountStore.initialize(),
+      this.authenticationStore.initialize(),
+      this.dishStore.initialize(),
+      this.foodstuffStore.initialize(),
+      this.groupStore.initialize(),
+      this.invitationStore.initialize(),
+      this.mealStore.initialize(),
+      this.measurementStore.initialize(),
+      this.viewStore.initialize(),
+      this.statisticsStore.clear()
     ]);
   }
 
@@ -101,16 +101,16 @@ export class RootStore {
    * Clears all stores.
    */
   public clear() {
-    this.accounts.clear();
-    this.authentication.clear();
-    this.dishes.clear();
-    this.foodstuffs.clear();
-    this.groups.clear();
-    this.invitations.clear();
-    this.meals.clear();
-    this.measurements.clear();
-    this.views.clear();
-    this.statistics.clear();
+    this.accountStore.clear();
+    this.authenticationStore.clear();
+    this.dishStore.clear();
+    this.foodstuffStore.clear();
+    this.groupStore.clear();
+    this.invitationStore.clear();
+    this.mealStore.clear();
+    this.measurementStore.clear();
+    this.viewStore.clear();
+    this.statisticsStore.clear();
   }
 }
 

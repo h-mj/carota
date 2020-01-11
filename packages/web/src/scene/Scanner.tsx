@@ -54,7 +54,7 @@ interface ScannerTranslation {
 /**
  * Barcode scanner scene component.
  */
-@inject("views")
+@inject("viewStore")
 @observer
 export class Scanner extends SceneComponent<
   "Scanner",

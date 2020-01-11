@@ -1,6 +1,6 @@
 import { FoodstuffDto, NutritionDeclarationDto, Unit } from "server";
 
-import { FoodstuffsStore } from "../store/FoodstuffsStore";
+import { FoodstuffStore } from "../store/FoodstuffStore";
 
 /**
  * Array of required nutrient names in most common order.
@@ -69,12 +69,12 @@ export class Foodstuff {
   /**
    * Foodstuff store reference.
    */
-  private readonly store: FoodstuffsStore;
+  private readonly store: FoodstuffStore;
 
   /**
    * Creates a new instance `Foodstuff` model based on the data transfer object.
    */
-  public constructor(dto: FoodstuffDto, store: FoodstuffsStore) {
+  public constructor(dto: FoodstuffDto, store: FoodstuffStore) {
     this.id = dto.id;
     this.name = dto.name;
     this.barcode = dto.barcode;

@@ -4,7 +4,7 @@ import * as React from "react";
 
 import { Component } from "../base/Component";
 import { fadeIn, fadeOut } from "../styling/animations";
-import { styled, THEME_CONSTANTS } from "../styling/theme";
+import { THEME_CONSTANTS, styled } from "../styling/theme";
 import { Loading } from "./collection/icons";
 import { Overlay } from "./Overlay";
 
@@ -12,7 +12,7 @@ import { Overlay } from "./Overlay";
  * Component that is shown when ViewsStore.load` function is awaiting some
  * promise.
  */
-@inject("views")
+@inject("viewStore")
 @observer
 export class Loader extends Component {
   /**
@@ -49,7 +49,7 @@ export class Loader extends Component {
    */
   @action
   private update() {
-    const { loading } = this.props.views!;
+    const { loading } = this.props.viewStore!;
 
     if (loading) {
       this.visible = true;
@@ -66,7 +66,7 @@ export class Loader extends Component {
    * Renders revolving disks inside an overlay component.
    */
   public render() {
-    const { loading } = this.props.views!;
+    const { loading } = this.props.viewStore!;
 
     if (!this.visible) {
       return null;

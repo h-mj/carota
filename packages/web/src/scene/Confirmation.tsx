@@ -49,7 +49,7 @@ interface ConfirmationTranslation {
  * Scene using which system can ask for user confirmation if the action is
  * potentially dangerous and irreversible.
  */
-@inject("views")
+@inject("viewStore")
 @observer
 export class Confirmation extends SceneComponent<
   "Confirmation",
@@ -92,7 +92,7 @@ export class Confirmation extends SceneComponent<
    */
   private cancel = () => {
     this.props.confirm(false);
-    this.props.views!.pop(this.props.scene);
+    this.props.viewStore!.pop(this.props.scene);
   };
 
   /**
@@ -100,7 +100,7 @@ export class Confirmation extends SceneComponent<
    */
   private confirm = () => {
     this.props.confirm(true);
-    this.props.views!.pop(this.props.scene);
+    this.props.viewStore!.pop(this.props.scene);
   };
 }
 

@@ -5,7 +5,7 @@ import { Store } from "./Store";
 /**
  * Invitation managing store.
  */
-export class InvitationsStore extends Store {
+export class InvitationStore extends Store {
   /**
    * Creates and returns invitation model from received invitation data transfer
    * object of invitation with specified ID.

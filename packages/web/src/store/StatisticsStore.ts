@@ -14,7 +14,7 @@ export class StatisticsStore extends Store {
     });
 
     if (!response.ok) {
-      this.rootStore.views.notifyUnknownError();
+      this.rootStore.viewStore.notifyUnknownError();
       return undefined;
     }
 

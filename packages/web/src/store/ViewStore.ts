@@ -44,7 +44,7 @@ const NO_AUTHENTICATION_SCENE_NAMES: readonly SceneNames[] = [
  * It is also responsible for retrieving correct scene name and parameters based
  * on current URL and updating current URL on redirection.
  */
-export class ViewsStore extends Store {
+export class ViewStore extends Store {
   /**
    * Current interface language.
    */
@@ -150,7 +150,7 @@ export class ViewsStore extends Store {
    */
   @action
   public redirect(scene: Scenes) {
-    const { authenticated } = this.rootStore.authentication;
+    const { authenticated } = this.rootStore.authenticationStore;
 
     const url = scene.getUrl();
 
@@ -189,7 +189,7 @@ export class ViewsStore extends Store {
    */
   @action
   public refresh() {
-    const { authenticated } = this.rootStore.authentication;
+    const { authenticated } = this.rootStore.authenticationStore;
     const scene = Scene.from(window.location.pathname);
 
     // If user is unauthenticated and tries to access the logout scene, redirect to home.

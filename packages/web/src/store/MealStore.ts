@@ -7,7 +7,7 @@ import { Store } from "./Store";
 /**
  * Meal managing store.
  */
-export class MealsStore extends Store {
+export class MealStore extends Store {
   /**
    * Cached meal models of specific dates.
    */
@@ -43,7 +43,7 @@ export class MealsStore extends Store {
     const result = await Rpc.call("meal", "create", { name, date });
 
     if (!result.ok) {
-      return this.rootStore.views.notifyUnknownError();
+      return this.rootStore.viewStore.notifyUnknownError();
     }
 
     (await this.getAll(date)).push(new Meal(result.value, this));
@@ -61,7 +61,7 @@ export class MealsStore extends Store {
       });
 
       if (!result.ok) {
-        this.rootStore.views.notifyUnknownError();
+        this.rootStore.viewStore.notifyUnknownError();
       }
 
       this.cache.set(
@@ -90,7 +90,7 @@ export class MealsStore extends Store {
     });
 
     if (!result.ok) {
-      return this.rootStore.views.notifyUnknownError();
+      return this.rootStore.viewStore.notifyUnknownError();
     }
   }
 
@@ -109,7 +109,7 @@ export class MealsStore extends Store {
     const result = await Rpc.call("meal", "delete", { id: meal.id });
 
     if (!result.ok) {
-      return this.rootStore.views.notifyUnknownError();
+      return this.rootStore.viewStore.notifyUnknownError();
     }
   }
 
@@ -123,7 +123,7 @@ export class MealsStore extends Store {
     const result = await Rpc.call("meal", "rename", { id: meal.id, name });
 
     if (!result.ok) {
-      return this.rootStore.views.notifyUnknownError();
+      return this.rootStore.viewStore.notifyUnknownError();
     }
   }
 }

@@ -28,7 +28,7 @@ interface AnchorProps {
 /**
  * Component that changes main scene on click.
  */
-@inject("views")
+@inject("viewStore")
 export class Anchor extends Component<AnchorProps> {
   /**
    * Renders an anchor component.
@@ -55,6 +55,6 @@ export class Anchor extends Component<AnchorProps> {
       return;
     }
 
-    this.props.views!.redirect(this.props.scene);
+    this.props.viewStore!.redirect(this.props.scene);
   };
 }

@@ -26,7 +26,7 @@ interface MealsViewProps {
  * Component that displays information of each meal currently stored in the meal
  * store.
  */
-@inject("meals")
+@inject("mealStore")
 @observer
 export class MealsView extends Component<MealsViewProps> {
   /**

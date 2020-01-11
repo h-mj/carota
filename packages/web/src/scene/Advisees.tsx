@@ -15,7 +15,7 @@ import { styled } from "../styling/theme";
 /**
  * Scene that is used by advisers to track and advise their advisees.
  */
-@inject("accounts", "groups", "views")
+@inject("accountStore", "groupStore", "viewStore")
 @observer
 export class Advisees extends SceneComponent<"Advisees"> {
   /**
@@ -29,8 +29,8 @@ export class Advisees extends SceneComponent<"Advisees"> {
   public constructor(props: DefaultSceneComponentProps<"Advisees">) {
     super("Advisees", props);
 
-    if (this.props.accounts!.current!.type !== "Adviser") {
-      this.props.views!.unknown(); // Show 404 if account is not an adviser.
+    if (this.props.accountStore!.current!.type !== "Adviser") {
+      this.props.viewStore!.unknown(); // Show 404 if account is not an adviser.
       return;
     }
   }
@@ -46,13 +46,13 @@ export class Advisees extends SceneComponent<"Advisees"> {
             onDragStart={this.handleDragStart}
             onDragEnd={this.handleDragEnd}
           >
-            {this.props.groups!.ungrouped.length > 0 && (
-              <AdviseeList group={this.props.groups!.ungrouped} />
+            {this.props.groupStore!.ungrouped.length > 0 && (
+              <AdviseeList group={this.props.groupStore!.ungrouped} />
             )}
 
             <GroupList
               draggableType={this.draggableType}
-              groupList={this.props.groups!.groups}
+              groupList={this.props.groupStore!.groups}
             />
           </DragDropContext>
 
@@ -90,7 +90,7 @@ export class Advisees extends SceneComponent<"Advisees"> {
     }
 
     if (this.draggableType === "group") {
-      const group = this.props.groups!.withId(draggableId);
+      const group = this.props.groupStore!.withId(draggableId);
 
       if (group === undefined) {
         return;
@@ -101,8 +101,8 @@ export class Advisees extends SceneComponent<"Advisees"> {
       return;
     }
 
-    const account = this.props.accounts!.withId(draggableId);
-    const group = this.props.groups!.withId(destination.droppableId);
+    const account = this.props.accountStore!.withId(draggableId);
+    const group = this.props.groupStore!.withId(destination.droppableId);
 
     if (account === undefined || group === undefined) {
       return;
@@ -110,7 +110,7 @@ export class Advisees extends SceneComponent<"Advisees"> {
 
     account.insert(group, destination.index);
 
-    const { ungrouped } = this.props.groups!;
+    const { ungrouped } = this.props.groupStore!;
 
     if (ungrouped.includes(account)) {
       ungrouped.splice(ungrouped.indexOf(account), 1);

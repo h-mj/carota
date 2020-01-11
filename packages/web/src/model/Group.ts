@@ -1,7 +1,7 @@
 import { observable } from "mobx";
 import { GroupDto } from "server";
 
-import { GroupsStore } from "../store/GroupsStore";
+import { GroupStore } from "../store/GroupStore";
 import { Account } from "./Account";
 import { Model } from "./Model";
 
@@ -25,18 +25,18 @@ export class Group implements Model {
   @observable public readonly accounts: Account[];
 
   /**
-   * Groups store instance.
+   * Group store instance.
    */
-  private readonly store: GroupsStore;
+  private readonly store: GroupStore;
 
   /**
    * Creates a new instance of `Group` model based on the data transfer object.
    */
-  public constructor(dto: GroupDto, store: GroupsStore) {
+  public constructor(dto: GroupDto, store: GroupStore) {
     this.id = dto.id;
     this.name = dto.name;
     this.accounts = dto.accounts.map(
-      dto => new Account(dto, this, store.rootStore.accounts)
+      dto => new Account(dto, this, store.rootStore.accountStore)
     );
     this.store = store;
 

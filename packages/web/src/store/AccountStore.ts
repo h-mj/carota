@@ -9,7 +9,7 @@ import { CachedStore } from "./CachedStore";
 /**
  * Account managing store.
  */
-export class AccountsStore extends CachedStore<Account> {
+export class AccountStore extends CachedStore<Account> {
   /**
    * Currently authenticated account.
    */
@@ -19,14 +19,14 @@ export class AccountsStore extends CachedStore<Account> {
    * Loads currently authenticated account.
    */
   public async initialize() {
-    if (!this.rootStore.authentication.authenticated) {
+    if (!this.rootStore.authenticationStore.authenticated) {
       return;
     }
 
     const result = await Rpc.call("account", "getCurrent", {});
 
     if (!result.ok) {
-      this.rootStore.views.notifyUnknownError();
+      this.rootStore.viewStore.notifyUnknownError();
       return;
     }
 
@@ -46,7 +46,7 @@ export class AccountsStore extends CachedStore<Account> {
   @action
   public setCurrentAccount(dto: AccountDto) {
     this.current = new Account(dto, undefined, this);
-    this.rootStore.views.language = dto.language;
+    this.rootStore.viewStore.language = dto.language;
   }
 
   /**
@@ -68,7 +68,7 @@ export class AccountsStore extends CachedStore<Account> {
     });
 
     if (!result.ok) {
-      this.rootStore.views.notifyUnknownError();
+      this.rootStore.viewStore.notifyUnknownError();
     }
   }
 
@@ -77,12 +77,12 @@ export class AccountsStore extends CachedStore<Account> {
    */
   @action
   public async setLanguage(language: Language) {
-    this.rootStore.views.language = language;
+    this.rootStore.viewStore.language = language;
 
     const result = await Rpc.call("account", "setLanguage", { language });
 
     if (!result.ok) {
-      this.rootStore.views.notifyUnknownError();
+      this.rootStore.viewStore.notifyUnknownError();
     }
   }
 
@@ -97,7 +97,7 @@ export class AccountsStore extends CachedStore<Account> {
       return result.value;
     }
 
-    this.rootStore.authentication.setCurrentAccount(result.value.token);
+    this.rootStore.authenticationStore.setCurrentAccount(result.value.token);
     this.setCurrentAccount(result.value.account);
 
     return undefined;

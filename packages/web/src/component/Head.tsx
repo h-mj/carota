@@ -27,7 +27,7 @@ interface HeadTranslation {
 /**
  * Component that updates document `<head>` element when `title` prop changes.
  */
-@inject("views")
+@inject("viewStore")
 @observer
 export class Head extends TranslatedComponent<
   "Head",

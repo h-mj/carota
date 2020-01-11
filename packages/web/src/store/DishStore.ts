@@ -7,7 +7,7 @@ import { Store } from "./Store";
 /**
  * Dish managing store.
  */
-export class DishesStore extends Store {
+export class DishStore extends Store {
   /**
    * Creates a new `Dish` within specified `meal`. Created dish will specify
    * that user consumed specified `quantity` of specified `foodstuff`.
@@ -26,7 +26,7 @@ export class DishesStore extends Store {
     });
 
     if (!result.ok) {
-      return this.rootStore.views.notifyUnknownError();
+      return this.rootStore.viewStore.notifyUnknownError();
     }
 
     meal.dishes.push(new Dish(result.value, meal, this));
@@ -41,7 +41,7 @@ export class DishesStore extends Store {
     const result = await Rpc.call("dish", "delete", { id: dish.id });
 
     if (!result.ok) {
-      this.rootStore.views.notifyUnknownError();
+      this.rootStore.viewStore.notifyUnknownError();
     }
   }
 
@@ -62,7 +62,7 @@ export class DishesStore extends Store {
     });
 
     if (!result.ok) {
-      this.rootStore.views.notifyUnknownError();
+      this.rootStore.viewStore.notifyUnknownError();
     }
   }
 
@@ -75,7 +75,7 @@ export class DishesStore extends Store {
     const result = await Rpc.call("dish", "setEaten", { id: dish.id, eaten });
 
     if (!result.ok) {
-      this.rootStore.views.notifyUnknownError();
+      this.rootStore.viewStore.notifyUnknownError();
     }
   }
 
@@ -91,7 +91,7 @@ export class DishesStore extends Store {
     });
 
     if (!result.ok) {
-      return this.rootStore.views.notifyUnknownError();
+      return this.rootStore.viewStore.notifyUnknownError();
     }
   }
 }

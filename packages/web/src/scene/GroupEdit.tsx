@@ -93,6 +93,11 @@ export class GroupEdit extends SceneComponent<
   @observable private reason?: string;
 
   /**
+   * Whether group creation or renaming request has been submitted.
+   */
+  private submitting = false;
+
+  /**
    * Creates a new instance of `GroupEdit` and sets the name of this component.
    */
   public constructor(
@@ -155,23 +160,30 @@ export class GroupEdit extends SceneComponent<
   > = async event => {
     event.preventDefault();
 
+    if (this.submitting) {
+      return;
+    }
+
+    this.submitting = true;
+
     const validationResult = nameValidator(this.name);
 
     if (!validationResult.ok) {
       this.reason = validationResult.value;
-      return;
+    } else {
+      const error =
+        this.props.group === undefined
+          ? await this.props.groupStore!.create(this.name)
+          : await this.props.group.rename(this.name);
+
+      if (error === undefined) {
+        this.props.onDone();
+        return;
+      }
+
+      this.reason = reasonAt(error, "name");
     }
 
-    const error =
-      this.props.group === undefined
-        ? await this.props.groupStore!.create(this.name)
-        : await this.props.group.rename(this.name);
-
-    if (error === undefined) {
-      this.props.onDone();
-      return;
-    }
-
-    this.reason = reasonAt(error, "name");
+    this.submitting = false;
   };
 }

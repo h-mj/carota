@@ -52,7 +52,7 @@ export class GroupStore extends CachedStore<Group> {
   /**
    * Loads advisee groups of current account.
    */
-  public async load() {
+  private async load() {
     if (this.loading) {
       return;
     }
@@ -85,6 +85,23 @@ export class GroupStore extends CachedStore<Group> {
   }
 
   /**
+   * Creates a new group with specified name.
+   */
+  public async create(name: string) {
+    const result = await Rpc.call("group", "create", { name });
+
+    if (!result.ok) {
+      return result.value;
+    }
+
+    if (this._groups !== undefined) {
+      this._groups.push(new Group(result.value, this));
+    }
+
+    return;
+  }
+
+  /**
    * Inserts specified `group` at specified `index` in adviser advisee group
    * list.
    */
@@ -101,5 +118,20 @@ export class GroupStore extends CachedStore<Group> {
     if (!result.ok) {
       this.rootStore.viewStore.notifyUnknownError();
     }
+  }
+
+  /**
+   * Renames specified `group` to specified `name`.
+   */
+  public async rename(group: Group, name: string) {
+    const result = await Rpc.call("group", "rename", { id: group.id, name });
+
+    if (!result.ok) {
+      return result.value;
+    }
+
+    group.name = name;
+
+    return;
   }
 }

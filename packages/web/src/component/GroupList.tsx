@@ -32,6 +32,8 @@ export class GroupList extends Component<GroupListProps> {
    * groups.
    */
   public render() {
+    const groups = [...this.props.groups];
+
     return (
       <Droppable
         droppableId="groups"
@@ -39,7 +41,7 @@ export class GroupList extends Component<GroupListProps> {
       >
         {provided => (
           <Container ref={provided.innerRef} {...provided.droppableProps}>
-            {this.props.groups.map((group, index) => (
+            {groups.map((group, index) => (
               <GroupView
                 key={group.id}
                 draggableType={this.props.draggableType}

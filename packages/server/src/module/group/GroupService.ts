@@ -9,6 +9,7 @@ import { AccountRepository } from "../account/AccountRepository";
 import { CreateGroupDto } from "./dto/CreateGroupDto";
 import { GetGroupsDto } from "./dto/GetGroupsDto";
 import { InsertGroupDto } from "./dto/InsertGroupDto";
+import { RenameGroupDto } from "./dto/RenameGroupDto";
 import { Group, authorize as authorizeGroup } from "./Group";
 import { GroupRepository } from "./GroupRepository";
 
@@ -105,5 +106,26 @@ export class GroupService {
       groups[dto.index - 1],
       groups[dto.index]
     );
+  }
+
+  /**
+   * Renames group with specified id to specified name.
+   */
+  @Transaction()
+  public async rename(
+    dto: RenameGroupDto,
+    principal: Account,
+    @TransactionRepository() groupRepository?: GroupRepository
+  ) {
+    const group = await groupRepository!.findOne(dto.id);
+
+    if (group === undefined) {
+      throw new InvalidIdError(Group, ["id"]);
+    }
+
+    await authorizeGroup(principal, "rename", group);
+
+    group.name = dto.name;
+    groupRepository!.save(group);
   }
 }

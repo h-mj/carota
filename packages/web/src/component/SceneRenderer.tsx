@@ -8,6 +8,7 @@ import { Body } from "../scene/Body";
 import { Confirmation } from "../scene/Confirmation";
 import { Diet } from "../scene/Diet";
 import { Edit } from "../scene/Edit";
+import { GroupEdit } from "../scene/GroupEdit";
 import { Login } from "../scene/Login";
 import { Logout } from "../scene/Logout";
 import { Measure } from "../scene/Measure";
@@ -33,6 +34,7 @@ const SCENE_COMPONENTS = {
   Confirmation: Confirmation,
   Diet: Diet,
   Edit: Edit,
+  GroupEdit: GroupEdit,
   Login: Login,
   Logout: Logout,
   Measure: Measure,

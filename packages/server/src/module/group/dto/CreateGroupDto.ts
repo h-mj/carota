@@ -1,14 +1,12 @@
 import { Success, deviate } from "deviator";
 
 /**
- * Validation function that validates whether given value is a valid
- * `CreateGroupDto` typed object.
+ * Validates whether a value is a valid input for group creation endpoint.
  */
-export const createGroupDtoValidator = deviate()
-  .object()
-  .shape({
-    name: deviate().string()
-  });
+// prettier-ignore
+export const createGroupDtoValidator = deviate().object().shape({
+  name: deviate().string().trim().nonempty()
+});
 
 /**
  * Create group endpoint data transfer object type.

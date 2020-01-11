@@ -90,6 +90,29 @@ export const append = <T extends ErrorTree>(tree: T, error?: ErrorDto): T => {
 };
 
 /**
+ * Returns error reason of specified `error` for field at specified `path`.
+ */
+export const reasonAt = (error: ErrorDto, ...path: string[]) => {
+  if (error.details === undefined) {
+    return undefined;
+  }
+
+  for (const detail of error.details) {
+    const { path: errorPath } = detail.location;
+
+    if (errorPath === undefined) {
+      continue;
+    }
+
+    if (errorPath.every((value, index) => value === path[index])) {
+      return detail.reason;
+    }
+  }
+
+  return undefined;
+};
+
+/**
  * Converts specified date to `YYYY-MM-DD` formatted string that ignores current
  * timezone.
  */

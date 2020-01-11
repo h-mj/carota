@@ -17,7 +17,7 @@ export class Group implements Model {
   /**
    * Group name.
    */
-  public readonly name: string;
+  @observable public name: string;
 
   /**
    * Array of account models within this group.
@@ -48,5 +48,12 @@ export class Group implements Model {
    */
   public insert(index: number) {
     return this.store.insert(this, index);
+  }
+
+  /**
+   * Renames this group to specified `name`.
+   */
+  public rename(name: string) {
+    return this.store.rename(this, name);
   }
 }

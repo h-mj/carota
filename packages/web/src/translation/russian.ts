@@ -105,6 +105,16 @@ export const russian: Translation = {
     GroupView: {
       ungrouped: "Негруппированные"
     },
+    GroupEdit: {
+      createSubmit: "Создать",
+      createTitle: "Создать группу",
+      editSubmit: "Переименовать",
+      editTitle: "Переименование группы",
+      label: "Название",
+      reasons: {
+        nonempty: "Пожалуйста, выберите название группы."
+      }
+    },
     Head: {
       title: "Морковка"
     },

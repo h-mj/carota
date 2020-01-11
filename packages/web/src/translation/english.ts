@@ -100,6 +100,16 @@ export const english: Translation = {
     FoodstuffView: {
       per: "Per 100{unit}:"
     },
+    GroupEdit: {
+      createSubmit: "Create",
+      createTitle: "Create group",
+      editSubmit: "Rename",
+      editTitle: "Rename group",
+      label: "Name",
+      reasons: {
+        nonempty: "Please enter group name."
+      }
+    },
     GroupView: {
       ungrouped: "Ungrouped"
     },

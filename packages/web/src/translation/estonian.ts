@@ -103,6 +103,16 @@ export const estonian: Translation = {
     GroupView: {
       ungrouped: "Rühmitamata"
     },
+    GroupEdit: {
+      createSubmit: "Looge",
+      createTitle: "Grupi loomine",
+      editSubmit: "Nimetage ümber",
+      editTitle: "Grupi ümbernimetamine",
+      label: "Nimetus",
+      reasons: {
+        nonempty: "Palun sisestage grupi nimetus."
+      }
+    },
     Head: {
       title: "Carota"
     },

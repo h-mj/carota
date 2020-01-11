@@ -113,6 +113,6 @@ const isGroupOwner = (requester: Account, target: Group) =>
 /*
  * Account related authorization definitions.
  */
-// prettier-ignore
 export const { authorize } = new Canallo(onUnauthorized)
   .allow(Account, "insert", Group, isGroupOwner)
+  .allow(Account, "rename", Group, isGroupOwner);

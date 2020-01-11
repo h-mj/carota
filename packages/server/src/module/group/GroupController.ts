@@ -6,6 +6,7 @@ import { Account } from "../account/Account";
 import { CreateGroupDto, createGroupDtoValidator } from "./dto/CreateGroupDto";
 import { GetGroupsDto, getGroupsDtoValidator } from "./dto/GetGroupsDto";
 import { InsertGroupDto, insertGroupDtoValidator } from "./dto/InsertGroupDto";
+import { RenameGroupDto, renameGroupDtoValidator } from "./dto/RenameGroupDto";
 import { GroupService } from "./GroupService";
 
 /**
@@ -57,5 +58,20 @@ export class GroupController {
     @Principal() principal: Account
   ) {
     await this.groupService.insert(dto, principal);
+
+    return true as const;
+  }
+
+  /**
+   * Group rename endpoint.
+   */
+  @Post("rename")
+  public async rename(
+    @Body(new ValidationPipe(renameGroupDtoValidator)) dto: RenameGroupDto,
+    @Principal() principal: Account
+  ) {
+    await this.groupService.rename(dto, principal);
+
+    return true as const;
   }
 }

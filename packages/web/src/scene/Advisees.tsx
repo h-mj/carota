@@ -3,6 +3,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { DragDropContext, DragStart, DropResult } from "react-beautiful-dnd";
 
+import { Scenes } from "../base/Scene";
 import {
   DefaultSceneComponentProps,
   SceneComponent
@@ -22,6 +23,11 @@ export class Advisees extends SceneComponent<"Advisees"> {
    * Current draggable type.
    */
   @observable private draggableType?: "account" | "group";
+
+  /**
+   * Pushed `GroupEdit` scene reference.
+   */
+  private scene?: Scenes;
 
   /**
    * Creates a new instance of `Advisees` and sets the name of this component.
@@ -56,7 +62,7 @@ export class Advisees extends SceneComponent<"Advisees"> {
             />
           </DragDropContext>
 
-          <Action fixed={true} />
+          <Action fixed={true} onClick={this.handleGroupAdd} />
         </Sidebar>
 
         <Main>Statistics</Main>
@@ -116,6 +122,22 @@ export class Advisees extends SceneComponent<"Advisees"> {
       ungrouped.splice(ungrouped.indexOf(account), 1);
     }
   };
+
+  /**
+   * Shows group creation scene on group add button click.
+   */
+  private handleGroupAdd = () => {
+    this.scene = this.props.viewStore!.push("center", "GroupEdit", {
+      onDone: this.handleSceneClose
+    });
+  };
+
+  /**
+   * Closes `GroupEdit` scene.
+   */
+  private handleSceneClose = () => {
+    this.props.viewStore!.pop(this.scene!);
+  };
 }
 
 /**
@@ -136,6 +158,8 @@ const Sidebar = styled.div`
   width: ${({ theme }) => theme.widthSmall};
   height: 100%;
   flex-shrink: 0;
+
+  overflow-y: auto;
 
   background-color: ${({ theme }) => theme.backgroundColor};
   border-right: solid 1px ${({ theme }) => theme.borderColor};

@@ -8,7 +8,7 @@ import { styled } from "../styling/theme";
 import { DishView } from "./DishView";
 
 /**
- * Dishes view component props.
+ * Dish list component props.
  */
 interface DishListProps {
   /**

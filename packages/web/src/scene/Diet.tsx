@@ -11,7 +11,7 @@ import {
 import { Action } from "../component/Action";
 import { DateSelect } from "../component/DateSelect/DateSelect";
 import { Head } from "../component/Head";
-import { MealsView } from "../component/MealList";
+import { MealList } from "../component/MealList";
 import { TrashCan } from "../component/TrashCan";
 import { styled } from "../styling/theme";
 import { toIsoDateString } from "../utility/form";
@@ -80,7 +80,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
         >
           <TrashCan isRemovable={this.isDraggableRemovable()} />
 
-          <MealsView
+          <MealList
             draggableType={this.draggableType}
             meals={this.props.mealStore!.mealsOf(this.date)}
           />

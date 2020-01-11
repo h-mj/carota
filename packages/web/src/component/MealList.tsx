@@ -8,9 +8,9 @@ import { styled } from "../styling/theme";
 import { MealView } from "./MealView";
 
 /**
- * Meals view component props.
+ * Meal list component props.
  */
-interface MealsViewProps {
+interface MealListProps {
   /**
    * Current draggable type.
    */
@@ -28,7 +28,7 @@ interface MealsViewProps {
  */
 @inject("mealStore")
 @observer
-export class MealsView extends Component<MealsViewProps> {
+export class MealList extends Component<MealListProps> {
   /**
    * Renders all provided meals.
    */

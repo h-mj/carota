@@ -14,7 +14,7 @@ interface AdviseeViewProps {
   /**
    * Advisee account model.
    */
-  advisee: Account;
+  account: Account;
 
   /**
    * Advisee index within the advisee list.
@@ -54,7 +54,7 @@ export class AdviseeView extends TranslatedComponent<
    */
   public render() {
     return (
-      <Draggable draggableId={this.props.advisee.id} index={this.props.index}>
+      <Draggable draggableId={this.props.account.id} index={this.props.index}>
         {(provided, snapshot) => (
           <Container
             ref={provided.innerRef}
@@ -62,9 +62,9 @@ export class AdviseeView extends TranslatedComponent<
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <Name>{this.props.advisee.name}</Name>
+            <Name>{this.props.account.name}</Name>
             <Attribute>
-              {this.translation.abbreviations[this.props.advisee.sex]}
+              {this.translation.abbreviations[this.props.account.sex]}
             </Attribute>
             <Attribute>{30}</Attribute>
           </Container>

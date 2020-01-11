@@ -9,7 +9,7 @@ import { Foodstuff } from "../model/Foodstuff";
 import { Meal } from "../model/Meal";
 import { styled } from "../styling/theme";
 import { Action } from "./Action";
-import { DishesView } from "./DishesView";
+import { DishList } from "./DishList";
 import { EditButton } from "./EditButton";
 import { ItemHeader, ItemHeaderText, ItemHeaderTexts } from "./ItemHeader";
 import { NutrientQuantities } from "./NutrientQuantities";
@@ -71,7 +71,7 @@ export class MealView extends Component<MealViewProps> {
               {showQuantities && <NutrientQuantities model={meal} />}
             </ItemHeader>
 
-            <DishesView meal={meal} draggableType={this.props.draggableType} />
+            <DishList meal={meal} draggableType={this.props.draggableType} />
 
             <PlusContainer>
               <Action onClick={this.showSearch} />

@@ -10,7 +10,7 @@ import { DishView } from "./DishView";
 /**
  * Dishes view component props.
  */
-interface DishesViewProps {
+interface DishListProps {
   /**
    * Current draggable type.
    */
@@ -26,7 +26,7 @@ interface DishesViewProps {
  * Component that displays all dishes of provided meal.
  */
 @observer
-export class DishesView extends Component<DishesViewProps> {
+export class DishList extends Component<DishListProps> {
   /**
    * Renders a list of dishes.
    */

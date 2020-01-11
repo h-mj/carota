@@ -19,7 +19,7 @@ interface GroupListProps {
   /**
    * List of advisee groups.
    */
-  groupList: Group[];
+  groups: Group[];
 }
 
 /**
@@ -39,7 +39,7 @@ export class GroupList extends Component<GroupListProps> {
       >
         {provided => (
           <Container ref={provided.innerRef} {...provided.droppableProps}>
-            {this.props.groupList.map((group, index) => (
+            {this.props.groups.map((group, index) => (
               <GroupView
                 key={group.id}
                 draggableType={this.props.draggableType}

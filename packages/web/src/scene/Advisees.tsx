@@ -52,7 +52,7 @@ export class Advisees extends SceneComponent<"Advisees"> {
 
             <GroupList
               draggableType={this.draggableType}
-              groupList={this.props.groupStore!.groups}
+              groups={this.props.groupStore!.groups}
             />
           </DragDropContext>
 

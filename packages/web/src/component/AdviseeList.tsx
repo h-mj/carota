@@ -18,7 +18,7 @@ interface AdviseeListProps {
   draggableType?: "account" | "group";
 
   /**
-   * Advisee group of list of advisees.
+   * Advisee group or a list of advisees.
    */
   group: Group | Account[];
 }
@@ -51,7 +51,7 @@ export class AdviseeList extends Component<AdviseeListProps> {
         {provided => (
           <Container ref={provided.innerRef} {...provided.droppableProps}>
             {advisees.map((advisee, index) => (
-              <AdviseeView key={advisee.id} advisee={advisee} index={index} />
+              <AdviseeView key={advisee.id} account={advisee} index={index} />
             ))}
 
             {provided.placeholder}

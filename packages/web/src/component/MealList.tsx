@@ -17,9 +17,9 @@ interface MealsViewProps {
   draggableType?: "meal" | "dish";
 
   /**
-   * Current list of meals.
+   * List of meals that will be rendered.
    */
-  mealList: Meal[];
+  meals: Meal[];
 }
 
 /**
@@ -33,7 +33,7 @@ export class MealsView extends Component<MealsViewProps> {
    * Renders all provided meals.
    */
   public render() {
-    const meals = [...this.props.mealList];
+    const meals = [...this.props.meals];
 
     return (
       <Droppable

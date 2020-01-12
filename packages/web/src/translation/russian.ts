@@ -36,6 +36,28 @@ export const russian: Translation = {
     Diet: {
       title: "Суточная потребления"
     },
+    DishEdit: {
+      g: "граммах",
+      ml: "миллилитрах",
+      quantity: {
+        helper: "Введите количество продукта:",
+        label: "Количество",
+        reasons: {
+          nonempty: "Пожалуйста, введите количество продукта.",
+          positive: "Пожалуйста, введите количество больше чем 0.",
+          toNumber: "Пожалуйста, введите правильное количество."
+        }
+      },
+      select: "Выбрать",
+      title: "Выбрать количество",
+      unit: {
+        helper: "Количество продукта в {unit} или в штуках?",
+        label: "Единица",
+        reasons: {
+          defined: "Пожалуйста, выберите единицу."
+        }
+      }
+    },
     Edit: {
       addTitle: "Добавить продукт",
       confirm: "Вы уверены, что хотите удалить этот продукт?",
@@ -102,9 +124,6 @@ export const russian: Translation = {
     FoodstuffView: {
       per: "На 100{unit}:"
     },
-    GroupView: {
-      ungrouped: "Негруппированные"
-    },
     GroupEdit: {
       createSubmit: "Создать",
       createTitle: "Создать группу",
@@ -114,6 +133,9 @@ export const russian: Translation = {
       reasons: {
         nonempty: "Пожалуйста, выберите название группы."
       }
+    },
+    GroupView: {
+      ungrouped: "Негруппированные"
     },
     Head: {
       title: "Морковка"
@@ -136,6 +158,27 @@ export const russian: Translation = {
       invalidCredentials: "Неверный адрес электронной почты или пароль.",
       submit: "Вход →",
       title: "Вход"
+    },
+    MealEdit: {
+      createSubmit: "Создать",
+      createTitle: "Создать прием пищи",
+      editSubmit: "Переименовать",
+      editTitle: "Переименование приема пищи",
+      label: "Название",
+      meals: {
+        breakfast: "Завтрак",
+        dinner: "Ужин",
+        lunch: "Обед"
+      },
+      or: "Или",
+      selectHelper: "Выберите название приема пищи:",
+      selectReasons: {
+        nonempty: "Пожалуйста, выберите название приема пищи."
+      },
+      textFieldHelper: "Введите название приема пищи:",
+      textFieldReasons: {
+        nonempty: "Пожалуйста, введите название приема пищи."
+      }
     },
     Measure: {
       confirmation: "Вы уверены, что хотите удалить этот замер?",
@@ -168,49 +211,6 @@ export const russian: Translation = {
       Logout: "Выйти",
       Settings: "Настройки",
       Statistics: "Статистика"
-    },
-    Name: {
-      createSubmit: "Создать",
-      createTitle: "Создать прием пищи",
-      editSubmit: "Переименовать",
-      editTitle: "Переименование приема пищи",
-      label: "Название",
-      meals: {
-        breakfast: "Завтрак",
-        dinner: "Ужин",
-        lunch: "Обед"
-      },
-      or: "Или",
-      selectHelper: "Выберите название приема пищи:",
-      selectReasons: {
-        nonempty: "Пожалуйста, выберите название приема пищи."
-      },
-      textFieldHelper: "Введите название приема пищи:",
-      textFieldReasons: {
-        nonempty: "Пожалуйста, введите название приема пищи."
-      }
-    },
-    Quantity: {
-      g: "граммах",
-      ml: "миллилитрах",
-      quantity: {
-        helper: "Введите количество продукта:",
-        label: "Количество",
-        reasons: {
-          nonempty: "Пожалуйста, введите количество продукта.",
-          positive: "Пожалуйста, введите количество больше чем 0.",
-          toNumber: "Пожалуйста, введите правильное количество."
-        }
-      },
-      select: "Выбрать",
-      title: "Выбрать количество",
-      unit: {
-        helper: "Количество продукта в {unit} или в штуках?",
-        label: "Единица",
-        reasons: {
-          defined: "Пожалуйста, выберите единицу."
-        }
-      }
     },
     Register: {
       inputs: {
@@ -290,17 +290,17 @@ export const russian: Translation = {
     },
     Statistics: {
       ranges: {
-        verySeverelyUnderweight: "Очень выраженный дефицит массы",
-        severelyUnderweight: "Выраженный дефицит массы",
-        underweight: "Недостаточная масса тела",
         normal: "Норма",
-        overweight: "Предожирение",
         obeseClass1: "Ожирение I степени",
         obeseClass2: "Ожирение II степени",
         obeseClass3: "Ожирение III степени",
         obeseClass4: "Ожирение IV степени",
         obeseClass5: "Ожирение V степени",
-        obeseClass6: "Ожирение VI степени"
+        obeseClass6: "Ожирение VI степени",
+        overweight: "Предожирение",
+        severelyUnderweight: "Выраженный дефицит массы",
+        underweight: "Недостаточная масса тела",
+        verySeverelyUnderweight: "Очень выраженный дефицит массы"
       },
       timeFrames: {
         all: "Все",
@@ -314,18 +314,18 @@ export const russian: Translation = {
         Bicep: "Объем бицепса",
         bodyMassIndex: "Индекс массы тела",
         Calf: "Объем икры ноги",
+        carbohydrate: "Углеводы",
         Chest: "Объем груди",
+        energy: "Энергетическая ценность",
+        fat: "Жиры",
         Height: "Рост",
         Hip: "Объем бедер",
+        protein: "Белки",
         Shin: "Объем голени",
         Thigh: "Объем бедра",
         Waist: "Объем талии",
         Weight: "Вес",
-        Wrist: "Объем запястья",
-        energy: "Энергетическая ценность",
-        protein: "Белки",
-        fat: "Жиры",
-        carbohydrate: "Углеводы"
+        Wrist: "Объем запястья"
       }
     },
     Unknown: {
@@ -334,10 +334,8 @@ export const russian: Translation = {
   },
   locale: "ru-RU",
   timeLocale: {
-    dateTime: "%A, %e %B %Y г. %X",
     date: "%d.%m.%Y",
-    time: "%H:%M:%S",
-    periods: ["AM", "PM"],
+    dateTime: "%A, %e %B %Y г. %X",
     days: [
       "воскресенье",
       "понедельник",
@@ -347,7 +345,6 @@ export const russian: Translation = {
       "пятница",
       "суббота"
     ],
-    shortDays: ["вс", "пн", "вт", "ср", "чт", "пт", "сб"],
     months: [
       "января",
       "февраля",
@@ -362,6 +359,8 @@ export const russian: Translation = {
       "ноября",
       "декабря"
     ],
+    periods: ["AM", "PM"],
+    shortDays: ["вс", "пн", "вт", "ср", "чт", "пт", "сб"],
     shortMonths: [
       "янв",
       "фев",
@@ -375,7 +374,8 @@ export const russian: Translation = {
       "окт",
       "ноя",
       "дек"
-    ]
+    ],
+    time: "%H:%M:%S"
   },
   units: {
     cm: "см",

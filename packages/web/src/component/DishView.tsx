@@ -109,24 +109,19 @@ export class DishView extends Component<DishViewProps> {
    */
   @action
   private handleEditClick = () => {
-    this.scene = this.props.viewStore!.push("center", "Quantity", {
+    this.scene = this.props.viewStore!.push("center", "DishEdit", {
+      dish: this.props.dish!,
       foodstuff: this.props.dish!.foodstuff,
-      quantity: this.props.dish!.quantity,
-      onSelect: this.handleSelect
+      meal: this.props.dish!.meal,
+      onClose: this.handleClose
     });
   };
 
   /**
-   * Updates provided dish' quantity on quantity selection.
+   * Closes pushed `DishEdit` scene.
    */
-  private handleSelect = (quantity?: number) => {
+  private handleClose = () => {
     this.props.viewStore!.pop(this.scene!);
-
-    if (quantity === undefined) {
-      return;
-    }
-
-    this.props.dish!.setQuantity(quantity);
   };
 }
 

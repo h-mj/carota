@@ -63,21 +63,21 @@ export class GroupStore extends CachedStore<Group> {
       accountId: this.rootStore.accountStore.current!.id
     });
 
-    if (!result.ok) {
+    if (result.ok) {
+      const { ungrouped, groups } = result.value;
+
+      this._groups = groups.map(
+        dto => new Group(dto, this.rootStore.groupStore)
+      );
+      this._ungrouped = ungrouped.map(
+        dto => new Account(dto, undefined, this.rootStore.accountStore)
+      );
+    } else {
+      this._groups = [];
+      this._ungrouped = [];
+
       this.rootStore.viewStore.notifyUnknownError();
-
-      return {
-        ungrouped: [],
-        groups: []
-      };
     }
-
-    const { ungrouped, groups } = result.value;
-
-    this._groups = groups.map(dto => new Group(dto, this.rootStore.groupStore));
-    this._ungrouped = ungrouped.map(
-      dto => new Account(dto, undefined, this.rootStore.accountStore)
-    );
 
     this.loading = false;
 
@@ -106,12 +106,10 @@ export class GroupStore extends CachedStore<Group> {
    * list.
    */
   public async insert(group: Group, index: number) {
-    if (this.groups === undefined) {
-      return;
+    if (this._groups !== undefined) {
+      this._groups.splice(this.groups.indexOf(group), 1);
+      this._groups.splice(index, 0, group);
     }
-
-    this.groups.splice(this.groups.indexOf(group), 1);
-    this.groups.splice(index, 0, group);
 
     const result = await Rpc.call("group", "insert", { id: group.id, index });
 

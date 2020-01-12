@@ -62,7 +62,7 @@ export class Advisees extends SceneComponent<"Advisees"> {
             />
           </DragDropContext>
 
-          <Action fixed={true} onClick={this.handleGroupAdd} />
+          <Action fixed={true} onClick={this.handleAction} />
         </Sidebar>
 
         <Main>Statistics</Main>
@@ -126,16 +126,16 @@ export class Advisees extends SceneComponent<"Advisees"> {
   /**
    * Shows group creation scene on group add button click.
    */
-  private handleGroupAdd = () => {
+  private handleAction = () => {
     this.scene = this.props.viewStore!.push("center", "GroupEdit", {
-      onDone: this.handleSceneClose
+      onClose: this.handleClose
     });
   };
 
   /**
    * Closes `GroupEdit` scene.
    */
-  private handleSceneClose = () => {
+  private handleClose = () => {
     this.props.viewStore!.pop(this.scene!);
   };
 }

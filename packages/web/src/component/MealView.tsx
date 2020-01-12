@@ -5,7 +5,6 @@ import { Draggable } from "react-beautiful-dnd";
 
 import { Component } from "../base/Component";
 import { Scenes } from "../base/Scene";
-import { Foodstuff } from "../model/Foodstuff";
 import { Meal } from "../model/Meal";
 import { styled } from "../styling/theme";
 import { Action } from "./Action";
@@ -37,7 +36,7 @@ interface MealViewProps {
 /**
  * Component that displays the information of provided meal model.
  */
-@inject("dishStore", "mealStore", "viewStore")
+@inject("mealStore", "viewStore")
 @observer
 export class MealView extends Component<MealViewProps> {
   /**
@@ -87,31 +86,9 @@ export class MealView extends Component<MealViewProps> {
    */
   public showSearch = () => {
     this.scene = this.props.viewStore!.push("main", "Search", {
-      name: this.props.meal.name,
-      onSelect: this.handleDishSelect
+      meal: this.props.meal,
+      onClose: this.handleClose
     });
-  };
-
-  /**
-   * Callback function which is called when user selects a foodstuff and its
-   * quantity.
-   */
-  @action
-  private handleDishSelect = (foodstuff?: Foodstuff, quantity?: number) => {
-    this.props.viewStore!.pop(this.scene!);
-
-    if (foodstuff === undefined || quantity === undefined) {
-      return;
-    }
-
-    this.props.dishStore!.create(
-      this.props.meal,
-      foodstuff,
-      quantity,
-      new Date(this.props.meal.date).getTime() <= new Date().getTime()
-    );
-
-    this.props.viewStore!.pop(this.scene!);
   };
 
   /**
@@ -119,25 +96,19 @@ export class MealView extends Component<MealViewProps> {
    */
   @action
   private showNameEdit = () => {
-    this.scene = this.props.viewStore!.push("center", "Name", {
-      currentMeals: this.props.mealStore!.mealsOf(this.props.meal.date),
-      name: this.props.meal.name,
-      onSelect: this.handleNameSelect
+    this.scene = this.props.viewStore!.push("center", "MealEdit", {
+      currentMeals: this.props.mealStore!.withDate(this.props.meal.date),
+      meal: this.props.meal,
+      date: this.props.meal.date,
+      onClose: this.handleClose
     });
   };
 
   /**
-   * Callback function which is called when user selects a meal name.
+   * Closes pushed scene.
    */
-  @action
-  private handleNameSelect = async (name?: string) => {
+  private handleClose = () => {
     this.props.viewStore!.pop(this.scene!);
-
-    if (name === undefined) {
-      return;
-    }
-
-    await this.props.meal.rename(name);
   };
 }
 

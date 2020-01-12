@@ -31,9 +31,9 @@ interface GroupEditProps {
   group?: Group;
 
   /**
-   * Group creation, update or exit callback.
+   * Scene close callback.
    */
-  onDone: () => void;
+  onClose: () => void;
 }
 
 /**
@@ -113,7 +113,7 @@ export class GroupEdit extends SceneComponent<
     return (
       <>
         <TitleBar
-          onClose={this.props.onDone}
+          onClose={this.props.onClose}
           title={
             this.props.group === undefined
               ? this.translation.createTitle
@@ -166,22 +166,22 @@ export class GroupEdit extends SceneComponent<
 
     this.submitting = true;
 
-    const validationResult = nameValidator(this.name);
+    const result = nameValidator(this.name);
 
-    if (!validationResult.ok) {
-      this.reason = validationResult.value;
-    } else {
+    if (result.ok) {
       const error =
         this.props.group === undefined
           ? await this.props.groupStore!.create(this.name)
           : await this.props.group.rename(this.name);
 
       if (error === undefined) {
-        this.props.onDone();
+        this.props.onClose();
         return;
       }
 
       this.reason = reasonAt(error, "name");
+    } else {
+      this.reason = result.value;
     }
 
     this.submitting = false;

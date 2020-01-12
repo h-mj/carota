@@ -28,7 +28,7 @@ interface DietTranslation {
 /**
  * Diet scene that is used to add, edit and delete the consumed meals at given date.
  */
-@inject("mealStore", "viewStore")
+@inject("dishStore", "mealStore", "viewStore")
 @observer
 export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
   /**
@@ -74,7 +74,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
         >
           <MealList
             draggableType={this.draggableType}
-            meals={this.props.mealStore!.mealsOf(this.date)}
+            meals={this.props.mealStore!.withDate(this.date)}
           />
         </DragDropContext>
 
@@ -87,9 +87,8 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
    * Sets currently active date to specified date.
    */
   @action
-  private setDate = async (date: string) => {
+  private setDate = (date: string) => {
     this.date = date;
-    this.props.mealStore!.getAll(date);
   };
 
   /**
@@ -123,18 +122,25 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
     }
 
     if (draggableType === "meal") {
-      return this.props
-        .mealStore!.withId(draggableId)!
-        .insert(destination.index);
+      const meal = this.props.mealStore!.withId(draggableId);
+
+      if (meal === undefined) {
+        return;
+      }
+
+      meal.insert(destination.index);
+
+      return;
     }
 
-    return this.props
-      .mealStore!.withId(source.droppableId)!
-      .withId(draggableId)!
-      .insert(
-        this.props.mealStore!.withId(destination.droppableId)!,
-        destination.index
-      );
+    const dish = this.props.dishStore!.withId(draggableId);
+    const meal = this.props.mealStore!.withId(destination.droppableId);
+
+    if (dish === undefined || meal === undefined) {
+      return;
+    }
+
+    dish.insert(meal, destination.index);
   };
 
   /**
@@ -142,25 +148,19 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
    */
   @action
   private handleAddClick = () => {
-    this.scene = this.props.viewStore!.push("center", "Name", {
-      currentMeals: this.props.mealStore!.mealsOf(this.date),
-      onSelect: this.handleNameSelect
+    this.scene = this.props.viewStore!.push("center", "MealEdit", {
+      currentMeals: this.props.mealStore!.withDate(this.date),
+      date: this.date,
+      onClose: this.handleMealEditClose
     });
   };
 
   /**
-   * If `name` is defined, creates a new meal with specified name. Used as a
-   * callback function for `Name` scene, that is used to select meal name.
+   * Hides pushed `MealEdit` scene.
    */
   @action
-  private handleNameSelect = (name?: string) => {
+  private handleMealEditClose = () => {
     this.props.viewStore!.pop(this.scene!);
-
-    if (name === undefined) {
-      return;
-    }
-
-    this.props.mealStore!.create(name, this.date);
   };
 }
 

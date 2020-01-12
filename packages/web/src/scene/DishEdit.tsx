@@ -13,27 +13,34 @@ import { Controls, Form, Title } from "../component/collection/form";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
 import { TitleBar } from "../component/TitleBar";
+import { Dish } from "../model/Dish";
 import { Foodstuff } from "../model/Foodstuff";
-import { ErrorsFor, any } from "../utility/form";
+import { Meal } from "../model/Meal";
+import { ErrorsFor, any, append } from "../utility/form";
 
 /**
- * Quantity scene component props.
+ * Dish edit scene component props.
  */
-interface QuantityProps {
+interface DishEditProps {
+  /**
+   * Existing dish that is being edited.
+   */
+  dish?: Dish;
+
   /**
    * Foodstuff which quantity is being selected.
    */
   foodstuff: Foodstuff;
 
   /**
-   * Initial quantity value.
+   * Meal that created/existing will/is part of.
    */
-  quantity?: number;
+  meal: Meal;
 
   /**
-   * Foodstuff selection callback.
+   * Scene close callback function.
    */
-  onSelect: (quantity?: number) => void;
+  onClose: () => void;
 }
 
 /**
@@ -57,9 +64,9 @@ interface InputTranslation {
 }
 
 /**
- * Quantity scene component translation.
+ * Dish edit scene component translation.
  */
-interface QuantityTranslation {
+interface DishEditTranslation {
   /**
    * Full gram unit translation that will be inserted into unitHelper text.
    */
@@ -94,7 +101,7 @@ interface QuantityTranslation {
 /**
  * Quantity selection form values.
  */
-interface FormValues {
+interface Values {
   /**
    * Selected quantity value.
    */
@@ -120,7 +127,7 @@ const toValidQuantity = deviate<string>()
  * Validates form values.
  */
 // prettier-ignore
-const validate = deviate<FormValues>().shape({
+const validate = deviate<Values>().shape({
   quantity: toValidQuantity,
   unit: deviate<Unit | "pcs" | undefined>().defined()
 });
@@ -131,36 +138,41 @@ const toQuantityString = deviate<number>()
   .then(number => ok(number.toString()));
 
 /**
- * Scene component that is used to select a quantity of some foodstuff.
+ * Scene component that is used to create or edit existing dish.
  */
-@inject("viewStore")
+@inject("dishStore", "viewStore")
 @observer
-export class Quantity extends SceneComponent<
-  "Quantity",
-  QuantityProps,
-  QuantityTranslation
+export class DishEdit extends SceneComponent<
+  "DishEdit",
+  DishEditProps,
+  DishEditTranslation
 > {
   /**
    * Quantity selection form values.
    */
-  @observable private values: FormValues = {
+  @observable private values: Values = {
     quantity:
-      this.props.quantity !== undefined ? this.props.quantity.toString() : "",
+      this.props.dish !== undefined ? this.props.dish.quantity.toString() : "",
     unit: this.props.foodstuff.unit
   };
 
   /**
    * Whether or not entered quantity is invalid.
    */
-  @observable private reasons: ErrorsFor<FormValues> = {};
+  @observable private reasons: ErrorsFor<Values> = {};
+
+  /**
+   * Whether dish creation or editing request has been submitted.
+   */
+  private submitting = false;
 
   /**
    * Sets the name of the scene of this component.
    */
   public constructor(
-    props: QuantityProps & DefaultSceneComponentProps<"Quantity">
+    props: DishEditProps & DefaultSceneComponentProps<"DishEdit">
   ) {
-    super("Quantity", props);
+    super("DishEdit", props);
   }
 
   /**
@@ -169,7 +181,7 @@ export class Quantity extends SceneComponent<
   public render() {
     return (
       <>
-        <TitleBar onClose={this.handleClose} title={this.translation.title} />
+        <TitleBar onClose={this.props.onClose} title={this.translation.title} />
 
         <Form noValidate={true} onSubmit={this.handleSubmit}>
           <Title>{this.props.foodstuff.name}</Title>
@@ -294,26 +306,45 @@ export class Quantity extends SceneComponent<
    * callback on form submit.
    */
   @action
-  private handleSubmit: React.FormEventHandler<HTMLFormElement> = event => {
+  private handleSubmit: React.FormEventHandler<
+    HTMLFormElement
+  > = async event => {
     event.preventDefault();
+
+    if (this.submitting) {
+      return;
+    }
+
+    this.submitting = true;
 
     const result = validate(this.values);
 
     if (result.ok) {
-      this.props.onSelect(
+      const quantity =
         result.value.unit === "pcs"
           ? result.value.quantity * this.props.foodstuff.pieceQuantity!
-          : result.value.quantity
-      );
+          : result.value.quantity;
+
+      const error =
+        this.props.dish === undefined
+          ? await this.props.dishStore!.create(
+              this.props.meal,
+              this.props.foodstuff,
+              quantity,
+              true
+            )
+          : await this.props.dish.setQuantity(quantity);
+
+      if (error === undefined) {
+        this.props.onClose();
+        return;
+      }
+
+      this.reasons = append(this.reasons, error);
     } else {
       this.reasons = result.value;
     }
-  };
 
-  /**
-   * Calls quantity selection callback with `undefined` quantity.
-   */
-  private handleClose = () => {
-    this.props.onSelect();
+    this.submitting = false;
   };
 }

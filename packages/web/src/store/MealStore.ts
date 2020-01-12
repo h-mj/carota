@@ -2,37 +2,68 @@ import { action, observable } from "mobx";
 
 import { Meal } from "../model/Meal";
 import { Rpc } from "../utility/rpc";
-import { Store } from "./Store";
+import { CachedStore } from "./CachedStore";
 
 /**
  * Meal managing store.
  */
-export class MealStore extends Store {
+export class MealStore extends CachedStore<Meal> {
   /**
    * Cached meal models of specific dates.
    */
-  @observable private cache: Map<string, Meal[]> = new Map();
+  @observable private meals: Map<string, Meal[]> = new Map();
 
   /**
-   * Returns meal model with specified ID.
+   * Tracks whether meals of some date are currently being loaded.
    */
-  public withId(id: string) {
-    return [...this.cache.values()].flat().find(meal => meal.id === id);
-  }
+  private loading: Map<string, boolean> = new Map();
 
   /**
    * Returns currently stored meals at specified date.
    */
-  public mealsOf(date: string) {
-    return this.cache.get(date) || [];
+  public withDate(date: string) {
+    if (!this.meals.has(date)) {
+      this.load(date);
+    }
+
+    return this.meals.get(date) ?? [];
   }
 
   /**
    * Clears all stored data.
    */
-  @action
   public clear() {
-    this.cache.clear();
+    super.clear();
+
+    this.meals.clear();
+    this.loading.clear();
+  }
+
+  /**
+   * Replaces currently stored meal models with meals with specified `date`.
+   */
+  public async load(date: string) {
+    if (this.loading.get(date)) {
+      return;
+    }
+
+    this.loading.set(date, true);
+
+    const result = await Rpc.call("meal", "getAll", {
+      accountId: undefined,
+      date
+    });
+
+    if (!result.ok) {
+      this.rootStore.viewStore.notifyUnknownError();
+    }
+
+    this.meals.set(
+      date,
+      result.ok ? result.value.map(dto => new Meal(dto, this)) : []
+    );
+
+    this.loading.set(date, false);
   }
 
   /**
@@ -43,34 +74,16 @@ export class MealStore extends Store {
     const result = await Rpc.call("meal", "create", { name, date });
 
     if (!result.ok) {
-      return this.rootStore.viewStore.notifyUnknownError();
+      return result.value;
     }
 
-    (await this.getAll(date)).push(new Meal(result.value, this));
-  }
+    const meals = this.meals.get(date);
 
-  /**
-   * Replaces currently stored meal models with meals with specified `date`.
-   */
-  @action
-  public async getAll(date: string) {
-    if (!this.cache.has(date)) {
-      const result = await Rpc.call("meal", "getAll", {
-        accountId: undefined,
-        date
-      });
-
-      if (!result.ok) {
-        this.rootStore.viewStore.notifyUnknownError();
-      }
-
-      this.cache.set(
-        date,
-        !result.ok ? [] : result.value.map(dto => new Meal(dto, this))
-      );
+    if (meals !== undefined) {
+      meals.push(new Meal(result.value, this));
     }
 
-    return this.cache.get(date)!;
+    return;
   }
 
   /**
@@ -78,10 +91,12 @@ export class MealStore extends Store {
    */
   @action
   public async insert(meal: Meal, index: number) {
-    const meals = await this.getAll(meal.date);
+    const meals = this.meals.get(meal.date);
 
-    meals.splice(meals.indexOf(meal), 1);
-    meals.splice(index, 0, meal);
+    if (meals !== undefined) {
+      meals.splice(meals.indexOf(meal), 1);
+      meals.splice(index, 0, meal);
+    }
 
     const result = await Rpc.call("meal", "insert", {
       id: meal.id,
@@ -103,8 +118,11 @@ export class MealStore extends Store {
       throw new Error("Tried to remove non-empty meal");
     }
 
-    const meals = await this.getAll(meal.date);
-    meals.splice(meals.indexOf(meal), 1);
+    const meals = this.meals.get(meal.date);
+
+    if (meals !== undefined) {
+      meals.splice(meals.indexOf(meal), 1);
+    }
 
     const result = await Rpc.call("meal", "delete", { id: meal.id });
 
@@ -116,14 +134,15 @@ export class MealStore extends Store {
   /**
    * Renames specified meal to specified name.
    */
-  @action
   public async rename(meal: Meal, name: string) {
-    meal.name = name;
-
     const result = await Rpc.call("meal", "rename", { id: meal.id, name });
 
     if (!result.ok) {
-      return this.rootStore.viewStore.notifyUnknownError();
+      return result.value;
     }
+
+    meal.name = name;
+
+    return;
   }
 }

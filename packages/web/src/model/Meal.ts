@@ -1,4 +1,4 @@
-import { action, observable } from "mobx";
+import { observable } from "mobx";
 import { MealDto } from "server";
 
 import { MealStore } from "../store/MealStore";
@@ -45,43 +45,28 @@ export class Meal {
       dish => new Dish(dish, this, store.rootStore.dishStore)
     );
     this.store = store;
-  }
 
-  /**
-   * Returns stored dish with specified id.
-   */
-  public withId(id: string) {
-    return this.dishes.find(dish => dish.id === id);
-  }
-
-  /**
-   * Returns whether meal contains dish with specified ID.
-   */
-  public has(id: string) {
-    return this.withId(id) !== undefined;
+    this.store.register(this);
   }
 
   /**
    * Deletes corresponding meal entity.
    */
-  @action
-  public async delete() {
+  public delete() {
     return this.store.delete(this);
   }
 
   /**
    * Sets the index of this meal.
    */
-  @action
-  public async insert(index: number) {
+  public insert(index: number) {
     return this.store.insert(this, index);
   }
 
   /**
    * Renames this meal to specified name.
    */
-  @action
-  public async rename(name: string) {
+  public rename(name: string) {
     return this.store.rename(this, name);
   }
 

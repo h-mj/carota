@@ -14,7 +14,7 @@ import { Separator } from "../component/Separator";
 import { TextField } from "../component/TextField";
 import { TitleBar } from "../component/TitleBar";
 import { Meal } from "../model/Meal";
-import { ErrorsFor, any } from "../utility/form";
+import { ErrorsFor, any, append } from "../utility/form";
 
 /**
  * Array of predefined meals that can be selected.
@@ -29,29 +29,34 @@ const nameValidator = deviate<string>()
   .nonempty();
 
 /**
- * Name component props.
+ * Meal edit component props.
  */
-interface NameProps {
+interface MealEditProps {
   /**
    * Currently loaded meals.
    */
   currentMeals: Meal[];
 
   /**
-   * Existing meal initial name.
+   * Currently visible date.
    */
-  name?: string;
+  date: string;
 
   /**
-   * Name selection callback function.
+   * Existing meal that is being edited.
    */
-  onSelect: (name?: string) => void;
+  meal?: Meal;
+
+  /**
+   * Scene close callback function.
+   */
+  onClose: () => void;
 }
 
 /**
- * Name component translation.
+ * Meal edit component translation.
  */
-interface NameTranslation {
+interface MealEditTranslation {
   /**
    * Create new meal submit button text.
    */
@@ -109,9 +114,9 @@ interface NameTranslation {
 }
 
 /**
- * Meal name selection form values.
+ * Meal editing form values.
  */
-interface NameValues {
+interface Values {
   /**
    * Entered name field.
    */
@@ -124,43 +129,54 @@ interface NameValues {
 }
 
 /**
- * Scene which is used to select created meal name.
+ * Scene which is used to create or edit an existing meal.
  */
-@inject("viewStore")
+@inject("viewStore", "mealStore")
 @observer
-export class Name extends SceneComponent<"Name", NameProps, NameTranslation> {
+export class MealEdit extends SceneComponent<
+  "MealEdit",
+  MealEditProps,
+  MealEditTranslation
+> {
   /**
    * Form values.
    */
-  @observable private values: NameValues = { name: "" };
+  @observable private values: Values = { name: "" };
 
   /**
    * Form field error reasons.
    */
-  @observable private reasons: ErrorsFor<NameValues> = {};
+  @observable private reasons: ErrorsFor<Values> = {};
+
+  /**
+   * Whether meal creation or renaming request has already been submitted.
+   */
+  private submitting = false;
 
   /**
    * Sets the name of this scene component.
    */
-  public constructor(props: NameProps & DefaultSceneComponentProps<"Name">) {
-    super("Name", props);
+  public constructor(
+    props: MealEditProps & DefaultSceneComponentProps<"MealEdit">
+  ) {
+    super("MealEdit", props);
 
-    if (props.name === undefined) {
+    if (props.meal === undefined) {
       return;
     }
 
     this.values[
-      this.getUnusedPredefinedMealNames().includes(props.name)
+      this.getTranslatedPredefinedNames().includes(props.meal.name)
         ? "selectedName"
         : "name"
-    ] = props.name;
+    ] = props.meal.name;
   }
 
   /**
    * Renders name selection form.
    */
   public render() {
-    const options = this.getUnusedPredefinedMealNames().map(label => ({
+    const options = this.getTranslatedPredefinedNames().map(label => ({
       label,
       value: label
     }));
@@ -168,9 +184,9 @@ export class Name extends SceneComponent<"Name", NameProps, NameTranslation> {
     return (
       <>
         <TitleBar
-          onClose={this.handleClose}
+          onClose={this.props.onClose}
           title={
-            this.props.name !== undefined
+            this.props.meal !== undefined
               ? this.translation.editTitle
               : this.translation.createTitle
           }
@@ -216,7 +232,7 @@ export class Name extends SceneComponent<"Name", NameProps, NameTranslation> {
 
           <Controls>
             <Button invalid={any(this.reasons)}>
-              {this.props.name !== undefined
+              {this.props.meal !== undefined
                 ? this.translation.editSubmit
                 : this.translation.createSubmit}
             </Button>
@@ -227,32 +243,25 @@ export class Name extends SceneComponent<"Name", NameProps, NameTranslation> {
   }
 
   /**
-   * Returns an array of translated unused predefined meal names.
+   * Returns an array of translated predefined meal names.
    */
-  private getUnusedPredefinedMealNames() {
-    const names: string[] = [];
+  private getTranslatedPredefinedNames() {
+    const translatedNames: string[] = [];
 
-    for (const name of PREDEFINED_MEAL_NAMES) {
-      const label = this.translation.meals[name];
+    for (const predefinedName of PREDEFINED_MEAL_NAMES) {
+      const translatedName = this.translation.meals[predefinedName];
 
       if (
-        this.props.currentMeals.find(meal => meal.name === label) ===
-          undefined ||
-        label === this.props.name
+        !this.props.currentMeals.some(meal => meal.name === translatedName) ||
+        (this.props.meal !== undefined &&
+          this.props.meal.name === translatedName)
       ) {
-        names.push(label);
+        translatedNames.push(translatedName);
       }
     }
 
-    return names;
+    return translatedNames;
   }
-
-  /**
-   * Cancels the name selection.
-   */
-  private handleClose = () => {
-    this.props.onSelect();
-  };
 
   /**
    * Updates name field when select value changes.
@@ -276,24 +285,48 @@ export class Name extends SceneComponent<"Name", NameProps, NameTranslation> {
    * Calls provided `onSelect` function on form submission.
    */
   @action
-  private handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  private handleSubmit: React.FormEventHandler<
+    HTMLFormElement
+  > = async event => {
     event.preventDefault();
 
-    if (this.values.selectedName !== undefined) {
-      return this.props.onSelect(this.values.selectedName);
+    if (this.submitting) {
+      return;
     }
 
-    const result = nameValidator(this.values.name);
+    this.submitting = true;
 
-    if (result.ok) {
-      return this.props.onSelect(this.values.name);
-    }
+    const name =
+      this.values.selectedName !== undefined
+        ? this.values.selectedName
+        : this.values.name;
 
-    if (result.value === "nonempty") {
-      this.reasons.name = "nonempty";
-      this.reasons.selectedName = "nonempty";
+    const validationResult = nameValidator(name);
+
+    if (validationResult.ok) {
+      const error =
+        this.props.meal === undefined
+          ? await this.props.mealStore!.create(
+              validationResult.value,
+              this.props.date
+            )
+          : await this.props.meal.rename(validationResult.value);
+
+      if (error === undefined) {
+        this.props.onClose();
+        return;
+      }
+
+      this.reasons = append(this.reasons, error);
     } else {
-      this.reasons.name = result.value;
+      if (validationResult.value === "nonempty") {
+        this.reasons.name = "nonempty";
+        this.reasons.selectedName = "nonempty";
+      } else {
+        this.reasons.name = validationResult.value;
+      }
     }
+
+    this.submitting = false;
   };
 }

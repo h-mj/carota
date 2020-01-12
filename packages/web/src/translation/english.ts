@@ -36,6 +36,28 @@ export const english: Translation = {
     Diet: {
       title: "Daily intake"
     },
+    DishEdit: {
+      g: "grams",
+      ml: "milliliters",
+      quantity: {
+        helper: "Enter foodstuff quantity:",
+        label: "Quantity",
+        reasons: {
+          nonempty: "Please enter foodstuff quantity.",
+          positive: "Please enter quantity that is greater than 0.",
+          toNumber: "Please enter correct quantity."
+        }
+      },
+      select: "Select",
+      title: "Select quantity",
+      unit: {
+        helper: "Is the quantity in {unit} or in pieces?",
+        label: "Unit",
+        reasons: {
+          defined: "Please select a unit."
+        }
+      }
+    },
     Edit: {
       addTitle: "Add foodstuff",
       confirm: "Are you sure you want to delete this foodstuff?",
@@ -135,6 +157,27 @@ export const english: Translation = {
       submit: "Sign in →",
       title: "Sign in"
     },
+    MealEdit: {
+      createSubmit: "Create",
+      createTitle: "Create meal",
+      editSubmit: "Rename",
+      editTitle: "Rename meal",
+      label: "Name",
+      meals: {
+        breakfast: "Breakfast",
+        dinner: "Dinner",
+        lunch: "Lunch"
+      },
+      or: "Or",
+      selectHelper: "Select meal name:",
+      selectReasons: {
+        nonempty: "Please select meal name."
+      },
+      textFieldHelper: "Enter meal name:",
+      textFieldReasons: {
+        nonempty: "Please enter meal name."
+      }
+    },
     Measure: {
       confirmation: "Are you sure you want to delete this measurement?",
       helper: {
@@ -166,49 +209,6 @@ export const english: Translation = {
       Logout: "Sign out",
       Settings: "Settings",
       Statistics: "Statistics"
-    },
-    Name: {
-      createSubmit: "Create",
-      createTitle: "Create meal",
-      editSubmit: "Rename",
-      editTitle: "Rename meal",
-      label: "Name",
-      meals: {
-        breakfast: "Breakfast",
-        dinner: "Dinner",
-        lunch: "Lunch"
-      },
-      or: "Or",
-      selectHelper: "Select meal name:",
-      selectReasons: {
-        nonempty: "Please select meal name."
-      },
-      textFieldHelper: "Enter meal name:",
-      textFieldReasons: {
-        nonempty: "Please enter meal name."
-      }
-    },
-    Quantity: {
-      g: "grams",
-      ml: "milliliters",
-      quantity: {
-        helper: "Enter foodstuff quantity:",
-        label: "Quantity",
-        reasons: {
-          nonempty: "Please enter foodstuff quantity.",
-          positive: "Please enter quantity that is greater than 0.",
-          toNumber: "Please enter correct quantity."
-        }
-      },
-      select: "Select",
-      title: "Select quantity",
-      unit: {
-        helper: "Is the quantity in {unit} or in pieces?",
-        label: "Unit",
-        reasons: {
-          defined: "Please select a unit."
-        }
-      }
     },
     Register: {
       inputs: {
@@ -286,17 +286,17 @@ export const english: Translation = {
     },
     Statistics: {
       ranges: {
-        verySeverelyUnderweight: "Very severely underweight",
-        severelyUnderweight: "Severely underweight",
-        underweight: "Underweight",
         normal: "Normal",
-        overweight: "Overweight",
         obeseClass1: "Obese Class I",
         obeseClass2: "Obese Class II",
         obeseClass3: "Obese Class III",
         obeseClass4: "Obese Class IV",
         obeseClass5: "Obese Class V",
-        obeseClass6: "Obese Class VI"
+        obeseClass6: "Obese Class VI",
+        overweight: "Overweight",
+        severelyUnderweight: "Severely underweight",
+        underweight: "Underweight",
+        verySeverelyUnderweight: "Very severely underweight"
       },
       timeFrames: {
         all: "All",
@@ -310,18 +310,18 @@ export const english: Translation = {
         Bicep: "Bicep circumference",
         bodyMassIndex: "Body mass index",
         Calf: "Calf circumference",
+        carbohydrate: "Carbohydrate",
         Chest: "Chest circumference",
+        energy: "Energy",
+        fat: "Fat",
         Height: "Height",
         Hip: "Hip circumference",
+        protein: "Protein",
         Shin: "Shin circumference",
         Thigh: "Thigh circumference",
         Waist: "Waist circumference",
         Weight: "Weight",
-        Wrist: "Wrist circumference",
-        energy: "Energy",
-        protein: "Protein",
-        fat: "Fat",
-        carbohydrate: "Carbohydrate"
+        Wrist: "Wrist circumference"
       }
     },
     Unknown: {
@@ -330,10 +330,8 @@ export const english: Translation = {
   },
   locale: "en-US",
   timeLocale: {
-    dateTime: "%x, %X",
     date: "%-m/%-d/%Y",
-    time: "%-I:%M:%S %p",
-    periods: ["AM", "PM"],
+    dateTime: "%x, %X",
     days: [
       "Sunday",
       "Monday",
@@ -343,7 +341,6 @@ export const english: Translation = {
       "Friday",
       "Saturday"
     ],
-    shortDays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     months: [
       "January",
       "February",
@@ -358,6 +355,8 @@ export const english: Translation = {
       "November",
       "December"
     ],
+    periods: ["AM", "PM"],
+    shortDays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     shortMonths: [
       "Jan",
       "Feb",
@@ -371,7 +370,8 @@ export const english: Translation = {
       "Oct",
       "Nov",
       "Dec"
-    ]
+    ],
+    time: "%-I:%M:%S %p"
   },
   units: {
     cm: "cm",

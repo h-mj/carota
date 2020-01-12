@@ -36,6 +36,28 @@ export const estonian: Translation = {
     Diet: {
       title: "Päevane tarbimine"
     },
+    DishEdit: {
+      g: "grammides",
+      ml: "milliliitrites",
+      quantity: {
+        helper: "Sisestage toiduaine kogus:",
+        label: "Kogus",
+        reasons: {
+          nonempty: "Palun sisestage toiduaine kogus.",
+          positive: "Palun sistestage kogus mis on suurem kui 0.",
+          toNumber: "Palun sistestage korrektne kogus."
+        }
+      },
+      select: "Valige",
+      title: "Valige kogus",
+      unit: {
+        helper: "Kas toiduaine kogus on {ühik} või tükkides?",
+        label: "Ühik",
+        reasons: {
+          defined: "Palun valige toiduaine ühik."
+        }
+      }
+    },
     Edit: {
       addTitle: "Lisa toiduaine",
       confirm: "Kas olete kindel, et soovite selle toiduaine ära kustutada?",
@@ -100,9 +122,6 @@ export const estonian: Translation = {
     FoodstuffView: {
       per: "100{unit} kohta:"
     },
-    GroupView: {
-      ungrouped: "Rühmitamata"
-    },
     GroupEdit: {
       createSubmit: "Looge",
       createTitle: "Grupi loomine",
@@ -112,6 +131,9 @@ export const estonian: Translation = {
       reasons: {
         nonempty: "Palun sisestage grupi nimetus."
       }
+    },
+    GroupView: {
+      ungrouped: "Rühmitamata"
     },
     Head: {
       title: "Carota"
@@ -134,6 +156,27 @@ export const estonian: Translation = {
       invalidCredentials: "Vale e-posti aadress või parool.",
       submit: "Sisenege →",
       title: "Sisenege"
+    },
+    MealEdit: {
+      createSubmit: "Looge",
+      createTitle: "Toidukorra loomine",
+      editSubmit: "Nimetage ümber",
+      editTitle: "Toidukorda ümbernimetamine",
+      label: "Nimetus",
+      meals: {
+        breakfast: "Hommikusöök",
+        dinner: "Õhtusöök",
+        lunch: "Lõunasöök"
+      },
+      or: "Või",
+      selectHelper: "Valige toidukorra nimetus:",
+      selectReasons: {
+        nonempty: "Palun valige toidukorra nimetus."
+      },
+      textFieldHelper: "Sisestage toidukorra nimetus:",
+      textFieldReasons: {
+        nonempty: "Palun sisestage toidukorra nimetus."
+      }
     },
     Measure: {
       confirmation: "Kas olete kindel, et soovite selle mõõdu kustutada?",
@@ -166,49 +209,6 @@ export const estonian: Translation = {
       Logout: "Logi välja",
       Settings: "Seaded",
       Statistics: "Statistika"
-    },
-    Name: {
-      createSubmit: "Looge",
-      createTitle: "Toidukorra loomine",
-      editSubmit: "Nimetage ümber",
-      editTitle: "Toidukorda ümbernimetamine",
-      label: "Nimetus",
-      meals: {
-        breakfast: "Hommikusöök",
-        dinner: "Õhtusöök",
-        lunch: "Lõunasöök"
-      },
-      or: "Või",
-      selectHelper: "Valige toidukorra nimetus:",
-      selectReasons: {
-        nonempty: "Palun valige toidukorra nimetus."
-      },
-      textFieldHelper: "Sisestage toidukorra nimetus:",
-      textFieldReasons: {
-        nonempty: "Palun sisestage toidukorra nimetus."
-      }
-    },
-    Quantity: {
-      g: "grammides",
-      ml: "milliliitrites",
-      quantity: {
-        helper: "Sisestage toiduaine kogus:",
-        label: "Kogus",
-        reasons: {
-          nonempty: "Palun sisestage toiduaine kogus.",
-          positive: "Palun sistestage kogus mis on suurem kui 0.",
-          toNumber: "Palun sistestage korrektne kogus."
-        }
-      },
-      select: "Valige",
-      title: "Valige kogus",
-      unit: {
-        helper: "Kas toiduaine kogus on {ühik} või tükkides?",
-        label: "Ühik",
-        reasons: {
-          defined: "Palun valige toiduaine ühik."
-        }
-      }
     },
     Register: {
       inputs: {
@@ -287,17 +287,17 @@ export const estonian: Translation = {
     },
     Statistics: {
       ranges: {
-        verySeverelyUnderweight: "Väga tõsine alakaal",
-        severelyUnderweight: "Tõsine alakaal",
-        underweight: "Alakaal",
         normal: "Normaalkaal",
-        overweight: "Ülekaal",
         obeseClass1: "Rasvumise I aste",
         obeseClass2: "Rasvumise II aste",
         obeseClass3: "Rasvumise III aste",
         obeseClass4: "Rasvumise IV aste",
         obeseClass5: "Rasvumise V aste",
-        obeseClass6: "Rasvumise VI aste"
+        obeseClass6: "Rasvumise VI aste",
+        overweight: "Ülekaal",
+        severelyUnderweight: "Tõsine alakaal",
+        underweight: "Alakaal",
+        verySeverelyUnderweight: "Väga tõsine alakaal"
       },
       timeFrames: {
         all: "Kõik",
@@ -311,18 +311,18 @@ export const estonian: Translation = {
         Bicep: "Biitsepi ümbermõõt",
         bodyMassIndex: "Kehamassiindeks",
         Calf: "Sääremarja ümbermõõt",
+        carbohydrate: "Süsivesikud",
         Chest: "Rindkere ümbermõõt",
+        energy: "Energiasisaldus",
+        fat: "Rasvad",
         Height: "Pikkus",
         Hip: "Puusa ümbermõõt",
+        protein: "Valgud",
         Shin: "Sääre ümbermõõt",
         Thigh: "Reie ümbermõõt",
         Waist: "Talje ümbermõõt",
         Weight: "Kaal",
-        Wrist: "Randme ümbermõõt",
-        energy: "Energiasisaldus",
-        protein: "Valgud",
-        fat: "Rasvad",
-        carbohydrate: "Süsivesikud"
+        Wrist: "Randme ümbermõõt"
       }
     },
     Unknown: {
@@ -331,10 +331,8 @@ export const estonian: Translation = {
   },
   locale: "et-EE",
   timeLocale: {
-    dateTime: "%A, %e %B %Y a. %X",
     date: "%d.%m.%Y",
-    time: "%H:%M:%S",
-    periods: ["AM", "PM"],
+    dateTime: "%A, %e %B %Y a. %X",
     days: [
       "pühapäev",
       "esmaspäev",
@@ -344,7 +342,6 @@ export const estonian: Translation = {
       "reede",
       "laupäev"
     ],
-    shortDays: ["P", "E", "T", "K", "N", "R", "L"],
     months: [
       "jaanuar",
       "veebruar",
@@ -359,6 +356,8 @@ export const estonian: Translation = {
       "november",
       "detsember"
     ],
+    periods: ["AM", "PM"],
+    shortDays: ["P", "E", "T", "K", "N", "R", "L"],
     shortMonths: [
       "jaan",
       "veebr",
@@ -372,7 +371,8 @@ export const estonian: Translation = {
       "okt",
       "nov",
       "dets"
-    ]
+    ],
+    time: "%H:%M:%S"
   },
   units: {
     cm: "cm",

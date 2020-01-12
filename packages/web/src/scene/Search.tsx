@@ -14,6 +14,7 @@ import { FoodstuffView } from "../component/FoodstuffView";
 import { TextField } from "../component/TextField";
 import { TitleBar } from "../component/TitleBar";
 import { Foodstuff } from "../model/Foodstuff";
+import { Meal } from "../model/Meal";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
 import { hasEnvironmentCamera } from "../utility/scanner";
@@ -35,14 +36,14 @@ type Reason = Failure<typeof validate> | "notFound";
  */
 interface SearchProps {
   /**
-   * Name of the meal to which foodstuff is being added.
+   * Meal to which foodstuff is being added.
    */
-  name: string;
+  meal: Meal;
 
   /**
-   * Foodstuff select callback function.
+   * Scene close callback.
    */
-  onSelect: (foodstuff?: Foodstuff, quantity?: number) => void;
+  onClose: () => void;
 }
 
 /**
@@ -103,11 +104,6 @@ export class Search extends SceneComponent<
   private scene?: Scenes;
 
   /**
-   * Currently selected foodstuff.
-   */
-  private foodstuff?: Foodstuff;
-
-  /**
    * Sets the name of this scene.
    */
   public constructor(
@@ -116,7 +112,7 @@ export class Search extends SceneComponent<
     super("Search", props);
 
     this.checkEnvironmentCamera();
-    this.props.foodstuffStore!.getLatestFrequent(this.props.name);
+    this.props.foodstuffStore!.getLatestFrequent(this.props.meal.name);
   }
 
   /**
@@ -125,7 +121,7 @@ export class Search extends SceneComponent<
   public render() {
     return (
       <>
-        <TitleBar onClose={this.handleClose} title={this.translation.title} />
+        <TitleBar onClose={this.props.onClose} title={this.translation.title} />
 
         <Controls>
           <TextField
@@ -146,7 +142,7 @@ export class Search extends SceneComponent<
         <AutoOverflow>
           <Results>
             {(this.query === ""
-              ? this.props.foodstuffStore!.frequentOf(this.props.name)
+              ? this.props.foodstuffStore!.frequentOf(this.props.meal.name)
               : this.completed
               ? this.props.foodstuffStore!.resultsOf(this.query)
               : []
@@ -272,33 +268,11 @@ export class Search extends SceneComponent<
    */
   @action
   private handleFoodstuffSelect = (foodstuff: Foodstuff) => {
-    this.foodstuff = foodstuff;
-
-    this.scene = this.props.viewStore!.push("center", "Quantity", {
+    this.scene = this.props.viewStore!.push("center", "DishEdit", {
       foodstuff,
-      onSelect: this.handleQuantitySelect
+      meal: this.props.meal,
+      onClose: this.props.onClose
     });
-  };
-
-  /**
-   * Selects current foodstuff of specified quantity if defined.
-   */
-  @action
-  private handleQuantitySelect = (quantity?: number) => {
-    this.props.viewStore!.pop(this.scene!);
-
-    if (quantity === undefined) {
-      return;
-    }
-
-    this.props.onSelect(this.foodstuff, quantity);
-  };
-
-  /**
-   * Select nothing on close.
-   */
-  public handleClose = () => {
-    this.props.onSelect();
   };
 }
 

@@ -1,4 +1,4 @@
-import { action, observable } from "mobx";
+import { observable } from "mobx";
 import { DishDto } from "server";
 
 import { DishStore } from "../store/DishStore";
@@ -20,12 +20,12 @@ export class Dish {
   public readonly foodstuff: Foodstuff;
 
   /**
-   * Quantity of the foodstuff that was consumed.
+   * Quantity of the foodstuff that was or will be consumed.
    */
   @observable public quantity: number;
 
   /**
-   * Whether dish was consumed.
+   * Whether dish has been consumed.
    */
   @observable public eaten: boolean;
 
@@ -52,6 +52,36 @@ export class Dish {
     this.eaten = dto.eaten;
     this.meal = meal;
     this.store = store;
+
+    this.store.register(this);
+  }
+
+  /**
+   * Deletes this dish.
+   */
+  public delete() {
+    return this.store.delete(this);
+  }
+
+  /**
+   * Inserts this dish into specified meal at specified index.
+   */
+  public insert(meal: Meal, index: number) {
+    return this.store.insert(this, meal, index);
+  }
+
+  /**
+   * Sets whether this dish is eaten.
+   */
+  public setEaten(eaten: boolean) {
+    return this.store.setEaten(this, eaten);
+  }
+
+  /**
+   * Sets the quantity of this meal.
+   */
+  public setQuantity(quantity: number) {
+    return this.store.setQuantity(this, quantity);
   }
 
   /**
@@ -61,37 +91,5 @@ export class Dish {
     return (
       this.quantity * (this.foodstuff.nutritionDeclaration[nutrient] / 100)
     );
-  }
-
-  /**
-   * Deletes this dish.
-   */
-  @action
-  public delete() {
-    return this.store.delete(this);
-  }
-
-  /**
-   * Inserts this dish into specified meal at specified index.
-   */
-  @action
-  public insert(meal: Meal, index: number) {
-    return this.store.insert(this, meal, index);
-  }
-
-  /**
-   * Sets whether this dish is eaten.
-   */
-  @action
-  public setEaten(eaten: boolean) {
-    return this.store.setEaten(this, eaten);
-  }
-
-  /**
-   * Sets the quantity of this meal.
-   */
-  @action
-  public setQuantity(quantity: number) {
-    return this.store.setQuantity(this, quantity);
   }
 }

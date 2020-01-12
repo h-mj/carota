@@ -8,13 +8,13 @@ export type SceneNames =
   | "Body"
   | "Confirmation"
   | "Diet"
+  | "DishEdit"
   | "Edit"
   | "GroupEdit"
   | "Login"
   | "Logout"
+  | "MealEdit"
   | "Measure"
-  | "Name"
-  | "Quantity"
   | "Register"
   | "Scanner"
   | "Search"
@@ -30,13 +30,13 @@ const SCENE_TO_COMPONENT_NAME = {
   Body: "Body",
   Confirmation: "Confirmation",
   Diet: "Diet",
+  DishEdit: "DishEdit",
   Edit: "Edit",
   GroupEdit: "GroupEdit",
   Login: "Login",
   Logout: "Logout",
+  MealEdit: "MealEdit",
   Measure: "Measure",
-  Name: "Name",
-  Quantity: "Quantity",
   Register: "Register",
   Scanner: "Scanner",
   Search: "Search",

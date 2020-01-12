@@ -2,12 +2,12 @@ import { Dish } from "../model/Dish";
 import { Foodstuff } from "../model/Foodstuff";
 import { Meal } from "../model/Meal";
 import { Rpc } from "../utility/rpc";
-import { Store } from "./Store";
+import { CachedStore } from "./CachedStore";
 
 /**
  * Dish managing store.
  */
-export class DishStore extends Store {
+export class DishStore extends CachedStore<Dish> {
   /**
    * Creates a new `Dish` within specified `meal`. Created dish will specify
    * that user consumed specified `quantity` of specified `foodstuff`.
@@ -26,10 +26,12 @@ export class DishStore extends Store {
     });
 
     if (!result.ok) {
-      return this.rootStore.viewStore.notifyUnknownError();
+      return result.value;
     }
 
     meal.dishes.push(new Dish(result.value, meal, this));
+
+    return;
   }
 
   /**
@@ -37,6 +39,7 @@ export class DishStore extends Store {
    */
   public async delete(dish: Dish) {
     dish.meal.dishes.splice(dish.meal.dishes.indexOf(dish), 1);
+    this.unregister(dish);
 
     const result = await Rpc.call("dish", "delete", { id: dish.id });
 
@@ -49,12 +52,12 @@ export class DishStore extends Store {
    * Moves specified dish to specified meal at specified index.
    */
   public async insert(dish: Dish, meal: Meal, index: number) {
-    dish.meal.dishes.splice(dish.meal.dishes.indexOf(dish), 1);
+    const { dishes } = dish.meal;
+    dishes.splice(dishes.indexOf(dish), 1);
 
     meal.dishes.splice(index, 0, dish);
     dish.meal = meal;
 
-    // Make the reorder dish request so that order is updated on the server too.
     const result = await Rpc.call("dish", "insert", {
       id: dish.id,
       mealId: meal.id,
@@ -83,15 +86,17 @@ export class DishStore extends Store {
    * Sets the quantity of specified dish.
    */
   public async setQuantity(dish: Dish, quantity: number) {
-    dish.quantity = quantity;
-
     const result = await Rpc.call("dish", "setQuantity", {
       id: dish.id,
       quantity
     });
 
     if (!result.ok) {
-      return this.rootStore.viewStore.notifyUnknownError();
+      return result.value;
     }
+
+    dish.quantity = quantity;
+
+    return;
   }
 }

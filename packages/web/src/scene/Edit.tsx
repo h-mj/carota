@@ -530,15 +530,19 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
 
     const result = toBody(this.values);
 
-    const error = await this.props.viewStore!.load(
-      result.ok ? this.props.foodstuffStore!.save(result.value) : undefined
-    );
-
-    if (result.ok && error === undefined) {
-      this.props.onSave(true);
+    if (!result.ok) {
+      this.reasons = result.value;
+      return;
     }
 
-    this.reasons = append(result.ok ? {} : result.value, error);
+    const error = await this.props.foodstuffStore!.save(result.value);
+
+    if (error === undefined) {
+      this.props.onSave(true);
+      return;
+    }
+
+    this.reasons = append({}, error);
   };
 
   /**

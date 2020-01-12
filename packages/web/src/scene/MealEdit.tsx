@@ -301,16 +301,13 @@ export class MealEdit extends SceneComponent<
         ? this.values.selectedName
         : this.values.name;
 
-    const validationResult = nameValidator(name);
+    const result = nameValidator(name);
 
-    if (validationResult.ok) {
+    if (result.ok) {
       const error =
         this.props.meal === undefined
-          ? await this.props.mealStore!.create(
-              validationResult.value,
-              this.props.date
-            )
-          : await this.props.meal.rename(validationResult.value);
+          ? await this.props.mealStore!.create(result.value, this.props.date)
+          : await this.props.meal.rename(result.value);
 
       if (error === undefined) {
         this.props.onClose();
@@ -319,11 +316,11 @@ export class MealEdit extends SceneComponent<
 
       this.reasons = append(this.reasons, error);
     } else {
-      if (validationResult.value === "nonempty") {
+      if (result.value === "nonempty") {
         this.reasons.name = "nonempty";
         this.reasons.selectedName = "nonempty";
       } else {
-        this.reasons.name = validationResult.value;
+        this.reasons.name = result.value;
       }
     }
 

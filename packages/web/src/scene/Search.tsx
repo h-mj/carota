@@ -204,11 +204,11 @@ export class Search extends SceneComponent<
   };
 
   /**
-   * Shows food editor when user clicks on add result.
+   * Shows foodstuff edit scene when user clicks on add result.
    */
   @action
   private showEditor = (foodstuff?: Foodstuff) => {
-    this.scene = this.props.viewStore!.push("left", "Edit", {
+    this.scene = this.props.viewStore!.push("left", "FoodstuffEdit", {
       foodstuff,
       name: this.query,
       onSave: this.hideEditor
@@ -216,7 +216,7 @@ export class Search extends SceneComponent<
   };
 
   /**
-   * Hides food editor, called by `Edit` scene itself.
+   * Closes foodstuff editor.
    */
   @action
   private hideEditor = (updated: boolean) => {

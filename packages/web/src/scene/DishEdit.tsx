@@ -331,7 +331,7 @@ export class DishEdit extends SceneComponent<
               this.props.meal,
               this.props.foodstuff,
               quantity,
-              true
+              new Date(this.props.meal.date).getTime() <= new Date().getTime()
             )
           : await this.props.dish.setQuantity(quantity);
 

@@ -58,7 +58,7 @@ export const estonian: Translation = {
         }
       }
     },
-    Edit: {
+    FoodstuffEdit: {
       addTitle: "Lisa toiduaine",
       confirm: "Kas olete kindel, et soovite selle toiduaine ära kustutada?",
       delete: "Kustutage",

@@ -58,7 +58,7 @@ export const english: Translation = {
         }
       }
     },
-    Edit: {
+    FoodstuffEdit: {
       addTitle: "Add foodstuff",
       confirm: "Are you sure you want to delete this foodstuff?",
       delete: "Delete",

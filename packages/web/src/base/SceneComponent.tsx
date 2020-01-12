@@ -3,7 +3,7 @@ import { Body } from "../scene/Body";
 import { Confirmation } from "../scene/Confirmation";
 import { Diet } from "../scene/Diet";
 import { DishEdit } from "../scene/DishEdit";
-import { Edit } from "../scene/Edit";
+import { FoodstuffEdit } from "../scene/FoodstuffEdit";
 import { GroupEdit } from "../scene/GroupEdit";
 import { Login } from "../scene/Login";
 import { Logout } from "../scene/Logout";
@@ -27,7 +27,7 @@ export interface SceneComponentMap {
   Confirmation: Confirmation;
   Diet: Diet;
   DishEdit: DishEdit;
-  Edit: Edit;
+  FoodstuffEdit: FoodstuffEdit;
   GroupEdit: GroupEdit;
   Login: Login;
   Logout: Logout;

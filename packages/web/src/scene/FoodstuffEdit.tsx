@@ -60,9 +60,9 @@ const NUTRIENTS = [
 type Nutrients = typeof NUTRIENTS[number];
 
 /**
- * Edit scene props.
+ * Foodstuff edit scene props.
  */
-interface EditProps {
+interface FoodstuffEditProps {
   /**
    * Foodstuff model that is being edited.
    */
@@ -97,7 +97,7 @@ interface InputTranslation {
 /**
  * Foodstuff edit scene translation.
  */
-interface EditTranslation {
+interface FoodstuffEditTranslation {
   /**
    * Scene title if new foodstuff is being created.
    */
@@ -153,7 +153,7 @@ type NutritionDeclarationValues = Record<RequiredNutrient, string> &
 /**
  * Foodstuff editing form values object type.
  */
-interface EditValues {
+interface Values {
   id?: string;
   name: string;
   barcode?: string;
@@ -171,7 +171,7 @@ const OPTIONAL_FIELDS = new Set(["barcode", "packageSize", "pieceQuantity"]);
 /**
  * Initial form values when creating a new foodstuff.
  */
-const DEFAULT_EDIT_VALUES: Readonly<EditValues> = {
+const DEFAULT_EDIT_VALUES: Readonly<Values> = {
   name: "",
   nutritionDeclaration: {
     carbohydrate: "",
@@ -244,7 +244,7 @@ const optionalParseFloat = deviate<string | undefined>()
  * type object.
  */
 // prettier-ignore
-const toBody = deviate<EditValues>().shape({
+const toBody = deviate<Values>().shape({
   id: deviate<string | undefined>(),
   name: deviate<string>().trim().nonempty(),
   barcode: deviate<string | undefined>().optional().replace(" ", "").nonempty().regexp(/^\d{13}$/),
@@ -272,16 +272,20 @@ const toBody = deviate<EditValues>().shape({
  */
 @inject("foodstuffStore", "viewStore")
 @observer
-export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
+export class FoodstuffEdit extends SceneComponent<
+  "FoodstuffEdit",
+  FoodstuffEditProps,
+  FoodstuffEditTranslation
+> {
   /**
    * Foodstuff editing form field values.
    */
-  @observable private values: EditValues;
+  @observable private values: Values;
 
   /**
    * Object that contains error reasons of occurred errors for each value.
    */
-  @observable private reasons: ErrorsFor<EditValues> = {};
+  @observable private reasons: ErrorsFor<Values> = {};
 
   /**
    * Whether scan button should be rendered next to the barcode input..
@@ -296,8 +300,10 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   /**
    * Sets the name of this scene.
    */
-  public constructor(props: EditProps & DefaultSceneComponentProps<"Edit">) {
-    super("Edit", props);
+  public constructor(
+    props: FoodstuffEditProps & DefaultSceneComponentProps<"FoodstuffEdit">
+  ) {
+    super("FoodstuffEdit", props);
 
     this.values = this.getValues();
 
@@ -472,10 +478,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
    * Updates input value on value change.
    */
   @action
-  private handleChange = <T extends InputNames>(
-    name: T,
-    value: EditValues[T]
-  ) => {
+  private handleChange = <T extends InputNames>(name: T, value: Values[T]) => {
     this.values[name] = value;
   };
 
@@ -585,7 +588,7 @@ export class Edit extends SceneComponent<"Edit", EditProps, EditTranslation> {
   /**
    * Returns initial form values.
    */
-  private getValues(): EditValues {
+  private getValues(): Values {
     const { foodstuff } = this.props;
 
     if (foodstuff === undefined) {

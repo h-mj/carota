@@ -58,7 +58,7 @@ export const russian: Translation = {
         }
       }
     },
-    Edit: {
+    FoodstuffEdit: {
       addTitle: "Добавить продукт",
       confirm: "Вы уверены, что хотите удалить этот продукт?",
       delete: "Удалить",

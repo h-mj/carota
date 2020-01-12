@@ -325,9 +325,6 @@ export const estonian: Translation = {
         carbohydrate: "Süsivesikud"
       }
     },
-    TrashCan: {
-      delete: "Kustutage"
-    },
     Unknown: {
       message: "Teie otsitavat lehte ei leitud."
     }

@@ -6,7 +6,6 @@ import { FoodstuffView } from "../component/FoodstuffView";
 import { GroupView } from "../component/GroupView";
 import { Head } from "../component/Head";
 import { Menu } from "../component/Menu";
-import { TrashCan } from "../component/TrashCan";
 import { Component } from "./Component";
 import { SceneComponentMap } from "./SceneComponent";
 
@@ -20,7 +19,6 @@ interface TranslatedComponentMap extends SceneComponentMap {
   GroupView: GroupView;
   Head: Head;
   Menu: Menu;
-  TrashCan: TrashCan;
 }
 
 /**

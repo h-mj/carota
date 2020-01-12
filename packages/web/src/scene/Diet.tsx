@@ -12,7 +12,6 @@ import { Action } from "../component/Action";
 import { DateSelect } from "../component/DateSelect/DateSelect";
 import { Head } from "../component/Head";
 import { MealList } from "../component/MealList";
-import { TrashCan } from "../component/TrashCan";
 import { styled } from "../styling/theme";
 import { toIsoDateString } from "../utility/form";
 
@@ -41,11 +40,6 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
    * Current draggable type.
    */
   @observable private draggableType?: "meal" | "dish";
-
-  /**
-   * Current draggable ID.
-   */
-  private draggableId?: string;
 
   /**
    * Pushed `Name` scene reference.
@@ -78,8 +72,6 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
           onDragStart={this.handleDragStart}
           onDragEnd={this.handleDragEnd}
         >
-          <TrashCan isRemovable={this.isDraggableRemovable()} />
-
           <MealList
             draggableType={this.draggableType}
             meals={this.props.mealStore!.mealsOf(this.date)}
@@ -90,21 +82,6 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
       </Container>
     );
   }
-
-  /**
-   * Returns whether current draggable is removable.
-   */
-  private isDraggableRemovable = () => {
-    if (this.draggableType === undefined) {
-      return false;
-    }
-
-    if (this.draggableType === "dish") {
-      return true;
-    }
-
-    return this.props.mealStore!.withId(this.draggableId!)!.dishes.length === 0;
-  };
 
   /**
    * Sets currently active date to specified date.
@@ -122,7 +99,6 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
   private handleDragStart = (initial: DragStart) => {
     this.draggableType =
       initial.source.droppableId === "meals" ? "meal" : "dish";
-    this.draggableId = initial.draggableId;
   };
 
   /**
@@ -132,7 +108,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
   private handleDragEnd = (result: DropResult) => {
     const { source, destination, draggableId } = result;
 
-    const type = this.draggableType;
+    const draggableType = this.draggableType;
     this.draggableType = undefined;
 
     if (!destination) {
@@ -146,18 +122,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
       return;
     }
 
-    if (destination.droppableId === "trashCan") {
-      const target =
-        type === "meal"
-          ? this.props.mealStore!.withId(draggableId)!
-          : this.props
-              .mealStore!.withId(source.droppableId)!
-              .withId(draggableId)!;
-
-      return target.delete();
-    }
-
-    if (type === "meal") {
+    if (draggableType === "meal") {
       return this.props
         .mealStore!.withId(draggableId)!
         .insert(destination.index);

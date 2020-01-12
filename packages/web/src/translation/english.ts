@@ -324,9 +324,6 @@ export const english: Translation = {
         carbohydrate: "Carbohydrate"
       }
     },
-    TrashCan: {
-      delete: "Delete"
-    },
     Unknown: {
       message: "The page you're looking for can not be found."
     }

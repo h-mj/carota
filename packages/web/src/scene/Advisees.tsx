@@ -48,24 +48,28 @@ export class Advisees extends SceneComponent<"Advisees"> {
     return (
       <Container>
         <Sidebar>
-          <DragDropContext
-            onDragStart={this.handleDragStart}
-            onDragEnd={this.handleDragEnd}
-          >
-            {this.props.groupStore!.ungrouped.length > 0 && (
-              <AdviseeList group={this.props.groupStore!.ungrouped} />
-            )}
+          <PaddedContent>
+            <DragDropContext
+              onDragStart={this.handleDragStart}
+              onDragEnd={this.handleDragEnd}
+            >
+              {this.props.groupStore!.ungrouped.length > 0 && (
+                <AdviseeList group={this.props.groupStore!.ungrouped} />
+              )}
 
-            <GroupList
-              draggableType={this.draggableType}
-              groups={this.props.groupStore!.groups}
-            />
-          </DragDropContext>
+              <GroupList
+                draggableType={this.draggableType}
+                groups={this.props.groupStore!.groups}
+              />
+            </DragDropContext>
+          </PaddedContent>
 
-          <Action fixed={true} onClick={this.handleAction} />
+          <ActionAligner>
+            <Action fixed={true} onClick={this.handleAction} />
+          </ActionAligner>
         </Sidebar>
 
-        <Main>Statistics</Main>
+        <PaddedContent>Statistics</PaddedContent>
       </Container>
     );
   }
@@ -155,32 +159,59 @@ const Container = styled.div`
  * Sidebar container.
  */
 const Sidebar = styled.div`
+  position: relative;
+
   width: ${({ theme }) => theme.widthSmall};
   height: 100%;
   flex-shrink: 0;
 
-  overflow-y: auto;
-
   background-color: ${({ theme }) => theme.backgroundColor};
   border-right: solid 1px ${({ theme }) => theme.borderColor};
-
-  padding: ${({ theme }) => theme.padding};
-  box-sizing: border-box;
 
   @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
     width: 100%;
     border-right: none;
   }
+`;
+
+/**
+ * Component that pads out its children with theme defined padding. Bottom
+ * padding is much larger to allow user to scroll last element up so that menu
+ * and add group buttons do not overlap it.
+ */
+const PaddedContent = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+
+  padding: ${({ theme }) => theme.padding};
+  box-sizing: border-box;
 
   & > *:not(:last-child) {
     margin-bottom: ${({ theme }) => theme.padding};
   }
+
+  & > *:last-child {
+    margin-bottom: calc(2 * ${({ theme }) => theme.height});
+  }
 `;
 
 /**
- * Scene main content container component.
+ * Aligns the `Action` component in correct place.
  */
-const Main = styled.div`
+const ActionAligner = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  transform: translateZ(0);
+
   width: 100%;
-  overflow-y: auto;
+  height: 100%;
+
+  pointer-events: none;
+
+  & > * {
+    pointer-events: initial;
+  }
 `;

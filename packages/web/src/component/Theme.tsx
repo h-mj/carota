@@ -31,8 +31,6 @@ export class Theme extends Component {
  * Global style that contains styling defined in global stylesheet.
  */
 const GlobalStyle = createGlobalStyle`
-  @import url("https://rsms.me/inter/inter.css");
-
   html {
     background-color: ${({ theme }) => theme.backgroundColor};
     color: ${({ theme }) => theme.colorSecondary};

@@ -7,6 +7,7 @@ import { InvalidIdError } from "../../base/error/InvalidIdError";
 import { Account, authorize as authorizeAccount } from "../account/Account";
 import { AccountRepository } from "../account/AccountRepository";
 import { CreateGroupDto } from "./dto/CreateGroupDto";
+import { DeleteGroupDto } from "./dto/DeleteGroupDto";
 import { GetGroupsDto } from "./dto/GetGroupsDto";
 import { InsertGroupDto } from "./dto/InsertGroupDto";
 import { RenameGroupDto } from "./dto/RenameGroupDto";
@@ -43,6 +44,27 @@ export class GroupService {
     await groupRepository!.link(group, previous);
 
     return group;
+  }
+
+  /**
+   * Deletes a group with given identifier.
+   */
+  @Transaction()
+  public async delete(
+    dto: DeleteGroupDto,
+    principal: Account,
+    @TransactionRepository() groupRepository?: GroupRepository
+  ) {
+    const group = await groupRepository!.findOne(dto.id);
+
+    if (group === undefined) {
+      throw new InvalidIdError(Group, ["id"]);
+    }
+
+    await authorizeGroup(principal, "delete", group);
+
+    await groupRepository!.unlink(group);
+    await groupRepository!.remove(group);
   }
 
   /**

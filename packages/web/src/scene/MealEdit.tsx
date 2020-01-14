@@ -68,6 +68,11 @@ interface MealEditTranslation {
   createTitle: string;
 
   /**
+   * Delete button text.
+   */
+  delete: string;
+
+  /**
    * Edit meal submit button text.
    */
   editSubmit: string;
@@ -231,6 +236,17 @@ export class MealEdit extends SceneComponent<
           />
 
           <Controls>
+            {this.props.meal !== undefined &&
+              this.props.meal.dishes.length === 0 && (
+                <Button
+                  invalid={any(this.reasons)}
+                  onClick={this.handleDeletion}
+                  secondary={true}
+                  type="button"
+                >
+                  {this.translation.delete}
+                </Button>
+              )}
             <Button invalid={any(this.reasons)}>
               {this.props.meal !== undefined
                 ? this.translation.editSubmit
@@ -323,6 +339,26 @@ export class MealEdit extends SceneComponent<
         this.reasons.name = result.value;
       }
     }
+
+    this.submitting = false;
+  };
+
+  /**
+   * Handles delete button click mouse event.
+   */
+  private handleDeletion = async () => {
+    if (this.props.meal === undefined || this.props.meal.dishes.length > 0) {
+      return;
+    }
+
+    if (this.submitting) {
+      return;
+    }
+
+    this.submitting = true;
+
+    await this.props.meal.delete();
+    this.props.onClose();
 
     this.submitting = false;
   };

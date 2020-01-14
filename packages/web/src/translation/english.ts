@@ -37,6 +37,7 @@ export const english: Translation = {
       title: "Daily intake"
     },
     DishEdit: {
+      delete: "Delete",
       g: "grams",
       ml: "milliliters",
       quantity: {
@@ -125,6 +126,7 @@ export const english: Translation = {
     GroupEdit: {
       createSubmit: "Create",
       createTitle: "Create group",
+      delete: "Delete",
       editSubmit: "Rename",
       editTitle: "Rename group",
       label: "Name",
@@ -160,6 +162,7 @@ export const english: Translation = {
     MealEdit: {
       createSubmit: "Create",
       createTitle: "Create meal",
+      delete: "Delete",
       editSubmit: "Rename",
       editTitle: "Rename meal",
       label: "Name",

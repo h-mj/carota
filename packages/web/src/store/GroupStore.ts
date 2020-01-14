@@ -102,6 +102,25 @@ export class GroupStore extends CachedStore<Group> {
   }
 
   /**
+   * Deletes specified group.
+   */
+  public async delete(group: Group) {
+    if (group.accounts.length > 0) {
+      throw new Error("Tried to remove non-empty group");
+    }
+
+    if (this._groups !== undefined && this._groups.includes(group)) {
+      this._groups.splice(this._groups.indexOf(group), 1);
+    }
+
+    const result = await Rpc.call("group", "delete", { id: group.id });
+
+    if (!result.ok) {
+      this.rootStore.viewStore.notifyUnknownError();
+    }
+  }
+
+  /**
    * Inserts specified `group` at specified `index` in adviser advisee group
    * list.
    */

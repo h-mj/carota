@@ -293,6 +293,11 @@ export class FoodstuffEdit extends SceneComponent<
   @observable private showScanButton = false;
 
   /**
+   * Whether saving or deletion request has been submitted.
+   */
+  private submitting = false;
+
+  /**
    * Pushed scene reference, either `Scanner` or `Confirmation`.
    */
   private scene?: Scenes;
@@ -531,27 +536,39 @@ export class FoodstuffEdit extends SceneComponent<
   > = async event => {
     event.preventDefault();
 
+    if (this.submitting) {
+      return;
+    }
+
+    this.submitting = true;
+
     const result = toBody(this.values);
 
-    if (!result.ok) {
+    if (result.ok) {
+      const error = await this.props.foodstuffStore!.save(result.value);
+
+      if (error === undefined) {
+        this.props.onSave(true);
+        return;
+      }
+
+      this.reasons = append({}, error);
+    } else {
       this.reasons = result.value;
-      return;
     }
 
-    const error = await this.props.foodstuffStore!.save(result.value);
-
-    if (error === undefined) {
-      this.props.onSave(true);
-      return;
-    }
-
-    this.reasons = append({}, error);
+    this.submitting = false;
   };
 
   /**
    * Shows confirmation screen when user clicks on delete button.
    */
   private showConfirmation = () => {
+    if (this.submitting) {
+      return;
+    }
+
+    this.submitting = true;
     this.scene = this.props.viewStore!.push("center", "Confirmation", {
       confirm: this.handleConfirmation,
       message: this.translation.confirm
@@ -563,12 +580,13 @@ export class FoodstuffEdit extends SceneComponent<
    */
   private handleConfirmation = async (confirmed: boolean) => {
     this.props.viewStore!.pop(this.scene!);
+    this.submitting = false;
 
     if (!confirmed) {
       return;
     }
 
-    await this.props.viewStore!.load(this.props.foodstuff!.delete());
+    await this.props.foodstuff!.delete();
     this.props.onSave(true);
   };
 

@@ -2,10 +2,12 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Draggable } from "react-beautiful-dnd";
 
+import { Scenes } from "../base/Scene";
 import { TranslatedComponent } from "../base/TranslatedComponent";
 import { Group } from "../model/Group";
 import { styled } from "../styling/theme";
 import { AdviseeList } from "./AdviseeList";
+import { EditButton } from "./EditButton";
 
 /**
  * Group view component props.
@@ -48,6 +50,11 @@ export class GroupView extends TranslatedComponent<
   GroupViewTranslation
 > {
   /**
+   * Pushed `GroupEdit` scene instance.
+   */
+  private scene?: Scenes;
+
+  /**
    * Creates a new instance of `GroupView` and sets the name of this component.
    */
   public constructor(props: GroupViewProps) {
@@ -58,6 +65,8 @@ export class GroupView extends TranslatedComponent<
    * Renders the group view component alongside a list of advisees component.
    */
   public render() {
+    const { name } = this.props.group;
+
     return (
       <Draggable draggableId={this.props.group.id} index={this.props.index}>
         {(provided, snapshot) => (
@@ -67,7 +76,8 @@ export class GroupView extends TranslatedComponent<
             {...provided.draggableProps}
           >
             <Header {...provided.dragHandleProps}>
-              {this.props.group.name}
+              {name}
+              <EditButton onClick={this.handleEdit} />
             </Header>
 
             <AdviseeList
@@ -79,6 +89,23 @@ export class GroupView extends TranslatedComponent<
       </Draggable>
     );
   }
+
+  /**
+   * Shows group editing scene on edit button click.
+   */
+  private handleEdit = () => {
+    this.scene = this.props.viewStore!.push("center", "GroupEdit", {
+      group: this.props.group,
+      onClose: this.handleEditClose
+    });
+  };
+
+  /**
+   * Closes pushed `GroupEdit` scene.
+   */
+  private handleEditClose = () => {
+    this.props.viewStore!.pop(this.scene!);
+  };
 }
 
 /**

@@ -37,6 +37,7 @@ export const estonian: Translation = {
       title: "Päevane tarbimine"
     },
     DishEdit: {
+      delete: "Kustutage",
       g: "grammides",
       ml: "milliliitrites",
       quantity: {
@@ -125,6 +126,7 @@ export const estonian: Translation = {
     GroupEdit: {
       createSubmit: "Looge",
       createTitle: "Grupi loomine",
+      delete: "Kustutage",
       editSubmit: "Nimetage ümber",
       editTitle: "Grupi ümbernimetamine",
       label: "Nimetus",
@@ -160,6 +162,7 @@ export const estonian: Translation = {
     MealEdit: {
       createSubmit: "Looge",
       createTitle: "Toidukorra loomine",
+      delete: "Kustutage",
       editSubmit: "Nimetage ümber",
       editTitle: "Toidukorda ümbernimetamine",
       label: "Nimetus",

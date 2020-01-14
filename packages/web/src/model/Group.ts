@@ -44,6 +44,13 @@ export class Group implements Model {
   }
 
   /**
+   * Deletes this group.
+   */
+  public delete() {
+    return this.store.delete(this);
+  }
+
+  /**
    * Inserts this group at specified `index` inside account advisee group list.
    */
   public insert(index: number) {

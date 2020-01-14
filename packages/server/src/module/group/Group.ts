@@ -114,5 +114,6 @@ const isGroupOwner = (requester: Account, target: Group) =>
  * Account related authorization definitions.
  */
 export const { authorize } = new Canallo(onUnauthorized)
+  .allow(Account, "delete", Group, isGroupOwner)
   .allow(Account, "insert", Group, isGroupOwner)
   .allow(Account, "rename", Group, isGroupOwner);

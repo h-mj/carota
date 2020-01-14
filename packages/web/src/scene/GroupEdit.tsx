@@ -51,6 +51,11 @@ interface GroupEditTranslation {
   createTitle: string;
 
   /**
+   * Delete button text.
+   */
+  delete: string;
+
+  /**
    * Submit button text if existing group is being edited.
    */
   editSubmit: string;
@@ -133,10 +138,21 @@ export class GroupEdit extends SceneComponent<
           />
 
           <Controls>
+            {this.props.group !== undefined &&
+              this.props.group.accounts.length === 0 && (
+                <Button
+                  invalid={this.reason !== undefined}
+                  onClick={this.handleDeletion}
+                  secondary={true}
+                  type="button"
+                >
+                  {this.translation.delete}
+                </Button>
+              )}
             <Button invalid={this.reason !== undefined}>
               {this.props.group === undefined
                 ? this.translation.createSubmit
-                : this.translation.createSubmit}
+                : this.translation.editSubmit}
             </Button>
           </Controls>
         </Form>
@@ -183,6 +199,29 @@ export class GroupEdit extends SceneComponent<
     } else {
       this.reason = result.value;
     }
+
+    this.submitting = false;
+  };
+
+  /**
+   * Handles delete button click mouse event.
+   */
+  private handleDeletion = async () => {
+    if (
+      this.props.group === undefined ||
+      this.props.group.accounts.length > 0
+    ) {
+      return;
+    }
+
+    if (this.submitting) {
+      return;
+    }
+
+    this.submitting = true;
+
+    await this.props.group.delete();
+    this.props.onClose();
 
     this.submitting = false;
   };

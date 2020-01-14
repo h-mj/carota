@@ -4,6 +4,7 @@ import { Principal } from "../../base/AuthenticationMiddleware";
 import { ValidationPipe } from "../../base/ValidationPipe";
 import { Account } from "../account/Account";
 import { CreateGroupDto, createGroupDtoValidator } from "./dto/CreateGroupDto";
+import { DeleteGroupDto, deleteGroupDtoValidator } from "./dto/DeleteGroupDto";
 import { GetGroupsDto, getGroupsDtoValidator } from "./dto/GetGroupsDto";
 import { InsertGroupDto, insertGroupDtoValidator } from "./dto/InsertGroupDto";
 import { RenameGroupDto, renameGroupDtoValidator } from "./dto/RenameGroupDto";
@@ -31,6 +32,19 @@ export class GroupController {
     const group = await this.groupService.create(dto, principal);
 
     return await group.toDto();
+  }
+
+  /**
+   * Group deletion endpoint.
+   */
+  @Post("delete")
+  public async delete(
+    @Body(new ValidationPipe(deleteGroupDtoValidator)) dto: DeleteGroupDto,
+    @Principal() principal: Account
+  ) {
+    await this.groupService.delete(dto, principal);
+
+    return true as const;
   }
 
   /**

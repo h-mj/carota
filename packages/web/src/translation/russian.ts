@@ -37,6 +37,7 @@ export const russian: Translation = {
       title: "Суточная потребления"
     },
     DishEdit: {
+      delete: "Удалить",
       g: "граммах",
       ml: "миллилитрах",
       quantity: {
@@ -127,6 +128,7 @@ export const russian: Translation = {
     GroupEdit: {
       createSubmit: "Создать",
       createTitle: "Создать группу",
+      delete: "Удалить",
       editSubmit: "Переименовать",
       editTitle: "Переименование группы",
       label: "Название",
@@ -162,6 +164,7 @@ export const russian: Translation = {
     MealEdit: {
       createSubmit: "Создать",
       createTitle: "Создать прием пищи",
+      delete: "Удалить",
       editSubmit: "Переименовать",
       editTitle: "Переименование приема пищи",
       label: "Название",

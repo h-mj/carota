@@ -68,6 +68,11 @@ interface InputTranslation {
  */
 interface DishEditTranslation {
   /**
+   * Delete button text.
+   */
+  delete: string;
+
+  /**
    * Full gram unit translation that will be inserted into unitHelper text.
    */
   g: string;
@@ -190,6 +195,16 @@ export class DishEdit extends SceneComponent<
           {this.renderQuantityInput()}
 
           <Controls>
+            {this.props.dish !== undefined && (
+              <Button
+                invalid={any(this.reasons)}
+                onClick={this.handleDeletion}
+                secondary={true}
+                type="button"
+              >
+                {this.translation.delete}
+              </Button>
+            )}
             <Button invalid={any(this.reasons)}>
               {this.translation.select}
             </Button>
@@ -344,6 +359,26 @@ export class DishEdit extends SceneComponent<
     } else {
       this.reasons = result.value;
     }
+
+    this.submitting = false;
+  };
+
+  /**
+   * Handles delete button click mouse event.
+   */
+  private handleDeletion = async () => {
+    if (this.props.dish === undefined) {
+      return;
+    }
+
+    if (this.submitting) {
+      return;
+    }
+
+    this.submitting = true;
+
+    await this.props.dish.delete();
+    this.props.onClose();
 
     this.submitting = false;
   };

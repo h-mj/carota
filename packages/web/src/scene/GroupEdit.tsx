@@ -129,7 +129,11 @@ export class GroupEdit extends SceneComponent<
         <Form noValidate={true} onSubmit={this.handleSubmit}>
           <TextField
             autoFocus={true}
-            errorMessage={this.reason}
+            errorMessage={
+              this.reason === undefined
+                ? undefined
+                : this.translation.reasons[this.reason]
+            }
             invalid={this.reason !== undefined}
             label={this.translation.label}
             name="name"

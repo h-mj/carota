@@ -7,6 +7,20 @@ import { Store } from "./Store";
  */
 export class InvitationStore extends Store {
   /**
+   * Creates an invitation for currently authenticated account.
+   */
+  public async createForAdvisee() {
+    const result = await Rpc.call("invitation", "createForAdvisee", undefined);
+
+    if (!result.ok) {
+      this.rootStore.viewStore.notifyUnknownError();
+      return undefined;
+    }
+
+    return new Invitation(result.value);
+  }
+
+  /**
    * Creates and returns invitation model from received invitation data transfer
    * object of invitation with specified ID.
    */

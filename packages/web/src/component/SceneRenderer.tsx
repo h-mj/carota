@@ -10,6 +10,7 @@ import { Diet } from "../scene/Diet";
 import { DishEdit } from "../scene/DishEdit";
 import { FoodstuffEdit } from "../scene/FoodstuffEdit";
 import { GroupEdit } from "../scene/GroupEdit";
+import { Invite } from "../scene/Invite";
 import { Login } from "../scene/Login";
 import { Logout } from "../scene/Logout";
 import { MealEdit } from "../scene/MealEdit";
@@ -36,6 +37,7 @@ const SCENE_COMPONENTS = {
   DishEdit: DishEdit,
   FoodstuffEdit: FoodstuffEdit,
   GroupEdit: GroupEdit,
+  Invite: Invite,
   Login: Login,
   Logout: Logout,
   MealEdit: MealEdit,

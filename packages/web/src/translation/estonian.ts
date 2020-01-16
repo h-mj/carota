@@ -2,6 +2,10 @@ import { Translation } from "./";
 
 export const estonian: Translation = {
   components: {
+    Advisees: {
+      invite: "Lisa",
+      title: "Nõustatavad"
+    },
     AdviseeView: {
       abbreviations: {
         Female: "N",
@@ -139,6 +143,10 @@ export const estonian: Translation = {
     },
     Head: {
       title: "Carota"
+    },
+    Invite: {
+      loading: "Loon registreerimise linki.",
+      title: "Registreerimise link"
     },
     Login: {
       inputs: {

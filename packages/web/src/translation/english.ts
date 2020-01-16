@@ -2,6 +2,10 @@ import { Translation } from "./";
 
 export const english: Translation = {
   components: {
+    Advisees: {
+      invite: "Add",
+      title: "Advisees"
+    },
     AdviseeView: {
       abbreviations: {
         Female: "F",
@@ -139,6 +143,10 @@ export const english: Translation = {
     },
     Head: {
       title: "Carota"
+    },
+    Invite: {
+      loading: "Creating registration link.",
+      title: "Registration link"
     },
     Login: {
       inputs: {

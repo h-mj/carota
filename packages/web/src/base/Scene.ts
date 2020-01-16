@@ -11,6 +11,7 @@ export type SceneNames =
   | "DishEdit"
   | "FoodstuffEdit"
   | "GroupEdit"
+  | "Invite"
   | "Login"
   | "Logout"
   | "MealEdit"
@@ -33,6 +34,7 @@ const SCENE_TO_COMPONENT_NAME = {
   DishEdit: "DishEdit",
   FoodstuffEdit: "FoodstuffEdit",
   GroupEdit: "GroupEdit",
+  Invite: "Invite",
   Login: "Login",
   Logout: "Logout",
   MealEdit: "MealEdit",

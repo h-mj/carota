@@ -10,15 +10,37 @@ import {
 } from "../base/SceneComponent";
 import { Action } from "../component/Action";
 import { AdviseeList } from "../component/AdviseeList";
+import { Button } from "../component/Button";
+import { Collection } from "../component/Collection";
 import { GroupList } from "../component/GroupList";
+import { Head } from "../component/Head";
 import { styled } from "../styling/theme";
+
+/**
+ * Advisee scene component translation.
+ */
+interface AdviseesTranslation {
+  /**
+   * Invite button text.
+   */
+  invite: string;
+
+  /**
+   * Page title and top bar title text.
+   */
+  title: string;
+}
 
 /**
  * Scene that is used by advisers to track and advise their advisees.
  */
 @inject("accountStore", "groupStore", "viewStore")
 @observer
-export class Advisees extends SceneComponent<"Advisees"> {
+export class Advisees extends SceneComponent<
+  "Advisees",
+  {},
+  AdviseesTranslation
+> {
   /**
    * Current draggable type.
    */
@@ -47,29 +69,40 @@ export class Advisees extends SceneComponent<"Advisees"> {
   public render() {
     return (
       <Container>
+        <Head title={this.translation.title} />
+
         <Sidebar>
-          <PaddedContent>
+          <ScrollableContent>
+            <Bar>
+              <Title>{this.translation.title}</Title>
+              <Button onClick={this.handleInvite}>
+                {this.translation.invite}
+              </Button>
+            </Bar>
+
             <DragDropContext
               onDragStart={this.handleDragStart}
               onDragEnd={this.handleDragEnd}
             >
-              {this.props.groupStore!.ungrouped.length > 0 && (
-                <AdviseeList group={this.props.groupStore!.ungrouped} />
-              )}
+              <Collection>
+                {this.props.groupStore!.ungrouped.length > 0 && (
+                  <AdviseeList group={this.props.groupStore!.ungrouped} />
+                )}
 
-              <GroupList
-                draggableType={this.draggableType}
-                groups={this.props.groupStore!.groups}
-              />
+                <GroupList
+                  draggableType={this.draggableType}
+                  groups={this.props.groupStore!.groups}
+                />
+              </Collection>
             </DragDropContext>
-          </PaddedContent>
+          </ScrollableContent>
 
           <ActionAligner>
-            <Action fixed={true} onClick={this.handleAction} />
+            <Action fixed={true} onClick={this.handleGroupAddition} />
           </ActionAligner>
         </Sidebar>
 
-        <PaddedContent>Statistics</PaddedContent>
+        <ScrollableContent>Statistics</ScrollableContent>
       </Container>
     );
   }
@@ -128,16 +161,25 @@ export class Advisees extends SceneComponent<"Advisees"> {
   };
 
   /**
+   * Shows invitation creation scene on invite button click.
+   */
+  private handleInvite = () => {
+    this.scene = this.props.viewStore!.push("center", "Invite", {
+      onClose: this.handleClose
+    });
+  };
+
+  /**
    * Shows group creation scene on group add button click.
    */
-  private handleAction = () => {
+  private handleGroupAddition = () => {
     this.scene = this.props.viewStore!.push("center", "GroupEdit", {
       onClose: this.handleClose
     });
   };
 
   /**
-   * Closes `GroupEdit` scene.
+   * Closes pushed `GroupEdit` or `Invite` scene.
    */
   private handleClose = () => {
     this.props.viewStore!.pop(this.scene!);
@@ -175,25 +217,35 @@ const Sidebar = styled.div`
 `;
 
 /**
- * Component that pads out its children with theme defined padding. Bottom
- * padding is much larger to allow user to scroll last element up so that menu
- * and add group buttons do not overlap it.
+ * Automatically overflowable container.
  */
-const PaddedContent = styled.div`
+const ScrollableContent = styled.div`
   width: 100%;
   height: 100%;
   overflow-y: auto;
+`;
 
-  padding: ${({ theme }) => theme.padding};
+/**
+ * Top bar component.
+ */
+const Bar = styled.div`
+  width: 100%;
+  height: ${({ theme }) => theme.height};
+
+  padding: 0 ${({ theme }) => theme.padding};
   box-sizing: border-box;
 
-  & > *:not(:last-child) {
-    margin-bottom: ${({ theme }) => theme.padding};
-  }
+  display: flex;
+  align-items: center;
 
-  & > *:last-child {
-    margin-bottom: calc(2 * ${({ theme }) => theme.height});
-  }
+  box-shadow: inset 0 -1px 0 0 ${({ theme }) => theme.borderColor};
+`;
+
+/**
+ * Invitation creation title.
+ */
+const Title = styled.div`
+  width: 100%;
 `;
 
 /**

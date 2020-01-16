@@ -195,15 +195,16 @@ export class Account {
 
   /**
    * Promise of an account which created the invitation that was used to create
-   * this account. Promise resolves to `undefined` if account was manually
-   * created.
+   * this account. Promise resolves to `undefined` if invitation was created
+   * manually.
    */
   @ManyToOne(() => Account)
   public inviter!: Promise<Account | undefined>;
 
   /**
    * Identifier of an account which created the invitation that was used to
-   * create this account. This value is `null` if account was manually created.
+   * create this account. This value is `null` if invitation was created
+   * manually.
    */
   @Column({ nullable: true })
   public inviterId!: string | null;

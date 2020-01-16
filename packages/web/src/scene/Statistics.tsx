@@ -1090,7 +1090,7 @@ const Canvas = styled.div`
 
   & svg .axis text {
     fill: ${({ theme }) => theme.colorSecondary};
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     letter-spacing: 0;
   }
 
@@ -1111,7 +1111,7 @@ const Canvas = styled.div`
     justify-content: center;
 
     color: ${({ theme }) => theme.colorSecondary};
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     letter-spacing: 0;
     text-align: center;
   }
@@ -1268,8 +1268,8 @@ const Value = styled.div`
   justify-content: center;
 
   color: ${({ theme }) => theme.colorPrimary};
-  font-size: 1.5rem;
-  letter-spacing: -0.019em;
+  font-size: 1.6rem;
+  letter-spacing: -0.019rem;
 `;
 
 /**

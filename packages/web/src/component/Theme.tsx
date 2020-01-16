@@ -36,8 +36,8 @@ const GlobalStyle = createGlobalStyle`
     color: ${({ theme }) => theme.colorSecondary};
 
     font-family: "Inter", sans-serif;
-    font-size: 16px;
-    letter-spacing: -0.011rem;
+    font-size: 15px;
+    letter-spacing: -0.009em;
   }
 
   @supports (font-variation-settings: normal) {

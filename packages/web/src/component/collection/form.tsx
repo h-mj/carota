@@ -48,8 +48,8 @@ export const Form = styled.form`
  */
 export const Title = styled.div`
   color: ${({ theme }) => theme.colorPrimary};
-  font-size: 1.5rem;
-  letter-spacing: -0.019em;
+  font-size: 1.6rem;
+  letter-spacing: -0.019rem;
   line-height: 1.5rem;
   text-align: center;
 `;

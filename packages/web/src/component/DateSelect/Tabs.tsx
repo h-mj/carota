@@ -203,7 +203,7 @@ const Abbreviation = styled.span`
   @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
     display: block;
     margin-left: 0;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     letter-spacing: 0;
   }
 `;

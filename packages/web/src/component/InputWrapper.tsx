@@ -236,6 +236,6 @@ const ErrorMessage = styled.div`
   margin-top: ${({ theme }) => theme.paddingSecondaryHalf};
 
   color: ${({ theme }) => theme.colorInvalid};
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   letter-spacing: 0;
 `;

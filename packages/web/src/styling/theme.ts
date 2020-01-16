@@ -73,12 +73,12 @@ export const LIGHT: Readonly<ColorTheme> = {
  */
 export const DARK: Readonly<ColorTheme> = {
   backgroundColor: "rgb(0, 0, 0)",
-  backgroundColorSecondary: "rgb(40, 40, 40)",
-  backgroundColorDisabled: "rgb(20, 20, 20)",
+  backgroundColorSecondary: "rgb(30, 30, 30)",
+  backgroundColorDisabled: "rgb(15, 15, 15)",
   backgroundColorTranslucent: "rgba(255, 255, 255, 0.1)",
-  borderColor: "rgb(50, 50, 50)",
+  borderColor: "rgb(45, 45, 45)",
   colorPrimary: "rgb(255, 255, 255)",
   colorSecondary: "rgb(150, 150, 150)",
-  colorActive: "rgb(191, 78, 0)",
-  colorInvalid: "rgb(156, 0, 0)"
+  colorActive: "rgb(200, 80, 0)",
+  colorInvalid: "rgb(180, 30, 30)"
 };

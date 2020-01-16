@@ -47,8 +47,8 @@ const Button = styled.button.attrs({ type: "button" })`
   flex-shrink: 0;
 
   color: ${({ theme }) => theme.colorSecondary};
-  font-size: 1.5rem;
-  letter-spacing: -0.019em;
+  font-size: 1.6rem;
+  letter-spacing: -0.019rem;
   line-height: 50%;
   text-align: center;
 

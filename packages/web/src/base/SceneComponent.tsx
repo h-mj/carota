@@ -55,7 +55,7 @@ export interface DefaultSceneComponentProps<TName extends SceneComponentNames> {
   /**
    * Scene of this component.
    */
-  scene: Scene<SceneComponentSceneNames<TName>>;
+  scene?: Scene<SceneComponentSceneNames<TName>>;
 }
 
 /**

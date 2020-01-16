@@ -92,7 +92,6 @@ export class Confirmation extends SceneComponent<
    */
   private cancel = () => {
     this.props.confirm(false);
-    this.props.viewStore!.pop(this.props.scene);
   };
 
   /**
@@ -100,7 +99,6 @@ export class Confirmation extends SceneComponent<
    */
   private confirm = () => {
     this.props.confirm(true);
-    this.props.viewStore!.pop(this.props.scene);
   };
 }
 

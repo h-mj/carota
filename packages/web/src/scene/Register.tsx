@@ -287,7 +287,7 @@ export class Register extends SceneComponent<
       result.ok
         ? this.props.accountStore!.create({
             ...result.value,
-            invitationId: this.props.scene.parameters!.invitationId
+            invitationId: this.props.scene!.parameters!.invitationId
           })
         : undefined
     );
@@ -304,6 +304,10 @@ export class Register extends SceneComponent<
    */
   @action
   private verify = async () => {
+    if (this.props.scene === undefined) {
+      return this.props.viewStore!.unknown();
+    }
+
     const { parameters } = this.props.scene;
 
     if (

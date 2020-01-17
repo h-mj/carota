@@ -4,6 +4,7 @@ import { Draggable } from "react-beautiful-dnd";
 
 import { Scenes } from "../base/Scene";
 import { TranslatedComponent } from "../base/TranslatedComponent";
+import { Account } from "../model/Account";
 import { Group } from "../model/Group";
 import { styled } from "../styling/theme";
 import { AdviseeList } from "./AdviseeList";
@@ -27,6 +28,11 @@ interface GroupViewProps {
    * Group index within the advisee group list.
    */
   index: number;
+
+  /**
+   * Advisee account selection callback.
+   */
+  onSelect: (account: Account) => void;
 }
 
 /**
@@ -83,6 +89,7 @@ export class GroupView extends TranslatedComponent<
             <AdviseeList
               draggableType={this.props.draggableType}
               group={this.props.group}
+              onSelect={this.props.onSelect}
             />
           </Container>
         )}

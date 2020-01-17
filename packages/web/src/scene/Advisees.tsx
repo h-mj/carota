@@ -14,7 +14,9 @@ import { Button } from "../component/Button";
 import { Collection } from "../component/Collection";
 import { GroupList } from "../component/GroupList";
 import { Head } from "../component/Head";
+import { Account } from "../model/Account";
 import { styled } from "../styling/theme";
+import { Statistics } from "./Statistics";
 
 /**
  * Advisee scene component translation.
@@ -47,6 +49,11 @@ export class Advisees extends SceneComponent<
   @observable private draggableType?: "account" | "group";
 
   /**
+   * Currently selected advisee account.
+   */
+  @observable private selectedAccount?: Account;
+
+  /**
    * Pushed `GroupEdit` scene reference.
    */
   private scene?: Scenes;
@@ -72,7 +79,7 @@ export class Advisees extends SceneComponent<
         <Head title={this.translation.title} />
 
         <Sidebar>
-          <ScrollableContent>
+          <Overflow>
             <Bar>
               <Title>{this.translation.title}</Title>
               <Button onClick={this.handleInvite}>
@@ -86,23 +93,29 @@ export class Advisees extends SceneComponent<
             >
               <Collection>
                 {this.props.groupStore!.ungrouped.length > 0 && (
-                  <AdviseeList group={this.props.groupStore!.ungrouped} />
+                  <AdviseeList
+                    group={this.props.groupStore!.ungrouped}
+                    onSelect={this.handleSelect}
+                  />
                 )}
 
                 <GroupList
                   draggableType={this.draggableType}
                   groups={this.props.groupStore!.groups}
+                  onSelect={this.handleSelect}
                 />
               </Collection>
             </DragDropContext>
-          </ScrollableContent>
+          </Overflow>
 
           <ActionAligner>
             <Action fixed={true} onClick={this.handleGroupAddition} />
           </ActionAligner>
         </Sidebar>
 
-        <ScrollableContent>Statistics</ScrollableContent>
+        {this.selectedAccount !== undefined && (
+          <Statistics account={this.selectedAccount} />
+        )}
       </Container>
     );
   }
@@ -184,6 +197,13 @@ export class Advisees extends SceneComponent<
   private handleClose = () => {
     this.props.viewStore!.pop(this.scene!);
   };
+
+  /**
+   * Sets currently selected advisee account.
+   */
+  private handleSelect = (account: Account) => {
+    this.selectedAccount = account;
+  };
 }
 
 /**
@@ -217,9 +237,9 @@ const Sidebar = styled.div`
 `;
 
 /**
- * Automatically overflowable container.
+ * Component with automatic y overflow.
  */
-const ScrollableContent = styled.div`
+const Overflow = styled.div`
   width: 100%;
   height: 100%;
   overflow-y: auto;
@@ -229,6 +249,9 @@ const ScrollableContent = styled.div`
  * Top bar component.
  */
 const Bar = styled.div`
+  position: sticky;
+  top: 0;
+
   width: 100%;
   height: ${({ theme }) => theme.height};
 
@@ -239,6 +262,7 @@ const Bar = styled.div`
   align-items: center;
 
   box-shadow: inset 0 -1px 0 0 ${({ theme }) => theme.borderColor};
+  background-color: ${({ theme }) => theme.backgroundColor};
 `;
 
 /**

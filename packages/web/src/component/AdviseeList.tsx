@@ -21,6 +21,11 @@ interface AdviseeListProps {
    * Advisee group or a list of advisees.
    */
   group: Group | Account[];
+
+  /**
+   * Advisee account selection callback.
+   */
+  onSelect: (account: Account) => void;
 }
 
 /**
@@ -51,7 +56,12 @@ export class AdviseeList extends Component<AdviseeListProps> {
         {provided => (
           <Container ref={provided.innerRef} {...provided.droppableProps}>
             {advisees.map((advisee, index) => (
-              <AdviseeView key={advisee.id} account={advisee} index={index} />
+              <AdviseeView
+                key={advisee.id}
+                account={advisee}
+                index={index}
+                onSelect={this.props.onSelect}
+              />
             ))}
 
             {provided.placeholder}

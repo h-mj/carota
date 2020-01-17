@@ -3,6 +3,7 @@ import * as React from "react";
 import { Droppable } from "react-beautiful-dnd";
 
 import { Component } from "../base/Component";
+import { Account } from "../model/Account";
 import { Group } from "../model/Group";
 import { styled } from "../styling/theme";
 import { GroupView } from "./GroupView";
@@ -20,6 +21,11 @@ interface GroupListProps {
    * List of advisee groups.
    */
   groups: Group[];
+
+  /**
+   * Advisee account selection callback.
+   */
+  onSelect: (account: Account) => void;
 }
 
 /**
@@ -47,6 +53,7 @@ export class GroupList extends Component<GroupListProps> {
                 draggableType={this.props.draggableType}
                 index={index}
                 group={group}
+                onSelect={this.props.onSelect}
               />
             ))}
 

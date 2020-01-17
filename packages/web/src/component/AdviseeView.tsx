@@ -20,6 +20,11 @@ interface AdviseeViewProps {
    * Advisee index within the advisee list.
    */
   index: number;
+
+  /**
+   * Advisee account selection callback.
+   */
+  onSelect: (account: Account) => void;
 }
 
 /**
@@ -59,6 +64,7 @@ export class AdviseeView extends TranslatedComponent<
           <Container
             ref={provided.innerRef}
             isDragging={snapshot.isDragging}
+            onClick={this.handleClick}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
@@ -72,6 +78,13 @@ export class AdviseeView extends TranslatedComponent<
       </Draggable>
     );
   }
+
+  /**
+   * Selects provided `account` on container click.
+   */
+  private handleClick = () => {
+    this.props.onSelect(this.props.account);
+  };
 }
 
 /**

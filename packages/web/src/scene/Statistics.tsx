@@ -10,8 +10,29 @@ import {
 } from "../base/SceneComponent";
 import { Head } from "../component/Head";
 import { Tab } from "../component/Tab";
+import { Account } from "../model/Account";
 import { RequiredNutrient } from "../model/Foodstuff";
 import { styled } from "../styling/theme";
+
+/**
+ * Default statistics data before actual data has been requested and received.
+ */
+const EMPTY_STATISTICS_DATA: Data<"statistics", "getAll"> = [
+  { type: "nutrition", name: "energy", data: [] },
+  { type: "nutrition", name: "protein", data: [] },
+  { type: "nutrition", name: "fat", data: [] },
+  { type: "nutrition", name: "carbohydrate", data: [] },
+  { type: "quantity", name: "Bicep", data: [] },
+  { type: "quantity", name: "Calf", data: [] },
+  { type: "quantity", name: "Chest", data: [] },
+  { type: "quantity", name: "Height", data: [] },
+  { type: "quantity", name: "Hip", data: [] },
+  { type: "quantity", name: "Shin", data: [] },
+  { type: "quantity", name: "Thigh", data: [] },
+  { type: "quantity", name: "Waist", data: [] },
+  { type: "quantity", name: "Weight", data: [] },
+  { type: "quantity", name: "Wrist", data: [] }
+];
 
 /**
  * Array of available time frames.
@@ -69,26 +90,6 @@ interface QuantityDataPoint {
   date: string;
   value: number;
 }
-
-/**
- * Initial statistics data before actual data has been requested and received.
- */
-const EMPTY_DATA: Data<"statistics", "getAll"> = [
-  { type: "nutrition", name: "energy", data: [] },
-  { type: "nutrition", name: "protein", data: [] },
-  { type: "nutrition", name: "fat", data: [] },
-  { type: "nutrition", name: "carbohydrate", data: [] },
-  { type: "quantity", name: "Bicep", data: [] },
-  { type: "quantity", name: "Calf", data: [] },
-  { type: "quantity", name: "Chest", data: [] },
-  { type: "quantity", name: "Height", data: [] },
-  { type: "quantity", name: "Hip", data: [] },
-  { type: "quantity", name: "Shin", data: [] },
-  { type: "quantity", name: "Thigh", data: [] },
-  { type: "quantity", name: "Waist", data: [] },
-  { type: "quantity", name: "Weight", data: [] },
-  { type: "quantity", name: "Wrist", data: [] }
-];
 
 /**
  * Maps time frames to functions that calculate the beginning of the time frame
@@ -227,6 +228,17 @@ const FORMAT_OPTIONS = {
 };
 
 /**
+ * Statistics scene component props.
+ */
+interface StatisticsProps {
+  /**
+   * Account which statistics will be shown. If `undefined`, currently
+   * authenticated user will be used.
+   */
+  account?: Account;
+}
+
+/**
  * Statistics scene component translation.
  */
 interface StatisticsTranslation {
@@ -255,17 +267,17 @@ interface StatisticsTranslation {
  * Scene component that displays statistics about consumed nutrition and body
  * measurements.
  */
-@inject("viewStore", "statisticsStore")
+@inject("accountStore", "viewStore", "statisticsStore")
 @observer
 export class Statistics extends SceneComponent<
   "Statistics",
-  {},
+  StatisticsProps,
   StatisticsTranslation
 > {
   /**
    * Current statistics data.
    */
-  @observable private data = EMPTY_DATA;
+  @observable private data = EMPTY_STATISTICS_DATA;
 
   /**
    * Currently selected or hovered over data point value which information is
@@ -296,6 +308,11 @@ export class Statistics extends SceneComponent<
   @observable private selectedTimeFrame: TimeFrame = "week";
 
   /**
+   * SVG element.
+   */
+  private svgNode: SVGSVGElement | null = null;
+
+  /**
    * Most recent width of the SVG element.
    */
   private svgWidth = 0;
@@ -310,6 +327,7 @@ export class Statistics extends SceneComponent<
    */
   public constructor(props: DefaultSceneComponentProps<"Statistics">) {
     super("Statistics", props);
+    this.loadData();
   }
 
   /**
@@ -317,11 +335,18 @@ export class Statistics extends SceneComponent<
    * which chart is redrawn.
    */
   public componentDidMount() {
-    this.loadData();
     this.renderCharts();
+    this.loadData();
 
     d3.timeFormatDefaultLocale(this.props.viewStore!.translation.timeLocale);
     window.addEventListener("resize", this.renderCharts, true);
+  }
+
+  /**
+   * Reload data after component update.
+   */
+  public componentDidUpdate() {
+    this.loadData();
   }
 
   /**
@@ -359,7 +384,8 @@ export class Statistics extends SceneComponent<
    */
   private renderBodyMassIndexChart = (
     svg: d3.Selection<SVGSVGElement, number, HTMLDivElement, never>,
-    domain: [Date, Date]
+    domain: [Date, Date],
+    data: Data<"statistics", "getAll">
   ) => {
     let chart = svg.selectAll<SVGGElement, never>("g.bmi-chart").data([0]);
 
@@ -373,9 +399,9 @@ export class Statistics extends SceneComponent<
         `translate(${PADDING.left}, ${PADDING.top + CHART_TITLE_HEIGHT})`
       );
 
-    const data = this.getBodyMassIndices(this.data!, domain);
+    const indices = this.getBodyMassIndices(data!, domain);
 
-    if (data.length === 0) {
+    if (indices.length === 0) {
       chart.selectAll("*").remove();
     }
 
@@ -384,8 +410,8 @@ export class Statistics extends SceneComponent<
 
     this.renderChartTitle(chart, "bodyMassIndex");
 
-    if (data.length > 0) {
-      const currentPoint = data[data.length - 1];
+    if (indices.length > 0) {
+      const currentPoint = indices[indices.length - 1];
       const current = currentPoint.value;
 
       const { min, lt } = BODY_MASS_INDEX_RANGES.find(
@@ -466,7 +492,7 @@ export class Statistics extends SceneComponent<
 
       const initialFlag = chart
         .selectAll<SVGRectElement, never>("rect.flag.initial")
-        .data(data.length > 1 ? [data[0]] : []);
+        .data(indices.length > 1 ? [indices[0]] : []);
 
       initialFlag.exit().remove();
 
@@ -575,6 +601,8 @@ export class Statistics extends SceneComponent<
       .on("mouseover", setSelectedPoint)
       .on("mouseleave", hideTooltip);
 
+    bars.exit().remove();
+
     // Render the top border line of each bar
     const highlights = chart
       .selectAll<SVGLineElement, never>("line.bar-top")
@@ -589,6 +617,8 @@ export class Statistics extends SceneComponent<
       .attr("y1", d => CHART_HEIGHT - y(d.value))
       .attr("x2", d => x(d3.timeDay.offset(new Date(d.date), 1)))
       .attr("y2", d => CHART_HEIGHT - y(d.value));
+
+    highlights.exit().remove();
 
     // Render limit lines
     const limits = chart
@@ -605,6 +635,8 @@ export class Statistics extends SceneComponent<
       .attr("y1", d => CHART_HEIGHT - y(d.limit))
       .attr("x2", (d, i) => x(i + 1 === data.length ? d3.timeDay.offset(new Date(d.date), 1) : new Date(data[i + 1].date)))
       .attr("y2", d => CHART_HEIGHT - y(d.limit));
+
+    limits.exit().remove();
   };
 
   /**
@@ -668,6 +700,8 @@ export class Statistics extends SceneComponent<
       .attr("cy", d => CHART_HEIGHT - y(d.value))
       .attr("r", DOT_RADIUS);
 
+    dots.exit().remove();
+
     // Add hoverable area around each dto so that on mouse enter tooltip of that
     // point will be shown.
     const hoverAreaBounds: Array<QuantityDataPoint & {
@@ -705,6 +739,8 @@ export class Statistics extends SceneComponent<
       .on("mouseover", setSelectedPoint)
       .on("mouseleave", hideTooltip);
 
+    hoverAreas.exit().remove();
+
     // Filter out label positions so that there wouldn't be any overlap.
     const labelPoints = data.reduce((accumulator, currentPoint) => {
       const previousPoint =
@@ -734,8 +770,6 @@ export class Statistics extends SceneComponent<
       .selectAll<SVGTextElement, never>("text.label")
       .data(labelPoints);
 
-    labels.exit().remove();
-
     labels
       .enter()
       .append("text")
@@ -745,6 +779,8 @@ export class Statistics extends SceneComponent<
       .attr("x", d => x(offsetHalfDay(new Date(d.date))))
       .attr("y", d => CHART_HEIGHT - y(d.value) - LABEL_OFFSET)
       .attr("text-anchor", "middle");
+
+    labels.exit().remove();
   };
 
   /**
@@ -788,12 +824,13 @@ export class Statistics extends SceneComponent<
       .merge(svg)
       .attr("height", totalHeight);
 
+    this.svgNode = svg.node();
     this.svgWidth = svg.node()!.clientWidth;
     this.chartWidth = this.svgWidth - PADDING.left - PADDING.right;
 
     const domain = this.getTimeDomain(this.data);
 
-    this.renderBodyMassIndexChart(svg, domain);
+    this.renderBodyMassIndexChart(svg, domain, this.data);
 
     const x = d3
       .scaleUtc()
@@ -910,7 +947,6 @@ export class Statistics extends SceneComponent<
     HTMLButtonElement
   > = event => {
     this.selectedTimeFrame = event.currentTarget.value as TimeFrame;
-    this.renderCharts();
   };
 
   /**
@@ -924,9 +960,11 @@ export class Statistics extends SceneComponent<
 
     const target = d3.event.target as HTMLElement;
     const boundingRectangle = target.getBoundingClientRect();
+    const svgBoundingRectangle = this.svgNode!.getBoundingClientRect();
 
     this.tooltipProps.x =
-      boundingRectangle.x +
+      boundingRectangle.x -
+      svgBoundingRectangle.x +
       Number.parseFloat(target.getAttribute("data-offsetX")!);
     this.tooltipProps.arrowOffsetX = 0;
     this.tooltipProps.mirrored = false;
@@ -1058,7 +1096,10 @@ export class Statistics extends SceneComponent<
    */
   @action
   private async loadData() {
-    this.data = (await this.props.statisticsStore!.getAll()) ?? EMPTY_DATA;
+    this.data =
+      (await this.props.statisticsStore!.load(
+        this.props.account ?? this.props.accountStore!.current!
+      )) ?? EMPTY_STATISTICS_DATA;
     this.renderCharts();
   }
 }

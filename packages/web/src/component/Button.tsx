@@ -99,7 +99,7 @@ interface ButtonElementProps {
 const ButtonElement = styled.button<ButtonElementProps>`
   ${RESET};
 
-  height: ${({ theme }) => theme.padding};
+  height: ${({ theme }) => theme.heightSecondary};
   padding: 0 ${({ theme }) => theme.padding};
 
   flex-shrink: 0;

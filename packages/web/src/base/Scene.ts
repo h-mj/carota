@@ -1,4 +1,4 @@
-import { SceneComponentNames, SceneComponentProps } from "./SceneComponent";
+import { SceneSceneComponentProps } from "./SceneComponent";
 
 /**
  * Union of scene names.
@@ -24,93 +24,61 @@ export type SceneNames =
   | "Unknown";
 
 /**
- * Object that maps scene name to its scene component name.
+ * Union of scene positions.
  */
-const SCENE_TO_COMPONENT_NAME = {
-  Advisees: "Advisees",
-  Body: "Body",
-  Confirmation: "Confirmation",
-  Diet: "Diet",
-  DishEdit: "DishEdit",
-  FoodstuffEdit: "FoodstuffEdit",
-  GroupEdit: "GroupEdit",
-  Invite: "Invite",
-  Login: "Login",
-  Logout: "Logout",
-  MealEdit: "MealEdit",
-  Measure: "Measure",
-  Register: "Register",
-  Scanner: "Scanner",
-  Search: "Search",
-  Settings: "Settings",
-  Statistics: "Statistics",
-  Unknown: "Unknown"
-} as const;
+export type ScenePositions = "center" | "left" | "main";
 
 /**
- * Scene component name of a scene named `TName`.
+ * Routing table route definition type.
  */
-export type SceneSceneComponentName<
-  TName extends SceneNames
-> = typeof SCENE_TO_COMPONENT_NAME[TName];
-
-/**
- * Scene names of a scene component named `TName`. Opposite to `SceneSceneComponentName`.
- */
-export type SceneComponentSceneNames<TName extends SceneComponentNames> = {
-  [Name in SceneNames]: typeof SCENE_TO_COMPONENT_NAME[Name] extends TName
-    ? Name
-    : never;
-}[SceneNames];
-
-/**
- * Type that defines some route's scene name and parameter names.
- */
-interface To<TName extends SceneNames, TParameterNames extends string = never> {
+interface Route<TSceneName extends SceneNames, TParameterNames extends string> {
   /**
-   * Route parameter names type.
+   * Name of the scene which will be shown.
    */
-  parameterNames?: TParameterNames[];
+  sceneName: TSceneName;
 
   /**
-   * Route scene name.
+   * Array of route parameter names.
    */
-  name: TName;
+  parameterNames: TParameterNames[];
 }
 
 /**
- * Creates an object that defines some route's scene name and parameter names.
+ * Defines target scene name and route parameter names of routing table
+ * endpoint.
  */
-const to = <TName extends SceneNames, TParameterNames extends string>(
-  sceneName: TName,
+const routeTo = <
+  TSceneName extends SceneNames,
+  TParameterNames extends string = never
+>(
+  sceneName: TSceneName,
   ...parameterNames: TParameterNames[]
-): To<TName, TParameterNames> => ({
-  name: sceneName,
+): Route<TSceneName, TParameterNames> => ({
+  sceneName,
   parameterNames
 });
 
 /**
- * Defines routes and corresponding scene and route parameter names.
+ * Application routing table.
  */
 const ROUTES = {
-  "/": to("Diet"),
-  "/advisees": to("Advisees"),
-  "/logout": to("Logout"),
-  "/measurements": to("Body"),
-  "/register/{invitationId}": to("Register", "invitationId"),
-  "/settings": to("Settings"),
-  "/statistics": to("Statistics")
+  "/": routeTo("Diet"),
+  "/advisees": routeTo("Advisees"),
+  "/logout": routeTo("Logout"),
+  "/measurements": routeTo("Body"),
+  "/register/{invitationId}": routeTo("Register", "invitationId"),
+  "/settings": routeTo("Settings"),
+  "/statistics": routeTo("Statistics")
 } as const;
 
 /**
- * Type that is a union of all possible mappings from parameter names to `string` types of
- * all routes, which scene name is one of the `TSceneNames` names.
+ * Route parameter object type of a scene with specified name.
  */
-export type RouteParameters<TSceneNames extends SceneNames> =
+type SceneRouteParameters<TSceneName extends SceneNames> =
   | undefined
-  | (typeof ROUTES[keyof typeof ROUTES] extends infer ITypes
-      ? ITypes extends To<infer ISceneName, infer IParameterNames>
-        ? ISceneName extends TSceneNames
+  | (typeof ROUTES[keyof typeof ROUTES] extends infer IRoute
+      ? IRoute extends Route<infer ISceneName, infer IParameterNames>
+        ? ISceneName extends TSceneName
           ? string extends IParameterNames
             ? {}
             : Record<IParameterNames, string>
@@ -119,75 +87,52 @@ export type RouteParameters<TSceneNames extends SceneNames> =
       : never);
 
 /**
- * Scene named `TName` scene component props type.
+ * Scene representation.
  */
-export type SceneSceneComponentProps<TName extends SceneNames> = {
-  [Name in TName]: SceneComponentProps<SceneSceneComponentName<Name>>;
-}[TName];
-
-/**
- * Union of scene positions.
- */
-export type RenderPosition = "center" | "left" | "main";
-
-/**
- * Object that holds the information needed to render a scene.
- */
-export class Scene<TName extends SceneNames> {
+export class Scene<TSceneName extends SceneNames> {
   /**
-   * Scene name.
+   * Name of this scene.
    */
-  public readonly name: TName;
+  public readonly name: TSceneName;
 
   /**
    * Scene route parameters.
    */
-  public readonly parameters: RouteParameters<TName>;
-
-  /**
-   * Scene scene component name.
-   */
-  public readonly componentName: SceneSceneComponentName<TName>;
+  public readonly parameters: SceneRouteParameters<TSceneName>;
 
   /**
    * Scene scene component props.
    */
-  public readonly props: SceneSceneComponentProps<TName>;
+  public readonly props: SceneSceneComponentProps<TSceneName>;
 
   /**
-   * Scene rendering position.
+   * Position of this scene.
    */
-  public readonly position: RenderPosition;
+  public readonly position: ScenePositions;
 
   /**
-   * Creates a new instance of `Scene`.
-   *
-   * @param name Scene name.
-   * @param parameters Scene route parameters.
-   * @param props Scene component props.
-   * @param position Scene rendering position.
+   * Creates a new instance of `Scene` with specified `name` and `position`.
    */
   public constructor(
-    name: TName,
-    parameters: RouteParameters<TName>,
-    props: SceneSceneComponentProps<TName>,
-    position: RenderPosition = "main"
+    name: TSceneName,
+    parameters: SceneRouteParameters<TSceneName>,
+    props: SceneSceneComponentProps<TSceneName>,
+    position: ScenePositions = "main"
   ) {
     this.name = name;
     this.parameters = parameters;
-    this.componentName = SCENE_TO_COMPONENT_NAME[name];
     this.props = props;
     this.position = position;
   }
 
   /**
-   * Returns this scene's corresponding URL or `window.location.pathname`, if
-   * this scene doesn't have a matching route.
+   * Returns the URL of this scene. If this scene does not have a matching
+   * route, `window.location.pathname` is returned.
    */
-  public getUrl(): string {
+  public get url(): string {
     forRoute: for (const route in ROUTES) {
       // If route's scene name is not this scene's name, skip.
-      if (ROUTES[route as keyof typeof ROUTES].name !== this.name) {
+      if (ROUTES[route as keyof typeof ROUTES].sceneName !== this.name) {
         continue;
       }
 
@@ -239,6 +184,7 @@ export class Scene<TName extends SceneNames> {
         const urlPart = urlParts[i];
         const routePart = routeParts[i];
 
+        // Replace all parameter placeholders with actual values.
         if (routePart.startsWith("{") && routePart.endsWith("}")) {
           parameters[routePart.substring(1, routePart.length - 1)] = urlPart;
         } else if (urlPart !== routePart) {
@@ -247,9 +193,9 @@ export class Scene<TName extends SceneNames> {
       }
 
       return new Scene(
-        ROUTES[route as keyof typeof ROUTES].name as SceneNames,
+        ROUTES[route as keyof typeof ROUTES].sceneName as SceneNames,
         parameters,
-        {} as SceneComponentProps<SceneNames>
+        {} as SceneSceneComponentProps<SceneNames>
       ) as Scenes;
     }
 
@@ -274,8 +220,6 @@ export const GATEWAY_SCENE = new Scene("Login", undefined, {});
 export const UNKNOWN_SCENE = new Scene("Unknown", undefined, {});
 
 /**
- * Union of all possible scene types.
+ * Union of scenes.
  */
-export type Scenes = {
-  [SceneName in SceneNames]: Scene<SceneName>;
-}[SceneNames];
+export type Scenes = { [Name in SceneNames]: Scene<Name> }[SceneNames];

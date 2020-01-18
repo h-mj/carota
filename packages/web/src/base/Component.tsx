@@ -3,8 +3,8 @@ import * as React from "react";
 import { RootStore } from "../store/RootStore";
 
 /**
- * Component base class with defined default props.
+ * Component base class.
  */
-export class Component<TProps = {}> extends React.Component<
+export abstract class Component<TProps = {}> extends React.Component<
   TProps & Partial<RootStore>
 > {}

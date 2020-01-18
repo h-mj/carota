@@ -3,10 +3,7 @@ import * as React from "react";
 import { Quantity } from "server";
 
 import { Scenes } from "../base/Scene";
-import {
-  DefaultSceneComponentProps,
-  SceneComponent
-} from "../base/SceneComponent";
+import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
 import { Head } from "../component/Head";
 import { Silhouette } from "../component/Silhouette";
 import { styled } from "../styling/theme";
@@ -35,7 +32,7 @@ export class Body extends SceneComponent<"Body", {}, BodyTranslation> {
   /**
    * Creates a new instance of `Body` and sets the name of this scene component.
    */
-  public constructor(props: DefaultSceneComponentProps<"Body">) {
+  public constructor(props: SceneComponentProps<"Body">) {
     super("Body", props);
   }
 

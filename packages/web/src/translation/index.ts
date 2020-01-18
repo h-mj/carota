@@ -1,4 +1,4 @@
-import { ComponentsTranslation } from "../base/TranslatedComponent";
+import { TranslatedComponentTranslations } from "../base/TranslatedComponent";
 
 /**
  * Translation object type that contains all translated strings.
@@ -7,7 +7,7 @@ export interface Translation {
   /**
    * Translated component translations.
    */
-  components: ComponentsTranslation;
+  components: TranslatedComponentTranslations;
 
   /**
    * Language locale string.

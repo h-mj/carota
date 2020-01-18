@@ -3,10 +3,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Language } from "server";
 
-import {
-  DefaultSceneComponentProps,
-  SceneComponent
-} from "../base/SceneComponent";
+import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
 import { CheckBox } from "../component/CheckBox";
 import { Form } from "../component/collection/form";
 import { Group } from "../component/Group";
@@ -58,7 +55,7 @@ export class Settings extends SceneComponent<
   /**
    * Sets the name of this scene component.
    */
-  public constructor(props: DefaultSceneComponentProps<"Settings">) {
+  public constructor(props: SceneComponentProps<"Settings">) {
     super("Settings", props);
   }
 

@@ -2,7 +2,7 @@ import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 
-import { Scene, Scenes } from "../base/Scene";
+import { Scene } from "../base/Scene";
 import { TranslatedComponent } from "../base/TranslatedComponent";
 import { Account } from "../model/Account";
 import { fadeIn } from "../styling/animations";
@@ -22,19 +22,22 @@ const ALWAYS = () => true;
  * will appear in the navigation menu and on what condition.
  */
 const NAVIGABLE_SCENE_REQUIREMENTS = [
-  ["Diet", ALWAYS],
-  ["Body", ALWAYS],
-  ["Statistics", ALWAYS],
-  ["Advisees", (account: Account) => account.type === "Adviser"],
-  ["Settings", ALWAYS],
-  ["Logout", ALWAYS]
+  [new Scene("Diet", undefined, {}), ALWAYS],
+  [new Scene("Body", undefined, {}), ALWAYS],
+  [new Scene("Statistics", undefined, {}), ALWAYS],
+  [
+    new Scene("Advisees", undefined, {}),
+    (account: Account) => account.type === "Adviser"
+  ],
+  [new Scene("Settings", undefined, {}), ALWAYS],
+  [new Scene("Logout", undefined, {}), ALWAYS]
 ] as const;
 
 /**
  * Menu item translations.
  */
 type MenuTranslation = Record<
-  typeof NAVIGABLE_SCENE_REQUIREMENTS[number][0],
+  typeof NAVIGABLE_SCENE_REQUIREMENTS[number][0]["name"],
   string
 >;
 
@@ -71,14 +74,14 @@ export class Menu extends TranslatedComponent<"Menu", {}, MenuTranslation> {
             <MenuContainer>
               <Navigation>
                 {NAVIGABLE_SCENE_REQUIREMENTS.map(
-                  ([name, requirement]) =>
+                  ([scene, requirement]) =>
                     requirement(this.props.accountStore!.current!) && (
                       <Item
-                        key={name}
+                        key={scene.name}
                         onClick={this.handleRedirect}
-                        scene={new Scene(name, {}, {}) as Scenes}
+                        scene={scene}
                       >
-                        {this.translation[name]}
+                        {this.translation[scene.name]}
                       </Item>
                     )
                 )}

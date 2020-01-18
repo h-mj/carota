@@ -5,10 +5,7 @@ import * as React from "react";
 import { NutritionDeclarationDto, Unit } from "server";
 
 import { Scenes } from "../base/Scene";
-import {
-  DefaultSceneComponentProps,
-  SceneComponent
-} from "../base/SceneComponent";
+import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
 import { Button } from "../component/Button";
 import { Controls, Form, Label } from "../component/collection/form";
 import { Barcode } from "../component/collection/icons";
@@ -306,7 +303,7 @@ export class FoodstuffEdit extends SceneComponent<
    * Sets the name of this scene.
    */
   public constructor(
-    props: FoodstuffEditProps & DefaultSceneComponentProps<"FoodstuffEdit">
+    props: SceneComponentProps<"FoodstuffEdit"> & FoodstuffEditProps
   ) {
     super("FoodstuffEdit", props);
 

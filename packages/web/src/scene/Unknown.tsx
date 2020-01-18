@@ -1,10 +1,7 @@
 import { inject } from "mobx-react";
 import * as React from "react";
 
-import {
-  DefaultSceneComponentProps,
-  SceneComponent
-} from "../base/SceneComponent";
+import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
 import { Center } from "../component/Center";
 import { styled } from "../styling/theme";
 
@@ -26,7 +23,7 @@ export class Unknown extends SceneComponent<"Unknown", {}, UnknownTranslation> {
   /**
    * Sets the name of this scene.
    */
-  public constructor(props: DefaultSceneComponentProps<"Unknown">) {
+  public constructor(props: SceneComponentProps<"Unknown">) {
     super("Unknown", props);
   }
 

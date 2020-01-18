@@ -4,10 +4,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Language, Sex } from "server";
 
-import {
-  DefaultSceneComponentProps,
-  SceneComponent
-} from "../base/SceneComponent";
+import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
 import { Button } from "../component/Button";
 import { Center } from "../component/Center";
 import { Controls, Form, Title } from "../component/collection/form";
@@ -150,7 +147,7 @@ export class Register extends SceneComponent<
    * Creates `Register` scene, sets the name of the scene and initiates
    * invitation ID verification.
    */
-  public constructor(props: DefaultSceneComponentProps<"Register">) {
+  public constructor(props: SceneComponentProps<"Register">) {
     super("Register", props);
     this.verify();
   }

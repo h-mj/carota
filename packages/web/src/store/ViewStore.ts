@@ -4,13 +4,13 @@ import { Language } from "server";
 import {
   GATEWAY_SCENE,
   INDEX_SCENE,
-  RenderPosition,
   Scene,
   SceneNames,
-  SceneSceneComponentProps,
+  ScenePositions,
   Scenes,
   UNKNOWN_SCENE
 } from "../base/Scene";
+import { SceneSceneComponentProps } from "../base/SceneComponent";
 import { Notification, NotificationType } from "../component/Notifications";
 import { DARK, LIGHT, THEME_CONSTANTS } from "../styling/theme";
 import { Translation } from "../translation";
@@ -151,8 +151,7 @@ export class ViewStore extends Store {
   @action
   public redirect(scene: Scenes) {
     const { authenticated } = this.rootStore.authenticationStore;
-
-    const url = scene.getUrl();
+    const { url } = scene;
 
     // If user authentication status is opposite to scene's authentication
     // requirement, show unknown scene if user is authenticated, otherwise show
@@ -209,7 +208,7 @@ export class ViewStore extends Store {
    */
   @action
   public push<TSceneName extends SceneNames>(
-    position: RenderPosition,
+    position: ScenePositions,
     name: TSceneName,
     props: SceneSceneComponentProps<TSceneName>
   ) {

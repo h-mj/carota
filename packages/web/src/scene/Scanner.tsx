@@ -9,10 +9,7 @@ import {
   Result
 } from "@zxing/library";
 
-import {
-  DefaultSceneComponentProps,
-  SceneComponent
-} from "../base/SceneComponent";
+import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
 import { TitleBar } from "../component/TitleBar";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
@@ -93,9 +90,7 @@ export class Scanner extends SceneComponent<
   /**
    * Sets the name of this component.
    */
-  public constructor(
-    props: ScannerProps & DefaultSceneComponentProps<"Scanner">
-  ) {
+  public constructor(props: SceneComponentProps<"Scanner"> & ScannerProps) {
     super("Scanner", props);
   }
 

@@ -2,7 +2,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 
 import { Component } from "../base/Component";
-import { RenderPosition, Scenes } from "../base/Scene";
+import { ScenePositions, Scenes } from "../base/Scene";
 import { Advisees } from "../scene/Advisees";
 import { Body } from "../scene/Body";
 import { Confirmation } from "../scene/Confirmation";
@@ -127,8 +127,7 @@ export class SceneRenderer extends Component<SceneRendererProps> {
    */
   private renderSceneComponent() {
     const { scene } = this.props;
-    const SceneComponent: typeof React.Component =
-      SCENE_COMPONENTS[scene.componentName];
+    const SceneComponent: typeof React.Component = SCENE_COMPONENTS[scene.name];
 
     return <SceneComponent scene={scene} {...scene.props} />;
   }
@@ -188,7 +187,7 @@ interface SceneInfoProps {
   /**
    * Scene rendering position.
    */
-  position: RenderPosition;
+  position: ScenePositions;
 }
 
 /**

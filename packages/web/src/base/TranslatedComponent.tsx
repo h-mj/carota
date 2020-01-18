@@ -7,24 +7,43 @@ import { GroupView } from "../component/GroupView";
 import { Head } from "../component/Head";
 import { Menu } from "../component/Menu";
 import { Component } from "./Component";
-import { SceneComponentMap } from "./SceneComponent";
+import { SceneComponents } from "./SceneComponent";
 
 /**
- * Maps translated component names to their classes.
+ * Union of translated component classes.
  */
-interface TranslatedComponentMap extends SceneComponentMap {
-  AdviseeView: AdviseeView;
-  Calendar: Calendar;
-  FoodstuffView: FoodstuffView;
-  GroupView: GroupView;
-  Head: Head;
-  Menu: Menu;
-}
+type TranslatedComponents =
+  | AdviseeView
+  | Calendar
+  | FoodstuffView
+  | GroupView
+  | Head
+  | Menu
+  | SceneComponents;
 
 /**
- * Union of all translated component names.
+ * Union of translated component names.
  */
-type TranslatedComponentNames = keyof TranslatedComponentMap;
+type TranslatedComponentNames = TranslatedComponents extends TranslatedComponent<
+  infer IName,
+  infer _1,
+  infer _2
+>
+  ? IName
+  : never;
+
+/**
+ * Translated component class with specified name.
+ */
+type TranslatedComponentWithName<
+  TName extends TranslatedComponentNames
+> = TranslatedComponents extends infer IComponents
+  ? IComponents extends infer IComponent
+    ? IComponent extends TranslatedComponent<TName, infer _1, infer _2>
+      ? IComponent
+      : never
+    : never
+  : never;
 
 /**
  * Union of type `T` keys to which type `V` can be assigned.
@@ -40,30 +59,32 @@ type UndefinedOptional<T> = Omit<T, AssignableKeys<T, undefined>> &
   Partial<Pick<T, AssignableKeys<T, undefined>>>;
 
 /**
- * Type of an object that maps names of all translated components to their
- * translation object types.
+ * Translated component translations
  */
-// prettier-ignore
-export type ComponentsTranslation = UndefinedOptional<{
-  [Name in TranslatedComponentNames]: TranslatedComponentMap[Name]["translation"];
-}>;
+export type TranslatedComponentTranslations = UndefinedOptional<
+  {
+    [Name in TranslatedComponentNames]: TranslatedComponentWithName<
+      Name
+    >["translation"];
+  }
+>;
 
 /**
- * Translated component base class used to automatically define and retrieve
- * typed translations.
+ * Translated component base class.
  */
 export abstract class TranslatedComponent<
-  TName extends TranslatedComponentNames,
-  TProps extends {} = {},
-  TTranslation extends {} | undefined = undefined
+  TName extends string,
+  TProps = {},
+  TTranslation = undefined
 > extends Component<TProps> {
   /**
-   * Component name that is used to retrieve correct translations.
+   * Name of this component.
    */
   private readonly __name: TName;
 
   /**
-   * Creates a new instance of `Component` and sets the name of this component.
+   * Creates a new instance of `TranslatedComponent` and initializes the
+   * component name.
    */
   public constructor(name: TName, props: TProps) {
     super(props);
@@ -71,12 +92,12 @@ export abstract class TranslatedComponent<
   }
 
   /**
-   * Returns translation object of this component.
+   * Returns translation value of this component.
    */
   @computed
   public get translation(): TTranslation {
     return (this.props.viewStore!.translation.components[
-      this.__name
+      this.__name as TranslatedComponentNames
     ] as unknown) as TTranslation;
   }
 }

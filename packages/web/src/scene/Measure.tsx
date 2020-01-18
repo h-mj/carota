@@ -6,10 +6,7 @@ import { Quantity } from "server";
 
 import { Component } from "../base/Component";
 import { Scenes } from "../base/Scene";
-import {
-  DefaultSceneComponentProps,
-  SceneComponent
-} from "../base/SceneComponent";
+import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
 import { Button } from "../component/Button";
 import { Controls, Form } from "../component/collection/form";
 import { DeleteButton } from "../component/DeleteButton";
@@ -115,9 +112,7 @@ export class Measure extends SceneComponent<
    * Creates a new instance of `Measure` and sets the name of this scene
    * component.
    */
-  public constructor(
-    props: MeasureProps & DefaultSceneComponentProps<"Measure">
-  ) {
+  public constructor(props: SceneComponentProps<"Measure"> & MeasureProps) {
     super("Measure", props);
   }
 

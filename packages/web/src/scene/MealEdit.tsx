@@ -3,10 +3,7 @@ import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 
-import {
-  DefaultSceneComponentProps,
-  SceneComponent
-} from "../base/SceneComponent";
+import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
 import { Button } from "../component/Button";
 import { Controls, Form } from "../component/collection/form";
 import { Select } from "../component/Select";
@@ -161,9 +158,7 @@ export class MealEdit extends SceneComponent<
   /**
    * Sets the name of this scene component.
    */
-  public constructor(
-    props: MealEditProps & DefaultSceneComponentProps<"MealEdit">
-  ) {
+  public constructor(props: SceneComponentProps<"MealEdit"> & MealEditProps) {
     super("MealEdit", props);
 
     if (props.meal === undefined) {

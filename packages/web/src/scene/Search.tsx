@@ -4,10 +4,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 
 import { Scenes } from "../base/Scene";
-import {
-  DefaultSceneComponentProps,
-  SceneComponent
-} from "../base/SceneComponent";
+import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
 import { Action } from "../component/Action";
 import { Barcode } from "../component/collection/icons";
 import { FoodstuffView } from "../component/FoodstuffView";
@@ -106,9 +103,7 @@ export class Search extends SceneComponent<
   /**
    * Sets the name of this scene.
    */
-  public constructor(
-    props: SearchProps & DefaultSceneComponentProps<"Search">
-  ) {
+  public constructor(props: SceneComponentProps<"Search"> & SearchProps) {
     super("Search", props);
 
     this.checkEnvironmentCamera();

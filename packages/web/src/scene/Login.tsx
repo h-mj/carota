@@ -3,10 +3,7 @@ import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 
-import {
-  DefaultSceneComponentProps,
-  SceneComponent
-} from "../base/SceneComponent";
+import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
 import { Button } from "../component/Button";
 import { Center } from "../component/Center";
 import { Controls, Form, Title } from "../component/collection/form";
@@ -104,7 +101,7 @@ export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
   /**
    * Sets the name of this scene.
    */
-  public constructor(props: DefaultSceneComponentProps<"Login">) {
+  public constructor(props: SceneComponentProps<"Login">) {
     super("Login", props);
   }
 

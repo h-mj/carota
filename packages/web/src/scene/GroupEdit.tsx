@@ -3,10 +3,7 @@ import { observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 
-import {
-  DefaultSceneComponentProps,
-  SceneComponent
-} from "../base/SceneComponent";
+import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
 import { Button } from "../component/Button";
 import { Controls, Form } from "../component/collection/form";
 import { TextField } from "../component/TextField";
@@ -105,9 +102,7 @@ export class GroupEdit extends SceneComponent<
   /**
    * Creates a new instance of `GroupEdit` and sets the name of this component.
    */
-  public constructor(
-    props: DefaultSceneComponentProps<"GroupEdit"> & GroupEditProps
-  ) {
+  public constructor(props: SceneComponentProps<"GroupEdit"> & GroupEditProps) {
     super("GroupEdit", props);
   }
 

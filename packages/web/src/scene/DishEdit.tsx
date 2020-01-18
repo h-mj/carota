@@ -4,10 +4,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Unit } from "server";
 
-import {
-  DefaultSceneComponentProps,
-  SceneComponent
-} from "../base/SceneComponent";
+import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
 import { Button } from "../component/Button";
 import { Controls, Form, Title } from "../component/collection/form";
 import { Select } from "../component/Select";
@@ -174,9 +171,7 @@ export class DishEdit extends SceneComponent<
   /**
    * Sets the name of the scene of this component.
    */
-  public constructor(
-    props: DishEditProps & DefaultSceneComponentProps<"DishEdit">
-  ) {
+  public constructor(props: SceneComponentProps<"DishEdit"> & DishEditProps) {
     super("DishEdit", props);
   }
 

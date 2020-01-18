@@ -37,7 +37,7 @@ export class Anchor extends Component<AnchorProps> {
     return (
       <a
         className={this.props.className}
-        href={this.props.scene.getUrl()}
+        href={this.props.scene.url}
         onClick={this.handleClick}
       >
         {this.props.children}

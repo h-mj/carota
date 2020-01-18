@@ -4,10 +4,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { Data, Quantity } from "server";
 
-import {
-  DefaultSceneComponentProps,
-  SceneComponent
-} from "../base/SceneComponent";
+import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
 import { Head } from "../component/Head";
 import { Tab } from "../component/Tab";
 import { Account } from "../model/Account";
@@ -325,7 +322,9 @@ export class Statistics extends SceneComponent<
   /**
    * Sets the name of this component.
    */
-  public constructor(props: DefaultSceneComponentProps<"Statistics">) {
+  public constructor(
+    props: SceneComponentProps<"Statistics"> & StatisticsProps
+  ) {
     super("Statistics", props);
     this.loadData();
   }

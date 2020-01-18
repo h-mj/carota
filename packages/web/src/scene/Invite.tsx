@@ -2,10 +2,7 @@ import { observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 
-import {
-  DefaultSceneComponentProps,
-  SceneComponent
-} from "../base/SceneComponent";
+import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
 import { Collection } from "../component/Collection";
 import { TextField } from "../component/TextField";
 import { TitleBar } from "../component/TitleBar";
@@ -55,9 +52,7 @@ export class Invite extends SceneComponent<
    * Creates a new instance of `Invite` and sets the name of this scene
    * component.
    */
-  public constructor(
-    props: DefaultSceneComponentProps<"Invite"> & InviteProps
-  ) {
+  public constructor(props: SceneComponentProps<"Invite"> & InviteProps) {
     super("Invite", props);
 
     this.createInvitation();

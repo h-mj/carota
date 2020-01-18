@@ -4,10 +4,7 @@ import * as React from "react";
 import { DragDropContext, DragStart, DropResult } from "react-beautiful-dnd";
 
 import { Scenes } from "../base/Scene";
-import {
-  DefaultSceneComponentProps,
-  SceneComponent
-} from "../base/SceneComponent";
+import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
 import { Action } from "../component/Action";
 import { DateSelect } from "../component/DateSelect/DateSelect";
 import { Head } from "../component/Head";
@@ -49,7 +46,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
   /**
    * Sets the name of this scene.
    */
-  public constructor(props: DefaultSceneComponentProps<"Diet">) {
+  public constructor(props: SceneComponentProps<"Diet">) {
     super("Diet", props);
 
     this.setDate(toIsoDateString(new Date()));

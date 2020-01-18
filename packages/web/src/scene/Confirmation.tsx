@@ -1,10 +1,7 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 
-import {
-  DefaultSceneComponentProps,
-  SceneComponent
-} from "../base/SceneComponent";
+import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
 import { Button } from "../component/Button";
 import { Controls, Form } from "../component/collection/form";
 import { TitleBar } from "../component/TitleBar";
@@ -60,7 +57,7 @@ export class Confirmation extends SceneComponent<
    * Sets the name of this scene.
    */
   public constructor(
-    props: DefaultSceneComponentProps<"Confirmation"> & ConfirmationProps
+    props: SceneComponentProps<"Confirmation"> & ConfirmationProps
   ) {
     super("Confirmation", props);
   }

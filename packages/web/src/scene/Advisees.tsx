@@ -4,10 +4,7 @@ import * as React from "react";
 import { DragDropContext, DragStart, DropResult } from "react-beautiful-dnd";
 
 import { Scenes } from "../base/Scene";
-import {
-  DefaultSceneComponentProps,
-  SceneComponent
-} from "../base/SceneComponent";
+import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
 import { Action } from "../component/Action";
 import { AdviseeList } from "../component/AdviseeList";
 import { Button } from "../component/Button";
@@ -61,7 +58,7 @@ export class Advisees extends SceneComponent<
   /**
    * Creates a new instance of `Advisees` and sets the name of this component.
    */
-  public constructor(props: DefaultSceneComponentProps<"Advisees">) {
+  public constructor(props: SceneComponentProps<"Advisees">) {
     super("Advisees", props);
 
     if (this.props.accountStore!.current!.type !== "Adviser") {

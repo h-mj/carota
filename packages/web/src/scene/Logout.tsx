@@ -1,9 +1,6 @@
 import { inject } from "mobx-react";
 
-import {
-  DefaultSceneComponentProps,
-  SceneComponent
-} from "../base/SceneComponent";
+import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
 
 /**
  * Scene that, when constructed, logs user out after some timeout.
@@ -14,7 +11,7 @@ export class Logout extends SceneComponent<"Logout"> {
    * Creates `Logout` scene instance, sets its name and executes `logout`
    * function, that logs user out.
    */
-  public constructor(props: DefaultSceneComponentProps<"Logout">) {
+  public constructor(props: SceneComponentProps<"Logout">) {
     super("Logout", props);
     this.logout();
   }

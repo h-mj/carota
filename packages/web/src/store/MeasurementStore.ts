@@ -16,6 +16,13 @@ export class MeasurementStore extends Store {
   @observable private cache: Map<Quantity, Measurement[]> = new Map();
 
   /**
+   * Clears all data stored in this store.
+   */
+  public clear() {
+    this.cache.clear();
+  }
+
+  /**
    * Retrieves all measurements of specified quantity of currently authenticated
    * account if not already cached, otherwise returns previously retrieved
    * measurements.
@@ -106,12 +113,5 @@ export class MeasurementStore extends Store {
     } else {
       measurements.unshift(new Measurement(result.value, this));
     }
-  }
-
-  /**
-   * Clears all data stored in this store.
-   */
-  public clear() {
-    this.cache.clear();
   }
 }

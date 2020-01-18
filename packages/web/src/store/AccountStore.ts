@@ -37,6 +37,8 @@ export class AccountStore extends CachedStore<Account> {
    * Clears all the data this store holds.
    */
   public clear() {
+    super.clear();
+
     this.current = undefined;
   }
 

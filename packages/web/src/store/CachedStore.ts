@@ -32,4 +32,11 @@ export abstract class CachedStore<T extends Model> extends Store {
   public withId(id: string) {
     return this.cache.get(id);
   }
+
+  /**
+   * Clears cached models.
+   */
+  public clear() {
+    this.cache.clear();
+  }
 }

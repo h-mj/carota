@@ -24,6 +24,13 @@ export class GroupStore extends CachedStore<Group> {
    */
   @observable private loading = false;
 
+  public clear() {
+    super.clear();
+
+    this._groups = undefined;
+    this._ungrouped = undefined;
+  }
+
   /**
    * Returns array of advisee groups of current account.
    */

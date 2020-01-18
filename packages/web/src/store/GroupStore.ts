@@ -109,15 +109,17 @@ export class GroupStore extends CachedStore<Group> {
       throw new Error("Tried to remove non-empty group");
     }
 
+    const result = await Rpc.call("group", "delete", { id: group.id });
+
+    if (!result.ok) {
+      return this.rootStore.viewStore.notifyUnknownError();
+    }
+
     if (this._groups !== undefined && this._groups.includes(group)) {
       this._groups.splice(this._groups.indexOf(group), 1);
     }
 
-    const result = await Rpc.call("group", "delete", { id: group.id });
-
-    if (!result.ok) {
-      this.rootStore.viewStore.notifyUnknownError();
-    }
+    this.unregister(group);
   }
 
   /**

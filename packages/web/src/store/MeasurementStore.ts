@@ -59,15 +59,18 @@ export class MeasurementStore extends Store {
    * Deletes specified measurement.
    */
   public async delete(measurement: Measurement) {
-    const measurements = this.cache.get(measurement.quantity)!;
-    measurements.splice(measurements.indexOf(measurement), 1);
-
     const result = await Rpc.call("measurement", "delete", {
       id: measurement.id
     });
 
     if (!result.ok) {
-      this.rootStore.viewStore.notifyUnknownError();
+      return this.rootStore.viewStore.notifyUnknownError();
+    }
+
+    const measurements = this.cache.get(measurement.quantity);
+
+    if (measurements !== undefined) {
+      measurements.splice(measurements.indexOf(measurement), 1);
     }
   }
 

@@ -56,13 +56,13 @@ export class FoodstuffStore extends Store {
    * Deletes specified foodstuff.
    */
   public async delete(foodstuff: Foodstuff) {
-    this.removeFromCache(foodstuff);
-
     const result = await Rpc.call("foodstuff", "delete", { id: foodstuff.id });
 
     if (!result.ok) {
-      this.rootStore.viewStore.notifyUnknownError();
+      return this.rootStore.viewStore.notifyUnknownError();
     }
+
+    this.removeFromCache(foodstuff);
   }
 
   /**

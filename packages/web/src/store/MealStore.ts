@@ -118,17 +118,19 @@ export class MealStore extends CachedStore<Meal> {
       throw new Error("Tried to remove non-empty meal");
     }
 
+    const result = await Rpc.call("meal", "delete", { id: meal.id });
+
+    if (!result.ok) {
+      return this.rootStore.viewStore.notifyUnknownError();
+    }
+
     const meals = this.meals.get(meal.date);
 
     if (meals !== undefined) {
       meals.splice(meals.indexOf(meal), 1);
     }
 
-    const result = await Rpc.call("meal", "delete", { id: meal.id });
-
-    if (!result.ok) {
-      return this.rootStore.viewStore.notifyUnknownError();
-    }
+    this.unregister(meal);
   }
 
   /**

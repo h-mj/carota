@@ -38,14 +38,14 @@ export class DishStore extends CachedStore<Dish> {
    * Deletes specified dish.
    */
   public async delete(dish: Dish) {
-    dish.meal.dishes.splice(dish.meal.dishes.indexOf(dish), 1);
-    this.unregister(dish);
-
     const result = await Rpc.call("dish", "delete", { id: dish.id });
 
     if (!result.ok) {
-      this.rootStore.viewStore.notifyUnknownError();
+      return this.rootStore.viewStore.notifyUnknownError();
     }
+
+    dish.meal.dishes.splice(dish.meal.dishes.indexOf(dish), 1);
+    this.unregister(dish);
   }
 
   /**

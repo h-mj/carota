@@ -75,6 +75,32 @@ interface SceneRendererProps {
 @observer
 export class SceneRenderer extends Component<SceneRendererProps> {
   /**
+   * Modal `div` element ref.
+   */
+  private modalRef = React.createRef<HTMLDivElement>();
+
+  /**
+   * Previous active element.
+   */
+  private previousActiveElement?: HTMLElement;
+
+  /**
+   * Blur currently active element after mount and adds event listeners for
+   * trapping the focus within the modal.
+   */
+  public componentDidMount() {
+    this.blurActiveElement();
+    window.addEventListener("focus", this.trapFocus, true);
+  }
+
+  /**
+   * Removes added event listeners.
+   */
+  public componentWillUnmount() {
+    window.removeEventListener("focus", this.trapFocus, true);
+  }
+
+  /**
    * Renders scene component within correct container of provided scene.
    */
   public render() {
@@ -83,7 +109,12 @@ export class SceneRenderer extends Component<SceneRendererProps> {
     const Container = CONTAINER_COMPONENTS[position];
 
     return (
-      <Modal isFirst={isFirst} isLast={isLast} position={position}>
+      <Modal
+        ref={this.modalRef}
+        isFirst={isFirst}
+        isLast={isLast}
+        position={position}
+      >
         <Container>{this.renderSceneComponent()}</Container>
 
         {isFirst && this.props.authenticationStore!.authenticated && <Menu />}
@@ -100,7 +131,71 @@ export class SceneRenderer extends Component<SceneRendererProps> {
 
     return <Component scene={scene} {...scene.props} />;
   }
+
+  /**
+   * Blurs currently active (focused) element if it is outside current modal.
+   */
+  private blurActiveElement() {
+    const modal = this.modalRef.current;
+
+    if (modal === null) {
+      return;
+    }
+
+    const element = document.activeElement as HTMLElement;
+
+    if (!modal.contains(element)) {
+      element.blur();
+    }
+  }
+
+  /**
+   * Traps focus within the modal if this scene is at the top of the scene
+   * stack.
+   */
+  private trapFocus = () => {
+    const modal = this.modalRef.current;
+
+    if (modal === null || !this.props.isLast) {
+      return;
+    }
+
+    const element = document.activeElement as HTMLElement;
+
+    if (modal.contains(element)) {
+      this.previousActiveElement = element;
+      return;
+    }
+
+    element.blur();
+
+    const targets = modal.querySelectorAll<HTMLElement>(
+      FOCUSABLE_ELEMENT_SELECTOR
+    );
+
+    if (targets.length === 0) {
+      this.previousActiveElement = undefined;
+      return;
+    }
+
+    const firstTarget = targets[0];
+    const lastTarget = targets[targets.length - 1];
+
+    if (this.previousActiveElement === firstTarget) {
+      this.previousActiveElement = lastTarget;
+    } else {
+      this.previousActiveElement = firstTarget;
+    }
+
+    this.previousActiveElement.focus();
+  };
 }
+
+/**
+ * Focusable element selector.
+ */
+const FOCUSABLE_ELEMENT_SELECTOR =
+  'a[href], area[href], button:not([disabled]), embed, iframe, input:not([disabled]), object, select:not([disabled]), textarea:not([disabled]), *[tabindex]:not([tabindex^="-"]), *[contenteditable]';
 
 /**
  * Rendering position information.

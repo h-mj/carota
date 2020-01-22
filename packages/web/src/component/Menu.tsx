@@ -147,6 +147,7 @@ const Button = styled.button`
   & > svg {
     display: block;
     width: 100%;
+    height: 1rem;
   }
 
   cursor: pointer;

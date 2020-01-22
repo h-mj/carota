@@ -54,6 +54,7 @@ export const ActionButton = styled.button<ActionProps>`
   & > * {
     display: block;
     width: 100%;
+    height: 1rem;
   }
 
   ${({ fixed }) => fixed && fixedStyle};

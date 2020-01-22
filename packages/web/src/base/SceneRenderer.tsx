@@ -20,6 +20,7 @@ import { Search } from "../scene/Search";
 import { Settings } from "../scene/Settings";
 import { Statistics } from "../scene/Statistics";
 import { Unknown } from "../scene/Unknown";
+import { fadeIn, fadeOut } from "../styling/animations";
 import { css, keyframes, styled } from "../styling/theme";
 import { Component } from "./Component";
 import { ScenePositions, Scenes } from "./Scene";
@@ -52,6 +53,11 @@ const SCENE_COMPONENTS = {
  * Scene renderer props.
  */
 interface SceneRendererProps {
+  /**
+   * Whether rendered scene is active.
+   */
+  active: boolean;
+
   /**
    * Whether rendered scene is at the bottom of the scene stack.
    */
@@ -104,18 +110,19 @@ export class SceneRenderer extends Component<SceneRendererProps> {
    * Renders scene component within correct container of provided scene.
    */
   public render() {
-    const { isFirst, isLast, scene } = this.props;
+    const { active, isFirst, isLast, scene } = this.props;
     const { position } = scene;
     const Container = CONTAINER_COMPONENTS[position];
 
     return (
       <Modal
         ref={this.modalRef}
+        active={active}
         isFirst={isFirst}
         isLast={isLast}
         position={position}
       >
-        <Container>{this.renderSceneComponent()}</Container>
+        <Container active={active}>{this.renderSceneComponent()}</Container>
 
         {isFirst && this.props.authenticationStore!.authenticated && <Menu />}
       </Modal>
@@ -206,6 +213,11 @@ const FOCUSABLE_ELEMENT_SELECTOR =
  */
 interface RenderPosition {
   /**
+   * Whether rendered scene is active.
+   */
+  active: boolean;
+
+  /**
    * Whether rendered scene is at the bottom of the scene stack.
    */
   isFirst: boolean;
@@ -227,10 +239,31 @@ interface RenderPosition {
 const openModal = keyframes`
   from {
     opacity: 0;
+    transform: scale(0.25);
+    clip-path: circle(25%);
   }
 
   to {
     opacity: 1;
+    transform: scale(1);
+    clip-path: circle(80%);
+  }
+`;
+
+/**
+ * `Modal` component closing animation keyframes.
+ */
+const closeModal = keyframes`
+  from {
+    opacity: 1;
+    transform: scale(1);
+    clip-path: circle(80%);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.25);
+    clip-path: circle(25%);
   }
 `;
 
@@ -246,22 +279,45 @@ const Modal = styled.div<RenderPosition>`
 
   background-color: ${({ theme }) => theme.backgroundColorTranslucent};
 
-  pointer-events: ${({ isLast }) => (isLast ? "initial" : "none")};
+  pointer-events: ${({ active, isLast }) =>
+    active && isLast ? "initial" : "none"};
 
   display: flex;
   align-items: center;
   justify-content: ${({ position }) =>
     position === "center" ? "center" : "normal"};
 
+  animation: ${({ active, isFirst, theme }) =>
+    isFirst
+      ? "none"
+      : active
+      ? css`${fadeIn} ${theme.transition}`
+      : css`${fadeOut} ${theme.transition}`};
+
   @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
-    animation: ${({ isFirst, theme }) => isFirst ? "none" : css` ${openModal} ${theme.transition}`};
+    animation: ${({ active, isFirst, theme }) =>
+      isFirst
+        ? "none"
+        : active
+        ? css`${openModal} ${theme.transition}`
+        : css`${closeModal} ${theme.transition}`};
   }
 `;
 
 /**
+ * Container component props.
+ */
+interface ContainerProps {
+  /**
+   * Whether rendered scene is active.
+   */
+  active: boolean;
+}
+
+/**
  * Base container component.
  */
-const BaseContainer = styled.div`
+const BaseContainer = styled.div<ContainerProps>`
   background-color: ${({ theme }) => theme.backgroundColor};
 
   display: flex;
@@ -295,9 +351,21 @@ const openCenter = keyframes`
 `;
 
 /**
+ * `Center` component closing animation keyframes.
+ */
+const closeCenter = keyframes`
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(25%);
+  }
+`;
+
+/**
  * Container for scene component at `center` position.
  */
-// prettier-ignore
 const Center = styled(BaseContainer)`
   max-width: ${({ theme }) => theme.widthSmall};
   max-height: 80%;
@@ -306,7 +374,14 @@ const Center = styled(BaseContainer)`
 
   border-radius: ${({ theme }) => theme.borderRadius};
 
-  animation: ${({ theme }) => css`${openCenter} ${theme.transitionLinear}`};
+  animation: ${({ active, theme }) =>
+    active
+      ? css`
+          ${openCenter} ${theme.transitionLinear}
+        `
+      : css`
+          ${closeCenter} ${theme.transitionLinear}
+        `};
 `;
 
 /**
@@ -331,16 +406,35 @@ const openSide = keyframes`
 `;
 
 /**
+ * `Side` component closing animation keyframes.
+ */
+const closeSide = keyframes`
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+`;
+
+/**
  * Container for scene component at `side` position.
  */
-// prettier-ignore
 const Side = styled(BaseContainer)`
   max-width: ${({ theme }) => theme.widthSmall};
 
   width: 100%;
   height: 100%;
 
-  animation: ${({ theme }) => css`${openSide} ${theme.transitionLinear}`};
+  animation: ${({ active, theme }) =>
+    active
+      ? css`
+          ${openSide} ${theme.transitionLinear}
+        `
+      : css`
+          ${closeSide} ${theme.transitionLinear}
+        `};
 `;
 
 /**

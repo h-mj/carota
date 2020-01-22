@@ -1,7 +1,7 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 
-import { Component } from "../base/Component";
+import { Component } from "./Component";
 import { SceneRenderer } from "./SceneRenderer";
 
 /**
@@ -9,18 +9,17 @@ import { SceneRenderer } from "./SceneRenderer";
  */
 @inject("viewStore")
 @observer
-export class Stage extends Component {
+export class StageRenderer extends Component {
   /**
-   * Renders all active scenes.
+   * Renders a `SceneRenderer` component for each visible scene.
    */
   public render() {
     const { scenes } = this.props.viewStore!;
 
     return scenes.map((scene, index) => (
       <SceneRenderer
-        key={`${scene.name}:${index}`}
-        first={index === 0}
-        overlaid={index !== scenes.length - 1}
+        isFirst={index === 0}
+        isLast={index === scenes.length - 1}
         scene={scene}
       />
     ));

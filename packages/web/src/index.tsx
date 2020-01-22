@@ -3,9 +3,9 @@ import { Provider, observer } from "mobx-react";
 import * as React from "react";
 import { render } from "react-dom";
 
+import { StageRenderer } from "./base/StageRenderer";
 import { Loader } from "./component/Loader";
 import { Notifications } from "./component/Notifications";
-import { Stage } from "./component/Stage";
 import { Theme } from "./component/Theme";
 import { rootStore } from "./store/RootStore";
 
@@ -35,7 +35,7 @@ class Application extends React.Component {
     return (
       <Provider {...rootStore}>
         <Theme>
-          {this.initialized && <Stage />}
+          {this.initialized && <StageRenderer />}
           <Loader />
           <Notifications />
         </Theme>

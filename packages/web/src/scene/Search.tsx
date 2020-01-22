@@ -203,7 +203,7 @@ export class Search extends SceneComponent<
    */
   @action
   private showEditor = (foodstuff?: Foodstuff) => {
-    this.scene = this.props.viewStore!.push("left", "FoodstuffEdit", {
+    this.scene = this.props.viewStore!.push("side", "FoodstuffEdit", {
       foodstuff,
       name: this.query,
       onSave: this.hideEditor

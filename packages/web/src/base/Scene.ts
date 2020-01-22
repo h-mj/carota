@@ -26,7 +26,7 @@ export type SceneNames =
 /**
  * Union of scene positions.
  */
-export type ScenePositions = "center" | "left" | "main";
+export type ScenePositions = "center" | "main" | "side";
 
 /**
  * Routing table route definition type.

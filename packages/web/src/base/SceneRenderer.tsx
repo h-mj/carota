@@ -162,6 +162,10 @@ export class SceneRenderer extends Component<SceneRendererProps> {
 
     const element = document.activeElement as HTMLElement;
 
+    if (element === document.body) {
+      return;
+    }
+
     if (modal.contains(element)) {
       this.previousActiveElement = element;
       return;

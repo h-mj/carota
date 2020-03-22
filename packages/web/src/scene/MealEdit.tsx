@@ -327,12 +327,8 @@ export class MealEdit extends SceneComponent<
 
       this.reasons = append(this.reasons, error);
     } else {
-      if (result.value === "nonempty") {
-        this.reasons.name = "nonempty";
-        this.reasons.selectedName = "nonempty";
-      } else {
-        this.reasons.name = result.value;
-      }
+      this.reasons.name = "nonempty";
+      this.reasons.selectedName = "nonempty";
     }
 
     this.submitting = false;

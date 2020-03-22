@@ -3,15 +3,18 @@ import { Request, Response } from "express";
 import {
   createParamDecorator,
   Injectable,
-  NestMiddleware
+  NestMiddleware,
+  ExecutionContext
 } from "@nestjs/common";
 
 import { AuthenticationService } from "../module/authentication/AuthenticationService";
 import { UnauthorizedError } from "./error/UnauthorizedError";
 
-export const Principal = createParamDecorator((_, request) => {
-  return request.account;
-});
+export const Principal = createParamDecorator(
+  (_, context: ExecutionContext) => {
+    return context.switchToHttp().getRequest().account;
+  }
+);
 
 @Injectable()
 export class AuthenticationMiddleware

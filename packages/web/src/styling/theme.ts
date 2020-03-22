@@ -17,8 +17,8 @@ export const {
 export const THEME_CONSTANTS = {
   borderRadius: "0.4rem",
   duration: 0.2,
-  height: "3.6rem",
-  heightHalf: "1.8rem",
+  height: "3.5rem",
+  heightHalf: "1.75rem",
   heightSecondary: "2.4rem",
   heightSecondaryHalf: "1.2rem",
   iconHeight: "1.25rem",

@@ -326,7 +326,6 @@ export class Statistics extends SceneComponent<
     props: SceneComponentProps<"Statistics"> & StatisticsProps
   ) {
     super("Statistics", props);
-    this.loadData();
   }
 
   /**
@@ -345,7 +344,7 @@ export class Statistics extends SceneComponent<
    * Reload data after component update.
    */
   public componentDidUpdate() {
-    this.loadData();
+    this.renderCharts();
   }
 
   /**

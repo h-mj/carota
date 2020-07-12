@@ -79,6 +79,8 @@ export class MeasurementStore extends Store {
     if (measurements !== undefined) {
       measurements.splice(measurements.indexOf(measurement), 1);
     }
+
+    this.rootStore.statisticsStore.clear();
   }
 
   /**
@@ -113,5 +115,7 @@ export class MeasurementStore extends Store {
     } else {
       measurements.unshift(new Measurement(result.value, this));
     }
+
+    this.rootStore.statisticsStore.clear();
   }
 }

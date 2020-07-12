@@ -51,7 +51,7 @@ export class NutritionDeclaration {
     starch: this.starch || undefined,
     fibre: this.fibre || undefined,
     protein: this.protein,
-    salt: this.salt || undefined
+    salt: this.salt || undefined,
   });
 }
 
@@ -59,7 +59,7 @@ export const REQUIRED_NUTRIENTS = [
   "energy",
   "fat",
   "carbohydrate",
-  "protein"
+  "protein",
 ] as const;
 
 export type RequiredNutrient = typeof REQUIRED_NUTRIENTS[number];

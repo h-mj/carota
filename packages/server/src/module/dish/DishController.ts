@@ -9,11 +9,11 @@ import { DeleteDishDto, deleteDishDtoValidator } from "./dto/DeleteDishDto";
 import { InsertDishDto, insertDishDtoValidator } from "./dto/InsertDishDto";
 import {
   SetDishEatenDto,
-  setDishEatenDtoValidator
+  setDishEatenDtoValidator,
 } from "./dto/SetDishEatenDto";
 import {
   SetDishQuantityDto,
-  setDishQuantityValidator
+  setDishQuantityValidator,
 } from "./dto/SetDishQuantityDto";
 
 @Controller("dish")

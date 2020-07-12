@@ -4,7 +4,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
-  Unique
+  Unique,
 } from "typeorm";
 
 import { onUnauthorized } from "../../utility/authorization";
@@ -21,7 +21,7 @@ export const QUANTITIES = [
   "Thigh",
   "Waist",
   "Weight",
-  "Wrist"
+  "Wrist",
 ] as const;
 
 export type Quantity = typeof QUANTITIES[number];
@@ -51,7 +51,7 @@ export class Measurement {
     id: this.id,
     quantity: this.quantity,
     value: this.value,
-    date: this.date
+    date: this.date,
   });
 }
 

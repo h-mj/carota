@@ -6,7 +6,7 @@ import {
   CallHandler,
   ExecutionContext,
   Injectable,
-  NestInterceptor
+  NestInterceptor,
 } from "@nestjs/common";
 
 export interface DataResponse<T> {
@@ -20,11 +20,8 @@ export class GlobalInterceptor<T>
     context: ExecutionContext,
     next: CallHandler
   ): Observable<DataResponse<T>> {
-    context
-      .switchToHttp()
-      .getResponse<Response>()
-      .status(200);
+    context.switchToHttp().getResponse<Response>().status(200);
 
-    return next.handle().pipe(map(data => ({ data })));
+    return next.handle().pipe(map((data) => ({ data })));
   }
 }

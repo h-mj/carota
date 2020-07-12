@@ -39,7 +39,7 @@ export class HttpError {
       status: this.status,
       reason: this.reason,
       message: this.message,
-      details: this.details
+      details: this.details,
     };
   }
 }

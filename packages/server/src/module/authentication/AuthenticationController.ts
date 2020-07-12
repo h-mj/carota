@@ -5,7 +5,7 @@ import { ValidationPipe } from "../../base/ValidationPipe";
 import { AuthenticationService } from "./AuthenticationService";
 import {
   GenerateAuthenticationTokenDto,
-  generateAuthenticationTokenDtoValidator
+  generateAuthenticationTokenDtoValidator,
 } from "./dto/GenerateAuthenticationToken";
 
 @Controller("authentication")
@@ -30,7 +30,7 @@ export class AuthenticationController {
 
     return {
       account: await account.toDto(),
-      token: this.authenticationService.generateToken(account)
+      token: this.authenticationService.generateToken(account),
     };
   }
 }

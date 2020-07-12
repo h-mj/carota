@@ -30,7 +30,7 @@ export class InvitationService {
       type: "Default",
       rights: "Default",
       adviserId: principal.id,
-      inviterId: principal.id
+      inviterId: principal.id,
     });
 
     return invitationRepository!.save(invitation);

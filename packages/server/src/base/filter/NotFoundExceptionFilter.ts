@@ -2,7 +2,7 @@ import {
   ArgumentsHost,
   Catch,
   ExceptionFilter,
-  NotFoundException
+  NotFoundException,
 } from "@nestjs/common";
 
 import { NotFoundError } from "../error/NotFoundError";

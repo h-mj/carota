@@ -6,13 +6,18 @@ export type ValidationErrorTree =
   | string
   | undefined;
 
-// prettier-ignore
 export class ValidationError extends BadRequestError {
   public constructor(tree: ValidationErrorTree) {
-    super("One or more fields failed validation", ...ValidationError.toDetailArray(tree));
+    super(
+      "One or more fields failed validation",
+      ...ValidationError.toDetailArray(tree)
+    );
   }
 
-  private static toDetailArray(tree: ValidationErrorTree, path: string[] = []): ErrorDetail[] {
+  private static toDetailArray(
+    tree: ValidationErrorTree,
+    path: string[] = []
+  ): ErrorDetail[] {
     if (tree === undefined) {
       return [];
     }
@@ -24,7 +29,12 @@ export class ValidationError extends BadRequestError {
     const details: ErrorDetail[] = [];
 
     for (const property in tree) {
-      details.push(...ValidationError.toDetailArray(tree[property], path.concat([property])));
+      details.push(
+        ...ValidationError.toDetailArray(
+          tree[property],
+          path.concat([property])
+        )
+      );
     }
 
     return details;

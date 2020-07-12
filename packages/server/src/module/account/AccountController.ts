@@ -7,16 +7,16 @@ import { Account } from "./Account";
 import { AccountService } from "./AccountService";
 import {
   CreateAccountDto,
-  createAccountDtoValidator
+  createAccountDtoValidator,
 } from "./dto/CreateAccountDto";
 import { GetAccountDto, getAccountDtoValidator } from "./dto/GetAccountDto";
 import {
   InsertAccountDto,
-  insertAccountDtoValidator
+  insertAccountDtoValidator,
 } from "./dto/InsertAccountDto";
 import {
   SetAccountLanguageDto,
-  setAccountLanguageDtoValidator
+  setAccountLanguageDtoValidator,
 } from "./dto/SetAccountLanguageDto";
 
 /**
@@ -44,7 +44,7 @@ export class AccountController {
 
     return {
       account: await account.toDto(),
-      token: this.authenticationService.generateToken(account)
+      token: this.authenticationService.generateToken(account),
     };
   }
 

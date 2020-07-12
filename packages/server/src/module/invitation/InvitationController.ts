@@ -5,7 +5,7 @@ import { ValidationPipe } from "../../base/ValidationPipe";
 import { Account } from "../account/Account";
 import {
   GetInvitationDto,
-  getInvitationDtoValidator
+  getInvitationDtoValidator,
 } from "./dto/GetInvitationDto";
 import { InvitationService } from "./InvitationService";
 

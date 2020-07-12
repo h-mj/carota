@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 import { DtoOf } from "../../utility/entities";
-import { Account, RIGHTS, Rights, TYPES, Type } from "../account/Account";
+import { Account, RIGHTS, Rights, Type, TYPES } from "../account/Account";
 
 @Entity()
 export class Invitation {
@@ -57,7 +57,7 @@ export class Invitation {
   public toDto = async () => ({
     id: this.id,
     type: this.type,
-    rights: this.rights
+    rights: this.rights,
   });
 }
 

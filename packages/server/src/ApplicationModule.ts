@@ -27,8 +27,8 @@ import { StatisticsModule } from "./module/statistics/StatisticsModule";
     InvitationModule,
     MealModule,
     MeasurementModule,
-    StatisticsModule
-  ]
+    StatisticsModule,
+  ],
 })
 export class ApplicationModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {

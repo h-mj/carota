@@ -98,7 +98,7 @@ export class FoodstuffService {
       pieceQuantity: dto.pieceQuantity,
       packageSize: dto.packageSize,
       nutritionDeclaration: dto.nutritionDeclaration,
-      editorId: principal.id
+      editorId: principal.id,
     });
 
     return foodstuffRepository!.save(template);
@@ -115,7 +115,7 @@ export class FoodstuffService {
         patterns: dto.query
           .trim()
           .split(/ +/)
-          .map(string => `%${string}%`)
+          .map((string) => `%${string}%`),
       })
       .orWhere("barcode = :barcode", { barcode: dto.query })
       .orderBy('length("Foodstuff"."name")', "ASC")

@@ -58,8 +58,8 @@ export class GroupController {
     const { ungrouped, groups } = await this.groupService.get(dto, principal);
 
     return {
-      ungrouped: await Promise.all(ungrouped.map(account => account.toDto())),
-      groups: await Promise.all(groups.map(group => group.toDto()))
+      ungrouped: await Promise.all(ungrouped.map((account) => account.toDto())),
+      groups: await Promise.all(groups.map((group) => group.toDto())),
     };
   }
 

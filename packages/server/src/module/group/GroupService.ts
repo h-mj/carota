@@ -11,7 +11,7 @@ import { DeleteGroupDto } from "./dto/DeleteGroupDto";
 import { GetGroupsDto } from "./dto/GetGroupsDto";
 import { InsertGroupDto } from "./dto/InsertGroupDto";
 import { RenameGroupDto } from "./dto/RenameGroupDto";
-import { Group, authorize as authorizeGroup } from "./Group";
+import { authorize as authorizeGroup, Group } from "./Group";
 import { GroupRepository } from "./GroupRepository";
 
 /**
@@ -30,14 +30,14 @@ export class GroupService {
     @TransactionRepository() groupRepository?: GroupRepository
   ) {
     const previous = await groupRepository!.findOne({
-      where: { accountId: principal.id, linked: true, nextId: null }
+      where: { accountId: principal.id, linked: true, nextId: null },
     });
 
     const group = await groupRepository!.save(
       groupRepository!.create({
         name: dto.name,
         accountId: principal.id,
-        linked: false
+        linked: false,
       })
     );
 
@@ -88,9 +88,9 @@ export class GroupService {
 
     return {
       ungrouped: await accountRepository!.find({
-        where: { adviserId: account.id, groupId: null }
+        where: { adviserId: account.id, groupId: null },
       }),
-      groups: await groupRepository!.findOrderedOf(account)
+      groups: await groupRepository!.findOrderedOf(account),
     };
   }
 
@@ -119,7 +119,7 @@ export class GroupService {
     if (!(dto.index in groups) && dto.index !== groups.length) {
       throw new BadRequestError("Provided insertion index is out of bounds.", {
         location: { part: "body", path: ["index"] },
-        reason: "invalidIndex"
+        reason: "invalidIndex",
       });
     }
 

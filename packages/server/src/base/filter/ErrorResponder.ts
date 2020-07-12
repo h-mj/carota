@@ -14,7 +14,7 @@ export abstract class ErrorResponder {
     const response = context.getResponse<Response>();
 
     const errorResponse: ErrorResponse = {
-      error: error.toDto()
+      error: error.toDto(),
     };
 
     response.status(status).json(errorResponse);

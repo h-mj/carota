@@ -17,7 +17,7 @@ interface LinkedEntity extends Entity {
 }
 
 export const ordered = <T extends LinkedEntity>(entities: T[]): T[] => {
-  const reverse = new Map(entities.map(entity => [entity.nextId, entity]));
+  const reverse = new Map(entities.map((entity) => [entity.nextId, entity]));
 
   const order: T[] = [];
   let current = reverse.get(null);

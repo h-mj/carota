@@ -11,7 +11,7 @@ import { DeleteMealDto } from "./dto/DeleteMealDto";
 import { GetAllMealsDto } from "./dto/GetAllMealsDto";
 import { InsertMealDto } from "./dto/InsertMealDto";
 import { RenameMealDto } from "./dto/RenameMealDto";
-import { Meal, authorize } from "./Meal";
+import { authorize, Meal } from "./Meal";
 import { MealRepository } from "./MealRepository";
 
 @Injectable()
@@ -25,13 +25,13 @@ export class MealService {
     const last = await mealRepository!.findOne({
       account,
       date: dto.date,
-      nextId: null
+      nextId: null,
     });
 
     const template = mealRepository!.create({
       account,
       name: dto.name,
-      date: dto.date
+      date: dto.date,
     });
 
     const meal = await mealRepository!.save(template);
@@ -101,7 +101,7 @@ export class MealService {
     if (!(dto.index in meals) && dto.index !== meals.length) {
       throw new BadRequestError("Provided insertion index is out of bounds.", {
         location: { part: "body", path: ["index"] },
-        reason: "invalidIndex"
+        reason: "invalidIndex",
       });
     }
 

@@ -7,6 +7,6 @@ import { AccountService } from "./AccountService";
 @Module({
   imports: [AuthenticationModule],
   providers: [AccountService],
-  controllers: [AccountController]
+  controllers: [AccountController],
 })
 export class AccountModule {}

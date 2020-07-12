@@ -1,11 +1,10 @@
-import { Success, deviate } from "deviator";
+import { deviate, Success } from "deviator";
 
 /**
  * Validates whether given value is valid input data transfer object for group deletion endpoint.
  */
-// prettier-ignore
 export const deleteGroupDtoValidator = deviate().object().shape({
-  id: deviate().string().guid()
+  id: deviate().string().guid(),
 });
 
 /**

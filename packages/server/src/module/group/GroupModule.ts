@@ -8,6 +8,6 @@ import { GroupService } from "./GroupService";
  */
 @Module({
   providers: [GroupService],
-  controllers: [GroupController]
+  controllers: [GroupController],
 })
 export class GroupModule {}

@@ -8,10 +8,11 @@ const withinMonth = (input: string) =>
     ? err("notWithinMonthDate")
     : ok(input);
 
-// prettier-ignore
-export const createMealDtoValidator = deviate().object().shape({
-  name: deviate().string().trim().nonempty(),
-  date: deviate().string().then(isValidDate).then(withinMonth)
-});
+export const createMealDtoValidator = deviate()
+  .object()
+  .shape({
+    name: deviate().string().trim().nonempty(),
+    date: deviate().string().then(isValidDate).then(withinMonth),
+  });
 
 export type CreateMealDto = Success<typeof createMealDtoValidator>;

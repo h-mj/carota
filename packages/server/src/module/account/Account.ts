@@ -6,7 +6,7 @@ import {
   ManyToOne,
   OneToMany,
   OneToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from "typeorm";
 
 import { onUnauthorized, or } from "../../utility/authorization";
@@ -161,10 +161,7 @@ export class Account {
    * - account is currently unlinked;
    * - account is the first account in the list.
    */
-  @OneToOne(
-    () => Account,
-    account => account.next
-  )
+  @OneToOne(() => Account, (account) => account.next)
   public previous!: Promise<Group | undefined>;
 
   /**
@@ -175,10 +172,7 @@ export class Account {
    * - account is currently unlinked;
    * - account is the last account in the list.
    */
-  @OneToOne(
-    () => Account,
-    account => account.previous
-  )
+  @OneToOne(() => Account, (account) => account.previous)
   @JoinColumn()
   public next!: Promise<Account | undefined>;
 
@@ -220,7 +214,7 @@ export class Account {
     language: this.language,
     email: this.email,
     type: this.type,
-    rights: this.rights
+    rights: this.rights,
   });
 }
 

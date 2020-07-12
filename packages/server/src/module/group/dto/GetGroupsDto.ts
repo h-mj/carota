@@ -1,11 +1,11 @@
-import { Success, deviate } from "deviator";
+import { deviate, Success } from "deviator";
 
 /**
  * Validates whether given value is `GetGroupsDto` typed object.
  */
-export const getGroupsDtoValidator = deviate()
-  .object()
-  .shape({ accountId: deviate().string() });
+export const getGroupsDtoValidator = deviate().object().shape({
+  accountId: deviate().string(),
+});
 
 /**
  * Get groups endpoint data transfer object.

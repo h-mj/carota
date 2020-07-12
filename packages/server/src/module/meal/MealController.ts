@@ -41,7 +41,7 @@ export class MealController {
   ) {
     const meals = await this.mealService.getAll(dto, principal);
 
-    return Promise.all(meals.map(meal => meal.toDto(principal)));
+    return Promise.all(meals.map((meal) => meal.toDto(principal)));
   }
 
   @Post("insert")

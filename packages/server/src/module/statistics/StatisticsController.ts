@@ -4,8 +4,8 @@ import { Principal } from "../../base/AuthenticationMiddleware";
 import { ValidationPipe } from "../../base/ValidationPipe";
 import { Account } from "../account/Account";
 import {
+  GetAllStatisticsDto,
   getAllStatisticsDtoValidator,
-  GetAllStatisticsDto
 } from "./dto/GetAllStatisticsDto";
 import { StatisticsService } from "./StatisticsService";
 

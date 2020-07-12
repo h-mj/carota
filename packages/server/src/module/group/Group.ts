@@ -6,7 +6,7 @@ import {
   ManyToOne,
   OneToMany,
   OneToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from "typeorm";
 
 import { onUnauthorized } from "../../utility/authorization";
@@ -34,10 +34,7 @@ export class Group {
    * Promise of all accounts inside this group. Accounts may not be in correct
    * order.
    */
-  @OneToMany(
-    () => Account,
-    account => account.group
-  )
+  @OneToMany(() => Account, (account) => account.group)
   public accounts!: Promise<Account[]>;
 
   /**
@@ -63,20 +60,14 @@ export class Group {
    * first in the list or the group is currently unlinked, promise resolves to
    * `undefined`.
    */
-  @OneToOne(
-    () => Group,
-    group => group.next
-  )
+  @OneToOne(() => Group, (group) => group.next)
   public previous!: Promise<Group | undefined>;
 
   /**
    * Promise of next group in the group linked list. If the group is the last in
    * the list or the group is currently unlinked, promise resolves to `undefined`.
    */
-  @OneToOne(
-    () => Group,
-    group => group.previous
-  )
+  @OneToOne(() => Group, (group) => group.previous)
   @JoinColumn()
   public next!: Promise<Group | undefined>;
 
@@ -94,8 +85,8 @@ export class Group {
     id: this.id,
     name: this.name,
     accounts: await Promise.all(
-      (await this.accounts).map(account => account.toDto())
-    )
+      (await this.accounts).map((account) => account.toDto())
+    ),
   });
 }
 

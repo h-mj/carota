@@ -16,7 +16,7 @@ export class GroupRepository extends Repository<Group> {
     const groups = ordered(
       await this.find({
         where: { accountId: account, linked: true },
-        relations: ["accounts"]
+        relations: ["accounts"],
       })
     );
 
@@ -44,7 +44,7 @@ export class GroupRepository extends Repository<Group> {
       .update(Group)
       .set({
         nextId: next !== undefined ? next.id : null,
-        linked: true
+        linked: true,
       })
       .where({ id: group.id })
       .execute();

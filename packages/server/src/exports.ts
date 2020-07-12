@@ -67,14 +67,14 @@ export {
   Language,
   Rights,
   Sex,
-  Type
+  Type,
 } from "./module/account/Account";
 export { DishDto } from "./module/dish/Dish";
 export { FoodstuffDto, Unit } from "./module/foodstuff/Foodstuff";
 export { GroupDto } from "./module/group/Group";
 export {
   NutritionDeclarationDto,
-  RequiredNutrient
+  RequiredNutrient,
 } from "./module/foodstuff/NutritionDeclaration";
 export { InvitationDto } from "./module/invitation/Invitation";
 export { MealDto } from "./module/meal/Meal";

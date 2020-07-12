@@ -44,14 +44,14 @@ export class DishService {
 
     const last = await dishRepository!.findOne({
       mealId: meal.id,
-      nextId: null
+      nextId: null,
     });
 
     const template = dishRepository!.create({
       mealId: meal.id,
       foodstuffId: foodstuff.id,
       quantity: dto.quantity,
-      eaten: dto.eaten
+      eaten: dto.eaten,
     });
 
     const dish = await dishRepository!.save(template);
@@ -111,7 +111,7 @@ export class DishService {
     if (!(dto.index in dishes) && dto.index !== dishes.length) {
       throw new BadRequestError("Provided insertion index is invalid.", {
         location: { part: "body", path: ["index"] },
-        reason: "invalidIndex"
+        reason: "invalidIndex",
       });
     }
 

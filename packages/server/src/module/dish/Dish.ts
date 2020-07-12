@@ -5,7 +5,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from "typeorm";
 
 import { onUnauthorized } from "../../utility/authorization";
@@ -37,16 +37,10 @@ export class Dish {
   @Column()
   public eaten!: boolean;
 
-  @OneToOne(
-    () => Dish,
-    dish => dish.next
-  )
+  @OneToOne(() => Dish, (dish) => dish.next)
   public previous!: Promise<Dish | undefined>;
 
-  @OneToOne(
-    () => Dish,
-    dish => dish.previous
-  )
+  @OneToOne(() => Dish, (dish) => dish.previous)
   @JoinColumn()
   public next!: Promise<Dish | undefined>;
 
@@ -57,7 +51,7 @@ export class Dish {
     id: this.id,
     foodstuff: await (await this.foodstuff).toDto(principal),
     quantity: this.quantity,
-    eaten: this.eaten
+    eaten: this.eaten,
   });
 }
 

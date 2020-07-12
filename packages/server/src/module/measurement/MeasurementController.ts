@@ -4,16 +4,16 @@ import { Principal } from "../../base/AuthenticationMiddleware";
 import { ValidationPipe } from "../../base/ValidationPipe";
 import { Account } from "../account/Account";
 import {
+  DeleteMeasurementDto,
   deleteMeasurementDtoValidator,
-  DeleteMeasurementDto
 } from "./dto/DeleteMeasurementDto";
 import {
+  GetQuantityMeasurementsDto,
   getQuantityMeasurementsDtoValidator,
-  GetQuantityMeasurementsDto
 } from "./dto/GetQuantityMeasurementsDto";
 import {
+  SaveMeasurementDto,
   saveMeasurementDtoValidator,
-  SaveMeasurementDto
 } from "./dto/SaveMeasurementDto";
 import { MeasurementService } from "./MeasurementService";
 
@@ -43,7 +43,7 @@ export class MeasurementController {
       principal
     );
 
-    return Promise.all(measurements.map(measurement => measurement.toDto()));
+    return Promise.all(measurements.map((measurement) => measurement.toDto()));
   }
 
   @Post("save")

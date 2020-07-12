@@ -53,24 +53,23 @@ export class StatisticsService {
       throw new InvalidIdError(Account, ["accountId"]);
     }
 
-    // prettier-ignore
     await authorize(principal, "get measurements of", account);
     await authorize(principal, "get meals of", account);
 
     const meals = await mealRepository!.find({
       where: { accountId: account.id },
-      relations: ["dishes", "dishes.foodstuff"]
+      relations: ["dishes", "dishes.foodstuff"],
     });
 
     const mealDtos = await Promise.all(
-      meals.map(meal => meal.toDto(principal))
+      meals.map((meal) => meal.toDto(principal))
     );
 
     const counters = new Map<RequiredNutrient, Map<string, number>>([
       ["energy", new Map()],
       ["protein", new Map()],
       ["fat", new Map()],
-      ["carbohydrate", new Map()]
+      ["carbohydrate", new Map()],
     ]);
 
     for (const [nutrient, counter] of counters.entries()) {
@@ -101,30 +100,30 @@ export class StatisticsService {
         data: points.map(([date, value]) => ({
           date,
           value,
-          limit: value - 10
-        })) // TODO: Retrieve correct limit
+          limit: value - 10,
+        })), // TODO: Retrieve correct limit
       });
     }
 
     const measurements = await measurementRepository!.find({
       where: { accountId: account.id },
-      order: { date: "ASC" }
+      order: { date: "ASC" },
     });
 
     const measurementDtos = await Promise.all(
-      measurements.map(measurement => measurement.toDto())
+      measurements.map((measurement) => measurement.toDto())
     );
 
-    const quantityDataSet: QuantityDataSet[] = QUANTITIES.map(quantity => ({
+    const quantityDataSet: QuantityDataSet[] = QUANTITIES.map((quantity) => ({
       type: "quantity",
       name: quantity,
-      data: []
+      data: [],
     }));
 
     for (const dto of measurementDtos) {
       quantityDataSet[QUANTITIES.indexOf(dto.quantity)].data.push({
         date: dto.date,
-        value: dto.value
+        value: dto.value,
       });
     }
 

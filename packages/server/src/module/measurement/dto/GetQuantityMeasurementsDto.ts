@@ -2,11 +2,12 @@ import { deviate, Success } from "deviator";
 
 import { QUANTITIES } from "../Measurement";
 
-// prettier-ignore
-export const getQuantityMeasurementsDtoValidator = deviate().object().shape({
-  accountId: deviate().optional().string().guid(),
-  quantity: deviate().options(QUANTITIES)
-});
+export const getQuantityMeasurementsDtoValidator = deviate()
+  .object()
+  .shape({
+    accountId: deviate().optional().string().guid(),
+    quantity: deviate().options(QUANTITIES),
+  });
 
 export type GetQuantityMeasurementsDto = Success<
   typeof getQuantityMeasurementsDtoValidator

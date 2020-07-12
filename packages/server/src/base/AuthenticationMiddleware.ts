@@ -2,17 +2,20 @@ import { Request, Response } from "express";
 
 import {
   createParamDecorator,
+  ExecutionContext,
   Injectable,
   NestMiddleware,
-  ExecutionContext
 } from "@nestjs/common";
 
+import { Account } from "../module/account/Account";
 import { AuthenticationService } from "../module/authentication/AuthenticationService";
 import { UnauthorizedError } from "./error/UnauthorizedError";
 
+type AuthorizedRequest = Request & { account: Account };
+
 export const Principal = createParamDecorator(
   (_, context: ExecutionContext) => {
-    return context.switchToHttp().getRequest().account;
+    return (context.switchToHttp().getRequest() as AuthorizedRequest).account;
   }
 );
 
@@ -26,10 +29,10 @@ export class AuthenticationMiddleware
   private static EXCLUDED_PATHS = [
     "/api/account/create",
     "/api/authentication/generateToken",
-    "/api/invitation/get"
+    "/api/invitation/get",
   ];
 
-  public async use(request: Request, _: Response, next: Function) {
+  public async use(request: Request, _: Response, next: () => unknown) {
     if (AuthenticationMiddleware.EXCLUDED_PATHS.includes(request.baseUrl)) {
       return next();
     }
@@ -40,7 +43,7 @@ export class AuthenticationMiddleware
       throw new UnauthorizedError('Header field "Authorization" is required.', {
         location: { part: "headers", path: ["Authorization"] },
         reason: "missing",
-        message: 'Header field "Authorization" is required.'
+        message: 'Header field "Authorization" is required.',
       });
     }
 
@@ -53,7 +56,7 @@ export class AuthenticationMiddleware
           location: { part: "headers", path: ["Authorization"] },
           reason: "invalid",
           message:
-            'Syntax of header field "Authorization" must be "Bearer <credentials>".'
+            'Syntax of header field "Authorization" must be "Bearer <credentials>".',
         }
       );
     }
@@ -66,12 +69,12 @@ export class AuthenticationMiddleware
         {
           location: { part: "headers", path: ["Authorization"] },
           reason: "incorrect",
-          message: 'Token provided in header field "Authorization" is invalid.'
+          message: 'Token provided in header field "Authorization" is invalid.',
         }
       );
     }
 
-    (request as any).account = account;
+    (request as AuthorizedRequest).account = account;
 
     next();
   }

@@ -8,7 +8,7 @@ import { AccountRepository } from "../account/AccountRepository";
 import { DeleteMeasurementDto } from "./dto/DeleteMeasurementDto";
 import { GetQuantityMeasurementsDto } from "./dto/GetQuantityMeasurementsDto";
 import { SaveMeasurementDto } from "./dto/SaveMeasurementDto";
-import { Measurement, authorize as authorizeMeal } from "./Measurement";
+import { authorize as authorizeMeal, Measurement } from "./Measurement";
 import { MeasurementRepository } from "./MeasurementRepository";
 
 @Injectable()
@@ -51,9 +51,9 @@ export class MeasurementService {
     return measurementRepository!.find({
       where: {
         accountId: account.id,
-        quantity: dto.quantity
+        quantity: dto.quantity,
       },
-      order: { date: "DESC" }
+      order: { date: "DESC" },
     });
   }
 
@@ -66,14 +66,14 @@ export class MeasurementService {
     let measurement = await measurementRepository!.findOne({
       accountId: principal.id,
       quantity: dto.quantity,
-      date: dto.date
+      date: dto.date,
     });
 
     if (measurement === undefined) {
       measurement = measurementRepository!.create({
         accountId: principal.id,
         quantity: dto.quantity,
-        date: dto.date
+        date: dto.date,
       });
     }
 

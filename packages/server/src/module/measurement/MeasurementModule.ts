@@ -5,6 +5,6 @@ import { MeasurementService } from "./MeasurementService";
 
 @Module({
   providers: [MeasurementService],
-  controllers: [MeasurementController]
+  controllers: [MeasurementController],
 })
 export class MeasurementModule {}

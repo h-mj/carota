@@ -41,7 +41,7 @@ export class AccountRepository extends Repository<Account> {
       .set({
         groupId: group.id,
         nextId: next !== undefined ? next.id : null,
-        linked: true
+        linked: true,
       })
       .where({ id: account.id })
       .execute();

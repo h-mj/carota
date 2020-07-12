@@ -54,7 +54,7 @@ export class AccountService {
       rights: invitation.rights,
       adviserId: invitation.adviserId,
       linked: false,
-      inviterId: invitation.inviterId
+      inviterId: invitation.inviterId,
     });
 
     await invitationRepository!.remove(invitation);
@@ -119,7 +119,7 @@ export class AccountService {
     if (!(dto.index in accounts) && dto.index !== accounts.length) {
       throw new BadRequestError("Provided insertion index is out of bounds.", {
         location: { part: "body", path: ["index"] },
-        reason: "invalidIndex"
+        reason: "invalidIndex",
       });
     }
 

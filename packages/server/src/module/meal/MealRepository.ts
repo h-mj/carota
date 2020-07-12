@@ -16,7 +16,7 @@ export class MealRepository extends Repository<Meal> {
     const meals = ordered(
       await this.find({
         where: { accountId: account.id, date },
-        relations: ["dishes", "dishes.foodstuff"]
+        relations: ["dishes", "dishes.foodstuff"],
       })
     );
 

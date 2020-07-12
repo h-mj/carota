@@ -47,7 +47,7 @@ export class Foodstuff {
     nutritionDeclaration: await this.nutritionDeclaration.toDto(),
     pieceQuantity: this.pieceQuantity || undefined,
     deletable: await can(principal, "delete", this),
-    editable: await can(principal, "save", this)
+    editable: await can(principal, "save", this),
   });
 }
 

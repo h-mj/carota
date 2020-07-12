@@ -6,7 +6,7 @@ import {
   ManyToOne,
   OneToMany,
   OneToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from "typeorm";
 
 import { onUnauthorized } from "../../utility/authorization";
@@ -31,22 +31,13 @@ export class Meal {
   @Column("date", { nullable: true })
   public date!: string | null;
 
-  @OneToMany(
-    () => Dish,
-    dish => dish.meal
-  )
+  @OneToMany(() => Dish, (dish) => dish.meal)
   public dishes!: Promise<Dish[]>;
 
-  @OneToOne(
-    () => Meal,
-    meal => meal.next
-  )
+  @OneToOne(() => Meal, (meal) => meal.next)
   public previous!: Promise<Meal | undefined>;
 
-  @OneToOne(
-    () => Meal,
-    meal => meal.previous
-  )
+  @OneToOne(() => Meal, (meal) => meal.previous)
   @JoinColumn()
   public next!: Promise<Meal | undefined>;
 
@@ -58,8 +49,8 @@ export class Meal {
     name: this.name,
     date: this.date!, // can be `null` only if meal has been unlinked from the list and not yet relinked,
     dishes: await Promise.all(
-      (await this.dishes).map(dish => dish.toDto(principal))
-    )
+      (await this.dishes).map((dish) => dish.toDto(principal))
+    ),
   });
 }
 

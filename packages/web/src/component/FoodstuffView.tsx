@@ -17,7 +17,7 @@ const ICONS = {
   energy: Energy,
   protein: Protein,
   fat: Fat,
-  carbohydrate: Carbohydrate
+  carbohydrate: Carbohydrate,
 } as const;
 
 /**
@@ -29,7 +29,7 @@ type Nutrient = keyof typeof ICONS;
  * `number.toLocaleString` function options.
  */
 const FORMAT_OPTIONS = {
-  minimumFractionDigits: 1
+  minimumFractionDigits: 1,
 };
 
 /**
@@ -138,7 +138,7 @@ export class FoodstuffView extends TranslatedComponent<
    * Displays foodstuff editing form when user clicks on the edit button.
    */
   @action
-  private handleEdit: React.MouseEventHandler<HTMLButtonElement> = event => {
+  private handleEdit: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation();
 
     this.props.showEditor(this.props.foodstuff);

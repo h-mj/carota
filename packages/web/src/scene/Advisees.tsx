@@ -175,7 +175,7 @@ export class Advisees extends SceneComponent<
    */
   private handleInvite = () => {
     this.scene = this.props.viewStore!.push("center", "Invite", {
-      onClose: this.handleClose
+      onClose: this.handleClose,
     });
   };
 
@@ -184,7 +184,7 @@ export class Advisees extends SceneComponent<
    */
   private handleGroupAddition = () => {
     this.scene = this.props.viewStore!.push("center", "GroupEdit", {
-      onClose: this.handleClose
+      onClose: this.handleClose,
     });
   };
 

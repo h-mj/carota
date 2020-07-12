@@ -102,7 +102,7 @@ export class CheckBox<TName extends string = string> extends Component<
       errorMessage,
       helperMessage,
       invalid,
-      label
+      label,
     } = this.props;
 
     if (basic) {
@@ -134,7 +134,7 @@ export class CheckBox<TName extends string = string> extends Component<
       name,
       readOnly,
       required,
-      value
+      value,
     } = this.props;
 
     return (
@@ -160,7 +160,9 @@ export class CheckBox<TName extends string = string> extends Component<
    * Calls `onChange` callback function prop whenever check box' checked state
    * changes.
    */
-  private handleChange: React.ChangeEventHandler<HTMLInputElement> = event => {
+  private handleChange: React.ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
     const { name, onChange } = this.props;
 
     if (onChange === undefined) {
@@ -175,9 +177,9 @@ export class CheckBox<TName extends string = string> extends Component<
    * focus change of check box.
    */
   @action
-  private handleFocusChange: React.FocusEventHandler<
-    HTMLInputElement
-  > = event => {
+  private handleFocusChange: React.FocusEventHandler<HTMLInputElement> = (
+    event
+  ) => {
     this.focused = event.type === "focus";
 
     const { name, onFocusChange } = this.props;
@@ -203,7 +205,6 @@ interface CheckBoxStateProps extends InputStyleProps {
 /**
  * Container that contains both real and fake check boxes.
  */
-// prettier-ignore
 const Box = styled.div<CheckBoxStateProps>`
   position: relative;
 
@@ -213,7 +214,14 @@ const Box = styled.div<CheckBoxStateProps>`
   flex: 0 0 auto;
 
   border-radius: ${({ theme }) => theme.borderRadius};
-  box-shadow: inset 0 0 0 ${({ active, invalid }) => (active || invalid ? "2px" : "1px")} ${({ active, invalid, theme }) => invalid ? theme.colorInvalid : active ? theme.colorActive : theme.borderColor};
+  box-shadow: inset 0 0 0
+    ${({ active, invalid }) => (active || invalid ? "2px" : "1px")}
+    ${({ active, invalid, theme }) =>
+      invalid
+        ? theme.colorInvalid
+        : active
+        ? theme.colorActive
+        : theme.borderColor};
 
   transition: ${({ theme }) => theme.transition};
 `;

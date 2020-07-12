@@ -33,7 +33,7 @@ export const Icon = styled.svg<IconProps>`
 
   ${({ fill, theme }) => fill && `fill: ${theme[fill]};`}
 
-  transition: ${({theme}) => theme.transition};
+  transition: ${({ theme }) => theme.transition};
 `;
 
 /**
@@ -137,7 +137,6 @@ export const Burger: React.FunctionComponent = () => (
 /**
  * Loading animation component.
  */
-// prettier-ignore
 export const Loading: React.FunctionComponent = () => (
   <Circles width={24} height={10}>
     <Circle keyframes={scale(0, 5, 5, "#43b02a")} />
@@ -218,14 +217,16 @@ export const scale = (
   color: string
 ) => keyframes`
   from {
-    transform: translateX(calc(${offset} * ${UNIT})) translate(-50%, -50%) scale(${radiusFrom /
-  RADIUS_SCALE});
+    transform: translateX(calc(${offset} * ${UNIT})) translate(-50%, -50%) scale(${
+  radiusFrom / RADIUS_SCALE
+});
     background-color: ${color};
   }
 
   to {
-    transform: translateX(calc(${offset} * ${UNIT})) translate(-50%, -50%) scale(${radiusTo /
-  RADIUS_SCALE});
+    transform: translateX(calc(${offset} * ${UNIT})) translate(-50%, -50%) scale(${
+  radiusTo / RADIUS_SCALE
+});
     background-color: ${color};
   }
 `;
@@ -241,8 +242,9 @@ export const move = (
   colorTo: string
 ) => keyframes`
   from {
-    transform: translateX(calc(${offset} * ${UNIT})) translate(-50%, -50%) scale(${radiusFrom /
-  RADIUS_SCALE});
+    transform: translateX(calc(${offset} * ${UNIT})) translate(-50%, -50%) scale(${
+  radiusFrom / RADIUS_SCALE
+});
     background-color: ${colorFrom};
   }
 
@@ -251,10 +253,9 @@ export const move = (
   }
 
   to {
-    transform: translateX(calc(${offset +
-      radiusFrom +
-      radiusTo} * ${UNIT})) translate(-50%, -50%) scale(${radiusTo /
-  RADIUS_SCALE});
+    transform: translateX(calc(${
+      offset + radiusFrom + radiusTo
+    } * ${UNIT})) translate(-50%, -50%) scale(${radiusTo / RADIUS_SCALE});
     background-color: ${colorTo};
   }
 `;

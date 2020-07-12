@@ -38,7 +38,7 @@ export class DishList extends Component<DishListProps> {
         droppableId={this.props.meal.id}
         isDropDisabled={this.props.draggableType !== "dish"}
       >
-        {provided => (
+        {(provided) => (
           <Container ref={provided.innerRef} {...provided.droppableProps}>
             {dishes.map((dish, index) => (
               <DishView key={dish.id} dish={dish} index={index} />
@@ -54,9 +54,9 @@ export class DishList extends Component<DishListProps> {
 /**
  * Container component that wraps all `DishEntry` components.
  */
-// prettier-ignore
 const Container = styled.div`
-  border-radius: 0 0 ${({ theme }) => theme.borderRadius} ${({ theme }) => theme.borderRadius};
+  border-radius: 0 0 ${({ theme }) => theme.borderRadius}
+    ${({ theme }) => theme.borderRadius};
   overflow: hidden;
-  min-height: ${({theme}) => theme.height};
+  min-height: ${({ theme }) => theme.height};
 `;

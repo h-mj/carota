@@ -5,7 +5,7 @@ import * as React from "react";
 import { Component } from "../base/Component";
 import { fadeIn, fadeOut } from "../styling/animations";
 import { RESET } from "../styling/stylesheets";
-import { THEME_CONSTANTS, keyframes, styled } from "../styling/theme";
+import { keyframes, styled, THEME_CONSTANTS } from "../styling/theme";
 
 /**
  * Union of notification types.
@@ -79,7 +79,7 @@ export class Notifications extends Component {
 
     return (
       <Container>
-        {this.visibleNotifications.map(notification => (
+        {this.visibleNotifications.map((notification) => (
           <NotificationContainer
             active={this.props.viewStore!.notifications.includes(notification)}
             key={notification.id}

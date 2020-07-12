@@ -38,13 +38,16 @@ export const ItemHeaderTexts = styled.div`
 /**
  * Item title wrapper component.
  */
-// prettier-ignore
 export const ItemHeaderText = styled.div`
   display: flex;
   flex-grow: 1;
 
-  padding: calc((${({theme}) => theme.heightHalf} - ${({ theme }) => theme.lineHeight}) / 2) 0;
+  padding: calc(
+      (${({ theme }) => theme.heightHalf} - ${({ theme }) => theme.lineHeight}) /
+        2
+    )
+    0;
 
-  color: ${({theme}) => theme.colorPrimary};
+  color: ${({ theme }) => theme.colorPrimary};
   line-height: ${({ theme }) => theme.lineHeight};
 `;

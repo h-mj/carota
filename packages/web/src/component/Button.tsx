@@ -60,7 +60,7 @@ export class Button extends Component<ButtonProps> {
       invalid,
       onClick,
       secondary,
-      type
+      type,
     } = this.props;
 
     return (

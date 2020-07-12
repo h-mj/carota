@@ -55,7 +55,7 @@ export class Body extends SceneComponent<"Body", {}, BodyTranslation> {
   private showMeasure = (quantity: Quantity) => {
     this.scene = this.props.viewStore!.push("center", "Measure", {
       close: this.close,
-      quantity
+      quantity,
     });
   };
 

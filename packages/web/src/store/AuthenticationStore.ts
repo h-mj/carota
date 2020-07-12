@@ -83,7 +83,7 @@ export class AuthenticationStore extends Store {
   ) {
     const result = yield Rpc.call("authentication", "generateToken", {
       email,
-      password
+      password,
     });
 
     if (!result.ok) {

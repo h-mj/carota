@@ -1,4 +1,4 @@
-import { Failure, deviate } from "deviator";
+import { deviate, Failure } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -19,9 +19,7 @@ import { hasEnvironmentCamera } from "../utility/scanner";
 /**
  * Query string validator.
  */
-const validate = deviate<string>()
-  .trim()
-  .minLength(3);
+const validate = deviate<string>().trim().minLength(3);
 
 /**
  * Potential occurred error reason string.
@@ -141,7 +139,7 @@ export class Search extends SceneComponent<
               : this.completed
               ? this.props.foodstuffStore!.resultsOf(this.query)
               : []
-            ).map(foodstuff => (
+            ).map((foodstuff) => (
               <FoodstuffView
                 key={foodstuff.id}
                 foodstuff={foodstuff}
@@ -206,7 +204,7 @@ export class Search extends SceneComponent<
     this.scene = this.props.viewStore!.push("side", "FoodstuffEdit", {
       foodstuff,
       name: this.query,
-      onSave: this.hideEditor
+      onSave: this.hideEditor,
     });
   };
 
@@ -229,7 +227,7 @@ export class Search extends SceneComponent<
   @action
   private showScanner = () => {
     this.scene = this.props.viewStore!.push("main", "Scanner", {
-      onScan: this.handleScan
+      onScan: this.handleScan,
     });
   };
 
@@ -266,7 +264,7 @@ export class Search extends SceneComponent<
     this.scene = this.props.viewStore!.push("center", "DishEdit", {
       foodstuff,
       meal: this.props.meal,
-      onClose: this.props.onClose
+      onClose: this.props.onClose,
     });
   };
 }
@@ -274,9 +272,9 @@ export class Search extends SceneComponent<
 /**
  * Component that wraps search controls which include the search bar.
  */
-// prettier-ignore
 const Controls = styled.div`
-  padding: ${({ theme }) => theme.paddingSecondary} ${({ theme }) => theme.padding};
+  padding: ${({ theme }) => theme.paddingSecondary}
+    ${({ theme }) => theme.padding};
   border-bottom: solid 1px ${({ theme }) => theme.borderColor};
   box-sizing: border-box;
 

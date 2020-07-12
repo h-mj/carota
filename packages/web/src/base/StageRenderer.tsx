@@ -52,7 +52,7 @@ export class StageRenderer extends Component {
   public render() {
     const { scenes } = this.props.viewStore!;
 
-    return this.visibleScenes.map(scene => (
+    return this.visibleScenes.map((scene) => (
       <SceneRenderer
         key={scene.name}
         active={scenes.includes(scene)}

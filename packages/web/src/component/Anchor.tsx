@@ -48,7 +48,7 @@ export class Anchor extends Component<AnchorProps> {
   /**
    * Prevents default anchor behavior and sets main scene.
    */
-  private handleClick: React.MouseEventHandler<HTMLAnchorElement> = event => {
+  private handleClick: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
     event.preventDefault();
 
     if (this.props.onClick !== undefined && this.props.onClick() === false) {

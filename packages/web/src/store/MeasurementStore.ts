@@ -36,7 +36,7 @@ export class MeasurementStore extends Store {
 
     const result = await Rpc.call("measurement", "getOfQuantity", {
       accountId: undefined,
-      quantity
+      quantity,
     });
 
     if (!result.ok) {
@@ -45,7 +45,7 @@ export class MeasurementStore extends Store {
 
     this.cache.set(
       quantity,
-      result.value.map(dto => new Measurement(dto, this))
+      result.value.map((dto) => new Measurement(dto, this))
     );
   }
 
@@ -67,7 +67,7 @@ export class MeasurementStore extends Store {
    */
   public async delete(measurement: Measurement) {
     const result = await Rpc.call("measurement", "delete", {
-      id: measurement.id
+      id: measurement.id,
     });
 
     if (!result.ok) {
@@ -91,7 +91,7 @@ export class MeasurementStore extends Store {
     const result = await Rpc.call("measurement", "save", {
       quantity,
       date: dateString,
-      value
+      value,
     });
 
     if (!result.ok) {
@@ -105,7 +105,7 @@ export class MeasurementStore extends Store {
     }
 
     const measurement = measurements.find(
-      measurement => measurement.date === dateString
+      (measurement) => measurement.date === dateString
     );
 
     if (measurement !== undefined) {

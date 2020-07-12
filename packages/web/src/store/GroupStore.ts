@@ -67,17 +67,17 @@ export class GroupStore extends CachedStore<Group> {
     this.loading = true;
 
     const result = await Rpc.call("group", "get", {
-      accountId: this.rootStore.accountStore.current!.id
+      accountId: this.rootStore.accountStore.current!.id,
     });
 
     if (result.ok) {
       const { ungrouped, groups } = result.value;
 
       this._groups = groups.map(
-        dto => new Group(dto, this.rootStore.groupStore)
+        (dto) => new Group(dto, this.rootStore.groupStore)
       );
       this._ungrouped = ungrouped.map(
-        dto => new Account(dto, undefined, this.rootStore.accountStore)
+        (dto) => new Account(dto, undefined, this.rootStore.accountStore)
       );
     } else {
       this._groups = [];

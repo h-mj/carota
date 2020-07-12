@@ -40,7 +40,7 @@ export class MealList extends Component<MealListProps> {
         droppableId="meals"
         isDropDisabled={this.props.draggableType !== "meal"}
       >
-        {provided => (
+        {(provided) => (
           <Container ref={provided.innerRef} {...provided.droppableProps}>
             {meals.map((meal, index) => (
               <MealView

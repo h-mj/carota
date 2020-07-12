@@ -11,7 +11,7 @@ import { Separator } from "../component/Separator";
 import { TextField } from "../component/TextField";
 import { TitleBar } from "../component/TitleBar";
 import { Meal } from "../model/Meal";
-import { ErrorsFor, any, append } from "../utility/form";
+import { any, append, ErrorsFor } from "../utility/form";
 
 /**
  * Array of predefined meals that can be selected.
@@ -21,9 +21,7 @@ const PREDEFINED_MEAL_NAMES = ["breakfast", "lunch", "dinner"] as const;
 /**
  * Entered meal name validator.
  */
-const nameValidator = deviate<string>()
-  .trim()
-  .nonempty();
+const nameValidator = deviate<string>().trim().nonempty();
 
 /**
  * Meal edit component props.
@@ -176,9 +174,9 @@ export class MealEdit extends SceneComponent<
    * Renders name selection form.
    */
   public render() {
-    const options = this.getTranslatedPredefinedNames().map(label => ({
+    const options = this.getTranslatedPredefinedNames().map((label) => ({
       label,
-      value: label
+      value: label,
     }));
 
     return (
@@ -263,7 +261,7 @@ export class MealEdit extends SceneComponent<
       const translatedName = this.translation.meals[predefinedName];
 
       if (
-        !this.props.currentMeals.some(meal => meal.name === translatedName) ||
+        !this.props.currentMeals.some((meal) => meal.name === translatedName) ||
         (this.props.meal !== undefined &&
           this.props.meal.name === translatedName)
       ) {
@@ -296,9 +294,9 @@ export class MealEdit extends SceneComponent<
    * Calls provided `onSelect` function on form submission.
    */
   @action
-  private handleSubmit: React.FormEventHandler<
-    HTMLFormElement
-  > = async event => {
+  private handleSubmit: React.FormEventHandler<HTMLFormElement> = async (
+    event
+  ) => {
     event.preventDefault();
 
     if (this.submitting) {

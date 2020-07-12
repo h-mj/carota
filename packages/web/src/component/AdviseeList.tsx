@@ -53,7 +53,7 @@ export class AdviseeList extends Component<AdviseeListProps> {
           this.props.draggableType !== "account"
         }
       >
-        {provided => (
+        {(provided) => (
           <Container ref={provided.innerRef} {...provided.droppableProps}>
             {advisees.map((advisee, index) => (
               <AdviseeView

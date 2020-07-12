@@ -79,9 +79,9 @@ export class Settings extends SceneComponent<
             label={this.translation.language}
             name="language"
             onChange={this.selectLanguage}
-            options={LANGUAGES.map(language => ({
+            options={LANGUAGES.map((language) => ({
               label: this.translation.languages[language],
-              value: language
+              value: language,
             }))}
             value={this.props.viewStore!.language}
           />

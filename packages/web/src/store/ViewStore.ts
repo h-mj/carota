@@ -8,7 +8,7 @@ import {
   SceneNames,
   ScenePositions,
   Scenes,
-  UNKNOWN_SCENE
+  UNKNOWN_SCENE,
 } from "../base/Scene";
 import { SceneSceneComponentProps } from "../base/SceneComponent";
 import { Notification, NotificationType } from "../component/Notifications";
@@ -26,7 +26,7 @@ import { Store } from "./Store";
 const TRANSLATIONS: Readonly<Record<Language, Translation>> = {
   English: english,
   Estonian: estonian,
-  Russian: russian
+  Russian: russian,
 };
 
 /**
@@ -34,7 +34,7 @@ const TRANSLATIONS: Readonly<Record<Language, Translation>> = {
  */
 const NO_AUTHENTICATION_SCENE_NAMES: readonly SceneNames[] = [
   "Login",
-  "Register"
+  "Register",
 ];
 
 /**
@@ -248,12 +248,9 @@ export class ViewStore extends Store {
   @action
   public notify(text: string, type: NotificationType, timeout = 5) {
     const notification: Notification = observable({
-      id:
-        Math.random()
-          .toString(36)
-          .substring(2) + Date.now().toString(36),
+      id: Math.random().toString(36).substring(2) + Date.now().toString(36),
       text,
-      type
+      type,
     });
 
     this._notifications.push(notification);
@@ -308,7 +305,7 @@ export class ViewStore extends Store {
    */
   @action
   public async wait(timeout: number): Promise<void> {
-    return new Promise(resolve => window.setTimeout(resolve, 1000 * timeout));
+    return new Promise((resolve) => window.setTimeout(resolve, 1000 * timeout));
   }
 
   /**

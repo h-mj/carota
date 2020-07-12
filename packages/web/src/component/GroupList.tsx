@@ -45,7 +45,7 @@ export class GroupList extends Component<GroupListProps> {
         droppableId="groups"
         isDropDisabled={this.props.draggableType !== "group"}
       >
-        {provided => (
+        {(provided) => (
           <Container ref={provided.innerRef} {...provided.droppableProps}>
             {groups.map((group, index) => (
               <GroupView

@@ -6,7 +6,7 @@ import {
   BrowserBarcodeReader,
   DecodeContinuouslyCallback,
   DecodeHintType,
-  Result
+  Result,
 } from "@zxing/library";
 
 import { SceneComponent, SceneComponentProps } from "../base/SceneComponent";
@@ -19,7 +19,7 @@ import { getEnvironmentCameraMediaStream } from "../utility/scanner";
  * Barcode decode hints.
  */
 const DECODE_HINTS = new Map<DecodeHintType, unknown>([
-  [DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13]]
+  [DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13]],
 ]);
 
 /**
@@ -139,14 +139,14 @@ export class Scanner extends SceneComponent<
     this.reader.stopContinuousDecode();
 
     if (this.stream !== undefined) {
-      this.stream.getTracks().forEach(track => track.stop());
+      this.stream.getTracks().forEach((track) => track.stop());
     }
   }
 
   /**
    * Stream decoding callback function.
    */
-  public decodeCallback: DecodeContinuouslyCallback = async result => {
+  public decodeCallback: DecodeContinuouslyCallback = async (result) => {
     if (result === null) {
       return;
     }

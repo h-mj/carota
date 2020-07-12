@@ -36,7 +36,7 @@ export class Group implements Model {
     this.id = dto.id;
     this.name = dto.name;
     this.accounts = dto.accounts.map(
-      dto => new Account(dto, this, store.rootStore.accountStore)
+      (dto) => new Account(dto, this, store.rootStore.accountStore)
     );
     this.store = store;
 

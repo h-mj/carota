@@ -51,7 +51,7 @@ export class MealView extends Component<MealViewProps> {
     const { meal } = this.props;
     const { name } = meal;
     const dishes = [...meal.dishes];
-    const showQuantities = dishes.some(dish => dish.eaten);
+    const showQuantities = dishes.some((dish) => dish.eaten);
 
     return (
       <Draggable draggableId={meal.id} index={this.props.index}>
@@ -87,7 +87,7 @@ export class MealView extends Component<MealViewProps> {
   public showSearch = () => {
     this.scene = this.props.viewStore!.push("main", "Search", {
       meal: this.props.meal,
-      onClose: this.handleClose
+      onClose: this.handleClose,
     });
   };
 
@@ -100,7 +100,7 @@ export class MealView extends Component<MealViewProps> {
       currentMeals: this.props.mealStore!.withDate(this.props.meal.date),
       meal: this.props.meal,
       date: this.props.meal.date,
-      onClose: this.handleClose
+      onClose: this.handleClose,
     });
   };
 

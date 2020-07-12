@@ -34,13 +34,13 @@ export class FoodstuffStore extends Store {
   private removeFromCache(foodstuff: Foodstuff) {
     const sources = [
       this.searchResults.values(),
-      this.frequentFoodstuffs.values()
+      this.frequentFoodstuffs.values(),
     ];
 
     for (const source of sources) {
       for (const foodstuffs of source) {
         const index = foodstuffs.findIndex(
-          cached => cached.id === foodstuff.id
+          (cached) => cached.id === foodstuff.id
         );
 
         if (index === -1) {
@@ -101,7 +101,7 @@ export class FoodstuffStore extends Store {
       return [];
     }
 
-    foodstuffs = result.value.map(dto => new Foodstuff(dto, this));
+    foodstuffs = result.value.map((dto) => new Foodstuff(dto, this));
 
     this.frequentFoodstuffs.set(name, foodstuffs);
 
@@ -147,7 +147,7 @@ export class FoodstuffStore extends Store {
       return [];
     }
 
-    foodstuffs = result.value.map(dto => new Foodstuff(dto, this));
+    foodstuffs = result.value.map((dto) => new Foodstuff(dto, this));
 
     this.searchResults.set(query, foodstuffs);
 

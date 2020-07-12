@@ -4,16 +4,16 @@ export const russian: Translation = {
   components: {
     Advisees: {
       invite: "Добавить",
-      title: "Клиенты"
+      title: "Клиенты",
     },
     AdviseeView: {
       abbreviations: {
         Female: "Ж",
-        Male: "М"
-      }
+        Male: "М",
+      },
     },
     Body: {
-      title: "Замеры"
+      title: "Замеры",
     },
     Calendar: {
       days: ["П", "В", "С", "Ч", "П", "С", "В"],
@@ -29,16 +29,16 @@ export const russian: Translation = {
         "Сентябрь",
         "Октябрь",
         "Ноябрь",
-        "Декабрь"
-      ]
+        "Декабрь",
+      ],
     },
     Confirmation: {
       cancel: "Отмена",
       confirm: "Подтвердить",
-      title: "Подтверждение"
+      title: "Подтверждение",
     },
     Diet: {
-      title: "Суточная потребления"
+      title: "Суточная потребления",
     },
     DishEdit: {
       delete: "Удалить",
@@ -50,8 +50,8 @@ export const russian: Translation = {
         reasons: {
           nonempty: "Пожалуйста, введите количество продукта.",
           positive: "Пожалуйста, введите количество больше чем 0.",
-          toNumber: "Пожалуйста, введите правильное количество."
-        }
+          toNumber: "Пожалуйста, введите правильное количество.",
+        },
       },
       select: "Выбрать",
       title: "Выбрать количество",
@@ -59,9 +59,9 @@ export const russian: Translation = {
         helper: "Количество продукта в {unit} или в штуках?",
         label: "Единица",
         reasons: {
-          defined: "Пожалуйста, выберите единицу."
-        }
-      }
+          defined: "Пожалуйста, выберите единицу.",
+        },
+      },
     },
     FoodstuffEdit: {
       addTitle: "Добавить продукт",
@@ -74,14 +74,14 @@ export const russian: Translation = {
           reasons: {
             conflict: "Продукт с таким штрих-кодом уже существуют.",
             nonempty: "Пожалуйста, введите штрих-код.",
-            regexp: "Пожалуйста, введите правильный штрих-код."
-          }
+            regexp: "Пожалуйста, введите правильный штрих-код.",
+          },
         },
         name: {
           label: "Название",
           reasons: {
-            nonempty: "Пожалуйста, введите название продукта."
-          }
+            nonempty: "Пожалуйста, введите название продукта.",
+          },
         },
         packageSize: {
           label: "Количество в упаковке",
@@ -89,8 +89,8 @@ export const russian: Translation = {
             nonempty: "Пожалуйста, введите количество продукта в упаковке.",
             positive: "Пожалуйста, введите количество больше чем 0.",
             toNumber:
-              "Пожалуйста, введите правильное количество продукта в упаковке."
-          }
+              "Пожалуйста, введите правильное количество продукта в упаковке.",
+          },
         },
         pieceQuantity: {
           label: "Количество одной штуки",
@@ -98,15 +98,15 @@ export const russian: Translation = {
             nonempty: "Пожалуйста, введите количество одной штуки.",
             positive:
               "Пожалуйста, введите количество одной штуки больше чем 0.",
-            toNumber: "Пожалуйста, введите правильное количество одной штуки.."
-          }
+            toNumber: "Пожалуйста, введите правильное количество одной штуки..",
+          },
         },
         unit: {
           label: "Единица",
           reasons: {
-            defined: "Пожалуйста, выберите единицу."
-          }
-        }
+            defined: "Пожалуйста, выберите единицу.",
+          },
+        },
       },
       nutrients: {
         carbohydrate: "Углеводы",
@@ -120,14 +120,14 @@ export const russian: Translation = {
         salt: "Соль",
         saturates: "Насыщенные жирные кислоты",
         starch: "Крахмал",
-        sugars: "Сахара"
+        sugars: "Сахара",
       },
       nutrientsLabel: "Пищевая ценность",
       nutrientsLabelPer: " на 100{unit}:",
-      submit: "Сохранить"
+      submit: "Сохранить",
     },
     FoodstuffView: {
-      per: "На 100{unit}:"
+      per: "На 100{unit}:",
     },
     GroupEdit: {
       createSubmit: "Создать",
@@ -137,37 +137,37 @@ export const russian: Translation = {
       editTitle: "Переименование группы",
       label: "Название",
       reasons: {
-        nonempty: "Пожалуйста, выберите название группы."
-      }
+        nonempty: "Пожалуйста, выберите название группы.",
+      },
     },
     GroupView: {
-      ungrouped: "Негруппированные"
+      ungrouped: "Негруппированные",
     },
     Head: {
-      title: "Морковка"
+      title: "Морковка",
     },
     Invite: {
       loading: "Создание ссылка для регистрации.",
-      title: "Ссылка для регистрации"
+      title: "Ссылка для регистрации",
     },
     Login: {
       inputs: {
         email: {
           label: "Эл. почта",
           reasons: {
-            nonempty: "Пожалуйста, введите адрес электронной почты."
-          }
+            nonempty: "Пожалуйста, введите адрес электронной почты.",
+          },
         },
         password: {
           label: "Пароль",
           reasons: {
-            nonempty: "Пожалуйста, введите пароль."
-          }
-        }
+            nonempty: "Пожалуйста, введите пароль.",
+          },
+        },
       },
       invalidCredentials: "Неверный адрес электронной почты или пароль.",
       submit: "Вход →",
-      title: "Вход"
+      title: "Вход",
     },
     MealEdit: {
       createSubmit: "Создать",
@@ -179,17 +179,17 @@ export const russian: Translation = {
       meals: {
         breakfast: "Завтрак",
         dinner: "Ужин",
-        lunch: "Обед"
+        lunch: "Обед",
       },
       or: "Или",
       selectHelper: "Выберите название приема пищи:",
       selectReasons: {
-        nonempty: "Пожалуйста, выберите название приема пищи."
+        nonempty: "Пожалуйста, выберите название приема пищи.",
       },
       textFieldHelper: "Введите название приема пищи:",
       textFieldReasons: {
-        nonempty: "Пожалуйста, введите название приема пищи."
-      }
+        nonempty: "Пожалуйста, введите название приема пищи.",
+      },
     },
     Measure: {
       confirmation: "Вы уверены, что хотите удалить этот замер?",
@@ -203,17 +203,17 @@ export const russian: Translation = {
         Thigh: "Пожалуйста, введите объем бедра:",
         Waist: "Пожалуйста, введите объем талии:",
         Weight: "Пожалуйста, введите ваш вес:",
-        Wrist: "Пожалуйста, введите объем запястья:"
+        Wrist: "Пожалуйста, введите объем запястья:",
       },
       label: "Значение",
       measurements: "Замеры",
       reasons: {
         nonempty: "Пожалуйста, введите измеренное значение.",
         positive: "Пожалуйста, введите значение больше 0.",
-        toNumber: "Пожалуйста, введите правильное значение измерения."
+        toNumber: "Пожалуйста, введите правильное значение измерения.",
       },
       title: "Обновить замер",
-      update: "Обновить"
+      update: "Обновить",
     },
     Menu: {
       Advisees: "Клиенты",
@@ -221,15 +221,15 @@ export const russian: Translation = {
       Diet: "Суточная потребления",
       Logout: "Выйти",
       Settings: "Настройки",
-      Statistics: "Статистика"
+      Statistics: "Статистика",
     },
     Register: {
       inputs: {
         birthDate: {
           label: "Дата рождения",
           reasons: {
-            nonempty: "Пожалуйста, введите вашу дату рождения."
-          }
+            nonempty: "Пожалуйста, введите вашу дату рождения.",
+          },
         },
         email: {
           label: "Эл. почта",
@@ -237,67 +237,67 @@ export const russian: Translation = {
             conflict: "Введенный адрес электронной почты уже используется.",
             email:
               "Пожалуйста, введите действительный адрес электронной почты.",
-            nonempty: "Пожалуйста, введите адрес электронной почты."
-          }
+            nonempty: "Пожалуйста, введите адрес электронной почты.",
+          },
         },
         language: {
           label: "Язык",
           options: {
             English: "English",
             Estonian: "eesti",
-            Russian: "русский"
+            Russian: "русский",
           },
           reasons: {
-            defined: "Пожалуйста, выберите язык."
-          }
+            defined: "Пожалуйста, выберите язык.",
+          },
         },
         name: {
           label: "Имя",
           reasons: {
-            nonempty: "Пожалуйста, введите имя."
-          }
+            nonempty: "Пожалуйста, введите имя.",
+          },
         },
         password: {
           label: "Пароль",
           reasons: {
             minLength: "Пароль должен содержать не менее 8 символов.",
-            nonempty: "Пожалуйста, введите пароль."
-          }
+            nonempty: "Пожалуйста, введите пароль.",
+          },
         },
         sex: {
           label: "Пол",
           options: {
             Female: "Женщина",
-            Male: "Мужчина"
+            Male: "Мужчина",
           },
           reasons: {
-            defined: "Пожалуйста, выберите свой пол."
-          }
-        }
+            defined: "Пожалуйста, выберите свой пол.",
+          },
+        },
       },
       submit: "Создать аккаунт →",
-      title: "Создать аккаунт"
+      title: "Создать аккаунт",
     },
     Scanner: {
-      title: "Сканер"
+      title: "Сканер",
     },
     Search: {
       reasons: {
         minLength: "Запрос должен содержать не менее 3 символов.",
         notFound:
-          "Продукт найден. Пожалуйста, попробуйте найти его по названию."
+          "Продукт найден. Пожалуйста, попробуйте найти его по названию.",
       },
-      title: "Поиск"
+      title: "Поиск",
     },
     Settings: {
       language: "Язык",
       languages: {
         English: "English",
         Estonian: "eesti",
-        Russian: "русский"
+        Russian: "русский",
       },
       title: "Настройки",
-      useDarkTheme: "Использовать темную тему"
+      useDarkTheme: "Использовать темную тему",
     },
     Statistics: {
       ranges: {
@@ -311,14 +311,14 @@ export const russian: Translation = {
         overweight: "Предожирение",
         severelyUnderweight: "Выраженный дефицит массы",
         underweight: "Недостаточная масса тела",
-        verySeverelyUnderweight: "Очень выраженный дефицит массы"
+        verySeverelyUnderweight: "Очень выраженный дефицит массы",
       },
       timeFrames: {
         all: "Все",
         month: "Месяц",
         quarter: "Квартал",
         week: "Неделя",
-        year: "Год"
+        year: "Год",
       },
       title: "Статистика",
       titles: {
@@ -336,12 +336,12 @@ export const russian: Translation = {
         Thigh: "Объем бедра",
         Waist: "Объем талии",
         Weight: "Вес",
-        Wrist: "Объем запястья"
-      }
+        Wrist: "Объем запястья",
+      },
     },
     Unknown: {
-      message: "Страница, которую Вы ищете, не может быть найдена."
-    }
+      message: "Страница, которую Вы ищете, не может быть найдена.",
+    },
   },
   locale: "ru-RU",
   timeLocale: {
@@ -354,7 +354,7 @@ export const russian: Translation = {
       "среда",
       "четверг",
       "пятница",
-      "суббота"
+      "суббота",
     ],
     months: [
       "января",
@@ -368,7 +368,7 @@ export const russian: Translation = {
       "сентября",
       "октября",
       "ноября",
-      "декабря"
+      "декабря",
     ],
     periods: ["AM", "PM"],
     shortDays: ["вс", "пн", "вт", "ср", "чт", "пт", "сб"],
@@ -384,9 +384,9 @@ export const russian: Translation = {
       "сен",
       "окт",
       "ноя",
-      "дек"
+      "дек",
     ],
-    time: "%H:%M:%S"
+    time: "%H:%M:%S",
   },
   units: {
     cm: "см",
@@ -394,7 +394,7 @@ export const russian: Translation = {
     kcal: "ккал",
     kg: "кг",
     ml: "мл",
-    pcs: "шт"
+    pcs: "шт",
   },
-  unknownError: "Произошла неизвестная ошибка."
+  unknownError: "Произошла неизвестная ошибка.",
 };

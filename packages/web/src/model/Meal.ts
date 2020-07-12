@@ -42,7 +42,7 @@ export class Meal {
     this.name = dto.name;
     this.date = dto.date;
     this.dishes = dto.dishes.map(
-      dish => new Dish(dish, this, store.rootStore.dishStore)
+      (dish) => new Dish(dish, this, store.rootStore.dishStore)
     );
     this.store = store;
 

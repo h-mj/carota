@@ -14,9 +14,7 @@ import { reasonAt } from "../utility/form";
 /**
  * Validates group name value.
  */
-const nameValidator = deviate<string>()
-  .trim()
-  .nonempty();
+const nameValidator = deviate<string>().trim().nonempty();
 
 /**
  * Group edit scene component props.
@@ -170,9 +168,9 @@ export class GroupEdit extends SceneComponent<
    * Prevents default form submission event either changes provided group name
    * or creates a new group with entered name.
    */
-  private handleSubmit: React.FormEventHandler<
-    HTMLFormElement
-  > = async event => {
+  private handleSubmit: React.FormEventHandler<HTMLFormElement> = async (
+    event
+  ) => {
     event.preventDefault();
 
     if (this.submitting) {

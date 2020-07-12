@@ -148,7 +148,7 @@ export class Diet extends SceneComponent<"Diet", {}, DietTranslation> {
     this.scene = this.props.viewStore!.push("center", "MealEdit", {
       currentMeals: this.props.mealStore!.withDate(this.date),
       date: this.date,
-      onClose: this.handleMealEditClose
+      onClose: this.handleMealEditClose,
     });
   };
 

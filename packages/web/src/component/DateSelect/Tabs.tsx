@@ -97,11 +97,11 @@ export class Tabs extends Component<TabsProps> {
       around(this.props.date, TAB_RADIUS)
     );
 
-    const index = dates.findIndex(date => date === this.props.date);
+    const index = dates.findIndex((date) => date === this.props.date);
 
     this.offset +=
-      dates.findIndex(date => date === this.props.date) -
-      dates.findIndex(date => date === this.previousDate);
+      dates.findIndex((date) => date === this.props.date) -
+      dates.findIndex((date) => date === this.previousDate);
 
     this.previousDate = this.props.date;
 
@@ -109,7 +109,7 @@ export class Tabs extends Component<TabsProps> {
       <Container>
         <Aligner>
           <Positioner anchor={index - this.offset} offset={this.offset}>
-            {dates.map(date => (
+            {dates.map((date) => (
               <Tab
                 key={date.toString()}
                 highlighted={date === toIsoDateString(new Date())}

@@ -4,7 +4,7 @@ import * as React from "react";
 
 import { Component } from "../base/Component";
 import { fadeIn, fadeOut } from "../styling/animations";
-import { THEME_CONSTANTS, styled } from "../styling/theme";
+import { styled, THEME_CONSTANTS } from "../styling/theme";
 import { Loading } from "./collection/icons";
 import { Overlay } from "./Overlay";
 

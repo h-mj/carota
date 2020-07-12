@@ -4,16 +4,16 @@ export const english: Translation = {
   components: {
     Advisees: {
       invite: "Add",
-      title: "Advisees"
+      title: "Advisees",
     },
     AdviseeView: {
       abbreviations: {
         Female: "F",
-        Male: "M"
-      }
+        Male: "M",
+      },
     },
     Body: {
-      title: "Measurements"
+      title: "Measurements",
     },
     Calendar: {
       days: ["M", "T", "W", "T", "F", "S", "S"],
@@ -29,16 +29,16 @@ export const english: Translation = {
         "September",
         "October",
         "November",
-        "December"
-      ]
+        "December",
+      ],
     },
     Confirmation: {
       cancel: "Cancel",
       confirm: "Confirm",
-      title: "Confirmation"
+      title: "Confirmation",
     },
     Diet: {
-      title: "Daily intake"
+      title: "Daily intake",
     },
     DishEdit: {
       delete: "Delete",
@@ -50,8 +50,8 @@ export const english: Translation = {
         reasons: {
           nonempty: "Please enter foodstuff quantity.",
           positive: "Please enter quantity that is greater than 0.",
-          toNumber: "Please enter correct quantity."
-        }
+          toNumber: "Please enter correct quantity.",
+        },
       },
       select: "Select",
       title: "Select quantity",
@@ -59,9 +59,9 @@ export const english: Translation = {
         helper: "Is the quantity in {unit} or in pieces?",
         label: "Unit",
         reasons: {
-          defined: "Please select a unit."
-        }
-      }
+          defined: "Please select a unit.",
+        },
+      },
     },
     FoodstuffEdit: {
       addTitle: "Add foodstuff",
@@ -74,37 +74,37 @@ export const english: Translation = {
           reasons: {
             conflict: "Foodstuff with this barcode already exists",
             nonempty: "Please enter a barcode.",
-            regexp: "Please enter a valid barcode."
-          }
+            regexp: "Please enter a valid barcode.",
+          },
         },
         name: {
           label: "Name",
           reasons: {
-            nonempty: "Please enter a name of this foodstuff."
-          }
+            nonempty: "Please enter a name of this foodstuff.",
+          },
         },
         packageSize: {
           label: "Package size",
           reasons: {
             nonempty: "Please enter foodstuff package size.",
             positive: "Please enter a package size that is greater than 0.",
-            toNumber: "Please enter correct package size."
-          }
+            toNumber: "Please enter correct package size.",
+          },
         },
         pieceQuantity: {
           label: "Piece quantity",
           reasons: {
             nonempty: "Please enter quantity of one piece.",
             positive: "Please enter one piece quantity that is greater than 0.",
-            toNumber: "Please enter correct one piece quantity."
-          }
+            toNumber: "Please enter correct one piece quantity.",
+          },
         },
         unit: {
           label: "Unit",
           reasons: {
-            defined: "Please select a unit."
-          }
-        }
+            defined: "Please select a unit.",
+          },
+        },
       },
       nutrients: {
         carbohydrate: "Carbohydrate",
@@ -118,14 +118,14 @@ export const english: Translation = {
         salt: "Salt",
         saturates: "Saturates",
         starch: "Starch",
-        sugars: "Sugars"
+        sugars: "Sugars",
       },
       nutrientsLabel: "Nutritional information",
       nutrientsLabelPer: " per 100{unit}",
-      submit: "Save"
+      submit: "Save",
     },
     FoodstuffView: {
-      per: "Per 100{unit}:"
+      per: "Per 100{unit}:",
     },
     GroupEdit: {
       createSubmit: "Create",
@@ -135,37 +135,37 @@ export const english: Translation = {
       editTitle: "Rename group",
       label: "Name",
       reasons: {
-        nonempty: "Please enter group name."
-      }
+        nonempty: "Please enter group name.",
+      },
     },
     GroupView: {
-      ungrouped: "Ungrouped"
+      ungrouped: "Ungrouped",
     },
     Head: {
-      title: "Carota"
+      title: "Carota",
     },
     Invite: {
       loading: "Creating registration link.",
-      title: "Registration link"
+      title: "Registration link",
     },
     Login: {
       inputs: {
         email: {
           label: "Email",
           reasons: {
-            nonempty: "Please enter an email address."
-          }
+            nonempty: "Please enter an email address.",
+          },
         },
         password: {
           label: "Password",
           reasons: {
-            nonempty: "Please enter a password."
-          }
-        }
+            nonempty: "Please enter a password.",
+          },
+        },
       },
       invalidCredentials: "Incorrect email address or password.",
       submit: "Sign in →",
-      title: "Sign in"
+      title: "Sign in",
     },
     MealEdit: {
       createSubmit: "Create",
@@ -177,17 +177,17 @@ export const english: Translation = {
       meals: {
         breakfast: "Breakfast",
         dinner: "Dinner",
-        lunch: "Lunch"
+        lunch: "Lunch",
       },
       or: "Or",
       selectHelper: "Select meal name:",
       selectReasons: {
-        nonempty: "Please select meal name."
+        nonempty: "Please select meal name.",
       },
       textFieldHelper: "Enter meal name:",
       textFieldReasons: {
-        nonempty: "Please enter meal name."
-      }
+        nonempty: "Please enter meal name.",
+      },
     },
     Measure: {
       confirmation: "Are you sure you want to delete this measurement?",
@@ -201,17 +201,17 @@ export const english: Translation = {
         Thigh: "Please enter your thigh circumference:",
         Waist: "Please enter your waist circumference:",
         Weight: "Please enter your weight:",
-        Wrist: "Please enter your wrist circumference:"
+        Wrist: "Please enter your wrist circumference:",
       },
       label: "Value",
       measurements: "Measurements",
       reasons: {
         nonempty: "Please enter the measured value.",
         positive: "Please enter a value that is greater than 0.",
-        toNumber: "Please enter a valid measured value."
+        toNumber: "Please enter a valid measured value.",
       },
       title: "Update measurement",
-      update: "Update"
+      update: "Update",
     },
     Menu: {
       Advisees: "Advisees",
@@ -219,81 +219,81 @@ export const english: Translation = {
       Diet: "Daily intake",
       Logout: "Sign out",
       Settings: "Settings",
-      Statistics: "Statistics"
+      Statistics: "Statistics",
     },
     Register: {
       inputs: {
         birthDate: {
           label: "Birth date",
           reasons: {
-            nonempty: "Please enter your birth date."
-          }
+            nonempty: "Please enter your birth date.",
+          },
         },
         email: {
           label: "Email",
           reasons: {
             conflict: "Entered email address is already in use.",
             email: "Please enter a valid email address.",
-            nonempty: "Please enter an email address."
-          }
+            nonempty: "Please enter an email address.",
+          },
         },
         language: {
           label: "Language",
           options: {
             English: "English",
             Estonian: "eesti",
-            Russian: "русский"
+            Russian: "русский",
           },
           reasons: {
-            defined: "Please select a language."
-          }
+            defined: "Please select a language.",
+          },
         },
         name: {
           label: "Name",
           reasons: {
-            nonempty: "Please enter a name."
-          }
+            nonempty: "Please enter a name.",
+          },
         },
         password: {
           label: "Password",
           reasons: {
             minLength: "Password must be at least 8 characters long.",
-            nonempty: "Please enter a password."
-          }
+            nonempty: "Please enter a password.",
+          },
         },
         sex: {
           label: "Sex",
           options: {
             Female: "Female",
-            Male: "Male"
+            Male: "Male",
           },
           reasons: {
-            defined: "Please select your sex."
-          }
-        }
+            defined: "Please select your sex.",
+          },
+        },
       },
       submit: "Create account →",
-      title: "Create account"
+      title: "Create account",
     },
     Scanner: {
-      title: "Scanner"
+      title: "Scanner",
     },
     Search: {
       reasons: {
         minLength: "Search query must be at least 3 characters long.",
-        notFound: "Foodstuff was not found. Please try to find it by name."
+        notFound: "Foodstuff was not found. Please try to find it by name.",
       },
-      title: "Search"
+      title: "Search",
     },
     Settings: {
       language: "Language",
       languages: {
         English: "English",
         Estonian: "eesti",
-        Russian: "русский"
+        Russian: "русский",
       },
       title: "Settings",
-      useDarkTheme: "Use dark theme"
+      useDarkTheme: "Use dark theme",
     },
     Statistics: {
       ranges: {
@@ -307,14 +307,14 @@ export const english: Translation = {
         overweight: "Overweight",
         severelyUnderweight: "Severely underweight",
         underweight: "Underweight",
-        verySeverelyUnderweight: "Very severely underweight"
+        verySeverelyUnderweight: "Very severely underweight",
       },
       timeFrames: {
         all: "All",
         month: "Month",
         quarter: "Quarter",
         week: "Week",
-        year: "Year"
+        year: "Year",
       },
       title: "Statistics",
       titles: {
@@ -332,12 +332,12 @@ export const english: Translation = {
         Thigh: "Thigh circumference",
         Waist: "Waist circumference",
         Weight: "Weight",
-        Wrist: "Wrist circumference"
-      }
+        Wrist: "Wrist circumference",
+      },
     },
     Unknown: {
-      message: "The page you're looking for can not be found."
-    }
+      message: "The page you're looking for can not be found.",
+    },
   },
   locale: "en-US",
   timeLocale: {
@@ -350,7 +350,7 @@ export const english: Translation = {
       "Wednesday",
       "Thursday",
       "Friday",
-      "Saturday"
+      "Saturday",
     ],
     months: [
       "January",
@@ -364,7 +364,7 @@ export const english: Translation = {
       "September",
       "October",
       "November",
-      "December"
+      "December",
     ],
     periods: ["AM", "PM"],
     shortDays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
@@ -380,9 +380,9 @@ export const english: Translation = {
       "Sep",
       "Oct",
       "Nov",
-      "Dec"
+      "Dec",
     ],
-    time: "%-I:%M:%S %p"
+    time: "%-I:%M:%S %p",
   },
   units: {
     cm: "cm",
@@ -390,7 +390,7 @@ export const english: Translation = {
     kcal: "kcal",
     kg: "kg",
     ml: "ml",
-    pcs: "pcs"
+    pcs: "pcs",
   },
-  unknownError: "An unknown error occurred."
+  unknownError: "An unknown error occurred.",
 };

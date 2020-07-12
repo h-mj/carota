@@ -55,7 +55,7 @@ const routeTo = <
   ...parameterNames: TParameterNames[]
 ): Route<TSceneName, TParameterNames> => ({
   sceneName,
-  parameterNames
+  parameterNames,
 });
 
 /**
@@ -68,7 +68,7 @@ const ROUTES = {
   "/measurements": routeTo("Body"),
   "/register/{invitationId}": routeTo("Register", "invitationId"),
   "/settings": routeTo("Settings"),
-  "/statistics": routeTo("Statistics")
+  "/statistics": routeTo("Statistics"),
 } as const;
 
 /**

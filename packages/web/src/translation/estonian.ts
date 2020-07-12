@@ -4,16 +4,16 @@ export const estonian: Translation = {
   components: {
     Advisees: {
       invite: "Lisa",
-      title: "Nõustatavad"
+      title: "Nõustatavad",
     },
     AdviseeView: {
       abbreviations: {
         Female: "N",
-        Male: "M"
-      }
+        Male: "M",
+      },
     },
     Body: {
-      title: "Mõõdud"
+      title: "Mõõdud",
     },
     Calendar: {
       days: ["E", "T", "K", "N", "R", "L", "P"],
@@ -29,16 +29,16 @@ export const estonian: Translation = {
         "September",
         "Oktoober",
         "November",
-        "Detsember"
-      ]
+        "Detsember",
+      ],
     },
     Confirmation: {
       cancel: "Tühista",
       confirm: "Kinnita",
-      title: "Kinnitus"
+      title: "Kinnitus",
     },
     Diet: {
-      title: "Päevane tarbimine"
+      title: "Päevane tarbimine",
     },
     DishEdit: {
       delete: "Kustutage",
@@ -50,8 +50,8 @@ export const estonian: Translation = {
         reasons: {
           nonempty: "Palun sisestage toiduaine kogus.",
           positive: "Palun sistestage kogus mis on suurem kui 0.",
-          toNumber: "Palun sistestage korrektne kogus."
-        }
+          toNumber: "Palun sistestage korrektne kogus.",
+        },
       },
       select: "Valige",
       title: "Valige kogus",
@@ -59,9 +59,9 @@ export const estonian: Translation = {
         helper: "Kas toiduaine kogus on {ühik} või tükkides?",
         label: "Ühik",
         reasons: {
-          defined: "Palun valige toiduaine ühik."
-        }
-      }
+          defined: "Palun valige toiduaine ühik.",
+        },
+      },
     },
     FoodstuffEdit: {
       addTitle: "Lisa toiduaine",
@@ -74,37 +74,37 @@ export const estonian: Translation = {
           reasons: {
             conflict: "Sellise triipkoodiga touaine on juba listatud.",
             nonempty: "Palun sisestage toiduaine triipkood.",
-            regexp: "Palun sisestage korrketne toiduaine triipkood."
-          }
+            regexp: "Palun sisestage korrketne toiduaine triipkood.",
+          },
         },
         name: {
           label: "Nimetus",
           reasons: {
-            nonempty: "Palun sisestage toiduaine nimetus."
-          }
+            nonempty: "Palun sisestage toiduaine nimetus.",
+          },
         },
         packageSize: {
           label: "Pakendi kogus",
           reasons: {
             nonempty: "Palun sisestage pakendi kogus.",
             positive: "Palun sisestage pakendi kogus mis on suurem kui 0.",
-            toNumber: "Palun sisestage korrektne pakendi kogus."
-          }
+            toNumber: "Palun sisestage korrektne pakendi kogus.",
+          },
         },
         pieceQuantity: {
           label: "Ühe tüki kogus",
           reasons: {
             nonempty: "Palun sisestage ühe tüki kogus.",
             positive: "Palun sisestage ühe tüki kogus mis on suurem kui 0.",
-            toNumber: "Palun sisestage korrektne ühe tüki kogus."
-          }
+            toNumber: "Palun sisestage korrektne ühe tüki kogus.",
+          },
         },
         unit: {
           label: "Ühik",
           reasons: {
-            defined: "Palun valige ühik."
-          }
-        }
+            defined: "Palun valige ühik.",
+          },
+        },
       },
       nutrients: {
         carbohydrate: "Süsivesikud",
@@ -118,14 +118,14 @@ export const estonian: Translation = {
         salt: "Sool",
         saturates: "Küllastunud rasvhapped",
         starch: "Tärklis",
-        sugars: "Suhkrud"
+        sugars: "Suhkrud",
       },
       nutrientsLabel: "Toitumisalane teave",
       nutrientsLabelPer: " 100{unit} kohta",
-      submit: "Salvesta"
+      submit: "Salvesta",
     },
     FoodstuffView: {
-      per: "100{unit} kohta:"
+      per: "100{unit} kohta:",
     },
     GroupEdit: {
       createSubmit: "Looge",
@@ -135,37 +135,37 @@ export const estonian: Translation = {
       editTitle: "Grupi ümbernimetamine",
       label: "Nimetus",
       reasons: {
-        nonempty: "Palun sisestage grupi nimetus."
-      }
+        nonempty: "Palun sisestage grupi nimetus.",
+      },
     },
     GroupView: {
-      ungrouped: "Rühmitamata"
+      ungrouped: "Rühmitamata",
     },
     Head: {
-      title: "Carota"
+      title: "Carota",
     },
     Invite: {
       loading: "Loon registreerimise linki.",
-      title: "Registreerimise link"
+      title: "Registreerimise link",
     },
     Login: {
       inputs: {
         email: {
           label: "E-post",
           reasons: {
-            nonempty: "Palun sisestage e-posti aadress."
-          }
+            nonempty: "Palun sisestage e-posti aadress.",
+          },
         },
         password: {
           label: "Parool",
           reasons: {
-            nonempty: "Palun sisestage salasõna."
-          }
-        }
+            nonempty: "Palun sisestage salasõna.",
+          },
+        },
       },
       invalidCredentials: "Vale e-posti aadress või parool.",
       submit: "Sisenege →",
-      title: "Sisenege"
+      title: "Sisenege",
     },
     MealEdit: {
       createSubmit: "Looge",
@@ -177,17 +177,17 @@ export const estonian: Translation = {
       meals: {
         breakfast: "Hommikusöök",
         dinner: "Õhtusöök",
-        lunch: "Lõunasöök"
+        lunch: "Lõunasöök",
       },
       or: "Või",
       selectHelper: "Valige toidukorra nimetus:",
       selectReasons: {
-        nonempty: "Palun valige toidukorra nimetus."
+        nonempty: "Palun valige toidukorra nimetus.",
       },
       textFieldHelper: "Sisestage toidukorra nimetus:",
       textFieldReasons: {
-        nonempty: "Palun sisestage toidukorra nimetus."
-      }
+        nonempty: "Palun sisestage toidukorra nimetus.",
+      },
     },
     Measure: {
       confirmation: "Kas olete kindel, et soovite selle mõõdu kustutada?",
@@ -201,17 +201,17 @@ export const estonian: Translation = {
         Thigh: "Palun sisestage oma reie ümbermõõt:",
         Waist: "Palun sisestage oma talje ümbermõõt:",
         Weight: "Palun sisestage oma kaal:",
-        Wrist: "Palun sisestage oma randme ümbermõõt:"
+        Wrist: "Palun sisestage oma randme ümbermõõt:",
       },
       label: "Mõõt",
       measurements: "Mõõdud",
       reasons: {
         nonempty: "Palun sisestage mõõdetud väärtus.",
         positive: "Palun sisestage väärtus mis on suurem kui 0.",
-        toNumber: "Palun sisestage korrektne mõõdetud väärtus."
+        toNumber: "Palun sisestage korrektne mõõdetud väärtus.",
       },
       title: "Uuenda mõõtu",
-      update: "Uuenda"
+      update: "Uuenda",
     },
     Menu: {
       Advisees: "Nõustatavad",
@@ -219,82 +219,82 @@ export const estonian: Translation = {
       Diet: "Päevane tarbimine",
       Logout: "Logi välja",
       Settings: "Seaded",
-      Statistics: "Statistika"
+      Statistics: "Statistika",
     },
     Register: {
       inputs: {
         birthDate: {
           label: "Sünnikuupäev",
           reasons: {
-            nonempty: "Palun sisestage oma sünnikuupäev."
-          }
+            nonempty: "Palun sisestage oma sünnikuupäev.",
+          },
         },
         email: {
           label: "E-post",
           reasons: {
             conflict: "Sisestatud e-posti aadress on juba kasutuses.",
             email: "Palun sisestage kehtiv e-posti aadress.",
-            nonempty: "Palun sisestage e-posti aadress."
-          }
+            nonempty: "Palun sisestage e-posti aadress.",
+          },
         },
         language: {
           label: "Keel",
           options: {
             English: "English",
             Estonian: "eesti",
-            Russian: "русский"
+            Russian: "русский",
           },
           reasons: {
-            defined: "Palun valige keel."
-          }
+            defined: "Palun valige keel.",
+          },
         },
         name: {
           label: "Nimi",
           reasons: {
-            nonempty: "Palun sisestage nimi."
-          }
+            nonempty: "Palun sisestage nimi.",
+          },
         },
         password: {
           label: "Parool",
           reasons: {
             minLength: "Salasõna peab sisaldama vähemalt 8 tähemärki.",
-            nonempty: "Palun sisestage salasõna."
-          }
+            nonempty: "Palun sisestage salasõna.",
+          },
         },
         sex: {
           label: "Sugu",
           options: {
             Female: "Naine",
-            Male: "Mees"
+            Male: "Mees",
           },
           reasons: {
-            defined: "Palun valige sugu."
-          }
-        }
+            defined: "Palun valige sugu.",
+          },
+        },
       },
       submit: "Looge konto →",
-      title: "Looge konto"
+      title: "Looge konto",
     },
     Scanner: {
-      title: "Skanner"
+      title: "Skanner",
     },
     Search: {
       reasons: {
         minLength: "Päring peab sisaldama vähemalt 3 tähemärki.",
         notFound:
-          "Toiduainet ei leitud. Palun proovige leida see nimetuse järgi."
+          "Toiduainet ei leitud. Palun proovige leida see nimetuse järgi.",
       },
-      title: "Otsing"
+      title: "Otsing",
     },
     Settings: {
       language: "Keel",
       languages: {
         English: "English",
         Estonian: "eesti",
-        Russian: "русский"
+        Russian: "русский",
       },
       title: "Seaded",
-      useDarkTheme: "Kasutage tumedat teemat"
+      useDarkTheme: "Kasutage tumedat teemat",
     },
     Statistics: {
       ranges: {
@@ -308,14 +308,14 @@ export const estonian: Translation = {
         overweight: "Ülekaal",
         severelyUnderweight: "Tõsine alakaal",
         underweight: "Alakaal",
-        verySeverelyUnderweight: "Väga tõsine alakaal"
+        verySeverelyUnderweight: "Väga tõsine alakaal",
       },
       timeFrames: {
         all: "Kõik",
         month: "Kuu",
         quarter: "Kvartal",
         week: "Nädal",
-        year: "Aasta"
+        year: "Aasta",
       },
       title: "Statistika",
       titles: {
@@ -333,12 +333,12 @@ export const estonian: Translation = {
         Thigh: "Reie ümbermõõt",
         Waist: "Talje ümbermõõt",
         Weight: "Kaal",
-        Wrist: "Randme ümbermõõt"
-      }
+        Wrist: "Randme ümbermõõt",
+      },
     },
     Unknown: {
-      message: "Teie otsitavat lehte ei leitud."
-    }
+      message: "Teie otsitavat lehte ei leitud.",
+    },
   },
   locale: "et-EE",
   timeLocale: {
@@ -351,7 +351,7 @@ export const estonian: Translation = {
       "kolmapäev",
       "neljapäev",
       "reede",
-      "laupäev"
+      "laupäev",
     ],
     months: [
       "jaanuar",
@@ -365,7 +365,7 @@ export const estonian: Translation = {
       "september",
       "oktoober",
       "november",
-      "detsember"
+      "detsember",
     ],
     periods: ["AM", "PM"],
     shortDays: ["P", "E", "T", "K", "N", "R", "L"],
@@ -381,9 +381,9 @@ export const estonian: Translation = {
       "sept",
       "okt",
       "nov",
-      "dets"
+      "dets",
     ],
-    time: "%H:%M:%S"
+    time: "%H:%M:%S",
   },
   units: {
     cm: "cm",
@@ -391,7 +391,7 @@ export const estonian: Translation = {
     kcal: "kcal",
     kg: "kg",
     ml: "ml",
-    pcs: "tk"
+    pcs: "tk",
   },
-  unknownError: "Ilmnes tundmatu tõrge."
+  unknownError: "Ilmnes tundmatu tõrge.",
 };

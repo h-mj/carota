@@ -29,7 +29,7 @@ export class NutrientQuantities extends Component<NutrientQuantitiesProps> {
   public render() {
     return (
       <Container>
-        {REQUIRED_NUTRIENTS.map(nutrient => (
+        {REQUIRED_NUTRIENTS.map((nutrient) => (
           <NutrientQuantity
             key={nutrient}
             model={this.props.model}
@@ -60,7 +60,7 @@ const ICONS = {
   energy: Energy,
   protein: Protein,
   fat: Fat,
-  carbohydrate: Carbohydrate
+  carbohydrate: Carbohydrate,
 } as const;
 
 /**

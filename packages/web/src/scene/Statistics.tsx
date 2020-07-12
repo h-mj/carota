@@ -28,7 +28,7 @@ const EMPTY_STATISTICS_DATA: Data<"statistics", "getAll"> = [
   { type: "quantity", name: "Thigh", data: [] },
   { type: "quantity", name: "Waist", data: [] },
   { type: "quantity", name: "Weight", data: [] },
-  { type: "quantity", name: "Wrist", data: [] }
+  { type: "quantity", name: "Wrist", data: [] },
 ];
 
 /**
@@ -63,7 +63,7 @@ const BODY_MASS_INDEX_RANGES = [
   { name: "obeseClass3" as const, min: 40, lt: 45 },
   { name: "obeseClass4" as const, min: 45, lt: 50 },
   { name: "obeseClass5" as const, min: 50, lt: 60 },
-  { name: "obeseClass6" as const, min: 60, lt: Infinity }
+  { name: "obeseClass6" as const, min: 60, lt: Infinity },
 ];
 
 /**
@@ -96,7 +96,7 @@ const TIME_FRAME_OFFSET_FUNCTIONS = {
   week: (now: Date) => d3.timeWeek.offset(now, -1),
   month: (now: Date) => d3.timeMonth.offset(now, -1),
   quarter: (now: Date) => d3.timeMonth.offset(now, -3),
-  year: (now: Date) => d3.timeYear.offset(now, -1)
+  year: (now: Date) => d3.timeYear.offset(now, -1),
 };
 
 /**
@@ -106,7 +106,7 @@ const PADDING = {
   top: 24,
   bottom: 128,
   left: 40,
-  right: 40
+  right: 40,
 };
 
 /**
@@ -199,9 +199,9 @@ const area = (
 ) =>
   d3
     .area<QuantityDataPoint>()
-    .x(d => x(offsetHalfDay(new Date(d.date))))
+    .x((d) => x(offsetHalfDay(new Date(d.date))))
     .y0(CHART_HEIGHT)
-    .y1(d => CHART_HEIGHT - y(d.value))
+    .y1((d) => CHART_HEIGHT - y(d.value))
     .curve(d3.curveMonotoneX);
 
 /**
@@ -213,15 +213,15 @@ const line = (
 ) =>
   d3
     .line<QuantityDataPoint>()
-    .x(d => x(offsetHalfDay(new Date(d.date))))
-    .y(d => CHART_HEIGHT - y(d.value))
+    .x((d) => x(offsetHalfDay(new Date(d.date))))
+    .y((d) => CHART_HEIGHT - y(d.value))
     .curve(d3.curveMonotoneX);
 
 /**
  * Tooltip value format options.
  */
 const FORMAT_OPTIONS = {
-  maximumFractionDigits: 1
+  maximumFractionDigits: 1,
 };
 
 /**
@@ -285,7 +285,7 @@ export class Statistics extends SceneComponent<
     | NutritionDataPoint
     | QuantityDataPoint = {
     date: "1970-01-01",
-    value: 0
+    value: 0,
   };
 
   /**
@@ -296,7 +296,7 @@ export class Statistics extends SceneComponent<
     y: 0,
     arrowOffsetX: 0,
     mirrored: false,
-    visible: false
+    visible: false,
   };
 
   /**
@@ -414,7 +414,7 @@ export class Statistics extends SceneComponent<
       const current = currentPoint.value;
 
       const { min, lt } = BODY_MASS_INDEX_RANGES.find(
-        range => range.min <= current && current < range.lt
+        (range) => range.min <= current && current < range.lt
       )!;
 
       let domain: number[] = [];
@@ -476,9 +476,9 @@ export class Statistics extends SceneComponent<
         .append("foreignObject")
         .attr("class", "range")
         .merge(rangeLabelContainers)
-        .attr("x", d => d.x)
+        .attr("x", (d) => d.x)
         .attr("y", 0)
-        .attr("width", d => d.width)
+        .attr("width", (d) => d.width)
         .attr("height", BMI_CHART_HEIGHT)
         .attr("alignment-baseline", "middle")
         .attr("text-anchor", "middle");
@@ -487,7 +487,7 @@ export class Statistics extends SceneComponent<
 
       rangeLabelContainers
         .append("xhtml:div")
-        .text(d => this.translation.ranges[d.name]);
+        .text((d) => this.translation.ranges[d.name]);
 
       const initialFlag = chart
         .selectAll<SVGRectElement, never>("rect.flag.initial")
@@ -500,7 +500,7 @@ export class Statistics extends SceneComponent<
         .append("rect")
         .attr("class", "flag initial")
         .merge(initialFlag)
-        .attr("x", d => x(d.value) - BMI_CHART_FLAG_WIDTH / 2)
+        .attr("x", (d) => x(d.value) - BMI_CHART_FLAG_WIDTH / 2)
         .attr("y", BMI_CHART_HEIGHT - BMI_CHART_FLAG_HEIGHT)
         .attr("width", BMI_CHART_FLAG_WIDTH)
         .attr("height", BMI_CHART_FLAG_HEIGHT)
@@ -518,7 +518,7 @@ export class Statistics extends SceneComponent<
         .append("rect")
         .attr("class", "flag current")
         .merge(currentFlag)
-        .attr("x", d => x(d.value) - BMI_CHART_FLAG_WIDTH / 2)
+        .attr("x", (d) => x(d.value) - BMI_CHART_FLAG_WIDTH / 2)
         .attr("y", BMI_CHART_HEIGHT - BMI_CHART_FLAG_HEIGHT)
         .attr("width", BMI_CHART_FLAG_WIDTH)
         .attr("height", BMI_CHART_FLAG_HEIGHT)
@@ -538,13 +538,13 @@ export class Statistics extends SceneComponent<
         .append("text")
         .attr("class", "label")
         .merge(label)
-        .text(d =>
+        .text((d) =>
           d.value.toLocaleString(
             this.props.viewStore!.translation.locale,
             FORMAT_OPTIONS
           )
         )
-        .attr("x", d => x(d.value))
+        .attr("x", (d) => x(d.value))
         .attr("y", BMI_CHART_HEIGHT - BMI_CHART_FLAG_HEIGHT - LABEL_OFFSET)
         .attr("text-anchor", "middle");
     }
@@ -571,14 +571,14 @@ export class Statistics extends SceneComponent<
     setSelectedPoint: (point: NutritionDataPoint) => void,
     hideTooltip: () => void
   ) => {
-    const min = d3.min(data, amount => Math.min(amount.limit, amount.value))!;
-    const max = d3.max(data, amount => Math.max(amount.limit, amount.value))!;
+    const min = d3.min(data, (amount) => Math.min(amount.limit, amount.value))!;
+    const max = d3.max(data, (amount) => Math.max(amount.limit, amount.value))!;
 
     const y = d3
       .scaleLinear()
       .domain([
         min - Math.max(10, (max - min) * 0.1),
-        max + Math.max(10, (max - min) * 0.1)
+        max + Math.max(10, (max - min) * 0.1),
       ])
       .range([0, CHART_HEIGHT]);
 
@@ -612,10 +612,10 @@ export class Statistics extends SceneComponent<
       .append("line")
       .attr("class", "bar-top")
       .merge(highlights)
-      .attr("x1", d => x(new Date(d.date)))
-      .attr("y1", d => CHART_HEIGHT - y(d.value))
-      .attr("x2", d => x(d3.timeDay.offset(new Date(d.date), 1)))
-      .attr("y2", d => CHART_HEIGHT - y(d.value));
+      .attr("x1", (d) => x(new Date(d.date)))
+      .attr("y1", (d) => CHART_HEIGHT - y(d.value))
+      .attr("x2", (d) => x(d3.timeDay.offset(new Date(d.date), 1)))
+      .attr("y2", (d) => CHART_HEIGHT - y(d.value));
 
     highlights.exit().remove();
 
@@ -642,7 +642,7 @@ export class Statistics extends SceneComponent<
    * Renders chart inside specified SVG with given measurements inside specified
    * SVG group selection.
    */
-  private renderQuantityChart = function(
+  private renderQuantityChart = function (
     chart: d3.Selection<SVGGElement, unknown, null, undefined>,
     data: QuantityDataPoint[],
     x: d3.ScaleTime<number, number>,
@@ -650,14 +650,14 @@ export class Statistics extends SceneComponent<
     hideTooltip: () => void,
     locale: string
   ) {
-    const min = d3.min(data, measurement => measurement.value)!;
-    const max = d3.max(data, measurement => measurement.value)!;
+    const min = d3.min(data, (measurement) => measurement.value)!;
+    const max = d3.max(data, (measurement) => measurement.value)!;
 
     const y = d3
       .scaleLinear()
       .domain([
         min - Math.max(10, (max - min) * 0.1),
-        max + Math.max(10, (max - min) * 0.1)
+        max + Math.max(10, (max - min) * 0.1),
       ])
       .range([0, CHART_HEIGHT]);
 
@@ -695,18 +695,20 @@ export class Statistics extends SceneComponent<
       .append("circle")
       .attr("class", "dot")
       .merge(dots)
-      .attr("cx", d => x(offsetHalfDay(new Date(d.date))))
-      .attr("cy", d => CHART_HEIGHT - y(d.value))
+      .attr("cx", (d) => x(offsetHalfDay(new Date(d.date))))
+      .attr("cy", (d) => CHART_HEIGHT - y(d.value))
       .attr("r", DOT_RADIUS);
 
     dots.exit().remove();
 
     // Add hoverable area around each dto so that on mouse enter tooltip of that
     // point will be shown.
-    const hoverAreaBounds: Array<QuantityDataPoint & {
-      x: number;
-      width: number;
-    }> = [];
+    const hoverAreaBounds: Array<
+      QuantityDataPoint & {
+        x: number;
+        width: number;
+      }
+    > = [];
 
     // prettier-ignore
     for (let i = 0; i < data.length; ++i) {
@@ -728,12 +730,12 @@ export class Statistics extends SceneComponent<
       .append("rect")
       .attr("class", "hover-area")
       .merge(hoverAreas)
-      .attr("x", d => d.x)
+      .attr("x", (d) => d.x)
       .attr("y", 0)
-      .attr("width", d => d.width)
+      .attr("width", (d) => d.width)
       .attr("height", CHART_HEIGHT)
-      .attr("data-offsetX", d => x(offsetHalfDay(new Date(d.date))) - d.x)
-      .attr("data-offsetY", d => CHART_HEIGHT - y(d.value))
+      .attr("data-offsetX", (d) => x(offsetHalfDay(new Date(d.date))) - d.x)
+      .attr("data-offsetY", (d) => CHART_HEIGHT - y(d.value))
       .attr("fill", "transparent")
       .on("mouseover", setSelectedPoint)
       .on("mouseleave", hideTooltip);
@@ -774,9 +776,9 @@ export class Statistics extends SceneComponent<
       .append("text")
       .attr("class", "label")
       .merge(labels)
-      .text(d => d.value.toLocaleString(locale, FORMAT_OPTIONS))
-      .attr("x", d => x(offsetHalfDay(new Date(d.date))))
-      .attr("y", d => CHART_HEIGHT - y(d.value) - LABEL_OFFSET)
+      .text((d) => d.value.toLocaleString(locale, FORMAT_OPTIONS))
+      .attr("x", (d) => x(offsetHalfDay(new Date(d.date))))
+      .attr("y", (d) => CHART_HEIGHT - y(d.value) - LABEL_OFFSET)
       .attr("text-anchor", "middle");
 
     labels.exit().remove();
@@ -791,9 +793,9 @@ export class Statistics extends SceneComponent<
 
     if (this.selectedTimeFrame === "all") {
       const milliseconds = data
-        .map(data => data.data)
+        .map((data) => data.data)
         .flat()
-        .map(point => new Date(point.date).valueOf());
+        .map((point) => new Date(point.date).valueOf());
 
       // Force minimum to be at least 1 year from now.
       milliseconds.push(TIME_FRAME_OFFSET_FUNCTIONS.year(now).valueOf());
@@ -817,11 +819,7 @@ export class Statistics extends SceneComponent<
       PADDING.bottom; // Bottom padding
 
     let svg = canvas.selectAll<SVGSVGElement, never>("svg").data([0]);
-    svg = svg
-      .enter()
-      .append("svg")
-      .merge(svg)
-      .attr("height", totalHeight);
+    svg = svg.enter().append("svg").merge(svg).attr("height", totalHeight);
 
     this.svgNode = svg.node();
     this.svgWidth = svg.node()!.clientWidth;
@@ -831,21 +829,13 @@ export class Statistics extends SceneComponent<
 
     this.renderBodyMassIndexChart(svg, domain, this.data);
 
-    const x = d3
-      .scaleUtc()
-      .range([0, this.chartWidth])
-      .domain(domain)
-      .nice();
+    const x = d3.scaleUtc().range([0, this.chartWidth]).domain(domain).nice();
 
     const xAxis = d3.axisBottom(x).ticks(this.chartWidth / TICK_WIDTH);
 
     let charts = svg.selectAll<SVGGElement, never>("g.chart").data(this.data);
 
-    charts = charts
-      .enter()
-      .append("g")
-      .attr("class", "chart")
-      .merge(charts);
+    charts = charts.enter().append("g").attr("class", "chart").merge(charts);
 
     // Make instance fields local since `this` will be the SVG G element inside `each` function.
     const renderChartTitle = this.renderChartTitle;
@@ -893,7 +883,7 @@ export class Statistics extends SceneComponent<
         <Head title={this.translation.title} />
 
         <Tabs>
-          {TIME_FRAMES.map(timeFrame => (
+          {TIME_FRAMES.map((timeFrame) => (
             <Tab
               key={timeFrame}
               onClick={this.selectTimeFrame}
@@ -942,9 +932,9 @@ export class Statistics extends SceneComponent<
   /**
    * Sets appropriate time frame on tab click.
    */
-  private selectTimeFrame: React.MouseEventHandler<
-    HTMLButtonElement
-  > = event => {
+  private selectTimeFrame: React.MouseEventHandler<HTMLButtonElement> = (
+    event
+  ) => {
     this.selectedTimeFrame = event.currentTarget.value as TimeFrame;
   };
 
@@ -1013,7 +1003,7 @@ export class Statistics extends SceneComponent<
   ): BodyMassIndexDataPoint[] {
     const nameProperties = [
       ["Height", "height"],
-      ["Weight", "weight"]
+      ["Weight", "weight"],
     ] as const;
 
     interface PartialValues {
@@ -1025,7 +1015,7 @@ export class Statistics extends SceneComponent<
     const dateValues = new Map<string, PartialValues>();
 
     for (const [name, property] of nameProperties) {
-      for (const point of data.find(set => set.name === name)?.data || []) {
+      for (const point of data.find((set) => set.name === name)?.data || []) {
         const values = dateValues.get(point.date);
 
         if (values === undefined) {
@@ -1044,7 +1034,7 @@ export class Statistics extends SceneComponent<
           accumulator.push({
             date,
             height: values.height,
-            weight: values.weight
+            weight: values.weight,
           });
         } else {
           const existingProperty =
@@ -1059,7 +1049,7 @@ export class Statistics extends SceneComponent<
               accumulator.push(({
                 date,
                 [existingProperty]: values[existingProperty],
-                [additionalProperty]: additionalValues[additionalProperty]
+                [additionalProperty]: additionalValues[additionalProperty],
               } as unknown) as { date: string; height: number; weight: number });
 
               break;
@@ -1071,9 +1061,9 @@ export class Statistics extends SceneComponent<
       }, [] as Array<{ date: string; height: number; weight: number }>)
       .map(({ date, height, weight }) => ({
         date,
-        value: weight / (height / 100) ** 2
+        value: weight / (height / 100) ** 2,
       }))
-      .filter(point => {
+      .filter((point) => {
         const dateValue = new Date(point.date).valueOf();
 
         return (

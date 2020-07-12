@@ -66,7 +66,7 @@ export class AccountStore extends CachedStore<Account> {
     const result = await Rpc.call("account", "insert", {
       id: account.id,
       groupId: group.id,
-      index
+      index,
     });
 
     if (!result.ok) {

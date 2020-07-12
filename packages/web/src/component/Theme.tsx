@@ -2,7 +2,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 
 import { Component } from "../base/Component";
-import { ThemeProvider, createGlobalStyle } from "../styling/theme";
+import { createGlobalStyle, ThemeProvider } from "../styling/theme";
 
 /**
  * Renders `GlobalStyle` component and renders it's children wrapped in

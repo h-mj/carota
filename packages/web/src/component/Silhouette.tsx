@@ -140,7 +140,7 @@ export class Silhouette extends Component<SilhouetteProps> {
    * Calls measurements click callback function when user clicks on one of
    * the lines.
    */
-  private handleClick: React.MouseEventHandler<SVGGElement> = event => {
+  private handleClick: React.MouseEventHandler<SVGGElement> = (event) => {
     this.props.onClick(event.currentTarget.id as Quantity);
   };
 }

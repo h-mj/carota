@@ -12,7 +12,7 @@ import { Group } from "../component/Group";
 import { Head } from "../component/Head";
 import { Select } from "../component/Select";
 import { TextField } from "../component/TextField";
-import { ErrorsFor, any, append } from "../utility/form";
+import { any, append, ErrorsFor } from "../utility/form";
 
 /**
  * Text field name type that is union of all text field names inside
@@ -25,7 +25,7 @@ type TextFieldNames = "name" | "birthDate" | "email" | "password";
  */
 const SELECT_OPTIONS = {
   language: ["English", "Estonian", "Russian"],
-  sex: ["Female", "Male"]
+  sex: ["Female", "Male"],
 } as const;
 
 /**
@@ -135,7 +135,7 @@ export class Register extends SceneComponent<
     sex: undefined,
     birthDate: "",
     email: "",
-    password: ""
+    password: "",
   };
 
   /**
@@ -178,9 +178,9 @@ export class Register extends SceneComponent<
               label={this.translation.inputs.language.label}
               name="language"
               onChange={this.handleLanguageChange}
-              options={SELECT_OPTIONS.language.map(language => ({
+              options={SELECT_OPTIONS.language.map((language) => ({
                 label: this.translation.inputs.language.options[language],
-                value: language
+                value: language,
               }))}
               required={true}
               value={this.values.language}
@@ -196,9 +196,9 @@ export class Register extends SceneComponent<
               label={this.translation.inputs.sex.label}
               name="sex"
               onChange={this.handleSexChange}
-              options={SELECT_OPTIONS.sex.map(sex => ({
+              options={SELECT_OPTIONS.sex.map((sex) => ({
                 label: this.translation.inputs.sex.options[sex],
-                value: sex
+                value: sex,
               }))}
               required={true}
               value={this.values.sex}
@@ -273,9 +273,9 @@ export class Register extends SceneComponent<
    * instead.
    */
   @action
-  private handleSubmit: React.FormEventHandler<
-    HTMLFormElement
-  > = async event => {
+  private handleSubmit: React.FormEventHandler<HTMLFormElement> = async (
+    event
+  ) => {
     event.preventDefault();
 
     const result = toBody(this.values);
@@ -284,7 +284,7 @@ export class Register extends SceneComponent<
       result.ok
         ? this.props.accountStore!.create({
             ...result.value,
-            invitationId: this.props.scene!.parameters!.invitationId
+            invitationId: this.props.scene!.parameters!.invitationId,
           })
         : undefined
     );

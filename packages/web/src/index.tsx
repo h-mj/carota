@@ -1,5 +1,5 @@
 import { action, observable } from "mobx";
-import { Provider, observer } from "mobx-react";
+import { observer, Provider } from "mobx-react";
 import * as React from "react";
 import { render } from "react-dom";
 

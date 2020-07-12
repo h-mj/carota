@@ -8,7 +8,7 @@ export const getEnvironmentCameraMediaStream = async () => {
 
   try {
     return await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { exact: "environment" } }
+      video: { facingMode: { exact: "environment" } },
     });
   } catch (error) {
     return undefined;
@@ -26,7 +26,7 @@ export const hasEnvironmentCamera = async () => {
 
   const deviceInfos = await navigator.mediaDevices.enumerateDevices();
 
-  if (!deviceInfos.some(deviceInfo => deviceInfo.kind === "videoinput")) {
+  if (!deviceInfos.some((deviceInfo) => deviceInfo.kind === "videoinput")) {
     return false;
   }
 
@@ -36,7 +36,7 @@ export const hasEnvironmentCamera = async () => {
     return false;
   }
 
-  stream.getTracks().forEach(track => track.stop());
+  stream.getTracks().forEach((track) => track.stop());
 
   return true;
 };

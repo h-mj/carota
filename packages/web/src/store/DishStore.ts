@@ -22,7 +22,7 @@ export class DishStore extends CachedStore<Dish> {
       mealId: meal.id,
       foodstuffId: foodstuff.id,
       quantity,
-      eaten
+      eaten,
     });
 
     if (!result.ok) {
@@ -61,7 +61,7 @@ export class DishStore extends CachedStore<Dish> {
     const result = await Rpc.call("dish", "insert", {
       id: dish.id,
       mealId: meal.id,
-      index
+      index,
     });
 
     if (!result.ok) {
@@ -88,7 +88,7 @@ export class DishStore extends CachedStore<Dish> {
   public async setQuantity(dish: Dish, quantity: number) {
     const result = await Rpc.call("dish", "setQuantity", {
       id: dish.id,
-      quantity
+      quantity,
     });
 
     if (!result.ok) {

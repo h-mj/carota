@@ -1,4 +1,4 @@
-import { Failure, deviate } from "deviator";
+import { deviate, Failure } from "deviator";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
@@ -164,7 +164,7 @@ export class Measure extends SceneComponent<
               </Separator>
 
               <div>
-                {measurements.map(measurement => (
+                {measurements.map((measurement) => (
                   <Entry
                     key={measurement.id}
                     measurement={measurement}
@@ -192,9 +192,9 @@ export class Measure extends SceneComponent<
    * displays occurred error.
    */
   @action
-  private handleSubmit: React.FormEventHandler<
-    HTMLFormElement
-  > = async event => {
+  private handleSubmit: React.FormEventHandler<HTMLFormElement> = async (
+    event
+  ) => {
     event.preventDefault();
 
     const result = validator(this.value);
@@ -219,7 +219,7 @@ export class Measure extends SceneComponent<
   private handleDelete = (measurement: Measurement) => {
     this.scene = this.props.viewStore!.push("center", "Confirmation", {
       message: this.translation.confirmation,
-      confirm: this.confirm(measurement)
+      confirm: this.confirm(measurement),
     });
   };
 

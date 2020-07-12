@@ -27,10 +27,10 @@ const NAVIGABLE_SCENE_REQUIREMENTS = [
   [new Scene("Statistics", undefined, {}), ALWAYS],
   [
     new Scene("Advisees", undefined, {}),
-    (account: Account) => account.type === "Adviser"
+    (account: Account) => account.type === "Adviser",
   ],
   [new Scene("Settings", undefined, {}), ALWAYS],
-  [new Scene("Logout", undefined, {}), ALWAYS]
+  [new Scene("Logout", undefined, {}), ALWAYS],
 ] as const;
 
 /**
@@ -113,9 +113,9 @@ export class Menu extends TranslatedComponent<"Menu", {}, MenuTranslation> {
    * Hides the menu if user clicks on overlay.
    */
   @action
-  private handleOverlayClick: React.MouseEventHandler<
-    HTMLDivElement
-  > = event => {
+  private handleOverlayClick: React.MouseEventHandler<HTMLDivElement> = (
+    event
+  ) => {
     if (event.target !== event.currentTarget) {
       return;
     }

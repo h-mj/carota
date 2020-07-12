@@ -51,7 +51,7 @@ export class MealStore extends CachedStore<Meal> {
 
     const result = await Rpc.call("meal", "getAll", {
       accountId: undefined,
-      date
+      date,
     });
 
     if (!result.ok) {
@@ -60,7 +60,7 @@ export class MealStore extends CachedStore<Meal> {
 
     this.meals.set(
       date,
-      result.ok ? result.value.map(dto => new Meal(dto, this)) : []
+      result.ok ? result.value.map((dto) => new Meal(dto, this)) : []
     );
 
     this.loading.set(date, false);
@@ -101,7 +101,7 @@ export class MealStore extends CachedStore<Meal> {
     const result = await Rpc.call("meal", "insert", {
       id: meal.id,
       date: meal.date,
-      index
+      index,
     });
 
     if (!result.ok) {

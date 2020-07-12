@@ -13,7 +13,7 @@ import { TitleBar } from "../component/TitleBar";
 import { Dish } from "../model/Dish";
 import { Foodstuff } from "../model/Foodstuff";
 import { Meal } from "../model/Meal";
-import { ErrorsFor, any, append } from "../utility/form";
+import { any, append, ErrorsFor } from "../utility/form";
 
 /**
  * Dish edit scene component props.
@@ -128,16 +128,15 @@ const toValidQuantity = deviate<string>()
 /**
  * Validates form values.
  */
-// prettier-ignore
 const validate = deviate<Values>().shape({
   quantity: toValidQuantity,
-  unit: deviate<Unit | "pcs" | undefined>().defined()
+  unit: deviate<Unit | "pcs" | undefined>().defined(),
 });
 
 // Transforms quantity number to string.
 const toQuantityString = deviate<number>()
   .round(2)
-  .then(number => ok(number.toString()));
+  .then((number) => ok(number.toString()));
 
 /**
  * Scene component that is used to create or edit existing dish.
@@ -155,7 +154,7 @@ export class DishEdit extends SceneComponent<
   @observable private values: Values = {
     quantity:
       this.props.dish !== undefined ? this.props.dish.quantity.toString() : "",
-    unit: this.props.foodstuff.unit
+    unit: this.props.foodstuff.unit,
   };
 
   /**
@@ -218,10 +217,12 @@ export class DishEdit extends SceneComponent<
       return null;
     }
 
-    const options = ([this.props.foodstuff.unit, "pcs"] as const).map(unit => ({
-      label: this.props.viewStore!.translation.units[unit],
-      value: unit
-    }));
+    const options = ([this.props.foodstuff.unit, "pcs"] as const).map(
+      (unit) => ({
+        label: this.props.viewStore!.translation.units[unit],
+        value: unit,
+      })
+    );
 
     return (
       <Select
@@ -316,9 +317,9 @@ export class DishEdit extends SceneComponent<
    * callback on form submit.
    */
   @action
-  private handleSubmit: React.FormEventHandler<
-    HTMLFormElement
-  > = async event => {
+  private handleSubmit: React.FormEventHandler<HTMLFormElement> = async (
+    event
+  ) => {
     event.preventDefault();
 
     if (this.submitting) {

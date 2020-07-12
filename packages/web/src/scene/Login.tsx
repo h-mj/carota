@@ -12,7 +12,7 @@ import { Group } from "../component/Group";
 import { Head } from "../component/Head";
 import { TextField } from "../component/TextField";
 import { styled } from "../styling/theme";
-import { ErrorsFor, any, append } from "../utility/form";
+import { any, append, ErrorsFor } from "../utility/form";
 
 /**
  * Array of input names within login form.
@@ -72,10 +72,9 @@ type LoginValues = Record<InputNames, string>;
 /**
  * Function that transforms `LoginValues` into `AccountLoginBody`.
  */
-// prettier-ignore
 const toBody = deviate<LoginValues>().shape({
   email: deviate<string>().trim().nonempty(),
-  password: deviate<string>().nonempty()
+  password: deviate<string>().nonempty(),
 });
 
 /**
@@ -90,7 +89,7 @@ export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
    */
   @observable private values: LoginValues = {
     email: "",
-    password: ""
+    password: "",
   };
 
   /**
@@ -165,9 +164,9 @@ export class Login extends SceneComponent<"Login", {}, LoginTranslation> {
    * instead.
    */
   @action
-  private handleSubmit: React.FormEventHandler<
-    HTMLFormElement
-  > = async event => {
+  private handleSubmit: React.FormEventHandler<HTMLFormElement> = async (
+    event
+  ) => {
     event.preventDefault();
 
     const result = toBody(this.values);

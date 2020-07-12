@@ -142,7 +142,7 @@ export class TextField<
       disabled,
       invalid,
       label,
-      value
+      value,
     } = this.props;
 
     if (basic) {
@@ -181,7 +181,7 @@ export class TextField<
       textAlign,
       type,
       unit,
-      value
+      value,
     } = this.props;
 
     return (
@@ -265,7 +265,9 @@ export class TextField<
   /**
    * Calls `onChange` callback function prop when input value is updated.
    */
-  private handleChange: React.ChangeEventHandler<HTMLInputElement> = event => {
+  private handleChange: React.ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
     const { name, onChange } = this.props;
 
     if (onChange === undefined) {
@@ -295,9 +297,9 @@ export class TextField<
    * focus change of the input element.
    */
   @action
-  private handleFocusChange: React.FocusEventHandler<
-    HTMLInputElement
-  > = event => {
+  private handleFocusChange: React.FocusEventHandler<HTMLInputElement> = (
+    event
+  ) => {
     this.focused = event.type === "focus";
   };
 
@@ -316,13 +318,13 @@ export class TextField<
   @action
   private handleWheelScrollCapture: React.WheelEventHandler<
     HTMLInputElement
-  > = async event => {
+  > = async (event) => {
     // Cache event target since synthetic events are nulled when await statement
     // is reached.
     const target = event.currentTarget;
 
     target.readOnly = true;
-    await new Promise(resolve => window.setTimeout(resolve, 0));
+    await new Promise((resolve) => window.setTimeout(resolve, 0));
     target.readOnly = this.props.readOnly || false;
   };
 }

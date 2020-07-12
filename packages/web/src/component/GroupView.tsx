@@ -103,7 +103,7 @@ export class GroupView extends TranslatedComponent<
   private handleEdit = () => {
     this.scene = this.props.viewStore!.push("center", "GroupEdit", {
       group: this.props.group,
-      onClose: this.handleEditClose
+      onClose: this.handleEditClose,
     });
   };
 

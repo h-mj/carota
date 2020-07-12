@@ -93,7 +93,7 @@ export class RootStore {
       this.mealStore.initialize(),
       this.measurementStore.initialize(),
       this.viewStore.initialize(),
-      this.statisticsStore.clear()
+      this.statisticsStore.clear(),
     ]);
   }
 

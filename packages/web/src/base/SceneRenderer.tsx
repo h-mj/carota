@@ -46,7 +46,7 @@ const SCENE_COMPONENTS = {
   Search: Search,
   Settings: Settings,
   Statistics: Statistics,
-  Unknown: Unknown
+  Unknown: Unknown,
 } as const;
 
 /**
@@ -270,7 +270,6 @@ const closeModal = keyframes`
 /**
  * Modal component that is rendered on top of all preceding components.
  */
-// prettier-ignore
 const Modal = styled.div<RenderPosition>`
   position: fixed;
 
@@ -291,16 +290,24 @@ const Modal = styled.div<RenderPosition>`
     isFirst
       ? "none"
       : active
-      ? css`${fadeIn} ${theme.transition}`
-      : css`${fadeOut} ${theme.transition}`};
+      ? css`
+          ${fadeIn} ${theme.transition}
+        `
+      : css`
+          ${fadeOut} ${theme.transition}
+        `};
 
   @media screen and (max-width: ${({ theme }) => theme.widthCutoff}) {
     animation: ${({ active, isFirst, theme }) =>
       isFirst
         ? "none"
         : active
-        ? css`${openModal} ${theme.transition}`
-        : css`${closeModal} ${theme.transition}`};
+        ? css`
+            ${openModal} ${theme.transition}
+          `
+        : css`
+            ${closeModal} ${theme.transition}
+          `};
   }
 `;
 
@@ -443,5 +450,5 @@ const Side = styled(BaseContainer)`
 const CONTAINER_COMPONENTS = {
   center: Center,
   main: Main,
-  side: Side
+  side: Side,
 };

@@ -9,7 +9,7 @@ export const REQUIRED_NUTRIENTS = [
   "energy",
   "protein",
   "fat",
-  "carbohydrate"
+  "carbohydrate",
 ] as const;
 
 /**

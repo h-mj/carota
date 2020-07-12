@@ -8,7 +8,7 @@ export const {
   css,
   createGlobalStyle,
   keyframes,
-  ThemeProvider
+  ThemeProvider,
 } = styledComponents as styledComponents.ThemedStyledComponentsModule<Theme>;
 
 /**
@@ -32,7 +32,7 @@ export const THEME_CONSTANTS = {
   transitionLinear: "0.2s",
   widthSmall: "30rem",
   widthMedium: "60rem",
-  widthCutoff: "60rem"
+  widthCutoff: "60rem",
 };
 
 /**
@@ -67,7 +67,7 @@ export const LIGHT: Readonly<ColorTheme> = {
   colorPrimary: "rgba(0, 0, 0, 0.88)",
   colorSecondary: "rgba(0, 0, 0, 0.44)",
   colorActive: "rgb(255, 130, 0)",
-  colorInvalid: "rgb(222, 0, 0)"
+  colorInvalid: "rgb(222, 0, 0)",
 };
 
 /**
@@ -82,5 +82,5 @@ export const DARK: Readonly<ColorTheme> = {
   colorPrimary: "rgb(255, 255, 255)",
   colorSecondary: "rgb(150, 150, 150)",
   colorActive: "rgb(200, 80, 0)",
-  colorInvalid: "rgb(180, 30, 30)"
+  colorInvalid: "rgb(180, 30, 30)",
 };

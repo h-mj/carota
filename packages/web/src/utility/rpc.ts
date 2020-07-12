@@ -53,7 +53,7 @@ export class Rpc {
     const response = await fetch(`/api/${controller}/${endpoint}`, {
       body: bodyString,
       headers,
-      method: "POST"
+      method: "POST",
     });
 
     if (response.status === 401) {

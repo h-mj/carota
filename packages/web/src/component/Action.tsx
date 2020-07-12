@@ -22,7 +22,7 @@ interface ActionProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 /**
  * Button component that is used to initiate some kind of action.
  */
-export const Action: React.FunctionComponent<ActionProps> = props => (
+export const Action: React.FunctionComponent<ActionProps> = (props) => (
   <ActionButton {...props}>{props.icon || <Plus />}</ActionButton>
 );
 

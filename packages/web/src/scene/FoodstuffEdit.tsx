@@ -16,11 +16,11 @@ import { TitleBar } from "../component/TitleBar";
 import {
   Foodstuff,
   REQUIRED_NUTRIENTS,
-  RequiredNutrient
+  RequiredNutrient,
 } from "../model/Foodstuff";
 import { RESET } from "../styling/stylesheets";
 import { styled } from "../styling/theme";
-import { ErrorsFor, any, append } from "../utility/form";
+import { any, append, ErrorsFor } from "../utility/form";
 import { hasEnvironmentCamera } from "../utility/scanner";
 
 /**
@@ -48,7 +48,7 @@ const NUTRIENTS = [
   "starch",
   "fibre",
   "protein",
-  "salt"
+  "salt",
 ] as const;
 
 /**
@@ -174,14 +174,16 @@ const DEFAULT_EDIT_VALUES: Readonly<Values> = {
     carbohydrate: "",
     energy: "",
     fat: "",
-    protein: ""
-  }
+    protein: "",
+  },
 };
 
 /**
  * Converts a number to string.
  */
-const numberToString = deviate<number>().then(number => ok(number.toString()));
+const numberToString = deviate<number>().then((number) =>
+  ok(number.toString())
+);
 
 /**
  * If value is `undefined`, returns `undefined` immediately, otherwise number is
@@ -195,7 +197,6 @@ const optionalNumberToString = deviate<number | undefined>()
  * Function that transforms `Foodstuff` type object into `EditValues` type
  * object.
  */
-// prettier-ignore
 const toValues = deviate<Foodstuff>().shape({
   id: deviate<string>(),
   name: deviate<string>(),
@@ -215,8 +216,8 @@ const toValues = deviate<Foodstuff>().shape({
     starch: optionalNumberToString,
     fibre: optionalNumberToString,
     protein: numberToString,
-    salt: optionalNumberToString
-  })
+    salt: optionalNumberToString,
+  }),
 });
 
 /**
@@ -240,11 +241,14 @@ const optionalParseFloat = deviate<string | undefined>()
  * Function that transforms `EditValues` type object into `SaveFoodstuffDto`
  * type object.
  */
-// prettier-ignore
 const toBody = deviate<Values>().shape({
   id: deviate<string | undefined>(),
   name: deviate<string>().trim().nonempty(),
-  barcode: deviate<string | undefined>().optional().replace(" ", "").nonempty().regexp(/^\d{13}$/),
+  barcode: deviate<string | undefined>()
+    .optional()
+    .replace(" ", "")
+    .nonempty()
+    .regexp(/^\d{13}$/),
   unit: deviate<Unit | undefined>().defined(),
   packageSize: optionalParseFloat.positive(),
   pieceQuantity: optionalParseFloat.positive(),
@@ -260,8 +264,8 @@ const toBody = deviate<Values>().shape({
     starch: optionalParseFloat,
     fibre: optionalParseFloat,
     protein: parseFloat,
-    salt: optionalParseFloat
-  })
+    salt: optionalParseFloat,
+  }),
 });
 
 /**
@@ -350,12 +354,12 @@ export class FoodstuffEdit extends SceneComponent<
               options={[
                 {
                   label: this.props.viewStore!.translation.units.g,
-                  value: "g"
+                  value: "g",
                 },
                 {
                   label: this.props.viewStore!.translation.units.ml,
-                  value: "ml"
-                }
+                  value: "ml",
+                },
               ]}
               value={this.values.unit}
             />
@@ -505,7 +509,7 @@ export class FoodstuffEdit extends SceneComponent<
    */
   private handleScanClick = () => {
     this.scene = this.props.viewStore!.push("main", "Scanner", {
-      onScan: this.handleScan
+      onScan: this.handleScan,
     });
   };
 
@@ -528,9 +532,9 @@ export class FoodstuffEdit extends SceneComponent<
    * instead.
    */
   @action
-  private handleSubmit: React.FormEventHandler<
-    HTMLFormElement
-  > = async event => {
+  private handleSubmit: React.FormEventHandler<HTMLFormElement> = async (
+    event
+  ) => {
     event.preventDefault();
 
     if (this.submitting) {
@@ -568,7 +572,7 @@ export class FoodstuffEdit extends SceneComponent<
     this.submitting = true;
     this.scene = this.props.viewStore!.push("center", "Confirmation", {
       confirm: this.handleConfirmation,
-      message: this.translation.confirm
+      message: this.translation.confirm,
     });
   };
 

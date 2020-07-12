@@ -31,7 +31,7 @@ export class StatisticsStore extends Store {
     }
 
     const response = await Rpc.call("statistics", "getAll", {
-      accountId: account.id
+      accountId: account.id,
     });
 
     if (!response.ok) {

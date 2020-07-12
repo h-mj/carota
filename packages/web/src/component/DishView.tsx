@@ -113,7 +113,7 @@ export class DishView extends Component<DishViewProps> {
       dish: this.props.dish!,
       foodstuff: this.props.dish!.foodstuff,
       meal: this.props.dish!.meal,
-      onClose: this.handleClose
+      onClose: this.handleClose,
     });
   };
 

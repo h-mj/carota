@@ -81,7 +81,7 @@ export const InputWrapper: React.FunctionComponent<InputWrapperProps> = ({
   invalid,
   label,
   prepend,
-  withLabel
+  withLabel,
 }) => {
   const LabelComponent = withLabel ? Label : React.Fragment;
 

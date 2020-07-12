@@ -103,7 +103,7 @@ export class Select<
       errorMessage,
       helperMessage,
       invalid,
-      label
+      label,
     } = this.props;
 
     if (basic) {
@@ -156,7 +156,7 @@ export class Select<
   /**
    * Calls `onChange` callback function prop when one of the options is clicked.
    */
-  private handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
+  private handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     const { name, onChange, value } = this.props;
 
     if (onChange === undefined) {
@@ -172,9 +172,9 @@ export class Select<
    * focus change of any option elements.
    */
   @action
-  private handleFocusChange: React.FocusEventHandler<
-    HTMLButtonElement
-  > = event => {
+  private handleFocusChange: React.FocusEventHandler<HTMLButtonElement> = (
+    event
+  ) => {
     this.focused = event.type === "focus";
 
     const { name, onFocusChange } = this.props;

@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "1.9.23"
+    id("io.ktor.plugin") version "2.3.11"
 }
 
 group = "ee.carota"
@@ -10,12 +11,22 @@ repositories {
 }
 
 dependencies {
+    implementation("io.ktor:ktor-server-config-yaml")
+    implementation("io.ktor:ktor-server-core")
+    implementation("io.ktor:ktor-server-netty")
+    runtimeOnly("ch.qos.logback:logback-classic:1.5.6")
+
     testImplementation(kotlin("test"))
+    testImplementation("io.ktor:ktor-server-test-host")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 kotlin {
     jvmToolchain(21)
+}
+
+application {
+    mainClass = "io.ktor.server.netty.EngineMain"
 }
 
 tasks.test {

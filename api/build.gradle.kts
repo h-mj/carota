@@ -1,9 +1,12 @@
+import com.adarshr.gradle.testlogger.theme.ThemeType
+
 plugins {
     val kotlinVersion = "1.9.23"
 
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
     id("io.ktor.plugin") version "2.3.11"
+    id("com.adarshr.test-logger") version "4.0.0"
 }
 
 group = "ee.carota"
@@ -37,4 +40,8 @@ application {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+testlogger {
+    theme = ThemeType.MOCHA_PARALLEL
 }

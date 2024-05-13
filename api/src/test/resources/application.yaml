@@ -3,4 +3,4 @@ ktor:
     modules:
       - ee.carota.api.ApplicationKt.module
   deployment:
-    port: $API_PORT
+    port: <API_PORT>

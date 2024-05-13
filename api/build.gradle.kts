@@ -1,4 +1,5 @@
 import com.adarshr.gradle.testlogger.theme.ThemeType
+import org.gradle.kotlin.dsl.run as runTask
 
 plugins {
     val kotlinVersion = "1.9.24"
@@ -6,6 +7,7 @@ plugins {
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
     id("io.ktor.plugin") version "2.3.11"
+    id("co.uzzu.dotenv.gradle") version "4.0.0"
     id("com.adarshr.test-logger") version "4.0.0"
 }
 
@@ -40,6 +42,10 @@ kotlin {
 
 application {
     mainClass = "io.ktor.server.netty.EngineMain"
+}
+
+tasks.runTask {
+    environment.putAll(env.allVariables())
 }
 
 tasks.test {

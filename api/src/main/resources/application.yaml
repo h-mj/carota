@@ -4,3 +4,7 @@ ktor:
       - ee.carota.api.ApplicationKt.module
   deployment:
     port: $API_PORT
+postgres:
+  url: $API_POSTGRES_URL
+  username: $API_POSTGRES_USERNAME
+  password: $API_POSTGRES_PASSWORD

@@ -28,6 +28,7 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation")
     implementation("io.ktor:ktor-server-core")
     implementation("io.ktor:ktor-server-netty")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-properties")
     runtimeOnly("ch.qos.logback:logback-classic:1.5.6")
 
     testImplementation(kotlin("test"))

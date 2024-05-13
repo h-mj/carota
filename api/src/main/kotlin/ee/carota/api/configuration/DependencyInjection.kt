@@ -10,6 +10,7 @@ import org.koin.logger.slf4jLogger
 
 fun Application.configureDependencyInjection() {
     val module = module {
+        single { Configuration.from(environment.config) }
         singleOf(::GreetingService)
     }
 

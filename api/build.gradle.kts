@@ -17,6 +17,10 @@ repositories {
 }
 
 dependencies {
+    implementation(platform("io.insert-koin:koin-bom:3.5.6"))
+
+    implementation("io.insert-koin:koin-ktor")
+    implementation("io.insert-koin:koin-logger-slf4j")
     implementation("io.ktor:ktor-serialization-kotlinx-json")
     implementation("io.ktor:ktor-server-config-yaml")
     implementation("io.ktor:ktor-server-content-negotiation")

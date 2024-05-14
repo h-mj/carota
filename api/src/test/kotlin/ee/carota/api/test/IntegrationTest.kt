@@ -4,6 +4,9 @@ import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.config.MapApplicationConfig
 import io.ktor.server.config.mergeWith
 import io.ktor.server.testing.ApplicationTestBuilder
+import org.flywaydb.core.Flyway
+import org.flywaydb.core.api.configuration.ClassicConfiguration
+import org.junit.jupiter.api.BeforeAll
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
@@ -30,5 +33,17 @@ abstract class IntegrationTest {
         @Container
         @JvmStatic
         private val postgres = PostgreSQLContainer("postgres:16.3")
+
+        @BeforeAll
+        @JvmStatic
+        fun beforeAll() {
+            val configuration = ClassicConfiguration().also {
+                it.url = postgres.jdbcUrl
+                it.user = postgres.username
+                it.password = postgres.password
+            }
+
+            Flyway(configuration).migrate()
+        }
     }
 }

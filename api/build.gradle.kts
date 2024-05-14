@@ -3,6 +3,7 @@ import org.gradle.kotlin.dsl.run as runTask
 
 plugins {
     alias(libs.plugins.dotenv)
+    alias(libs.plugins.flyway)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ktor)
@@ -31,12 +32,20 @@ dependencies {
     runtimeOnly(libs.logback.classic)
     runtimeOnly(libs.postgresql)
 
+    testImplementation(libs.flyway.core)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.ktor.client.content.negotiation)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.testcontainers.junit.jupiter)
     testImplementation(libs.testcontainers.postgresql)
+    testRuntimeOnly(libs.flyway.database.postgres)
     testRuntimeOnly(libs.junit.platform.launcher)
+}
+
+buildscript {
+    dependencies {
+        classpath(libs.flyway.database.postgres)
+    }
 }
 
 kotlin {
@@ -45,6 +54,12 @@ kotlin {
 
 application {
     mainClass = "io.ktor.server.netty.EngineMain"
+}
+
+flyway {
+    url = env.API_POSTGRES_URL.value
+    user = env.API_POSTGRES_USERNAME.value
+    password = env.API_POSTGRES_PASSWORD.value
 }
 
 tasks.runTask {

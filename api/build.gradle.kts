@@ -2,13 +2,11 @@ import com.adarshr.gradle.testlogger.theme.ThemeType
 import org.gradle.kotlin.dsl.run as runTask
 
 plugins {
-    val kotlinVersion = "1.9.24"
-
-    kotlin("jvm") version kotlinVersion
-    kotlin("plugin.serialization") version kotlinVersion
-    id("io.ktor.plugin") version "2.3.11"
-    id("co.uzzu.dotenv.gradle") version "4.0.0"
-    id("com.adarshr.test-logger") version "4.0.0"
+    alias(libs.plugins.dotenv)
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ktor)
+    alias(libs.plugins.test.logger)
 }
 
 group = "ee.carota"
@@ -19,30 +17,26 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("io.insert-koin:koin-bom:3.5.6"))
-    implementation(platform("org.jetbrains.exposed:exposed-bom:0.50.1"))
-    implementation(platform("org.testcontainers:testcontainers-bom:1.19.8"))
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.jdbc)
+    implementation(libs.hikari.cp)
+    implementation(libs.koin.ktor)
+    implementation(libs.koin.logger.slf4j)
+    implementation(libs.kotlinx.serialization.properties)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.server.config.yaml)
+    implementation(libs.ktor.server.content.negotiation)
+    implementation(libs.ktor.server.core)
+    implementation(libs.ktor.server.netty)
+    runtimeOnly(libs.logback.classic)
+    runtimeOnly(libs.postgresql)
 
-    implementation("com.zaxxer:HikariCP:5.1.0")
-    implementation("io.insert-koin:koin-ktor")
-    implementation("io.insert-koin:koin-logger-slf4j")
-    implementation("io.ktor:ktor-serialization-kotlinx-json")
-    implementation("io.ktor:ktor-server-config-yaml")
-    implementation("io.ktor:ktor-server-content-negotiation")
-    implementation("io.ktor:ktor-server-core")
-    implementation("io.ktor:ktor-server-netty")
-    implementation("org.jetbrains.exposed:exposed-core")
-    implementation("org.jetbrains.exposed:exposed-jdbc")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-properties")
-    runtimeOnly("ch.qos.logback:logback-classic:1.5.6")
-    runtimeOnly("org.postgresql:postgresql:42.7.3")
-
-    testImplementation(kotlin("test"))
-    testImplementation("io.ktor:ktor-client-content-negotiation")
-    testImplementation("io.ktor:ktor-server-test-host")
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.testcontainers:postgresql")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation(libs.kotlin.test)
+    testImplementation(libs.ktor.client.content.negotiation)
+    testImplementation(libs.ktor.server.test.host)
+    testImplementation(libs.testcontainers.junit.jupiter)
+    testImplementation(libs.testcontainers.postgresql)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 kotlin {

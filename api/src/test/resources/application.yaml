@@ -4,6 +4,8 @@ ktor:
       - ee.carota.api.ApplicationKt.module
   deployment:
     port: <API_PORT>
+bcrypt:
+  cost: 4
 postgres:
   url: <API_POSTGRES_URL>
   username: <API_POSTGRES_USERNAME>

@@ -1,6 +1,7 @@
 package ee.carota.api.configuration
 
 import ee.carota.api.service.GreetingService
+import ee.carota.api.service.PublicIdGenerator
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import org.koin.core.module.dsl.singleOf
@@ -15,6 +16,7 @@ fun Application.configureDependencyInjection() {
         single { configuration.bcrypt }
         single { configuration.postgres }
         singleOf(::GreetingService)
+        singleOf(::PublicIdGenerator)
     }
 
     install(Koin) {

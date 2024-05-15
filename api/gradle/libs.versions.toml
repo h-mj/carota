@@ -1,4 +1,5 @@
 [versions]
+bcrypt = "0.10.2"
 dotenv = "4.0.0"
 exposed = "0.50.1"
 flyway = "10.13.0"
@@ -21,6 +22,7 @@ ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 test-logger = { id = "com.adarshr.test-logger", version.ref = "test-logger" }
 
 [libraries]
+bcrypt = { module = "at.favre.lib:bcrypt", version.ref = "bcrypt" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposed-java-time = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }

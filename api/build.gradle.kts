@@ -18,6 +18,7 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.bcrypt)
     implementation(libs.exposed.core)
     implementation(libs.exposed.java.time)
     implementation(libs.exposed.jdbc)

@@ -2,6 +2,7 @@ ktor:
   application:
     modules:
       - ee.carota.api.ApplicationKt.module
+      - ee.carota.api.module.auth.AuthModuleKt.authModule
   deployment:
     port: <API_PORT>
 bcrypt:

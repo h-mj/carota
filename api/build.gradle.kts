@@ -25,6 +25,7 @@ dependencies {
     implementation(libs.hikari.cp)
     implementation(libs.koin.ktor)
     implementation(libs.koin.logger.slf4j)
+    implementation(libs.kotlin.result)
     implementation(libs.kotlinx.serialization.properties)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.server.config.yaml)

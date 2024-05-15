@@ -1,6 +1,5 @@
 package ee.carota.api.configuration
 
-import ee.carota.api.service.GreetingService
 import ee.carota.api.service.PublicIdGenerator
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
@@ -15,7 +14,6 @@ fun Application.configureDependencyInjection() {
     val module = module {
         single { configuration.bcrypt }
         single { configuration.postgres }
-        singleOf(::GreetingService)
         singleOf(::PublicIdGenerator)
     }
 

@@ -19,6 +19,7 @@ repositories {
 
 dependencies {
     implementation(libs.exposed.core)
+    implementation(libs.exposed.java.time)
     implementation(libs.exposed.jdbc)
     implementation(libs.hikari.cp)
     implementation(libs.koin.ktor)

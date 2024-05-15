@@ -24,11 +24,7 @@ class RegisterTest : IntegrationTest() {
             password = "password",
         )
 
-        val client = createClient {
-            install(ContentNegotiation) {
-                json()
-            }
-        }
+        val client = createJsonClient()
 
         val response = client.post("/v1/auth:register") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
@@ -49,11 +45,7 @@ class RegisterTest : IntegrationTest() {
             password = "password",
         )
 
-        val client = createClient {
-            install(ContentNegotiation) {
-                json()
-            }
-        }
+        val client = createJsonClient()
 
         val response = client.post("/v1/auth:register") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)

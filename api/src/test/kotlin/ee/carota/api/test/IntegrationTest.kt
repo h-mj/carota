@@ -1,5 +1,9 @@
 package ee.carota.api.test
 
+import io.ktor.client.HttpClientConfig
+import io.ktor.client.engine.HttpClientEngineConfig
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.config.MapApplicationConfig
 import io.ktor.server.config.mergeWith
@@ -29,6 +33,14 @@ abstract class IntegrationTest {
         block()
     }
 
+    fun ApplicationTestBuilder.createJsonClient(block: HttpClientConfigBuilder = {}) = createClient {
+        install(ContentNegotiation) {
+            json()
+        }
+
+        block()
+    }
+
     companion object {
         @Container
         @JvmStatic
@@ -47,3 +59,5 @@ abstract class IntegrationTest {
         }
     }
 }
+
+typealias HttpClientConfigBuilder = HttpClientConfig<out HttpClientEngineConfig>.() -> Unit

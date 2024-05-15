@@ -7,12 +7,12 @@ import org.jetbrains.exposed.sql.Database
 import org.koin.ktor.ext.inject
 
 fun Application.configureDatabase() {
-    val configuration by inject<Configuration>()
+    val configuration by inject<PostgresConfiguration>()
 
     val hikariConfiguration = HikariConfig().also {
-        it.jdbcUrl = configuration.postgres.url
-        it.username = configuration.postgres.username
-        it.password = configuration.postgres.password
+        it.jdbcUrl = configuration.url
+        it.username = configuration.username
+        it.password = configuration.password
         it.isAutoCommit = false
         it.transactionIsolation = "TRANSACTION_REPEATABLE_READ"
         it.validate()

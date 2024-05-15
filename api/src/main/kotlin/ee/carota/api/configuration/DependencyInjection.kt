@@ -9,8 +9,11 @@ import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
 
 fun Application.configureDependencyInjection() {
+    val configuration = Configuration.from(environment.config)
+
     val module = module {
-        single { Configuration.from(environment.config) }
+        single { configuration.bcrypt }
+        single { configuration.postgres }
         singleOf(::GreetingService)
     }
 

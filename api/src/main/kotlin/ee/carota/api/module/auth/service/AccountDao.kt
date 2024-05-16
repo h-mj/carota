@@ -7,7 +7,6 @@ import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.intLiteral
 
 class AccountDao {
-
     fun existsByEmail(email: String): Boolean {
         val existsByEmail = exists(Account.select(intLiteral(1)).where { Account.email eq email })
 

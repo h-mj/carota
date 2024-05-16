@@ -18,7 +18,6 @@ import io.ktor.server.testing.testApplication as ktorTestApplication
 
 @Testcontainers
 abstract class IntegrationTest {
-
     fun testApplication(block: suspend ApplicationTestBuilder.() -> Unit) = ktorTestApplication {
         val configuration = MapApplicationConfig(
             "postgres.url" to postgres.jdbcUrl,
@@ -33,7 +32,9 @@ abstract class IntegrationTest {
         block()
     }
 
-    fun ApplicationTestBuilder.createJsonClient(block: HttpClientConfigBuilder = {}) = createClient {
+    fun ApplicationTestBuilder.createJsonClient(
+        block: HttpClientConfig<out HttpClientEngineConfig>.() -> Unit,
+    ) = createClient {
         install(ContentNegotiation) {
             json()
         }
@@ -59,5 +60,3 @@ abstract class IntegrationTest {
         }
     }
 }
-
-typealias HttpClientConfigBuilder = HttpClientConfig<out HttpClientEngineConfig>.() -> Unit

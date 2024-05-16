@@ -30,7 +30,9 @@ fun Routing.register() = post<RegisterRequest>("/v1/auth:register") { body ->
 
     if (result.isOk) {
         call.data(RegisterResponse(result.value.publicId))
-    } else when (result.error) {
-        CreateAccountError.Exists -> call.error(Errors.ACCOUNT_ALREADY_EXISTS)
+    } else {
+        when (result.error) {
+            CreateAccountError.Exists -> call.error(Errors.ACCOUNT_ALREADY_EXISTS)
+        }
     }
 }

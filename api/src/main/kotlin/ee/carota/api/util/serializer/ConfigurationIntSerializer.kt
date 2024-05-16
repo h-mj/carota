@@ -7,7 +7,8 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 class ConfigurationIntSerializer : KSerializer<Int> {
-    override val descriptor = PrimitiveSerialDescriptor("ConfigurationIntSerializer", PrimitiveKind.STRING)
+    override val descriptor =
+        PrimitiveSerialDescriptor("ConfigurationIntSerializer", PrimitiveKind.STRING)
 
     override fun deserialize(decoder: Decoder): Int {
         return decoder.decodeString().toInt()

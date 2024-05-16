@@ -8,6 +8,7 @@ koin = "3.5.6"
 kotlin = "1.9.24"
 kotlin-result = "2.0.0"
 kotlinx-serialization = "1.6.3"
+ktlint = "12.1.1"
 ktor = "2.3.11"
 logback-classic = "1.5.6"
 nanoid = "1.0.1"
@@ -20,6 +21,7 @@ dotenv = { id = "co.uzzu.dotenv.gradle", version.ref = "dotenv" }
 flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 test-logger = { id = "com.adarshr.test-logger", version.ref = "test-logger" }
 

@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.flyway)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ktlint)
     alias(libs.plugins.ktor)
     alias(libs.plugins.test.logger)
 }

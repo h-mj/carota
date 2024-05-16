@@ -4,7 +4,7 @@ import io.ktor.http.HttpStatusCode
 
 object Errors {
     val ACCOUNT_ALREADY_EXISTS = Error(
-        status = 409,
+        status = HttpStatusCode.Conflict.value,
         code = Code.ALREADY_EXISTS,
         message = "An account with this email already exists",
     )

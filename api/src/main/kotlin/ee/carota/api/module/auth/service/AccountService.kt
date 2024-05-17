@@ -46,6 +46,14 @@ class AccountService(
         repeat(PUBLIC_ID_GENERATION_ATTEMPTS) {
             val publicId = publicIdGenerator.generate(PUBLIC_ID_LENGTH)
 
+            val isPublicIdAlreadyUsed = transaction {
+                accountDao.existsByPublicId(publicId)
+            }
+
+            if (isPublicIdAlreadyUsed) {
+                return@repeat
+            }
+
             val result = transaction {
                 accountDao.create(publicId, email, passwordHash)
             }

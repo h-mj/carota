@@ -23,6 +23,15 @@ class AccountDao {
     }
 
     /**
+     * Returns whether an account with the given [publicId] exists.
+     */
+    fun existsByPublicId(publicId: String): Boolean {
+        val exists = exists(Account.select(intLiteral(1)).where { Account.publicId eq publicId })
+
+        return Dual.select(exists).single()[exists]
+    }
+
+    /**
      * Sealed class for account creation errors.
      */
     sealed class CreateError {

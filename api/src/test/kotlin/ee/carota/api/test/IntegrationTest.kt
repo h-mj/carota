@@ -33,7 +33,7 @@ abstract class IntegrationTest {
     }
 
     fun ApplicationTestBuilder.createJsonClient(
-        block: HttpClientConfig<out HttpClientEngineConfig>.() -> Unit,
+        block: HttpClientConfig<out HttpClientEngineConfig>.() -> Unit = {},
     ) = createClient {
         install(ContentNegotiation) {
             json()

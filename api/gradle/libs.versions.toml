@@ -4,6 +4,7 @@ dotenv = "4.0.0"
 exposed = "0.50.1"
 flyway = "10.13.0"
 hikari-cp = "5.1.0"
+javaagent = "0.5.1"
 koin = "3.5.6"
 kotlin = "1.9.24"
 kotlin-result = "2.0.0"
@@ -12,6 +13,7 @@ ktlint = "12.1.1"
 ktor = "2.3.11"
 logback-classic = "1.5.6"
 nanoid = "1.0.1"
+opentelemetry = "2.3.0"
 postgresql = "42.7.3"
 test-logger = "4.0.0"
 testcontainers = "1.19.8"
@@ -19,6 +21,7 @@ testcontainers = "1.19.8"
 [plugins]
 dotenv = { id = "co.uzzu.dotenv.gradle", version.ref = "dotenv" }
 flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }
+javaagent = { id = "com.ryandens.javaagent-application", version.ref = "javaagent" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
@@ -49,6 +52,7 @@ ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages", versio
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-classic" }
 nanoid = { module = "io.viascom.nanoid:nanoid", version.ref = "nanoid" }
+opentelemetry-javaagent = { module = "io.opentelemetry.javaagent:opentelemetry-javaagent", version.ref = "opentelemetry" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
 testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }

@@ -4,6 +4,7 @@ import org.gradle.kotlin.dsl.run as runTask
 plugins {
     alias(libs.plugins.dotenv)
     alias(libs.plugins.flyway)
+    alias(libs.plugins.javaagent)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ktlint)
@@ -19,6 +20,8 @@ repositories {
 }
 
 dependencies {
+    javaagent(libs.opentelemetry.javaagent)
+
     implementation(libs.bcrypt)
     implementation(libs.exposed.core)
     implementation(libs.exposed.java.time)

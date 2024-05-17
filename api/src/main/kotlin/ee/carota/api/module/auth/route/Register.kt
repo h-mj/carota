@@ -1,7 +1,7 @@
 package ee.carota.api.module.auth.route
 
-import ee.carota.api.module.auth.service.AccountService
-import ee.carota.api.module.auth.service.AccountService.CreateAccountError
+import ee.carota.api.module.auth.service.AuthenticationService
+import ee.carota.api.module.auth.service.AuthenticationService.RegisterError
 import ee.carota.api.response.Errors
 import ee.carota.api.util.data
 import ee.carota.api.util.error
@@ -19,20 +19,18 @@ data class RegisterRequest(
 
 @Serializable
 data class RegisterResponse(
-    val id: String,
+    val publicId: String,
 )
 
 fun Routing.register() = post<RegisterRequest>("/v1/auth:register") { body ->
-    // TODO(Henri): Validate that email and password are OK.
-    val accountService by context.inject<AccountService>()
+    val authenticationService by context.inject<AuthenticationService>()
 
-    val result = accountService.create(body.email, body.password)
+    val result = authenticationService.register(body.email, body.password)
 
-    if (result.isOk) {
-        call.data(RegisterResponse(result.value.publicId))
-    } else {
-        when (result.error) {
-            CreateAccountError.Exists -> call.error(Errors.ACCOUNT_ALREADY_EXISTS)
+    when {
+        result.isOk -> call.data(RegisterResponse(result.value))
+        else -> when (result.error) {
+            RegisterError.EmailAlreadyUsed -> call.error(Errors.ACCOUNT_ALREADY_EXISTS)
         }
     }
 }

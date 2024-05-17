@@ -33,7 +33,7 @@ class RegisterTest : IntegrationTest() {
 
         val responseBody = response.body<DataResponse<RegisterResponse>>()
 
-        assertEquals(12, responseBody.data.id.length)
+        assertEquals(12, responseBody.data.publicId.length)
     }
 
     @Test

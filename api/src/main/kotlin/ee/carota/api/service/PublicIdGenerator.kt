@@ -1,5 +1,6 @@
 package ee.carota.api.service
 
+import io.opentelemetry.instrumentation.annotations.WithSpan
 import io.viascom.nanoid.NanoId
 
 /**
@@ -14,6 +15,7 @@ class PublicIdGenerator {
     /**
      * Generates a public ID with the given [length].
      */
+    @WithSpan
     fun generate(length: Int): String {
         return NanoId.generate(length, ALPHABET)
     }

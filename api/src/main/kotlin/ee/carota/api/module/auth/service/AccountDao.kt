@@ -3,6 +3,7 @@ package ee.carota.api.module.auth.service
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import ee.carota.api.module.auth.table.Account
+import io.opentelemetry.instrumentation.annotations.WithSpan
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.Table.Dual
 import org.jetbrains.exposed.sql.exists
@@ -16,6 +17,7 @@ class AccountDao {
     /**
      * Returns whether an account with the given [email] exists.
      */
+    @WithSpan
     fun existsByEmail(email: String): Boolean {
         val exists = exists(Account.select(intLiteral(1)).where { Account.email eq email })
 
@@ -25,6 +27,7 @@ class AccountDao {
     /**
      * Returns whether an account with the given [publicId] exists.
      */
+    @WithSpan
     fun existsByPublicId(publicId: String): Boolean {
         val exists = exists(Account.select(intLiteral(1)).where { Account.publicId eq publicId })
 
@@ -54,6 +57,7 @@ class AccountDao {
      * If there was an error, a result containing one of the following errors is returned:
      * * [CreateError.PublicIdAlreadyUsed]: The public ID is already used by another account.
      */
+    @WithSpan
     fun create(publicId: String, email: String, passwordHash: String): Result<Long, CreateError> {
         val id = try {
             Account.insertAndGetId {

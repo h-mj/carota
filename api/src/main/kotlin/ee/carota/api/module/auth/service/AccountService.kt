@@ -4,6 +4,7 @@ import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import ee.carota.api.service.PublicIdGenerator
+import io.opentelemetry.instrumentation.annotations.WithSpan
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.lang.RuntimeException
 
@@ -42,6 +43,7 @@ class AccountService(
      * If there was an error, a result containing one of the following errors is returned:
      * * [CreateError.EmailAlreadyUsed]: The email is already used by another account.
      */
+    @WithSpan
     fun create(email: String, passwordHash: String): Result<String, CreateError> {
         repeat(PUBLIC_ID_GENERATION_ATTEMPTS) {
             val publicId = publicIdGenerator.generate(PUBLIC_ID_LENGTH)

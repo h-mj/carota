@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.ktor.server.netty)
     implementation(libs.ktor.server.status.pages)
     implementation(libs.nanoid)
+    implementation(libs.opentelemetry.annotations)
     runtimeOnly(libs.logback.classic)
     runtimeOnly(libs.postgresql)
 

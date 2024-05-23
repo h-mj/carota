@@ -3,6 +3,7 @@ package ee.carota.api.module.auth.service
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.mapError
+import io.opentelemetry.instrumentation.annotations.WithSpan
 import org.jetbrains.exposed.sql.transactions.transaction
 import ee.carota.api.module.auth.service.AccountService.CreateError as AccountCreateError
 
@@ -32,6 +33,7 @@ class AuthenticationService(
      * If there was an error, a result containing one of the following errors is returned:
      * * [RegisterError.EmailAlreadyUsed]: The email is already used by another account.
      */
+    @WithSpan
     fun register(email: String, password: String): Result<String, RegisterError> {
         val isEmailAlreadyUsed = transaction {
             accountDao.existsByEmail(email)
